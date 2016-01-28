@@ -1,0 +1,11 @@
+{% load menu_tags %}
+<ul>
+    {% for item in menu_items %}
+        <li class="{{ item.active_class }}">
+            <a href="{{ item.url }}">{{ item.title }}</a>
+            {% if item.has_children_in_menu %}
+            	{% children_menu parent=item stop_at_this_level=0 %}
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

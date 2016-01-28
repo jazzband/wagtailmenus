@@ -1,0 +1,4 @@
+include LICENSE
+include README.rst
+recursive-include wagtailmenus/templates *.html
+recursive-include wagtailmenus *.py
