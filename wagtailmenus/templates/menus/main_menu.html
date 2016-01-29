@@ -2,9 +2,9 @@
 <ul class="nav navbar-nav">
     {% for item in menu_items %}
         <li class="{{ item.active_class }}{% if item.has_children_in_menu %} dropdown{% endif %}">
-            <a href="{{ item.url }}"{% if item.has_children_in_menu %} class="dropdown-toggle" id="ddtoggle_{{ item.pk }}" data-toggle="dropdown" data-hover="dropdown" data-delay="400" data-close-others="false" aria-haspopup="true" aria-expanded="false"{% endif %}>{{ item.title }}</a>
+            <a href="{{ item.href }}"{% if item.has_children_in_menu %} class="dropdown-toggle" id="ddtoggle_{{ item.pk }}" data-toggle="dropdown" data-hover="dropdown" data-delay="400" data-close-others="false" aria-haspopup="true" aria-expanded="false"{% endif %}>{{ item.title }}</a>
             {% if item.has_children_in_menu  %}
-                {% children_menu_dropdown parent=item.link_page stop_at_this_level=1 %}
+                {% children_menu_dropdown item stop_at_this_level=1 %}
             {% endif %}
         </li>       
     {% endfor %}

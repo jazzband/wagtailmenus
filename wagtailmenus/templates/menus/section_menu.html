@@ -5,16 +5,16 @@
         <ul>
             {% if show_section_root and section_root %}
                 <li class="{{ section_root.active_class }} section_root">
-                    <a href="{% pageurl section_root %}">
+                    <a href="{{ section_root.href }}">
                         {{ section_root.title }}
                     </a>
                     <ul>
             {% endif %}
             {% for item in menu_items %}
                 <li class="{{ item.active_class }}">
-                    <a href="{{ item.url }}">{{ item.title }}</a>
+                    <a href="{{ item.href }}">{{ item.title }}</a>
                     {% if item.has_children_in_menu %}
-                         {% children_menu parent=item stop_at_this_level=0 %}
+                         {% children_menu item stop_at_this_level=0 %}
                     {% endif %}
                 </li>
             {% endfor %}

@@ -11,7 +11,7 @@ from wagtail.wagtailcore.models import Orderable
 
 
 class MenuItem(models.Model):
-    show_children = False
+    show_children_menu = False
 
     link_text = models.CharField(
         max_length=255,
@@ -137,8 +137,8 @@ class MainMenuItem(Orderable, MenuItem):
             "page, and that page has children that are set to appear in menus."
         )
     )
-    repeat_page_in_children_menu = models.BooleanField(
-        verbose_name=_("Repeat a link to this page in the children menu?"),
+    repeat_in_children_menu = models.BooleanField(
+        verbose_name=_("Repeat this page in the children menu?"),
         help_text=_(
             "A menu item with children automatically becomes a toggle for "
             "accessing the pages below it. Repeating the link in it's "
@@ -147,11 +147,11 @@ class MainMenuItem(Orderable, MenuItem):
         )
     )
     children_menu_link_text = models.CharField(
-        varbose_name=_('Link text for children menu link'),
+        verbose_name=_('Link text for children menu link'),
         max_length=255,
         blank=True,
         help_text=_(
-            "If left blank, the menu item text will be repeated."
+            "If left blank, the same link text will be used."
         )
     )
 
@@ -164,7 +164,7 @@ class MainMenuItem(Orderable, MenuItem):
         FieldPanel('link_url'),
         PageChooserPanel('link_page'),
         FieldPanel('show_children_menu'),
-        FieldPanel('repeat_page_in_children_menu'),
+        FieldPanel('repeat_in_children_menu'),
         FieldPanel('children_menu_link_text'),
     )
 
