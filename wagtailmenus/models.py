@@ -17,8 +17,8 @@ class MenuItem(models.Model):
         max_length=255,
         blank=True,
         help_text=_(
-            "If left blank, the page name will be used. Must be set if you're "
-            "linking to a custom URL."
+            "If left blank, the page title will be used. Must be set if you "
+            "wish to link to a custom URL."
         )
     )
     link_page = models.ForeignKey(
@@ -29,7 +29,8 @@ class MenuItem(models.Model):
         on_delete=models.CASCADE,
         related_name='+',
     )
-    link_url = models.URLField(
+    link_url = models.CharField(
+        max_length=255,
         verbose_name=_('Link to a custom URL'),
         blank=True,
         null=True,
@@ -78,7 +79,7 @@ class MainMenu(ClusterableModel):
         verbose_name_plural = _("main menu")
 
     def __unicode__(self):
-        return self.site.site_name
+        return 'For %s' % (self.site.site_name or self.site)
 
     panels = [
         FieldPanel('site'),
@@ -96,14 +97,13 @@ class FlatMenu(ClusterableModel):
     handle = models.SlugField(
         max_length=100,
         help_text=_(
-            "Used in to reference this menu in templates etc. Must be unique "
+            "Used to reference this menu in templates etc. Must be unique "
             "for the selected site."))
     heading = models.CharField(
         max_length=255,
         blank=True,
         help_text=_(
-            "If supplied, appears above the menu when displayed on the "
-            "on the front-end of the site."))
+            "If supplied, appears above the menu when rendered."))
 
     class Meta:
         unique_together = ("site", "handle")
@@ -130,34 +130,25 @@ class FlatMenu(ClusterableModel):
 class MainMenuItem(Orderable, MenuItem):
     menu = ParentalKey('MainMenu', related_name="menu_items")
     show_children_menu = models.BooleanField(
-        verbose_name=_("Show a children menu for this item?"),
-        default=True,
-        help_text=_(
-            "The children menu will only appear if this menu item links to a "
-            "page, and that page has children that are set to appear in menus."
-        )
+        verbose_name=_("Add a sub-menu for children of this page"),
+        default=False,
     )
     repeat_in_children_menu = models.BooleanField(
-        verbose_name=_("Repeat this page in the children menu?"),
-        help_text=_(
-            "A menu item with children automatically becomes a toggle for "
-            "accessing the pages below it. Repeating the link in it's "
-            "children menu allows the page to remain accessible via the main "
-            "navigation."
-        )
+        verbose_name=_("Include a link to this page in the sub-menu"),
+        default=False,
     )
     children_menu_link_text = models.CharField(
-        verbose_name=_('Link text for children menu link'),
+        verbose_name=_('Link text for sub-menu item'),
         max_length=255,
         blank=True,
         help_text=_(
-            "If left blank, the same link text will be used."
+            "e.g. Overview. If left blank, the page title will be used."
         )
     )
 
     @property
     def children_menu_title(self):
-        return self.children_menu_link_text or self.title
+        return self.children_menu_link_text or self.link_page.title
 
     panels = (
         FieldPanel('link_text'),

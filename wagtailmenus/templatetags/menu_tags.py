@@ -233,10 +233,6 @@ def children_menu(context, menuitem_or_page, stop_at_this_level=False):
         """
         parent_page = menuitem_or_page
 
-    page_list = parent_page.get_children().live().in_menu()
-    if not stop_at_this_level:
-        page_list = page_list.prefecth_related('children')
-
     menu_items = prime_page_list(
         page_list=parent_page.get_children().live().in_menu(),
         current_page=current_page,
