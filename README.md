@@ -101,9 +101,9 @@ The `section_menu` templatetag accepts two optional parameters:
 
 So, if you wanted your section menu to show second-level pages only, you could do that with `{% section_menu show_section_root=False show_multiple_levels=False %}`
 
-### Controlling 'repeating' behaviour for specific
+### Controlling 'repeating' behaviour for specific sections
 
-Let's say you have an 'About Us' section on your site. The top-level 'About Us' page has a decent amount of important content on it, and it also has important children pages that have more specific content (e.g. 'Meet the team', 'Our mission and values', 'Staff vacancies'). You want people to be able to access the top-level 'About Us' page from your navigation as easily as the other pages, but you're using a drop-down menu, and the 'About Us' page link has simply become a toggle for hiding and showing it's children pages.
+Let's say you have an 'About Us' section on your site. The top-level 'About Us' page has a decent amount of important content on it, and it also has important children pages that have more specific content (e.g. 'Meet the team', 'Our mission and values', 'Staff vacancies'). You want people to be able to access the top-level 'About Us' page from your navigation as easily as the other pages, but you're using a drop-down menu, and the 'About Us' page link has simply become a toggle for hiding and showing its children pages.
 
 Presuming the 'About Us' page uses a model that extends the `wagtailmenus.models.MenuPage`:
 
@@ -114,4 +114,4 @@ Presuming the 'About Us' page uses a model that extends the `wagtailmenus.models
 5. Tick the checkbox that appears, and optionally provide some custom link text to use for the repeated nav item
 6. Save your changes.
 
-In a multi-level main menu or section menu, an additional link will now appear alongside the children of 'About Us', allowing it to be accessed more easily. The page title will be repeated by default, but it's often desirable to use different text for the repeated nav item (commonly 'Overview' or 'Section home'). You can do that by altering the value of **Link text for sub-navigation item**.
+In a multi-level main menu or section menu, an additional link will now appear alongside the children of 'About Us', allowing it to be accessed more easily. The page title will be repeated by default, but it's often desirable to use different text for the repeated nav item (commonly 'Overview' or 'Section home'). You can do that by altering the value of **Link text for sub-navigation item** and saving your changes.
