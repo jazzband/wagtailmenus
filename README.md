@@ -14,15 +14,15 @@ We’re forever coming across the same problems on sites we put together using W
 
 If all pages in your tree contain important content, and need to be accessible from the main navigation, a page tree alone can make that difficult in multi-level navigation. In dropdown or hover menus, menu items for pages with children commonly become just a 'toggle' for getting to it's children pages, making that page difficult  to access.
 
-In the past we've always hacked around this issue by adding additional pages into the tree, or repeating the page automatically alongside it's children in menu templates, or by adding extra items with javascript, etc etc. Lots of different approaches, changing from project to project, depending on who was solving the problem.
+In the past we've always hacked around this issue by adding additional pages into the tree, or repeating the page automatically alongside it's children in menu templates, or adding extra items with javascript, etc etc. Lots of different approaches, changing from project to project, depending on who was solving the problem.
 
 ### 2) We sometimes want a menu item to link to a certain part of a page, or to an external URL
 
-That's very difficult to do with just a page tree, and often resorts in certain menus being hardcoded, or partly hardcoded somehow.
+That's very difficult to do with just a page tree, and often resorts in certain menus being fixed, or partly fixed; which is difficult to manage over a long project life cycle, and bound to trip you up at least once. 
 
-### 3) We often want to control the main navigation independently of the page tree, to avoid certain 'issues'
+### 3) Giving the client free reign over the main menu isn't always appropriate
 
-Your main navigation is likely to be horizontal, and sensitive to changes. Having some kind of separate control over the root items prevents certain problems, such as somebody accidentally adding a new root page, and it ruining the design completely.
+The main navigation on a site is often the result of some intense thought and conversation. Add to that the design implications of horizontal navs, and styling them to work responsively, and there's certainly an argument for detaching the main navigation from the page tree to a degree. 
 
 ### 4) We often find ourselves wanting other 'flat' menus to output links elsewhere in project templates
 
