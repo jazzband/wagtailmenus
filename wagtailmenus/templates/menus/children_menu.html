@@ -2,7 +2,7 @@
 <ul>
     {% for item in menu_items %}
         <li class="{{ item.active_class }}">
-            <a href="{{ item.href }}">{{ item.title }}</a>
+            <a href="{{ item.href }}">{{ item.text }}</a>
             {% if item.has_children_in_menu %}
             	{% children_menu item stop_at_this_level=0 %}
             {% endif %}

@@ -1,6 +1,6 @@
+from wagtail.wagtailcore import hooks
 from django.utils.translation import ugettext_lazy as _
-from wagtailmodeladmin.options import (
-    ModelAdmin, ModelAdminGroup, wagtailmodeladmin_register)
+from wagtailmodeladmin.options import ModelAdmin, wagtailmodeladmin_register
 from .models import MainMenu, FlatMenu
 
 
@@ -21,3 +21,16 @@ class FlatMenuAdmin(ModelAdmin):
 
 wagtailmodeladmin_register(MainMenuAdmin)
 wagtailmodeladmin_register(FlatMenuAdmin)
+
+
+@hooks.register('before_serve_page')
+def wagtailmenu_params_helper(page, request, serve_args, serve_kwargs):
+    section_root = request.site.root_page.get_children().ancestor_of(
+        page, inclusive=True).first()
+    if section_root:
+        section_root = section_root.specific
+    ancestor_ids = page.get_ancestors().values_list('id', flat=True)
+    request.META.update({
+        'CURRENT_SECTION_ROOT': section_root,
+        'CURRENT_PAGE_ANCESTOR_IDS': ancestor_ids,
+    })
