@@ -1,8 +1,8 @@
-# wagtailmenus
+# What is wagtailmenus?
 
-An extension for torchboxes `Wagtail CMS` to help you handle complex navigation more consistently across projects. 
+An extension for torchbox's [Wagtail CMS](https://github.com/torchbox/wagtail) to help you handle complex navigation more consistently across projects. 
 
-## Want to use wagtailmenus in your project?
+## Want to use this in your project?
 
 The projet is still very much in development, and code hasn’t yet been optimised for use outside of the RKH project workflow. We are unable to offer any support at this time (Issue tracking has been turned off). If you wish to use `wagtailmenus` in your project, you do so at your own risk, and will have to overcome any issues yourself.
 
