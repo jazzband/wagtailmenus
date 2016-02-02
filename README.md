@@ -1,24 +1,24 @@
 # What is wagtailmenus?
 
-An extension for torchbox's [Wagtail CMS](https://github.com/torchbox/wagtail) to help you handle complex navigation more consistently across projects. 
+It's an extension for torchbox's [Wagtail CMS](https://github.com/torchbox/wagtail) to help you handle multi-level navigation more consistently in your wagtail project. 
 
 ## Want to use this in your project?
 
-The projet is still very much in development, and code hasn’t yet been optimised for use outside of the RKH project workflow. We are unable to offer any support at this time (Issue tracking has been turned off). If you wish to use `wagtailmenus` in your project, you do so at your own risk, and will have to overcome any issues yourself.
+The project is still in development. Code hasn’t yet been optimised for use outside of the RKH project workflow, and we are unable to offer any support at this time. If you wish to use `wagtailmenus` in your project, you do so at your own risk, and will have to overcome any issues yourself.
 
-## So, what’s the point?
+## Why does the project exist?
 
-We’re forever coming across the same problems on most sites we put together, and wanted a nice, consistent, but flexible way overcome them.
+We’re forever coming across the same problems on sites we put together using Wagtail, and wanted a nice, consistent, but flexible way overcome them.
 
 ### 1) Page trees on their own are often insufficient for creating complex menus 
 
-If all pages in your tree contain important content, and need to be accessible from the main navigation, that can be a bit of a tall order with just a page tree. In dropdown or hover menus, menu items for pages with children commonly become just 'toggle' for getting to it's children pages, meaning you can't get to that page.
+If all pages in your tree contain important content, and need to be accessible from the main navigation, a page tree alone can make that difficult in multi-level navigation. In dropdown or hover menus, menu items for pages with children commonly become just a 'toggle' for getting to it's children pages, making that page difficult  to access.
 
-In the past we've always 'hacked around' the issue by adding additional pages into the tree, or repeating the page automatically alongside it's children in menu templates, or by adding extra items with javascript, etc etc. Lot's of different approaches, changing from project to project, depending on who was working on it at the time.
+In the past we've always hacked around this issue by adding additional pages into the tree, or repeating the page automatically alongside it's children in menu templates, or by adding extra items with javascript, etc etc. Lots of different approaches, changing from project to project, depending on who was solving the problem.
 
 ### 2) We sometimes want a menu item to link to a certain part of a page, or to an external URL
 
-With a PageTree, that's very difficult to do without resorting to a fixed/hardcode navigation. Even if you don't want the client to have control over the main navigation, hardcoding is far from ideal.
+That's very difficult to do with just a page tree, and often resorts in certain menus being hardcoded, or partly hardcoded somehow.
 
 ### 3) We often want to control the main navigation independently of the page tree, to avoid certain 'issues'
 
