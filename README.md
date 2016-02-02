@@ -1,6 +1,6 @@
 # What is wagtailmenus?
 
-It's an extension for torchbox's [Wagtail CMS](https://github.com/torchbox/wagtail) to help you handle multi-level navigation more consistently in your wagtail project. 
+It's an extension for torchbox's [Wagtail CMS](https://github.com/torchbox/wagtail) to help you manage complex multi-level navigation and flat menus in a consistent, yet flexible way.
 
 ## Want to use this in your project?
 
