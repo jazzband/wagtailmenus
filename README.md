@@ -70,7 +70,7 @@ With output designed to be fully accessible and compatible with Bootstrap3. Temp
 5. In whichever template you want to output your main menu in, load `menu_tags` using `{% load menu_tags %}`
 6. Use the `{% main_menu %}` tag where you want the menu to appear
 
-#### Optional params for `main_menu`
+**Optional params for `main_menu`**
 
 The `main_menu` templatetag accepts an optional parameter `show_multiple_levels` to let you control whether multiple levels should be displayed, which defaults to `True` if not provided. If you only want top-level items to display, you can do that with `{% main_menu show_multiple_levels=False %}`
 
@@ -83,7 +83,7 @@ The `main_menu` templatetag accepts an optional parameter `show_multiple_levels`
 5. In whichever template you want to output your flat menu, load `menu_tags` using `{% load menu_tags %}`
 6. Use the `{% flat_menu 'menu-handle' %}` tag where you want the menu to appear, where 'menu-handle' is the unique handle for the menu you want to use
 
-#### Optional params for `flat_menu`
+**Optional params for `flat_menu`**
 
 The `flat_menu` templatetag accepts an optional parameter `show_menu_heading` to let you control whether a heading should be displayed if one has been added to the menu you're using. It is simply passed through to the `flat_menu.html` template, to allow you to conditionally display it in the template. It defaults to `True` if not provided. If you definitely don't want the headings to be displayed where you're outputting them, you can do that with `{% flat_menu 'menu-handle' show_menu_heading=False %}`
 
@@ -92,7 +92,7 @@ The `flat_menu` templatetag accepts an optional parameter `show_menu_heading` to
 1. In whichever template you wish to add a context-specific, page-driven 'section menu' to (in a sidebar, for example), load `menu_tags` using `{% load menu_tags %}`
 2. Use the `{% section_menu %}` tag where you want the menu to appear
 
-#### Optional params for `section_menu`
+**Optional params for `section_menu`**
 
 The `section_menu` templatetag accepts two optional parameters:
 
