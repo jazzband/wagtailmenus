@@ -6,7 +6,7 @@ from .models import MainMenu, FlatMenu
 
 class MainMenuAdmin(ModelAdmin):
     model = MainMenu
-    menu_label = _('Main navigation')
+    menu_label = _('Main menu')
     menu_icon = 'link'
     list_filter = ('site', )
     add_to_settings_menu = True
@@ -14,6 +14,7 @@ class MainMenuAdmin(ModelAdmin):
 
 class FlatMenuAdmin(ModelAdmin):
     model = FlatMenu
+    menu_label = _('Flat menus')
     menu_icon = 'list-ol'
     list_display = ('title', 'handle', )
     list_filter = ('site', )

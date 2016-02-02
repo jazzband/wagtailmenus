@@ -19,86 +19,6 @@ for you to output in the template:
 """
 
 
-def prime_menu_items(
-    menu_items, current_page, current_page_ancestor_ids, current_site,
-    check_for_children=False
-):
-    primed_menu_items = []
-    for item in menu_items:
-
-        """
-        `MenuItem` and `Page` both have the relative_url method, which we use
-        to get a URL relative to the current site root.
-        """
-        setattr(item, 'href', item.relative_url(current_site))
-
-        try:
-            """
-            `menu_items` is a list of `MenuItem` objects, that either linkgs
-            to a Page, or a custom URL
-            """
-            page = item.link_page
-            menuitem = item
-            setattr(item, 'text', item.menu_text)
-        except AttributeError:
-            """
-            `menu_items` is a list of `Page` objects, not `MenuItem` objects
-            """
-            page = item
-            menuitem = None
-            setattr(item, 'text', page.title)
-
-        has_children_in_menu = False
-        if page and page.show_in_menus:
-            """
-            If linking to a page, we only want to include this item
-            in the resulting list if that page is set to appear in menus.
-            """
-            if page.depth > 2 and check_for_children:
-                """
-                Working out whether this item should have a sub nav is
-                expensive, so we try to do the working out where absolutely
-                necessary.
-                """
-                if ((menuitem and menuitem.allow_subnav) or not menuitem):
-                    has_children_in_menu = (
-                        page.get_children().live().in_menu().exists())
-                    setattr(item, 'has_children_in_menu', has_children_in_menu)
-
-            """
-            Now we know whether this page has a subnav or not, we can look
-            for a `repeat_in_subnav` value on the page's specific model
-            object, to see if a link to the same page will be repeated as
-            the first child. If so, we only want this item to have an
-            `ancestor` class at most, as the repeated nav item will be
-            given the `active` class.
-            """
-            page_is_repeated_in_subnav = False
-            if has_children_in_menu:
-                page = page.specific
-                try:
-                    page_is_repeated_in_subnav = page.repeat_in_subnav
-                except AttributeError:
-                    pass
-
-            """
-            Now we can figure out what class should be added to this item
-            """
-            if current_page and page.pk == current_page.pk:
-                if page_is_repeated_in_subnav:
-                    setattr(item, 'active_class', 'ancestor')
-                else:
-                    setattr(item, 'active_class', 'active')
-            elif page.depth > 2 and page.pk in current_page_ancestor_ids:
-                setattr(item, 'active_class', 'ancestor')
-
-            primed_menu_items.append(item)
-
-        elif page is None:
-            primed_menu_items.append(item)
-    return primed_menu_items
-
-
 @register.inclusion_tag('menus/main_menu.html', takes_context=True)
 def main_menu(context, show_multiple_levels=True):
     request = context['request']
@@ -265,3 +185,83 @@ def children_menu_dropdown(context, menuitem_or_page, stop_at_this_level=True):
     with added accessibility attributes
     """
     return children_menu(context, menuitem_or_page, stop_at_this_level)
+
+
+def prime_menu_items(
+    menu_items, current_page, current_page_ancestor_ids, current_site,
+    check_for_children=False
+):
+    primed_menu_items = []
+    for item in menu_items:
+
+        """
+        `MenuItem` and `Page` both have the relative_url method, which we use
+        to get a URL relative to the current site root.
+        """
+        setattr(item, 'href', item.relative_url(current_site))
+
+        try:
+            """
+            `menu_items` is a list of `MenuItem` objects, that either linkgs
+            to a Page, or a custom URL
+            """
+            page = item.link_page
+            menuitem = item
+            setattr(item, 'text', item.menu_text)
+        except AttributeError:
+            """
+            `menu_items` is a list of `Page` objects, not `MenuItem` objects
+            """
+            page = item
+            menuitem = None
+            setattr(item, 'text', page.title)
+
+        has_children_in_menu = False
+        if page and page.show_in_menus:
+            """
+            If linking to a page, we only want to include this item
+            in the resulting list if that page is set to appear in menus.
+            """
+            if page.depth > 2 and check_for_children:
+                """
+                Working out whether this item should have a sub nav is
+                expensive, so we try to do the working out where absolutely
+                necessary.
+                """
+                if ((menuitem and menuitem.allow_subnav) or not menuitem):
+                    has_children_in_menu = (
+                        page.get_children().live().in_menu().exists())
+                    setattr(item, 'has_children_in_menu', has_children_in_menu)
+
+            """
+            Now we know whether this page has a subnav or not, we can look
+            for a `repeat_in_subnav` value on the page's specific model
+            object, to see if a link to the same page will be repeated as
+            the first child. If so, we only want this item to have an
+            `ancestor` class at most, as the repeated nav item will be
+            given the `active` class.
+            """
+            page_is_repeated_in_subnav = False
+            if has_children_in_menu:
+                page = page.specific
+                try:
+                    page_is_repeated_in_subnav = page.repeat_in_subnav
+                except AttributeError:
+                    pass
+
+            """
+            Now we can figure out what class should be added to this item
+            """
+            if current_page and page.pk == current_page.pk:
+                if page_is_repeated_in_subnav:
+                    setattr(item, 'active_class', 'ancestor')
+                else:
+                    setattr(item, 'active_class', 'active')
+            elif page.depth > 2 and page.pk in current_page_ancestor_ids:
+                setattr(item, 'active_class', 'ancestor')
+
+            primed_menu_items.append(item)
+
+        elif page is None:
+            primed_menu_items.append(item)
+    return primed_menu_items
