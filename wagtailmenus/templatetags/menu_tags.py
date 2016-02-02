@@ -1,4 +1,5 @@
 from django import template
+from copy import deepcopy
 
 register = template.Library()
 
@@ -106,13 +107,13 @@ def main_menu(context, show_multiple_levels=True):
     ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS')
 
     context.update({
-        'menu_items': prime_menu_items(
+        'menu_items': tuple(prime_menu_items(
             menu_items=menu.menu_items.all().select_related('link_page'),
             current_page=context.get('self'),
             current_page_ancestor_ids=ancestor_ids,
             current_site=site,
             check_for_children=show_multiple_levels,
-        )
+        ))
     })
     return context
 
@@ -125,11 +126,6 @@ def section_menu(context, show_section_root=True, show_multiple_levels=True):
     section_root = request.META.get('CURRENT_SECTION_ROOT')
     ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS')
 
-    context.update({
-        'show_section_root': show_section_root,
-        'section_root': section_root,
-    })
-
     if section_root:
         menu_items = prime_menu_items(
             menu_items=section_root.get_children().live().in_menu(),
@@ -138,22 +134,51 @@ def section_menu(context, show_section_root=True, show_multiple_levels=True):
             current_site=current_site,
             check_for_children=show_multiple_levels
         )
+
+        """
+        We want `section_root` to have the same attributes as primed menu
+        items, so it can be used in the same way in a template if required.
+        """
+        setattr(section_root, 'text', section_root.title)
+        setattr(section_root, 'href', section_root.relative_url(current_site))
+
+        """
+        Before we can work out an `active_class` for `section_root`, we need
+        to find out if it's going to be repeated alongside it's children in a
+        subnav.
+        """
         try:
-            if section_root.repeat_in_subnav:
-                extra_item = section_root
-                href = section_root.relative_url(current_site)
+            if menu_items and section_root.repeat_in_subnav:
+                """
+                The page should be repeated alongside children in the
+                subnav, so we create a new item and add it to the existing
+                menu_items
+                """
+                extra_item = deepcopy(section_root)
                 text = section_root.subnav_menu_text or section_root.title
                 setattr(extra_item, 'text', text)
-                setattr(extra_item, 'href', href)
                 if extra_item.pk == current_page.pk:
                     setattr(extra_item, 'active_class', 'active')
                 menu_items.insert(0, extra_item)
         except AttributeError:
-                pass
+            extra_item = None
 
-        context.update({'menu_items': menu_items})
+        """
+        Now we know the subnav/repetition situation, we can set the
+        `active_class` for `section_root`
+        """
+        if extra_item and hasattr(extra_item, 'active_class'):
+            setattr(section_root, 'active_class', 'ancestor')
+        elif section_root.pk == current_page.pk:
+            setattr(section_root, 'active_class', 'active')
     else:
-        context.update({'menu_items': []})
+        menu_items = []
+
+    context.update({
+        'section_root': section_root,
+        'show_section_root': show_section_root,
+        'menu_items': tuple(menu_items),
+    })
     return context
 
 
@@ -173,13 +198,13 @@ def flat_menu(context, handle, show_menu_heading=True):
         context.update({
             'matched_menu': menu,
             'menu_heading': menu.heading,
-            'menu_items': prime_menu_items(
+            'menu_items': tuple(prime_menu_items(
                 menu_items=menu.menu_items.all().select_related('link_page'),
                 current_page=context.get('self'),
                 current_page_ancestor_ids=ancestor_ids,
                 current_site=current_site,
                 check_for_children=False,
-            ),
+            )),
         })
     except FlatMenu.DoesNotExist:
         context.update({
@@ -199,7 +224,6 @@ def children_menu(context, menuitem_or_page, stop_at_this_level=False):
     current_site = request.site
     ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS')
     current_page = context.get('self')
-    parent_menuitem = None
     try:
         parent_page = menuitem_or_page.link_page.specific
     except AttributeError:
@@ -215,20 +239,20 @@ def children_menu(context, menuitem_or_page, stop_at_this_level=False):
 
     try:
         if parent_page.repeat_in_subnav:
-            parent_menuitem = parent_page
+            extra_item = deepcopy(parent_page)
             href = parent_page.relative_url(current_site)
             text = parent_page.subnav_menu_text or parent_page.title
-            setattr(parent_menuitem, 'href', href)
-            setattr(parent_menuitem, 'text', text)
+            setattr(extra_item, 'href', href)
+            setattr(extra_item, 'text', text)
             if parent_page.pk == current_page.pk:
-                setattr(parent_menuitem, 'active_class', 'active')
-            menu_items.insert(0, parent_menuitem)
+                setattr(extra_item, 'active_class', 'active')
+            menu_items.insert(0, extra_item)
     except AttributeError:
             pass
 
     context.update({
         'parent_page': parent_page,
-        'menu_items': menu_items,
+        'menu_items': tuple(menu_items),
     })
     return context
 
