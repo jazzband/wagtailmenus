@@ -87,7 +87,7 @@ The `main_menu` templatetag accepts an optional parameter `show_multiple_levels`
 
 The `flat_menu` templatetag accepts an optional parameter `show_menu_heading` to let you control whether a heading should be displayed if one has been added to the menu you're using. It is simply passed through to the `flat_menu.html` template, to allow you to conditionally display it in the template. It defaults to `True` if not provided. If you definitely don't want the headings to be displayed where you're outputting them, you can do that with `{% flat_menu 'menu-handle' show_menu_heading=False %}`
 
-### Using wagtailmenus `section` menus 
+### Using the `section_menu` tag
 
 1. In whichever template you wish to add a context-specific, page-driven 'section menu' to (in a sidebar, for example), load `menu_tags` using `{% load menu_tags %}`
 2. Use the `{% section_menu %}` tag where you want the menu to appear
@@ -100,3 +100,18 @@ The `section_menu` templatetag accepts two optional parameters:
 - `show_multiple_levels`: let you control whether multiple levels should be displayed. Defaults to `True` if not provided.
 
 So, if you wanted your section menu to show second-level pages only, you could do that with `{% section_menu show_section_root=False show_multiple_levels=False %}`
+
+### Controlling 'repeating' behaviour for specific
+
+Let's say you have an 'About Us' section on your site. The top-level 'About Us' page has a decent amount of important content on it, and it also has important children pages that have more specific content (e.g. 'Meet the team', 'Our mission and values', 'Staff vacancies'). You want people to be able to access the top-level 'About Us' page from your navigation as easily as the other pages, but you're using a drop-down menu, and the 'About Us' page link has simply become a toggle for hiding and showing it's children pages.
+
+Presuming the 'About Us' page uses a model that extends the `wagtailmenus.models.MenuPage`:
+
+1. Log into the Wagtail CMS for your project
+2. Find the 'About Us' page and click to get to it's 'edit' page
+3. Click on the `Settings` tab
+4. Uncollapse the `ADVANCED MENU BEHAVIOUR` panel by clicking the read arrow.
+5. Tick the checkbox that appears, and optionally provide some custom link text to use for the repeated nav item
+6. Save your changes.
+
+In a multi-level main menu or section menu, an additional link will now appear alongside the children of 'About Us', allowing it to be accessed more easily. The page title will be repeated by default, but it's often desirable to use different text for the repeated nav item (commonly 'Overview' or 'Section home'). You can do that by altering the value of **Link text for sub-navigation item**.
