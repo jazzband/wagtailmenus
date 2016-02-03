@@ -1,9 +1,8 @@
 from django import template
 from copy import deepcopy
+from ..models import FlatMenu
 
 register = template.Library()
-
-from ..models import FlatMenu
 
 """
 In all menu templates, menu items are always assigned the following attributes
@@ -21,6 +20,7 @@ for you to output in the template:
 
 @register.inclusion_tag('menus/main_menu.html', takes_context=True)
 def main_menu(context, show_multiple_levels=True):
+    """Render the MainMenu instance for the current site."""
     request = context['request']
     site = request.site
     menu = site.main_menu
@@ -40,6 +40,7 @@ def main_menu(context, show_multiple_levels=True):
 
 @register.inclusion_tag('menus/section_menu.html', takes_context=True)
 def section_menu(context, show_section_root=True, show_multiple_levels=True):
+    """Render a section menu for the current section."""
     request = context['request']
     current_site = request.site
     current_page = context.get('self')
@@ -104,6 +105,10 @@ def section_menu(context, show_section_root=True, show_multiple_levels=True):
 
 @register.inclusion_tag('menus/flat_menu.html', takes_context=True)
 def flat_menu(context, handle, show_menu_heading=True):
+    """
+    Find a FlatMenu for the current site matching the `handle` provided and
+    render it.
+    """
     request = context['request']
     current_site = request.site
     ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS')
@@ -138,7 +143,8 @@ def flat_menu(context, handle, show_menu_heading=True):
 @register.inclusion_tag('menus/children_menu.html', takes_context=True)
 def children_menu(context, menuitem_or_page, stop_at_this_level=False):
     """
-    Retrieves the children menu items and renders them as a simple ul list
+    Retrieve the children menu items for the `menuitem_or_page` provided, and
+    render them as a simple ul list
     """
     request = context['request']
     current_site = request.site
@@ -181,8 +187,8 @@ def children_menu(context, menuitem_or_page, stop_at_this_level=False):
                         takes_context=True)
 def children_menu_dropdown(context, menuitem_or_page, stop_at_this_level=True):
     """
-    Retrieves the children menu items and renders them as a dropdown ul list
-    with added accessibility attributes
+    Retrieve the children menu items for the `menuitem_or_page` provided, and
+    render them as a dropdown ul list with added accessibility attributes
     """
     return children_menu(context, menuitem_or_page, stop_at_this_level)
 
@@ -191,6 +197,10 @@ def prime_menu_items(
     menu_items, current_page, current_page_ancestor_ids, current_site,
     check_for_children=False
 ):
+    """
+    Prepare a list of menuitem objects or pages for rendering to a menu
+    template.
+    """
     primed_menu_items = []
     for item in menu_items:
 
@@ -202,10 +212,17 @@ def prime_menu_items(
 
         try:
             """
-            `menu_items` is a list of `MenuItem` objects, that either linkgs
+            `menu_items` is a list of `MenuItem` objects, that either links
             to a Page, or a custom URL
             """
             page = item.link_page
+            if not page.show_in_menus or not page.live:
+                """
+                If the page isn't set to show in menus or is not live, we
+                set page to None, so it isn't returned as a menu item, and
+                we don't waste any time doing expensive operations on it.
+                """
+                page = None
             menuitem = item
             setattr(item, 'text', item.menu_text)
         except AttributeError:
@@ -217,18 +234,18 @@ def prime_menu_items(
             setattr(item, 'text', page.title)
 
         has_children_in_menu = False
-        if page and page.show_in_menus:
+        if page:
             """
             If linking to a page, we only want to include this item
             in the resulting list if that page is set to appear in menus.
             """
-            if page.depth > 2 and check_for_children:
+            if check_for_children and page.depth > 2:
                 """
                 Working out whether this item should have a sub nav is
                 expensive, so we try to do the working out where absolutely
                 necessary.
                 """
-                if ((menuitem and menuitem.allow_subnav) or not menuitem):
+                if ((menuitem and menuitem.allow_subnav) or menuitem is None):
                     has_children_in_menu = (
                         page.get_children().live().in_menu().exists())
                     setattr(item, 'has_children_in_menu', has_children_in_menu)
