@@ -68,6 +68,7 @@ def section_menu(context, show_section_root=True, show_multiple_levels=True):
         to find out if it's going to be repeated alongside it's children in a
         subnav.
         """
+        extra_item = None
         try:
             if menu_items and section_root.repeat_in_subnav:
                 """
@@ -82,7 +83,7 @@ def section_menu(context, show_section_root=True, show_multiple_levels=True):
                     setattr(extra_item, 'active_class', 'active')
                 menu_items.insert(0, extra_item)
         except AttributeError:
-            extra_item = None
+            pass
 
         """
         Now we know the subnav/repetition situation, we can set the
