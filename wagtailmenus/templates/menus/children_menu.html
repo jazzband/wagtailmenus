@@ -4,7 +4,7 @@
         <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
             {% if item.has_children_in_menu %}
-            	{% children_menu item stop_at_this_level=0 %}
+            	{% children_menu item stop_at_this_level=False allow_repeating_parents=allow_repeating_parents%}
             {% endif %}
         </li>
     {% endfor %}

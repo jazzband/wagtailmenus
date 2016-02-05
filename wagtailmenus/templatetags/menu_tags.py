@@ -39,7 +39,8 @@ def main_menu(context, show_multiple_levels=True):
 
 
 @register.inclusion_tag('menus/section_menu.html', takes_context=True)
-def section_menu(context, show_section_root=True, show_multiple_levels=True):
+def section_menu(context, show_section_root=True, show_multiple_levels=True,
+                 allow_repeating_parents=True):
     """Render a section menu for the current section."""
     request = context['request']
     current_site = request.site
@@ -53,7 +54,8 @@ def section_menu(context, show_section_root=True, show_multiple_levels=True):
             current_page=current_page,
             current_page_ancestor_ids=ancestor_ids,
             current_site=current_site,
-            check_for_children=show_multiple_levels
+            check_for_children=show_multiple_levels,
+            allow_repeating_parents=allow_repeating_parents,
         )
 
         """
@@ -70,7 +72,10 @@ def section_menu(context, show_section_root=True, show_multiple_levels=True):
         """
         extra_item = None
         try:
-            if menu_items and section_root.repeat_in_subnav:
+            if (
+                allow_repeating_parents and menu_items and
+                section_root.repeat_in_subnav
+            ):
                 """
                 The page should be repeated alongside children in the
                 subnav, so we create a new item and add it to the existing
@@ -142,7 +147,8 @@ def flat_menu(context, handle, show_menu_heading=True):
 
 
 @register.inclusion_tag('menus/children_menu.html', takes_context=True)
-def children_menu(context, menuitem_or_page, stop_at_this_level=False):
+def children_menu(context, menuitem_or_page, stop_at_this_level=False,
+                  allow_repeating_parents=True):
     """
     Retrieve the children menu items for the `menuitem_or_page` provided, and
     render them as a simple ul list
@@ -162,10 +168,11 @@ def children_menu(context, menuitem_or_page, stop_at_this_level=False):
         current_page_ancestor_ids=ancestor_ids,
         current_site=current_site,
         check_for_children=not stop_at_this_level,
+        allow_repeating_parents=allow_repeating_parents,
     )
 
     try:
-        if parent_page.repeat_in_subnav:
+        if allow_repeating_parents and parent_page.repeat_in_subnav:
             extra_item = deepcopy(parent_page)
             href = parent_page.relative_url(current_site)
             text = parent_page.subnav_menu_text or parent_page.title
@@ -180,23 +187,26 @@ def children_menu(context, menuitem_or_page, stop_at_this_level=False):
     context.update({
         'parent_page': parent_page,
         'menu_items': tuple(menu_items),
+        'allow_repeating_parents': allow_repeating_parents,
     })
     return context
 
 
 @register.inclusion_tag('menus/children_menu_dropdown.html',
                         takes_context=True)
-def children_menu_dropdown(context, menuitem_or_page, stop_at_this_level=True):
+def children_menu_dropdown(context, menuitem_or_page, stop_at_this_level=True,
+                           allow_repeating_parents=True):
     """
     Retrieve the children menu items for the `menuitem_or_page` provided, and
     render them as a dropdown ul list with added accessibility attributes
     """
-    return children_menu(context, menuitem_or_page, stop_at_this_level)
+    return children_menu(context, menuitem_or_page, stop_at_this_level,
+                         allow_repeating_parents)
 
 
 def prime_menu_items(
     menu_items, current_page, current_page_ancestor_ids, current_site,
-    check_for_children=False
+    check_for_children=False, allow_repeating_parents=True,
 ):
     """
     Prepare a list of menuitem objects or pages for rendering to a menu
@@ -217,7 +227,7 @@ def prime_menu_items(
             to a Page, or a custom URL
             """
             page = item.link_page
-            if not page.show_in_menus or not page.live:
+            if page and (not page.show_in_menus or not page.live):
                 """
                 If the page isn't set to show in menus or is not live, we
                 set page to None, so it isn't returned as a menu item, and
@@ -260,7 +270,7 @@ def prime_menu_items(
             given the `active` class.
             """
             page_is_repeated_in_subnav = False
-            if has_children_in_menu:
+            if allow_repeating_parents and has_children_in_menu:
                 page = page.specific
                 try:
                     page_is_repeated_in_subnav = page.repeat_in_subnav
