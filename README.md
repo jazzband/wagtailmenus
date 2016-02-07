@@ -12,17 +12,17 @@ We’re forever coming across the same navigation-related problems on sites we p
 
 ### 1) Just outputing a page tree doesn't quite cut it for websites with multi-level navigation 
 
-If all pages in your tree contain important content, and need to be accessible from the main navigation, that's typically a complicated issue to solve when you have multi-level navigation. In dropdown or hover menus, menu items for pages with children commonly become just a 'toggle' for getting to it's children pages, making it difficult to maintain quick access to those pages.
+If all pages in your tree contain important content, and need to be accessible from the main navigation, that's typically a complicated issue to solve when you have multi-level navigation. In dropdown or hover menus, menu items for pages with children commonly become just a 'toggle' for getting to their children pages, making it difficult to maintain quick access to those pages.
 
 In the past we've 'hacked around' this issue by adding additional pages into the tree, or repeating the page automatically alongside it's children in menu templates, or adding extra items with javascript, etc. Lots of different approaches, changing from project to project, depending on who was working on it.
 
 ### 2) We sometimes want a menu item to link to a certain part of a page, or to an external URL
 
-That's very difficult to do with just a page tree, and often resorts in certain menus being fixed, or partly fixed in templates. That gets difficult to manage over a long project life cycle, and is bound to trip you up at least once. 
+That's very difficult to do with just a page tree, and often resorts in certain menus being fixed, or partly fixed in templates. That gets difficult to manage over a long project life cycle, and has tripped us up at least once. 
 
-### 3) Having the main navigation absolutely tied to the page tree isn't often helpful
+### 3) Having the main navigation absolutely tied to the page tree isn't always helpful
 
-The main navigation on a site is often the result of some intense thought and conversation. Add to that the design implications of horizontal navs, and the work that goes into styling them to work responsively, and there's certainly an argument for controling your navigation independantly.  
+The main navigation on a site is often the result of some intense thought and conversation. Add to that the design implications of horizontal navs, and the work that goes into styling them to work responsively, and there's certainly an argument for controling your navigation independantly.
 
 ### 4) We often find ourselves wanting to output flat lists of links elsewhere in project templates
 
@@ -32,25 +32,25 @@ Sets of links in the footer, or an extra 'info' nav in the header, or some other
 
 ### Independent control over your main menu
 
-The `MainMenu` model lets you define a dynamic main navigation menu for your site (or one for each site, if it's a multi-site project). A simple, orderable inline let you pick and choose what you want to include. They can be pages or custom URLS. You can also add a hash or querystring to append to the the page URL (to get to a specific tab or section), and control which pages you want to allow children/sub menus for.
+The `MainMenu` model and it's orderable inline `MainMenuItem`s let you define a dynamic main navigation for your site (or one for each site, if it's a multi-site project). Your menu items can be pages or custom URLS. You can also add a hash or querystring to append to a page URL (to get to a specific tab or section), and control which pages you want to allow children/sub menus for.
 
-Past the root level, your existing `Page` structure is used to drive sub-navigation, so you don't have to maintain 2 large data-structures. 
+Past the root level, your existing `Page` structure is used to drive sub-navigation, so you don't have to maintain two large data-structures. 
 
 ### A simple, flexible way to allow access to any page in via a dropdown/hover menu system
 
-Extend the `MenuPage` (an abstract sub-class of Wagtail's `Page` model) to create your custom page types, and get a couple of fields that allow you to control advanced menu behaviour on an page-to-page basis. Because the data is saved against the page iteself, you can access it wherever that page is output in menus, allowing you to handle things consistently throught.
+Extend the `MenuPage` (an abstract sub-class of Wagtail's `Page` model) to create your custom page types, and get a couple of fields that allow you to control advanced menu behaviour on an page-to-page basis. Because the data is saved against the page iteself, you can access it wherever that page is output in both main navigation and sectional navigation, for consitency.
 
-**Using custom `edit_panels` for your Pages?** Check out `panels.py`… there should be something there that can help.
+**Using custom `edit_panels` for your custom page types?** Check out `panels.py`… there should be something there that can help.
 
 ### Manage multiple, unlimited flat menus
 
-Create `FlatMenu` to help you manage lists of links throughout your project. Each `FlatMenu` will have a handle, which you can easily use within templates to output them using a standard template.
+Create `FlatMenu`s to help you manage lists of links throughout your project. Each `FlatMenu` will have a handle, which you can easily use within templates to output them using a standard template.
 
 **Got a multi-site project?** Create separate versions of your `FlatMenu` for each site, using the same handle for each site. The `flat_menu` templatetag will automatically grab the correct one when rendering to a template.
 
 ### A set of powerful templatetags and templates included
 
-With output designed to be fully accessible and compatible with Bootstrap 3. Templates can be overridden easily for each project if you need to do something different.
+Menu output is designed to be fully accessible and compatible with Bootstrap 3. Templates can be easily overridden if the default doesn't work for your project.
 
 ## How to install
 
