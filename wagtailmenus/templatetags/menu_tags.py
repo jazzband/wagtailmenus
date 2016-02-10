@@ -1,6 +1,6 @@
 from django import template
 from copy import deepcopy
-from ..models import FlatMenu
+from ..models import MainMenu, FlatMenu
 
 register = template.Library()
 
@@ -19,12 +19,16 @@ for you to output in the template:
 
 
 @register.inclusion_tag('menus/main_menu.html', takes_context=True)
-def main_menu(context, show_multiple_levels=True):
+def main_menu(context, show_multiple_levels=True,
+              allow_repeating_parents=True):
     """Render the MainMenu instance for the current site."""
     request = context['request']
     site = request.site
-    menu = site.main_menu
-    ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS')
+    try:
+        menu = site.main_menu
+    except MainMenu.DoesNotExist:
+        menu = MainMenu.objects.create(site=site)
+    ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
 
     context.update({
         'menu_items': tuple(prime_menu_items(
@@ -33,6 +37,7 @@ def main_menu(context, show_multiple_levels=True):
             current_page_ancestor_ids=ancestor_ids,
             current_site=site,
             check_for_children=show_multiple_levels,
+            allow_repeating_parents=allow_repeating_parents,
         ))
     })
     return context
@@ -46,7 +51,7 @@ def section_menu(context, show_section_root=True, show_multiple_levels=True,
     current_site = request.site
     current_page = context.get('self')
     section_root = request.META.get('CURRENT_SECTION_ROOT')
-    ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS')
+    ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
 
     if section_root:
         menu_items = prime_menu_items(
@@ -117,7 +122,7 @@ def flat_menu(context, handle, show_menu_heading=True):
     """
     request = context['request']
     current_site = request.site
-    ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS')
+    ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
 
     context.update({
         'menu_handle': handle,
@@ -148,14 +153,14 @@ def flat_menu(context, handle, show_menu_heading=True):
 
 @register.inclusion_tag('menus/children_menu.html', takes_context=True)
 def children_menu(context, menuitem_or_page, stop_at_this_level=False,
-                  allow_repeating_parents=True):
+                  allow_repeating_parents=None):
     """
     Retrieve the children menu items for the `menuitem_or_page` provided, and
     render them as a simple ul list
     """
     request = context['request']
     current_site = request.site
-    ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS')
+    ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
     current_page = context.get('self')
     try:
         parent_page = menuitem_or_page.link_page.specific
@@ -170,6 +175,9 @@ def children_menu(context, menuitem_or_page, stop_at_this_level=False,
         check_for_children=not stop_at_this_level,
         allow_repeating_parents=allow_repeating_parents,
     )
+
+    if allow_repeating_parents is None:
+        allow_repeating_parents = context.get('allow_repeating_parents', True)
 
     try:
         if allow_repeating_parents and parent_page.repeat_in_subnav:
@@ -195,7 +203,7 @@ def children_menu(context, menuitem_or_page, stop_at_this_level=False,
 @register.inclusion_tag('menus/children_menu_dropdown.html',
                         takes_context=True)
 def children_menu_dropdown(context, menuitem_or_page, stop_at_this_level=True,
-                           allow_repeating_parents=True):
+                           allow_repeating_parents=None):
     """
     Retrieve the children menu items for the `menuitem_or_page` provided, and
     render them as a dropdown ul list with added accessibility attributes
