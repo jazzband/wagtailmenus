@@ -41,9 +41,9 @@ Output from the included templates is designed to be fully accessible and compat
 
 **Optional params for `{% main_menu %}`**
 
-- `show_multiple_levels`: Default: `True`. Lets you control whether subsequent levels should be rendered
-- `allow_repeating_parents`: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
-- `template`: Default: `menus/main_menu.html`. Lets you render the menu to a template of your choosing.
+- **`show_multiple_levels`**: Default: `True`. Lets you control whether subsequent levels should be rendered
+- **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
+- **`template`**: Default: `menus/main_menu.html`. Lets you render the menu to a template of your choosing.
 
 ### Using `FlatMenu` class and `{% flat_menu %}`
 
@@ -56,8 +56,8 @@ Output from the included templates is designed to be fully accessible and compat
 
 **Optional params for `{% flat_menu %}`**
 
-- `show_menu_heading`: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display a heading above the menu.
-- `template`: Default: `menus/flat_menu.html`. Lets you render the menu to a template of your choosing.
+- **`show_menu_heading`**: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display a heading above the menu.
+- **`template`**: Default: `menus/flat_menu.html`. Lets you render the menu to a template of your choosing.
 
 ### The `{% section_menu %}` tag
 
@@ -66,11 +66,10 @@ Output from the included templates is designed to be fully accessible and compat
 
 **Optional params for `{% section_menu %}`**
 
-- `show_section_root`: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display the root page of the current section.
-- `show_multiple_levels`: Default: `True`. Lets you control whether subsequent levels should be rendered
-- `allow_repeating_parents`: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
-- `template`: Default: `menus/section_menu.html`. Lets you render the menu to a template of your choosing.
-
+- **`show_section_root`**: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display the root page of the current section.
+- **`show_multiple_levels`**: Default: `True`. Lets you control whether subsequent levels should be rendered
+- **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
+- **`template`**: Default: `menus/section_menu.html`. Lets you render the menu to a template of your choosing.
 
 ### 'Repeating behaviour' for specific pages
 
