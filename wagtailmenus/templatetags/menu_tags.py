@@ -1,8 +1,9 @@
-from django import template
+from django.template import loader, Library
 from copy import deepcopy
 from ..models import MainMenu, FlatMenu
 
-register = template.Library()
+
+register = Library()
 
 """
 In all menu templates, menu items are always assigned the following attributes
@@ -18,9 +19,11 @@ for you to output in the template:
 """
 
 
-@register.inclusion_tag('menus/main_menu.html', takes_context=True)
-def main_menu(context, show_multiple_levels=True,
-              allow_repeating_parents=True):
+@register.simple_tag(takes_context=True)
+def main_menu(
+    context, show_multiple_levels=True, allow_repeating_parents=True,
+    template='menus/main_menu.html'
+):
     """Render the MainMenu instance for the current site."""
     request = context['request']
     site = request.site
@@ -40,12 +43,15 @@ def main_menu(context, show_multiple_levels=True,
             allow_repeating_parents=allow_repeating_parents,
         ))
     })
-    return context
+    tpl = loader.get_template(template)
+    return tpl.render(context)
 
 
-@register.inclusion_tag('menus/section_menu.html', takes_context=True)
-def section_menu(context, show_section_root=True, show_multiple_levels=True,
-                 allow_repeating_parents=True):
+@register.simple_tag(takes_context=True)
+def section_menu(
+    context, show_section_root=True, show_multiple_levels=True,
+    allow_repeating_parents=True, template='menus/section_menu.html'
+):
     """Render a section menu for the current section."""
     request = context['request']
     current_site = request.site
@@ -111,11 +117,14 @@ def section_menu(context, show_section_root=True, show_multiple_levels=True,
         'show_section_root': show_section_root,
         'menu_items': tuple(menu_items),
     })
-    return context
+    tpl = loader.get_template(template)
+    return tpl.render(context)
 
 
-@register.inclusion_tag('menus/flat_menu.html', takes_context=True)
-def flat_menu(context, handle, show_menu_heading=True):
+@register.simple_tag(takes_context=True)
+def flat_menu(
+    context, handle, show_menu_heading=True, template='menus/flat_menu.html'
+):
     """
     Find a FlatMenu for the current site matching the `handle` provided and
     render it.
@@ -148,12 +157,15 @@ def flat_menu(context, handle, show_menu_heading=True):
             'menu_heading': '',
             'menu_items': [],
         })
-    return context
+    tpl = loader.get_template(template)
+    return tpl.render(context)
 
 
-@register.inclusion_tag('menus/children_menu.html', takes_context=True)
-def children_menu(context, menuitem_or_page, stop_at_this_level=False,
-                  allow_repeating_parents=None):
+@register.simple_tag(takes_context=True)
+def children_menu(
+    context, menuitem_or_page, stop_at_this_level=False,
+    allow_repeating_parents=None, template='menus/children_menu.html'
+):
     """
     Retrieve the children menu items for the `menuitem_or_page` provided, and
     render them as a simple ul list
@@ -197,19 +209,21 @@ def children_menu(context, menuitem_or_page, stop_at_this_level=False,
         'menu_items': tuple(menu_items),
         'allow_repeating_parents': allow_repeating_parents,
     })
-    return context
+    tpl = loader.get_template(template)
+    return tpl.render(context)
 
 
-@register.inclusion_tag('menus/children_menu_dropdown.html',
-                        takes_context=True)
-def children_menu_dropdown(context, menuitem_or_page, stop_at_this_level=True,
-                           allow_repeating_parents=None):
+@register.simple_tag(takes_context=True)
+def children_menu_dropdown(
+    context, menuitem_or_page, stop_at_this_level=True,
+    allow_repeating_parents=None, template='menus/children_menu_dropdown.html'
+):
     """
     Retrieve the children menu items for the `menuitem_or_page` provided, and
     render them as a dropdown ul list with added accessibility attributes
     """
     return children_menu(context, menuitem_or_page, stop_at_this_level,
-                         allow_repeating_parents)
+                         allow_repeating_parents, template)
 
 
 def prime_menu_items(
@@ -286,7 +300,7 @@ def prime_menu_items(
                     pass
 
             """
-            Now we can figure out what class should be added to this item
+            Now we can figure out which class should be added to this item
             """
             if current_page and page.pk == current_page.pk:
                 if page_is_repeated_in_subnav:
