@@ -4,21 +4,21 @@ It's an extension for torchbox's [Wagtail CMS](https://github.com/torchbox/wagta
 
 ## What does it provide?
 
-### Independent control over your root-level main menu items
+### 1. Independent control over your root-level main menu items
 
 The `MainMenu` model and it's orderable inline `MainMenuItem`s let you define the root-level items for your site's main navigation (or one for each site, if it's a multi-site project). Your menu items can link to pages or custom URLS, and you can append an optional hash or querystring to the URL if required. You can still hide pages from menus by unchecking `show_in_menus` on the page, but the root-level menu items will be protected from accidental additions.
 
 Your existing `Page` structure powers everything past the root level, so you don't have to recreate your whole page tree elsewhere.
 
-### Control which pages to repeat in dropdown/hover menus
+### 2. Control which pages to repeat in dropdown/hover menus
 
 Extend the `MenuPage` class (an abstract sub-class of Wagtail's `Page` model) to create your custom page types, and get a couple of extra fields that allow you to control advanced menu behaviour on an page-to-page basis.
 
-### Manage multiple 'flat' menus
+### 3. Manage multiple 'flat' menus via the CMS
 
 Create `FlatMenu`s to help you manage lists of links throughout your project. Each `FlatMenu` will have a handle, which you can easily use within templates to output them using a standard template.
 
-### A set of powerful templatetags and accessible menu templates
+### 4. A set of powerful templatetags and accessible menu templates
 
 Output from the included templates is designed to be fully accessible and compatible with Bootstrap 3. You can easily use your own templates by passing a `template` variable to any of the tags, or you can override the included templates by putting customised versions in a system-preferred location.
 
