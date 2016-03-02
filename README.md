@@ -31,7 +31,7 @@ Output from the included templates is designed to be fully accessible and compat
 5. Run `python manage.py makemigrations` to create migrations for the apps you've updated
 6. Run `python manage.py migrate` to add apply those migrations
 
-### Using the `MainMenu` class
+### The `MainMenu` class and `{% main_menu %}` tag
 
 1. Log into the Wagtail CMS for your project (as a superuser)
 2. Click on `Settings` in the side menu to access the options in there, then select `Main menu`
@@ -45,7 +45,7 @@ Output from the included templates is designed to be fully accessible and compat
 - `allow_repeating_parents`: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
 - `template`: Default: `menus/main_menu.html`. Lets you render the menu to a template of your choosing.
 
-### Using the `FlatMenu` class
+### Using `FlatMenu` class and `{% flat_menu %}`
 
 1. Log into the Wagtail CMS for your project (as a superuser)
 2. Click on `Settings` in the side menu to access the options in there, then select `Flat menus`
@@ -59,7 +59,7 @@ Output from the included templates is designed to be fully accessible and compat
 - `show_menu_heading`: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display a defined heading above the menu.
 - `template`: Default: `menus/main_menu.html`. Lets you render the menu to a template of your choosing.
 
-### Using the `{% section_menu %}` tag
+### The `{% section_menu %}` tag
 
 1. In whichever template you wish to add a context-specific, page-driven 'section menu' to your template (in a sidebar, for example), load `menu_tags` using `{% load menu_tags %}`
 2. Use the `{% section_menu %}` tag where you want the menu to appear
@@ -72,17 +72,15 @@ Output from the included templates is designed to be fully accessible and compat
 - `template`: Default: `menus/section_menu.html`. Lets you render the menu to a template of your choosing.
 
 
-### Controlling 'repeating' behaviour for specific sections
+### 'Repeating behaviour' for specific pages
 
 Let's say you have an 'About Us' section on your site. The top-level 'About Us' page has a decent amount of important content on it, and it also has important children pages that have more specific content (e.g. 'Meet the team', 'Our mission and values', 'Staff vacancies'). You want people to be able to access the top-level 'About Us' page from your navigation as easily as the other pages, but you're using a drop-down menu, and the 'About Us' page link has simply become a toggle for hiding and showing its children pages.
 
 Presuming the 'About Us' page uses a model that extends the `wagtailmenus.models.MenuPage`:
 
-1. Log into the Wagtail CMS for your project
-2. Find the 'About Us' page and click to get to it's 'edit' page
-3. Click on the `Settings` tab
-4. Uncollapse the `ADVANCED MENU BEHAVIOUR` panel by clicking the read arrow.
-5. Tick the checkbox that appears, and optionally provide some custom link text to use for the repeated nav item
-6. Save your changes.
+1. Find the 'About Us' page and click to get to it's 'edit' page
+2. Click on the `Settings` tab
+3. Uncollapse the `ADVANCED MENU BEHAVIOUR` panel by clicking the read arrow (if it's not there, you might need to configure your panels).
+4. Tick the checkbox that appears, and save your changes.
 
-In a multi-level main menu or section menu, an additional link will now appear alongside the children of 'About Us', allowing it to be accessed more easily. The page title will be repeated by default, but it's often desirable to use different text for the repeated nav item (commonly 'Overview' or 'Section home'). You can do that by altering the value of **Link text for sub-navigation item** and saving your changes.
+In a multi-level main menu or section menu, an additional link will now appear alongside the children of 'About Us', allowing it to be accessed more easily. The page title will be repeated by default, but it's often desirable to use different text for the repeated nav item (commonly 'Overview' or 'Section home'). You can do that by altering the value of **Link text for sub-navigation item**.
