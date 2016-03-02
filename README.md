@@ -45,7 +45,7 @@ Output from the included templates is designed to be fully accessible and compat
 - **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
 - **`template`**: Default: `menus/main_menu.html`. Lets you render the menu to a template of your choosing.
 
-### Using `FlatMenu` class and `{% flat_menu %}`
+### The `FlatMenu` class and `{% flat_menu %}`
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Flat menus`.
@@ -71,13 +71,13 @@ Output from the included templates is designed to be fully accessible and compat
 - **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
 - **`template`**: Default: `menus/section_menu.html`. Lets you render the menu to a template of your choosing.
 
-### 'Repeating behaviour' for specific pages
+### Optional repetition of selected pages in menus using `MenuPage`
 
 Let's say you have an 'About Us' section on your site. The top-level 'About Us' page has a decent amount of important content on it, and it also has important children pages that have more specific content (e.g. 'Meet the team', 'Our mission and values', 'Staff vacancies'). You want people to be able to access the top-level 'About Us' page from your navigation as easily as the other pages, but you're using a drop-down menu, and the 'About Us' page link has simply become a toggle for hiding and showing its children pages.
 
 Presuming the 'About Us' page uses a model that extends the `wagtailmenus.models.MenuPage`:
 
-1. Find the 'About Us' page and click to get to it's 'edit' page.
+1. Find the 'About Us' page in the CMS, and access it's 'edit' page.
 2. Click on the `Settings` tab.
 3. Uncollapse the `ADVANCED MENU BEHAVIOUR` panel by clicking the read arrow (if it's not there, you might need to configure your panels).
 4. Tick the checkbox that appears, and save your changes.
