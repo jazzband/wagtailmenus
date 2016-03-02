@@ -24,34 +24,34 @@ Output from the included templates is designed to be fully accessible and compat
 
 ## How to install
 
-1. Install the package using pip: `pip install git+https://github.com/rkhleics/wagtailmenus.git`
-2. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings (after `wagtailmodeladmin` and before your `core` app)
-3. Run `python manage.py migrate wagtailmenus` to set up the initial database tables
-4. In your `core` app and other apps (wherever you have defined a custom page/content model to use in your project), import `MenuPage` from `wagtailmenus.models`, and extend that instead of `Page` from `wagtail.wagtailcore.models`
-5. Run `python manage.py makemigrations` to create migrations for the apps you've updated
-6. Run `python manage.py migrate` to add apply those migrations
+1. Install the package using pip: `pip install git+https://github.com/rkhleics/wagtailmenus.git`.
+2. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings (after `wagtailmodeladmin` and before your `core` app).
+3. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
+4. In your `core` app and other apps (wherever you have defined a custom page/content model to use in your project), import `MenuPage` from `wagtailmenus.models`, and extend that instead of `Page` from `wagtail.wagtailcore.models`.
+5. Run `python manage.py makemigrations` to create migrations for the apps you've updated.
+6. Run `python manage.py migrate` to add apply those migrations.
 
 ### The `MainMenu` class and `{% main_menu %}` tag
 
-1. Log into the Wagtail CMS for your project (as a superuser)
-2. Click on `Settings` in the side menu to access the options in there, then select `Main menu`
+1. Log into the Wagtail CMS for your project (as a superuser).
+2. Click on `Settings` in the side menu to access the options in there, then select `Main menu`.
 3. Click the button at the top of the page to add a main menu for your site (or one for each of your sites if you are running a multi-site setup), using the `MENU ITEMS` InlinePanel to define the root level items.
-4. In whichever template you want to output your main menu in, load `menu_tags` using `{% load menu_tags %}`
+4. In whichever template you want to output your main menu in, load `menu_tags` using `{% load menu_tags %}`.
 5. Use the `{% main_menu %}` tag where you want the menu to appear.
 
 **Optional params for `{% main_menu %}`**
 
-- **`show_multiple_levels`**: Default: `True`. Lets you control whether subsequent levels should be rendered
+- **`show_multiple_levels`**: Default: `True`. Lets you control whether subsequent levels should be rendered.
 - **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
 - **`template`**: Default: `menus/main_menu.html`. Lets you render the menu to a template of your choosing.
 
 ### Using `FlatMenu` class and `{% flat_menu %}`
 
-1. Log into the Wagtail CMS for your project (as a superuser)
-2. Click on `Settings` in the side menu to access the options in there, then select `Flat menus`
+1. Log into the Wagtail CMS for your project (as a superuser).
+2. Click on `Settings` in the side menu to access the options in there, then select `Flat menus`.
 3. Click the button at the top of the page to add a flat menu for your site (or one for each of your sites if you are running a multi-site setup), choosing a 'unique for site' `handle` to reference in your templates, and using the `MENU ITEMS` InlinePanel to define the the links you want to appear in it.
-4. Save your new menu
-5. In whichever template you want to output your flat menu, load `menu_tags` using `{% load menu_tags %}`
+4. Save your new menu.
+5. In whichever template you want to output your flat menu, load `menu_tags` using `{% load menu_tags %}`.
 6. Use the `{% flat_menu 'menu-handle' %}` tag where you want the menu to appear, where 'menu-handle' is the unique handle for the menu you added.
 
 **Optional params for `{% flat_menu %}`**
@@ -61,13 +61,13 @@ Output from the included templates is designed to be fully accessible and compat
 
 ### The `{% section_menu %}` tag
 
-1. In whichever template you wish to add a context-specific, page-driven 'section menu' to your template (in a sidebar, for example), load `menu_tags` using `{% load menu_tags %}`
-2. Use the `{% section_menu %}` tag where you want the menu to appear
+1. In whichever template you wish to add a context-specific, page-driven 'section menu' to your template (in a sidebar, for example), load `menu_tags` using `{% load menu_tags %}`.
+2. Use the `{% section_menu %}` tag where you want the menu to appear.
 
 **Optional params for `{% section_menu %}`**
 
 - **`show_section_root`**: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display the root page of the current section.
-- **`show_multiple_levels`**: Default: `True`. Lets you control whether subsequent levels should be rendered
+- **`show_multiple_levels`**: Default: `True`. Lets you control whether subsequent levels should be rendered.
 - **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
 - **`template`**: Default: `menus/section_menu.html`. Lets you render the menu to a template of your choosing.
 
@@ -77,8 +77,8 @@ Let's say you have an 'About Us' section on your site. The top-level 'About Us' 
 
 Presuming the 'About Us' page uses a model that extends the `wagtailmenus.models.MenuPage`:
 
-1. Find the 'About Us' page and click to get to it's 'edit' page
-2. Click on the `Settings` tab
+1. Find the 'About Us' page and click to get to it's 'edit' page.
+2. Click on the `Settings` tab.
 3. Uncollapse the `ADVANCED MENU BEHAVIOUR` panel by clicking the read arrow (if it's not there, you might need to configure your panels).
 4. Tick the checkbox that appears, and save your changes.
 
