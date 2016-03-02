@@ -52,12 +52,12 @@ Output from the included templates is designed to be fully accessible and compat
 3. Click the button at the top of the page to add a flat menu for your site (or one for each of your sites if you are running a multi-site setup), choosing a 'unique for site' `handle` to reference in your templates, and using the `MENU ITEMS` InlinePanel to define the the links you want to appear in it.
 4. Save your new menu
 5. In whichever template you want to output your flat menu, load `menu_tags` using `{% load menu_tags %}`
-6. Use the `{% flat_menu 'menu-handle' %}` tag where you want the menu to appear, where 'menu-handle' is the unique handle for the menu you want to use
+6. Use the `{% flat_menu 'menu-handle' %}` tag where you want the menu to appear, where 'menu-handle' is the unique handle for the menu you added.
 
 **Optional params for `{% flat_menu %}`**
 
-- `show_menu_heading`: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display a defined heading above the menu.
-- `template`: Default: `menus/main_menu.html`. Lets you render the menu to a template of your choosing.
+- `show_menu_heading`: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display a heading above the menu.
+- `template`: Default: `menus/flat_menu.html`. Lets you render the menu to a template of your choosing.
 
 ### The `{% section_menu %}` tag
 
