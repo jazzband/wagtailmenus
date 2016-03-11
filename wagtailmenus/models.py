@@ -78,7 +78,7 @@ class MenuItem(models.Model):
     @property
     def menu_text(self):
         if self.link_page:
-            return self.link_page.title
+            return self.link_text or self.link_page.title
         return self.link_text
 
     def clean(self, *args, **kwargs):
