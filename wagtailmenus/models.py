@@ -10,6 +10,7 @@ from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, PageChooserPanel, FieldRowPanel, InlinePanel)
 from wagtail.wagtailcore.models import Orderable
 
+from .managers import MenuItemManager
 from .panels import menupage_settings_panels
 
 
@@ -62,6 +63,8 @@ class MenuItem(models.Model):
         max_length=255,
         blank=True,
     )
+
+    objects = MenuItemManager()
 
     class Meta:
         abstract = True
