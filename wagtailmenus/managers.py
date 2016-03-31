@@ -7,7 +7,8 @@ class MenuItemManager(models.Manager):
 
     def for_display(self):
         return self.filter(
-            Q(link_page__isnull=True) |
-            Q(link_page__live=True) & Q(link_page__expired=False) & 
-            Q(link_page__in_menus=True)
+            models.Q(link_page__isnull=True) |
+            models.Q(link_page__live=True) &
+            models.Q(link_page__expired=False) & 
+            models.Q(link_page__show_in_menus=True)
         ).select_related('link_page')
