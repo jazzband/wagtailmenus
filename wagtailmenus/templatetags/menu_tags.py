@@ -1,4 +1,5 @@
 from django.template import loader, Library
+from django.db.models import Q
 from copy import deepcopy
 from ..models import MainMenu, FlatMenu
 
@@ -33,9 +34,14 @@ def main_menu(
         menu = MainMenu.objects.create(site=site)
     ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
 
+    menu_items = menu.menu_items.filter(
+        Q(link_page__live=True) & Q(link_page__in_menus=True) |
+        Q(link_page__isnull=True)
+    ).select_related('link_page')
+
     context.update({
         'menu_items': tuple(prime_menu_items(
-            menu_items=menu.menu_items.all().select_related('link_page'),
+            menu_items=menu_items,
             current_page=context.get('self'),
             current_page_ancestor_ids=ancestor_ids,
             current_site=site,
