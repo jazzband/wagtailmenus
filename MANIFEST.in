@@ -1,4 +1,4 @@
-include LICENSE
+include LICENSE.txt
 include README.md
 recursive-include wagtailmenus/templates *.html
 recursive-include wagtailmenus *.py
