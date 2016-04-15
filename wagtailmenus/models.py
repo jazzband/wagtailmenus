@@ -7,7 +7,7 @@ from modelcluster.fields import ParentalKey
 
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailadmin.edit_handlers import (
-    FieldPanel, PageChooserPanel, FieldRowPanel, InlinePanel)
+    FieldPanel, PageChooserPanel, MultiFieldPanel, FieldRowPanel, InlinePanel)
 from wagtail.wagtailcore.models import Orderable
 
 from .managers import MenuItemManager
@@ -59,9 +59,12 @@ class MenuItem(models.Model):
         help_text=_("Must be set if you wish to link to a custom URL."),
     )
     url_append = models.CharField(
-        verbose_name=_("Hash or querystring to append to URL"),
+        verbose_name=_("Append to URL"),
         max_length=255,
         blank=True,
+        help_text=(
+            "Use this to optionally append a #hash or querystring to the "
+            "above page's URL.")
     )
 
     objects = MenuItemManager()
@@ -161,15 +164,20 @@ class FlatMenu(ClusterableModel):
         return u'%s (%s)' % (self.title, self.handle)
 
     panels = (
-        FieldPanel('site'),
-        FieldRowPanel(
-            classname='label-above',
+        MultiFieldPanel(
+            heading=_("Settings"),
             children=(
-                FieldPanel('title', classname="col6"),
-                FieldPanel('handle', classname="col6"),
+                FieldRowPanel(
+                    classname='label-above',
+                    children=(
+                        FieldPanel('site', classname="col12"),
+                        FieldPanel('title', classname="col6"),
+                        FieldPanel('handle', classname="col6"),
+                        FieldPanel('heading', classname="col12"),
+                    )
+                ),
             )
         ),
-        FieldPanel('heading'),
         InlinePanel('menu_items', label=_("Menu items")),
     )
 
