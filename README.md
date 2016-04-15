@@ -38,6 +38,13 @@ NOTE: It is not necessary to extend `MenuPage` for all custom page types; Just o
 
 ## How to use
 
+**Skip to:**
+
+- [The `MainMenu` class and `{% main_menu %}` tag](#the-mainmenu-class-and--main_menu--tag)
+- [The `FlatMenu` class and `{% flat_menu %}` tag](#the-flatmenu-class-and--flat_menu--tag)
+- [The `{% section_menu %}` tag](#the--section_menu--tag)
+- [Optional repetition of selected pages in menus using `MenuPage`](#optional-repetition-of-selected-pages-in-menus-using-menupage)
+
 ### The `MainMenu` class and `{% main_menu %}` tag
 
 1. Log into the Wagtail CMS for your project (as a superuser).
