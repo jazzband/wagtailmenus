@@ -36,6 +36,8 @@ NOTE: It is not necessary to extend `MenuPage` for all custom page types; Just o
 2. Run `python manage.py makemigrations` to create migrations for the apps you've updated.
 3. Run `python manage.py migrate` to add apply those migrations.
 
+## How to use
+
 ### The `MainMenu` class and `{% main_menu %}` tag
 
 1. Log into the Wagtail CMS for your project (as a superuser).
