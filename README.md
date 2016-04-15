@@ -54,7 +54,7 @@ Output from the included templates is designed to be fully accessible and compat
 5. In whichever template you want to output your flat menu, load `menu_tags` using `{% load menu_tags %}`.
 6. Use the `{% flat_menu 'menu-handle' %}` tag where you want the menu to appear, where 'menu-handle' is the unique handle for the menu you added.
 
-**Optional params for `{% flat_menu %}`**
+**Optional params for `{% flat_menu %}` tag**
 
 - **`show_menu_heading`**: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display a heading above the menu.
 - **`template`**: Default: `menus/flat_menu.html`. Lets you render the menu to a template of your choosing.
