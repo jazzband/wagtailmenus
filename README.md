@@ -45,7 +45,7 @@ Output from the included templates is designed to be fully accessible and compat
 - **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
 - **`template`**: Default: `menus/main_menu.html`. Lets you render the menu to a template of your choosing.
 
-### The `FlatMenu` class and `{% flat_menu %}`
+### The `FlatMenu` class and `{% flat_menu %}` tag
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Flat menus`.
@@ -54,7 +54,7 @@ Output from the included templates is designed to be fully accessible and compat
 5. In whichever template you want to output your flat menu, load `menu_tags` using `{% load menu_tags %}`.
 6. Use the `{% flat_menu 'menu-handle' %}` tag where you want the menu to appear, where 'menu-handle' is the unique handle for the menu you added.
 
-**Optional params for `{% flat_menu %}` tag**
+**Optional params for `{% flat_menu %}`**
 
 - **`show_menu_heading`**: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display a heading above the menu.
 - **`template`**: Default: `menus/flat_menu.html`. Lets you render the menu to a template of your choosing.
