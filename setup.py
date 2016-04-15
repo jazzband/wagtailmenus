@@ -35,6 +35,6 @@ setup(
     ],
     install_requires=[
         "wagtail>=1.3.1",
-        "wagtailmodeladmin>=1.2.5"
+        "wagtailmodeladmin>=2.5.7",
     ],
 )
