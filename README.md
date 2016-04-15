@@ -24,7 +24,7 @@ Output from the included templates is designed to be fully accessible and compat
 
 ## How to install
 
-1. Install the package using pip: `pip install git+https://github.com/rkhleics/wagtailmenus.git`.
+1. Install the package using pip: `pip install wagtailmenus`.
 2. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings (after `wagtailmodeladmin` and before your `core` app).
 3. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
 4. In your `core` app and other apps (wherever you have defined a custom page/content model to use in your project), import `MenuPage` from `wagtailmenus.models`, and extend that instead of `Page` from `wagtail.wagtailcore.models`.
