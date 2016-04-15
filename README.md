@@ -40,12 +40,12 @@ NOTE: It is not necessary to extend `MenuPage` for all custom page types; Just o
 
 **Skip to:**
 
-- [The `MainMenu` class and `{% main_menu %}` tag](#the-mainmenu-class-and--main_menu--tag)
-- [The `FlatMenu` class and `{% flat_menu %}` tag](#the-flatmenu-class-and--flat_menu--tag)
+- [The `MainMenu` model and `{% main_menu %}` tag](#the-mainmenu-model-and--main_menu--tag)
+- [The `FlatMenu` model and `{% flat_menu %}` tag](#the-flatmenu-model-and--flat_menu--tag)
 - [The `{% section_menu %}` tag](#the--section_menu--tag)
 - [Optional repetition of selected pages in menus using `MenuPage`](#optional-repetition-of-selected-pages-in-menus-using-menupage)
 
-### The `MainMenu` class and `{% main_menu %}` tag
+### The `MainMenu` model and `{% main_menu %}` tag
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Main menu`.
@@ -59,7 +59,7 @@ NOTE: It is not necessary to extend `MenuPage` for all custom page types; Just o
 - **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
 - **`template`**: Default: `menus/main_menu.html`. Lets you render the menu to a template of your choosing.
 
-### The `FlatMenu` class and `{% flat_menu %}` tag
+### The `FlatMenu` model and `{% flat_menu %}` tag
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Flat menus`.
