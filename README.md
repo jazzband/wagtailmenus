@@ -10,7 +10,7 @@ The `MainMenu` model and it's orderable inline `MainMenuItem`s let you define th
 
 Your existing `Page` structure powers everything past the root level, so you don't have to recreate your whole page tree elsewhere.
 
-### 2. Allow pages you choose to repeat in dropdown/hover menus, so that you can always get to them
+### 2. Specify pages that should repeat in dropdown/hover menus, to improve visibility/acessibility
 
 Extend the `MenuPage` class (an abstract sub-class of Wagtail's `Page` model) to create your custom page types, and get a couple of extra fields that allow you to control advanced menu behaviour on an page-to-page basis.
 
