@@ -40,12 +40,12 @@ NOTE: It is not necessary to extend `MenuPage` for all custom page types; Just o
 
 **Skip to:**
 
-- [The `MainMenu` model and `{% main_menu %}` tag](#the-mainmenu-model-and--main_menu--tag)
-- [The `FlatMenu` model and `{% flat_menu %}` tag](#the-flatmenu-model-and--flat_menu--tag)
-- [The `{% section_menu %}` tag](#the--section_menu--tag)
-- [Optional repetition of selected pages in menus using `MenuPage`](#optional-repetition-of-selected-pages-in-menus-using-menupage)
+- [The `MainMenu` model and `{% main_menu %}` tag](#using-main-menus)
+- [The `FlatMenu` model and `{% flat_menu %}` tag](#using-flat-menus)
+- [The `{% section_menu %}` tag](#using-section-menus)
+- [Optional repetition of selected pages in menus using `MenuPage`](#using-menupage)
 
-### The `MainMenu` model and `{% main_menu %}` tag
+### <a name="using-main-menus"></a> The `MainMenu` model and `{% main_menu %}` tag
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Main menu`.
@@ -59,7 +59,7 @@ NOTE: It is not necessary to extend `MenuPage` for all custom page types; Just o
 - **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
 - **`template`**: Default: `menus/main_menu.html`. Lets you render the menu to a template of your choosing.
 
-### The `FlatMenu` model and `{% flat_menu %}` tag
+### <a name="using-flat-menus"></a> The `FlatMenu` model and `{% flat_menu %}` tag
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Flat menus`.
@@ -73,7 +73,7 @@ NOTE: It is not necessary to extend `MenuPage` for all custom page types; Just o
 - **`show_menu_heading`**: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display a heading above the menu.
 - **`template`**: Default: `menus/flat_menu.html`. Lets you render the menu to a template of your choosing.
 
-### The `{% section_menu %}` tag
+### <a name="using-section-menus"></a> The `{% section_menu %}` tag
 
 1. In whichever template you wish to add a context-specific, page-driven 'section menu' to your template (in a sidebar, for example), load `menu_tags` using `{% load menu_tags %}`.
 2. Use the `{% section_menu %}` tag where you want the menu to appear.
@@ -85,7 +85,7 @@ NOTE: It is not necessary to extend `MenuPage` for all custom page types; Just o
 - **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
 - **`template`**: Default: `menus/section_menu.html`. Lets you render the menu to a template of your choosing.
 
-### Optional repetition of selected pages in menus using `MenuPage`
+### <a name="using-menupage"></a> Optional repetition of selected pages in menus using `MenuPage`
 
 Let's say you have an 'About Us' section on your site. The top-level 'About Us' page has a decent amount of important content on it, and it also has important children pages that have more specific content (e.g. 'Meet the team', 'Our mission and values', 'Staff vacancies'). You want people to be able to access the top-level 'About Us' page from your navigation as easily as the other pages, but you're using a drop-down menu, and the 'About Us' page link has simply become a toggle for hiding and showing its children pages.
 
@@ -93,7 +93,9 @@ Presuming the 'About Us' page uses a model that extends the `wagtailmenus.models
 
 1. Find the 'About Us' page in the CMS, and access it's 'edit' page.
 2. Click on the `Settings` tab.
-3. Uncollapse the `ADVANCED MENU BEHAVIOUR` panel by clicking the read arrow (if it's not there, you might need to configure your panels).
+3. Uncollapse the `ADVANCED MENU BEHAVIOUR` panel by clicking the red arrow next to the panel's label. 
 4. Tick the checkbox that appears, and save your changes.
 
-In a multi-level main menu or section menu, an additional link will now appear alongside the children of 'About Us', allowing it to be accessed more easily. The page title will be repeated by default, but it's often desirable to use different text for the repeated nav item (commonly 'Overview' or 'Section home'). You can do that by altering the value of **Link text for sub-navigation item**.
+NOTE: If you're using a custom `TabbedInterface` for your page model, you won't see the `ADVANCED MENU BEHAVIOUR` panel by default. Take a look at `wagtailmenus.panels.py`. There should be something in there that you can import and use in your custom `TabbedInteface`, or at least something you can copy to get the panel to show.
+
+In a multi-level main menu or section menu (as long as the template tags aren't called with `allow_repeating_parents=False`), an additional link to the 'About Us' page should now appear alongside the links to it's children pages, allowing that page to be accessed more easily. The page's title will be used as the menu text for the repeated item by default. But, it's often desirable to use different text for the repeated nav item (e.g. 'Overview' or 'Section home'). You can do this by altering the value of **Link text for sub-navigation item** (also in the `ADVANCED MENU BEHAVIOUR` panel).
