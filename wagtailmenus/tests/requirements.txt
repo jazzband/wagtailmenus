@@ -1,0 +1,8 @@
+pytz
+wagtail==1.4.3
+wagtailmodeladmin
+django-taggit==0.18.0
+django-modelcluster==1.1
+Willow==0.2.2
+Pillow==3.1.1
+coverage==4.0.3
