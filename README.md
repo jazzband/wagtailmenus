@@ -95,8 +95,8 @@ Let's say you have an 'About Us' section on your site. The top-level 'About Us' 
 Presuming the 'About Us' page uses a model that extends `wagtailmenus.models.MenuPage`:
 
 1. Edit the 'About Us' page in the CMS, and click on the `Settings` tab.
-2. Uncollapse the `ADVANCED MENU BEHAVIOUR` panel by clicking the red arrow next to the panel's label. 
-4. Tick the checkbox that appears, and save your changes.
+2. Uncollapse the `ADVANCED MENU BEHAVIOUR` panel by clicking the downward-pointing arrow next to the panel's label. ![advanced menu behaviour panel collapsed](http://i.imgur.com/XwbZjwL.png)
+4. Tick the **Repeat in sub-navigation** checkbox that appears, and save your changes. ![advanced menu behaviour panel open](http://i.imgur.com/EzBKZyB.png)
 
 **NOTE:** If you're using a custom `TabbedInterface` for your page model, you won't see the `ADVANCED MENU BEHAVIOUR` panel by default. Take a look at `wagtailmenus.panels.py`. There should be something in there that you can import and use in your custom `TabbedInteface`, or at least something you can copy to get the panel to show.
 
