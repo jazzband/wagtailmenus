@@ -16,13 +16,15 @@ from .panels import menupage_settings_panels
 
 class MenuPage(Page):
     repeat_in_subnav = models.BooleanField(
-        verbose_name=_(
-            "Include a link to this page alongside children when displaying "
-            "sub-navigation"),
+        verbose_name=_("repeat in sub-navigation"),
+        help_text=_(
+            "If checked, a link to this page will be repeated alongside it's "
+            "direct children when displaying a sub-navigation for this page."
+        ),
         default=False,
     )
     subnav_menu_text = models.CharField(
-        verbose_name=_('Link text for sub-navigation item'),
+        verbose_name=_('link text for sub-navigation item'),
         max_length=255,
         blank=True,
         help_text=_(
@@ -42,14 +44,14 @@ class MenuItem(models.Model):
 
     link_page = models.ForeignKey(
         'wagtailcore.Page',
-        verbose_name=_('Link to an internal page'),
+        verbose_name=_('link to an internal page'),
         blank=True,
         null=True,
         on_delete=models.CASCADE,
     )
     link_url = models.CharField(
         max_length=255,
-        verbose_name=_('Link to a custom URL'),
+        verbose_name=_('link to a custom URL'),
         blank=True,
         null=True,
     )
@@ -59,7 +61,7 @@ class MenuItem(models.Model):
         help_text=_("Must be set if you wish to link to a custom URL."),
     )
     url_append = models.CharField(
-        verbose_name=_("Append to URL"),
+        verbose_name=_("append to URL"),
         max_length=255,
         blank=True,
         help_text=(
@@ -187,9 +189,7 @@ class MainMenuItem(Orderable, MenuItem):
 
     allow_subnav = models.BooleanField(
         default=True,
-        verbose_name=_(
-            "Allow sub-navigation for this page"
-        ),
+        verbose_name=_("allow sub-navigation for this page"),
     )
     panels = MenuItem.panels + (
         FieldPanel('allow_subnav'),
