@@ -1,0 +1,61 @@
+{% extends "wagtailmodeladmin/create.html" %}
+{% load i18n %}
+
+{% block content %}
+    <header class="nice-padding">
+        <div class="row">
+            <div class="left">
+                <div class="col">
+                    <h1 class="icon icon-{{ view.header_icon }}">
+                        {% trans view.page_title %}
+                        <span>{{ view.get_page_subtitle }}</span>
+                    </h1>
+                </div>
+            </div>
+            <div class="right">
+                {% if site_switcher %}
+                <form method="get" id="settings-site-switch">
+                    <label for="{{ site_switcher.site.id_for_label }}">
+                        Site:
+                    </label>
+                    <div class="input">
+                        {{ site_switcher.site }}
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <form action="?" method="POST">
+        {% csrf_token %}
+
+        {{ edit_handler.render_form_content }}
+        
+        <footer>
+            <ul>
+                <li class="actions">
+                    {% block form_actions %}
+                        <div class="dropdown dropup match-width">
+                            <input type="submit" value="{% trans 'Save' %}" class="button" />
+                        </div>
+                    {% endblock %}
+                </li>
+            </ul>
+        </footer>
+        
+    </form>
+{% endblock %}
+
+{% block extra_css %}
+    {% include "wagtailadmin/pages/_editor_css.html" %}
+    {{ edit_handler.form.media.css }}
+    {{ site_switcher.media.css }}
+{% endblock %}
+{% block extra_js %}
+    {% include "wagtailadmin/pages/_editor_js.html" %}
+    {{ edit_handler.form.media.js }}
+    {{ site_switcher.media.js }}
+{% endblock %}
+
+

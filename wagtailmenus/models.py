@@ -84,7 +84,7 @@ class MenuItem(models.Model):
         return url + self.url_append
 
     @property
-    def menu_text(self):
+    def text(self):
         if self.link_page:
             return self.link_text or self.link_page.title
         return self.link_text
@@ -112,8 +112,8 @@ class MenuItem(models.Model):
                 "link and clear any unwanted values."
             ))
 
-    def __unicode__(self):
-        return self.menu_text
+    def __str__(self):
+        return self.text
 
     panels = (
         PageChooserPanel('link_page'),
@@ -124,17 +124,27 @@ class MenuItem(models.Model):
 
 
 class MainMenu(ClusterableModel):
-    site = models.OneToOneField('wagtailcore.Site', related_name="main_menu")
+    site = models.OneToOneField(
+        'wagtailcore.Site', related_name="main_menu",
+        db_index=True, editable=False, on_delete=models.CASCADE
+    )
 
     class Meta:
         verbose_name = _("main menu")
         verbose_name_plural = _("main menu")
 
-    def __unicode__(self):
-        return 'For %s' % (self.site.site_name or self.site)
+    @classmethod
+    def for_site(cls, site):
+        """
+        Get a mainmenu instance for the site.
+        """
+        instance, created = cls.objects.get_or_create(site=site)
+        return instance
+
+    def __str__(self):
+        return self._meta.verbose_name
 
     panels = (
-        FieldPanel('site'),
         InlinePanel('menu_items', label=_("Menu items")),
     )
 
@@ -162,8 +172,8 @@ class FlatMenu(ClusterableModel):
         verbose_name = _("flat menu")
         verbose_name_plural = _("flat menus")
 
-    def __unicode__(self):
-        return u'%s (%s)' % (self.title, self.handle)
+    def __str__(self):
+        return '%s (%s)' % (self.title, self.handle)
 
     panels = (
         MultiFieldPanel(

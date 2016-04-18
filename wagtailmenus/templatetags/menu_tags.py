@@ -87,7 +87,7 @@ def section_menu(
         to find out if it's going to be repeated alongside it's children in a
         subnav.
         """
-        extra_item = None
+        extra = None
         if (
             allow_repeating_parents and menu_items and
             getattr(section_root, 'repeat_in_subnav', False)
@@ -97,22 +97,25 @@ def section_menu(
             subnav, so we create a new item and add it to the existing
             menu_items
             """
-            extra_item = deepcopy(section_root)
+            extra = deepcopy(section_root)
             text = section_root.subnav_menu_text or section_root.title
-            setattr(extra_item, 'text', text)
-            if apply_active_classes and extra_item.pk == current_page.pk:
-                setattr(extra_item, 'active_class', ACTIVE_CLASS)
-            menu_items.insert(0, extra_item)
+            setattr(extra, 'text', text)
+            if apply_active_classes and extra.pk == current_page.pk:
+                setattr(extra, 'active_class', ACTIVE_CLASS)
+            menu_items.insert(0, extra)
         
         """
         Now we know the subnav/repetition situation, we can set the
         `active_class` for `section_root`
         """
         if apply_active_classes:
-            if extra_item and hasattr(extra_item, 'active_class'):
-                setattr(section_root, 'active_class', ACTIVE_ANCESTOR_CLASS)
-            elif section_root.pk == current_page.pk:
-                setattr(section_root, 'active_class', ACTIVE_CLASS)
+            active_class = ACTIVE_ANCESTOR_CLASS
+            if(
+                (extra is None or not hasattr(extra, 'active_class')) and
+                section_root.pk == current_page.pk
+            ):
+                active_class = ACTIVE_CLASS
+            setattr(section_root, 'active_class', active_class)
     else:
         menu_items = []
 

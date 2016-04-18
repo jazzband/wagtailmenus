@@ -22,6 +22,7 @@ INSTALLED_APPS = (
     'wagtailmenus.tests',
     'wagtailmenus',
 
+    'wagtail.contrib.settings',
     'wagtail.wagtailforms',
     'wagtail.wagtailsearch',
     'wagtail.wagtailembeds',
