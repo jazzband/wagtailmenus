@@ -44,8 +44,8 @@ def main_menu(
             allow_repeating_parents=allow_repeating_parents,
         ))
     })
-    tpl = loader.get_template(template)
-    return tpl.render(context)
+    t = context.template.engine.get_template(template)
+    return t.render(context)
 
 
 @register.simple_tag(takes_context=True)
@@ -118,8 +118,8 @@ def section_menu(
         'show_section_root': show_section_root,
         'menu_items': tuple(menu_items),
     })
-    tpl = loader.get_template(template)
-    return tpl.render(context)
+    t = context.template.engine.get_template(template)
+    return t.render(context)
 
 
 @register.simple_tag(takes_context=True)
@@ -158,8 +158,8 @@ def flat_menu(
             'menu_heading': '',
             'menu_items': [],
         })
-    tpl = loader.get_template(template)
-    return tpl.render(context)
+    t = context.template.engine.get_template(template)
+    return t.render(context)
 
 
 @register.simple_tag(takes_context=True)
@@ -210,8 +210,8 @@ def children_menu(
         'menu_items': tuple(menu_items),
         'allow_repeating_parents': allow_repeating_parents,
     })
-    tpl = loader.get_template(template)
-    return tpl.render(context)
+    t = context.template.engine.get_template(template)
+    return t.render(context)
 
 
 @register.simple_tag(takes_context=True)
