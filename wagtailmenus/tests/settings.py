@@ -7,8 +7,8 @@ SITE_ID = 1
 
 DATABASES = {
     'default': {
-        'NAME': 'wagtailmenus.sqlite',
-        'TEST_NAME': 'wagtailmenus_test.sqlite',
+        'NAME': 'wagtailmenus_test.sqlite',
+        'TEST_NAME': 'wagtailmenus_test_test.sqlite',
         'ENGINE': 'django.db.backends.sqlite3',
     }
 }
@@ -19,8 +19,6 @@ USE_I18N = True
 USE_L10N = True
 
 INSTALLED_APPS = (
-    
-
     'wagtailmenus.tests',
     'wagtailmenus',
 
@@ -38,6 +36,7 @@ INSTALLED_APPS = (
     'wagtail.wagtailcore',
 
     'wagtailmodeladmin',
+    'django_nose',
     'taggit',
     'modelcluster',
 
@@ -60,8 +59,20 @@ SECRET_KEY = 'fake-key'
 
 ROOT_URLCONF = 'wagtailmenus.tests.urls'
 
+WAGTAIL_SITE_NAME = 'Test site'
 LOGIN_URL = 'wagtailadmin_login'
 LOGIN_REDIRECT_URL = 'wagtailadmin_home'
+
+
+# =============================================================================
+# django-nose config
+# =============================================================================
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=wagtailmenus',
+]
 
 # =============================================================================
 # Templates
