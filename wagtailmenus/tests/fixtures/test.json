@@ -316,7 +316,7 @@
     "fields": {
         "title": "Legal",
         "numchild": 4,
-        "show_in_menus": false,
+        "show_in_menus": true,
         "live": true,
         "depth": 3,
         "content_type": ["tests", "toplevelpage"],
@@ -502,7 +502,7 @@
     "model": "wagtailmenus.flatmenu",
     "fields": {
         "site": 1,
-        "title": "CTA links",
+        "title": "Contact links",
         "handle": "contact",
         "heading": ""
     }
