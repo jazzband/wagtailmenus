@@ -36,7 +36,6 @@ INSTALLED_APPS = (
     'wagtail.wagtailcore',
 
     'wagtailmodeladmin',
-    'django_nose',
     'taggit',
     'modelcluster',
 
@@ -63,16 +62,6 @@ WAGTAIL_SITE_NAME = 'Test site'
 LOGIN_URL = 'wagtailadmin_login'
 LOGIN_REDIRECT_URL = 'wagtailadmin_home'
 
-
-# =============================================================================
-# django-nose config
-# =============================================================================
-
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=wagtailmenus',
-]
 
 # =============================================================================
 # Templates

@@ -15,13 +15,13 @@
                 <a class="logo" href="/" title="Go to home page">Wagtailmenus Test</a>
 
                 <nav role="navigation" class="navbar-default nav-main">
-                    <div class="collapse navbar-collapse navbar" id="nav-main">
-                        {% main_menu %}
+                    <div class="collapse navbar-collapse navbar" id="main_menu_output">
+                        {% spaceless %}{% main_menu %}{% endspaceless %}
                     </div>
                 </nav>
 
-                <div id="nav-cta">
-                    {% flat_menu 'cta' show_menu_heading=False %}
+                <div id="nav-contact">
+                    {% spaceless %}{% flat_menu 'contact' show_menu_heading=False %}{% endspaceless %}
                 </div>
 
             </div>
@@ -37,7 +37,7 @@
         <footer role="contentinfo">
             <div class="container">
                 <div id="nav-footer">
-                    {% flat_menu 'footer' %}
+                    {% spaceless %}{% flat_menu 'footer' %}{% endspaceless %}
                 </div>
                 <p class="rkh"><a href="http://www.rkh.co.uk/" target="_blank" title="Web design and development, Leicester">Website by Rock Kitchen Harris</a></p>
             </div>
