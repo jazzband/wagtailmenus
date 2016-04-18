@@ -16,7 +16,7 @@ Your existing `Page` structure powers everything past the root level, so you don
 
 Extend the `MenuPage` class (an abstract sub-class of Wagtail's `Page` model) to create your custom page types, and gain a couple of extra fields that allow you to control advanced menu behaviour on a page-to-page basis.
 
-### 3. Manage multiple 'flat' menus from the Wagtail's admin area
+### 3. Manage multiple 'flat' menus from the Wagtail admin area
 
 Create `FlatMenu`s to help you manage lists of links throughout your project. Each `FlatMenu` will have a unique `handle`, allowing you to reference it in `{% flat_menu %}` tags throughout your project's templates.
 
