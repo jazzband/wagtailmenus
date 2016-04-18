@@ -2,9 +2,7 @@
 {% if menu_items %}
     <nav class="nav-section" role="navigation">
         {% if show_section_root and section_root %}
-            <a href="{{ section_root.href }}" class="{{ section_root.active_class }} section_root">
-                {{ section_root.text }}
-            </a>
+            <a href="{{ section_root.href }}" class="{{ section_root.active_class }} section_root">{{ section_root.text }}</a>
         {% endif %}
         <ul>
             {% for item in menu_items %}
