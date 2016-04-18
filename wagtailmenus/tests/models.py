@@ -10,8 +10,8 @@ class HomePage(MenuPage):
 class TopLevelPage(MenuPage):
     template = 'page.html'
     parent_page_types = [HomePage]
-    subpage_types = ['LowLevelPage']
 
 
 class LowLevelPage(Page):
     template = 'page.html'
+    parent_page_types = [TopLevelPage]
