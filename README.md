@@ -68,7 +68,7 @@ Output from the included templates is designed to be fully accessible and compat
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Flat menus`.
-3. Click the button at the top of the page to add a flat menu for your site (or one for each of your sites if you are running a multi-site setup), choosing a 'unique for site' `handle` to reference in your templates, and using the `MENU ITEMS` InlinePanel to define the the links you want to appear in it.
+3. Click the button at the top of the page to add a flat menu for your site (or one for each of your sites if you are running a multi-site setup), choosing a 'unique for site' `handle` to reference in your templates, and using the `MENU ITEMS` InlinePanel to define the the links you want to appear in it. ![screenshot to show location of add button on the FlatMenu list page](http://i.imgur.com/vJ0eCsR.png)
 4. Save your new menu.
 5. In whichever template you want to output your flat menu, load `menu_tags` using `{% load menu_tags %}`.
 6. Use the `{% flat_menu 'menu-handle' %}` tag where you want the menu to appear, where 'menu-handle' is the unique handle for the menu you added.
