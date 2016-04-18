@@ -45,7 +45,7 @@ Output from the included templates is designed to be fully accessible and compat
 - [The `{% section_menu %}` tag](#using-section-menus)
 - [Optional repetition of selected pages in menus using `MenuPage`](#using-menupage)
 
-### <a name="using-main-menus"></a> The `MainMenu` model and `{% main_menu %}` tag
+### <a id="using-main-menus"></a> The `MainMenu` model and `{% main_menu %}` tag
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Main menu`.
@@ -60,7 +60,7 @@ Output from the included templates is designed to be fully accessible and compat
 - **`template`**: Default: `menus/main_menu.html`. Lets you render the menu to a template of your choosing.
 - **`apply_active_classes`**: Default: `True`. wagtailmenus will attempt to add 'active' and 'ancestor' classes to the menu items, based on the current page (`self` in the context). To disable this behaviour, add `apply_active_classes=False`.
 
-### <a name="using-flat-menus"></a> The `FlatMenu` model and `{% flat_menu %}` tag
+### <a id="using-flat-menus"></a> The `FlatMenu` model and `{% flat_menu %}` tag
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Flat menus`.
@@ -75,7 +75,7 @@ Output from the included templates is designed to be fully accessible and compat
 - **`template`**: Default: `menus/flat_menu.html`. Lets you render the menu to a template of your choosing.
 - **`apply_active_classes`**: Default: `False`. If you wish for wagtailmenus to attempt to add 'active' and 'ancestor' classes to the menu items, based on the current page (`self` in the context), add `apply_active_classes=True`.
 
-### <a name="using-section-menus"></a> The `{% section_menu %}` tag
+### <a id="using-section-menus"></a> The `{% section_menu %}` tag
 
 1. In whichever template you wish to add a context-specific, page-driven 'section menu' to your template (in a sidebar, for example), load `menu_tags` using `{% load menu_tags %}`.
 2. Use the `{% section_menu %}` tag where you want the menu to appear.
@@ -88,7 +88,7 @@ Output from the included templates is designed to be fully accessible and compat
 - **`template`**: Default: `menus/section_menu.html`. Lets you render the menu to a template of your choosing.
 - **`apply_active_classes`**: Default: `True`. wagtailmenus will attempt to add 'active' and 'ancestor' classes to the menu items, based on the current page (`self` in the context). To disable this behaviour, add `apply_active_classes=False`.
 
-### <a name="using-menupage"></a> Optional repetition of selected pages in menus using `MenuPage`
+### <a id="using-menupage"></a> Optional repetition of selected pages in menus using `MenuPage`
 
 Let's say you have an 'About Us' section on your site. The top-level 'About Us' page has a decent amount of important content on it, and it also has important children pages that have more specific content (e.g. 'Meet the team', 'Our mission and values', 'Staff vacancies'). You want people to be able to access the top-level 'About Us' page from your navigation as easily as the other pages, but you're using a drop-down menu, and the 'About Us' page link has simply become a toggle for hiding and showing its children pages.
 
