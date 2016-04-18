@@ -30,7 +30,7 @@ Output from the included templates is designed to be fully accessible and compat
 
 **Optional steps, if you wish to use `MenuPage`**
 
-NOTE: It is not necessary to extend `MenuPage` for all custom page types; Just ones you know will be used for pages that may have children, and will need the option to repeat themselves in sub-menus when listing those children.
+**NOTE:** It is not necessary to extend `MenuPage` for all custom page types; Just ones you know will be used for pages that may have children, and will need the option to repeat themselves in sub-menus when listing those children.
 
 1. In your `core` app and other apps (wherever you have defined a custom page/content model to use in your project), import `wagtailmenus.models.MenuPage` and extend that instead of `wagtail.wagtailcore.models.Page`.
 2. Run `python manage.py makemigrations` to create migrations for the apps you've updated.
@@ -58,6 +58,7 @@ NOTE: It is not necessary to extend `MenuPage` for all custom page types; Just o
 - **`show_multiple_levels`**: Default: `True`. Lets you control whether subsequent levels should be rendered.
 - **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
 - **`template`**: Default: `menus/main_menu.html`. Lets you render the menu to a template of your choosing.
+- **`apply_active_classes`**: Default: `True`. wagtailmenus will attempt to add 'active' and 'ancestor' classes to the menu items, based on the current page (`self` in the context). To disable this behaviour, add `apply_active_classes=False`.
 
 ### <a name="using-flat-menus"></a> The `FlatMenu` model and `{% flat_menu %}` tag
 
@@ -72,6 +73,7 @@ NOTE: It is not necessary to extend `MenuPage` for all custom page types; Just o
 
 - **`show_menu_heading`**: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display a heading above the menu.
 - **`template`**: Default: `menus/flat_menu.html`. Lets you render the menu to a template of your choosing.
+- **`apply_active_classes`**: Default: `False`. If you wish for wagtailmenus to attempt to add 'active' and 'ancestor' classes to the menu items, based on the current page (`self` in the context), add `apply_active_classes=True`.
 
 ### <a name="using-section-menus"></a> The `{% section_menu %}` tag
 
@@ -84,6 +86,7 @@ NOTE: It is not necessary to extend `MenuPage` for all custom page types; Just o
 - **`show_multiple_levels`**: Default: `True`. Lets you control whether subsequent levels should be rendered.
 - **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
 - **`template`**: Default: `menus/section_menu.html`. Lets you render the menu to a template of your choosing.
+- **`apply_active_classes`**: Default: `True`. wagtailmenus will attempt to add 'active' and 'ancestor' classes to the menu items, based on the current page (`self` in the context). To disable this behaviour, add `apply_active_classes=False`.
 
 ### <a name="using-menupage"></a> Optional repetition of selected pages in menus using `MenuPage`
 
