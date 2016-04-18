@@ -16,13 +16,13 @@ Your existing `Page` structure powers everything past the root level, so you don
 
 Extend the `MenuPage` class (an abstract sub-class of Wagtail's `Page` model) to create your custom page types, and gain a couple of extra fields that allow you to control advanced menu behaviour on a page-to-page basis.
 
-### 3. Manage multiple 'flat' menus via the Wagtail CMS
+### 3. Manage multiple 'flat' menus from the Wagtail's admin area
 
 Create `FlatMenu`s to help you manage lists of links throughout your project. Each `FlatMenu` will have a unique `handle`, allowing you to reference it in `{% flat_menu %}` tags throughout your project's templates.
 
 ![Screenshot of FlatMenu list page in Wagtail admin](http://i.imgur.com/BZa46vl.png)
 
-### 4. A set of powerful templatetags and accessible menu templates
+### 4. A set of powerful template tags to render your menus using accessible menu templates
 
 Output from the included templates is designed to be fully accessible and compatible with Bootstrap 3. You can easily use your own templates by passing a `template` variable to any of the tags, or you can override the included templates by putting customised versions in a system-preferred location.
 
