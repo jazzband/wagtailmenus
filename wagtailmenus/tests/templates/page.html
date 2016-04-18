@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load menu_tags %}
+
+{% block content %}
+	<div class="row">
+
+		<div class="content-main">
+			<h1>{{ self.title }}</h1>
+			<p>Hello world.</p>
+		</div>
+
+		<div class="content-secondary">
+			<div id="nav-section">
+				{% spaceless %}{% section_menu %}{% endspaceless %}
+			</div>
+		</div>
+
+	</div>    
+{% endblock %}
