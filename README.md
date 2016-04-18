@@ -6,7 +6,7 @@ It's an extension for torchbox's [Wagtail CMS](https://github.com/torchbox/wagta
 
 ### 1. Independent control over your root-level main menu items
 
-The `MainMenu` model and it's orderable inline `MainMenuItem`s let you define the root-level items for your site's main navigation (or one for each site, if it's a multi-site project). Your menu items can link to pages or custom URLs, and you can append an optional hash or querystring to the URL if required. You can still hide pages from menus by unchecking `show_in_menus` on the page, but your site's root-level menu items (likely displayed in a manor that is 'sensitive' to change) will be protected from accidental additions.
+The `MainMenu` model and it's orderable inline `MainMenuItem`s let you define the root-level items for your site's main navigation (or one for each site, if it's a multi-site project). Your menu items can link to pages or custom URLs, and you can append an optional hash or querystring to the URL if required. You can still hide pages from menus by unchecking `show_in_menus` on the page, but your site's root-level menu items (likely displayed in a manner that is 'sensitive' to change) will be protected from accidental additions.
 
 Your existing `Page` structure powers everything past the root level, so you don't have to recreate your whole page tree elsewhere.
 
