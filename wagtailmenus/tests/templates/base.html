@@ -15,12 +15,14 @@
                 <a class="logo" href="/" title="Go to home page">Wagtailmenus Test</a>
 
                 <nav role="navigation" class="navbar-default nav-main">
-                    <div class="collapse navbar-collapse navbar" id="navbar">
+                    <div class="collapse navbar-collapse navbar" id="nav-main">
                         {% main_menu %}
                     </div>
-
-                    {% flat_menu 'head-extra' show_menu_heading=False %}
                 </nav>
+
+                <div id="nav-cta">
+                    {% flat_menu 'cta' show_menu_heading=False %}
+                </div>
 
             </div>
         </header>
@@ -29,15 +31,14 @@
 
             <div class="container content">
                 {% block content %}{% endblock %}
-
-                {% section_menu %}
             </div>
         </main>
 
         <footer role="contentinfo">
             <div class="container">
-                {% flat_menu 'footer' %}
-
+                <div id="nav-footer">
+                    {% flat_menu 'footer' %}
+                </div>
                 <p class="rkh"><a href="http://www.rkh.co.uk/" target="_blank" title="Web design and development, Leicester">Website by Rock Kitchen Harris</a></p>
             </div>
         </footer>

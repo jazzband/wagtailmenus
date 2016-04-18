@@ -27,7 +27,7 @@
         "show_in_menus": false,
         "live": true,
         "depth": 2,
-        "content_type": ["tests", "toplevelpage"],
+        "content_type": ["tests", "homepage"],
         "path": "00010001",
         "url_path": "/home/",
         "slug": "home"
@@ -35,7 +35,7 @@
 },
 {
     "pk": 2,
-    "model": "tests.toplevelpage",
+    "model": "tests.homepage",
     "fields": {
         "repeat_in_subnav": false
     }
@@ -503,7 +503,7 @@
     "fields": {
         "site": 1,
         "title": "CTA links",
-        "handle": "info",
+        "handle": "contact",
         "heading": ""
     }
 },
