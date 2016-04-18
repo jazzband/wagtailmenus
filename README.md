@@ -26,6 +26,8 @@ Create `FlatMenu`s to help you manage lists of links throughout your project. Ea
 
 Output from the included templates is designed to be fully accessible and compatible with Bootstrap 3. You can easily use your own templates by passing a `template` variable to any of the tags, or you can override the included templates by putting customised versions in a system-preferred location.
 
+![Screenshot from Sublime editor showing menu template code](http://i.imgur.com/XlteNfN.png)
+
 ## How to install
 
 1. Install the package using pip: `pip install wagtailmenus`.
