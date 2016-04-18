@@ -32,7 +32,7 @@ Output from the included templates is designed to be fully accessible and compat
 
 NOTE: It is not necessary to extend `MenuPage` for all custom page types; Just ones you know will be used for pages that may have children, and will need the option to repeat themselves in sub-menus when listing those children.
 
-1. In your `core` app and other apps (wherever you have defined a custom page/content model to use in your project), import `MenuPage` from `wagtailmenus.models`, and extend that instead of `wagtail.wagtailcore.models.Page`.
+1. In your `core` app and other apps (wherever you have defined a custom page/content model to use in your project), import `wagtailmenus.models.MenuPage` and extend that instead of `wagtail.wagtailcore.models.Page`.
 2. Run `python manage.py makemigrations` to create migrations for the apps you've updated.
 3. Run `python manage.py migrate` to add apply those migrations.
 
@@ -89,12 +89,12 @@ NOTE: It is not necessary to extend `MenuPage` for all custom page types; Just o
 
 Let's say you have an 'About Us' section on your site. The top-level 'About Us' page has a decent amount of important content on it, and it also has important children pages that have more specific content (e.g. 'Meet the team', 'Our mission and values', 'Staff vacancies'). You want people to be able to access the top-level 'About Us' page from your navigation as easily as the other pages, but you're using a drop-down menu, and the 'About Us' page link has simply become a toggle for hiding and showing its children pages.
 
-Presuming the 'About Us' page uses a model that extends the `wagtailmenus.models.MenuPage`:
+Presuming the 'About Us' page uses a model that extends `wagtailmenus.models.MenuPage`:
 
 1. Edit the 'About Us' page in the CMS, and click on the `Settings` tab.
 2. Uncollapse the `ADVANCED MENU BEHAVIOUR` panel by clicking the red arrow next to the panel's label. 
 4. Tick the checkbox that appears, and save your changes.
 
-NOTE: If you're using a custom `TabbedInterface` for your page model, you won't see the `ADVANCED MENU BEHAVIOUR` panel by default. Take a look at `wagtailmenus.panels.py`. There should be something in there that you can import and use in your custom `TabbedInteface`, or at least something you can copy to get the panel to show.
+**NOTE:** If you're using a custom `TabbedInterface` for your page model, you won't see the `ADVANCED MENU BEHAVIOUR` panel by default. Take a look at `wagtailmenus.panels.py`. There should be something in there that you can import and use in your custom `TabbedInteface`, or at least something you can copy to get the panel to show.
 
 In a multi-level main menu or section menu (as long as the template tags aren't called with `allow_repeating_parents=False`), an additional link to the 'About Us' page should now appear alongside the links to it's children pages, allowing that page to be accessed more easily. The page's title will be used as the menu text for the repeated item by default. But, it's often desirable to use different text for the repeated nav item (e.g. 'Overview' or 'Section home'). You can do this by altering the value of **Link text for sub-navigation item** (also in the `ADVANCED MENU BEHAVIOUR` panel).
