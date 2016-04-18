@@ -118,8 +118,8 @@ class MenuItem(models.Model):
     panels = (
         PageChooserPanel('link_page'),
         FieldPanel('url_append'),
-        FieldPanel('link_text'),
         FieldPanel('link_url'),
+        FieldPanel('link_text'),
     )
 
 
