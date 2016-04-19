@@ -22,8 +22,8 @@ class MainMenuAdmin(ModelAdmin):
 
     def get_admin_urls_for_registration(self):
         return (
-            url(get_url_pattern(self.opts, 'index'),
-                self.index_view, name=get_url_name(self.opts, 'index')),
+            url(get_url_pattern(self.opts),
+                self.index_view, name=get_url_name(self.opts)),
             url(get_object_specific_url_pattern(self.opts, 'edit'),
                 self.edit_view, name=get_url_name(self.opts, 'edit')),
         )

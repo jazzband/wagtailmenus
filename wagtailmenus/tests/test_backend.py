@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 from django.contrib.auth import get_user_model
 from django.test import TransactionTestCase
+from wagtail.wagtailcore.models import Site
 
 
 class TestBackend(TransactionTestCase):
@@ -47,9 +48,20 @@ class TestBackend(TransactionTestCase):
 
     def test_mainmenu_list(self):
         response = self.client.get('/admin/modeladmin/wagtailmenus/mainmenu/')
-        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, '/admin/modeladmin/wagtailmenus/mainmenu/edit/1/')
 
     def test_mainmenu_edit(self):
+        response = self.client.get(
+            '/admin/modeladmin/wagtailmenus/mainmenu/edit/1/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_mainmenu_edit_multisite(self):
+        site2 = Site.objects.create(
+            hostname='test2.com', port=80, root_page_id=2,
+            is_default_site=0, site_name="Test site 2")
+        site3 = Site.objects.create(
+            hostname='test3.com', port=80, root_page_id=3,
+            is_default_site=0, site_name="Test site 3")
         response = self.client.get(
             '/admin/modeladmin/wagtailmenus/mainmenu/edit/1/')
         self.assertEqual(response.status_code, 200)

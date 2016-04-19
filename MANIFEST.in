@@ -3,3 +3,6 @@ include README.md
 include wagtailmenus/tests/fixtures/test.json
 recursive-include wagtailmenus *.html
 recursive-include wagtailmenus *.py
+recursive-include wagtailmenus/static *.js
+recursive-include wagtailmenus/static *.css
+recursive-include wagtailmenus/static *.scss

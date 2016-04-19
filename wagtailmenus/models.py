@@ -84,7 +84,7 @@ class MenuItem(models.Model):
         return url + self.url_append
 
     @property
-    def text(self):
+    def menu_text(self):
         if self.link_page:
             return self.link_text or self.link_page.title
         return self.link_text
@@ -113,7 +113,7 @@ class MenuItem(models.Model):
             ))
 
     def __str__(self):
-        return self.text
+        return self.menu_text
 
     panels = (
         PageChooserPanel('link_page'),
@@ -132,7 +132,7 @@ class MainMenu(ClusterableModel):
     class Meta:
         verbose_name = _("main menu")
         verbose_name_plural = _("main menu")
-
+    
     @classmethod
     def for_site(cls, site):
         """
@@ -142,7 +142,7 @@ class MainMenu(ClusterableModel):
         return instance
 
     def __str__(self):
-        return self._meta.verbose_name
+        return _('Main menu for %s') % (self.site.site_name or self.site)
 
     panels = (
         InlinePanel('menu_items', label=_("Menu items")),

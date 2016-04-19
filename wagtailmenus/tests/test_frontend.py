@@ -108,7 +108,7 @@ class TestMenuRendering(TestCase):
         """
         response = self.client.get('/about-us/meet-the-team/')
         # Add assertions to compare rendered HTML against expected HTML
-        expected_menu_html = """<div id="nav-section"><nav class="nav-section" role="navigation"><a href="/about-us/" class=" section_root">About us</a><ul><li class=""><a href="/about-us/">Section home</a></li><li class="active"><a href="/about-us/meet-the-team/">Meet the team</a></li><li class=""><a href="/about-us/our-heritage/">Our heritage</a></li><li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li></ul></nav></div>"""
+        expected_menu_html = """<div id="nav-section"><nav class="nav-section" role="navigation"><a href="/about-us/" class="ancestor section_root">About us</a><ul><li class=""><a href="/about-us/">Section home</a></li><li class="active"><a href="/about-us/meet-the-team/">Meet the team</a></li><li class=""><a href="/about-us/our-heritage/">Our heritage</a></li><li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li></ul></nav></div>"""
         soup = BeautifulSoup(response.content, 'html5lib')
         menu_html = soup.find(id='nav-section').decode()
         self.assertHTMLEqual(menu_html, expected_menu_html)

@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+from django import forms
 from django.utils.text import capfirst
 from django.utils.translation import ugettext as _
 from django.shortcuts import get_object_or_404, redirect
@@ -8,7 +9,6 @@ from django.contrib.admin.utils import quote, unquote
 
 from wagtail.wagtailadmin import messages
 from wagtail.wagtailcore.models import Site
-from wagtail.contrib.settings.forms import SiteSwitchForm as OrigSiteSwitchForm
 
 from wagtailmodeladmin.views import WMABaseView, WMAFormView
 from wagtailmodeladmin.helpers import get_url_name
@@ -17,11 +17,17 @@ from .models import MainMenu
 edit_url_name = get_url_name(MainMenu._meta, 'edit')
 
 
-class SiteSwitchForm(OrigSiteSwitchForm):
+class SiteSwitchForm(forms.Form):
+    site = forms.ChoiceField(choices=[])
+
+    class Media:
+        js = [
+            'wagtailmenus/js/site-switcher.js',
+        ]
+
     def __init__(self, current_site, **kwargs):
         initial_data = {'site': self.get_change_url(current_site)}
-        super(OrigSiteSwitchForm, self).__init__(initial=initial_data,
-                                                 **kwargs)
+        super(SiteSwitchForm, self).__init__(initial=initial_data, **kwargs)
         sites = [(self.get_change_url(site), site)
                  for site in Site.objects.all()]
         self.fields['site'].choices = sites
