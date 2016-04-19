@@ -23,8 +23,8 @@ class MenuPage(Page):
         ),
         default=False,
     )
-    subnav_menu_text = models.CharField(
-        verbose_name=_('link text for sub-navigation item'),
+    repeated_item_text = models.CharField(
+        verbose_name=_('repeated item link text'),
         max_length=255,
         blank=True,
         help_text=_(

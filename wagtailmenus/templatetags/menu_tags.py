@@ -98,7 +98,7 @@ def section_menu(
             menu_items
             """
             extra = deepcopy(section_root)
-            text = section_root.subnav_menu_text or section_root.title
+            text = section_root.repeated_item_text or section_root.title
             setattr(extra, 'text', text)
             if apply_active_classes and extra.pk == current_page.pk:
                 setattr(extra, 'active_class', ACTIVE_CLASS)
@@ -211,7 +211,7 @@ def children_menu(
         if allow_repeating_parents and parent_page.repeat_in_subnav:
             extra_item = deepcopy(parent_page)
             href = parent_page.relative_url(current_site)
-            text = parent_page.subnav_menu_text or parent_page.title
+            text = parent_page.repeated_item_text or parent_page.title
             setattr(extra_item, 'href', href)
             setattr(extra_item, 'text', text)
             if apply_active_classes and parent_page.pk == current_page.pk:

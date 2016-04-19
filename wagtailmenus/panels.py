@@ -23,7 +23,7 @@ menupage_settings_panels = (
         classname="collapsible collapsed",
         children=(
             FieldPanel('repeat_in_subnav'),
-            FieldPanel('subnav_menu_text'),
+            FieldPanel('repeated_item_text'),
         )
     )
 )
