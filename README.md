@@ -10,7 +10,7 @@ The `MainMenu` model and it's orderable inline `MainMenuItem`s let you define th
 
 Your existing `Page` structure powers everything past the root level, so you don't have to recreate your whole page tree elsewhere.
 
-![Screenshot of MainMenu edit page in Wagtail admin](http://i.imgur.com/0ohWizF.png)
+<img alt="Screenshot of MainMenu edit page in Wagtail admin" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-mainmenu-edit.png" />
 
 ### 2. Specify pages that should repeat in dropdown/hover menus, to improve visibility/acessibility
 
@@ -20,13 +20,13 @@ Extend the `MenuPage` class (an abstract sub-class of Wagtail's `Page` model) to
 
 Create `FlatMenu`s to help you manage lists of links throughout your project. Each `FlatMenu` will have a unique `handle`, allowing you to reference it in `{% flat_menu %}` tags throughout your project's templates.
 
-![Screenshot of FlatMenu list page in Wagtail admin](http://i.imgur.com/BZa46vl.png)
+<img alt="Screenshot of FlatMenu list page in Wagtail admin" src="http://i.imgur.com/BZa46vl.png" />
 
 ### 4. A set of powerful template tags to render your menus using accessible menu templates
 
 Output from the included templates is designed to be fully accessible and compatible with Bootstrap 3. You can easily use your own templates by passing a `template` variable to any of the tags, or you can override the included templates by putting customised versions in a system-preferred location.
 
-![Screenshot from Sublime editor showing menu template code](http://i.imgur.com/XlteNfN.png)
+<img alt="Screenshot from Sublime editor showing menu template code" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-menu-templates.png" />
 
 ## How to install
 
@@ -71,7 +71,7 @@ Output from the included templates is designed to be fully accessible and compat
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Flat menus`.
-3. Click the button at the top of the page to add a flat menu for your site (or one for each of your sites if you are running a multi-site setup), choosing a 'unique for site' `handle` to reference in your templates, and using the `MENU ITEMS` InlinePanel to define the the links you want to appear in it. ![screenshot to show location of add button on the FlatMenu list page](http://i.imgur.com/vJ0eCsR.png)
+3. Click the button at the top of the page to add a flat menu for your site (or one for each of your sites if you are running a multi-site setup), choosing a 'unique for site' `handle` to reference in your templates, and using the `MENU ITEMS` InlinePanel to define the the links you want to appear in it. <img alt="screenshot to indicate location of add button on the FlatMenu list page" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-add.png" />
 4. Save your new menu.
 5. In whichever template you want to output your flat menu, load `menu_tags` using `{% load menu_tags %}`.
 6. Use the `{% flat_menu 'menu-handle' %}` tag where you want the menu to appear, where 'menu-handle' is the unique handle for the menu you added.
@@ -102,8 +102,8 @@ Let's say you have an 'About Us' section on your site. The top-level 'About Us' 
 Presuming the 'About Us' page uses a model that extends `wagtailmenus.models.MenuPage`:
 
 1. Edit the 'About Us' page in the CMS, and click on the `Settings` tab.
-2. Uncollapse the `ADVANCED MENU BEHAVIOUR` panel by clicking the downward-pointing arrow next to the panel's label. ![advanced menu behaviour panel collapsed](http://i.imgur.com/XwbZjwL.png)
-4. Tick the **Repeat in sub-navigation** checkbox that appears, and publish your changes. ![advanced menu behaviour panel open](http://i.imgur.com/EzBKZyB.png)
+2. Uncollapse the `ADVANCED MENU BEHAVIOUR` panel by clicking the downward-pointing arrow next to the panel's label. <img alt="Screenshot showing the collapsed 'advanced menu behaviour' panel" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-menupage-settings-collapsed.png" />
+4. Tick the **Repeat in sub-navigation** checkbox that appears, and publish your changes. <img alt="Screenshot show the expanded 'advanced menu behaviour' panel" src="https://github.com/rkhleics/wagtailmenus/blob/master/screenshots/wagtailmenus-menupage-settings-visible.png" />
 
 **NOTE:** If you're using a custom `TabbedInterface` for your page model, you won't see the `ADVANCED MENU BEHAVIOUR` panel by default. Take a look at `wagtailmenus.panels.py`. There should be something in there that you can import and use in your custom `TabbedInteface`, or at least something you can copy to get the panel to show.
 
