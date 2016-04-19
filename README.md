@@ -112,11 +112,11 @@ In a multi-level the main menu or section menu, an additional link to the 'About
 
 You can override some of wagtailmenus' default behaviour by adding one of more of the following to your project's settings:
 
-- `WAGTAILMENUS_ACTIVE_CLASS` (Default `'active'`): The class added to menu items for the currently active page (when using a menu template with `apply_active_classes=True`)
-- `WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS` (Default `'ancestor'`): The class added to any menu items for pages that are ancestors of the currently active page (when using a menu template with `apply_active_classes=True`)
-- `WAGTAILMENUS_MAINMENU_MENU_ICON` (Default `'list-ol'`): Icon used to represent `MainMenu` in the Wagtail admin area.
-- `WAGTAILMENUS_FLATMENU_MENU_ICON` (Default `'list-ol'`): Icon used to represent `FlatMenu` in the Wagtail admin area.
-- `WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE` (Default `'menus/main_menu.html'`): The name of the template used for rendering by the `{{ main_menu }}` tag when `template` isn't specified as a keyword argument.
-- `WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE` (Default `'menus/flat_menu.html'`): The name of the template used for rendering by the `{{ flat_menu }}` tag when `template` isn't specified as a keyword argument.
-- `WAGTAILMENUS_DEFAULT_SECTION_MENU_TEMPLATE` (Default `'menus/section_menu.html'`): The name of the template used for rendering by the `{{ section_menu }}` tag when `template` isn't specified as a keyword argument.
-- `WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE` (Default `'menus/children_menu.html'`): The name of the template used for rendering by the `{{ childre_menu }}` tag when `template` isn't specified as a keyword argument.
+- **`WAGTAILMENUS_ACTIVE_CLASS`** (default: `'active'`): The class added to menu items for the currently active page (when using a menu template with `apply_active_classes=True`)
+- **`WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS`** (default: `'ancestor'`): The class added to any menu items for pages that are ancestors of the currently active page (when using a menu template with `apply_active_classes=True`)
+- **`WAGTAILMENUS_MAINMENU_MENU_ICON`** (default: `'list-ol'`): Icon used to represent `MainMenu` in the Wagtail admin area.
+- **`WAGTAILMENUS_FLATMENU_MENU_ICON`** (default: `'list-ol'`): Icon used to represent `FlatMenu` in the Wagtail admin area.
+- **`WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE`** (default: `'menus/main_menu.html'`): The name of the template used for rendering by the `{{ main_menu }}` tag when `template` isn't specified as a keyword argument.
+- **`WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE`** (default: `'menus/flat_menu.html'`): The name of the template used for rendering by the `{{ flat_menu }}` tag when `template` isn't specified as a keyword argument.
+- **`WAGTAILMENUS_DEFAULT_SECTION_MENU_TEMPLATE`** (default: `'menus/section_menu.html'`): The name of the template used for rendering by the `{{ section_menu }}` tag when `template` isn't specified as a keyword argument.
+- **`WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE`** (default: `'menus/children_menu.html'`): The name of the template used for rendering by the `{{ childre_menu }}` tag when `template` isn't specified as a keyword argument.
