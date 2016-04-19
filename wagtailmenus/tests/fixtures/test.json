@@ -638,7 +638,7 @@
     "pk": 6,
     "fields": {
         "repeat_in_subnav": true,
-        "subnav_menu_text": "Section home"
+        "repeated_item_text": "Section home"
     }
 },
 {
@@ -646,7 +646,7 @@
     "pk": 11,
     "fields": {
         "repeat_in_subnav": false,
-        "subnav_menu_text": ""
+        "repeated_item_text": ""
     }
 },
 {
@@ -654,7 +654,7 @@
     "pk": 14,
     "fields": {
         "repeat_in_subnav": false,
-        "subnav_menu_text": ""
+        "repeated_item_text": ""
     }
 },
 {
@@ -662,7 +662,7 @@
     "pk": 18,
     "fields": {
         "repeat_in_subnav": true,
-        "subnav_menu_text": ""
+        "repeated_item_text": ""
     }
 },
 {
@@ -670,7 +670,7 @@
     "pk": 19,
     "fields": {
         "repeat_in_subnav": false,
-        "subnav_menu_text": ""
+        "repeated_item_text": ""
     }
 },
 {
@@ -678,7 +678,7 @@
     "pk": 5,
     "fields": {
         "repeat_in_subnav": false,
-        "subnav_menu_text": ""
+        "repeated_item_text": ""
     }
 }
 ]
