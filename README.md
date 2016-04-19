@@ -20,7 +20,7 @@ Extend the `MenuPage` class (an abstract sub-class of Wagtail's `Page` model) to
 
 Create `FlatMenu`s to help you manage lists of links throughout your project. Each `FlatMenu` will have a unique `handle`, allowing you to reference it in `{% flat_menu %}` tags throughout your project's templates.
 
-<img alt="Screenshot of FlatMenu list page in Wagtail admin" src="http://i.imgur.com/BZa46vl.png" />
+<img alt="Screenshot of FlatMenu list page in Wagtail admin" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-list.png" />
 
 ### 4. A set of powerful template tags to render your menus using accessible menu templates
 
@@ -50,6 +50,7 @@ Output from the included templates is designed to be fully accessible and compat
 2. [The `FlatMenu` model and `{% flat_menu %}` tag](#using-flat-menus)
 3. [The `{% section_menu %}` tag](#using-section-menus)
 4. [Optional repetition of selected pages in menus using `MenuPage`](#using-menupage)
+5. [Changing the default settings](#changing-settings)
 
 ### <a id="using-main-menus"></a>1. The `MainMenu` model and `{% main_menu %}` tag
 
@@ -105,6 +106,17 @@ Presuming the 'About Us' page uses a model that extends `wagtailmenus.models.Men
 2. Uncollapse the `ADVANCED MENU BEHAVIOUR` panel by clicking the downward-pointing arrow next to the panel's label. <img alt="Screenshot showing the collapsed 'advanced menu behaviour' panel" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-menupage-settings-collapsed.png" />
 4. Tick the **Repeat in sub-navigation** checkbox that appears, and publish your changes. <img alt="Screenshot show the expanded 'advanced menu behaviour' panel" src="https://github.com/rkhleics/wagtailmenus/blob/master/screenshots/wagtailmenus-menupage-settings-visible.png" />
 
-**NOTE:** If you're using a custom `TabbedInterface` for your page model, you won't see the `ADVANCED MENU BEHAVIOUR` panel by default. Take a look at `wagtailmenus.panels.py`. There should be something in there that you can import and use in your custom `TabbedInteface`, or at least something you can copy to get the panel to show.
+In a multi-level the main menu or section menu, an additional link to the 'About Us' page should now appear as the first item alongside links to it's children pages, allowing that page to be accessed more easily. The page's title will be used as the link text for the repeated item by default. But, it's often desirable to use something different (e.g. 'Overview' or 'Section home'). You can do this using the **Repeated item link text** field.
 
-In a multi-level main menu or section menu (as long as the template tags aren't called with `allow_repeating_parents=False`), an additional link to the 'About Us' page should now appear alongside the links to it's children pages, allowing that page to be accessed more easily. The page's title will be used as the menu text for the repeated item by default. But, it's often desirable to use different text for the repeated nav item (e.g. 'Overview' or 'Section home'). You can do this by altering the value of **Link text for sub-navigation item** (also in the `ADVANCED MENU BEHAVIOUR` panel).
+### <a id="changing-settings"></a>5. Changing the default settings
+
+You can override some of wagtailmenus' default behaviour by adding one of more of the following to your project's settings:
+
+- `WAGTAILMENUS_ACTIVE_CLASS` (Default `'active'`): The class added to menu items for the currently active page (when using a menu template with `apply_active_classes=True`)
+- `WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS` (Default `'ancestor'`): The class added to any menu items for pages that are ancestors of the currently active page (when using a menu template with `apply_active_classes=True`)
+- `WAGTAILMENUS_MAINMENU_MENU_ICON` (Default `'list-ol'`): Icon used to represent `MainMenu` in the Wagtail admin area.
+- `WAGTAILMENUS_FLATMENU_MENU_ICON` (Default `'list-ol'`): Icon used to represent `FlatMenu` in the Wagtail admin area.
+- `WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE` (Default `'menus/main_menu.html'`): The name of the template used for rendering by the `{{ main_menu }}` tag when `template` isn't specified as a keyword argument.
+- `WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE` (Default `'menus/flat_menu.html'`): The name of the template used for rendering by the `{{ flat_menu }}` tag when `template` isn't specified as a keyword argument.
+- `WAGTAILMENUS_DEFAULT_SECTION_MENU_TEMPLATE` (Default `'menus/section_menu.html'`): The name of the template used for rendering by the `{{ section_menu }}` tag when `template` isn't specified as a keyword argument.
+- `WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE` (Default `'menus/children_menu.html'`): The name of the template used for rendering by the `{{ childre_menu }}` tag when `template` isn't specified as a keyword argument.
