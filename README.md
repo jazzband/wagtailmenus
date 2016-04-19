@@ -55,9 +55,10 @@ Output from the included templates is designed to be fully accessible and compat
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Main menu`.
-3. Click the button at the top of the page to add a main menu for your site (or one for each of your sites if you are running a multi-site setup), using the `MENU ITEMS` InlinePanel to define the root level items.
-4. In whichever template you want to output your main menu in, load `menu_tags` using `{% load menu_tags %}`.
-5. Use the `{% main_menu %}` tag where you want the menu to appear.
+3. You'll be automatically redirected to the 'Main menu' edit page for the current site (or the 'default' site, if the current site cannot be identified). For multi-site projects, a 'site switcher' will appear in the top right, allowing you to edit main menus for each site.
+4. Use the `MENU ITEMS` InlinePanel to define the root level items for your menu.
+5. In whichever template you want to output your main menu in, load `menu_tags` using `{% load menu_tags %}`.
+6. Use the `{% main_menu %}` tag where you want the menu to appear.
 
 **Optional params for `{% main_menu %}`**
 
