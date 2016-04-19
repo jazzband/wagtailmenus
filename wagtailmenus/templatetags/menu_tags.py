@@ -1,8 +1,11 @@
-from django.template import loader, Library
-from django.db.models import Q
 from copy import deepcopy
-from ..settings import ACTIVE_CLASS, ACTIVE_ANCESTOR_CLASS
+from django.template import Library
+from django.db.models import Q
 from ..models import MainMenu, FlatMenu
+from ..settings import (
+    ACTIVE_CLASS, ACTIVE_ANCESTOR_CLASS, DEFAULT_MAIN_MENU_TEMPLATE,
+    DEFAULT_FLAT_MENU_TEMPLATE, DEFAULT_SECTION_MENU_TEMPLATE,
+    DEFAULT_CHILDREN_MENU_TEMPLATE)
 
 
 register = Library()
@@ -24,7 +27,7 @@ for you to output in the template:
 @register.simple_tag(takes_context=True)
 def main_menu(
     context, show_multiple_levels=True, allow_repeating_parents=True,
-    template='menus/main_menu.html', apply_active_classes=True
+    apply_active_classes=True, template=DEFAULT_MAIN_MENU_TEMPLATE
 ):
     """Render the MainMenu instance for the current site."""
     request = context['request']
@@ -54,8 +57,8 @@ def main_menu(
 @register.simple_tag(takes_context=True)
 def section_menu(
     context, show_section_root=True, show_multiple_levels=True,
-    allow_repeating_parents=True, template='menus/section_menu.html',
-    apply_active_classes=True
+    allow_repeating_parents=True, apply_active_classes=True,
+    template=DEFAULT_SECTION_MENU_TEMPLATE
 ):
     """Render a section menu for the current section."""
     request = context['request']
@@ -131,8 +134,8 @@ def section_menu(
 
 @register.simple_tag(takes_context=True)
 def flat_menu(
-    context, handle, show_menu_heading=True, template='menus/flat_menu.html',
-    apply_active_classes=False,
+    context, handle, show_menu_heading=True, apply_active_classes=False,
+    template=DEFAULT_FLAT_MENU_TEMPLATE
 ):
     """
     Find a FlatMenu for the current site matching the `handle` provided and
@@ -175,8 +178,8 @@ def flat_menu(
 @register.simple_tag(takes_context=True)
 def children_menu(
     context, menuitem_or_page, stop_at_this_level=False,
-    allow_repeating_parents=None, template='menus/children_menu.html',
-    apply_active_classes=None
+    allow_repeating_parents=None, apply_active_classes=None,
+    template=DEFAULT_CHILDREN_MENU_TEMPLATE
 ):
     """
     Retrieve the children menu items for the `menuitem_or_page` provided, and
@@ -224,24 +227,10 @@ def children_menu(
         'parent_page': parent_page,
         'menu_items': tuple(menu_items),
         'allow_repeating_parents': allow_repeating_parents,
+        'current_template': template,
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
-
-
-@register.simple_tag(takes_context=True)
-def children_menu_dropdown(
-    context, menuitem_or_page, stop_at_this_level=True,
-    allow_repeating_parents=None, template='menus/children_menu_dropdown.html',
-    apply_active_classes=None
-):
-    """
-    Retrieve the children menu items for the `menuitem_or_page` provided, and
-    render them as a dropdown ul list with added accessibility attributes
-    """
-    return children_menu(context, menuitem_or_page, stop_at_this_level,
-                         allow_repeating_parents, template,
-                         apply_active_classes)
 
 
 def prime_menu_items(
