@@ -73,8 +73,8 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 
 - **`show_multiple_levels`**: Default: `True`. Lets you control whether subsequent levels should be rendered. If you only want to display the root-level items, you should add `show_multiple_levels=False` for improved speed and efficiency (it will prevent wagtailmenus from doing unnecessary/expensive checks to work out if each page has children).
 - **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
-- **`template`**: Default: `menus/main_menu.html`. Lets you render the menu to a template of your choosing.
 - **`apply_active_classes`**: Default: `True`. wagtailmenus will attempt to add 'active' and 'ancestor' classes to the menu items (based on the current page). To disable this behaviour, add `apply_active_classes=False`. Doing so will improve speed and efficiency (it will prevent wagtailmenus from doing unnecessary checks to work out which classes to use for each page)
+- **`template`**: Default: `menus/main_menu.html`. Lets you render the menu to a template of your choosing.
 
 ### <a id="defining-flat-menus"></a>3. Defining flat menus in the CMS
 
@@ -91,8 +91,8 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 **Optional params for `{% flat_menu %}`**
 
 - **`show_menu_heading`**: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display a heading above the menu.
-- **`template`**: Default: `menus/flat_menu.html`. Lets you render the menu to a template of your choosing.
 - **`apply_active_classes`**: Default: `False`. If you wish for wagtailmenus to attempt to add 'active' and 'ancestor' classes to the menu items (based on the current page), add `apply_active_classes=True`.
+- **`template`**: Default: `menus/flat_menu.html`. Lets you render the menu to a template of your choosing.
 
 ### <a id="section-menu-tag"></a>5. The `{% section_menu %}` tag
 
@@ -106,8 +106,8 @@ The `{% section_menu %}` tag allows you to display a context-aware, page-driven 
 - **`show_section_root`**: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display the root page of the current section.
 - **`show_multiple_levels`**: Default: `True`. If you only want to display a single level of pages, you should add `show_multiple_levels=False` for improved speed and efficiency (it will prevent wagtailmenus from doing unnecessary/expensive checks to work out if each page has children).
 - **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
-- **`template`**: Default: `menus/section_menu.html`. Lets you render the menu to a template of your choosing.
 - **`apply_active_classes`**: Default: `True`. wagtailmenus will attempt to add 'active' and 'ancestor' classes to the menu items (based on the current page). To disable this behaviour, add `apply_active_classes=False`. Doing so will improve speed and efficiency (it will prevent wagtailmenus from doing unnecessary checks to work out which classes to use for each page).
+- **`template`**: Default: `menus/section_menu.html`. Lets you render the menu to a template of your choosing.
 
 ### <a id="children-menu-tag"></a>6. The `{% children_menu %}` tag
 
@@ -120,7 +120,7 @@ The `{% children_menu %}` tag is used in main menu and section menu templates to
 
 - **`stop_at_this_level`**: Default: `False`. If you only want to display a single level of pages, you should add `stop_at_this_level=True` for improved speed and efficiency (it will prevent wagtailmenus from doing unnecessary/expensive checks to work out if each page has children).
 - **`apply_active_classes`**: Default: `True`. wagtailmenus will attempt to add 'active' and 'ancestor' classes to the menu items (based on the current page). To disable this behaviour, add `apply_active_classes=False` ). Doing so will improve speed and efficiency (it will prevent wagtailmenus from doing unnecessary checks to work out which classes to use for each page).
-- - **`template`**: Default: `menus/children_menu.html`. Lets you render the menu to a template of your choosing.
+- **`template`**: Default: `menus/children_menu.html`. Lets you render the menu to a template of your choosing.
 
 ### <a id="using-menupage"></a>7. Optional repetition of selected pages in menus using `MenuPage`
 
