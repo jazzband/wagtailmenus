@@ -47,11 +47,11 @@ Output from the included templates is designed to be fully accessible and compat
 **Skip to:**
 
 1. [Defining root-level main menu items in the CMS](#defining-main-menu-items)
-2. [The `{% main_menu %}` tag](#main-menu-tag)
+2. [Using the `{% main_menu %}` tag](#main-menu-tag)
 3. [Defining flat menus in the CMS](#defining-flat-menus)
-4. [The `{% flat_menu %}` tag](#flat-menu-tag)
-5. [The `{% section_menu %}` tag](#section-menu-tag)
-6. [The `{% children_menu %}` tag](#children-menu-tag)
+4. [Using the `{% flat_menu %}` tag](#flat-menu-tag)
+5. [Using the `{% section_menu %}` tag](#section-menu-tag)
+6. [Using the `{% children_menu %}` tag](#children-menu-tag)
 7. [Optional repetition of selected pages in menus using `MenuPage`](#using-menupage)
 8. [Changing the default settings](#changing-defaults)
 
@@ -62,7 +62,7 @@ Output from the included templates is designed to be fully accessible and compat
 3. You'll be automatically redirected to the `Main menu` edit page for the current site (or the 'default' site, if the current site cannot be identified). For multi-site projects, a 'site switcher' will appear in the top right, allowing you to edit main menus for each site.
 4. Use the **MENU ITEMS** inline panel to define the root-level items, and save your changes when finished.
 
-### <a id="main-menu-tag"></a>2. The `{% main_menu %}` tag
+### <a id="main-menu-tag"></a>2. Using the `{% main_menu %}` tag
 
 The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the current site in your Wagtail project, with CSS classes automatically applied to each item to indicate the current page or ancestors of the current page. It also does a few sensible thing, like never adding the 'ancestor' class for a homepage link, or outputting children for it.
 
@@ -83,7 +83,7 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 3. Click the button at the top of the page to add a flat menu for your site (or one for each of your sites if you are running a multi-site setup).<img alt="screenshot to indicate location of add button on the FlatMenu list page" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-add.png" />
 4. Fill out the form, choosing a 'unique for site' `handle` to reference in your templates, and using the **MENU ITEMS** inline panel to define the links you want the menu to have. Save your changes when finished.
 
-### <a id="flat-menu-tag"></a>4. The `{% flat_menu %}` tag
+### <a id="flat-menu-tag"></a>4. Using the `{% flat_menu %}` tag
 
 1. In whichever template you want your menu to appear, load `menu_tags` using `{% load menu_tags %}`.
 2. Use the `{% flat_menu 'menu-handle' %}` tag where you want the menu to appear, where 'menu-handle' is the unique handle for the menu you added.
@@ -94,7 +94,7 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 - **`apply_active_classes`**: Default: `False`. If you wish for wagtailmenus to attempt to add 'active' and 'ancestor' classes to the menu items (based on the current page), add `apply_active_classes=True`.
 - **`template`**: Default: `menus/flat_menu.html`. Lets you render the menu to a template of your choosing.
 
-### <a id="section-menu-tag"></a>5. The `{% section_menu %}` tag
+### <a id="section-menu-tag"></a>5. Using the `{% section_menu %}` tag
 
 The `{% section_menu %}` tag allows you to display a context-aware, page-driven menu in your Wagtail project, with CSS classes automatically applied to each item to indicate the current page or ancestors of the current page.  
 
@@ -109,7 +109,7 @@ The `{% section_menu %}` tag allows you to display a context-aware, page-driven 
 - **`apply_active_classes`**: Default: `True`. wagtailmenus will attempt to add 'active' and 'ancestor' classes to the menu items (based on the current page). To disable this behaviour, add `apply_active_classes=False`. Doing so will improve speed and efficiency (it will prevent wagtailmenus from doing unnecessary checks to work out which classes to use for each page).
 - **`template`**: Default: `menus/section_menu.html`. Lets you render the menu to a template of your choosing.
 
-### <a id="children-menu-tag"></a>6. The `{% children_menu %}` tag
+### <a id="children-menu-tag"></a>6. Using the `{% children_menu %}` tag
 
 The `{% children_menu %}` tag is used in main menu and section menu templates to render menu items past the first level, but there's no reason it can't be used in places where you have a page in the context, and wish to display a menu just for it's children (or even further down the tree, if desired).
 
