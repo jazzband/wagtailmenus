@@ -46,57 +46,83 @@ Output from the included templates is designed to be fully accessible and compat
 
 **Skip to:**
 
-1. [The `MainMenu` model and `{% main_menu %}` tag](#using-main-menus)
-2. [The `FlatMenu` model and `{% flat_menu %}` tag](#using-flat-menus)
-3. [The `{% section_menu %}` tag](#using-section-menus)
-4. [Optional repetition of selected pages in menus using `MenuPage`](#using-menupage)
-5. [Changing the default settings](#changing-settings)
+1. [Defining root-level main menu items in the CMS](#defining-main-menu-items)
+2. [The `{% main_menu %}` tag](#main-menu-tag)
+3. [Defining flat menus in the CMS](#defining-flat-menus)
+4. [The `{% flat_menu %}` tag](#flat-menu-tag)
+5. [The `{% section_menu %}` tag](#section-menu-tag)
+6. [The `{% children_menu %}` tag](#children-menu-tag)
+7. [Optional repetition of selected pages in menus using `MenuPage`](#using-menupage)
+8. [Changing the default settings](#changing-defaults)
 
-### <a id="using-main-menus"></a>1. The `MainMenu` model and `{% main_menu %}` tag
+### <a id="defining-main-menu-items"></a>1. Defining root-level main menu items in the CMS
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Main menu`.
-3. You'll be automatically redirected to the 'Main menu' edit page for the current site (or the 'default' site, if the current site cannot be identified). For multi-site projects, a 'site switcher' will appear in the top right, allowing you to edit main menus for each site.
-4. Use the `MENU ITEMS` InlinePanel to define the root level items for your menu.
-5. In whichever template you want to output your main menu in, load `menu_tags` using `{% load menu_tags %}`.
-6. Use the `{% main_menu %}` tag where you want the menu to appear.
+3. You'll be automatically redirected to the `Main menu` edit page for the current site (or the 'default' site, if the current site cannot be identified). For multi-site projects, a 'site switcher' will appear in the top right, allowing you to edit main menus for each site.
+4. Use the **MENU ITEMS** inline panel to define the root-level items, and save your changes when finished.
+
+### <a id="main-menu-tag"></a>2. The `{% main_menu %}` tag
+
+The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the current site in your Wagtail project, with CSS classes automatically applied to each item to indicate the current page or ancestors of the current page. It also does a few sensible thing, like never adding the 'ancestor' class for a homepage link, or outputting children for it.
+
+1. In whichever template you want your main menu to appear, load `menu_tags` using `{% load menu_tags %}`.
+2. Use the `{% main_menu %}` tag where you want the menu to appear.
 
 **Optional params for `{% main_menu %}`**
 
-- **`show_multiple_levels`**: Default: `True`. Lets you control whether subsequent levels should be rendered.
+- **`show_multiple_levels`**: Default: `True`. Lets you control whether subsequent levels should be rendered. If you only want to display the root-level items, you should add `show_multiple_levels=False` for improved speed and efficiency (it will prevent wagtailmenus from doing unnecessary/expensive checks to work out if each page has children).
 - **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
 - **`template`**: Default: `menus/main_menu.html`. Lets you render the menu to a template of your choosing.
-- **`apply_active_classes`**: Default: `True`. wagtailmenus will attempt to add 'active' and 'ancestor' classes to the menu items, based on the current page (`self` in the context). To disable this behaviour, add `apply_active_classes=False`.
+- **`apply_active_classes`**: Default: `True`. wagtailmenus will attempt to add 'active' and 'ancestor' classes to the menu items (based on the current page). To disable this behaviour, add `apply_active_classes=False`. Doing so will improve speed and efficiency (it will prevent wagtailmenus from doing unnecessary checks to work out which classes to use for each page)
 
-### <a id="using-flat-menus"></a>2. The `FlatMenu` model and `{% flat_menu %}` tag
+### <a id="defining-flat-menus"></a>3. Defining flat menus in the CMS
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Flat menus`.
-3. Click the button at the top of the page to add a flat menu for your site (or one for each of your sites if you are running a multi-site setup), choosing a 'unique for site' `handle` to reference in your templates, and using the `MENU ITEMS` InlinePanel to define the the links you want to appear in it. <img alt="screenshot to indicate location of add button on the FlatMenu list page" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-add.png" />
-4. Save your new menu.
-5. In whichever template you want to output your flat menu, load `menu_tags` using `{% load menu_tags %}`.
-6. Use the `{% flat_menu 'menu-handle' %}` tag where you want the menu to appear, where 'menu-handle' is the unique handle for the menu you added.
+3. Click the button at the top of the page to add a flat menu for your site (or one for each of your sites if you are running a multi-site setup).<img alt="screenshot to indicate location of add button on the FlatMenu list page" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-add.png" />
+4. Fill out the form, choosing a 'unique for site' `handle` to reference in your templates, and using the **MENU ITEMS** inline panel to define the links you want the menu to have. Save your changes when finished.
+
+### <a id="flat-menu-tag"></a>4. The `{% flat_menu %}` tag
+
+1. In whichever template you want your menu to appear, load `menu_tags` using `{% load menu_tags %}`.
+2. Use the `{% flat_menu 'menu-handle' %}` tag where you want the menu to appear, where 'menu-handle' is the unique handle for the menu you added.
 
 **Optional params for `{% flat_menu %}`**
 
 - **`show_menu_heading`**: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display a heading above the menu.
 - **`template`**: Default: `menus/flat_menu.html`. Lets you render the menu to a template of your choosing.
-- **`apply_active_classes`**: Default: `False`. If you wish for wagtailmenus to attempt to add 'active' and 'ancestor' classes to the menu items, based on the current page (`self` in the context), add `apply_active_classes=True`.
+- **`apply_active_classes`**: Default: `False`. If you wish for wagtailmenus to attempt to add 'active' and 'ancestor' classes to the menu items (based on the current page), add `apply_active_classes=True`.
 
-### <a id="using-section-menus"></a>3. The `{% section_menu %}` tag
+### <a id="section-menu-tag"></a>5. The `{% section_menu %}` tag
 
-1. In whichever template you wish to add a context-specific, page-driven 'section menu' to your template (in a sidebar, for example), load `menu_tags` using `{% load menu_tags %}`.
-2. Use the `{% section_menu %}` tag where you want the menu to appear.
+The `{% section_menu %}` tag allows you to display a context-aware, page-driven menu in your Wagtail project, with CSS classes automatically applied to each item to indicate the current page or ancestors of the current page.  
+
+1. In whichever template you want the section menu to appear, load `menu_tags` using `{% load menu_tags %}`.
+2. Add `{% section_menu %}` where you want the menu to appear.
 
 **Optional params for `{% section_menu %}`**
 
 - **`show_section_root`**: Default: `True`. Passed through to the template used for rendering, where it can be used to conditionally display the root page of the current section.
-- **`show_multiple_levels`**: Default: `True`. Lets you control whether subsequent levels should be rendered.
+- **`show_multiple_levels`**: Default: `True`. If you only want to display a single level of pages, you should add `show_multiple_levels=False` for improved speed and efficiency (it will prevent wagtailmenus from doing unnecessary/expensive checks to work out if each page has children).
 - **`allow_repeating_parents`**: Default: `True`. If set to False, will ignore any repetition-related settings for individual pages, and not repeat any pages when rendering.
 - **`template`**: Default: `menus/section_menu.html`. Lets you render the menu to a template of your choosing.
-- **`apply_active_classes`**: Default: `True`. wagtailmenus will attempt to add 'active' and 'ancestor' classes to the menu items, based on the current page (`self` in the context). To disable this behaviour, add `apply_active_classes=False`.
+- **`apply_active_classes`**: Default: `True`. wagtailmenus will attempt to add 'active' and 'ancestor' classes to the menu items (based on the current page). To disable this behaviour, add `apply_active_classes=False`. Doing so will improve speed and efficiency (it will prevent wagtailmenus from doing unnecessary checks to work out which classes to use for each page).
 
-### <a id="using-menupage"></a>4. Optional repetition of selected pages in menus using `MenuPage`
+### <a id="children-menu-tag"></a>6. The `{% children_menu %}` tag
+
+The `{% children_menu %}` tag is used in main menu and section menu templates to render menu items past the first level, but there's no reason it can't be used in places where you have a page in the context, and wish to display a menu just for it's children (or even further down the tree, if desired).
+
+1. In whichever template you want the menu to appear, load `menu_tags` using `{% load menu_tags %}`.
+2. Use the `{% children_menu parent_page %}` tag where you want the menu to appear, where `parent_page` is a Page object that you wish to display children for (the current page should be available as `self` in the context, if you're rendering a page).
+
+**Optional params for `{% children_menu %}`**
+
+- **`stop_at_this_level`**: Default: `False`. If you only want to display a single level of pages, you should add `stop_at_this_level=True` for improved speed and efficiency (it will prevent wagtailmenus from doing unnecessary/expensive checks to work out if each page has children).
+- **`apply_active_classes`**: Default: `True`. wagtailmenus will attempt to add 'active' and 'ancestor' classes to the menu items (based on the current page). To disable this behaviour, add `apply_active_classes=False` ). Doing so will improve speed and efficiency (it will prevent wagtailmenus from doing unnecessary checks to work out which classes to use for each page).
+- - **`template`**: Default: `menus/children_menu.html`. Lets you render the menu to a template of your choosing.
+
+### <a id="using-menupage"></a>7. Optional repetition of selected pages in menus using `MenuPage`
 
 Let's say you have an 'About Us' section on your site. The top-level 'About Us' page has a decent amount of important content on it, and it also has important children pages that have more specific content (e.g. 'Meet the team', 'Our mission and values', 'Staff vacancies'). You want people to be able to access the top-level 'About Us' page from your navigation as easily as the other pages, but you're using a drop-down menu, and the 'About Us' page link has simply become a toggle for hiding and showing its children pages.
 
@@ -108,7 +134,7 @@ Presuming the 'About Us' page uses a model that extends `wagtailmenus.models.Men
 
 In a multi-level the main menu or section menu, an additional link to the 'About Us' page should now appear as the first item alongside links to it's children pages, allowing that page to be accessed more easily. The page's title will be used as the link text for the repeated item by default. But, it's often desirable to use something different (e.g. 'Overview' or 'Section home'). You can do this using the **Repeated item link text** field.
 
-### <a id="changing-settings"></a>5. Changing the default settings
+### <a id="changing-settings"></a>8. Changing the default settings
 
 You can override some of wagtailmenus' default behaviour by adding one of more of the following to your project's settings:
 
