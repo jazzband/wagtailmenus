@@ -179,15 +179,10 @@ class FlatMenu(ClusterableModel):
         MultiFieldPanel(
             heading=_("Settings"),
             children=(
-                FieldRowPanel(
-                    classname='label-above',
-                    children=(
-                        FieldPanel('site', classname="col12"),
-                        FieldPanel('title', classname="col6"),
-                        FieldPanel('handle', classname="col6"),
-                        FieldPanel('heading', classname="col12"),
-                    )
-                ),
+                FieldPanel('site'),
+                FieldPanel('title'),
+                FieldPanel('handle'),
+                FieldPanel('heading'),    
             )
         ),
         InlinePanel('menu_items', label=_("Menu items")),
