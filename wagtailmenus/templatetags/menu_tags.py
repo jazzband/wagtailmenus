@@ -276,7 +276,7 @@ def children_menu(
 
 
 @register.simple_tag(takes_context=True)
-def children_menu_direct(
+def children_page_menu(
     context, page=None, allow_repeating_parents=True,
     apply_active_classes=False,
     max_levels=app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS,
