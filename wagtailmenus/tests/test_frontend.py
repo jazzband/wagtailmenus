@@ -150,7 +150,7 @@ class TestMenuRendering(TestCase):
 
     def test_homepage_children_menu_one_level(self):
         """
-        Test '{{ children_menu self }}' output for homepage
+        Test '{% children_menu_direct %}' output for homepage
         """
         response = self.client.get('/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -169,7 +169,7 @@ class TestMenuRendering(TestCase):
 
     def test_homepage_children_menu_three_levels(self):
         """
-        Test '{{ children_menu self max_levels=3 }}' output for homepage
+        Test '{% children_menu_direct max_levels=3 allow_repeating_parents=False %}' output for homepage
         """
         response = self.client.get('/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -215,7 +215,7 @@ class TestMenuRendering(TestCase):
 
     def test_about_us_main_menu_two_levels(self):
         """
-        Test '{{ main_menu }}' output for 'About us' page
+        Test '{% main_menu %}' output for 'About us' page
         """
         response = self.client.get('/about-us/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -252,7 +252,7 @@ class TestMenuRendering(TestCase):
 
     def test_about_us_main_menu_three_levels(self):
         """
-        Test '{{ main_menu max_levels=3 }}' output for 'About us' page
+        Test '{% main_menu max_levels=3 %}' output for 'About us' page
         """
         response = self.client.get('/about-us/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -298,7 +298,7 @@ class TestMenuRendering(TestCase):
 
     def test_about_us_section_menu_two_levels(self):
         """
-        Test '{{ section_menu }}' output for 'About us' page
+        Test '{% section_menu %}' output for 'About us' page
         """
         response = self.client.get('/about-us/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -329,7 +329,7 @@ class TestMenuRendering(TestCase):
 
     def test_about_us_section_menu_one_level(self):
         """
-        Test '{{ section_menu max_levels=1 }}' output for 'About us' page
+        Test '{% section_menu max_levels=1 %}' output for 'About us' page
         """
         response = self.client.get('/about-us/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -372,7 +372,7 @@ class TestMenuRendering(TestCase):
 
     def test_about_us_children_menu_three_levels(self):
         """
-        Test '{{ children_menu self reset_level=True max_levels=3 }}' output for 'About us' page
+        Test '{% children_menu_direct max_levels=3 allow_repeating_parents=False %}' output for 'About us' page
         """
         response = self.client.get('/about-us/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -380,7 +380,6 @@ class TestMenuRendering(TestCase):
         expected_menu_html = """
         <div id="children-menu-three-levels">
             <ul>
-                <li class="active"><a href="/about-us/">Section home</a></li>
                 <li class="">
                     <a href="/about-us/meet-the-team/">Meet the team</a>
                     <ul>
@@ -398,7 +397,7 @@ class TestMenuRendering(TestCase):
 
     def test_marvel_comics_section_menu_two_levels(self):
         """
-        Test '{{ section_menu }}' output for 'Marvel comics' page
+        Test '{% section_menu %}' output for 'Marvel comics' page
         """
         response = self.client.get('/superheroes/marvel-comics/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -433,7 +432,7 @@ class TestMenuRendering(TestCase):
 
     def test_marvel_comics_section_menu_one_level(self):
         """
-        Test '{{ section_menu max_levels=1 }}' output for 'Marvel comics' page
+        Test '{% section_menu max_levels=1 %}' output for 'Marvel comics' page
         """
         response = self.client.get('/superheroes/marvel-comics/')
         soup = BeautifulSoup(response.content, 'html5lib')

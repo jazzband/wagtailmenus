@@ -1,6 +1,7 @@
 from copy import deepcopy
 from django.template import Library
 from django.db.models import Q
+from wagtail.wagtailcore.models import Page
 from ..models import MainMenu, FlatMenu
 from wagtailmenus import app_settings
 
@@ -201,8 +202,8 @@ def flat_menu(
 
 @register.simple_tag(takes_context=True)
 def children_menu(
-    context, menuitem_or_page, max_levels=None, stop_at_this_level=None,
-    reset_level=False, allow_repeating_parents=None, apply_active_classes=None,
+    context, menuitem_or_page, stop_at_this_level=None,
+    allow_repeating_parents=None, apply_active_classes=None,
     template=app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE
 ):
     """
@@ -210,10 +211,7 @@ def children_menu(
     render them as a simple ul list
     """
     request = context['request']
-    
     previous_level = context.get('current_level', 0)
-    if reset_level:
-        previous_level = 0
     current_level = previous_level + 1
     current_site = request.site
     ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
@@ -230,9 +228,8 @@ def children_menu(
             # menuitem_or_page wasn't a menuitem or page
             return ''
 
-    if max_levels is None:
-        max_levels = context.get(
-            'max_levels', app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS)
+    max_levels = context.get(
+        'max_levels', app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS)
 
     if stop_at_this_level is None:
         stop_at_this_level = (current_level >= max_levels)
@@ -276,6 +273,32 @@ def children_menu(
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
+
+
+@register.simple_tag(takes_context=True)
+def children_menu_direct(
+    context, page=None, allow_repeating_parents=True,
+    apply_active_classes=False,
+    max_levels=app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS,
+    template=app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE
+):
+    if page is None:
+        page = context.get('self')
+        if not isinstance(page, Page):
+            return ''
+
+    context.update({
+        'current_level': 0,
+        'max_levels': max_levels,
+    })
+    return children_menu(
+        context,
+        menuitem_or_page=page,
+        stop_at_this_level=None,
+        allow_repeating_parents=allow_repeating_parents,
+        apply_active_classes=apply_active_classes,
+        template=template,
+    )
 
 
 def prime_menu_items(

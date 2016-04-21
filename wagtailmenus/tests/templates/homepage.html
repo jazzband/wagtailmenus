@@ -8,12 +8,12 @@
 
 	<h4>Children Menu (max_levels=1)</h4>
 	<div id="children-menu-one-level">
-		{% children_menu self reset_level=True %}
+		{% children_menu_direct %}
 	</div>
 
 	<h4>Children Menu (max_levels=3)</h4>
 	<div id="children-menu-three-levels">
-		{% children_menu self reset_level=True max_levels=3 allow_repeating_parents=False %}
+		{% children_menu_direct max_levels=3 allow_repeating_parents=False %}
 	</div>
 
 {% endblock %}
