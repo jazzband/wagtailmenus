@@ -14,4 +14,3 @@ class TopLevelPage(MenuPage):
 
 class LowLevelPage(Page):
     template = 'page.html'
-    parent_page_types = [TopLevelPage]
