@@ -2,10 +2,7 @@ from copy import deepcopy
 from django.template import Library
 from django.db.models import Q
 from ..models import MainMenu, FlatMenu
-from ..settings import (
-    ACTIVE_CLASS, ACTIVE_ANCESTOR_CLASS, DEFAULT_MAIN_MENU_TEMPLATE,
-    DEFAULT_FLAT_MENU_TEMPLATE, DEFAULT_SECTION_MENU_TEMPLATE,
-    DEFAULT_CHILDREN_MENU_TEMPLATE)
+from wagtailmenus import app_settings
 
 
 register = Library()

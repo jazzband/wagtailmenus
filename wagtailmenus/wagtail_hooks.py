@@ -7,7 +7,7 @@ from wagtailmodeladmin.helpers import (
 
 from wagtail.wagtailcore import hooks
 
-from .settings import MAINMENU_MENU_ICON, FLATMENU_MENU_ICON
+from .app_settings import MAINMENU_MENU_ICON, FLATMENU_MENU_ICON
 from .models import MainMenu, FlatMenu
 from .views import MainMenuIndexView, MainMenuEditView
 
