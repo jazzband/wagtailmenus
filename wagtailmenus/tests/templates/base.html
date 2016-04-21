@@ -15,13 +15,21 @@
                 <a class="logo" href="/" title="Go to home page">Wagtailmenus Test</a>
 
                 <nav role="navigation" class="navbar-default nav-main">
-                    <div class="collapse navbar-collapse navbar" id="main_menu_output">
-                        {% spaceless %}{% main_menu %}{% endspaceless %}
+                    
+                    <h4>Main Menu (max_levels=2)</h4>
+                    <div id="main-menu-two-levels">
+                        {% main_menu %}
                     </div>
+
+                    <h4>Main Menu (max_levels=3)</h4>
+                    <div id="main-menu-three-levels">
+                        {% main_menu max_levels=3 %}
+                    </div>
+
                 </nav>
 
                 <div id="nav-contact">
-                    {% spaceless %}{% flat_menu 'contact' show_menu_heading=False %}{% endspaceless %}
+                    {% flat_menu 'contact' show_menu_heading=False %}
                 </div>
 
             </div>
@@ -37,7 +45,7 @@
         <footer role="contentinfo">
             <div class="container">
                 <div id="nav-footer">
-                    {% spaceless %}{% flat_menu 'footer' %}{% endspaceless %}
+                    {% flat_menu 'footer' apply_active_classes=True %}
                 </div>
                 <p class="rkh"><a href="http://www.rkh.co.uk/" target="_blank" title="Web design and development, Leicester">Website by Rock Kitchen Harris</a></p>
             </div>

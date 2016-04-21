@@ -218,7 +218,6 @@
         "slug": "root",
         "content_type": ["wagtailcore", "page"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/",
         "owner": null,
         "show_in_menus": false,
@@ -237,7 +236,6 @@
         "slug": "home",
         "content_type": ["tests", "homepage"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/home/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:12:19.295Z",
@@ -255,7 +253,6 @@
         "slug": "about-us",
         "content_type": ["tests", "toplevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/home/about-us/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:14:33.551Z",
@@ -268,16 +265,66 @@
     "fields": {
         "path": "0001000200010001",
         "depth": 4,
-        "numchild": 0,
+        "numchild": 3,
         "title": "Meet the team",
         "slug": "meet-the-team",
         "content_type": ["tests", "lowlevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/home/about-us/meet-the-team/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:15:29.218Z",
         "latest_revision_created_at": "2016-04-18T11:15:29.201Z"
+    }
+},
+{
+    "model": "wagtailcore.page",
+    "pk": 31,
+    "fields": {
+        "path": "00010002000100010001",
+        "depth": 5,
+        "numchild": 0,
+        "title": "Staff member one",
+        "slug": "staff-member-one",
+        "content_type": ["tests", "lowlevelpage"],
+        "live": true,
+        "url_path": "/home/about-us/meet-the-team/staff-member-one/",
+        "show_in_menus": true,
+        "first_published_at": "2016-04-21T08:46:55.370Z",
+        "latest_revision_created_at": "2016-04-21T08:46:55.352Z"
+    }
+},
+{
+    "model": "wagtailcore.page",
+    "pk": 32,
+    "fields": {
+        "path": "00010002000100010002",
+        "depth": 5,
+        "numchild": 0,
+        "title": "Staff member two",
+        "slug": "staff-member-two",
+        "content_type": ["tests", "lowlevelpage"],
+        "live": true,
+        "url_path": "/home/about-us/meet-the-team/staff-member-two/",
+        "show_in_menus": true,
+        "first_published_at": "2016-04-21T08:47:09.754Z",
+        "latest_revision_created_at": "2016-04-21T08:47:09.737Z"
+    }
+},
+{
+    "model": "wagtailcore.page",
+    "pk": 33,
+    "fields": {
+        "path": "00010002000100010003",
+        "depth": 5,
+        "numchild": 0,
+        "title": "Staff member three",
+        "slug": "staff-member-three",
+        "content_type": ["tests", "lowlevelpage"],
+        "live": true,
+        "url_path": "/home/about-us/meet-the-team/staff-member-three/",
+        "show_in_menus": true,
+        "first_published_at": "2016-04-21T08:47:20.581Z",
+        "latest_revision_created_at": "2016-04-21T08:47:20.565Z"
     }
 },
 {
@@ -291,7 +338,6 @@
         "slug": "our-heritage",
         "content_type": ["tests", "lowlevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/home/about-us/our-heritage/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:15:48.376Z",
@@ -309,7 +355,6 @@
         "slug": "mission-and-values",
         "content_type": ["tests", "lowlevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/home/about-us/mission-and-values/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:16:41.371Z",
@@ -327,7 +372,6 @@
         "slug": "staff-vacancies",
         "content_type": ["tests", "lowlevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/home/about-us/staff-vacancies/",
         "show_in_menus": false,
         "first_published_at": "2016-04-18T11:17:08.211Z",
@@ -341,12 +385,11 @@
         "path": "000100020002",
         "depth": 3,
         "numchild": 2,
-        "title": "Superheroes (hidden)",
-        "slug": "superheroes-hidden",
+        "title": "Superheroes",
+        "slug": "superheroes",
         "content_type": ["tests", "toplevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
-        "url_path": "/home/superheroes-hidden/",
+        "url_path": "/home/superheroes/",
         "show_in_menus": false,
         "first_published_at": "2016-04-18T11:19:12.566Z",
         "latest_revision_created_at": "2016-04-18T11:19:12.552Z"
@@ -358,16 +401,66 @@
     "fields": {
         "path": "0001000200020001",
         "depth": 4,
-        "numchild": 0,
+        "numchild": 3,
         "title": "Marvel Comics",
         "slug": "marvel-comics",
         "content_type": ["tests", "lowlevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
-        "url_path": "/home/superheroes-hidden/marvel-comics/",
+        "url_path": "/home/superheroes/marvel-comics/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:19:37.045Z",
         "latest_revision_created_at": "2016-04-18T11:19:37.030Z"
+    }
+},
+{
+    "model": "wagtailcore.page",
+    "pk": 28,
+    "fields": {
+        "path": "00010002000200010001",
+        "depth": 5,
+        "numchild": 0,
+        "title": "Iron Man",
+        "slug": "iron-man",
+        "content_type": ["tests", "lowlevelpage"],
+        "live": true,
+        "url_path": "/home/superheroes/marvel-comics/iron-man/",
+        "show_in_menus": true,
+        "first_published_at": "2016-04-21T08:45:14.247Z",
+        "latest_revision_created_at": "2016-04-21T08:48:53.545Z"
+    }
+},
+{
+    "model": "wagtailcore.page",
+    "pk": 29,
+    "fields": {
+        "path": "00010002000200010002",
+        "depth": 5,
+        "numchild": 0,
+        "title": "Wolverine",
+        "slug": "wolverine",
+        "content_type": ["tests", "lowlevelpage"],
+        "live": true,
+        "url_path": "/home/superheroes/marvel-comics/wolverine/",
+        "show_in_menus": false,
+        "first_published_at": "2016-04-21T08:45:26.851Z",
+        "latest_revision_created_at": "2016-04-21T08:45:26.834Z"
+    }
+},
+{
+    "model": "wagtailcore.page",
+    "pk": 30,
+    "fields": {
+        "path": "00010002000200010003",
+        "depth": 5,
+        "numchild": 0,
+        "title": "Spiderman",
+        "slug": "spiderman",
+        "content_type": ["tests", "lowlevelpage"],
+        "live": true,
+        "url_path": "/home/superheroes/marvel-comics/spiderman/",
+        "show_in_menus": true,
+        "first_published_at": "2016-04-21T08:45:53.957Z",
+        "latest_revision_created_at": "2016-04-21T08:49:02.247Z"
     }
 },
 {
@@ -376,16 +469,66 @@
     "fields": {
         "path": "0001000200020002",
         "depth": 4,
-        "numchild": 0,
+        "numchild": 3,
         "title": "D.C. Comics",
         "slug": "dc-comics",
         "content_type": ["tests", "lowlevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
-        "url_path": "/home/superheroes-hidden/dc-comics/",
+        "url_path": "/home/superheroes/dc-comics/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:19:59.116Z",
         "latest_revision_created_at": "2016-04-18T11:19:59.099Z"
+    }
+},
+{
+    "model": "wagtailcore.page",
+    "pk": 25,
+    "fields": {
+        "path": "00010002000200020001",
+        "depth": 5,
+        "numchild": 0,
+        "title": "Batman",
+        "slug": "batman",
+        "content_type": ["tests", "lowlevelpage"],
+        "live": true,
+        "url_path": "/home/superheroes/dc-comics/batman/",
+        "show_in_menus": true,
+        "first_published_at": "2016-04-21T08:44:16.023Z",
+        "latest_revision_created_at": "2016-04-21T08:44:16.003Z"
+    }
+},
+{
+    "model": "wagtailcore.page",
+    "pk": 26,
+    "fields": {
+        "path": "00010002000200020002",
+        "depth": 5,
+        "numchild": 0,
+        "title": "Superman",
+        "slug": "superman",
+        "content_type": ["tests", "lowlevelpage"],
+        "live": true,
+        "url_path": "/home/superheroes/dc-comics/superman/",
+        "show_in_menus": false,
+        "first_published_at": "2016-04-21T08:44:25.864Z",
+        "latest_revision_created_at": "2016-04-21T08:48:12.109Z"
+    }
+},
+{
+    "model": "wagtailcore.page",
+    "pk": 27,
+    "fields": {
+        "path": "00010002000200020003",
+        "depth": 5,
+        "numchild": 0,
+        "title": "Wonder Woman",
+        "slug": "wonder-woman",
+        "content_type": ["tests", "lowlevelpage"],
+        "live": true,
+        "url_path": "/home/superheroes/dc-comics/wonder-woman/",
+        "show_in_menus": true,
+        "first_published_at": "2016-04-21T08:44:50.467Z",
+        "latest_revision_created_at": "2016-04-21T08:47:47.016Z"
     }
 },
 {
@@ -399,7 +542,6 @@
         "slug": "news-and-events",
         "content_type": ["tests", "toplevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/home/news-and-events/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:20:45.992Z",
@@ -417,7 +559,6 @@
         "slug": "latest-news",
         "content_type": ["tests", "lowlevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/home/news-and-events/latest-news/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:21:39.087Z",
@@ -435,7 +576,6 @@
         "slug": "upcoming-events",
         "content_type": ["tests", "lowlevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/home/news-and-events/upcoming-events/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:22:08.789Z",
@@ -453,7 +593,6 @@
         "slug": "press",
         "content_type": ["tests", "lowlevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/home/news-and-events/press/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:22:24.623Z",
@@ -471,7 +610,6 @@
         "slug": "contact-us",
         "content_type": ["tests", "toplevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/home/contact-us/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:23:05.728Z",
@@ -489,7 +627,6 @@
         "slug": "legal",
         "content_type": ["tests", "toplevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/home/legal/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:24:09.013Z",
@@ -507,7 +644,6 @@
         "slug": "accessibility",
         "content_type": ["tests", "lowlevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/home/legal/accessibility/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:24:39.476Z",
@@ -525,7 +661,6 @@
         "slug": "privacy-policy",
         "content_type": ["tests", "lowlevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/home/legal/privacy-policy/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:24:55.257Z",
@@ -543,7 +678,6 @@
         "slug": "terms-and-conditions",
         "content_type": ["tests", "lowlevelpage"],
         "live": true,
-        "has_unpublished_changes": false,
         "url_path": "/home/legal/terms-and-conditions/",
         "show_in_menus": true,
         "first_published_at": "2016-04-18T11:25:14.635Z",
@@ -561,7 +695,6 @@
         "slug": "test",
         "content_type": ["tests", "lowlevelpage"],
         "live": false,
-        "has_unpublished_changes": true,
         "url_path": "/home/legal/test/",
         "show_in_menus": true,
         "first_published_at": null,
@@ -631,6 +764,51 @@
 {
     "model": "tests.lowlevelpage",
     "pk": 24,
+    "fields": {}
+},
+{
+    "model": "tests.lowlevelpage",
+    "pk": 25,
+    "fields": {}
+},
+{
+    "model": "tests.lowlevelpage",
+    "pk": 26,
+    "fields": {}
+},
+{
+    "model": "tests.lowlevelpage",
+    "pk": 27,
+    "fields": {}
+},
+{
+    "model": "tests.lowlevelpage",
+    "pk": 28,
+    "fields": {}
+},
+{
+    "model": "tests.lowlevelpage",
+    "pk": 29,
+    "fields": {}
+},
+{
+    "model": "tests.lowlevelpage",
+    "pk": 30,
+    "fields": {}
+},
+{
+    "model": "tests.lowlevelpage",
+    "pk": 31,
+    "fields": {}
+},
+{
+    "model": "tests.lowlevelpage",
+    "pk": 32,
+    "fields": {}
+},
+{
+    "model": "tests.lowlevelpage",
+    "pk": 33,
     "fields": {}
 },
 {

@@ -7,11 +7,27 @@
 		<div class="content-main">
 			<h1>{{ self.title }}</h1>
 			<p>Hello world.</p>
+
+			<h4>Children Menu (max_levels=1)</h4>
+			<div id="children-menu-one-level">
+				{% children_menu self reset_level=True apply_active_classes=False %}
+			</div>
+
+			<h4>Children Menu (max_levels=3)</h4>
+			<div id="children-menu-three-levels">
+				{% children_menu self reset_level=True apply_active_classes=True max_levels=3 %}
+			</div>
 		</div>
 
 		<div class="content-secondary">
-			<div id="nav-section">
-				{% spaceless %}{% section_menu %}{% endspaceless %}
+			<h4>Section Menu (max_levels=1)</h4>
+			<div id="section-menu-one-level">
+				{% section_menu max_levels=1 %}
+			</div>
+
+			<h4>Section Menu (max_levels=2)</h4>
+			<div id="section-menu-two-levels">
+				{% section_menu %}
 			</div>
 		</div>
 
