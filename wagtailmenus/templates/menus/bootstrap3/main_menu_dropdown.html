@@ -1,11 +1,11 @@
 {% load menu_tags %}
 <ul class="nav navbar-nav">
-    {% for item in menu_items %}
-        <li class="{{ item.active_class }}{% if item.has_children_in_menu %} dropdown{% endif %}">
-            <a href="{{ item.href }}"{% if item.has_children_in_menu %} class="dropdown-toggle" id="ddtoggle_{{ item.link_page.pk }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"{% endif %}>{{ item.text }}</a>
-            {% if item.has_children_in_menu  %}
-                {% children_menu item stop_at_this_level=True template="menus/bootstrap3/children_menu_dropdown.html" %}
-            {% endif %}
-        </li>       
-    {% endfor %}
+{% for item in menu_items %}
+    <li class="{{ item.active_class }}{% if item.has_children_in_menu %} dropdown{% endif %}">
+        <a href="{{ item.href }}"{% if item.has_children_in_menu %} class="dropdown-toggle" id="ddtoggle_{{ item.link_page.pk }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"{% endif %}>{{ item.text }}</a>
+        {% if item.has_children_in_menu %}
+        	{% children_menu item template="menus/bootstrap3/children_menu_dropdown.html" %}
+        {% endif %}
+    </li>       
+{% endfor %}
 </ul>

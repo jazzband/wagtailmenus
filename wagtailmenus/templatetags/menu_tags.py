@@ -9,22 +9,34 @@ register = Library()
 
 """
 In all menu templates, menu items are always assigned the following attributes
-for you to output in the template:
+for you to use in the template:
 
-    * `href`: the value to use for the `href` attribute on the <a> element
-    * `text`: the text to use for the link
-    * `active_class`: a class to be applied to the <li> element (values are
-      `ancestor` if the page is an ancestor of the current page or `active` if
+    * `href`: The value to use for the `href` attribute on the <a> element
+    * `text`: The text to use for the link
+    * `active_class`: A class to be applied to the <li> element (values are
+      `ancestor` If the page is an ancestor of the current page or `active` if
       the page is the current_page)
-    * `has_children_in_menu`: a boolean value that will let you know if the
+    * `has_children_in_menu`: A boolean value that will let you know if the
       item has children that should be output as a submenu.
+
+The following variables will also be added to the context for you to make use
+of:
+
+    * `current_level`: The current 'level' being rendered. This starts at 1 for
+      the initial template tag call, then increments each time `children_menu`
+      is called recursively.
+    * `current_template`: The name of the template currently being rendered.
+      This is most useful when rendering a `children_menu` template that
+      calls `children_menu` recursively, and you wish to use the same template
+      for all recursions.
 """
 
 
 @register.simple_tag(takes_context=True)
 def main_menu(
-    context, show_multiple_levels=True, allow_repeating_parents=True,
-    apply_active_classes=True, template=DEFAULT_MAIN_MENU_TEMPLATE
+    context, apply_active_classes=True, allow_repeating_parents=True,
+    max_levels=app_settings.DEFAULT_MAIN_MENU_MAX_LEVELS,
+    template=app_settings.DEFAULT_MAIN_MENU_TEMPLATE
 ):
     """Render the MainMenu instance for the current site."""
     request = context['request']
@@ -42,10 +54,14 @@ def main_menu(
             current_page=context.get('self'),
             current_page_ancestor_ids=ancestor_ids,
             current_site=site,
-            check_for_children=show_multiple_levels,
+            check_for_children=max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
             apply_active_classes=apply_active_classes,
-        ))
+        )),
+        'allow_repeating_parents': allow_repeating_parents,
+        'current_level': 1,
+        'max_levels': max_levels,
+        'current_template': template,
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -53,9 +69,10 @@ def main_menu(
 
 @register.simple_tag(takes_context=True)
 def section_menu(
-    context, show_section_root=True, show_multiple_levels=True,
-    allow_repeating_parents=True, apply_active_classes=True,
-    template=DEFAULT_SECTION_MENU_TEMPLATE
+    context, show_section_root=True, allow_repeating_parents=True,
+    apply_active_classes=True, 
+    max_levels=app_settings.DEFAULT_SECTION_MENU_MAX_LEVELS,
+    template=app_settings.DEFAULT_SECTION_MENU_TEMPLATE
 ):
     """Render a section menu for the current section."""
     request = context['request']
@@ -64,66 +81,73 @@ def section_menu(
     section_root = request.META.get('CURRENT_SECTION_ROOT')
     ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
 
-    if section_root:
-        menu_items = prime_menu_items(
-            menu_items=section_root.get_children().live().in_menu(),
-            current_page=current_page,
-            current_page_ancestor_ids=ancestor_ids,
-            current_site=current_site,
-            check_for_children=show_multiple_levels,
-            allow_repeating_parents=allow_repeating_parents,
-            apply_active_classes=apply_active_classes,
-        )
+    if section_root is None:
+        # The section root couldn't be identified. Likely because it's not 
+        # a 'Page' being served, and `wagtail_hooks.wagtailmenu_params_helper`
+        # isn't running.
+        return ''
 
-        """
-        We want `section_root` to have the same attributes as primed menu
-        items, so it can be used in the same way in a template if required.
-        """
-        setattr(section_root, 'text', section_root.title)
-        setattr(section_root, 'href', section_root.relative_url(current_site))
+    menu_items = prime_menu_items(
+        menu_items=section_root.get_children().live().in_menu(),
+        current_page=current_page,
+        current_page_ancestor_ids=ancestor_ids,
+        current_site=current_site,
+        check_for_children=max_levels > 1,
+        allow_repeating_parents=allow_repeating_parents,
+        apply_active_classes=apply_active_classes,
+    )
 
+    """
+    We want `section_root` to have the same attributes as primed menu
+    items, so it can be used in the same way in a template if required.
+    """
+    setattr(section_root, 'text', section_root.title)
+    setattr(section_root, 'href', section_root.relative_url(current_site))
+
+    """
+    Before we can work out an `active_class` for `section_root`, we need
+    to find out if it's going to be repeated alongside it's children in a
+    subnav.
+    """
+    extra = None
+    if (
+        allow_repeating_parents and menu_items and
+        getattr(section_root, 'repeat_in_subnav', False)
+    ):
         """
-        Before we can work out an `active_class` for `section_root`, we need
-        to find out if it's going to be repeated alongside it's children in a
-        subnav.
+        The page should be repeated alongside children in the
+        subnav, so we create a new item and add it to the existing
+        menu_items
         """
-        extra = None
-        if (
-            allow_repeating_parents and menu_items and
-            getattr(section_root, 'repeat_in_subnav', False)
+        extra = deepcopy(section_root)
+        text = section_root.repeated_item_text or section_root.title
+        setattr(extra, 'text', text)
+        if apply_active_classes and extra.pk == current_page.pk:
+            setattr(extra, 'active_class', app_settings.ACTIVE_CLASS)
+        menu_items.insert(0, extra)
+    
+    """
+    Now we know the subnav/repetition situation, we can set the
+    `active_class` for `section_root`
+    """
+    if apply_active_classes:
+        active_class = app_settings.ACTIVE_ANCESTOR_CLASS
+        if(
+            (extra is None or not hasattr(extra, 'active_class')) and
+            section_root.pk == current_page.pk
         ):
-            """
-            The page should be repeated alongside children in the
-            subnav, so we create a new item and add it to the existing
-            menu_items
-            """
-            extra = deepcopy(section_root)
-            text = section_root.repeated_item_text or section_root.title
-            setattr(extra, 'text', text)
-            if apply_active_classes and extra.pk == current_page.pk:
-                setattr(extra, 'active_class', ACTIVE_CLASS)
-            menu_items.insert(0, extra)
-        
-        """
-        Now we know the subnav/repetition situation, we can set the
-        `active_class` for `section_root`
-        """
-        if apply_active_classes:
-            active_class = ACTIVE_ANCESTOR_CLASS
-            if(
-                (extra is None or not hasattr(extra, 'active_class')) and
-                section_root.pk == current_page.pk
-            ):
-                active_class = ACTIVE_CLASS
-            setattr(section_root, 'active_class', active_class)
-    else:
-        menu_items = []
+            active_class = app_settings.ACTIVE_CLASS
+        setattr(section_root, 'active_class', active_class)
 
     context.update({
         'section_root': section_root,
         'apply_active_classes': apply_active_classes,
+        'allow_repeating_parents': allow_repeating_parents,
         'show_section_root': show_section_root,
         'menu_items': tuple(menu_items),
+        'current_level': 1,
+        'max_levels': max_levels,
+        'current_template': template,
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -132,7 +156,7 @@ def section_menu(
 @register.simple_tag(takes_context=True)
 def flat_menu(
     context, handle, show_menu_heading=True, apply_active_classes=False,
-    template=DEFAULT_FLAT_MENU_TEMPLATE
+    template=app_settings.DEFAULT_FLAT_MENU_TEMPLATE
 ):
     """
     Find a FlatMenu for the current site matching the `handle` provided and
@@ -146,6 +170,9 @@ def flat_menu(
         'menu_handle': handle,
         'show_menu_heading': show_menu_heading,
         'apply_active_classes': apply_active_classes,
+        'current_level': 1,
+        'max_levels': 1,
+        'current_template': template,
     })
 
     try:
@@ -174,25 +201,47 @@ def flat_menu(
 
 @register.simple_tag(takes_context=True)
 def children_menu(
-    context, menuitem_or_page, stop_at_this_level=False,
-    allow_repeating_parents=None, apply_active_classes=None,
-    template=DEFAULT_CHILDREN_MENU_TEMPLATE
+    context, menuitem_or_page, max_levels=None, stop_at_this_level=None,
+    reset_level=False, allow_repeating_parents=None, apply_active_classes=None,
+    template=app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE
 ):
     """
     Retrieve the children menu items for the `menuitem_or_page` provided, and
     render them as a simple ul list
     """
     request = context['request']
+    
+    previous_level = context.get('current_level', 0)
+    if reset_level:
+        previous_level = 0
+    current_level = previous_level + 1
     current_site = request.site
     ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
     current_page = context.get('self')
+
     try:
-        parent_page = menuitem_or_page.link_page.specific
+        # menuitem_or_page is a page
+        parent_page = menuitem_or_page.specific
     except AttributeError:
-        parent_page = menuitem_or_page
+        try:
+            # menuitem_or_page is a menuitem linking to a page
+            parent_page = menuitem_or_page.link_page.specific
+        except AttributeError:
+            # menuitem_or_page wasn't a menuitem or page
+            return ''
+
+    if max_levels is None:
+        max_levels = context.get(
+            'max_levels', app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS)
+
+    if stop_at_this_level is None:
+        stop_at_this_level = (current_level >= max_levels)
 
     if apply_active_classes is None:
         apply_active_classes = context.get('apply_active_classes', True)
+
+    if allow_repeating_parents is None:
+        allow_repeating_parents = context.get('allow_repeating_parents', True)
 
     menu_items = prime_menu_items(
         menu_items=parent_page.get_children().live().in_menu(),
@@ -204,26 +253,25 @@ def children_menu(
         apply_active_classes=apply_active_classes
     )
 
-    if allow_repeating_parents is None:
-        allow_repeating_parents = context.get('allow_repeating_parents', True)
-
-    try:
-        if allow_repeating_parents and parent_page.repeat_in_subnav:
+    if allow_repeating_parents:
+        if getattr(parent_page, 'repeat_in_subnav', False):
             extra_item = deepcopy(parent_page)
             href = parent_page.relative_url(current_site)
             text = parent_page.repeated_item_text or parent_page.title
             setattr(extra_item, 'href', href)
             setattr(extra_item, 'text', text)
-            if apply_active_classes and parent_page.pk == current_page.pk:
-                setattr(extra_item, 'active_class', ACTIVE_CLASS)
+            if apply_active_classes:
+                if parent_page.pk == getattr(current_page, 'pk', 0):
+                    active_css_class = app_settings.ACTIVE_CLASS
+                    setattr(extra_item, 'active_class', active_css_class)
             menu_items.insert(0, extra_item)
-    except AttributeError:
-            pass
-
+  
     context.update({
         'parent_page': parent_page,
         'menu_items': tuple(menu_items),
         'allow_repeating_parents': allow_repeating_parents,
+        'current_level': current_level,
+        'max_levels': max_levels,
         'current_template': template,
     })
     t = context.template.engine.get_template(template)
@@ -299,13 +347,15 @@ def prime_menu_items(
             Now we can figure out which class should be added to this item
             """
             if apply_active_classes:
+                ancestor_class = app_settings.ACTIVE_ANCESTOR_CLASS
+                active_class = app_settings.ACTIVE_CLASS
                 if current_page and page.pk == current_page.pk:
                     if page_is_repeated_in_subnav:
-                        setattr(item, 'active_class', ACTIVE_ANCESTOR_CLASS)
+                        setattr(item, 'active_class', ancestor_class)
                     else:
-                        setattr(item, 'active_class', ACTIVE_CLASS)
+                        setattr(item, 'active_class', active_class)
                 elif page.depth > 2 and page.pk in current_page_ancestor_ids:
-                    setattr(item, 'active_class', ACTIVE_ANCESTOR_CLASS)
+                    setattr(item, 'active_class', ancestor_class)
 
             primed_menu_items.append(item)
 
