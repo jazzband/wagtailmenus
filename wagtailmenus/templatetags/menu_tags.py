@@ -50,7 +50,7 @@ def main_menu(
 
     context.update({
         'apply_active_classes': apply_active_classes,
-        'menu_items': tuple(prime_menu_items(
+        'menu_items': prime_menu_items(
             menu_items=menu.menu_items.for_display(),
             current_page=context.get('self'),
             current_page_ancestor_ids=ancestor_ids,
@@ -265,7 +265,7 @@ def children_menu(
   
     context.update({
         'parent_page': parent_page,
-        'menu_items': tuple(menu_items),
+        'menu_items': menu_items,
         'allow_repeating_parents': allow_repeating_parents,
         'current_level': current_level,
         'max_levels': max_levels,
