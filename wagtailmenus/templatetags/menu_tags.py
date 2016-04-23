@@ -285,14 +285,14 @@ def sub_menu(
 
 @register.simple_tag(takes_context=True)
 def children_menu(
-    context, page=None, allow_repeating_parents=True,
+    context, parent_page=None, allow_repeating_parents=True,
     apply_active_classes=False,
     max_levels=app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS,
     template=app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE
 ):
-    if page is None:
-        page = context.get('self')
-        if not isinstance(page, Page):
+    if parent_page is None:
+        parent_page = context.get('self')
+        if not isinstance(parent_page, Page):
             return ''
 
     context.update({
@@ -301,7 +301,7 @@ def children_menu(
     })
     return sub_menu(
         context,
-        menuitem_or_page=page,
+        menuitem_or_page=parent_page,
         stop_at_this_level=None,
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
