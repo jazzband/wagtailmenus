@@ -14,15 +14,15 @@ The site's page tree powers everything past the root level, so you don't have to
 
 Pages still need to have `show_in_menus` checked to appear in menus (if you really needed to hide a page for some reason, it would be frustrating if they didn't), but your project's main navigation (likely displayed in a way that is sensitive to change) will be protected from accidental additions.
 
-### 2. Allows you to manage any number of 'flat menus' via the CMS
+### 2. Allows you to manage multiple 'flat menus' via the CMS
 
-Have you ever hard-coded a menu into a footer at the start of a project, only for those pages never to come into existence? Or maybe the pages were created, but their URLs changed later on, breaking the hard-coded links? How about secondary navigation menus in headers? Flat menus allow you to manage these kind of menus via the CMS, instead of hard-coding them. This means that the page URLs dynamically update to reflect changes, and adding/removing items is possible without needing to change a line of code.
+Have you ever hard-coded a menu into a footer at the start of a project, only for those pages never to come into existence? Or maybe the pages were created, but their URLs changed later on, breaking the hard-coded links? How about 'secondary navigation' menus in headers? Flat menus allow you to manage these kind of menus via the CMS, instead of hard-coding them. This means that the page URLs dynamically update to reflect changes, and adding/removing items is possible without needing to touch your project's codebase.
 
 <img alt="Screenshot of FlatMenu list page in Wagtail admin" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-list.png" />
 
-As you'd expect, only links to published pages will appear when rendering, and just like main menu items, pages must have `show_in_menus` checked in order to appear in flat menus too.
+As you'd expect, only links to published pages will appear when rendering, and just like main menu items, pages must have `show_in_menus` checked in order to appear in flat menus.
 
-Flat menus are designed for outputting simple, 'flat' lists of links, but they can be made to display multiple levels of pages too. See the instructions below for [using the `{% flat_menu %}` tag](#flat-menu-tag).
+Flat menus are designed for outputting simple, flat lists of links, but they CAN be made to display multiple levels of pages too. See the instructions below for [using the `{% flat_menu %}` tag](#flat_menu-tag).
 
 ### 3. Offers a solution to the issue of key page links becoming 'toggles' in multi-level drop-down menus
 
@@ -30,9 +30,9 @@ Extend the `wagtailmenus.models.MenuPage` model instead of the usual `wagtail.wa
 
 No more adding additional pages into the tree. No more hard-coding additional links into templates, or resorting to javascript hacks.
 
-### 4. A set of powerful template tags to render your menus consistently
+### 4. Gives you a set of powerful template tags to render your menus consistently
 
-Output from the included templates is designed to be fully accessible and compatible with Bootstrap 3. You can easily use your own templates by passing a `template` variable to any of the tags, or you can override the included templates by putting customised versions in a system-preferred location.
+Each tag comes with a default template that's designed to be fully accessible and compatible with Bootstrap 3. Limiting any project to a set of pre-defined templates would be silly though, which is why every template tag allows you to render menus using a template of your choosing. You can also override the templates in the same way as any other Django project... by putting templates of the same name into a preferred location.
 
 <img alt="Screenshot from Sublime editor showing menu template code" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-menu-templates.png" />
 
