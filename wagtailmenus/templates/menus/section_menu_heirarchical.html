@@ -11,7 +11,7 @@
         <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
             {% if item.has_children_in_menu %}
-                 {% children_menu item %}
+                 {% sub_menu item %}
             {% endif %}
         </li>
         {% endfor %}

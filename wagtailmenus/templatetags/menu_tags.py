@@ -24,11 +24,11 @@ The following variables will also be added to the context for you to make use
 of:
 
     * `current_level`: The current 'level' being rendered. This starts at 1 for
-      the initial template tag call, then increments each time `children_menu`
+      the initial template tag call, then increments each time `sub_menu`
       is called recursively.
     * `current_template`: The name of the template currently being rendered.
-      This is most useful when rendering a `children_menu` template that
-      calls `children_menu` recursively, and you wish to use the same template
+      This is most useful when rendering a `sub_menu` template that
+      calls `sub_menu` recursively, and you wish to use the same template
       for all recursions.
 """
 
@@ -209,7 +209,7 @@ def flat_menu(
 
 
 @register.simple_tag(takes_context=True)
-def children_menu(
+def sub_menu(
     context, menuitem_or_page, stop_at_this_level=None,
     allow_repeating_parents=None, apply_active_classes=None,
     template=app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE
@@ -299,7 +299,7 @@ def children_page_menu(
         'current_level': 0,
         'max_levels': max_levels,
     })
-    return children_menu(
+    return sub_menu(
         context,
         menuitem_or_page=page,
         stop_at_this_level=None,
