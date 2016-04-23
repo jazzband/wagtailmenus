@@ -120,6 +120,7 @@ class MenuItem(models.Model):
         FieldPanel('url_append'),
         FieldPanel('link_url'),
         FieldPanel('link_text'),
+        FieldPanel('allow_subnav'),
     )
 
 
@@ -191,15 +192,23 @@ class FlatMenu(ClusterableModel):
 
 class MainMenuItem(Orderable, MenuItem):
     menu = ParentalKey('MainMenu', related_name="menu_items")
-
     allow_subnav = models.BooleanField(
         default=True,
-        verbose_name=_("allow sub-navigation for this page"),
-    )
-    panels = MenuItem.panels + (
-        FieldPanel('allow_subnav'),
+        verbose_name=_("allow sub-menu for this item"),
+        help_text=_(
+            "NOTE: The sub-menu might not be displayed, even if checked. "
+            "It depends on how the menu is used in this project's templates."
+        )
     )
 
 
 class FlatMenuItem(Orderable, MenuItem):
     menu = ParentalKey('FlatMenu', related_name="menu_items")
+    allow_subnav = models.BooleanField(
+        default=False,
+        verbose_name=_("allow sub-menu for this item"),
+        help_text=_(
+            "NOTE: The sub-menu might not be displayed, even if checked. "
+            "It depends on how the menu is used in this project's templates."
+        )
+    )
