@@ -81,7 +81,7 @@ class TestMenuRendering(TestCase):
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/">Home</a></li>       
                 <li class=" dropdown">
-                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>
+                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                         <li class=""><a href="/about-us/">Section home</a></li>
                         <li class=""><a href="/about-us/meet-the-team/">Meet the team</a></li>
@@ -90,7 +90,7 @@ class TestMenuRendering(TestCase):
                     </ul>      
                 </li>       
                 <li class=" dropdown">
-                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events</a>    
+                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>    
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
                         <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
@@ -118,11 +118,11 @@ class TestMenuRendering(TestCase):
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/">Home</a></li>       
                 <li class=" dropdown">
-                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>
+                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                         <li class=""><a href="/about-us/">Section home</a></li>
                         <li class=" dropdown">
-                            <a href="/about-us/meet-the-team/" class="dropdown-toggle" id="ddtoggle_7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Meet the team</a> 
+                            <a href="/about-us/meet-the-team/" class="dropdown-toggle" id="ddtoggle_7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Meet the team <span class="caret"></span></a> 
                             <ul class="dropdown-menu" aria-labelledby="ddtoggle_7">
                                 <li class=""><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
                                 <li class=""><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
@@ -134,7 +134,7 @@ class TestMenuRendering(TestCase):
                     </ul>
                 </li>
                 <li class=" dropdown">
-                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events</a>
+                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
                         <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
@@ -227,7 +227,7 @@ class TestMenuRendering(TestCase):
             <ul class="nav navbar-nav">
                 <li class=""><a href="/">Home</a></li>       
                 <li class="ancestor dropdown">
-                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>
+                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                         <li class="active"><a href="/about-us/">Section home</a></li>
                         <li class=""><a href="/about-us/meet-the-team/">Meet the team</a></li>
@@ -236,7 +236,7 @@ class TestMenuRendering(TestCase):
                     </ul>
                 </li>
                 <li class=" dropdown">
-                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events</a>
+                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
                         <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
@@ -264,13 +264,13 @@ class TestMenuRendering(TestCase):
             <ul class="nav navbar-nav">
                 <li class=""><a href="/">Home</a></li>       
                 <li class="ancestor dropdown">
-                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>     
+                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>     
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                         <li class="active">
                             <a href="/about-us/">Section home</a>
                         </li>
                         <li class=" dropdown">
-                            <a href="/about-us/meet-the-team/" class="dropdown-toggle" id="ddtoggle_7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Meet the team</a>
+                            <a href="/about-us/meet-the-team/" class="dropdown-toggle" id="ddtoggle_7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Meet the team <span class="caret"></span></a>
                             <ul class="dropdown-menu" aria-labelledby="ddtoggle_7">
                                 <li class=""><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
                                 <li class=""><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
@@ -282,7 +282,7 @@ class TestMenuRendering(TestCase):
                     </ul>   
                 </li>
                 <li class=" dropdown">
-                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events</a>
+                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
                         <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
@@ -494,7 +494,7 @@ class TestMenuRendering(TestCase):
             <ul class="nav navbar-nav">
                 <li class=""><a href="/">Home</a></li>       
                 <li class=" dropdown">
-                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>
+                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                         <li class=""><a href="/about-us/">Section home</a></li>
                         <li class=""><a href="/about-us/meet-the-team/">Meet the team</a></li>
@@ -503,7 +503,7 @@ class TestMenuRendering(TestCase):
                     </ul>      
                 </li>       
                 <li class=" dropdown">
-                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events</a>    
+                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>    
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
                         <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
