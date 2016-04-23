@@ -176,6 +176,10 @@ def flat_menu(
     current_site = request.site
     current_page = context.get('self')
     ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
+    
+    if not show_multiple_levels:
+        max_levels = 1
+
     try:
         menu = current_site.flat_menus.get(handle__exact=handle)
     except FlatMenu.DoesNotExist:
