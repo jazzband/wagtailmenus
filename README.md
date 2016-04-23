@@ -81,7 +81,7 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 **Optional params for `{% main_menu %}`**
 
 - **`max_levels`** (default: `2`): Provide an integer value to control how many levels of pages should be rendered. If you only want to display the root-level menu items defined as inlines in the CMS (whether the selected pages have children or not), add `max_levels=1` to the tag in your template. You can display additional levels by providing a higher value. You can also override the default value by adding a `WAGTAILMENUS_DEFAULT_MAIN_MENU_MAX_LEVELS` setting to your project's settings module.
-- **`allow_multiple_levels`** (default: `True`): Adding `allow_multiple_levels=False` to the tag in your template essentially overrides `max_levels` to `1`. It's just a little more descriptive.  
+- **`show_multiple_levels`** (default: `True`): Adding `show_multiple_levels=False` to the tag in your template essentially overrides `max_levels` to `1`. It's just a little more descriptive.  
 - **`allow_repeating_parents`** (default: `True`): Repetition-related settings on your pages are respected by default, but you can add `allow_repeating_parents=False` to ignore them, and not repeat any pages in sub-menus when rendering multiple levels.
 - **`apply_active_classes`** (default: `True`): The tag will attempt to add 'active' and 'ancestor' CSS classes to the menu items (where applicable) to indicate the active page and ancestors of that page. To disable this behaviour, add `apply_active_classes=False` to the tag in your template. You can change the CSS classes used by adding `WAGTAILMENUS_ACTIVE_CLASS` and `WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS` settings to your project's settings module.
 - **`template`** (default: `'menus/main_menu.html'`): Lets you render the menu to a template of your choosing. You can also name an alternative template to be used by default, by adding a `WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE` setting to your project's settings module.
@@ -101,8 +101,8 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 **Optional params for `{% flat_menu %}`**
 
 - **`show_menu_heading`** (default: `True`): Passed through to the template used for rendering, where it can be used to conditionally display a heading above the menu.
-- **`allow_multiple_levels`** (default: `False`): Flat menus are designed for outputting simple, flat lists of links. But, if the need arises, you can add `allow_multiple_levels=True` to the tag in your template to output multiple page levels. If you haven't already, you may also need to check the **"Allow sub-menu for this item"** box for the menu items you wish to show further levels for.
-- **`max_levels`** (default: `2`): If `allow_multiple_levels` is being provided to enable multiple levels, you can use this parameter to specify how many levels you'd like to display.
+- **`show_multiple_levels`** (default: `False`): Flat menus are designed for outputting simple, flat lists of links. But, if the need arises, you can add `show_multiple_levels=True` to the tag in your template to output multiple page levels. If you haven't already, you may also need to check the **"Allow sub-menu for this item"** box for the menu items you wish to show further levels for.
+- **`max_levels`** (default: `2`): If `show_multiple_levels=True` is being provided to enable multiple levels, you can use this parameter to specify how many levels you'd like to display.
 - **`apply_active_classes`** (default: `False`): Unlike `main_menu` and `section_menu`, `flat_menu` will NOT attempt to add 'active' and 'ancestor' classes to the menu items by default, as this is often not useful. You can override this by adding `apply_active_classes=true` to the tag in your template.
 - **`template`** (default: `'menus/flat_menu.html'`): Lets you render the menu to a template of your choosing. You can also name an alternative template to be used by default, by adding a `WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE` setting to your project's settings module.
 
@@ -117,6 +117,7 @@ The `{% section_menu %}` tag allows you to display a context-aware, page-driven 
 
 - **`show_section_root`** (default: `True`): Passed through to the template used for rendering, where it can be used to conditionally display the root page of the current section.
 - **`max_levels`** (default: `2`): Lets you control how many levels of pages should be rendered (the section root page does not count as a level, just the first set of pages below it). If you only want to display the first level of pages below the section root page (whether pages linked to have children or not), add `max_levels=1` to the tag in your template. You can display additional levels by providing a higher value.
+- **`show_multiple_levels`** (default: `True`): Adding `show_multiple_levels=False` to the tag in your template essentially overrides `max_levels` to `1`. It's just a little more descriptive.  
 - **`allow_repeating_parents`** (default: `True`): Repetition-related settings on your pages are respected by default, but you can add `allow_repeating_parents=False` to ignore them, and not repeat any pages in sub-menus when rendering.
 - **`apply_active_classes`** (default: `True`): The tag will add 'active' and 'ancestor' classes to the menu items where applicable, to indicate the active page and ancestors of that page. To disable this behaviour, add `apply_active_classes=False` to the tag in your template.
 - **`template`** (default: `'menus/section_menu.html'`): Lets you render the menu to a template of your choosing. You can also name an alternative template to be used by default, by adding a `WAGTAILMENUS_DEFAULT_SECTION_MENU_TEMPLATE` setting to your project's settings module.
@@ -176,7 +177,7 @@ You can override some of wagtailmenus' default behaviour by adding one of more o
 - **`WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE`** (default: `'menus/children_menu.html'`): The name of the template used for rendering by the `{% children_menu %}` tag when a `template` parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE`** (default: `'menus/sub_menu.html'`): The name of the template used for rendering by the `{% sub_menu %}` tag when a `template` parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_MAIN_MENU_MAX_LEVELS`** (default: `2`): The default number of maximum levels rendered by `{% main_menu %}` when a `max_levels` parameter value isn't provided.
-- **`WAGTAILMENUS_DEFAULT_FLAT_MENU_MAX_LEVELS`** (default: `2`): The default number of maximum levels rendered by `{% flat_menu %}` when `allow_multiple_levels=True` and a `max_levels` parameter value isn't provided.
+- **`WAGTAILMENUS_DEFAULT_FLAT_MENU_MAX_LEVELS`** (default: `2`): The default number of maximum levels rendered by `{% flat_menu %}` when `show_multiple_levels=True` and a `max_levels` parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_SECTION_MENU_MAX_LEVELS`** (default: `2`): The default number of maximum levels rendered by `{% section_menu %}` when a `max_levels` parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS`** (default: `1`): The default number of maximum levels rendered by `{% children_page_menu %}` when a `max_levels` parameter value isn't provided.
 
