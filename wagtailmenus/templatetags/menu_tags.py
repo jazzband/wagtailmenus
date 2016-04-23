@@ -215,8 +215,8 @@ def sub_menu(
     template=app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE
 ):
     """
-    Retrieve the children menu items for the `menuitem_or_page` provided, and
-    render them as a simple ul list
+    Retrieve the children pages for the `menuitem_or_page` provided, turn them
+    into menu items, and render them to a template
     """
     request = context['request']
     previous_level = context.get('current_level', 0)
@@ -284,7 +284,7 @@ def sub_menu(
 
 
 @register.simple_tag(takes_context=True)
-def children_page_menu(
+def children_menu(
     context, page=None, allow_repeating_parents=True,
     apply_active_classes=False,
     max_levels=app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS,

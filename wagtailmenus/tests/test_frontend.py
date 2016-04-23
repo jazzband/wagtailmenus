@@ -150,7 +150,7 @@ class TestMenuRendering(TestCase):
 
     def test_homepage_sub_menu_one_level(self):
         """
-        Test '{% children_page_menu %}' output for homepage
+        Test '{% children_menu %}' output for homepage
         """
         response = self.client.get('/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -169,7 +169,7 @@ class TestMenuRendering(TestCase):
 
     def test_homepage_sub_menu_three_levels(self):
         """
-        Test '{% children_page_menu max_levels=3 allow_repeating_parents=False %}' output for homepage
+        Test '{% children_menu max_levels=3 allow_repeating_parents=False %}' output for homepage
         """
         response = self.client.get('/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -372,7 +372,7 @@ class TestMenuRendering(TestCase):
 
     def test_about_us_sub_menu_three_levels(self):
         """
-        Test '{% children_page_menu max_levels=3 allow_repeating_parents=False %}' output for 'About us' page
+        Test '{% children_menu max_levels=3 allow_repeating_parents=False %}' output for 'About us' page
         """
         response = self.client.get('/about-us/')
         soup = BeautifulSoup(response.content, 'html5lib')
