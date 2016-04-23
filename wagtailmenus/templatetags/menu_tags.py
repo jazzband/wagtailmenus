@@ -36,6 +36,7 @@ of:
 @register.simple_tag(takes_context=True)
 def main_menu(
     context, apply_active_classes=True, allow_repeating_parents=True,
+    show_multiple_levels=True,
     max_levels=app_settings.DEFAULT_MAIN_MENU_MAX_LEVELS,
     template=app_settings.DEFAULT_MAIN_MENU_TEMPLATE
 ):
@@ -48,17 +49,20 @@ def main_menu(
         menu = MainMenu.objects.create(site=site)
     ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
 
+    if not show_multiple_levels:
+        max_levels = 1
+
     context.update({
         'apply_active_classes': apply_active_classes,
         'menu_items': prime_menu_items(
             menu_items=menu.menu_items.for_display(),
+            current_site=site,
             current_page=context.get('self'),
             current_page_ancestor_ids=ancestor_ids,
-            current_site=site,
             check_for_children=max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
             apply_active_classes=apply_active_classes,
-        )),
+        ),
         'allow_repeating_parents': allow_repeating_parents,
         'current_level': 1,
         'max_levels': max_levels,
@@ -70,8 +74,8 @@ def main_menu(
 
 @register.simple_tag(takes_context=True)
 def section_menu(
-    context, show_section_root=True, allow_repeating_parents=True,
-    apply_active_classes=True, 
+    context, show_section_root=True, show_multiple_levels=True,
+    apply_active_classes=True, allow_repeating_parents=True,
     max_levels=app_settings.DEFAULT_SECTION_MENU_MAX_LEVELS,
     template=app_settings.DEFAULT_SECTION_MENU_TEMPLATE
 ):
@@ -82,21 +86,14 @@ def section_menu(
     section_root = request.META.get('CURRENT_SECTION_ROOT')
     ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
 
+    if not show_multiple_levels:
+        max_levels = 1
+
     if section_root is None:
         # The section root couldn't be identified. Likely because it's not 
         # a 'Page' being served, and `wagtail_hooks.wagtailmenu_params_helper`
         # isn't running.
         return ''
-
-    menu_items = prime_menu_items(
-        menu_items=section_root.get_children().live().in_menu(),
-        current_page=current_page,
-        current_page_ancestor_ids=ancestor_ids,
-        current_site=current_site,
-        check_for_children=max_levels > 1,
-        allow_repeating_parents=allow_repeating_parents,
-        apply_active_classes=apply_active_classes,
-    )
 
     """
     We want `section_root` to have the same attributes as primed menu
@@ -104,6 +101,16 @@ def section_menu(
     """
     setattr(section_root, 'text', section_root.title)
     setattr(section_root, 'href', section_root.relative_url(current_site))
+
+    menu_items = prime_menu_items(
+        menu_items=section_root.get_children().live().in_menu(),
+        current_site=current_site,
+        current_page=current_page,
+        current_page_ancestor_ids=ancestor_ids,
+        check_for_children=max_levels > 1,
+        allow_repeating_parents=allow_repeating_parents,
+        apply_active_classes=apply_active_classes,
+    )
 
     """
     Before we can work out an `active_class` for `section_root`, we need
@@ -142,10 +149,10 @@ def section_menu(
 
     context.update({
         'section_root': section_root,
+        'show_section_root': show_section_root,
         'apply_active_classes': apply_active_classes,
         'allow_repeating_parents': allow_repeating_parents,
-        'show_section_root': show_section_root,
-        'menu_items': tuple(menu_items),
+        'menu_items': menu_items,
         'current_level': 1,
         'max_levels': max_levels,
         'current_template': template,
@@ -157,6 +164,8 @@ def section_menu(
 @register.simple_tag(takes_context=True)
 def flat_menu(
     context, handle, show_menu_heading=True, apply_active_classes=False,
+    show_multiple_levels=False, allow_repeating_parents=True,
+    max_levels=app_settings.DEFAULT_FLAT_MENU_MAX_LEVELS,
     template=app_settings.DEFAULT_FLAT_MENU_TEMPLATE
 ):
     """
@@ -165,37 +174,36 @@ def flat_menu(
     """
     request = context['request']
     current_site = request.site
+    current_page = context.get('self')
     ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
-
-    context.update({
-        'menu_handle': handle,
-        'show_menu_heading': show_menu_heading,
-        'apply_active_classes': apply_active_classes,
-        'current_level': 1,
-        'max_levels': 1,
-        'current_template': template,
-    })
-
     try:
         menu = current_site.flat_menus.get(handle__exact=handle)
-        context.update({
-            'matched_menu': menu,
-            'menu_heading': menu.heading,
-            'menu_items': tuple(prime_menu_items(
-                menu_items=menu.menu_items.for_display(),
-                current_page=context.get('self'),
-                current_page_ancestor_ids=ancestor_ids,
-                current_site=current_site,
-                check_for_children=False,
-                apply_active_classes=apply_active_classes,
-            )),
-        })
     except FlatMenu.DoesNotExist:
-        context.update({
-            'matched_menu': None,
-            'menu_heading': '',
-            'menu_items': [],
-        })
+        # No menu was found matching `handle`, so gracefully render nothing.
+        return ''
+
+    menu_items = prime_menu_items(
+        menu_items=menu.menu_items.for_display(),
+        current_site=current_site,
+        current_page=current_page,
+        current_page_ancestor_ids=ancestor_ids,
+        check_for_children=max_levels > 1,
+        allow_repeating_parents=allow_repeating_parents,
+        apply_active_classes=apply_active_classes,
+    )
+
+    context.update({
+        'matched_menu': menu,
+        'menu_handle': handle,
+        'menu_heading': menu.heading,
+        'show_menu_heading': show_menu_heading,
+        'apply_active_classes': apply_active_classes,
+        'allow_repeating_parents': allow_repeating_parents,
+        'menu_items': menu_items,
+        'current_level': 1,
+        'max_levels': max_levels,
+        'current_template': template,
+    })
     t = context.template.engine.get_template(template)
     return t.render(context)
 
@@ -242,9 +250,9 @@ def children_menu(
 
     menu_items = prime_menu_items(
         menu_items=parent_page.get_children().live().in_menu(),
+        current_site=current_site,
         current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
-        current_site=current_site,
         check_for_children=not stop_at_this_level,
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes
@@ -302,7 +310,7 @@ def children_page_menu(
 
 
 def prime_menu_items(
-    menu_items, current_page, current_page_ancestor_ids, current_site,
+    menu_items, current_site, current_page, current_page_ancestor_ids,
     check_for_children=False, allow_repeating_parents=True,
     apply_active_classes=True
 ):
@@ -347,7 +355,7 @@ def prime_menu_items(
                 expensive, so we try to do the working out where absolutely
                 necessary.
                 """
-                if ((menuitem and menuitem.allow_subnav) or menuitem is None):
+                if (menuitem is None or menuitem.allow_subnav):
                     has_children_in_menu = (
                         page.get_children().live().in_menu().exists())
                     setattr(item, 'has_children_in_menu', has_children_in_menu)
