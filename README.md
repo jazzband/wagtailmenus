@@ -83,7 +83,7 @@ Each tag comes with a default template that's designed to be fully accessible an
 The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the current site in your Wagtail project, with CSS classes automatically applied to each item to indicate the current page or ancestors of the current page. It also does a few sensible things, like never adding the 'ancestor' class for a homepage link, or outputting children for it.
 
 1. In whichever template you want your main menu to appear, load `menu_tags` using `{% load menu_tags %}`.
-2. Use the `{% main_menu %}` tag where you want the menu to appear.
+2. Add `{% main_menu %}` to your template, where you want the menu to appear.
 
 **Optional params for `{% main_menu %}`**
 
@@ -96,7 +96,7 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 ### <a id="flat_menu-tag"></a>4. Using the `{% flat_menu %}` tag
 
 1. In whichever template you want your menu to appear, load `menu_tags` using `{% load menu_tags %}`.
-2. Use the `{% flat_menu 'menu-handle' %}` tag where you want the menu to appear, where 'menu-handle' is the unique handle for the menu you added.
+2. Add `{% flat_menu 'menu-handle' %}` to your template, where you want the menu to appear (where 'menu-handle' is the unique handle for the menu you added).
 
 **Optional params for `{% flat_menu %}`**
 
@@ -111,7 +111,7 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 The `{% section_menu %}` tag allows you to display a context-aware, page-driven menu in your project's templates, with CSS classes automatically applied to each item to indicate the active page or ancestors of the active page.  
 
 1. In whichever template you want the section menu to appear, load `menu_tags` using `{% load menu_tags %}`.
-2. Add `{% section_menu %}` where you want the menu to appear.
+2. Add `{% section_menu %}` to your template, where you want the menu to appear.
 
 **Optional params for `{% section_menu %}`**
 
