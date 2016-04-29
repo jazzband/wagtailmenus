@@ -140,7 +140,7 @@ The `{% children_menu %}` tag can be used in page templates to display children 
 
 ### <a id="sub_menu-tag"></a>6. Using the `{% sub_menu %}` tag
 
-The `{% sub_menu %}` tag is used within menu templates to render additional levels of pages within a menu. It's designed to pick up on variables added to the context by the other menu tags, and so can behaves inconsistently if called directly, without those context variables having been set. It requires only one parameter to work, which is `menuitem_or_page`, which can either be an instance of `MainMenuItem`, `FlatMenuItem`, or `Page`.
+The `{% sub_menu %}` tag is used within menu templates to render additional levels of pages within a menu. It's designed to pick up on variables added to the context by the other menu tags, and so can behave a little unpredictably if called directly, without those context variables having been set. It requires only one parameter to work, which is `menuitem_or_page`, which can either be an instance of `MainMenuItem`, `FlatMenuItem`, or `Page`.
 
 **Optional params for `{% sub_menu %}`**
 
