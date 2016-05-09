@@ -1,13 +1,36 @@
 from __future__ import absolute_import, unicode_literals
 
-from django.contrib.auth import get_user_model
 from django.test import TestCase
+from wagtailmenus.models import MainMenu, FlatMenu
 from bs4 import BeautifulSoup
 
 
-class TestMenuRendering(TestCase):
+class TestModels(TestCase):
+    fixtures = ['test.json']
+
+    def test_menuitem_methods(self):
+        menu = MainMenu.objects.get(pk=1)
+        item_1 = menu.menu_items.first()
+        self.assertEqual(item_1.__str__(), 'Home')
+
+        menu = FlatMenu.objects.get(handle='contact')
+        item_1 = menu.menu_items.first()
+        self.assertEqual(item_1.__str__(), 'Call us')
+
+
+class TestTemplateTags(TestCase):
     fixtures = ['test.json']
     maxDiff = None
+
+    def test_main_menu_created_when_not_exists(self):
+        menu = MainMenu.objects.get(pk=1)
+        self.assertEqual(menu.__str__(), 'Main menu for Test')
+        menu.delete()
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        menu = MainMenu.objects.first()
+        self.assertTrue(menu)
+        self.assertEqual(menu.__str__(), 'Main menu for Test')
 
     def test_homepage(self):
         """
@@ -18,7 +41,7 @@ class TestMenuRendering(TestCase):
 
     def test_about_us(self):
         """
-        Test that 'About us' page (based on `MenuPage`), with 
+        Test that 'About us' page (based on `MenuPage`), with
         `repeat_in_subnav=True`, renders without errors.
         """
         response = self.client.get('/about-us/')
@@ -42,7 +65,7 @@ class TestMenuRendering(TestCase):
 
     def test_staff_vacancies(self):
         """
-        Test that 'Staff vacancies' page (based on `Page`), with 
+        Test that 'Staff vacancies' page (based on `Page`), with
         `show_in_menus=False`, and within a section with subnav, renders
         without errors.
         """
@@ -51,7 +74,7 @@ class TestMenuRendering(TestCase):
 
     def test_news_and_events(self):
         """
-        Test that 'News and events' page (based on `MenuPage`), with 
+        Test that 'News and events' page (based on `MenuPage`), with
         `repeat_in_subnav=False`, and within a section with subnav, renders
         without errors.
         """
@@ -73,13 +96,13 @@ class TestMenuRendering(TestCase):
         """
         response = self.client.get('/')
         soup = BeautifulSoup(response.content, 'html5lib')
-        
+
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-two-levels').decode()
         expected_menu_html = """
-        <div id="main-menu-two-levels">                      
+        <div id="main-menu-two-levels">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home</a></li>       
+                <li class="active"><a href="/">Home</a></li>
                 <li class=" dropdown">
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
@@ -87,17 +110,17 @@ class TestMenuRendering(TestCase):
                         <li class=""><a href="/about-us/meet-the-team/">Meet the team</a></li>
                         <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
-                    </ul>      
-                </li>       
+                    </ul>
+                </li>
                 <li class=" dropdown">
-                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>    
+                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
                         <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
                         <li class=""><a href="/news-and-events/press/">In the press</a></li>
                     </ul>
-                </li>       
-                <li class=""><a href="http://google.co.uk">Google</a></li>       
+                </li>
+                <li class=""><a href="http://google.co.uk">Google</a></li>
                 <li class=""><a href="/contact-us/">Contact us</a></li>
             </ul>
         </div>
@@ -110,13 +133,13 @@ class TestMenuRendering(TestCase):
         """
         response = self.client.get('/')
         soup = BeautifulSoup(response.content, 'html5lib')
-        
+
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-three-levels').decode()
         expected_menu_html = """
         <div id="main-menu-three-levels">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home</a></li>       
+                <li class="active"><a href="/">Home</a></li>
                 <li class=" dropdown">
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
@@ -139,10 +162,10 @@ class TestMenuRendering(TestCase):
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
                         <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
                         <li class=""><a href="/news-and-events/press/">In the press</a></li>
-                    </ul>  
-                </li>       
-                <li class=""><a href="http://google.co.uk">Google</a></li>       
-                <li class=""><a href="/contact-us/">Contact us</a></li>       
+                    </ul>
+                </li>
+                <li class=""><a href="http://google.co.uk">Google</a></li>
+                <li class=""><a href="/contact-us/">Contact us</a></li>
             </ul>
         </div>
         """
@@ -156,7 +179,7 @@ class TestMenuRendering(TestCase):
         soup = BeautifulSoup(response.content, 'html5lib')
         menu_html = soup.find(id='children-menu-one-level').decode()
         expected_menu_html = """
-        <div id="children-menu-one-level">     
+        <div id="children-menu-one-level">
             <ul>
                 <li class=""><a href="/about-us/">About us</a></li>
                 <li class=""><a href="/news-and-events/">News &amp; events</a></li>
@@ -177,7 +200,7 @@ class TestMenuRendering(TestCase):
         expected_menu_html = """
         <div id="children-menu-three-levels">
             <ul>
-                <li class=""><a href="/about-us/">About us</a>       
+                <li class=""><a href="/about-us/">About us</a>
                     <ul>
                         <li class="">
                             <a href="/about-us/meet-the-team/">Meet the team</a>
@@ -185,7 +208,7 @@ class TestMenuRendering(TestCase):
                                 <li class=""><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
                                 <li class=""><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
                                 <li class=""><a href="/about-us/meet-the-team/staff-member-three/">Staff member three</a></li>
-                            </ul>                        
+                            </ul>
                         </li>
                         <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
@@ -225,7 +248,7 @@ class TestMenuRendering(TestCase):
         expected_menu_html = """
         <div id="main-menu-two-levels">
             <ul class="nav navbar-nav">
-                <li class=""><a href="/">Home</a></li>       
+                <li class=""><a href="/">Home</a></li>
                 <li class="ancestor dropdown">
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
@@ -241,10 +264,10 @@ class TestMenuRendering(TestCase):
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
                         <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
                         <li class=""><a href="/news-and-events/press/">In the press</a></li>
-                    </ul>    
-                </li>       
-                <li class=""><a href="http://google.co.uk">Google</a></li>       
-                <li class=""><a href="/contact-us/">Contact us</a></li>       
+                    </ul>
+                </li>
+                <li class=""><a href="http://google.co.uk">Google</a></li>
+                <li class=""><a href="/contact-us/">Contact us</a></li>
             </ul>
         </div>
         """
@@ -260,11 +283,11 @@ class TestMenuRendering(TestCase):
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-three-levels').decode()
         expected_menu_html = """
-        <div id="main-menu-three-levels"> 
+        <div id="main-menu-three-levels">
             <ul class="nav navbar-nav">
-                <li class=""><a href="/">Home</a></li>       
+                <li class=""><a href="/">Home</a></li>
                 <li class="ancestor dropdown">
-                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>     
+                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                         <li class="active">
                             <a href="/about-us/">Section home</a>
@@ -279,7 +302,7 @@ class TestMenuRendering(TestCase):
                         </li>
                         <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
-                    </ul>   
+                    </ul>
                 </li>
                 <li class=" dropdown">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
@@ -287,10 +310,10 @@ class TestMenuRendering(TestCase):
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
                         <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
                         <li class=""><a href="/news-and-events/press/">In the press</a></li>
-                    </ul> 
-                </li>       
-                <li class=""><a href="http://google.co.uk">Google</a></li>       
-                <li class=""><a href="/contact-us/">Contact us</a></li>       
+                    </ul>
+                </li>
+                <li class=""><a href="http://google.co.uk">Google</a></li>
+                <li class=""><a href="/contact-us/">Contact us</a></li>
             </ul>
         </div>
         """
@@ -312,7 +335,7 @@ class TestMenuRendering(TestCase):
                 <ul>
                     <li class="active"><a href="/about-us/">Section home</a></li>
                     <li class="">
-                        <a href="/about-us/meet-the-team/">Meet the team</a>  
+                        <a href="/about-us/meet-the-team/">Meet the team</a>
                         <ul>
                             <li class=""><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
                             <li class=""><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
@@ -409,7 +432,7 @@ class TestMenuRendering(TestCase):
                 <a href="/superheroes/" class="ancestor section_root">Superheroes</a>
                 <ul>
                     <li class="active">
-                        <a href="/superheroes/marvel-comics/">Marvel Comics</a>     
+                        <a href="/superheroes/marvel-comics/">Marvel Comics</a>
                         <ul>
                             <li class=""><a href="/superheroes/marvel-comics/iron-man/">Iron Man</a></li>
                             <li class=""><a href="/superheroes/marvel-comics/spiderman/">Spiderman</a></li>
@@ -470,7 +493,7 @@ class TestMenuRendering(TestCase):
         """
         response = self.client.get('/')
         soup = BeautifulSoup(response.content, 'html5lib')
-        
+
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='nav-footer').decode()
         expected_menu_html = """<div id="nav-footer"><div class="flat-menu footer with_heading"><h4>Important links</h4><ul><li class=""><a href="/legal/accessibility/">Accessibility</a></li><li class=""><a href="/legal/privacy-policy/">Privacy policy</a></li><li class=""><a href="/legal/terms-and-conditions/">Terms and conditions</a></li></ul></div></div>"""
@@ -478,7 +501,7 @@ class TestMenuRendering(TestCase):
 
         response = self.client.get('/legal/privacy-policy/')
         soup = BeautifulSoup(response.content, 'html5lib')
-        
+
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='nav-footer').decode()
         expected_menu_html = """<div id="nav-footer"><div class="flat-menu footer with_heading"><h4>Important links</h4><ul><li class=""><a href="/legal/accessibility/">Accessibility</a></li><li class="active"><a href="/legal/privacy-policy/">Privacy policy</a></li><li class=""><a href="/legal/terms-and-conditions/">Terms and conditions</a></li></ul></div></div>"""
@@ -490,9 +513,9 @@ class TestMenuRendering(TestCase):
 
         main_menu_html = soup.find(id='main-menu-two-levels').decode()
         expected_menu_html = """
-        <div id="main-menu-two-levels">                      
+        <div id="main-menu-two-levels">
             <ul class="nav navbar-nav">
-                <li class=""><a href="/">Home</a></li>       
+                <li class=""><a href="/">Home</a></li>
                 <li class=" dropdown">
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
@@ -500,8 +523,8 @@ class TestMenuRendering(TestCase):
                         <li class=""><a href="/about-us/meet-the-team/">Meet the team</a></li>
                         <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
-                    </ul>      
-                </li>       
+                    </ul>
+                </li>
                 <li class=" dropdown">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>    
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
@@ -509,8 +532,8 @@ class TestMenuRendering(TestCase):
                         <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
                         <li class=""><a href="/news-and-events/press/">In the press</a></li>
                     </ul>
-                </li>       
-                <li class=""><a href="http://google.co.uk">Google</a></li>       
+                </li>
+                <li class=""><a href="http://google.co.uk">Google</a></li>
                 <li class=""><a href="/contact-us/">Contact us</a></li>
             </ul>
         </div>

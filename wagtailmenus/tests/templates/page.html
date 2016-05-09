@@ -20,14 +20,18 @@
 		</div>
 
 		<div class="content-secondary">
-			<h4>Section Menu (max_levels=1)</h4>
+			<h4>Section Menu (show_multiple_levels=False)</h4>
 			<div id="section-menu-one-level">
-				{% section_menu max_levels=1 %}
+				{% section_menu show_multiple_levels=False %}
 			</div>
 
 			<h4>Section Menu (max_levels=2)</h4>
 			<div id="section-menu-two-levels">
-				{% section_menu %}
+				{% section_menu max_levels=2 %}
+			</div>
+
+			<div id="sub-menu-no-page">
+				{% sub_menu 'not-a-menuitem-or-page' %}
 			</div>
 		</div>
 
