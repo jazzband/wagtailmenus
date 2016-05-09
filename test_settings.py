@@ -1,5 +1,4 @@
 import os
-import hashlib
 from django.conf.global_settings import *  # NOQA
 
 DEBUG = True
@@ -7,8 +6,8 @@ SITE_ID = 1
 
 DATABASES = {
     'default': {
-        'NAME': 'wagtailmenus_test.sqlite',
-        'TEST_NAME': 'wagtailmenus_test_test.sqlite',
+        'NAME': 'wagtailmenus.sqlite',
+        'TEST_NAME': 'wagtailmenus_test.sqlite',
         'ENGINE': 'django.db.backends.sqlite3',
     }
 }
@@ -37,7 +36,6 @@ INSTALLED_APPS = (
     'wagtail.wagtailcore',
 
     'wagtailmodeladmin',
-    'django_nose',
     'taggit',
     'modelcluster',
 
@@ -64,16 +62,6 @@ WAGTAIL_SITE_NAME = 'Test site'
 LOGIN_URL = 'wagtailadmin_login'
 LOGIN_REDIRECT_URL = 'wagtailadmin_home'
 
-
-# =============================================================================
-# django-nose config
-# =============================================================================
-
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=wagtailmenus',
-]
 
 # =============================================================================
 # Templates
