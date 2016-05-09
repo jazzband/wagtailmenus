@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from django import forms
 from django.utils.text import capfirst
 from django.utils.translation import ugettext as _
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.contrib.admin.utils import quote, unquote
@@ -86,14 +87,14 @@ class MainMenuEditView(WMAFormView):
         return context
 
     def form_valid(self, form):
-        instance = form.save()
+        form.save()
         messages.success(
             self.request, _("%s updated.") % capfirst(self.model_name)
         )
         return redirect(self.edit_url)
 
     def get_error_message(self):
-        return _("The %s could not be saved due to errors.") % self.model_name
+        return _("The menu could not be saved due to errors.")
 
     def get_template_names(self):
         return ['wagtailmenus/mainmenu_edit.html']
