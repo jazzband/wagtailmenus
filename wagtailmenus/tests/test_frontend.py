@@ -1,18 +1,46 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.test import TestCase
-from wagtailmenus.models import MainMenu, FlatMenu
+from django.core.exceptions import ValidationError
+
+from wagtail.wagtailcore.models import Page
+from wagtailmenus.models import MainMenu, MainMenuItem, FlatMenu
 from bs4 import BeautifulSoup
 
 
 class TestModels(TestCase):
     fixtures = ['test.json']
 
-    def test_menuitem_methods(self):
+    def test_mainmenuitem_clean_missing_link_text(self):
+        menu = MainMenu.objects.get(pk=1)
+        new_item = MainMenuItem(menu=menu, link_url='test/')
+        self.assertRaisesMessage(
+            ValidationError,
+            "This must be set if you're linking to a custom URL.",
+            new_item.clean)
+
+    def test_mainmenuitem_clean_missing_link_url(self):
+        menu = MainMenu.objects.get(pk=1)
+        new_item = MainMenuItem(menu=menu)
+        self.assertRaisesMessage(
+            ValidationError,
+            "This must be set if you're not linking to a page.",
+            new_item.clean)
+
+    def test_mainmenuitem_clean_link_url_and_link_page(self):
+        menu = MainMenu.objects.get(pk=1)
+        new_item = MainMenuItem(menu=menu, link_text='Test', link_url='test/', link_page=Page.objects.get(pk=6))
+        self.assertRaisesMessage(
+            ValidationError,
+            "You cannot link to both a page and URL. Please review your link and clear any unwanted values.",
+            new_item.clean)
+
+    def test_mainmenuitem_str(self):
         menu = MainMenu.objects.get(pk=1)
         item_1 = menu.menu_items.first()
         self.assertEqual(item_1.__str__(), 'Home')
 
+    def test_flatmenuitem_str(self):
         menu = FlatMenu.objects.get(handle='contact')
         item_1 = menu.menu_items.first()
         self.assertEqual(item_1.__str__(), 'Call us')
