@@ -41,8 +41,6 @@ class SiteSwitchForm(forms.Form):
 class MainMenuIndexView(WMABaseView):
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.permission_helper.has_list_permission(request.user):
-            raise PermissionDenied
         site = Site.find_for_request(request)
         return redirect(self.get_edit_url(site))
 
