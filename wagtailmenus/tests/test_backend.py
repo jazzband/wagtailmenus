@@ -32,6 +32,10 @@ class TestSuperUser(TransactionTestCase):
             '/admin/modeladmin/wagtailmenus/mainmenu/edit/1/')
         self.assertEqual(response.status_code, 200)
 
+        # Test 'get_error_message' method on view for additional coverage
+        view = response.context['view']
+        self.assertTrue(view.get_error_message())
+
     def test_mainmenu_edit_multisite(self):
         Site.objects.create(
             hostname='test2.com', port=80, root_page_id=2,
