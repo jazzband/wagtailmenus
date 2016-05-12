@@ -65,15 +65,16 @@ class MainMenuEditView(WMAFormView):
     def get_page_subtitle(self):
         return capfirst(self.opts.verbose_name)
 
-    def check_action_permitted(self, user):
-        return self.permission_helper.can_edit_object(user, self.instance)
-
     def dispatch(self, request, *args, **kwargs):
+        user = request.user
+        if not self.permission_helper.can_edit_object(user, self.instance):
+            raise PermissionDenied
         self.site_switcher = None
         if Site.objects.count() > 1:
             self.site_switcher = SiteSwitchForm(self.site)
-            if request.GET.get('site', None):
-                return redirect(request.GET['site'])
+            site_from_get = request.GET.get('site', None)
+            if site_from_get and site_from_get != self.object_id:
+                return redirect(reverse(edit_url_name, args=[site_from_get]))
         return super(MainMenuEditView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
