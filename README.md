@@ -153,7 +153,7 @@ The `{% sub_menu %}` tag is used within menu templates to render additional leve
 
 ### <a id="using-menupage"></a>8. Optional repetition of selected pages in menus using `MenuPage`
 
-Let's say you have an 'About Us' section on your site. The top-level 'About Us' page has content on it that is just as important as the content on the more specific pages below it (e.g. 'Meet the team', 'Our mission and values', 'Staff vacancies'). So, you'd like visitors to be able to access the 'About Us' page from your navigation as easily as those pages. But your site uses a drop-down menu, and the 'About Us' link no longer links to the page when clicked... it has simply become a toggle for hiding and showing the pages below it:
+Let's say you have an 'About Us' section on your site. The top-level 'About Us' page has content that is just as important as that on the more specific pages below it (e.g. 'Meet the team', 'Our mission and values', 'Staff vacancies'). Because of this, you'd like visitors to be able to access the 'About Us' page from your navigation as easily as those pages. But, your site uses drop-down navigation, and the 'About Us' link no longer takes you to that page when clicked... it simply acts as a toggle for hiding and showing the pages below it:
 
 <img alt="Screenshot showing an example navigation" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/no-repeating-item.png" />
 
