@@ -151,7 +151,9 @@ The `{% sub_menu %}` tag is used within menu templates to render additional leve
 
 ### <a id="using-menupage"></a>8. Optional repetition of selected pages in menus using `MenuPage`
 
-Let's say you have an 'About Us' section on your site. The top-level 'About Us' page has content on it that is just as important as the content on the more specific pages below it (e.g. 'Meet the team', 'Our mission and values', 'Staff vacancies'). So, want people to be able to access the 'About Us' page from your navigation as easily as those pages. But your site uses a drop-down menu, and the 'About Us' link no longer links to the page when clicked... it has simply become a toggle for hiding and showing the pages below it. 
+Let's say you have an 'About Us' section on your site. The top-level 'About Us' page has content on it that is just as important as the content on the more specific pages below it (e.g. 'Meet the team', 'Our mission and values', 'Staff vacancies'). So, you'd like visitors to be able to access the 'About Us' page from your navigation as easily as those pages. But your site uses a drop-down menu, and the 'About Us' link no longer links to the page when clicked... it has simply become a toggle for hiding and showing the pages below it:
+
+<img alt="Screenshot showing an example navigation" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/no-repeating-item.png" />
 
 Presuming the 'About Us' page extends `wagtailmenus.models.MenuPage`:
 
@@ -159,7 +161,9 @@ Presuming the 'About Us' page extends `wagtailmenus.models.MenuPage`:
 2. Uncollapse the `ADVANCED MENU BEHAVIOUR` panel by clicking the downward-pointing arrow next to the panel's label. <img alt="Screenshot showing the collapsed 'advanced menu behaviour' panel" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-menupage-settings-collapsed.png" />
 4. Tick the **Repeat in sub-navigation** checkbox that appears, and publish your changes. <img alt="Screenshot show the expanded 'advanced menu behaviour' panel" src="https://github.com/rkhleics/wagtailmenus/blob/master/screenshots/wagtailmenus-menupage-settings-visible.png" />
 
-Now, wherever the children of the `About Us` page are output (using one of the about menu tags), An additional link to the about us page will appear alongside them, allowing the page to be accessed more easily. In the example above, you'll see I've added the text **Section home** into the `Repeated item link text` field. That means that the repeated item will say 'Section home', instead of just repeating the page's title. 
+Now, wherever the children of the `About Us` page are output (using one of the above menu tags), an additional link to the `About Us` page will appear alongside them, allowing the page to be accessed more easily. In the example above, you'll see I've added the text **Section home** into the `Repeated item link text` field. With this set, the repeated item text should be 'Section home', instead of just repeating the page's title, like so:
+
+<img alt="Screenshot showing the repeated nav item in effect" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/repeating-item.png" />
 
 The menu tags do some extra work to make sure both links are never assigned the 'active' class. When on the 'About Us' page, the tags will treat the repeated item as the 'active' page, and just assign the 'ancestor' class to the original, so that the behaviour/styling is consistent with other page links rendered at that level.
 
