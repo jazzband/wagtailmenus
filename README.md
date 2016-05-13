@@ -28,6 +28,8 @@ Flat menus are designed for outputting simple, flat lists of links, but they CAN
 
 Extend the `wagtailmenus.models.MenuPage` model instead of the usual `wagtail.wagtailcore.models.Page` to create your custom page types, and gain a couple of extra fields that will allow you to configure certain pages to appear again alongside their children in multi-level menus. Use the menu tags provided, and that behaviour will remain consistent in all menus throughout your site.
 
+<img alt="Screenshot showing the repeated nav item in effect" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/repeating-item.png" />
+
 No more adding additional pages into the tree. No more hard-coding additional links into templates, or resorting to javascript hacks.
 
 ### 4. Gives you a set of powerful template tags to render your menus consistently
