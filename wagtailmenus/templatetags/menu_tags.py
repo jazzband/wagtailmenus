@@ -1,6 +1,5 @@
-from copy import deepcopy
+from copy import deepcopy, copy
 from django.template import Library
-from django.db.models import Q
 from wagtail.wagtailcore.models import Page
 from ..models import MainMenu, FlatMenu
 from wagtailmenus import app_settings
@@ -90,7 +89,7 @@ def section_menu(
         max_levels = 1
 
     if section_root is None:
-        # The section root couldn't be identified. Likely because it's not 
+        # The section root couldn't be identified. Likely because it's not
         # a 'Page' being served, and `wagtail_hooks.wagtailmenu_params_helper`
         # isn't running.
         return ''
@@ -133,7 +132,7 @@ def section_menu(
         if apply_active_classes and extra.pk == current_page.pk:
             setattr(extra, 'active_class', app_settings.ACTIVE_CLASS)
         menu_items.insert(0, extra)
-    
+
     """
     Now we know the subnav/repetition situation, we can set the
     `active_class` for `section_root`
@@ -176,7 +175,7 @@ def flat_menu(
     current_site = request.site
     current_page = context.get('self')
     ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
-    
+
     if not show_multiple_levels:
         max_levels = 1
 
@@ -220,8 +219,13 @@ def sub_menu(
 ):
     """
     Retrieve the children pages for the `menuitem_or_page` provided, turn them
-    into menu items, and render them to a template
+    into menu items, and render them to a template.
+
+    Instead of updating the context directly, we create a copy of it, to avoid
+    various sub-menus in the same menu getting confused about the current level
+    they're rendering, and whether they should render any further levels
     """
+    context = copy(context)
     request = context['request']
     previous_level = context.get('current_level', 0)
     current_level = previous_level + 1
@@ -274,7 +278,7 @@ def sub_menu(
                     active_css_class = app_settings.ACTIVE_CLASS
                     setattr(extra_item, 'active_class', active_css_class)
             menu_items.insert(0, extra_item)
-  
+
     context.update({
         'parent_page': parent_page,
         'menu_items': menu_items,
