@@ -63,8 +63,9 @@ Each tag comes with a default template that's designed to be fully accessible an
 5. [Using the `{% section_menu %}` tag](#section_menu-tag)
 6. [Using the `{% children_menu %}` tag](#children_menu-tag)
 7. [Using the `{% sub_menu %}` tag](#sub_menu-tag)
-8. [Optional repetition of selected pages in menus using `MenuPage`](#using-menupage)
-9. [Overriding default behaviour with settings](#app-settings)
+8. [Writing your own menu templates](#writing-menu-templates)
+9. [Optional repetition of selected pages in menus using `MenuPage`](#using-menupage)
+10. [Overriding default behaviour with settings](#app-settings)
 
 ### <a id="defining-main-menu-items"></a>1. Defining root-level main menu items in the CMS
 
@@ -151,7 +152,25 @@ The `{% sub_menu %}` tag is used within menu templates to render additional leve
 - **`apply_active_classes`**: By default, the tag will inherit this behaviour from whatever was specified for the original menu tag. However, you can override that behaviour by adding either `apply_active_classes=True` or `apply_active_classes=False` to the tag in your custom menu template.
 - **`template`** (default: `'menus/sub_menu.html'`): Lets you render the menu to a template of your choosing. You can also name an alternative template to be used by default, by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings module.
 
-### <a id="using-menupage"></a>8. Optional repetition of selected pages in menus using `MenuPage`
+### <a id="writing-menu-templates"></a>8. Writing your own menu templates
+
+The following variables are added to the context by all of the above tags, which you can make use of in your templates:
+
+- **`menu_items`**: A list of `MenuItem` or `Page` objects with additional attributes added to help render menu items for the current level.
+- **`current_level`**: The current level being rendered. This starts at `1` for the initial template tag call, then increments each time `sub_menu` is called recursively in rendering that same menu.
+- **`current_template`**: The name of the template currently being used for rendering. This is most useful when rendering a `sub_menu` template that calls `sub_menu` recursively, and you wish to use the same template for all recursions.
+- **`max_levels`**: The maximum number of levels that should be rendered, as determined by the original `main_menu`, `section_menu`, `flat_menu` or `children_menu` tag call.
+- **`allow_repeating_parents`**: A boolean indicating whether repeating nav item settings for page should be utilised when rendering further menu levels.
+- **`apply_active_classes`**: A boolean indicating whether `sub_menu` tags should attempt to add  'active' and 'ancestor' classes to menu items when rendering further menu levels.
+
+**Each item in `menu_items` has the following additional attributes:**
+
+- **`href`**: The URL that the menu item should link to
+- **`text`**: The text that should be used for the menu item
+- **`active_class`**: A class name to indicate the 'active' state of the menu item. The value will be 'active' if linking to the current page, or 'ancestor' if linking to one of it's ancestors.
+- **`has_children_in_menu`**: A boolean indicating whether the menu item has children that should be output as a sub-menu.
+
+### <a id="using-menupage"></a>9. Optional repetition of selected pages in menus using `MenuPage`
 
 Let's say you have an 'About Us' section on your site. The top-level 'About Us' page has content that is just as important as that on the more specific pages below it (e.g. 'Meet the team', 'Our mission and values', 'Staff vacancies'). Because of this, you'd like visitors to be able to access the 'About Us' page from your navigation as easily as those pages. But, your site uses drop-down navigation, and the 'About Us' link no longer takes you to that page when clicked... it simply acts as a toggle for hiding and showing the pages below it:
 
@@ -169,7 +188,7 @@ Now, wherever the children of the `About Us` page are output (using one of the a
 
 The menu tags do some extra work to make sure both links are never assigned the 'active' class. When on the 'About Us' page, the tags will treat the repeated item as the 'active' page, and just assign the 'ancestor' class to the original, so that the behaviour/styling is consistent with other page links rendered at that level.
 
-### <a id="changing-settings"></a>9. Changing the default settings
+### <a id="app-settings"></a>10. Changing the default settings
 
 You can override some of wagtailmenus' default behaviour by adding one of more of the following to your project's settings:
 
@@ -186,4 +205,3 @@ You can override some of wagtailmenus' default behaviour by adding one of more o
 - **`WAGTAILMENUS_DEFAULT_FLAT_MENU_MAX_LEVELS`** (default: `2`): The default number of maximum levels rendered by `{% flat_menu %}` when `show_multiple_levels=True` and a `max_levels` parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_SECTION_MENU_MAX_LEVELS`** (default: `2`): The default number of maximum levels rendered by `{% section_menu %}` when a `max_levels` parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS`** (default: `1`): The default number of maximum levels rendered by `{% children_page_menu %}` when a `max_levels` parameter value isn't provided.
-
