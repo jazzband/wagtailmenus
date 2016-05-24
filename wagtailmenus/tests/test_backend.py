@@ -24,12 +24,12 @@ class TestSuperUser(TransactionTestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_mainmenu_list(self):
-        response = self.client.get('/admin/modeladmin/wagtailmenus/mainmenu/')
-        self.assertRedirects(response, '/admin/modeladmin/wagtailmenus/mainmenu/edit/1/')
+        response = self.client.get('/admin/wagtailmenus/mainmenu/')
+        self.assertRedirects(response, '/admin/wagtailmenus/mainmenu/edit/1/')
 
     def test_mainmenu_edit(self):
         response = self.client.get(
-            '/admin/modeladmin/wagtailmenus/mainmenu/edit/1/')
+            '/admin/wagtailmenus/mainmenu/edit/1/')
         self.assertEqual(response.status_code, 200)
 
         # Test 'get_error_message' method on view for additional coverage
@@ -45,28 +45,28 @@ class TestSuperUser(TransactionTestCase):
             is_default_site=0, site_name="Test site 3")
 
         response = self.client.get(
-            '/admin/modeladmin/wagtailmenus/mainmenu/edit/1/')
+            '/admin/wagtailmenus/mainmenu/edit/1/')
         self.assertEqual(response.status_code, 200)
 
         # If the site id in the URL and the site GET value are the same,
         # we shouldn't be redirect, because we're already where we need to be
         response = self.client.get(
-            '/admin/modeladmin/wagtailmenus/mainmenu/edit/2/', {'site': 2})
+            '/admin/wagtailmenus/mainmenu/edit/2/', {'site': 2})
         self.assertEqual(response.status_code, 200)
 
         # If the site id in the URL and the site GET value are different,
         # we should be redirected to the edit page for the site in GET
         response = self.client.get(
-            '/admin/modeladmin/wagtailmenus/mainmenu/edit/2/', {'site': 3})
-        self.assertRedirects(response, '/admin/modeladmin/wagtailmenus/mainmenu/edit/3/')
+            '/admin/wagtailmenus/mainmenu/edit/2/', {'site': 3})
+        self.assertRedirects(response, '/admin/wagtailmenus/mainmenu/edit/3/')
 
     def test_flatmenu_list(self):
-        response = self.client.get('/admin/modeladmin/wagtailmenus/flatmenu/')
+        response = self.client.get('/admin/wagtailmenus/flatmenu/')
         self.assertEqual(response.status_code, 200)
 
     def test_flatmenu_edit(self):
         response = self.client.get(
-            '/admin/modeladmin/wagtailmenus/flatmenu/edit/1/')
+            '/admin/wagtailmenus/flatmenu/edit/1/')
         self.assertEqual(response.status_code, 200)
 
 
@@ -84,5 +84,5 @@ class TestNonSuperUser(TransactionTestCase):
         self.client.login(username='test2', password='password')
 
     def test_mainmenu_edit_denied(self):
-        response = self.client.get('/admin/modeladmin/wagtailmenus/mainmenu/edit/1/')
+        response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
         self.assertEqual(response.status_code, 403)
