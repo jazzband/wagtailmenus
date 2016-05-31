@@ -1,5 +1,5 @@
 pytz
-wagtail==1.5rc1
+wagtail==1.5
 django-taggit==0.18.0
 django-modelcluster==1.1
 beautifulsoup4==4.4.1
