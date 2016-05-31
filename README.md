@@ -169,7 +169,7 @@ The following variables are added to the context by all of the above tags, which
 - **`current_level`**: The current level being rendered. This starts at `1` for the initial template tag call, then increments each time `sub_menu` is called recursively in rendering that same menu.
 - **`current_template`**: The name of the template currently being used for rendering. This is most useful when rendering a `sub_menu` template that calls `sub_menu` recursively, and you wish to use the same template for all recursions.
 - **`max_levels`**: The maximum number of levels that should be rendered, as determined by the original `main_menu`, `section_menu`, `flat_menu` or `children_menu` tag call.
-- **`allow_repeating_parents`**: A boolean indicating whether repeating nav item settings for page should be utilised when rendering further menu levels.
+- **`allow_repeating_parents`**: A boolean indicating whether `MenuPage` fields should be respected when rendering further menu levels.
 - **`apply_active_classes`**: A boolean indicating whether `sub_menu` tags should attempt to add  'active' and 'ancestor' classes to menu items when rendering further menu levels.
 
 **Each item in `menu_items` has the following additional attributes:**
