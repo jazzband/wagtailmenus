@@ -38,7 +38,7 @@ Each tag comes with a default template that's designed to be fully accessible an
 
 <img alt="Screenshot from Sublime editor showing menu template code" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-menu-templates.png" />
 
-## How to install
+## Installation instructions
 
 ### For wagtail `1.5` and up
 
@@ -53,7 +53,7 @@ Each tag comes with a default template that's designed to be fully accessible an
 3. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings (after `wagtailmodeladmin` and before your `core` app).
 4. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
 
-**Optional steps, if you wish to use `MenuPage`**
+### Additional steps for `MenuPage` usage
 
 **NOTE:** It is not necessary to extend `MenuPage` for all custom page types; Just ones you know will be used for pages that may have children, and will need the option to repeat themselves in sub-menus when listing those children.
 
@@ -61,7 +61,7 @@ Each tag comes with a default template that's designed to be fully accessible an
 2. Run `python manage.py makemigrations` to create migrations for the apps you've updated.
 3. Run `python manage.py migrate` to add apply those migrations.
 
-## How to use
+## Usage instructions
 
 **Skip to a section:**
 
