@@ -40,9 +40,18 @@ Each tag comes with a default template that's designed to be fully accessible an
 
 ## How to install
 
+### For wagtail `1.5` and up
+
 1. Install the package using pip: `pip install wagtailmenus`.
-2. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings (after `wagtailmodeladmin` and before your `core` app).
+2. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings.
 3. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
+
+### For wagtail `1.4.5` and below
+
+1. Install `wagtailmodeladmin` by following these instructions: https://github.com/rkhleics/wagtailmodeladmin.
+2. Install this package using pip: `pip install wagtailmenus<=1.1.1`.
+3. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings (after `wagtailmodeladmin` and before your `core` app).
+4. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
 
 **Optional steps, if you wish to use `MenuPage`**
 
