@@ -136,7 +136,7 @@ The `{% section_menu %}` tag allows you to display a context-aware, page-driven 
 
 ### <a id="children_menu-tag"></a>6. Using the `{% children_menu %}` tag
 
-The `{% children_menu %}` tag can be used in page templates to display a menu of children of the current page. You can also use the `parent_page` arguement to show children of a different page.
+The `{% children_menu %}` tag can be used in page templates to display a menu of children of the current page. You can also use the `parent_page` argument to show children of a different page.
 
 1. In whichever template you want the menu to appear, load `menu_tags` using `{% load menu_tags %}`.
 2. Use the `{% children_menu %}` tag where you want the menu to appear.
