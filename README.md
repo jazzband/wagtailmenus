@@ -43,8 +43,9 @@ Each tag comes with a default template that's designed to be fully accessible an
 ### For wagtail `1.5` and up
 
 1. Install the package using pip: `pip install wagtailmenus`.
-2. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings.
-3. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
+2. Add `wagtail.contrib.modeladmin` to `INSTALLED_APPS` in your project settings, if it's not there already.
+3. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings.
+4. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
 
 ### For wagtail `1.4.5` and below
 
