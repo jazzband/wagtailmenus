@@ -173,7 +173,7 @@ The following variables are added to the context by all of the above tags, which
 - **`allow_repeating_parents`**: A boolean indicating whether `MenuPage` fields should be respected when rendering further menu levels.
 - **`apply_active_classes`**: A boolean indicating whether `sub_menu` tags should attempt to add  'active' and 'ancestor' classes to menu items when rendering further menu levels.
 
-**Each item in `menu_items` has the following additional attributes:**
+**Each item in `menu_items` has the following attributes:**
 
 - **`href`**: The URL that the menu item should link to
 - **`text`**: The text that should be used for the menu item
