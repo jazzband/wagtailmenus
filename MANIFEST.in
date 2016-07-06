@@ -1,5 +1,6 @@
 include LICENSE.txt
 include README.md
+include CHANGELOG.md
 recursive-include wagtailmenus *.html
 recursive-include wagtailmenus *.py
 recursive-include wagtailmenus/static *.js
