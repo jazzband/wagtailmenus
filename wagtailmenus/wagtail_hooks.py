@@ -4,7 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.wagtailcore import hooks
 
-from .app_settings import MAINMENU_MENU_ICON, FLATMENU_MENU_ICON
+from .app_settings import (
+    MAINMENU_MENU_ICON, FLATMENU_MENU_ICON, SECTION_ROOT_DEPTH)
 from .models import MainMenu, FlatMenu
 from .views import MainMenuIndexView, MainMenuEditView
 
@@ -42,8 +43,8 @@ modeladmin_register(FlatMenuAdmin)
 
 @hooks.register('before_serve_page')
 def wagtailmenu_params_helper(page, request, serve_args, serve_kwargs):
-    section_root = request.site.root_page.get_children().ancestor_of(
-        page, inclusive=True).first()
+    section_root = request.site.root_page.get_descendants().ancestor_of(
+        page, inclusive=True).filter(depth__exact=SECTION_ROOT_DEPTH).first()
     if section_root:
         section_root = section_root.specific
     ancestor_ids = page.get_ancestors().values_list('id', flat=True)

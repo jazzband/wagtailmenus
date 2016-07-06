@@ -13,6 +13,9 @@ MAINMENU_MENU_ICON = getattr(
 FLATMENU_MENU_ICON = getattr(
 	settings, 'WAGTAILMENUS_FLATMENU_MENU_ICON', 'list-ol')
 
+SECTION_ROOT_DEPTH = getattr(
+	settings, 'WAGTAILMENUS_SECTION_ROOT_DEPTH', 3)
+
 DEFAULT_MAIN_MENU_TEMPLATE = getattr(
 	settings, 'WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE',
 	'menus/main_menu.html')

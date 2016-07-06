@@ -357,7 +357,10 @@ def prime_menu_items(
             If linking to a page, we only want to include this item
             in the resulting list if that page is set to appear in menus.
             """
-            if check_for_children and page.depth > 2:
+            if (
+                check_for_children and
+                page.depth >= app_settings.SECTION_ROOT_DEPTH
+            ):
                 """
                 Working out whether this item should have a sub nav is
                 expensive, so we try to do the working out where absolutely
