@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/rkhleics/wagtailmenus.svg?branch=master)](https://travis-ci.org/rkhleics/wagtailmenus)
+
 # What is wagtailmenus?
 
 It's an extension for Torchbox's [Wagtail CMS](https://github.com/torchbox/wagtail) to help you manage and render multi-level navigation and simple flat menus in a consistent, flexible way.
