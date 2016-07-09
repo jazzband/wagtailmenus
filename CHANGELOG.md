@@ -4,6 +4,8 @@ Changelog
 1.2.3 (xx.xx.xx) IN DEVELOPMENT
 ---------------------------------
 
+* Added CONTRIBUTORS.rst
+
 
 1.2.2 (06.07.2016)
 ------------------
