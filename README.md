@@ -4,9 +4,9 @@ It's an extension for Torchbox's [Wagtail CMS](https://github.com/torchbox/wagta
 
 #### Compatibility
 
-Wagtailmenus officially supports for Wagtail versions 1.4.1+, on Python 2.7
+The current version of wagtailmenus is compatible with Wagtail >= 1.5, and Python 2.7.
 
-Support for Python 3.2-3.4 is planned soon (feel free to help!).
+Support for Python 3.2-3.4 is planned for version 1.3 (if you'd like to help, pull requests are welcome).
 
 ## What does it do?
 
@@ -56,7 +56,7 @@ Each tag comes with a default template that's designed to be fully accessible an
 ### For wagtail `1.4.5` and below
 
 1. Install `wagtailmodeladmin` by following these instructions: https://github.com/rkhleics/wagtailmodeladmin.
-2. Install this package using pip: `pip install wagtailmenus<=1.1.1`.
+2. Install this package using pip: `pip install wagtailmenus==1.1.1`.
 3. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings (after `wagtailmodeladmin` and before your `core` app).
 4. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
 

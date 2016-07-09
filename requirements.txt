@@ -1,0 +1,2 @@
+wagtail==1.5
+coverage==4.0.3
