@@ -2,6 +2,12 @@
 
 It's an extension for Torchbox's [Wagtail CMS](https://github.com/torchbox/wagtail) to help you manage and render multi-level navigation and simple flat menus in a consistent, flexible way.
 
+#### Compatibility
+
+Wagtailmenus officially supports for Wagtail versions 1.4.1+, on Python 2.7
+
+Support for Python 3.2-3.4 is planned soon (feel free to help!).
+
 ## What does it do?
 
 ### 1. Gives you independent control over your root-level main menu items
