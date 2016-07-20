@@ -4,7 +4,8 @@ Changelog
 1.2.3 (xx.xx.xx) IN DEVELOPMENT
 ---------------------------------
 
-* Added CONTRIBUTORS.rst
+* Added tests for Python 3.4 and 3.5 to confirm compatibility (Andy Babic)
+* Added CONTRIBUTORS.rst (Andy Babic)
 
 
 1.2.2 (06.07.2016)

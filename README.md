@@ -6,9 +6,7 @@ It's an extension for Torchbox's [Wagtail CMS](https://github.com/torchbox/wagta
 
 #### Compatibility
 
-The current version of wagtailmenus is compatible with Wagtail >= 1.5, and Python 2.7.
-
-Support for Python 3.2-3.4 is planned for version 1.3 (if you'd like to help, pull requests are welcome).
+The current version of wagtailmenus is compatible with Wagtail >= 1.5, and Python 2.7, 3.4 and 3.5.
 
 ## What does it do?
 
