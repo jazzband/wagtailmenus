@@ -6,9 +6,9 @@
 
 It's an extension for Torchbox's [Wagtail CMS](https://github.com/torchbox/wagtail) to help you manage and render multi-level navigation and simple flat menus in a consistent, flexible way.
 
-#### Compatibility
+### Compatibility
 
-The current version of wagtailmenus is compatible with Wagtail >= 1.5, and Python 2.7, 3.4 and 3.5.
+The current version is compatible with Wagtail >= 1.5, and Python 2.7, 3.3, 3.4 and 3.5.
 
 ## What does it do?
 
@@ -57,8 +57,10 @@ Each tag comes with a default template that's designed to be fully accessible an
 
 ### For wagtail `1.4.5` and below
 
+Since version `1.2`, watailmenus has depended on the `wagtail.contrib.modeladmin` package that was added to wagtail in `1.5`. However, earlier versions of wagtailmenus can be used with earlier versions of wagtail with the help of another third-party package, [wagtailmodeladmin](https://github.com/rkhleics/wagtailmodeladmin).
+
 1. Install `wagtailmodeladmin` by following these instructions: https://github.com/rkhleics/wagtailmodeladmin.
-2. Install this package using pip: `pip install wagtailmenus==1.1.1`.
+2. Install this package using pip: `pip install wagtailmenus>=1.1.1,<1.2.0`.
 3. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings (after `wagtailmodeladmin` and before your `core` app).
 4. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
 
