@@ -76,7 +76,7 @@ class TestNonSuperUser(TransactionTestCase):
     def setUp(self):
         user = get_user_model().objects._create_user(
             username='test2', email='test2@email.com', password='password',
-            is_staff=True, is_superuser=False, is_active=True)
+            is_staff=True, is_superuser=False)
         for group in Group.objects.all():
             if group.name == 'Testers':
                 user.groups.add(group)

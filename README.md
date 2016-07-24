@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/rkhleics/wagtailmenus.svg?branch=master)](https://travis-ci.org/rkhleics/wagtailmenus)
+[![Coverage Status](https://coveralls.io/repos/github/rkhleics/wagtailmenus/badge.svg?branch=master)](https://coveralls.io/github/rkhleics/wagtailmenus?branch=master)
 
 # What is wagtailmenus?
 
