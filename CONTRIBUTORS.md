@@ -1,9 +1,7 @@
-Authors
-=======
+## Authors
 
 * Andy Babic (Rock Kitchen Harris) twitter: @andyjbabic
 
-Contributors
-============
+## Contributors
 
 None
