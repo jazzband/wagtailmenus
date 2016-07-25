@@ -1,15 +1,15 @@
+from copy import deepcopy
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
-
 from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
 
-from wagtail.wagtailcore.models import Page
 from wagtail.wagtailadmin.edit_handlers import (
-    FieldPanel, PageChooserPanel, MultiFieldPanel, FieldRowPanel, InlinePanel)
-from wagtail.wagtailcore.models import Orderable
+    FieldPanel, PageChooserPanel, MultiFieldPanel, InlinePanel)
+from wagtail.wagtailcore.models import Page, Orderable
 
+from .app_settings import ACTIVE_CLASS
 from .managers import MenuItemManager
 from .panels import menupage_settings_panels
 
@@ -37,6 +37,33 @@ class MenuPage(Page):
 
     class Meta:
         abstract = True
+
+    def modify_submenu_items(self, menu_items, current_page,
+                             current_ancestor_ids, current_site,
+                             allow_repeating_parents, apply_active_classes,
+                             original_menu_tag=''):
+        """
+        Make any necessary modifications to `menu_items` and return the list
+        back to the calling menu tag to render in templates. Any additional
+        items added should have a `text` and `href` attribute as a minimum.
+
+        `original_menu_tag` should be one of 'main_menu', 'section_menu' or
+        'children_menu', which should be useful when extending/overriding.
+        """
+        if (allow_repeating_parents and menu_items and self.repeat_in_subnav):
+            """
+            This page should have a version of itself repeated alongside
+            children in the subnav, so we create a new item and prepend it to
+            menu_items.
+            """
+            extra = deepcopy(self)
+            setattr(extra, 'text', self.repeated_item_text or self.title)
+            setattr(extra, 'href', self.relative_url(current_site))
+            if(apply_active_classes and self == current_page):
+                setattr(extra, 'active_class', ACTIVE_CLASS)
+            menu_items.insert(0, extra)
+
+        return menu_items
 
 
 class MenuItem(models.Model):
@@ -133,7 +160,7 @@ class MainMenu(ClusterableModel):
     class Meta:
         verbose_name = _("main menu")
         verbose_name_plural = _("main menu")
-    
+
     @classmethod
     def for_site(cls, site):
         """
@@ -183,7 +210,7 @@ class FlatMenu(ClusterableModel):
                 FieldPanel('site'),
                 FieldPanel('title'),
                 FieldPanel('handle'),
-                FieldPanel('heading'),    
+                FieldPanel('heading'),
             )
         ),
         InlinePanel('menu_items', label=_("Menu items")),
