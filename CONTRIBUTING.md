@@ -32,9 +32,10 @@ Each pull request will need the following before it can be accepted/merged:
 1. Any new features documented in `README.md`
 
 2. A new line adding to `CONTRIBUTORS.md` (under the 'Contributors' heading)
-   with your name, company name, and option twitter handle / email address.
+   with your name, company name, and optional twitter handle / email address.
 
-3. A note adding to `CHANGELOG.md`, explaining the feature or fix you made.
+3. A note adding to `CHANGELOG.md`, providing a concise description of what
+   you have changed.
 
 4. New unit tests adding to `wagtailmenus.tests`, to test the code you've
    written. Although the quality of unit tests is the most important thing 
