@@ -63,9 +63,10 @@ followed by `coverage report` or `coverage html` (depending on what you find
 more useful).
 
 Testing in a single environment is a quick and easy way to identify obvious
-issues with your code. However, it's important to test other environments too.
-before submitting code. Wagtailmenus is configured to use `tox` for
-multi-environment tests. They take longer to complete, but running them is as
-simple as entering the following command:
+issues with your code. However, it's important to test changes in other
+environments too, before they are submitted. In order to help with this,
+wagtailmenus is configured to use `tox` for multi-environment tests. They
+take longer to complete, but running them is as simple as entering the
+following command:
 
 `tox`
