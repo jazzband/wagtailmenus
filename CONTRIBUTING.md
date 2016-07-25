@@ -42,7 +42,7 @@ Each pull request will need the following before it can be accepted/merged:
    code coverage is important too (making each line of code runs during unit
    tests).
 
-## Testing
+## Running tests locally
 
 It's important that any new code is tested before submitting. To quickly
 test code in your active development environment, you should first install all 
@@ -53,6 +53,13 @@ of the requirements from `requirements.txt`, by doing something like:
 Then, run the following command to execute tests:
 
 `python runtests.py`
+
+Or if you want to measure test coverage, you can run:
+
+`coverage --source=wagtailmenus runtests.py`
+
+followed by `coverage report` or `coverage html` (depending on what you find
+more useful).
 
 Testing in a single environment is a quick and easy way to identify obvious
 issues with your code. However, it's important to test other environments too.
