@@ -1,2 +1,4 @@
-wagtail==1.5
-coverage==4.0.3
+wagtail>=1.5.1,<1.6
+beautifulsoup4>=4.4.1,<4.5.0
+coverage>=3.6
+tox
