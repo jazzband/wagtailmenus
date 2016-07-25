@@ -59,10 +59,7 @@ class MenuPage(Page):
             extra = deepcopy(self)
             setattr(extra, 'text', self.repeated_item_text or self.title)
             setattr(extra, 'href', self.relative_url(current_site))
-            if(
-                apply_active_classes and current_page and
-                self.pk == current_page.pk
-            ):
+            if(apply_active_classes and self == current_page):
                 setattr(extra, 'active_class', ACTIVE_CLASS)
             menu_items.insert(0, extra)
 

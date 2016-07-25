@@ -125,15 +125,14 @@ def section_menu(
 
     """
     Now we know the subnav/repetition situation, we can set the `active_class`
-    for the section_root page.
+    for the section_root page (much like `prime_menu_items` does for pages
+    with children.
     """
     if apply_active_classes:
         active_class = ''
         if current_page and section_root.pk == current_page.pk:
-            if (
-                allow_repeating_parents and menu_items and
-                getattr(section_root, 'repeat_in_subnav', False)
-            ):
+            repeat_in_subnav = getattr(section_root, 'repeat_in_subnav', False)
+            if (allow_repeating_parents and menu_items and repeat_in_subnav):
                 active_class = app_settings.ACTIVE_ANCESTOR_CLASS
             else:
                 active_class = app_settings.ACTIVE_CLASS
@@ -321,6 +320,7 @@ def prime_menu_items(
     Prepare a list of menuitem objects or pages for rendering to a menu
     template.
     """
+    sroot_depth = app_settings.SECTION_ROOT_DEPTH
     primed_menu_items = []
     for item in menu_items:
 
@@ -352,10 +352,7 @@ def prime_menu_items(
             If linking to a page, we only want to include this item
             in the resulting list if that page is set to appear in menus.
             """
-            if (
-                check_for_children and
-                page.depth >= app_settings.SECTION_ROOT_DEPTH
-            ):
+            if (check_for_children and page.depth >= sroot_depth):
                 """
                 Working out whether this item should have a sub nav is
                 expensive, so we try to do the working out where absolutely
@@ -374,11 +371,10 @@ def prime_menu_items(
             `ancestor` class at most, as the repeated nav item will be
             given the `active` class.
             """
-            page_is_repeated_in_subnav = False
+            repeated_in_subnav = False
             if allow_repeating_parents and has_children_in_menu:
                 page = page.specific
-                page_is_repeated_in_subnav = getattr(page, 'repeat_in_subnav',
-                                                     False)
+                repeated_in_subnav = getattr(page, 'repeat_in_subnav', False)
 
             """
             Now we can figure out which class should be added to this item
@@ -386,7 +382,7 @@ def prime_menu_items(
             if apply_active_classes:
                 active_class = ''
                 if current_page and page.pk == current_page.pk:
-                    if page_is_repeated_in_subnav:
+                    if repeated_in_subnav:
                         active_class = app_settings.ACTIVE_ANCESTOR_CLASS
                     else:
                         active_class = app_settings.ACTIVE_CLASS
