@@ -6,8 +6,6 @@
 
 It's an extension for Torchbox's [Wagtail CMS](https://github.com/torchbox/wagtail) to help you manage and render multi-level navigation and simple flat menus in a consistent, flexible way.
 
-### Compatibility
-
 The current version is compatible with Wagtail >= 1.5, and Python 2.7, 3.3, 3.4 and 3.5.
 
 ## What does it do?
@@ -71,6 +69,12 @@ Since version `1.2`, watailmenus has depended on the `wagtail.contrib.modeladmin
 1. In your `core` app and other apps (wherever you have defined a custom page/content model to use in your project), import `wagtailmenus.models.MenuPage` and extend that instead of `wagtail.wagtailcore.models.Page`.
 2. Run `python manage.py makemigrations` to create migrations for the apps you've updated.
 3. Run `python manage.py migrate` to add apply those migrations.
+
+## Want to say thanks for the work so far?
+
+If your life has been made easier by wagtailmenus and you would like to say thanks, please consider making my life easier too, by buying me a beer.
+
+[![Donate! :3](https://www.paypalobjects.com/en_US/GB/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EJK2H9BPNTNBY)
 
 ## Usage instructions
 
