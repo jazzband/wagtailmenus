@@ -8,10 +8,6 @@ It's an extension for Torchbox's [Wagtail CMS](https://github.com/torchbox/wagta
 
 The current version is compatible with Wagtail >= 1.5, and Python 2.7, 3.3, 3.4 and 3.5.
 
-If your life has been made easier by wagtailmenus and you would like to say thanks, please consider making my life easier too, by buying me a beer...
-
-[![Donate! :3](https://www.paypalobjects.com/en_US/GB/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EJK2H9BPNTNBY)
-
 ## What does wagtailmenus do?
 
 ### 1. Gives you independent control over your root-level main menu items
