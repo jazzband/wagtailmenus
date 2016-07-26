@@ -228,3 +228,7 @@ You can override some of wagtailmenus' default behaviour by adding one of more o
 - **`WAGTAILMENUS_DEFAULT_FLAT_MENU_MAX_LEVELS`** (default: `2`): The default number of maximum levels rendered by `{% flat_menu %}` when `show_multiple_levels=True` and a `max_levels` parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_SECTION_MENU_MAX_LEVELS`** (default: `2`): The default number of maximum levels rendered by `{% section_menu %}` when a `max_levels` parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS`** (default: `1`): The default number of maximum levels rendered by `{% children_page_menu %}` when a `max_levels` parameter value isn't provided.
+
+## Contributing
+
+If you'd like to become a wagtailmenus contributor, we'd be happy to have you. You should start by taking a look at our [contributor guidelines](https://github.com/rkhleics/wagtailmenus/blob/master/CONTRIBUTING.md)
