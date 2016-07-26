@@ -32,9 +32,9 @@ following criteria:
 
 1. Any new features documented in `README.md`
 
-2. If you're not in the list already, add a new line adding to
-   `CONTRIBUTORS.md` (under the 'Contributors' heading) with your name,
-   company name, and an optional twitter handle / email address.
+2. If you're not in the list already, add a new line to `CONTRIBUTORS.md`
+   (under the 'Contributors' heading) with your name, company name, and
+   an optional twitter handle / email address.
 
 3. Add a concise description of what you have changed to `CHANGELOG.md`.
 
