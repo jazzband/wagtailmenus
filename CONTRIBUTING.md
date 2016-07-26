@@ -13,7 +13,7 @@ submitting pull requests. Please don't use the issue tracker
 for support requests. If you need help with something that isn't a bug, you can
 join our [Wagtailmenus support group](https://groups.google.com/forum/#!forum/wagtailmenus-support-requests) and ask your question there.
 
-## Contributing code
+## Contributing code via pull requests
 
 If there are any open issues you think you can help with, please comment
 on the issue and state your intent to help. Or, if you have an idea for a
@@ -30,7 +30,7 @@ then submit a pull request for review.
 In order to be accepted/merged, your pull request will need to meet the
 following criteria:
 
-1. Any new features documented in `README.md`
+1. Any new features must be documented in `README.md`
 
 2. If you're not in the list already, add a new line to `CONTRIBUTORS.md`
    (under the 'Contributors' heading) with your name, company name, and
