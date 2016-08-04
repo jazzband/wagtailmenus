@@ -5,7 +5,6 @@ from wagtail.wagtailcore.models import Page
 from ..models import MainMenu, FlatMenu
 from wagtailmenus import app_settings
 
-
 register = Library()
 
 """
@@ -33,37 +32,46 @@ of:
 """
 
 
-def get_attrs_from_context(context, guess_page=True, geuss_sroot=False):
+def get_attrs_from_context(context, identify_section_from_path=False):
+    """
+    Gets a bunch of things from the context and returns them as a tuple, for
+    use in most menu tags. If `identify_section_from_path` is True, and
+    `request.META['CURRENT_SECTION_ROOT']` hasn't been set by
+    `wagtailmenu_params_helper` (most likely, because it isn't a 'Page'
+    being served), attempt to identify a nearby page and section root from the
+    request path.
+    """
     request = context['request']
     site = request.site
-    current_page = context.get('self', None)
-    guessed_page = context.get('guessed_page', None)
+    page = context.get('self', None)
     section_root = request.META.get('CURRENT_SECTION_ROOT', None)
     ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
-    if not current_page and guess_page:
+    indentified_page = None
+    if not page and identify_section_from_path:
         path_components = [pc for pc in request.path.split('/') if pc]
-        path_component_count = len(path_components)
-        while guessed_page is None and path_components:
+        # keep trying to find a page using the path components until there are
+        # no components left, or a page has been identified
+        while path_components and not indentified_page:
             try:
-                page, args, kwargs = site.root_page.specific.route(
+                indentified_page, args, kwargs = site.root_page.specific.route(
                     request, path_components)
-                guessed_page = page
-                if len(path_components) == path_component_count:
-                    current_page = page
-                if not ancestor_ids:
-                    ancestor_ids = page.get_ancestors().values_list(
-                        'id', flat=True)
-                    request.META['CURRENT_PAGE_ANCESTOR_IDS'] = ancestor_ids
+                ancestor_ids = indentified_page.get_ancestors(
+                    inclusive=True).values_list('id', flat=True)
             except Http404:
+                # No match found, so remove a path component and try again
                 path_components.pop()
-        context.update({'guessed_page': guessed_page, 'self': current_page})
-    if not section_root and geuss_sroot and (current_page or guessed_page):
-        section_root = site.root_page.get_descendants().ancestor_of(
-            current_page or guessed_page, inclusive=True
-        ).filter(depth__exact=app_settings.SECTION_ROOT_DEPTH).first()
-        if section_root:
-            request.META['CURRENT_SECTION_ROOT'] = section_root
-    return (request, site, current_page, section_root, ancestor_ids)
+    if not section_root and identify_section_from_path:
+        if page or indentified_page:
+            # attempt to identify the section root page using 'page'
+            # (the 'current page' from context) or the one identified above
+            section_root = site.root_page.get_descendants().ancestor_of(
+                page or indentified_page, inclusive=True
+            ).filter(depth__exact=app_settings.SECTION_ROOT_DEPTH).first()
+            if section_root:
+                # we need the 'specific' section_root page, so that
+                # `modify_submenu_items()` can be called
+                section_root = section_root.specific
+    return (request, site, page, section_root, ancestor_ids)
 
 
 @register.simple_tag(takes_context=True)
@@ -71,11 +79,11 @@ def main_menu(
     context, apply_active_classes=True, allow_repeating_parents=True,
     show_multiple_levels=True,
     max_levels=app_settings.DEFAULT_MAIN_MENU_MAX_LEVELS,
-    template=app_settings.DEFAULT_MAIN_MENU_TEMPLATE
+    template=app_settings.DEFAULT_MAIN_MENU_TEMPLATE,
 ):
     """Render the MainMenu instance for the current site."""
     request, site, page, section_root, ancestor_ids = get_attrs_from_context(
-        context)
+        context, app_settings.MAIN_MENU_SECTION_FROM_PATH)
     try:
         menu = site.main_menu
     except MainMenu.DoesNotExist:
@@ -110,11 +118,11 @@ def section_menu(
     context, show_section_root=True, show_multiple_levels=True,
     apply_active_classes=True, allow_repeating_parents=True,
     max_levels=app_settings.DEFAULT_SECTION_MENU_MAX_LEVELS,
-    template=app_settings.DEFAULT_SECTION_MENU_TEMPLATE
+    template=app_settings.DEFAULT_SECTION_MENU_TEMPLATE,
 ):
     """Render a section menu for the current section."""
     request, site, page, section_root, ancestor_ids = get_attrs_from_context(
-        context, True, True)
+        context, app_settings.SECTION_MENU_SECTION_FROM_PATH)
 
     if not show_multiple_levels:
         max_levels = 1
@@ -250,12 +258,10 @@ def sub_menu(
     they're rendering, and whether they should render any further levels
     """
     context = copy(context)
-    request = context['request']
+    request, site, page, section_root, ancestor_ids = get_attrs_from_context(
+        context)
     previous_level = context.get('current_level', 0)
     current_level = previous_level + 1
-    current_site = request.site
-    ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
-    current_page = context.get('self')
 
     try:
         # menuitem_or_page is a page
@@ -282,8 +288,8 @@ def sub_menu(
 
     menu_items = prime_menu_items(
         menu_items=parent_page.get_children().live().in_menu(),
-        current_site=current_site,
-        current_page=current_page,
+        current_site=site,
+        current_page=page,
         current_page_ancestor_ids=ancestor_ids,
         check_for_children=not stop_at_this_level,
         allow_repeating_parents=allow_repeating_parents,
@@ -296,7 +302,7 @@ def sub_menu(
     """
     if hasattr(parent_page, 'modify_submenu_items'):
         menu_items = parent_page.modify_submenu_items(
-            menu_items, current_page, ancestor_ids, current_site,
+            menu_items, page, ancestor_ids, site,
             allow_repeating_parents, apply_active_classes, 'parent_page')
 
     context.update({

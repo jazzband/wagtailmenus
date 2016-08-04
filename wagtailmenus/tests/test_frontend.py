@@ -118,6 +118,18 @@ class TestTemplateTags(TestCase):
         response = self.client.get('/custom-url/')
         self.assertEqual(response.status_code, 200)
 
+    def test_non_page_in_section(self):
+        """
+        Test that there are no errors when rendering page template without
+        the `wagtailmenus.wagtail_hooks.wagtailmenu_params_helper()` method
+        having run to add helpful bits to the context.
+
+        Also, because the path looks like it should be a page, we can try to
+        at least identify a section root page to create a section menu.
+        """
+        response = self.client.get('/about-us/meet-the-team/custom-url/')
+        self.assertEqual(response.status_code, 200)
+
     def test_homepage_main_menu_two_levels(self):
         """
         Test '{{ main_menu }}' output for homepage
@@ -571,3 +583,58 @@ class TestTemplateTags(TestCase):
         section_menu_html = soup.find(id='section-menu-two-levels').decode()
         expected_menu_html = """<div id="section-menu-two-levels"></div>"""
         self.assertHTMLEqual(section_menu_html, expected_menu_html)
+
+    def test_guessed_page_section_menu_one_level(self):
+        """
+        Test '{% section_menu max_levels=1 %}' output for 'About us' page
+        """
+        response = self.client.get('/about-us/meet-the-team/custom-url/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='section-menu-one-level').decode()
+        expected_menu_html = """
+        <div id="section-menu-one-level">
+            <nav class="nav-section" role="navigation">
+                <a href="/about-us/" class="ancestor section_root">About us</a>
+                <ul>
+                    <li class=""><a href="/about-us/">Section home</a></li>
+                    <li class="ancestor"><a href="/about-us/meet-the-team/">Meet the team</a></li>
+                    <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
+                    <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                </ul>
+            </nav>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
+    def test_guessed_page_section_menu(self):
+        """
+        Test '{% section_menu %}' output for 'About us' page
+        """
+        response = self.client.get('/about-us/meet-the-team/custom-url/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='section-menu-two-levels').decode()
+        expected_menu_html = """
+        <div id="section-menu-two-levels">
+            <nav class="nav-section" role="navigation">
+                <a href="/about-us/" class="ancestor section_root">About us</a>
+                <ul>
+                    <li class=""><a href="/about-us/">Section home</a></li>
+                    <li class="ancestor">
+                        <a href="/about-us/meet-the-team/">Meet the team</a>
+                        <ul>
+                            <li class=""><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
+                            <li class=""><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
+                            <li class=""><a href="/about-us/meet-the-team/staff-member-three/">Staff member three</a></li>
+                        </ul>
+                    </li>
+                    <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
+                    <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                </ul>
+            </nav>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
