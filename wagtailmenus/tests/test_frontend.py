@@ -118,18 +118,6 @@ class TestTemplateTags(TestCase):
         response = self.client.get('/custom-url/')
         self.assertEqual(response.status_code, 200)
 
-    def test_non_page_in_section(self):
-        """
-        Test that there are no errors when rendering page template without
-        the `wagtailmenus.wagtail_hooks.wagtailmenu_params_helper()` method
-        having run to add helpful bits to the context.
-
-        Also, because the path looks like it should be a page, we can try to
-        at least identify a section root page to create a section menu.
-        """
-        response = self.client.get('/about-us/meet-the-team/custom-url/')
-        self.assertEqual(response.status_code, 200)
-
     def test_homepage_main_menu_two_levels(self):
         """
         Test '{{ main_menu }}' output for homepage
@@ -584,9 +572,10 @@ class TestTemplateTags(TestCase):
         expected_menu_html = """<div id="section-menu-two-levels"></div>"""
         self.assertHTMLEqual(section_menu_html, expected_menu_html)
 
-    def test_guessed_page_section_menu_one_level(self):
+    def test_custom_about_us_url_section_menu(self):
         """
-        Test '{% section_menu max_levels=1 %}' output for 'About us' page
+        Test '{% section_menu max_levels=1 %}' output for a custom url that
+        looks like it's part of the page tree, but isn't.
         """
         response = self.client.get('/about-us/meet-the-team/custom-url/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -606,33 +595,65 @@ class TestTemplateTags(TestCase):
             </nav>
         </div>
         """
+        self.assertEqual(response.status_code, 200)
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
-    def test_guessed_page_section_menu(self):
+    def test_custom_about_us_url_main_menu(self):
         """
-        Test '{% section_menu %}' output for 'About us' page
+        Test '{% main_menu %}' output for a custom url that
+        looks like it's part of the page tree, but isn't.
         """
         response = self.client.get('/about-us/meet-the-team/custom-url/')
+        self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.content, 'html5lib')
 
         # Assertions to compare rendered HTML against expected HTML
-        menu_html = soup.find(id='section-menu-two-levels').decode()
+        menu_html = soup.find(id='main-menu-two-levels').decode()
         expected_menu_html = """
-        <div id="section-menu-two-levels">
+        <div id="main-menu-two-levels">
+            <ul class="nav navbar-nav">
+                <li class=""><a href="/">Home</a></li>
+                <li class="ancestor dropdown">
+                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
+                        <li class=""><a href="/about-us/">Section home</a></li>
+                        <li class="ancestor"><a href="/about-us/meet-the-team/">Meet the team</a></li>
+                        <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
+                        <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                    </ul>
+                </li>
+                <li class=" dropdown">
+                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
+                        <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
+                        <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
+                        <li class=""><a href="/news-and-events/press/">In the press</a></li>
+                    </ul>
+                </li>
+                <li class=""><a href="http://google.co.uk">Google</a></li>
+                <li class=""><a href="/contact-us/">Contact us</a></li>
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
+    def test_custom_superheroes_url_section_menu(self):
+        """
+        Test '{% section_menu max_levels=1 %}' output for 'About us' page
+        """
+        response = self.client.get('/superheroes/marvel-comics/custom-man/about/')
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='section-menu-one-level').decode()
+        expected_menu_html = """
+        <div id="section-menu-one-level">
             <nav class="nav-section" role="navigation">
-                <a href="/about-us/" class="ancestor section_root">About us</a>
+                <a href="/superheroes/" class="ancestor section_root">Superheroes</a>
                 <ul>
-                    <li class=""><a href="/about-us/">Section home</a></li>
-                    <li class="ancestor">
-                        <a href="/about-us/meet-the-team/">Meet the team</a>
-                        <ul>
-                            <li class=""><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
-                            <li class=""><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
-                            <li class=""><a href="/about-us/meet-the-team/staff-member-three/">Staff member three</a></li>
-                        </ul>
-                    </li>
-                    <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
-                    <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                    <li class="ancestor"><a href="/superheroes/marvel-comics/">Marvel Comics</a></li>
+                    <li class=""><a href="/superheroes/dc-comics/">D.C. Comics</a></li>
                 </ul>
             </nav>
         </div>
