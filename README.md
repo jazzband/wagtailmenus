@@ -206,6 +206,35 @@ Now, wherever the children of the `About Us` page are output (using one of the a
 
 The menu tags do some extra work to make sure both links are never assigned the 'active' class. When on the 'About Us' page, the tags will treat the repeated item as the 'active' page, and just assign the 'ancestor' class to the original, so that the behaviour/styling is consistent with other page links rendered at that level.
 
+#### Adding further sub-menu items for a page (NEW IN 1.3)
+
+`MenuPage` objects have a `modify_submenu_items()` method, which is responsible for adding the 'repeated' menu item (mentioned above) when the appropriate fields have been set. If for any reason you want to dynamically add more links to a page's sub-menu, it's possible to override `modify_submenu_items()` on your page model and add them there. For example:
+
+```python
+
+from django.db import models
+from wagtailmenus.models import MenuPage
+
+class MyPageModel(MenuPage):
+	add_submenu_item_for_news = models.BooleanField(default=False)
+
+	def modify_submenu_items(
+		self, menu_items, current_page, current_ancestor_ids, current_site,
+        allow_repeating_parents, apply_active_classes, original_menu_tag=''
+    ):
+        menu_items = super(MyPageModel,self).modify_menu_items(
+        	menu_items, current_page, current_ancestor_ids, current_site,
+            allow_repeating_parents, apply_active_classes, original_menu_tag=''
+        )
+        if self.add_submenu_item_for_news:
+        	menu_items.append({
+        		'href': '/news/',
+        		'text': 'Read the news',
+        		'active_class': 'news-link',
+        	})
+		return menu_items
+```
+
 ### <a id="app-settings"></a>10. Changing the default settings
 
 You can override some of wagtailmenus' default behaviour by adding one of more of the following to your project's settings:
@@ -224,6 +253,10 @@ You can override some of wagtailmenus' default behaviour by adding one of more o
 - **`WAGTAILMENUS_DEFAULT_FLAT_MENU_MAX_LEVELS`** (default: `2`): The default number of maximum levels rendered by `{% flat_menu %}` when `show_multiple_levels=True` and a `max_levels` parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_SECTION_MENU_MAX_LEVELS`** (default: `2`): The default number of maximum levels rendered by `{% section_menu %}` when a `max_levels` parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS`** (default: `1`): The default number of maximum levels rendered by `{% children_page_menu %}` when a `max_levels` parameter value isn't provided.
+- **`WAGTAILMENUS_MAIN_MENU_SECTION_FROM_PATH`** (default: `True`): If you've added custom URLs to your project to serve real views (not just wagtail `Pages`), and the paths of those URLs coincide some way with your page tree (e.g. You have a page with the path '/about-us/news-and-events/' and a custom URL with the path '/about-us/news-and-events/news/'), the `main_menu` tag will use that path to identify the '/about-us/news-and-events/' page as the nearest ancestor, and '/about-us/' page as the section root, meaning menu items in your main menu will be highlighted accordingly. To turn this behaviour off, set this setting to `False` instead.
+- **`WAGTAILMENUS_SECTION_MENU_SECTION_FROM_PATH`** (default: `True`): If you've added custom URLs to your project to serve real views (not just wagtail `Pages`), and the paths of those URLs coincide some way with your page tree (e.g. You have a page with the path `'/about-us/news-and-events/'` and a custom URL with the path `'/about-us/news-and-events/news/'`), the `section_menu` tag will use that path to identify the `'/about-us/news-and-events/'` page as the nearest ancestor, and `'/about-us/'` page as the section root, allowing you to still render a section menu in those views, with menu
+items highlighted accordingly. To turn this behaviour off, set this setting to `False` instead.
+
 
 ## Contributing
 
