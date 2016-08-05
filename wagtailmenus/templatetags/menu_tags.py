@@ -214,7 +214,7 @@ def flat_menu(
     render it.
     """
     request, site, page, section_root, ancestor_ids = get_attrs_from_context(
-        context)
+        context, app_settings.FLAT_MENU_SECTION_FROM_PATH)
 
     if not show_multiple_levels:
         max_levels = 1
