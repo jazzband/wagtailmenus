@@ -34,11 +34,11 @@ of:
 
 def get_attrs_from_context(context, identify_section_from_path=False):
     """
-    Gets a bunch of things from the context and returns them as a tuple, for
-    use in most menu tags. If `identify_section_from_path` is True, and
-    `request.META['CURRENT_SECTION_ROOT']` hasn't been set by
+    Gets a bunch of useful things from the context/request and returns them as
+    a tuple for use in most menu tags. If `identify_section_from_path` is True,
+    and `request.META['CURRENT_SECTION_ROOT']` hasn't been set by
     `wagtailmenu_params_helper` (most likely, because it isn't a 'Page'
-    being served), attempt to identify a nearby page and section root from the
+    being served), attempt to identify a nearby page / section root from the
     request path.
     """
     request = context['request']
@@ -68,8 +68,8 @@ def get_attrs_from_context(context, identify_section_from_path=False):
                 page or indentified_page, inclusive=True
             ).filter(depth__exact=app_settings.SECTION_ROOT_DEPTH).first()
             if section_root:
-                # we need the 'specific' section_root page, so that
-                # `modify_submenu_items()` can be called
+                # we need the 'specific' section_root page, so that we can
+                # look for / use the page's `modify_submenu_items()` method
                 section_root = section_root.specific
     return (request, site, page, section_root, ancestor_ids)
 
