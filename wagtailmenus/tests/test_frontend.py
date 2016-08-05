@@ -572,23 +572,33 @@ class TestTemplateTags(TestCase):
         expected_menu_html = """<div id="section-menu-two-levels"></div>"""
         self.assertHTMLEqual(section_menu_html, expected_menu_html)
 
-    def test_custom_about_us_url_section_menu(self):
+    def test_custom_about_us_url_section_menu_two_levels(self):
         """
-        Test '{% section_menu max_levels=1 %}' output for a custom url that
-        looks like it's part of the page tree, but isn't.
+        Test '{% section_menu max_levels=2 %}' output for a custom url that
+        looks like a page from the 'about us' section, but isn't.
+
+        'about-us' and 'meet-the-team' items should be identified as
+        'ancestors', as indicated by the request path.
         """
         response = self.client.get('/about-us/meet-the-team/custom-url/')
         soup = BeautifulSoup(response.content, 'html5lib')
 
         # Assertions to compare rendered HTML against expected HTML
-        menu_html = soup.find(id='section-menu-one-level').decode()
+        menu_html = soup.find(id='section-menu-two-levels').decode()
         expected_menu_html = """
-        <div id="section-menu-one-level">
+        <div id="section-menu-two-levels">
             <nav class="nav-section" role="navigation">
                 <a href="/about-us/" class="ancestor section_root">About us</a>
                 <ul>
                     <li class=""><a href="/about-us/">Section home</a></li>
-                    <li class="ancestor"><a href="/about-us/meet-the-team/">Meet the team</a></li>
+                    <li class="ancestor">
+                        <a href="/about-us/meet-the-team/">Meet the team</a>
+                        <ul>
+                            <li class=""><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
+                            <li class=""><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
+                            <li class=""><a href="/about-us/meet-the-team/staff-member-three/">Staff member three</a></li>
+                        </ul>
+                    </li>
                     <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
                     <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                 </ul>
@@ -598,10 +608,13 @@ class TestTemplateTags(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
-    def test_custom_about_us_url_main_menu(self):
+    def test_custom_about_us_url_main_menu_two_levels(self):
         """
-        Test '{% main_menu %}' output for a custom url that
-        looks like it's part of the page tree, but isn't.
+        Test '{% main_menu max_levels=2 %}' output for a custom url that
+        looks like a page from the 'about us' section, but isn't.
+
+        'about-us' and 'meet-the-team' items should be identified as
+        'ancestors', as indicated by the request path.
         """
         response = self.client.get('/about-us/meet-the-team/custom-url/')
         self.assertEqual(response.status_code, 200)
@@ -637,23 +650,41 @@ class TestTemplateTags(TestCase):
         """
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
-    def test_custom_superheroes_url_section_menu(self):
+    def test_custom_superheroes_url_section_menu_two_levels(self):
         """
-        Test '{% section_menu max_levels=1 %}' output for 'About us' page
+        Test '{% section_menu max_levels=2 %}' output for a custom url that
+        looks like a page from the superheroes section, but isn't.
+
+        'superheroes' and 'marvel-comics' items should be identified as
+        'ancestors', as indicated by the request path.
         """
         response = self.client.get('/superheroes/marvel-comics/custom-man/about/')
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.content, 'html5lib')
 
         # Assertions to compare rendered HTML against expected HTML
-        menu_html = soup.find(id='section-menu-one-level').decode()
+        menu_html = soup.find(id='section-menu-two-levels').decode()
         expected_menu_html = """
-        <div id="section-menu-one-level">
+        <div id="section-menu-two-levels">
             <nav class="nav-section" role="navigation">
                 <a href="/superheroes/" class="ancestor section_root">Superheroes</a>
                 <ul>
-                    <li class="ancestor"><a href="/superheroes/marvel-comics/">Marvel Comics</a></li>
-                    <li class=""><a href="/superheroes/dc-comics/">D.C. Comics</a></li>
+                    <li class="ancestor">
+                        <a href="/superheroes/marvel-comics/">Marvel Comics</a>
+                        <ul>
+                            <li class=""><a href="/superheroes/marvel-comics/iron-man/">Iron Man</a></li>
+                            <li class=""><a href="/superheroes/marvel-comics/spiderman/">Spiderman</a></li>
+                        </ul>
+                    </li>
+                    <li class="">
+                        <a href="/superheroes/dc-comics/">D.C. Comics</a>
+                        <ul>
+                            <li class=""><a href="/superheroes/dc-comics/batman/">Batman</a></li>
+                            <li class="">
+                                <a href="/superheroes/dc-comics/wonder-woman/">Wonder Woman</a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </div>

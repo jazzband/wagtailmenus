@@ -206,7 +206,7 @@ Now, wherever the children of the `About Us` page are output (using one of the a
 
 The menu tags do some extra work to make sure both links are never assigned the 'active' class. When on the 'About Us' page, the tags will treat the repeated item as the 'active' page, and just assign the 'ancestor' class to the original, so that the behaviour/styling is consistent with other page links rendered at that level.
 
-#### Adding further sub-menu items for a page (NEW IN 1.3)
+#### NEW IN 1.3! Adding further sub-menu items for a page
 
 `MenuPage` objects have a `modify_submenu_items()` method, which is responsible for adding the 'repeated' menu item (mentioned above) when the appropriate fields have been set. If for any reason you want to dynamically add more links to a page's sub-menu, it's possible to override `modify_submenu_items()` on your page model and add them there. For example:
 
@@ -235,6 +235,12 @@ class MyPageModel(MenuPage):
 		return menu_items
 ```
 
+Even if your page model doesn't extend `MenuPage`, you can add a new method to
+your model with the same name, and taking the same arguments, and it will be
+used whenever generating sub-menus for pages of that type. Just make sure to
+always return `menu_items`, whether you made any changes to it's contents or
+not.
+
 ### <a id="app-settings"></a>10. Changing the default settings
 
 You can override some of wagtailmenus' default behaviour by adding one of more of the following to your project's settings:
@@ -253,10 +259,6 @@ You can override some of wagtailmenus' default behaviour by adding one of more o
 - **`WAGTAILMENUS_DEFAULT_FLAT_MENU_MAX_LEVELS`** (default: `2`): The default number of maximum levels rendered by `{% flat_menu %}` when `show_multiple_levels=True` and a `max_levels` parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_SECTION_MENU_MAX_LEVELS`** (default: `2`): The default number of maximum levels rendered by `{% section_menu %}` when a `max_levels` parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS`** (default: `1`): The default number of maximum levels rendered by `{% children_page_menu %}` when a `max_levels` parameter value isn't provided.
-- **`WAGTAILMENUS_MAIN_MENU_SECTION_FROM_PATH`** (default: `True`): If you've added custom URLs to your project to serve Django views rather than just wagtail `Pages`, and the paths of those URLs coincide with your page tree (e.g. You have a page with the path '/about-us/news-and-events/' and a custom URL with the path '/about-us/news-and-events/news/'), the `main_menu` tag will use that path to identify the '/about-us/news-and-events/' page as the nearest ancestor, and '/about-us/' page as the section root, meaning menu items in your main menu will be highlighted accordingly. To turn this behaviour off, set this setting to `False` instead.
-- **`WAGTAILMENUS_SECTION_MENU_SECTION_FROM_PATH`** (default: `True`): If you've added custom URLs to your project to serve Django views rather than just wagtail `Pages`, and the paths of those URLs coincide with your page tree (e.g. You have a page with the path `'/about-us/news-and-events/'` and a custom URL with the path `'/about-us/news-and-events/news/'`), the `section_menu` tag will use that path to identify the `'/about-us/news-and-events/'` page as the nearest ancestor, and `'/about-us/'` page as the section root, allowing you to still render a section menu in those views, with menu items highlighted accordingly. To turn this behaviour off, set this setting to `False` instead.
-- **`WAGTAILMENUS_FLAT_MENU_SECTION_FROM_PATH`** (default: `False`): As with the two settings above for `{% main_menu %}` and `{% section_menu %}`, `{% flat_menu %}` can also be made to use the current path to identify the current section root and any ancestors for highlighting when serving a standard Django view. This behaviour is disabled by default, because in common usage, flat menus do not need to know this information. However, you can set this setting to `True` to enable it.
-
 
 ## Contributing
 

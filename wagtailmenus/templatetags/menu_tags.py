@@ -32,7 +32,7 @@ of:
 """
 
 
-def get_attrs_from_context(context, identify_section_from_path=False):
+def get_attrs_from_context(context):
     """
     Gets a bunch of useful things from the context/request and returns them as
     a tuple for use in most menu tags. If `identify_section_from_path` is True,
@@ -43,17 +43,24 @@ def get_attrs_from_context(context, identify_section_from_path=False):
     """
     request = context['request']
     site = request.site
-    page = context.get('self', None)
-    # If 'section_root' has been added to the context by `main_menu`,
-    # `section_menu` or `flat_menu`, use that over the request.META version
-    section_root = context.get('section_root') or request.META.get(
-        'CURRENT_SECTION_ROOT', None)
-    # If 'current_ancestor_ids' has been added to the context by `main_menu`,
-    # `section_menu` or `flat_menu`, use that over the request.META version
-    ancestor_ids = context.get('current_ancestor_ids') or request.META.get(
-        'CURRENT_PAGE_ANCESTOR_IDS', [])
+    current_page = context.get('self', None)
+    section_root = None
     indentified_page = None
-    if not page and identify_section_from_path:
+    ancestor_ids = []
+
+    # If section_root` or `current_ancestor_ids` have been added to the
+    # context by a previous `main_menu`, `section_menu` or `flat_menu`
+    # call, then use those values to avoid any more further work
+    section_root = context.get('section_root', None)
+    ancestor_ids = context.get('current_ancestor_ids', [])
+
+    # Fall back to finding values set by `wagtailmenus_params_helper`.
+    if not section_root:
+        section_root = request.META.get('CURRENT_SECTION_ROOT')
+    if not ancestor_ids:
+        ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
+
+    if not current_page:
         path_components = [pc for pc in request.path.split('/') if pc]
         # keep trying to find a page using the path components until there are
         # no components left, or a page has been identified
@@ -66,18 +73,18 @@ def get_attrs_from_context(context, identify_section_from_path=False):
             except Http404:
                 # No match found, so remove a path component and try again
                 path_components.pop()
-    if not section_root and identify_section_from_path:
-        if page or indentified_page:
+    if not section_root:
+        if current_page or indentified_page:
             # attempt to identify the section root page using 'page'
             # (the 'current page' from context) or the one identified above
             section_root = site.root_page.get_descendants().ancestor_of(
-                page or indentified_page, inclusive=True
+                current_page or indentified_page, inclusive=True
             ).filter(depth__exact=app_settings.SECTION_ROOT_DEPTH).first()
             if section_root:
                 # we need the 'specific' section_root page, so that we can
                 # look for / use the page's `modify_submenu_items()` method
                 section_root = section_root.specific
-    return (request, site, page, section_root, ancestor_ids)
+    return (request, site, current_page, section_root, ancestor_ids)
 
 
 @register.simple_tag(takes_context=True)
@@ -88,8 +95,8 @@ def main_menu(
     template=app_settings.DEFAULT_MAIN_MENU_TEMPLATE,
 ):
     """Render the MainMenu instance for the current site."""
-    request, site, page, section_root, ancestor_ids = get_attrs_from_context(
-        context, app_settings.MAIN_MENU_SECTION_FROM_PATH)
+    r, site, current_page, section_root, ancestor_ids = get_attrs_from_context(
+        context)
     try:
         menu = site.main_menu
     except MainMenu.DoesNotExist:
@@ -103,7 +110,7 @@ def main_menu(
         'menu_items': prime_menu_items(
             menu_items=menu.menu_items.for_display(),
             current_site=site,
-            current_page=context.get('self'),
+            current_page=current_page,
             current_page_ancestor_ids=ancestor_ids,
             check_for_children=max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
@@ -129,8 +136,8 @@ def section_menu(
     template=app_settings.DEFAULT_SECTION_MENU_TEMPLATE,
 ):
     """Render a section menu for the current section."""
-    request, site, page, section_root, ancestor_ids = get_attrs_from_context(
-        context, app_settings.SECTION_MENU_SECTION_FROM_PATH)
+    r, site, current_page, section_root, ancestor_ids = get_attrs_from_context(
+        context)
 
     if not show_multiple_levels:
         max_levels = 1
@@ -153,11 +160,10 @@ def section_menu(
     menu_items = prime_menu_items(
         menu_items=section_root.get_children().live().in_menu(),
         current_site=site,
-        current_page=page,
+        current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
         check_for_children=max_levels > 1,
         allow_repeating_parents=allow_repeating_parents,
-        apply_active_classes=apply_active_classes,
     )
 
     """
@@ -166,8 +172,8 @@ def section_menu(
     """
     if hasattr(section_root, 'modify_submenu_items'):
         menu_items = section_root.modify_submenu_items(
-            menu_items, page, ancestor_ids, site, allow_repeating_parents,
-            apply_active_classes, 'section_menu')
+            menu_items, current_page, ancestor_ids, site,
+            allow_repeating_parents, apply_active_classes, 'section_menu')
 
     """
     Now we know the subnav/repetition situation, we can set the `active_class`
@@ -176,7 +182,7 @@ def section_menu(
     """
     if apply_active_classes:
         active_class = ''
-        if page and section_root.pk == page.pk:
+        if current_page and section_root.pk == current_page.pk:
             repeat_in_subnav = getattr(section_root, 'repeat_in_subnav', False)
             if (allow_repeating_parents and menu_items and repeat_in_subnav):
                 active_class = app_settings.ACTIVE_ANCESTOR_CLASS
@@ -207,14 +213,14 @@ def flat_menu(
     context, handle, show_menu_heading=True, apply_active_classes=False,
     show_multiple_levels=False, allow_repeating_parents=True,
     max_levels=app_settings.DEFAULT_FLAT_MENU_MAX_LEVELS,
-    template=app_settings.DEFAULT_FLAT_MENU_TEMPLATE
+    template=app_settings.DEFAULT_FLAT_MENU_TEMPLATE,
 ):
     """
     Find a FlatMenu for the current site matching the `handle` provided and
     render it.
     """
-    request, site, page, section_root, ancestor_ids = get_attrs_from_context(
-        context, app_settings.FLAT_MENU_SECTION_FROM_PATH)
+    r, site, current_page, section_root, ancestor_ids = get_attrs_from_context(
+        context)
 
     if not show_multiple_levels:
         max_levels = 1
@@ -228,7 +234,7 @@ def flat_menu(
     menu_items = prime_menu_items(
         menu_items=menu.menu_items.for_display(),
         current_site=site,
-        current_page=page,
+        current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
         check_for_children=max_levels > 1,
         allow_repeating_parents=allow_repeating_parents,
@@ -269,7 +275,7 @@ def sub_menu(
     they're rendering, and whether they should render any further levels
     """
     context = copy(context)
-    request, site, page, section_root, ancestor_ids = get_attrs_from_context(
+    r, site, current_page, section_root, ancestor_ids = get_attrs_from_context(
         context)
     previous_level = context.get('current_level', 0)
     current_level = previous_level + 1
@@ -300,7 +306,7 @@ def sub_menu(
     menu_items = prime_menu_items(
         menu_items=parent_page.get_children().live().in_menu(),
         current_site=site,
-        current_page=page,
+        current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
         check_for_children=not stop_at_this_level,
         allow_repeating_parents=allow_repeating_parents,
@@ -313,7 +319,7 @@ def sub_menu(
     """
     if hasattr(parent_page, 'modify_submenu_items'):
         menu_items = parent_page.modify_submenu_items(
-            menu_items, page, ancestor_ids, site,
+            menu_items, current_page, ancestor_ids, site,
             allow_repeating_parents, apply_active_classes, 'parent_page')
 
     context.update({
@@ -365,7 +371,7 @@ def prime_menu_items(
     Prepare a list of menuitem objects or pages for rendering to a menu
     template.
     """
-    sroot_depth = app_settings.SECTION_ROOT_DEPTH
+    section_root_depth = app_settings.SECTION_ROOT_DEPTH
     primed_menu_items = []
     for item in menu_items:
 
@@ -397,7 +403,7 @@ def prime_menu_items(
             If linking to a page, we only want to include this item
             in the resulting list if that page is set to appear in menus.
             """
-            if (check_for_children and page.depth >= sroot_depth):
+            if (check_for_children and page.depth >= section_root_depth):
                 """
                 Working out whether this item should have a sub nav is
                 expensive, so we try to do the working out where absolutely
