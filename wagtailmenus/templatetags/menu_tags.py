@@ -44,8 +44,14 @@ def get_attrs_from_context(context, identify_section_from_path=False):
     request = context['request']
     site = request.site
     page = context.get('self', None)
-    section_root = request.META.get('CURRENT_SECTION_ROOT', None)
-    ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
+    # If 'section_root' has been added to the context by `main_menu`,
+    # `section_menu` or `flat_menu`, use that over the request.META version
+    section_root = context.get('section_root') or request.META.get(
+        'CURRENT_SECTION_ROOT', None)
+    # If 'current_ancestor_ids' has been added to the context by `main_menu`,
+    # `section_menu` or `flat_menu`, use that over the request.META version
+    ancestor_ids = context.get('current_ancestor_ids') or request.META.get(
+        'CURRENT_PAGE_ANCESTOR_IDS', [])
     indentified_page = None
     if not page and identify_section_from_path:
         path_components = [pc for pc in request.path.split('/') if pc]
@@ -108,6 +114,8 @@ def main_menu(
         'max_levels': max_levels,
         'current_template': template,
         'original_menu_tag': 'main_menu',
+        'section_root': section_root,
+        'current_ancestor_ids': ancestor_ids,
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -188,6 +196,7 @@ def section_menu(
         'max_levels': max_levels,
         'current_template': template,
         'original_menu_tag': 'section_menu',
+        'current_ancestor_ids': ancestor_ids,
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -238,6 +247,8 @@ def flat_menu(
         'max_levels': max_levels,
         'current_template': template,
         'original_menu_tag': 'flat_menu',
+        'section_root': section_root,
+        'current_ancestor_ids': ancestor_ids,
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
