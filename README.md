@@ -12,7 +12,7 @@ The current version is compatible with Wagtail >= 1.5, and Python 2.7, 3.3, 3.4 
 
 ### 1. Gives you independent control over your root-level main menu items
 
-The `MainMenu` model lets you define the root-level items for your projects's main navigation (or one for each site, if it's a multi-site project) using an inline model `MainMenuItem`. These items can link to pages (you can append an optional hash or querystring to the URL, too) or custom URLs. The custom URL field won't force you to enter a valid URL either, so you can add things like `"#request-callback"` or `"#signup"` to link to areas on the active page (perhaps as JS modals).
+The `MainMenu` model lets you define the root-level items for your projects's main navigation (or one for each site, if it's a multi-site project) using an inline model `MainMenuItem`. These items can link to pages (you can append an optional hash or querystring to the URL, too) or custom URLs. The custom URL field won't force you to enter a valid URL either, so you can add things like *#request-callback* or *#signup* to link to areas on the active page (perhaps as JS modals).
 
 <img alt="Screenshot of MainMenu edit page in Wagtail admin" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-mainmenu-edit.png" />
 
@@ -200,7 +200,7 @@ Presuming the **About Us** page extends `wagtailmenus.models.MenuPage`:
 2. Uncollapse the **ADVANCED MENU BEHAVIOUR** panel by clicking the downward-pointing arrow next to the panel's label. <img alt="Screenshot showing the collapsed 'advanced menu behaviour' panel" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-menupage-settings-collapsed.png" />
 4. Tick the **Repeat in sub-navigation** checkbox that appears, and publish your changes. <img alt="Screenshot show the expanded 'advanced menu behaviour' panel" src="https://github.com/rkhleics/wagtailmenus/blob/master/screenshots/wagtailmenus-menupage-settings-visible.png" />
 
-Now, wherever the children of the **About Us** page are output (using one of the above menu tags), an additional link will appear alongside them, allowing the that page to be accessed more easily. In the example above, you'll see `'Section overview'` has been added to the a `'Repeated item link text`` field. With this set, the link text for the repeated item should read `'Section overview'`, instead of just repeating the page's title, like so:
+Now, wherever the children of the **About Us** page are output (using one of the above menu tags), an additional link will appear alongside them, allowing the that page to be accessed more easily. In the example above, you'll see *"Section overview"* has been added to the a **Repeated item link text** field. With this set, the link text for the repeated item should read *"Section overview"*, instead of just repeating the page's title, like so:
 
 <img alt="Screenshot showing the repeated nav item in effect" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/repeating-item.png" />
 
