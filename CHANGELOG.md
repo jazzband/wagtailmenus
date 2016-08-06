@@ -1,12 +1,18 @@
 Changelog
 =========
 
-1.3.0 (xx.xx.xx) IN DEVELOPMENT
+1.3.1 (XX.XX.XXXX) IN DEVELOPMENT
 ---------------------------------
 
+1.3.0 (06.08.2016)
+---------------------------------
+
+* Added the ability for all menu tags to (attempt to) identify ancestor pages
+  and section root page by using components from the request path when serving
+  a custom URL (not routed via the page tree / served by `wagtail_serve`)
 * Added `modify_submenu_items()` method to `MenuPage` model, which takes
   responsibility for modifying the initial menu_items list in `section_menu`
-  and `sub_menu` tags. A DRYer approach, that is easily extend/override to
+  and `sub_menu` tags. A DRYer approach, that is easier to extend/override to
   meet custom needs.
   
 
@@ -14,7 +20,7 @@ Changelog
 ---------------------------------
 
 * Added PyPi version and coveralls test coverage badges to README
-* Altered travis CI test configuration to use tox, allowing for much better
+* Altered Travis CI test configuration to use tox, allowing for much better
   control over test environments
 * Added tests for Python 3.4 and 3.5 to confirm compatibility
 * Added CONTRIBUTORS.rst
