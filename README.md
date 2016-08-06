@@ -12,13 +12,13 @@ The current version is compatible with Wagtail >= 1.5, and Python 2.7, 3.3, 3.4 
 
 ### 1. Gives you independent control over your root-level main menu items
 
-The `MainMenu` model lets you define the root-level items for your projects's main navigation (or one for each site, if it's a multi-site project) using an inline model `MainMenuItem`. These items can link to pages (you can append an optional hash or querystring to the URL, too) or custom URLs. The custom URL field won't force you to enter a valid URL either, so you can add things like "#request-callback" or "#signup" to link to areas on the active page (perhaps as JS modals).
+The `MainMenu` model lets you define the root-level items for your projects's main navigation (or one for each site, if it's a multi-site project) using an inline model `MainMenuItem`. These items can link to pages (you can append an optional hash or querystring to the URL, too) or custom URLs. The custom URL field won't force you to enter a valid URL either, so you can add things like `"#request-callback"` or `"#signup"` to link to areas on the active page (perhaps as JS modals).
 
 <img alt="Screenshot of MainMenu edit page in Wagtail admin" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-mainmenu-edit.png" />
 
 The site's page tree powers everything past the root level, so you don't have to recreate it elsewhere. And as you'd expect, only links to published pages will appear when rendering.
 
-Pages still need to have `show_in_menus` checked to appear in menus (if you really needed to hide a page for some reason, it would be frustrating if they didn't), but your project's main navigation (likely displayed in a way that is sensitive to change) will be protected from accidental additions.
+**Please note:** In order to enable pages to be hidden using Wagtail's existing controls, pages still need to have `show_in_menus` checked to appear in menus.
 
 ### 2. Allows you to manage multiple 'flat menus' via the CMS
 
@@ -88,8 +88,8 @@ Since version `1.2`, watailmenus has depended on the `wagtail.contrib.modeladmin
 ### <a id="defining-main-menu-items"></a>1. Defining root-level main menu items in the CMS
 
 1. Log into the Wagtail CMS for your project (as a superuser).
-2. Click on `Settings` in the side menu to access the options in there, then select `Main menu`.
-3. You'll be automatically redirected to the `Main menu` edit page for the current site (or the 'default' site, if the current site cannot be identified). For multi-site projects, a 'site switcher' will appear in the top right, allowing you to edit main menus for each site.
+2. Click on **Settings** in the side menu to access the options in there, then select **Main menu**.
+3. You'll be automatically redirected to the an edit page for the current site (or the 'default' site, if the current site cannot be identified). For multi-site projects, a 'site switcher' will appear in the top right, allowing you to edit main menus for each site.
 4. Use the **MENU ITEMS** inline panel to define the root-level items, and save your changes when finished.
 
 ### <a id="defining-flat-menus"></a>2. Defining flat menus in the CMS
@@ -190,21 +190,21 @@ The following variables are added to the context by all of the above tags, which
 
 ### <a id="using-menupage"></a>9. Optional repetition of selected pages in menus using `MenuPage`
 
-Let's say you have an 'About Us' section on your site. The top-level 'About Us' page has content that is just as important as that on the more specific pages below it (e.g. 'Meet the team', 'Our mission and values', 'Staff vacancies'). Because of this, you'd like visitors to be able to access the 'About Us' page from your navigation as easily as those pages. But, your site uses drop-down navigation, and the 'About Us' link no longer takes you to that page when clicked... it simply acts as a toggle for hiding and showing the pages below it:
+Let's say you have an **About Us** section on your site. The top-level page has content that is just as important as that on the pages below it (e.g. "Meet the team", "Our mission and values", "Staff vacancies"). Because of this, you'd like visitors to be able to access the root page as easily as those pages. But, your site uses drop-down navigation, and the **About Us** link no longer takes you to that page when clicked... it simply acts as a toggle for hiding and showing it's sub-pages:
 
 <img alt="Screenshot showing an example navigation" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/no-repeating-item.png" />
 
-Presuming the 'About Us' page extends `wagtailmenus.models.MenuPage`:
+Presuming the **About Us** page extends `wagtailmenus.models.MenuPage`:
 
-1. Edit the 'About Us' page in the CMS, and click on the `Settings` tab.
-2. Uncollapse the `ADVANCED MENU BEHAVIOUR` panel by clicking the downward-pointing arrow next to the panel's label. <img alt="Screenshot showing the collapsed 'advanced menu behaviour' panel" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-menupage-settings-collapsed.png" />
+1. Edit that page in the CMS, and click on the `Settings` tab.
+2. Uncollapse the **ADVANCED MENU BEHAVIOUR** panel by clicking the downward-pointing arrow next to the panel's label. <img alt="Screenshot showing the collapsed 'advanced menu behaviour' panel" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-menupage-settings-collapsed.png" />
 4. Tick the **Repeat in sub-navigation** checkbox that appears, and publish your changes. <img alt="Screenshot show the expanded 'advanced menu behaviour' panel" src="https://github.com/rkhleics/wagtailmenus/blob/master/screenshots/wagtailmenus-menupage-settings-visible.png" />
 
-Now, wherever the children of the `About Us` page are output (using one of the above menu tags), an additional link to the `About Us` page will appear alongside them, allowing the page to be accessed more easily. In the example above, you'll see I've added the text **Section overview** into the `Repeated item link text` field. With this set, the repeated item text should be 'Section overview', instead of just repeating the page's title, like so:
+Now, wherever the children of the **About Us** page are output (using one of the above menu tags), an additional link will appear alongside them, allowing the that page to be accessed more easily. In the example above, you'll see `'Section overview'` has been added to the a `'Repeated item link text`` field. With this set, the link text for the repeated item should read `'Section overview'`, instead of just repeating the page's title, like so:
 
 <img alt="Screenshot showing the repeated nav item in effect" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/repeating-item.png" />
 
-The menu tags do some extra work to make sure both links are never assigned the 'active' class. When on the 'About Us' page, the tags will treat the repeated item as the 'active' page, and just assign the 'ancestor' class to the original, so that the behaviour/styling is consistent with other page links rendered at that level.
+The menu tags do some extra work to make sure both links are never assigned the `'active'` class. When on the 'About Us' page, the tags will treat the repeated item as the 'active' page, and just assign the `'ancestor'` class to the original, so that the behaviour/styling is consistent with other page links rendered at that level.
 
 #### NEW IN 1.3! Adding further sub-menu items for a page
 
@@ -235,11 +235,7 @@ class MyPageModel(MenuPage):
 		return menu_items
 ```
 
-Even if your page model doesn't extend `MenuPage`, you can add a new method to
-your model with the same name, and taking the same arguments, and it will be
-used whenever generating sub-menus for pages of that type. Just make sure to
-always return `menu_items`, whether you made any changes to it's contents or
-not.
+Even if your page model doesn't extend `MenuPage`, you can add a new method to your model with the same name, and taking the same arguments, and it will be used whenever generating sub-menus for pages of that type. Just make sure to always return `menu_items`, whether you made any changes to it's contents or not.
 
 ### <a id="app-settings"></a>10. Changing the default settings
 
