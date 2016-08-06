@@ -61,7 +61,6 @@ WAGTAIL_SITE_NAME = 'Test site'
 LOGIN_URL = 'wagtailadmin_login'
 LOGIN_REDIRECT_URL = 'wagtailadmin_home'
 
-
 # =============================================================================
 # Templates
 # =============================================================================

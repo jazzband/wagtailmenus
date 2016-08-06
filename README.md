@@ -206,6 +206,41 @@ Now, wherever the children of the `About Us` page are output (using one of the a
 
 The menu tags do some extra work to make sure both links are never assigned the 'active' class. When on the 'About Us' page, the tags will treat the repeated item as the 'active' page, and just assign the 'ancestor' class to the original, so that the behaviour/styling is consistent with other page links rendered at that level.
 
+#### NEW IN 1.3! Adding further sub-menu items for a page
+
+`MenuPage` objects have a `modify_submenu_items()` method, which is responsible for adding the 'repeated' menu item (mentioned above) when the appropriate fields have been set. If for any reason you want to dynamically add more links to a page's sub-menu, it's possible to override `modify_submenu_items()` on your page model and add them there. For example:
+
+```python
+
+from django.db import models
+from wagtailmenus.models import MenuPage
+
+class MyPageModel(MenuPage):
+	add_submenu_item_for_news = models.BooleanField(default=False)
+
+	def modify_submenu_items(
+		self, menu_items, current_page, current_ancestor_ids, current_site,
+        allow_repeating_parents, apply_active_classes, original_menu_tag=''
+    ):
+        menu_items = super(MyPageModel,self).modify_menu_items(
+        	menu_items, current_page, current_ancestor_ids, current_site,
+            allow_repeating_parents, apply_active_classes, original_menu_tag=''
+        )
+        if self.add_submenu_item_for_news:
+        	menu_items.append({
+        		'href': '/news/',
+        		'text': 'Read the news',
+        		'active_class': 'news-link',
+        	})
+		return menu_items
+```
+
+Even if your page model doesn't extend `MenuPage`, you can add a new method to
+your model with the same name, and taking the same arguments, and it will be
+used whenever generating sub-menus for pages of that type. Just make sure to
+always return `menu_items`, whether you made any changes to it's contents or
+not.
+
 ### <a id="app-settings"></a>10. Changing the default settings
 
 You can override some of wagtailmenus' default behaviour by adding one of more of the following to your project's settings:
