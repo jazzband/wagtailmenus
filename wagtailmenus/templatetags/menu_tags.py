@@ -45,7 +45,7 @@ def get_attrs_from_context(context):
     site = request.site
     current_page = context.get('self', None)
     section_root = None
-    indentified_page = None
+    identified_page = None
     ancestor_ids = []
 
     # If section_root` or `current_ancestor_ids` have been added to the
@@ -64,21 +64,21 @@ def get_attrs_from_context(context):
         path_components = [pc for pc in request.path.split('/') if pc]
         # keep trying to find a page using the path components until there are
         # no components left, or a page has been identified
-        while path_components and not indentified_page:
+        while path_components and not identified_page:
             try:
-                indentified_page, args, kwargs = site.root_page.specific.route(
+                identified_page, args, kwargs = site.root_page.specific.route(
                     request, path_components)
-                ancestor_ids = indentified_page.get_ancestors(
+                ancestor_ids = identified_page.get_ancestors(
                     inclusive=True).values_list('id', flat=True)
             except Http404:
                 # No match found, so remove a path component and try again
                 path_components.pop()
     if not section_root:
-        if current_page or indentified_page:
+        if current_page or identified_page:
             # attempt to identify the section root page using 'page'
             # (the 'current page' from context) or the one identified above
             section_root = site.root_page.get_descendants().ancestor_of(
-                current_page or indentified_page, inclusive=True
+                current_page or identified_page, inclusive=True
             ).filter(depth__exact=app_settings.SECTION_ROOT_DEPTH).first()
             if section_root:
                 # we need the 'specific' section_root page, so that we can
