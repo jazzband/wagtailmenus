@@ -64,15 +64,19 @@ def get_attrs_from_context(context):
         path_components = [pc for pc in request.path.split('/') if pc]
         # keep trying to find a page using the path components until there are
         # no components left, or a page has been identified
+        first_run = True
         while path_components and not identified_page:
             try:
                 identified_page, args, kwargs = site.root_page.specific.route(
                     request, path_components)
                 ancestor_ids = identified_page.get_ancestors(
                     inclusive=True).values_list('id', flat=True)
+                if first_run:
+                    current_page = identified_page
             except Http404:
                 # No match found, so remove a path component and try again
                 path_components.pop()
+            first_run = False
     if not section_root:
         if current_page or identified_page:
             # attempt to identify the section root page using 'page'
