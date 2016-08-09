@@ -31,7 +31,6 @@ INSTALLED_APPS = (
     'wagtail.wagtaildocs',
     'wagtail.wagtailredirects',
     'wagtail.wagtailadmin',
-    'wagtail.api',
     'wagtail.wagtailcore',
     'wagtail.contrib.modeladmin',
 
