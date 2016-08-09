@@ -2,7 +2,7 @@ from copy import copy
 from django.http import Http404
 from django.template import Library
 from wagtail.wagtailcore.models import Page
-from ..models import MainMenu, FlatMenu
+from ..models import MainMenu, FlatMenu, MenuItem
 from wagtailmenus import app_settings
 
 register = Library()
@@ -62,7 +62,7 @@ def get_attrs_from_context(context):
 
     if not current_page:
         path_components = [pc for pc in request.path.split('/') if pc]
-        # keep trying to find a page using the path components until there are
+        # Keep trying to find a page using the path components until there are
         # no components left, or a page has been identified
         first_run = True
         while path_components and not identified_page:
@@ -72,22 +72,28 @@ def get_attrs_from_context(context):
                 ancestor_ids = identified_page.get_ancestors(
                     inclusive=True).values_list('id', flat=True)
                 if first_run:
+                    # A page was found matching the exact path, so it's safe to
+                    # assume it's the 'current page'
                     current_page = identified_page
             except Http404:
                 # No match found, so remove a path component and try again
                 path_components.pop()
-            first_run = False
-    if not section_root:
-        if current_page or identified_page:
-            # attempt to identify the section root page using 'page'
-            # (the 'current page' from context) or the one identified above
+            first_run = False  # Don't use non-exact matches as 'current_page'
+
+    if not section_root and (current_page or identified_page):
+        page = current_page or identified_page
+        if page.depth == app_settings.SECTION_ROOT_DEPTH:
+            section_root
+        if page.depth > app_settings.SECTION_ROOT_DEPTH:
+            # Attempt to identify the section root page using either the
+            # current page from the context, or the one identified above
             section_root = site.root_page.get_descendants().ancestor_of(
-                current_page or identified_page, inclusive=True
+                page, inclusive=True
             ).filter(depth__exact=app_settings.SECTION_ROOT_DEPTH).first()
-            if section_root:
-                # we need the 'specific' section_root page, so that we can
-                # look for / use the page's `modify_submenu_items()` method
-                section_root = section_root.specific
+        if section_root and type(section_root) is Page:
+            # We need the 'specific' section_root page, so that we can
+            # look for / use the page's `modify_submenu_items()` method
+            section_root = section_root.specific
     return (request, site, current_page, section_root, ancestor_ids)
 
 
@@ -284,16 +290,21 @@ def sub_menu(
     previous_level = context.get('current_level', 0)
     current_level = previous_level + 1
 
-    try:
-        # menuitem_or_page is a page
+    item_class = type(menuitem_or_page)
+    if issubclass(item_class, MenuItem):
+        # A `MenuItem` of some kind was supplied, so the 'link_page' is the
+        # page we want to work with
+        parent_page = menuitem_or_page.link_page.specific
+    elif item_class is Page:
+        # We were passed a vanilla Page object, so we need to identify the
+        # `specific` version
         parent_page = menuitem_or_page.specific
-    except AttributeError:
-        try:
-            # menuitem_or_page is a menuitem linking to a page
-            parent_page = menuitem_or_page.link_page.specific
-        except AttributeError:
-            # menuitem_or_page wasn't a menuitem or page
-            return ''
+    elif issubclass(item_class, Page):
+        # It looks like we were passed an instance of a Page sub-class, we can
+        # likely avoid calling `specific`
+        parent_page = menuitem_or_page
+    else:
+        return ''
 
     max_levels = context.get(
         'max_levels', app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS)
@@ -428,12 +439,12 @@ def prime_menu_items(
             """
             repeated_in_subnav = False
             if allow_repeating_parents and has_children_in_menu:
-                page = page.specific
+                if type(page) is Page:
+                    # Only use 'specific' if we don't already have the sub-type
+                    page = page.specific
                 repeated_in_subnav = getattr(page, 'repeat_in_subnav', False)
 
-            """
-            Now we can figure out which class should be added to this item
-            """
+            # Now we can figure out which class should be added to this item
             if apply_active_classes:
                 active_class = ''
                 if current_page and page.pk == current_page.pk:
