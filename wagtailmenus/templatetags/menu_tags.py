@@ -83,7 +83,7 @@ def get_attrs_from_context(context):
     if not section_root and (current_page or identified_page):
         page = current_page or identified_page
         if page.depth == app_settings.SECTION_ROOT_DEPTH:
-            section_root
+            section_root = page
         if page.depth > app_settings.SECTION_ROOT_DEPTH:
             # Attempt to identify the section root page using either the
             # current page from the context, or the one identified above
