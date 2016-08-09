@@ -11,5 +11,7 @@ urlpatterns = [
         TemplateView.as_view(template_name='page.html')),
     url(r'^superheroes/marvel-comics/custom-man/about/$',
         TemplateView.as_view(template_name='page.html')),
+    url(r'^/about-us/meet-the-team/staff-member-one/$',
+        TemplateView.as_view(template_name='page.html')),
     url(r'', include(wagtail_urls)),
 ]

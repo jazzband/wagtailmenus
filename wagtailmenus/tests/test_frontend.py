@@ -173,7 +173,7 @@ class TestTemplateTags(TestCase):
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                         <li class=""><a href="/about-us/">Section home</a></li>
                         <li class=" dropdown">
-                            <a href="/about-us/meet-the-team/" class="dropdown-toggle" id="ddtoggle_7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Meet the team <span class="caret"></span></a> 
+                            <a href="/about-us/meet-the-team/" class="dropdown-toggle" id="ddtoggle_7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Meet the team <span class="caret"></span></a>
                             <ul class="dropdown-menu" aria-labelledby="ddtoggle_7">
                                 <li class=""><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
                                 <li class=""><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
@@ -554,7 +554,7 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=" dropdown">
-                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>    
+                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
                         <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
@@ -685,6 +685,93 @@ class TestTemplateTags(TestCase):
                             </li>
                         </ul>
                     </li>
+                </ul>
+            </nav>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
+    def test_staffmember_direct_url_main_menu(self):
+        """
+        Test '{% main_menu max_levels=3 %}' when serving the following URL:
+        /about-us/meet-the-team/staff-member-one/
+
+        It's a real page in the tree, so we want to identify it and highlight
+        it as active in the tree, but it's not being served via Wagtail's
+        `serve_page`, so the page is identified using the request path.
+        """
+        response = self.client.get('/about-us/meet-the-team/staff-member-one/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='main-menu-three-levels').decode()
+        expected_menu_html = """
+        <div id="main-menu-three-levels">
+            <ul class="nav navbar-nav">
+                <li class=""><a href="/">Home</a></li>
+                <li class="ancestor dropdown">
+                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
+                        <li class="">
+                            <a href="/about-us/">Section home</a>
+                        </li>
+                        <li class="ancestor dropdown">
+                            <a href="/about-us/meet-the-team/" class="dropdown-toggle" id="ddtoggle_7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Meet the team <span class="caret"></span></a>
+                            <ul class="dropdown-menu" aria-labelledby="ddtoggle_7">
+                                <li class="active"><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
+                                <li class=""><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
+                                <li class=""><a href="/about-us/meet-the-team/staff-member-three/">Staff member three</a></li>
+                            </ul>
+                        </li>
+                        <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
+                        <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                    </ul>
+                </li>
+                <li class=" dropdown">
+                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
+                        <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
+                        <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
+                        <li class=""><a href="/news-and-events/press/">In the press</a></li>
+                    </ul>
+                </li>
+                <li class=""><a href="http://google.co.uk">Google</a></li>
+                <li class=""><a href="/contact-us/">Contact us</a></li>
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
+    def test_staffmember_direct_url_section_menu(self):
+        """
+        Test '{% section_menu max_levels=2 %}' when serving the following URL:
+        /about-us/meet-the-team/staff-member-one/
+
+        It's a real page in the tree, so we want to identify it and highlight
+        it as active in the tree, but it's not being served via Wagtail's
+        `serve_page`, so the page is identified using the request path.
+        """
+        response = self.client.get('/about-us/meet-the-team/staff-member-one/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='section-menu-two-levels').decode()
+        expected_menu_html = """
+        <div id="section-menu-two-levels">
+            <nav class="nav-section" role="navigation">
+                <a href="/about-us/" class="ancestor section_root">About us</a>
+                <ul>
+                    <li class=""><a href="/about-us/">Section home</a></li>
+                    <li class="ancestor">
+                        <a href="/about-us/meet-the-team/">Meet the team</a>
+                        <ul>
+                            <li class="active"><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
+                            <li class=""><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
+                            <li class=""><a href="/about-us/meet-the-team/staff-member-three/">Staff member three</a></li>
+                        </ul>
+                    </li>
+                    <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
+                    <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                 </ul>
             </nav>
         </div>
