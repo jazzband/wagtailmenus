@@ -6,7 +6,9 @@ Changelog
 
 * Extend the 'section matching by path' functionality added in 1.3.0 to
   also identify a 'current page' if the found page matches the exact path.
-* Added further tests
+* Added further tests.
+* Reduce the number of unnecessary calls to `Page.specific` in `menu_tags.py`
+  where possible.
 
 1.3.0 (06.08.2016)
 ---------------------------------
