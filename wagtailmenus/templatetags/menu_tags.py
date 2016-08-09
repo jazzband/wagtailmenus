@@ -2,7 +2,7 @@ from copy import copy
 from django.http import Http404
 from django.template import Library
 from wagtail.wagtailcore.models import Page
-from ..models import MainMenu, FlatMenu, MenuItem
+from ..models import MainMenu, FlatMenu
 from wagtailmenus import app_settings
 
 register = Library()
@@ -290,21 +290,16 @@ def sub_menu(
     previous_level = context.get('current_level', 0)
     current_level = previous_level + 1
 
-    item_class = type(menuitem_or_page)
-    if issubclass(item_class, MenuItem):
-        # A `MenuItem` of some kind was supplied, so the 'link_page' is the
-        # page we want to work with
+    try:
+        # First, presume we're dealing with a `MenuItem`
         parent_page = menuitem_or_page.link_page.specific
-    elif item_class is Page:
-        # We were passed a vanilla Page object, so we need to identify the
-        # `specific` version
-        parent_page = menuitem_or_page.specific
-    elif issubclass(item_class, Page):
-        # It looks like we were passed an instance of a Page sub-class, we can
-        # likely avoid calling `specific`
-        parent_page = menuitem_or_page
-    else:
-        return ''
+    except AttributeError:
+        try:
+            # Now assume we're dealing with a `Page` object
+            parent_page = menuitem_or_page.specific
+        except AttributeError:
+            # We can't determine the page, so fail gracefully
+            return ''
 
     max_levels = context.get(
         'max_levels', app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS)
