@@ -100,15 +100,6 @@ class TestTemplateTags(TestCase):
         response = self.client.get('/about-us/staff-vacancies/')
         self.assertEqual(response.status_code, 200)
 
-    def test_news_and_events(self):
-        """
-        Test that 'News and events' page (based on `MenuPage`), with
-        `repeat_in_subnav=False`, and within a section with subnav, renders
-        without errors.
-        """
-        response = self.client.get('/news-and-events/')
-        self.assertEqual(response.status_code, 200)
-
     def test_non_page(self):
         """
         Test that there are no errors when rendering page template without
@@ -697,8 +688,8 @@ class TestTemplateTags(TestCase):
         /about-us/meet-the-team/staff-member-one/
 
         It's a real page in the tree, so we want to identify it and highlight
-        it as active in the tree, but it's not being served via Wagtail's
-        `serve_page`, so the page is identified using the request path.
+        it as active, but it's not being served via Wagtail's `serve_page`, so
+        the page is identified using the request path.
         """
         response = self.client.get('/about-us/meet-the-team/staff-member-one/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -748,8 +739,8 @@ class TestTemplateTags(TestCase):
         /about-us/meet-the-team/staff-member-one/
 
         It's a real page in the tree, so we want to identify it and highlight
-        it as active in the tree, but it's not being served via Wagtail's
-        `serve_page`, so the page is identified using the request path.
+        it as active, but it's not being served via Wagtail's `serve_page`, so
+        the page is identified using the request path.
         """
         response = self.client.get('/about-us/meet-the-team/staff-member-one/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -772,6 +763,35 @@ class TestTemplateTags(TestCase):
                     </li>
                     <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
                     <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                </ul>
+            </nav>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
+    def test_news_and_events_section_menu(self):
+        """
+        Test '{% section_menu max_levels=2 %}' when serving the following URL:
+        /news-and-events/
+
+        It's a real page in the tree, so we want to identify it and highlight
+        it as active, but it's not being served via Wagtail's `serve_page`, so
+        the page is identified using the request path.
+        """
+        response = self.client.get('/news-and-events/')
+
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='section-menu-two-levels').decode()
+        expected_menu_html = """
+        <div id="section-menu-two-levels">
+            <nav class="nav-section" role="navigation">
+                <a href="/news-and-events/" class="active section_root">News &amp; events</a>
+                <ul>
+                    <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
+                    <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
+                    <li class=""><a href="/news-and-events/press/">In the press</a></li>
                 </ul>
             </nav>
         </div>
