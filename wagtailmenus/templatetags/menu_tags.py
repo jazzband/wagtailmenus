@@ -137,6 +137,7 @@ def main_menu(
             allow_repeating_parents=allow_repeating_parents,
             apply_active_classes=apply_active_classes,
             use_specific=use_specific,
+            original_menu_tag='main_menu'
         ),
         'allow_repeating_parents': allow_repeating_parents,
         'current_level': 1,
@@ -192,6 +193,7 @@ def section_menu(
         current_page_ancestor_ids=ancestor_ids,
         check_for_children=max_levels > 1,
         allow_repeating_parents=allow_repeating_parents,
+        original_menu_tag='section_menu'
     )
 
     """
@@ -272,6 +274,7 @@ def flat_menu(
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
         use_specific=use_specific,
+        original_menu_tag='flat_menu',
     )
 
     context.update({
@@ -357,6 +360,7 @@ def sub_menu(
         check_for_children=not stop_at_this_level,
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
+        original_menu_tag=context.get('original_menu_tag', ''),
     )
 
     """
@@ -416,7 +420,7 @@ def children_menu(
 def prime_menu_items(
     menu_items, current_site, current_page, current_page_ancestor_ids,
     check_for_children=False, allow_repeating_parents=True,
-    apply_active_classes=True, use_specific=False
+    apply_active_classes=True, use_specific=False, original_menu_tag='',
 ):
     """
     Prepare a list of menuitem objects or pages for rendering to a menu
@@ -453,17 +457,40 @@ def prime_menu_items(
 
         has_children_in_menu = False
         if page:
-            if (check_for_children and page.depth >= section_root_depth):
+            if (page.depth >= section_root_depth):
                 """
                 Working out whether this item should have a sub nav is
                 expensive, so we try to do the working out only when absolutely
                 necessary.
                 """
                 if (menuitem is None or menuitem.allow_subnav):
-                    has_children_in_menu = (
-                        page.get_children().live().in_menu().exists()
-                    )
-                    setattr(item, 'has_children_in_menu', has_children_in_menu)
+                    if (
+                        hasattr(page, 'has_submenu_items') or
+                        hasattr(page.specific_class, 'has_submenu_items')
+                    ):
+                        """
+                        If the page in question has a `has_submenu_items`
+                        method, shift responsibilty for determining the
+                        `has_children_in_menu` value to that.
+                        """
+                        if type(page) is Page:
+                            page = page.specific
+                        has_children_in_menu = page.has_submenu_items(
+                            current_page=current_page,
+                            check_for_children=check_for_children,
+                            allow_repeating_parents=allow_repeating_parents,
+                            original_menu_tag=original_menu_tag,
+                        )
+
+                    elif check_for_children:
+                        """
+                        The page has no `has_submenu_items` method. Resort to
+                        default behaviour and simply cound children pages.
+                        """
+                        has_children_in_menu = (
+                            page.get_children().live().in_menu().exists())
+
+            setattr(item, 'has_children_in_menu', has_children_in_menu)
 
             """
             Now we know whether this page has a subnav or not, we can look
