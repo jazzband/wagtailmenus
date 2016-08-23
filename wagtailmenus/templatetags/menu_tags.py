@@ -465,8 +465,8 @@ def prime_menu_items(
                         hasattr(page.specific_class, 'has_submenu_items')
                     ):
                         """
-                        If the page in question has a `has_submenu_items`
-                        method, shift responsibilty for determining the
+                        If the page has a `has_submenu_items` method, shift
+                        responsibilty for determining the
                         `has_children_in_menu` value to that.
                         """
                         if type(page) is Page:
