@@ -418,10 +418,16 @@ def prime_menu_items(
                 necessary.
                 """
                 if (menuitem is None or menuitem.allow_subnav):
+                    """
+                    Using `Page.specific_class` here to check for the existence
+                    of the `has_submenu_items` method. With `content_type` data
+                    already using `select_related()`, this shouldn't incur
+                    additional database operations.
+                    """
                     if hasattr(page.specific_class, 'has_submenu_items'):
                         """
-                        If the page in question has a `has_submenu_items`
-                        method, shift responsibilty for determining the
+                        If the page has a `has_submenu_items` method, shift
+                        responsibilty for determining the
                         `has_children_in_menu` value to that.
                         """
                         has_children_in_menu = page.specific.has_submenu_items(
