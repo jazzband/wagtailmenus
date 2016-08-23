@@ -154,11 +154,7 @@ def section_menu(
         max_levels = 1
 
     if section_root is None:
-        """
-        The section root couldn't be identified. Likely because it's not
-        a 'Page' being served, and `wagtail_hooks.wagtailmenu_params_helper`
-        isn't running.
-        """
+        # The section root couldn't be identified.
         return ''
 
     """
@@ -428,8 +424,7 @@ def prime_menu_items(
                         method, shift responsibilty for determining the
                         `has_children_in_menu` value to that.
                         """
-                        page = page.specific
-                        has_children_in_menu = page.has_submenu_items(
+                        has_children_in_menu = page.specific.has_submenu_items(
                             current_page=current_page,
                             check_for_children=check_for_children,
                             allow_repeating_parents=allow_repeating_parents,
