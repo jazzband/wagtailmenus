@@ -170,11 +170,7 @@ def section_menu(
         max_levels = 1
 
     if section_root is None:
-        """
-        The section root couldn't be identified. Likely because it's not
-        a 'Page' being served, and `wagtail_hooks.wagtailmenu_params_helper`
-        isn't running.
-        """
+        # The section root couldn't be identified.
         return ''
 
     """
