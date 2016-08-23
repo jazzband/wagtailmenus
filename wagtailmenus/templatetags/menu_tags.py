@@ -421,8 +421,8 @@ def prime_menu_items(
                     """
                     Using `Page.specific_class` here to check for the existence
                     of the `has_submenu_items` method. With `content_type` data
-                    already using `select_related()`, this shouldn't incur
-                    additional database operations.
+                    already fetched using `select_related()`, this shouldn't
+                    incur additional database operations.
                     """
                     if hasattr(page.specific_class, 'has_submenu_items'):
                         """
