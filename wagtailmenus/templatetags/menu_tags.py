@@ -440,7 +440,8 @@ def prime_menu_items(
                     elif check_for_children:
                         """
                         The page has no `has_submenu_items` method. Resort to
-                        default behaviour and simply cound children pages.
+                        default behaviour (check if there are any children
+                        pages that need representing).
                         """
                         has_children_in_menu = (
                             page.get_children().live().in_menu().exists())
