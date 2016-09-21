@@ -1,8 +1,22 @@
 Changelog
 =========
 
-1.3.2 (XX.XX.XXXX) IN DEVELOPMENT
+1.4.1 (XX.XX.XXXX) IN DEVELOPMENT
 ---------------------------------
+
+* Added a `sub_menu_template` option to `main_menu`, `section_menu`,
+  `flat_menu` and `children_menu` that will be automatically picked up by the
+  `sub_menu` tag and used as the template (if no `template` value is provided).
+* Added a `fetch_specific_pages` option to all template tags, that if True,
+  will used PageQuerySet's `specific()` method to return instances of the 
+  most specific page-type model as menu items, instead of just vanilla `Page`
+  objects.
+* Added settings to allow default `fetch_specific_pages` value to be
+  altered for each individual menu tag.
+* If `fetch_specific_pages` is True, `prime_menu_items` will call the 
+  `relative_url` method on the specific page to determine a menu item's `href`
+  value, meaning overrides to that method will be respected.
+
 
 1.3.1 (09.08.2016)
 ---------------------------------
