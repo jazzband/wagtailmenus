@@ -17,9 +17,6 @@ USE_I18N = True
 USE_L10N = True
 
 INSTALLED_APPS = (
-    'wagtailmenus.tests',
-    'wagtailmenus',
-
     'wagtail.contrib.settings',
     'wagtail.wagtailforms',
     'wagtail.wagtailsearch',
@@ -33,6 +30,8 @@ INSTALLED_APPS = (
     'wagtail.wagtailadmin',
     'wagtail.wagtailcore',
     'wagtail.contrib.modeladmin',
+    'wagtailmenus',
+    'wagtailmenus.tests',
 
     'taggit',
     'modelcluster',
@@ -104,3 +103,5 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
+
+WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE = 'menus/custom_main_menu.html'

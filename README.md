@@ -113,6 +113,8 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 - **`allow_repeating_parents`** (default: `True`): Repetition-related settings on your pages are respected by default, but you can add `allow_repeating_parents=False` to ignore them, and not repeat any pages in sub-menus when rendering multiple levels.
 - **`apply_active_classes`** (default: `True`): The tag will attempt to add 'active' and 'ancestor' CSS classes to the menu items (where applicable) to indicate the active page and ancestors of that page. To disable this behaviour, add `apply_active_classes=False` to the tag in your template. You can change the CSS classes used by adding `WAGTAILMENUS_ACTIVE_CLASS` and `WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS` settings to your project's settings module.
 - **`template`** (default: `'menus/main_menu.html'`): Lets you render the menu to a template of your choosing. You can also name an alternative template to be used by default, by adding a `WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE` setting to your project's settings module.
+- **`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. You can specify an alternative default template by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings module.
+- **`use_specific`** (default: `False`): If `True`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The default can be altered by adding `WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC=True` to your project's settings module.
 
 ### <a id="flat_menu-tag"></a>4. Using the `{% flat_menu %}` tag
 
@@ -126,6 +128,8 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 - **`max_levels`** (default: `2`): If `show_multiple_levels=True` is being provided to enable multiple levels, you can use this parameter to specify how many levels you'd like to display.
 - **`apply_active_classes`** (default: `False`): Unlike `main_menu` and `section_menu`, `flat_menu` will NOT attempt to add 'active' and 'ancestor' classes to the menu items by default, as this is often not useful. You can override this by adding `apply_active_classes=true` to the tag in your template.
 - **`template`** (default: `'menus/flat_menu.html'`): Lets you render the menu to a template of your choosing. You can also name an alternative template to be used by default, by adding a `WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE` setting to your project's settings module.
+- **`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets you specify a template to be used for rendering sub menus (if enabled using `show_multiple_levels`). All subsequent calls to `{% sub_menu %}` within the context of the flat menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. You can specify an alternative default template by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings module.
+- **`use_specific`** (default: `False`): If `True`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The default can be altered by adding `WAGTAILMENUS_DEFAULT_FLAT_MENU_USE_SPECIFIC=True` to your project's settings module.
 
 ### <a id="section_menu-tag"></a>5. Using the `{% section_menu %}` tag
 
@@ -142,6 +146,8 @@ The `{% section_menu %}` tag allows you to display a context-aware, page-driven 
 - **`allow_repeating_parents`** (default: `True`): Repetition-related settings on your pages are respected by default, but you can add `allow_repeating_parents=False` to ignore them, and not repeat any pages in sub-menus when rendering.
 - **`apply_active_classes`** (default: `True`): The tag will add 'active' and 'ancestor' classes to the menu items where applicable, to indicate the active page and ancestors of that page. To disable this behaviour, add `apply_active_classes=False` to the tag in your template.
 - **`template`** (default: `'menus/section_menu.html'`): Lets you render the menu to a template of your choosing. You can also name an alternative template to be used by default, by adding a `WAGTAILMENUS_DEFAULT_SECTION_MENU_TEMPLATE` setting to your project's settings module.
+- **`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. You can specify an alternative default template by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings module.
+- **`use_specific`** (default: `False`): If `True`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The default can be altered by adding `WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC=True` to your project's settings module.
 
 ### <a id="children_menu-tag"></a>6. Using the `{% children_menu %}` tag
 
@@ -157,7 +163,8 @@ The `{% children_menu %}` tag can be used in page templates to display a menu of
 - **`allow_repeating_parents`** (default: `True`): Repetition-related settings on your pages are respected by default, but you can add `allow_repeating_parents=False` to ignore them, and not repeat any pages in sub-menus when rendering.
 - **`apply_active_classes`** (default: `False`): Unlike `main_menu` and `section_menu`, `children_menu` will NOT attempt to add 'active' and 'ancestor' classes to the menu items by default, as this is often not useful. You can override this by adding `apply_active_classes=true` to the tag in your template.
 - **`template`** (default: `'menus/children_menu.html'`): Lets you render the menu to a template of your choosing. You can also name an alternative template to be used by default, by adding a `WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE` setting to your project's settings module.
-
+- **`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. You can specify an alternative default template by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings module.
+- **`use_specific`** (default: `False`): If `True`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The default can be altered by adding `WAGTAILMENUS_DEFAULT_CHILDREN_MENU_USE_SPECIFIC=True` to your project's settings module.
 
 ### <a id="sub_menu-tag"></a>6. Using the `{% sub_menu %}` tag
 
@@ -169,6 +176,7 @@ The `{% sub_menu %}` tag is used within menu templates to render additional leve
 - **`allow_repeating_parents`**: By default, the tag will inherit this behaviour from whatever was specified for the original menu tag. However, you can override that behaviour by adding either `allow_repeating_parents=True` or `allow_repeating_parents=False` to the tag in your custom menu template.
 - **`apply_active_classes`**: By default, the tag will inherit this behaviour from whatever was specified for the original menu tag. However, you can override that behaviour by adding either `apply_active_classes=True` or `apply_active_classes=False` to the tag in your custom menu template.
 - **`template`** (default: `'menus/sub_menu.html'`): Lets you render the menu to a template of your choosing. You can also name an alternative template to be used by default, by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings module.
+- **`use_specific`**: By default, the tag will inherit this behaviour from whatever was specified for the original menu tag. However, the value can be overridden by adding `use_specific=True` or `use_specific=False` to the {% sub_menu %} tag in your custom menu template.
 
 ### <a id="writing-menu-templates"></a>8. Writing your own menu templates
 
@@ -255,6 +263,14 @@ You can override some of wagtailmenus' default behaviour by adding one of more o
 - **`WAGTAILMENUS_DEFAULT_FLAT_MENU_MAX_LEVELS`** (default: `2`): The default number of maximum levels rendered by `{% flat_menu %}` when `show_multiple_levels=True` and a `max_levels` parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_SECTION_MENU_MAX_LEVELS`** (default: `2`): The default number of maximum levels rendered by `{% section_menu %}` when a `max_levels` parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS`** (default: `1`): The default number of maximum levels rendered by `{% children_page_menu %}` when a `max_levels` parameter value isn't provided.
+- **`WAGTAILMENUS_DEFAULT_MAIN_MENU_USE_SPECIFIC`** (default: `False`): If set to `True`, by default, when rendering a `{% main_menu %}`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The behaviour can be overridden in individual cases using the tag's `use_specific` keyword argument.
+- **`WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC`** (default: `False`): If set to `True`, by default, when rendering a `{% section_menu %}`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The behaviour can be overridden in individual cases using the tag's `use_specific` keyword argument.
+- **`WAGTAILMENUS_DEFAULT_CHILDREN_USE_SPECIFIC`** (default: `False`): If set to `True`, by default, when rendering a `{% children_menu %}`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The behaviour can be overridden in individual cases using the tag's `use_specific` keyword argument.
+- **`WAGTAILMENUS_DEFAULT_FLAT_MENU_USE_SPECIFIC`** (default: `False`): If set to `True`, by default, when rendering a `{% flat_menu %}`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The behaviour can be overridden in individual cases using the tag's `use_specific` keyword argument.
+
+## Contributing
+
+If you'd like to become a wagtailmenus contributor, we'd be happy to have you. You should start by taking a look at our [contributor guidelines](https://github.com/rkhl
 
 ## Contributing
 

@@ -106,13 +106,6 @@ class MenuItem(models.Model):
         verbose_name = _("menu item")
         verbose_name_plural = _("menu items")
 
-    def relative_url(self, current_site):
-        try:
-            url = self.link_page.relative_url(current_site)
-        except AttributeError:
-            url = self.link_url
-        return url + self.url_append
-
     @property
     def menu_text(self):
         if self.link_page:

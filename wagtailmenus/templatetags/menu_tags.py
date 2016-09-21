@@ -97,12 +97,23 @@ def get_attrs_from_context(context):
     return (request, site, current_page, section_root, ancestor_ids)
 
 
+def get_children_for_menu(page, original_menu_tag, use_specific):
+    qs = page.get_children().live().in_menu()
+    if use_specific:
+        qs = qs.specific()
+    else:
+        qs = qs.select_related('content_type')
+    return qs
+
+
 @register.simple_tag(takes_context=True)
 def main_menu(
     context, apply_active_classes=True, allow_repeating_parents=True,
     show_multiple_levels=True,
     max_levels=app_settings.DEFAULT_MAIN_MENU_MAX_LEVELS,
     template=app_settings.DEFAULT_MAIN_MENU_TEMPLATE,
+    sub_menu_template=app_settings.DEFAULT_SUB_MENU_TEMPLATE,
+    use_specific=app_settings.DEFAULT_MAIN_MENU_USE_SPECIFIC,
 ):
     """Render the MainMenu instance for the current site."""
     r, site, current_page, section_root, ancestor_ids = get_attrs_from_context(
@@ -125,14 +136,17 @@ def main_menu(
             check_for_children=max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
             apply_active_classes=apply_active_classes,
+            use_specific=use_specific,
         ),
         'allow_repeating_parents': allow_repeating_parents,
         'current_level': 1,
         'max_levels': max_levels,
         'current_template': template,
+        'sub_menu_template': sub_menu_template,
         'original_menu_tag': 'main_menu',
         'section_root': section_root,
         'current_ancestor_ids': ancestor_ids,
+        'use_specific': use_specific,
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -144,6 +158,8 @@ def section_menu(
     apply_active_classes=True, allow_repeating_parents=True,
     max_levels=app_settings.DEFAULT_SECTION_MENU_MAX_LEVELS,
     template=app_settings.DEFAULT_SECTION_MENU_TEMPLATE,
+    sub_menu_template=app_settings.DEFAULT_SUB_MENU_TEMPLATE,
+    use_specific=app_settings.DEFAULT_SECTION_MENU_USE_SPECIFIC,
 ):
     """Render a section menu for the current section."""
     r, site, current_page, section_root, ancestor_ids = get_attrs_from_context(
@@ -167,8 +183,10 @@ def section_menu(
     setattr(section_root, 'text', section_root.title)
     setattr(section_root, 'href', section_root.relative_url(site))
 
+    children_qs = get_children_for_menu(section_root, 'section_menu',
+                                        use_specific)
     menu_items = prime_menu_items(
-        menu_items=section_root.get_children().live().in_menu(),
+        menu_items=children_qs,
         current_site=site,
         current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
@@ -211,8 +229,10 @@ def section_menu(
         'current_level': 1,
         'max_levels': max_levels,
         'current_template': template,
+        'sub_menu_template': sub_menu_template,
         'original_menu_tag': 'section_menu',
         'current_ancestor_ids': ancestor_ids,
+        'use_specific': use_specific,
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -224,6 +244,8 @@ def flat_menu(
     show_multiple_levels=False, allow_repeating_parents=True,
     max_levels=app_settings.DEFAULT_FLAT_MENU_MAX_LEVELS,
     template=app_settings.DEFAULT_FLAT_MENU_TEMPLATE,
+    sub_menu_template=app_settings.DEFAULT_SUB_MENU_TEMPLATE,
+    use_specific=app_settings.DEFAULT_FLAT_MENU_USE_SPECIFIC,
 ):
     """
     Find a FlatMenu for the current site matching the `handle` provided and
@@ -249,6 +271,7 @@ def flat_menu(
         check_for_children=max_levels > 1,
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
+        use_specific=use_specific,
     )
 
     context.update({
@@ -262,9 +285,11 @@ def flat_menu(
         'current_level': 1,
         'max_levels': max_levels,
         'current_template': template,
+        'sub_menu_template': sub_menu_template,
         'original_menu_tag': 'flat_menu',
         'section_root': section_root,
         'current_ancestor_ids': ancestor_ids,
+        'use_specific': use_specific,
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -274,7 +299,7 @@ def flat_menu(
 def sub_menu(
     context, menuitem_or_page, stop_at_this_level=None,
     allow_repeating_parents=None, apply_active_classes=None,
-    template=app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE
+    template=None, use_specific=None
 ):
     """
     Retrieve the children pages for the `menuitem_or_page` provided, turn them
@@ -313,8 +338,19 @@ def sub_menu(
     if allow_repeating_parents is None:
         allow_repeating_parents = context.get('allow_repeating_parents', True)
 
+    if use_specific is None:
+        use_specific = context.get('use_specific', False)
+
+    if template is None:
+        template = context.get(
+            'sub_menu_template', app_settings.DEFAULT_SUB_MENU_TEMPLATE)
+
+    original_menu_tag = context.get('original_menu_tag', 'sub_menu')
+
+    children_qs = get_children_for_menu(parent_page, original_menu_tag,
+                                        use_specific)
     menu_items = prime_menu_items(
-        menu_items=parent_page.get_children().live().in_menu(),
+        menu_items=children_qs,
         current_site=site,
         current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
@@ -330,7 +366,7 @@ def sub_menu(
     if hasattr(parent_page, 'modify_submenu_items'):
         menu_items = parent_page.modify_submenu_items(
             menu_items, current_page, ancestor_ids, site,
-            allow_repeating_parents, apply_active_classes, 'parent_page')
+            allow_repeating_parents, apply_active_classes, original_menu_tag)
 
     context.update({
         'parent_page': parent_page,
@@ -339,7 +375,7 @@ def sub_menu(
         'current_level': current_level,
         'max_levels': max_levels,
         'current_template': template,
-        'original_menu_tag': context.get('original_menu_tag', ''),
+        'original_menu_tag': original_menu_tag,
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -350,7 +386,9 @@ def children_menu(
     context, parent_page=None, allow_repeating_parents=True,
     apply_active_classes=False,
     max_levels=app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS,
-    template=app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE
+    template=app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE,
+    sub_menu_template=app_settings.DEFAULT_SUB_MENU_TEMPLATE,
+    use_specific=app_settings.DEFAULT_CHILDREN_MENU_USE_SPECIFIC,
 ):
     if parent_page is None:
         parent_page = context.get('self')
@@ -361,6 +399,8 @@ def children_menu(
         'current_level': 0,
         'max_levels': max_levels,
         'original_menu_tag': 'children_menu',
+        'use_specific': use_specific,
+        'sub_menu_template': sub_menu_template,
     })
     return sub_menu(
         context,
@@ -369,13 +409,14 @@ def children_menu(
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
         template=template,
+        use_specific=use_specific,
     )
 
 
 def prime_menu_items(
     menu_items, current_site, current_page, current_page_ancestor_ids,
     check_for_children=False, allow_repeating_parents=True,
-    apply_active_classes=True
+    apply_active_classes=True, use_specific=False
 ):
     """
     Prepare a list of menuitem objects or pages for rendering to a menu
@@ -383,18 +424,12 @@ def prime_menu_items(
     """
     section_root_depth = app_settings.SECTION_ROOT_DEPTH
     primed_menu_items = []
+
     for item in menu_items:
-
-        """
-        `MenuItem` and `Page` both have the relative_url method, which we use
-        to get a URL relative to the current site root.
-        """
-        setattr(item, 'href', item.relative_url(current_site))
-
         try:
             """
             `menu_items` is a list of `MenuItem` objects, that either links
-            to a Page, or a custom URL
+            to Page instances, or custom URLs
             """
             page = item.link_page
             menuitem = item
@@ -407,21 +442,27 @@ def prime_menu_items(
             menuitem = None
             setattr(item, 'text', page.title)
 
+        """
+        `MenuItemQuerySet` cannot currently utilise `PageQuerySet.specific()`
+        to fetch 'specific' page objects efficiently, so if needed, we must
+        do it the expensive way.
+        """
+        if menuitem and page and use_specific:
+            page = page.specific
+            item.link_page = page
+
         has_children_in_menu = False
         if page:
-            """
-            If linking to a page, we only want to include this item
-            in the resulting list if that page is set to appear in menus.
-            """
             if (check_for_children and page.depth >= section_root_depth):
                 """
                 Working out whether this item should have a sub nav is
-                expensive, so we try to do the working out where absolutely
+                expensive, so we try to do the working out only when absolutely
                 necessary.
                 """
                 if (menuitem is None or menuitem.allow_subnav):
                     has_children_in_menu = (
-                        page.get_children().live().in_menu().exists())
+                        page.get_children().live().in_menu().exists()
+                    )
                     setattr(item, 'has_children_in_menu', has_children_in_menu)
 
             """
@@ -434,8 +475,11 @@ def prime_menu_items(
             """
             repeated_in_subnav = False
             if allow_repeating_parents and has_children_in_menu:
+                """
+                Only call the page's `specific` property method if we don't
+                already have the sub-type.
+                """
                 if type(page) is Page:
-                    # Only use 'specific' if we don't already have the sub-type
                     page = page.specific
                 repeated_in_subnav = getattr(page, 'repeat_in_subnav', False)
 
@@ -451,8 +495,19 @@ def prime_menu_items(
                     active_class = app_settings.ACTIVE_ANCESTOR_CLASS
                 setattr(item, 'active_class', active_class)
 
+            """
+            Using `relative_url()` on the `page` object to get a `href` value.
+            If `use_specific=True` was used, this should be a 'specific' page
+            by now, which is better, as `relative_url()` can be overridden.
+            """
+            href = page.relative_url(current_site)
+            if menuitem:
+                href += menuitem.url_append
+            setattr(item, 'href', href)
             primed_menu_items.append(item)
 
         elif page is None:
+            setattr(item, 'href', item.link_url + item.url_append)
             primed_menu_items.append(item)
+
     return primed_menu_items
