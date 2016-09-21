@@ -7,30 +7,6 @@ from wagtailmenus import app_settings
 
 register = Library()
 
-"""
-In all menu templates, menu items are always assigned the following attributes
-for you to use in the template:
-
-    * `href`: The value to use for the `href` attribute on the <a> element
-    * `text`: The text to use for the link
-    * `active_class`: A class to be applied to the <li> element (values are
-      `ancestor` If the page is an ancestor of the current page or `active` if
-      the page is the current_page)
-    * `has_children_in_menu`: A boolean value that will let you know if the
-      item has children that should be output as a submenu.
-
-The following variables will also be added to the context for you to make use
-of:
-
-    * `current_level`: The current 'level' being rendered. This starts at 1 for
-      the initial template tag call, then increments each time `sub_menu`
-      is called recursively.
-    * `current_template`: The name of the template currently being rendered.
-      This is most useful when rendering a `sub_menu` template that
-      calls `sub_menu` recursively, and you wish to use the same template
-      for all recursions.
-"""
-
 
 def get_attrs_from_context(context):
     """
@@ -356,7 +332,7 @@ def sub_menu(
         check_for_children=not stop_at_this_level,
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
-        original_menu_tag=context.get('original_menu_tag', ''),
+        original_menu_tag=original_menu_tag,
     )
 
     """
@@ -405,7 +381,6 @@ def children_menu(
     return sub_menu(
         context,
         menuitem_or_page=parent_page,
-        stop_at_this_level=None,
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
         template=template,
