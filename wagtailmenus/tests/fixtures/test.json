@@ -608,7 +608,7 @@
         "numchild": 0,
         "title": "Contact us",
         "slug": "contact-us",
-        "content_type": ["tests", "toplevelpage"],
+        "content_type": ["tests", "contactpage"],
         "live": true,
         "url_path": "/home/contact-us/",
         "show_in_menus": true,
@@ -836,7 +836,7 @@
     }
 },
 {
-    "model": "tests.toplevelpage",
+    "model": "tests.contactpage",
     "pk": 18,
     "fields": {
         "repeat_in_subnav": true,

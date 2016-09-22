@@ -140,7 +140,14 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
-                <li class=" top-level"><a href="/contact-us/">Contact us</a></li>
+                <li class=" dropdown">
+                    <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
+                        <li class="support"><a href="/contact-us/#support">Get support</a></li>
+                        <li class="call"><a href="/contact-us/#call">Speak to someone</a></li>
+                        <li class="map"><a href="/contact-us/#map">Map &amp; directions</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
         """
@@ -184,7 +191,14 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
-                <li class=""><a href="/contact-us/">Contact us</a></li>
+                <li class=" dropdown">
+                    <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
+                        <li class="support"><a href="/contact-us/#support">Get support</a></li>
+                        <li class="call"><a href="/contact-us/#call">Speak to someone</a></li>
+                        <li class="map"><a href="/contact-us/#map">Map &amp; directions</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
         """
@@ -286,7 +300,14 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
-                <li class=" top-level"><a href="/contact-us/">Contact us</a></li>
+                <li class=" dropdown">
+                    <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
+                        <li class="support"><a href="/contact-us/#support">Get support</a></li>
+                        <li class="call"><a href="/contact-us/#call">Speak to someone</a></li>
+                        <li class="map"><a href="/contact-us/#map">Map &amp; directions</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
         """
@@ -332,7 +353,14 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
-                <li class=""><a href="/contact-us/">Contact us</a></li>
+                <li class=" dropdown">
+                    <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
+                        <li class="support"><a href="/contact-us/#support">Get support</a></li>
+                        <li class="call"><a href="/contact-us/#call">Speak to someone</a></li>
+                        <li class="map"><a href="/contact-us/#map">Map &amp; directions</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
         """
@@ -553,7 +581,14 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
-                <li class=" top-level"><a href="/contact-us/">Contact us</a></li>
+                <li class=" dropdown">
+                    <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
+                        <li class="support"><a href="/contact-us/#support">Get support</a></li>
+                        <li class="call"><a href="/contact-us/#call">Speak to someone</a></li>
+                        <li class="map"><a href="/contact-us/#map">Map &amp; directions</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
         """
@@ -635,7 +670,14 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
-                <li class=" top-level"><a href="/contact-us/">Contact us</a></li>
+                <li class=" dropdown">
+                    <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
+                        <li class="support"><a href="/contact-us/#support">Get support</a></li>
+                        <li class="call"><a href="/contact-us/#call">Speak to someone</a></li>
+                        <li class="map"><a href="/contact-us/#map">Map &amp; directions</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
         """
@@ -727,7 +769,14 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
-                <li class=""><a href="/contact-us/">Contact us</a></li>
+                <li class=" dropdown">
+                    <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
+                        <li class="support"><a href="/contact-us/#support">Get support</a></li>
+                        <li class="call"><a href="/contact-us/#call">Speak to someone</a></li>
+                        <li class="map"><a href="/contact-us/#map">Map &amp; directions</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
         """
