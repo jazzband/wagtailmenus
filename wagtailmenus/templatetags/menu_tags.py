@@ -7,30 +7,6 @@ from wagtailmenus import app_settings
 
 register = Library()
 
-"""
-In all menu templates, menu items are always assigned the following attributes
-for you to use in the template:
-
-    * `href`: The value to use for the `href` attribute on the <a> element
-    * `text`: The text to use for the link
-    * `active_class`: A class to be applied to the <li> element (values are
-      `ancestor` If the page is an ancestor of the current page or `active` if
-      the page is the current_page)
-    * `has_children_in_menu`: A boolean value that will let you know if the
-      item has children that should be output as a submenu.
-
-The following variables will also be added to the context for you to make use
-of:
-
-    * `current_level`: The current 'level' being rendered. This starts at 1 for
-      the initial template tag call, then increments each time `sub_menu`
-      is called recursively.
-    * `current_template`: The name of the template currently being rendered.
-      This is most useful when rendering a `sub_menu` template that
-      calls `sub_menu` recursively, and you wish to use the same template
-      for all recursions.
-"""
-
 
 def get_attrs_from_context(context):
     """
@@ -137,6 +113,7 @@ def main_menu(
             allow_repeating_parents=allow_repeating_parents,
             apply_active_classes=apply_active_classes,
             use_specific=use_specific,
+            original_menu_tag='main_menu'
         ),
         'allow_repeating_parents': allow_repeating_parents,
         'current_level': 1,
@@ -169,11 +146,7 @@ def section_menu(
         max_levels = 1
 
     if section_root is None:
-        """
-        The section root couldn't be identified. Likely because it's not
-        a 'Page' being served, and `wagtail_hooks.wagtailmenu_params_helper`
-        isn't running.
-        """
+        # The section root couldn't be identified.
         return ''
 
     """
@@ -192,6 +165,7 @@ def section_menu(
         current_page_ancestor_ids=ancestor_ids,
         check_for_children=max_levels > 1,
         allow_repeating_parents=allow_repeating_parents,
+        original_menu_tag='section_menu'
     )
 
     """
@@ -272,6 +246,7 @@ def flat_menu(
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
         use_specific=use_specific,
+        original_menu_tag='flat_menu',
     )
 
     context.update({
@@ -357,6 +332,7 @@ def sub_menu(
         check_for_children=not stop_at_this_level,
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
+        original_menu_tag=original_menu_tag,
     )
 
     """
@@ -405,7 +381,6 @@ def children_menu(
     return sub_menu(
         context,
         menuitem_or_page=parent_page,
-        stop_at_this_level=None,
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
         template=template,
@@ -416,7 +391,7 @@ def children_menu(
 def prime_menu_items(
     menu_items, current_site, current_page, current_page_ancestor_ids,
     check_for_children=False, allow_repeating_parents=True,
-    apply_active_classes=True, use_specific=False
+    apply_active_classes=True, use_specific=False, original_menu_tag='',
 ):
     """
     Prepare a list of menuitem objects or pages for rendering to a menu
@@ -433,6 +408,8 @@ def prime_menu_items(
             """
             page = item.link_page
             menuitem = item
+            if page and use_specific:
+                page = page.specific
             setattr(item, 'text', item.menu_text)
         except AttributeError:
             """
@@ -442,28 +419,45 @@ def prime_menu_items(
             menuitem = None
             setattr(item, 'text', page.title)
 
-        """
-        `MenuItemQuerySet` cannot currently utilise `PageQuerySet.specific()`
-        to fetch 'specific' page objects efficiently, so if needed, we must
-        do it the expensive way.
-        """
-        if menuitem and page and use_specific:
-            page = page.specific
-            item.link_page = page
-
         has_children_in_menu = False
         if page:
-            if (check_for_children and page.depth >= section_root_depth):
+            if (page.depth >= section_root_depth):
                 """
                 Working out whether this item should have a sub nav is
                 expensive, so we try to do the working out only when absolutely
                 necessary.
                 """
                 if (menuitem is None or menuitem.allow_subnav):
-                    has_children_in_menu = (
-                        page.get_children().live().in_menu().exists()
-                    )
-                    setattr(item, 'has_children_in_menu', has_children_in_menu)
+                    if (
+                        hasattr(page, 'has_submenu_items') or
+                        hasattr(page.specific_class, 'has_submenu_items')
+                    ):
+                        """
+                        If the page has a `has_submenu_items` method, shift
+                        responsibilty for determining the
+                        `has_children_in_menu` value to that.
+                        """
+                        if type(page) is Page:
+                            page = page.specific
+                            if menuitem:
+                                item.link_page = page
+                        has_children_in_menu = page.has_submenu_items(
+                            current_page=current_page,
+                            check_for_children=check_for_children,
+                            allow_repeating_parents=allow_repeating_parents,
+                            original_menu_tag=original_menu_tag,
+                        )
+
+                    elif check_for_children:
+                        """
+                        The page has no `has_submenu_items` method. Resort to
+                        default behaviour (check if there are any children
+                        pages that need representing).
+                        """
+                        has_children_in_menu = (
+                            page.get_children().live().in_menu().exists())
+
+            setattr(item, 'has_children_in_menu', has_children_in_menu)
 
             """
             Now we know whether this page has a subnav or not, we can look
@@ -496,8 +490,15 @@ def prime_menu_items(
                 setattr(item, 'active_class', active_class)
 
             """
+            If we're dealing with a MenuItem instance, replace `link_page` with
+            the page object we have, which may well be a 'specific' page by now
+            """
+            if menuitem:
+                item.link_page = page
+
+            """
             Using `relative_url()` on the `page` object to get a `href` value.
-            If `use_specific=True` was used, this should be a 'specific' page
+            If `use_specific=True` was used, this will be a 'specific' page
             by now, which is better, as `relative_url()` can be overridden.
             """
             href = page.relative_url(current_site)

@@ -83,7 +83,8 @@ Since version `1.2`, watailmenus has depended on the `wagtail.contrib.modeladmin
 7. [Using the `{% sub_menu %}` tag](#sub_menu-tag)
 8. [Writing your own menu templates](#writing-menu-templates)
 9. [Optional repetition of selected pages in menus using `MenuPage`](#using-menupage)
-10. [Overriding default behaviour with settings](#app-settings)
+10. [Adding additional menu items for specific page types](#modifying-submenu-items)
+11. [Overriding default behaviour with settings](#app-settings)
 
 ### <a id="defining-main-menu-items"></a>1. Defining root-level main menu items in the CMS
 
@@ -214,25 +215,105 @@ Now, wherever the children of the **About Us** page are output (using one of the
 
 The menu tags do some extra work to make sure both links are never assigned the `'active'` class. When on the 'About Us' page, the tags will treat the repeated item as the 'active' page, and just assign the `'ancestor'` class to the original, so that the behaviour/styling is consistent with other page links rendered at that level.
 
-#### NEW IN 1.3! Adding further sub-menu items for a page
+### <a id="modifying-submenu-items"></a>10. Adding additional menu items for specific page types
 
-`MenuPage` objects have a `modify_submenu_items()` method, which is responsible for adding the 'repeated' menu item (mentioned above) when the appropriate fields have been set. If for any reason you want to dynamically add more links to a page's sub-menu, it's possible to override `modify_submenu_items()` on your page model and add them there. For example:
+If you find yourself needing further control over the items that appear in your menus (perhaps you need to add further items for specific pages, or remove some under certain circumstances), you will likely find the [`modify_submenu_items()`]() _(added in 1.3)_ and [`has_submenu_items()`]() _(added in 1.4)_ methods on the `MenuPage` model of interest. 
+
+For example, if you had a `ContactPage` model extended `MenuPage`, and in main menus, you wanted to add some additional links below each `ContactPage` - You could achieve that by overriding the `modify_submenu_items()` and `has_submenu_items()` methods like so:
+
+```python
+
+from wagtailmenus.models import MenuPage
+
+
+class ContactPage(MenuPage):
+	...
+
+    def modify_submenu_items(self, menu_items, current_page,
+                             current_ancestor_ids, current_site,
+                             allow_repeating_parents, apply_active_classes,
+                             original_menu_tag):
+        # Apply default modifications first of all
+        menu_items = super(ContactPage, self).modify_submenu_items(
+            menu_items, current_page, current_ancestor_ids, current_site,
+            allow_repeating_parents, apply_active_classes, original_menu_tag)
+        """
+        If rendering a 'main_menu', add some additional menu items to the end
+        of the list that link to various anchored sections on the same page
+        """
+        if original_menu_tag == 'main_menu':
+            base_url = self.relative_url(current_site)
+            """
+            Additional menu items can be objects with the necessary attributes,
+            or simple dictionaries. `href` is used for the link URL, and `text`
+            is the text displayed for each link. Below, I've also used
+            `active_class` to add some additional CSS classes to these items,
+            so that I can target them with additional CSS  
+            """
+            menu_items.extend((
+                {
+                    'text': 'Get support',
+                    'href': base_url + '#support',
+                    'active_class': 'support',
+                },
+                {
+                    'text': 'Speak to someone',
+                    'href': base_url + '#call',
+                    'active_class': 'call',
+                },
+                {
+                    'text': 'Map & directions',
+                    'href': base_url + '#map',
+                    'active_class': 'map',
+                },
+            ))
+        return menu_items
+
+    def has_submenu_items(self, current_page, check_for_children,
+                          allow_repeating_parents, original_menu_tag):
+        """
+        Because `modify_submenu_items` is being used to add additional menu
+        items, we need to indicate in menu templates that `ContactPage` objects
+        do have submenu items in main menus, even if they don't have children
+        pages.
+        """
+        if original_menu_tag == 'main_menu':
+            return True
+        return super(ContactPage, self).has_submenu_items(
+            current_page, check_for_children, allow_repeating_parents,
+            original_menu_tag)
+```
+
+These modifications would result in the following HTML output when rendering a ContactPage in a main menu:
+
+```html
+	<li class=" dropdown">
+        <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
+        <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
+            <li class="support"><a href="/contact-us/#support">Get support</a></li>
+            <li class="call"><a href="/contact-us/#call">Speak to someone</a></li>
+            <li class="map"><a href="/contact-us/#map">Map &amp; directions</a></li>
+        </ul>
+    </li>
+```
+
+You could even modify sub-menu items based on field values for specific instance of a custom Page, rather than for every single one, like in the following example:
 
 ```python
 
 from django.db import models
 from wagtailmenus.models import MenuPage
 
-class MyPageModel(MenuPage):
+class SectionRootPage(MenuPage):
 	add_submenu_item_for_news = models.BooleanField(default=False)
 
 	def modify_submenu_items(
 		self, menu_items, current_page, current_ancestor_ids, current_site,
         allow_repeating_parents, apply_active_classes, original_menu_tag=''
     ):
-        menu_items = super(MyPageModel,self).modify_menu_items(
+        menu_items = super(SectionRootPage,self).modify_menu_items(
         	menu_items, current_page, current_ancestor_ids, current_site,
-            allow_repeating_parents, apply_active_classes, original_menu_tag=''
+            allow_repeating_parents, apply_active_classes, original_menu_tag
         )
         if self.add_submenu_item_for_news:
         	menu_items.append({
@@ -241,11 +322,18 @@ class MyPageModel(MenuPage):
         		'active_class': 'news-link',
         	})
 		return menu_items
+
+	def has_submenu_items(self, current_page, check_for_children,
+                          allow_repeating_parents, original_menu_tag):
+        
+        if self.add_submenu_item_for_news:
+            return True
+        return super(SectionRootPage, self).has_submenu_items(
+            current_page, check_for_children, allow_repeating_parents,
+            original_menu_tag)
 ```
 
-Even if your page model doesn't extend `MenuPage`, you can add a new method to your model with the same name, and taking the same arguments, and it will be used whenever generating sub-menus for pages of that type. Just make sure to always return `menu_items`, whether you made any changes to it's contents or not.
-
-### <a id="app-settings"></a>10. Changing the default settings
+### <a id="app-settings"></a>11. Changing the default settings
 
 You can override some of wagtailmenus' default behaviour by adding one of more of the following to your project's settings:
 
@@ -267,10 +355,6 @@ You can override some of wagtailmenus' default behaviour by adding one of more o
 - **`WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC`** (default: `False`): If set to `True`, by default, when rendering a `{% section_menu %}`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The behaviour can be overridden in individual cases using the tag's `use_specific` keyword argument.
 - **`WAGTAILMENUS_DEFAULT_CHILDREN_USE_SPECIFIC`** (default: `False`): If set to `True`, by default, when rendering a `{% children_menu %}`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The behaviour can be overridden in individual cases using the tag's `use_specific` keyword argument.
 - **`WAGTAILMENUS_DEFAULT_FLAT_MENU_USE_SPECIFIC`** (default: `False`): If set to `True`, by default, when rendering a `{% flat_menu %}`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The behaviour can be overridden in individual cases using the tag's `use_specific` keyword argument.
-
-## Contributing
-
-If you'd like to become a wagtailmenus contributor, we'd be happy to have you. You should start by taking a look at our [contributor guidelines](https://github.com/rkhl
 
 ## Contributing
 
