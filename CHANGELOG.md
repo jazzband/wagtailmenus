@@ -1,7 +1,11 @@
 Changelog
 =========
 
-1.4.0 (XX.XX.XXXX) IN DEVELOPMENT
+1.4.1 (XX.XX.XXXX) IN DEVELOPMENT
+---------------------------------
+
+
+1.4.0 (22.09.2016)
 ---------------------------------
 
 * Added a `has_submenu_items()` method to `MenuPage` model to compliment
