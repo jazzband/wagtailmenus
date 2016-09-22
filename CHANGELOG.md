@@ -1,9 +1,13 @@
 Changelog
 =========
 
-1.4.1 (XX.XX.XXXX) IN DEVELOPMENT
+1.4.0 (XX.XX.XXXX) IN DEVELOPMENT
 ---------------------------------
 
+* Added a `has_submenu_items()` method to `MenuPage` model to compliment
+  `modify_submenu_items()` in version 1.3. Allows for far better control and 
+  consistency when overriding `modify_submenu_items()` to add additional
+  menu items for specific page types.
 * Added a `sub_menu_template` option to `main_menu`, `section_menu`,
   `flat_menu` and `children_menu` that will be automatically picked up by the
   `sub_menu` tag and used as the template (if no `template` value is provided).
