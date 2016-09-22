@@ -211,7 +211,7 @@ The menu tags do some extra work to make sure both links are never assigned the 
 
 ### <a id="modifying-submenu-items"></a>10. Adding additional menu items for specific page types
 
-If you find yourself needing further control over the items that appear in your menus (perhaps you need to add further items for specific pages, or remove some under certain circumstances), you will likely find the [`modify_submenu_items()`]() _(added in 1.3)_ and [`has_submenu_items()`]() _(added in 1.4)_ methods on the `MenuPage` model of interest. 
+If you find yourself needing further control over the items that appear in your menus (perhaps you need to add further items for specific pages, or remove some under certain circumstances), you will likely find the **`modify_submenu_items()`** _(added in 1.3)_ and **`has_submenu_items()`** _(added in 1.4)_ methods on the [`MenuPage`](https://github.com/rkhleics/wagtailmenus/blob/master/wagtailmenus/models.py#L17) model of interest. 
 
 For example, if you had a `ContactPage` model extended `MenuPage`, and in main menus, you wanted to add some additional links below each `ContactPage` - You could achieve that by overriding the `modify_submenu_items()` and `has_submenu_items()` methods like so:
 
@@ -221,7 +221,7 @@ from wagtailmenus.models import MenuPage
 
 
 class ContactPage(MenuPage):
-	...
+    ...
 
     def modify_submenu_items(self, menu_items, current_page,
                              current_ancestor_ids, current_site,
