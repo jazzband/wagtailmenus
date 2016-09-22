@@ -166,7 +166,7 @@ class TestTemplateTags(TestCase):
         <div id="main-menu-three-levels">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/">Home</a></li>
-                <li class=" dropdown">
+                <li class=" dropdown top-level">
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                         <li class=" top-level"><a href="/about-us/">Section home</a></li>
@@ -182,7 +182,7 @@ class TestTemplateTags(TestCase):
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
-                <li class=" dropdown">
+                <li class=" dropdown top-level">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
@@ -326,7 +326,7 @@ class TestTemplateTags(TestCase):
         <div id="main-menu-three-levels">
             <ul class="nav navbar-nav">
                 <li class=""><a href="/">Home</a></li>
-                <li class="ancestor dropdown">
+                <li class="ancestor dropdown top-level">
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                         <li class="active top-level">
@@ -344,7 +344,7 @@ class TestTemplateTags(TestCase):
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
-                <li class=" dropdown">
+                <li class=" dropdown top-level">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
@@ -742,7 +742,7 @@ class TestTemplateTags(TestCase):
         <div id="main-menu-three-levels">
             <ul class="nav navbar-nav">
                 <li class=""><a href="/">Home</a></li>
-                <li class="ancestor dropdown">
+                <li class="ancestor dropdown top-level">
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                         <li class=" top-level">
@@ -760,7 +760,7 @@ class TestTemplateTags(TestCase):
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
-                <li class=" dropdown">
+                <li class=" dropdown top-level">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>

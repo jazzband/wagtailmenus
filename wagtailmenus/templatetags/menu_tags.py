@@ -408,6 +408,8 @@ def prime_menu_items(
             """
             page = item.link_page
             menuitem = item
+            if page and use_specific:
+                page = page.specific
             setattr(item, 'text', item.menu_text)
         except AttributeError:
             """
@@ -416,15 +418,6 @@ def prime_menu_items(
             page = item
             menuitem = None
             setattr(item, 'text', page.title)
-
-        """
-        `MenuItemQuerySet` cannot currently utilise `PageQuerySet.specific()`
-        to fetch 'specific' page objects efficiently, so if needed, we must
-        do it the expensive way.
-        """
-        if menuitem and page and use_specific:
-            page = page.specific
-            item.link_page = page
 
         has_children_in_menu = False
         if page:
@@ -446,6 +439,8 @@ def prime_menu_items(
                         """
                         if type(page) is Page:
                             page = page.specific
+                            if menuitem:
+                                item.link_page = page
                         has_children_in_menu = page.has_submenu_items(
                             current_page=current_page,
                             check_for_children=check_for_children,
@@ -495,8 +490,15 @@ def prime_menu_items(
                 setattr(item, 'active_class', active_class)
 
             """
+            If we're dealing with a MenuItem instance, replace `link_page` with
+            the page object we have, which may well be a 'specific' page by now
+            """
+            if menuitem:
+                item.link_page = page
+
+            """
             Using `relative_url()` on the `page` object to get a `href` value.
-            If `use_specific=True` was used, this should be a 'specific' page
+            If `use_specific=True` was used, this will be a 'specific' page
             by now, which is better, as `relative_url()` can be overridden.
             """
             href = page.relative_url(current_site)
