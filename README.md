@@ -14,19 +14,11 @@ The current version is compatible with Wagtail >= 1.5, and Python 2.7, 3.3, 3.4 
 
 The `MainMenu` model lets you define the root-level items for your projects's main navigation (or one for each site, if it's a multi-site project) using an inline model `MainMenuItem`. These items can link to pages (you can append an optional hash or querystring to the URL, too) or custom URLs. The custom URL field won't force you to enter a valid URL either, so you can add things like *#request-callback* or *#signup* to link to areas on the active page (perhaps as JS modals).
 
-<img alt="Screenshot of MainMenu edit page in Wagtail admin" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-mainmenu-edit.png" />
-
 The site's page tree powers everything past the root level, so you don't have to recreate it elsewhere. And as you'd expect, only links to published pages will appear when rendering.
-
-**Please note:** In order to enable pages to be hidden using Wagtail's existing controls, pages still need to have `show_in_menus` checked to appear in menus.
 
 ### 2. Allows you to manage multiple 'flat menus' via the CMS
 
 Have you ever hard-coded a menu into a footer at the start of a project, only for those pages never to come into existence? Or maybe the pages were created, but their URLs changed later on, breaking the hard-coded links? How about 'secondary navigation' menus in headers? Flat menus allow you to manage these kind of menus via the CMS, instead of hard-coding them. This means that the page URLs dynamically update to reflect changes, and making updates is possible without having to touch a single line of code.
-
-<img alt="Screenshot of FlatMenu list page in Wagtail admin" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-list.png" />
-
-As you'd expect, only links to published pages will appear when rendering, and just like main menu items, pages must have `show_in_menus` checked in order to appear in flat menus.
 
 Flat menus are designed for outputting simple, flat lists of links, but they CAN be made to display multiple levels of pages too. See the instructions below for [using the `{% flat_menu %}` tag](#flat_menu-tag).
 
@@ -34,9 +26,9 @@ Flat menus are designed for outputting simple, flat lists of links, but they CAN
 
 Extend the `wagtailmenus.models.MenuPage` model instead of the usual `wagtail.wagtailcore.models.Page` to create your custom page types, and gain a couple of extra fields that will allow you to configure certain pages to appear again alongside their children in multi-level menus. Use the menu tags provided, and that behaviour will remain consistent in all menus throughout your site.
 
-<img alt="Screenshot showing the repeated nav item in effect" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/repeating-item.png" />
-
 No more adding additional pages into the tree. No more hard-coding additional links into templates, or resorting to javascript hacks.
+
+<img alt="Screenshot showing the repeated nav item in effect" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/repeating-item.png" />
 
 ### 4. Gives you a set of powerful template tags to render your menus consistently
 
@@ -70,7 +62,7 @@ Since version `1.2`, watailmenus has depended on the `wagtail.contrib.modeladmin
 2. Run `python manage.py makemigrations` to create migrations for the apps you've updated.
 3. Run `python manage.py migrate` to add apply those migrations.
 
-## Usage instructions
+## How to use wagtailmenus in your project
 
 **Skip to a section:**
 
@@ -90,8 +82,9 @@ Since version `1.2`, watailmenus has depended on the `wagtail.contrib.modeladmin
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on **Settings** in the side menu to access the options in there, then select **Main menu**.
-3. You'll be automatically redirected to the an edit page for the current site (or the 'default' site, if the current site cannot be identified). For multi-site projects, a 'site switcher' will appear in the top right, allowing you to edit main menus for each site.
+3. You'll be automatically redirected to the an edit page for the current site (or the 'default' site, if the current site cannot be identified). For multi-site projects, a 'site switcher' will appear in the top right, allowing you to edit main menus for each site. <img alt="Screenshot of MainMenu edit page in Wagtail admin" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-mainmenu-edit.png" />
 4. Use the **MENU ITEMS** inline panel to define the root-level items, and save your changes when finished.
+5. **Reminder**: Pages chosen for menu items need to have the `show_in_menus` checkbox (under the 'Promote' tab by default) in order for them to appear when rendering in menus.
 
 ### <a id="defining-flat-menus"></a>2. Defining flat menus in the CMS
 
@@ -99,6 +92,7 @@ Since version `1.2`, watailmenus has depended on the `wagtail.contrib.modeladmin
 2. Click on `Settings` in the side menu to access the options in there, then select `Flat menus`.
 3. Click the button at the top of the page to add a flat menu for your site (or one for each of your sites if you are running a multi-site setup). <img alt="Screenshot indicating the location of the add button on the FlatMenu list page" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-add.png" />
 4. Fill out the form, choosing a 'unique for site' `handle` to reference in your templates, and using the **MENU ITEMS** inline panel to define the links you want the menu to have. Save your changes when finished. <img alt="Screenshot showing the FlatMenu edit interface" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-edit.png" />
+5. **Reminder**: Pages chosen for menu items need to have the `show_in_menus` checkbox (under the 'Promote' tab by default) in order for them to appear when rendering in menus.
 
 ### <a id="main_menu-tag"></a>3. Using the `{% main_menu %}` tag
 
@@ -284,7 +278,7 @@ class ContactPage(MenuPage):
             original_menu_tag)
 ```
 
-These modifications would result in the following HTML output when rendering a ContactPage in a main menu:
+These change would result in the following HTML output when rendering a `ContactPage` instance in a main menu:
 
 ```html
 	<li class=" dropdown">
@@ -297,7 +291,7 @@ These modifications would result in the following HTML output when rendering a C
     </li>
 ```
 
-You could even modify sub-menu items based on field values for specific instance of a custom Page, rather than for every single one, like in the following example:
+You can also modify sub-menu items based on field values for specific instances, rather than doing the same for every page of the same type. Here's another example:
 
 ```python
 
