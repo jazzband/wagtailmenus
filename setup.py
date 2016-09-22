@@ -20,7 +20,7 @@ setup(
     packages=find_packages(),
     license="MIT",
     keywords="wagtail cms model utility",
-    download_url="https://github.com/rkhleics/wagtailmenus/tarball/v1.3.1",
+    download_url="https://github.com/rkhleics/wagtailmenus/tarball/v1.4.0",
     url="https://github.com/rkhleics/wagtailmenus",
     include_package_data=True,
     zip_safe=False,
