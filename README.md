@@ -83,16 +83,16 @@ Since version `1.2`, watailmenus has depended on the `wagtail.contrib.modeladmin
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on **Settings** in the side menu to access the options in there, then select **Main menu**.
 3. You'll be automatically redirected to the an edit page for the current site (or the 'default' site, if the current site cannot be identified). For multi-site projects, a 'site switcher' will appear in the top right, allowing you to edit main menus for each site. <img alt="Screenshot of MainMenu edit page in Wagtail admin" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-mainmenu-edit.png" />
-4. Use the **MENU ITEMS** inline panel to define the root-level items, and save your changes when finished.
-5. **Reminder**: Pages chosen for menu items need to have the `show_in_menus` checkbox (under the 'Promote' tab by default) in order for them to appear when rendering in menus.
+4. Use the **MENU ITEMS** inline panel to define the root-level items. **NOTE**: Pages need to be published, and have the `show_in_menus` checkbox checked in order to appear in menus (look under the **Promote** tab when editing pages).
+5. Save your changes to apply them to your site.
 
 ### <a id="defining-flat-menus"></a>2. Defining flat menus in the CMS
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Flat menus`.
-3. Click the button at the top of the page to add a flat menu for your site (or one for each of your sites if you are running a multi-site setup). <img alt="Screenshot indicating the location of the add button on the FlatMenu list page" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-add.png" />
-4. Fill out the form, choosing a 'unique for site' `handle` to reference in your templates, and using the **MENU ITEMS** inline panel to define the links you want the menu to have. Save your changes when finished. <img alt="Screenshot showing the FlatMenu edit interface" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-edit.png" />
-5. **Reminder**: Pages chosen for menu items need to have the `show_in_menus` checkbox (under the 'Promote' tab by default) in order for them to appear when rendering in menus.
+3. Click the button at the top of the page to add a flat menu for your site (or one for each of your sites if you are running a multi-site setup). <img alt="Screenshot showing the FlatMenu edit interface" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-edit.png" />
+4. Fill out the form, choosing a 'unique for site' `handle` to reference in your templates, and using the **MENU ITEMS** inline panel to define the links you want the menu to have. **NOTE**: Pages need to be published and have the `show_in_menus` checkbox checked in order to appear in menus (look under the **Promote** tab when editing pages).
+5. Save your changes to apply them to your site. 
 
 ### <a id="main_menu-tag"></a>3. Using the `{% main_menu %}` tag
 
