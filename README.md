@@ -190,6 +190,7 @@ The following variables are added to the context by all of the above tags, which
 - **`text`**: The text that should be used for the menu item
 - **`active_class`**: A class name to indicate the 'active' state of the menu item. The value will be 'active' if linking to the current page, or 'ancestor' if linking to one of it's ancestors.
 - **`has_children_in_menu`**: A boolean indicating whether the menu item has children that should be output as a sub-menu.
+- **`handle`**: A string which can be used to do specific matching of menu items in the template.
 
 ### <a id="using-menupage"></a>9. Optional repetition of selected pages in menus using `MenuPage`
 
