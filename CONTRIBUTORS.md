@@ -4,4 +4,4 @@
 
 ## Contributors
 
-* Tim Leguijt
+* Tim Leguijt (tleguijt)
