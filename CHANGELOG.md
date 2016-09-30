@@ -4,7 +4,7 @@ Changelog
 1.4.1 (XX.XX.XXXX) IN DEVELOPMENT
 ---------------------------------
 * Added a `handle` to `MenuItem` model to provide a string which can be 
-  used to do specific matching of menu items in the template.
+  used to do specific matching of menu items in the template. (Tim Leguijt)
 
 1.4.0 (22.09.2016)
 ---------------------------------
