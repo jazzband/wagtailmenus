@@ -164,7 +164,7 @@ class MenuItem(models.Model):
         FieldPanel('url_append'),
         FieldPanel('link_url'),
         FieldPanel('link_text'),
-        FieldPanel('link_handle'),
+        FieldPanel('handle'),
         FieldPanel('allow_subnav'),
     )
 

@@ -83,7 +83,7 @@ Since version `1.2`, watailmenus has depended on the `wagtail.contrib.modeladmin
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on **Settings** in the side menu to access the options in there, then select **Main menu**.
 3. You'll be automatically redirected to the an edit page for the current site (or the 'default' site, if the current site cannot be identified). For multi-site projects, a 'site switcher' will appear in the top right, allowing you to edit main menus for each site. <img alt="Screenshot of MainMenu edit page in Wagtail admin" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-mainmenu-edit.png" />
-4. Use the **MENU ITEMS** inline panel to define the root-level items. **NOTE**: Pages need to be published, and have the `show_in_menus` checkbox checked in order to appear in menus (look under the **Promote** tab when editing pages).
+4. Use the **MENU ITEMS** inline panel to define the root-level items. You can use the `handle` field to be able to identify certain menu items in your template code. **NOTE**: Pages need to be published, and have the `show_in_menus` checkbox checked in order to appear in menus (look under the **Promote** tab when editing pages).
 5. Save your changes to apply them to your site.
 
 ### <a id="defining-flat-menus"></a>2. Defining flat menus in the CMS
@@ -91,8 +91,9 @@ Since version `1.2`, watailmenus has depended on the `wagtail.contrib.modeladmin
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Flat menus`.
 3. Click the button at the top of the page to add a flat menu for your site (or one for each of your sites if you are running a multi-site setup). <img alt="Screenshot showing the FlatMenu edit interface" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-edit.png" />
-4. Fill out the form, choosing a 'unique for site' `handle` to reference in your templates, and using the **MENU ITEMS** inline panel to define the links you want the menu to have. **NOTE**: Pages need to be published and have the `show_in_menus` checkbox checked in order to appear in menus (look under the **Promote** tab when editing pages).
-5. Save your changes to apply them to your site. 
+4. Fill out the form, choosing a 'unique for site' `handle` to reference in your templates.
+5. Use the **MENU ITEMS** inline panel to define the links you want the menu to have. You can use the `handle` field to be able to identify certain menu items in your template code. **NOTE**: Pages need to be published and have the `show_in_menus` checkbox checked in order to appear in menus (look under the **Promote** tab when editing pages).
+6. Save your changes to apply them to your site. 
 
 ### <a id="main_menu-tag"></a>3. Using the `{% main_menu %}` tag
 
@@ -190,7 +191,6 @@ The following variables are added to the context by all of the above tags, which
 - **`text`**: The text that should be used for the menu item
 - **`active_class`**: A class name to indicate the 'active' state of the menu item. The value will be 'active' if linking to the current page, or 'ancestor' if linking to one of it's ancestors.
 - **`has_children_in_menu`**: A boolean indicating whether the menu item has children that should be output as a sub-menu.
-- **`handle`**: A string which can be used to do specific matching of menu items in the template.
 
 ### <a id="using-menupage"></a>9. Optional repetition of selected pages in menus using `MenuPage`
 
