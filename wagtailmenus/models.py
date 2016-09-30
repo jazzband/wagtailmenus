@@ -106,12 +106,11 @@ class MenuItem(models.Model):
         blank=True,
         help_text=_("Must be set if you wish to link to a custom URL."),
     )
-    link_handle = models.SlugField(
+    handle = models.CharField(
         max_length=100,
         blank=True,
         help_text=_(
-            "Used to reference this menu item in templates etc. "
-            "Must be unique for the selected site."))
+            "Used to identify a specific menu item in the template code."))
     url_append = models.CharField(
         verbose_name=_("append to URL"),
         max_length=255,
@@ -133,10 +132,6 @@ class MenuItem(models.Model):
         if self.link_page:
             return self.link_text or self.link_page.title
         return self.link_text
-
-    @property
-    def handle(self):
-        return self.link_handle
 
     def clean(self, *args, **kwargs):
         super(MenuItem, self).clean(*args, **kwargs)
