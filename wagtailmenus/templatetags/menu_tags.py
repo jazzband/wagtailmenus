@@ -43,6 +43,8 @@ def get_attrs_from_context(context):
         first_run = True
         while path_components and not identified_page:
             try:
+                # NOTE: The route() method is quite inefficient we should
+                # think about matching some other way in future.
                 identified_page, args, kwargs = site.root_page.specific.route(
                     request, path_components)
                 ancestor_ids = identified_page.get_ancestors(
