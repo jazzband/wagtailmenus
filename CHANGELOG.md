@@ -4,6 +4,15 @@ Changelog
 1.4.1 (XX.XX.XXXX) IN DEVELOPMENT
 ---------------------------------
 
+* Made it easier to develop and debug wagtailmenus locally, by running it as a
+  Django project. See CONTRIBUTING.md for instructions. 
+* Added a `get_for_site` class method to the FlatMenu model, to be consistent 
+  with the MainMenu model, and renamed the `for_site` method on MainMenu to
+  `get_for_site` for consistency. `main_menu` and `flat_menu` tags now make use
+  of these.
+* Fixed an minor bug in the `prime_menu_items` method, where a `depth`
+  value was hardcoded, instead of utilising the `SECTION_ROOT_LEVEL` setting. 
+
 
 1.4.0 (22.09.2016)
 ---------------------------------
