@@ -45,13 +45,41 @@ following criteria:
    important too, so please ensure as many lines of your code as possible
    are accessed when the unit tests are run.
 
-## Testing your code locally
+
+### Developing locally
+
+If you'd like a runnable Django project to help with development of
+wagtailmenus, follow these steps to get started (Mac only). The development
+environment has django-debug-toolbar and some other helpful packages installed
+to help you debug with your code as you develop:
+
+1. In a Terminal window, cd to the `wagtailmenus` root directory, and run:
+   `pip install -r requirements/development.txt`
+2. Now create a copy of the development settings:
+   `cp wagtailmenus/settings/development.py.example wagtailmenus/settings/development.py`
+3. Now create a copy of the development urls:
+   `cp wagtailmenus/development/urls.py.example wagtailmenus/development/urls.py`
+4. Now create `manage.py` by copying the example provided:
+   `cp manage.py.example manage.py`
+5. To load some test data into the database, run the following:
+   `django manage.py loaddata wagtailmenus/tests/fixtures/test.json`
+6. Now run the following and follow the prompts to set up a new superuser:
+   `django manage.py createsuperuser`
+7. Now run the project using the standard Django command:
+   `django manage.py runserver`
+
+Your local copies of `settings/development.py` and `manage.py` should be
+ignored by git when you push any changes, as will anything you add to the
+`wagtailmenus/development/` directory.
+"""
+
+## Testing locally
 
 It's important that any new code is tested before submitting. To quickly
 test code in your active development environment, you should first install all 
-of the requirements from `requirements.txt`, by doing something like:
+of the requirements by running:
 
-`pip install -r requirements.txt`
+`pip install -r requirements/testing.txt`
 
 Then, run the following command to execute tests:
 

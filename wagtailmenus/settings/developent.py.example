@@ -1,0 +1,33 @@
+"""
+Example settings for local development
+
+Use this file as a base for your local development settings and copy
+it to development.py. It should not be checked into your code repository.
+"""
+from .base import *  # NOQA
+
+DEBUG = True
+
+INSTALLED_APPS += (
+    'django_extensions',
+    'debug_toolbar',
+    'wagtailmenus.tests',
+    'wagtailmenus.development',
+    'wagtail.contrib.wagtailstyleguide',
+)
+
+DATABASES = {
+    'default': {
+        'NAME': 'wagtailmenus-development.sqlite',
+        'ENGINE': 'django.db.backends.sqlite3',
+    }
+}
+
+MIDDLEWARE_CLASSES = (
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+) + MIDDLEWARE_CLASSES
+
+ROOT_URLCONF = 'wagtailmenus.development.urls'
+WAGTAIL_SITE_NAME = 'Wagtailmenus development'
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
+INTERNAL_IPS = ['127.0.0.1']

@@ -4,13 +4,6 @@ from django.conf.global_settings import *  # NOQA
 DEBUG = True
 SITE_ID = 1
 
-DATABASES = {
-    'default': {
-        'NAME': 'wagtailmenus.sqlite',
-        'ENGINE': 'django.db.backends.sqlite3',
-    }
-}
-
 TIME_ZONE = 'Europe/London'
 USE_TZ = True
 USE_I18N = True
@@ -31,7 +24,6 @@ INSTALLED_APPS = (
     'wagtail.wagtailcore',
     'wagtail.contrib.modeladmin',
     'wagtailmenus',
-    'wagtailmenus.tests',
 
     'taggit',
     'modelcluster',
@@ -46,16 +38,12 @@ INSTALLED_APPS = (
 )
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'test-static')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
-MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'test-media')
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
 
 SECRET_KEY = 'fake-key'
-
-ROOT_URLCONF = 'wagtailmenus.tests.urls'
-
-WAGTAIL_SITE_NAME = 'Test site'
 LOGIN_URL = 'wagtailadmin_login'
 LOGIN_REDIRECT_URL = 'wagtailadmin_home'
 
@@ -103,5 +91,3 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
-
-WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE = 'menus/custom_main_menu.html'
