@@ -62,3 +62,4 @@ docs/_build/
 target/
 MANIFEST
 wagtailmenus.sqlite
+*.sqlite
