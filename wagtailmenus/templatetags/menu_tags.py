@@ -96,10 +96,8 @@ def main_menu(
     """Render the MainMenu instance for the current site."""
     r, site, current_page, section_root, ancestor_ids = get_attrs_from_context(
         context)
-    try:
-        menu = site.main_menu
-    except MainMenu.DoesNotExist:
-        menu = MainMenu.objects.create(site=site)
+
+    menu = MainMenu.get_for_site(site)
 
     if not show_multiple_levels:
         max_levels = 1

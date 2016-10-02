@@ -174,7 +174,7 @@ class MainMenu(ClusterableModel):
         verbose_name_plural = _("main menu")
 
     @classmethod
-    def for_site(cls, site):
+    def get_for_site(cls, site):
         """
         Get a mainmenu instance for the site.
         """
