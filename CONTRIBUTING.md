@@ -57,18 +57,20 @@ to help you debug with your code as you develop:
    `pip install -r requirements/development.txt`
 2. Now create a copy of the development settings:
    `cp wagtailmenus/settings/development.py.example wagtailmenus/settings/development.py`
-3. Now create `manage.py` by copying the example provided:
+3. Now create a copy of the development urls:
+   `cp wagtailmenus/development/urls.py.example wagtailmenus/development/urls.py`
+4. Now create `manage.py` by copying the example provided:
    `cp manage.py.example manage.py`
-4. To load some test data into the database, run the following:
+5. To load some test data into the database, run the following:
    `django manage.py loaddata wagtailmenus/tests/fixtures/test.json`
-5. Now run the following and follow the prompts to set up a new superuser:
+6. Now run the following and follow the prompts to set up a new superuser:
    `django manage.py createsuperuser`
-6. Now run the project using the standard django command:
+7. Now run the project using the standard Django command:
    `django manage.py runserver`
-7. Access the project at the address provided using a web browser.
 
 Your local copies of `settings/development.py` and `manage.py` should be
-ignored by git when you push any changes.
+ignored by git when you push any changes, as will anything you add to the
+`wagtailmenus/development/` directory.
 """
 
 ## Testing locally
