@@ -43,6 +43,8 @@ def get_attrs_from_context(context):
         first_run = True
         while path_components and not identified_page:
             try:
+                # NOTE: The route() method is quite inefficient we should
+                # think about matching some other way in future.
                 identified_page, args, kwargs = site.root_page.specific.route(
                     request, path_components)
                 ancestor_ids = identified_page.get_ancestors(
@@ -94,10 +96,8 @@ def main_menu(
     """Render the MainMenu instance for the current site."""
     r, site, current_page, section_root, ancestor_ids = get_attrs_from_context(
         context)
-    try:
-        menu = site.main_menu
-    except MainMenu.DoesNotExist:
-        menu = MainMenu.objects.create(site=site)
+
+    menu = MainMenu.get_for_site(site)
 
     if not show_multiple_levels:
         max_levels = 1
@@ -231,9 +231,8 @@ def flat_menu(
     if not show_multiple_levels:
         max_levels = 1
 
-    try:
-        menu = site.flat_menus.get(handle__exact=handle)
-    except FlatMenu.DoesNotExist:
+    menu = FlatMenu.get_for_site(handle, site)
+    if not menu:
         # No menu was found matching `handle`, so gracefully render nothing.
         return ''
 
