@@ -233,9 +233,8 @@ def flat_menu(
     if not show_multiple_levels:
         max_levels = 1
 
-    try:
-        menu = site.flat_menus.get(handle__exact=handle)
-    except FlatMenu.DoesNotExist:
+    menu = FlatMenu.get_for_site(handle, site)
+    if not menu:
         # No menu was found matching `handle`, so gracefully render nothing.
         return ''
 
