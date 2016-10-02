@@ -220,6 +220,7 @@ def flat_menu(
     template=app_settings.DEFAULT_FLAT_MENU_TEMPLATE,
     sub_menu_template=app_settings.DEFAULT_SUB_MENU_TEMPLATE,
     use_specific=app_settings.DEFAULT_FLAT_MENU_USE_SPECIFIC,
+    use_default_site_menu_as_fallback=app_settings.USE_DEFAULT_SITE_MENUS_AS_FALLBACKS
 ):
     """
     Find a FlatMenu for the current site matching the `handle` provided and
@@ -231,7 +232,8 @@ def flat_menu(
     if not show_multiple_levels:
         max_levels = 1
 
-    menu = FlatMenu.get_for_site(handle, site)
+    menu = FlatMenu.get_for_site(
+        handle, site, use_default_site_menu_as_fallback)
     if not menu:
         # No menu was found matching `handle`, so gracefully render nothing.
         return ''
