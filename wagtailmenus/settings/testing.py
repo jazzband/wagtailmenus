@@ -5,7 +5,7 @@ SITE_ID = 1
 
 DATABASES = {
     'default': {
-        'NAME': 'wagtailmenus.sqlite',
+        'NAME': 'wagtailmenus-testing.sqlite',
         'ENGINE': 'django.db.backends.sqlite3',
     }
 }

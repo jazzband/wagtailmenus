@@ -18,10 +18,8 @@ INSTALLED_APPS += (
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'wagtailmenus_dev',
-        'USER': 'root',
-        'PASSWORD': '',
+        'NAME': 'wagtailmenus-development.sqlite',
+        'ENGINE': 'django.db.backends.sqlite3',
     }
 }
 
