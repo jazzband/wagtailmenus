@@ -1,9 +1,16 @@
 Changelog
 =========
 
-1.4.1 (XX.XX.XXXX) IN DEVELOPMENT
+1.4.2 (XX.XX.XXX) IN DEVELOPMENT
 ---------------------------------
 
+
+1.4.1 (02.10.2016) 
+------------------
+
+* Updated FlatMenu listing in CMS to include a column for `site`, a filter for
+  `handle`, and a MenuItem count for each object. Also added default ordering,
+  and output the handle value in a <code></code> tag to make it stand out.
 * Made it easier to develop and debug wagtailmenus locally, by running it as a
   Django project. See CONTRIBUTING.md for instructions. 
 * Added a `get_for_site` class method to the FlatMenu model, to be consistent 
@@ -11,11 +18,11 @@ Changelog
   `get_for_site` for consistency. `main_menu` and `flat_menu` tags now make use
   of these.
 * Fixed an minor bug in the `prime_menu_items` method, where a `depth`
-  value was hardcoded, instead of utilising the `SECTION_ROOT_LEVEL` setting. 
+  value was hard-coded, instead of utilising the `SECTION_ROOT_LEVEL` setting. 
 
 
 1.4.0 (22.09.2016)
----------------------------------
+------------------
 
 * Added a `has_submenu_items()` method to `MenuPage` model to compliment
   `modify_submenu_items()` in version 1.3. Allows for far better control and 
@@ -36,7 +43,7 @@ Changelog
 
 
 1.3.1 (09.08.2016)
----------------------------------
+------------------
 
 * Configured additional tox test environments for Wagtail>=1.6 with Django=1.9
   and 1.10.
@@ -47,7 +54,7 @@ Changelog
   where possible.
 
 1.3.0 (06.08.2016)
----------------------------------
+------------------
 
 * Added the ability for all menu tags to (attempt to) identify ancestor pages
   and section root page by using components from the request path when serving
@@ -59,7 +66,7 @@ Changelog
   
 
 1.2.3 (25.07.2016)
----------------------------------
+------------------
 
 * Added PyPi version and coveralls test coverage badges to README
 * Altered Travis CI test configuration to use tox, allowing for much better
