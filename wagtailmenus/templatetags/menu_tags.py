@@ -485,7 +485,10 @@ def prime_menu_items(
                         active_class = app_settings.ACTIVE_ANCESTOR_CLASS
                     else:
                         active_class = app_settings.ACTIVE_CLASS
-                elif page.depth > 2 and page.pk in current_page_ancestor_ids:
+                elif(
+                    page.depth >= app_settings.SECTION_ROOT_DEPTH and
+                    page.pk in current_page_ancestor_ids
+                ):
                     active_class = app_settings.ACTIVE_ANCESTOR_CLASS
                 setattr(item, 'active_class', active_class)
 
