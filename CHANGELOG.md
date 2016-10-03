@@ -1,8 +1,15 @@
 Changelog
 =========
 
-1.4.2 (XX.XX.XXX) IN DEVELOPMENT
+1.5.0 (XX.XX.XXX) IN DEVELOPMENT
 ---------------------------------
+
+* Updated FlatMenu listing in CMS to only show site column and filters if menus
+  are defined for more than one site.
+* Added the `fall_back_to_default_site_menus` option to the `flat_menu` tag, to
+  allow flat menus defined for the default site to be used as fall-backs, in
+  cases where the 'current' site doesn't have its own menus set up with the
+  specified handle.
 
 
 1.4.1 (02.10.2016) 
