@@ -10,6 +10,8 @@ Changelog
   allow flat menus defined for the default site to be used as fall-backs, in
   cases where the 'current' site doesn't have its own menus set up with the
   specified handle.
+* Apply `active` classes to menu items that link to custom URLs (if
+  `request.path` and `link_url` are exact matches).
 
 
 1.4.1 (02.10.2016) 

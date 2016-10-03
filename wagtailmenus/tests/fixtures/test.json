@@ -211,6 +211,18 @@
     }
 },
 {
+    "model": "wagtailmenus.flatmenuitem",
+    "pk": 8,
+    "fields": {
+        "sort_order": 4,
+        "link_page": null,
+        "link_url": "/about-us/meet-the-team/custom-url/",
+        "link_text": "Meet the team's pets",
+        "url_append": "",
+        "menu": 2
+    }
+},
+{
     "model": "sites.site",
     "pk": 1,
     "fields": {

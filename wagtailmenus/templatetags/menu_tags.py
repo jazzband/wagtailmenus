@@ -110,6 +110,7 @@ def main_menu(
             current_site=site,
             current_page=current_page,
             current_page_ancestor_ids=ancestor_ids,
+            request_path=r.path,
             check_for_children=max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
             apply_active_classes=apply_active_classes,
@@ -164,6 +165,7 @@ def section_menu(
         current_site=site,
         current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
+        request_path=r.path,
         check_for_children=max_levels > 1,
         allow_repeating_parents=allow_repeating_parents,
         original_menu_tag='section_menu'
@@ -244,6 +246,7 @@ def flat_menu(
         current_site=site,
         current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
+        request_path=r.path,
         check_for_children=max_levels > 1,
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
@@ -331,6 +334,7 @@ def sub_menu(
         current_site=site,
         current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
+        request_path=r.path,
         check_for_children=not stop_at_this_level,
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
@@ -392,7 +396,7 @@ def children_menu(
 
 def prime_menu_items(
     menu_items, current_site, current_page, current_page_ancestor_ids,
-    check_for_children=False, allow_repeating_parents=True,
+    request_path, check_for_children=False, allow_repeating_parents=True,
     apply_active_classes=True, use_specific=False, original_menu_tag='',
 ):
     """
@@ -512,6 +516,8 @@ def prime_menu_items(
 
         elif page is None:
             setattr(item, 'href', item.link_url + item.url_append)
+            if apply_active_classes and item.link_url == request_path:
+                setattr(item, 'active_class', app_settings.ACTIVE_CLASS)
             primed_menu_items.append(item)
 
     return primed_menu_items
