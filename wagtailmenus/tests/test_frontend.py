@@ -563,7 +563,19 @@ class TestTemplateTags(TestCase):
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='nav-footer').decode()
-        expected_menu_html = """<div id="nav-footer"><div class="flat-menu footer with_heading"><h4>Important links</h4><ul><li class=""><a href="/legal/accessibility/">Accessibility</a></li><li class=""><a href="/legal/privacy-policy/">Privacy policy</a></li><li class=""><a href="/legal/terms-and-conditions/">Terms and conditions</a></li></ul></div></div>"""
+        expected_menu_html = """
+        <div id="nav-footer">
+            <div class="flat-menu footer with_heading">
+                <h4>Important links</h4>
+                <ul>
+                    <li class=""><a href="/legal/accessibility/">Accessibility</a></li>
+                    <li class=""><a href="/legal/privacy-policy/">Privacy policy</a></li>
+                    <li class=""><a href="/legal/terms-and-conditions/">Terms and conditions</a></li>
+                    <li class=""><a href="/about-us/meet-the-team/custom-url/">Meet the team's pets</a></li>
+                </ul>
+            </div>
+        </div>
+        """
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
         response = self.client.get('/legal/privacy-policy/')
@@ -571,7 +583,39 @@ class TestTemplateTags(TestCase):
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='nav-footer').decode()
-        expected_menu_html = """<div id="nav-footer"><div class="flat-menu footer with_heading"><h4>Important links</h4><ul><li class=""><a href="/legal/accessibility/">Accessibility</a></li><li class="active"><a href="/legal/privacy-policy/">Privacy policy</a></li><li class=""><a href="/legal/terms-and-conditions/">Terms and conditions</a></li></ul></div></div>"""
+        expected_menu_html = """
+        <div id="nav-footer">
+            <div class="flat-menu footer with_heading">
+                <h4>Important links</h4>
+                <ul>
+                    <li class=""><a href="/legal/accessibility/">Accessibility</a></li>
+                    <li class="active"><a href="/legal/privacy-policy/">Privacy policy</a></li>
+                    <li class=""><a href="/legal/terms-and-conditions/">Terms and conditions</a></li>
+                    <li class=""><a href="/about-us/meet-the-team/custom-url/">Meet the team's pets</a></li>
+                </ul>
+            </div>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
+        response = self.client.get('/about-us/meet-the-team/custom-url/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='nav-footer').decode()
+        expected_menu_html = """
+        <div id="nav-footer">
+            <div class="flat-menu footer with_heading">
+                <h4>Important links</h4>
+                <ul>
+                    <li class=""><a href="/legal/accessibility/">Accessibility</a></li>
+                    <li class=""><a href="/legal/privacy-policy/">Privacy policy</a></li>
+                    <li class=""><a href="/legal/terms-and-conditions/">Terms and conditions</a></li>
+                    <li class="active"><a href="/about-us/meet-the-team/custom-url/">Meet the team's pets</a></li>
+                </ul>
+            </div>
+        </div>
+        """
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
     def test_custom_page_menu_output(self):
