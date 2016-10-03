@@ -36,10 +36,21 @@ class FlatMenuAdmin(ModelAdmin):
     model = FlatMenu
     menu_label = _('Flat menus')
     menu_icon = FLATMENU_MENU_ICON
-    list_display = ('title', 'handle_formatted', 'site', 'items')
-    list_filter = ('site', 'handle')
     ordering = ('-site__is_default_site', 'site__hostname', 'handle')
     add_to_settings_menu = True
+
+    def is_multisite(self, request):
+        return self.get_queryset(request).values('site').distinct().count() > 1
+
+    def get_list_filter(self, request):
+        if self.is_multisite(request):
+            return ('site', 'handle')
+        return ()
+
+    def get_list_display(self, request):
+        if self.is_multisite(request):
+            return ('title', 'handle_formatted', 'site', 'items')
+        return ('title', 'handle_formatted', 'items')
 
     def handle_formatted(self, obj):
         return mark_safe('<code>%s</code>' % obj.handle)
