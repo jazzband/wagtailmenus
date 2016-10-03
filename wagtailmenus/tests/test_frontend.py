@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-from wagtail.wagtailcore.models import Page
+from wagtail.wagtailcore.models import Page, Site
 from wagtailmenus.models import MainMenu, MainMenuItem, FlatMenu
 from bs4 import BeautifulSoup
 
@@ -52,13 +52,33 @@ class TestTemplateTags(TestCase):
 
     def test_main_menu_created_when_not_exists(self):
         menu = MainMenu.objects.get(pk=1)
-        self.assertEqual(menu.__str__(), 'Main menu for Test')
+        self.assertEqual(menu.__str__(), 'Main menu for wagtailmenus (co.uk)')
         menu.delete()
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
         menu = MainMenu.objects.first()
         self.assertTrue(menu)
-        self.assertEqual(menu.__str__(), 'Main menu for Test')
+        self.assertEqual(menu.__str__(), 'Main menu for wagtailmenus (co.uk)')
+
+    def test_flat_menu_get_for_site_with_default_fallback(self):
+        site_one = Site.objects.get(pk=1)
+        site_two = Site.objects.get(pk=2)
+
+        # Site one (default) definitiely has a menu defined with the handle 
+        # `footer`
+        menu = FlatMenu.get_for_site('footer', site_one)
+        site_one_menu_pk = menu.pk
+        self.assertIsNotNone(menu)
+
+        # Site two doesn't have any menus defined, so this should return None
+        menu = FlatMenu.get_for_site('footer', site_two)
+        self.assertIsNone(menu)
+
+        # But if we use the `use_default_site_menu_as_fallback` flag to fetch
+        # from the default site, we should get the one defined for site_one
+        menu = FlatMenu.get_for_site('footer', site_two, True)
+        self.assertIsNotNone(menu)
+        self.assertEqual(menu.pk, site_one_menu_pk)
 
     def test_homepage(self):
         """
@@ -204,7 +224,7 @@ class TestTemplateTags(TestCase):
         """
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
-    def test_homepage_sub_menu_one_level(self):
+    def test_homepage_children_menu_one_level(self):
         """
         Test '{% children_menu %}' output for homepage
         """
@@ -223,7 +243,7 @@ class TestTemplateTags(TestCase):
         """
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
-    def test_homepage_sub_menu_three_levels(self):
+    def test_homepage_children_menu_three_levels(self):
         """
         Test '{% children_menu max_levels=3 allow_repeating_parents=False %}' output for homepage
         """
@@ -421,7 +441,7 @@ class TestTemplateTags(TestCase):
         """
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
-    def test_about_us_sub_menu_one_level(self):
+    def test_about_us_children_menu_one_level(self):
         """
         Test '{{ sub_menu self }}' output for 'About us' page
         """
@@ -440,7 +460,7 @@ class TestTemplateTags(TestCase):
         """
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
-    def test_about_us_sub_menu_three_levels(self):
+    def test_about_us_children_menu_three_levels(self):
         """
         Test '{% children_menu max_levels=3 allow_repeating_parents=False %}' output for 'About us' page
         """

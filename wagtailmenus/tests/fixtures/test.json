@@ -3,11 +3,22 @@
     "model": "wagtailcore.site",
     "pk": 1,
     "fields": {
-        "hostname": "localhost",
+        "hostname": "www.wagtailmenus.co.uk",
         "port": 8000,
-        "site_name": "Test",
+        "site_name": "wagtailmenus (co.uk)",
         "root_page": 5,
         "is_default_site": true
+    }
+},
+{
+    "model": "wagtailcore.site",
+    "pk": 2,
+    "fields": {
+        "hostname": "www.wagtailmenus.org",
+        "port": 8000,
+        "site_name": "wagtailmenus (org)",
+        "root_page": 5,
+        "is_default_site": false
     }
 },
 {

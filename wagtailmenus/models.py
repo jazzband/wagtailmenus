@@ -214,14 +214,14 @@ class FlatMenu(ClusterableModel):
 
     @classmethod
     def get_for_site(cls, handle, site,
-                     use_default_site_menu_as_fallback=False):
+                     fall_back_to_default_site_menus=False):
         """
         Get a FlatMenu instance with a matching `handle` for the `site`
         provided - or for the 'default' site if not found.
         """
         menu = cls.objects.filter(handle__exact=handle, site=site).first()
         if(
-            menu is None and use_default_site_menu_as_fallback and
+            menu is None and fall_back_to_default_site_menus and
             not site.is_default_site
         ):
             return cls.objects.filter(
