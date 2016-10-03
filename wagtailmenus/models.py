@@ -213,14 +213,15 @@ class FlatMenu(ClusterableModel):
         verbose_name_plural = _("flat menus")
 
     @classmethod
-    def get_for_site(cls, handle, site, try_default_site_if_not_found=False):
+    def get_for_site(cls, handle, site,
+                     fall_back_to_default_site_menus=False):
         """
         Get a FlatMenu instance with a matching `handle` for the `site`
         provided - or for the 'default' site if not found.
         """
         menu = cls.objects.filter(handle__exact=handle, site=site).first()
         if(
-            menu is None and try_default_site_if_not_found and
+            menu is None and fall_back_to_default_site_menus and
             not site.is_default_site
         ):
             return cls.objects.filter(
