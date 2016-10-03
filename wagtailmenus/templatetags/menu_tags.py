@@ -4,6 +4,7 @@ from django.template import Library
 from wagtail.wagtailcore.models import Page
 from ..models import MainMenu, FlatMenu
 from wagtailmenus import app_settings
+flat_menus_fbtdsm = app_settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS
 
 register = Library()
 
@@ -220,7 +221,7 @@ def flat_menu(
     template=app_settings.DEFAULT_FLAT_MENU_TEMPLATE,
     sub_menu_template=app_settings.DEFAULT_SUB_MENU_TEMPLATE,
     use_specific=app_settings.DEFAULT_FLAT_MENU_USE_SPECIFIC,
-    use_default_site_menu_as_fallback=app_settings.USE_DEFAULT_SITE_MENUS_AS_FALLBACKS
+    fall_back_to_default_site_menus=flat_menus_fbtdsm,
 ):
     """
     Find a FlatMenu for the current site matching the `handle` provided and
@@ -233,7 +234,7 @@ def flat_menu(
         max_levels = 1
 
     menu = FlatMenu.get_for_site(
-        handle, site, use_default_site_menu_as_fallback)
+        handle, site, fall_back_to_default_site_menus)
     if not menu:
         # No menu was found matching `handle`, so gracefully render nothing.
         return ''
@@ -440,8 +441,6 @@ def prime_menu_items(
                         """
                         if type(page) is Page:
                             page = page.specific
-                            if menuitem:
-                                item.link_page = page
                         has_children_in_menu = page.has_submenu_items(
                             current_page=current_page,
                             check_for_children=check_for_children,
