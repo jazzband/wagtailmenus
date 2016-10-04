@@ -10,6 +10,13 @@ Changelog
   allow flat menus defined for the default site to be used as fall-backs, in
   cases where the 'current' site doesn't have its own menus set up with the
   specified handle.
+* Added a custom ValidationError to FlatMenu's `clean()` method that better
+  handles the `unique_together` rule that applied to `site` and `handle`
+  fields.
+* Added the ability to copy/duplicate existing FlatMenu objects between sites
+  (or to the same site with a different handle) via Wagtail's admin area. The
+  'Copy' button appears in the listing for anyone with 'add' permission, and
+  the view allows the user to make changes before anything is saved. 
 * Apply `active` classes to menu items that link to custom URLs (if
   `request.path` and `link_url` are exact matches).
 * Added a `handle` to `MenuItem` model to provide a string which can be 
