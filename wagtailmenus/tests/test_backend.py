@@ -4,13 +4,14 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.test import TransactionTestCase
 from wagtail.wagtailcore.models import Site
+from wagtailmenus.models import FlatMenu
 
 
 class TestSuperUser(TransactionTestCase):
     fixtures = ['test.json']
 
     def setUp(self):
-        user = get_user_model().objects._create_user(
+        get_user_model().objects._create_user(
             username='test1', email='test1@email.com', password='password',
             is_staff=True, is_superuser=True)
         self.client.login(username='test1', password='password')
@@ -63,10 +64,46 @@ class TestSuperUser(TransactionTestCase):
     def test_flatmenu_list(self):
         response = self.client.get('/admin/wagtailmenus/flatmenu/')
         self.assertEqual(response.status_code, 200)
+        self.assertNotContains(
+            response, '<th scope="col"  class="sortable column-site">')
+        self.assertNotContains(response,
+                               '<div class="changelist-filter col3">')
+
+    def test_flatmenu_list_multisite(self):
+        site_one = Site.objects.get(id=1)
+        site_two = Site.objects.get(id=2)
+
+        # Start by getting the footer menu for site one
+        site_one_footer_menu = FlatMenu.get_for_site('footer', site_one)
+
+        # Use menu one to create another for site two
+        site_two_footer_menu = site_one_footer_menu
+        site_two_footer_menu.site = site_two
+        site_two_footer_menu.id = None
+        site_two_footer_menu.save()
+
+        # Redefine menu one, so that we definitely have two menus
+        site_one_footer_menu = FlatMenu.get_for_site('footer', site_one)
+
+        # Check the menus aren't the same
+        self.assertNotEqual(site_one_footer_menu, site_two_footer_menu)
+
+        # Check that the listing has changed to include the site column and
+        # filters
+        response = self.client.get('/admin/wagtailmenus/flatmenu/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response, '<th scope="col"  class="sortable column-site">')
+        self.assertContains(response, '<div class="changelist-filter col3">')
 
     def test_flatmenu_edit(self):
         response = self.client.get(
             '/admin/wagtailmenus/flatmenu/edit/1/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_flatmenu_copy(self):
+        response = self.client.get(
+            '/admin/wagtailmenus/flatmenu/copy/1/')
         self.assertEqual(response.status_code, 200)
 
 
