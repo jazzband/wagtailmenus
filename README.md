@@ -22,7 +22,7 @@ Have you ever hard-coded a menu into a footer at the start of a project, only fo
 
 Flat menus are designed for outputting simple, flat lists of links, but they CAN be made to display multiple levels of pages too. See the instructions below for [using the `{% flat_menu %}` tag](#flat_menu-tag).
 
-In a multi-site project, you can choose to define a new set of menus for each site, or you can define one set of menus for your default site and reuse them for your other sites, or use a combination of both approaches for different menus (see the **`fall_back_to_default_site_menus`** option in [**Using the `{% flat_menu %}` tag**](#flat_menu-tag)). However you choose to do things, a 'copy' feature makes it easy to copy existing flat menus from one site to another via Wagtail's admin interface.
+In a multi-site project, you can choose to define a new set of menus for each site, or you can define one set of menus for your default site and reuse them for your other sites, or use a combination of both approaches for different menus (see the **`fall_back_to_default_site_menus`** option in [**Using the `{% flat_menu %}` tag**](#flat_menu-tag) to find out more). However you choose to do things, a 'copy' feature makes it easy to copy existing flat menus from one site to another via Wagtail's admin interface.
 
 ### 3. Offers a solution to the issue of key page links becoming 'toggles' in multi-level drop-down menus
 
@@ -97,7 +97,7 @@ Since version `1.2`, watailmenus has depended on the `wagtail.contrib.modeladmin
 5. Use the **MENU ITEMS** inline panel to define the links you want the menu to have. If you wish, you can use the `handle` field to specify an additional value for each item, which you'll be able to access in a custom flat menu template. **NOTE**: Pages need to be published and have the `show_in_menus` checkbox checked in order to appear in menus (look under the **Promote** tab when editing pages).
 6. Save your changes to apply them to your site.
 
-All of the menus you define for a project will appear in the listing page, from step 2, making it easy to find, update, copy or delete your menus later. As soon as you create menus for more than one site in a multi-site project, the listing page will show additional columns and filters to help you manage your menus, like so: <img alt="Screenshot showing the FlatMenu listing page for a multi-site setup" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-list.png" />
+All of the flat menus created for a project will appear in the menu list page (from step 2, above) making it easy to find, update, copy or delete your menus later. As soon as you create menus for more than one site in a multi-site project, the listing page will give you additional information and filters to help manage your menus, like so: <img alt="Screenshot showing the FlatMenu listing page for a multi-site setup" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-list.png" />
 
 ### <a id="main_menu-tag"></a>3. Using the `{% main_menu %}` tag
 
