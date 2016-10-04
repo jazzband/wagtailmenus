@@ -12,6 +12,8 @@ Changelog
   specified handle.
 * Apply `active` classes to menu items that link to custom URLs (if
   `request.path` and `link_url` are exact matches).
+* Added a `handle` to `MenuItem` model to provide a string which can be 
+  used to do specific matching of menu items in the template. (Tim Leguijt)
 
 
 1.4.1 (02.10.2016) 
@@ -61,6 +63,7 @@ Changelog
 * Added further tests for path matching.
 * Reduced the number of unnecessary calls to `Page.specific` in `menu_tags.py`
   where possible.
+
 
 1.3.0 (06.08.2016)
 ------------------

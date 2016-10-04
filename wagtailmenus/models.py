@@ -106,6 +106,13 @@ class MenuItem(models.Model):
         blank=True,
         help_text=_("Must be set if you wish to link to a custom URL."),
     )
+    handle = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text=_(
+            "Use this field to optionally specify an additional value for "
+            "each menu item, which you can then reference in custom menu "
+            "templates."))
     url_append = models.CharField(
         verbose_name=_("append to URL"),
         max_length=255,
@@ -159,6 +166,7 @@ class MenuItem(models.Model):
         FieldPanel('url_append'),
         FieldPanel('link_url'),
         FieldPanel('link_text'),
+        FieldPanel('handle'),
         FieldPanel('allow_subnav'),
     )
 
