@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
@@ -28,16 +29,39 @@ class MainMenuAdmin(ModelAdmin):
                 name=self.url_helper.get_action_url_name('edit')),
         )
 
+modeladmin_register(MainMenuAdmin)
+
 
 class FlatMenuAdmin(ModelAdmin):
     model = FlatMenu
     menu_label = _('Flat menus')
     menu_icon = FLATMENU_MENU_ICON
-    list_display = ('title', 'handle', )
-    list_filter = ('site', )
+    ordering = ('-site__is_default_site', 'site__hostname', 'handle')
     add_to_settings_menu = True
 
-modeladmin_register(MainMenuAdmin)
+    def is_multisite(self, request):
+        return self.get_queryset(request).values('site').distinct().count() > 1
+
+    def get_list_filter(self, request):
+        if self.is_multisite(request):
+            return ('site', 'handle')
+        return ()
+
+    def get_list_display(self, request):
+        if self.is_multisite(request):
+            return ('title', 'handle_formatted', 'site', 'items')
+        return ('title', 'handle_formatted', 'items')
+
+    def handle_formatted(self, obj):
+        return mark_safe('<code>%s</code>' % obj.handle)
+    handle_formatted.short_description = 'handle'
+    handle_formatted.admin_order_field = 'handle'
+
+    def items(self, obj):
+        return obj.menu_items.count()
+    items.short_description = _('no. of items')
+
+
 modeladmin_register(FlatMenuAdmin)
 
 

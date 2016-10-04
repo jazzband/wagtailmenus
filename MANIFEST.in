@@ -1,9 +1,12 @@
 include LICENSE.txt
 include README.md
 include CHANGELOG.md
+include runtests.py
 recursive-include wagtailmenus *.html
 recursive-include wagtailmenus *.py
 recursive-include wagtailmenus/static *.js
 recursive-include wagtailmenus/static *.css
 recursive-include wagtailmenus/static *.scss
 recursive-include wagtailmenus *.json
+prune wagtailmenus/development
+

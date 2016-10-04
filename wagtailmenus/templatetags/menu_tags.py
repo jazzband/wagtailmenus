@@ -4,6 +4,7 @@ from django.template import Library
 from wagtail.wagtailcore.models import Page
 from ..models import MainMenu, FlatMenu
 from wagtailmenus import app_settings
+flat_menus_fbtdsm = app_settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS
 
 register = Library()
 
@@ -43,6 +44,8 @@ def get_attrs_from_context(context):
         first_run = True
         while path_components and not identified_page:
             try:
+                # NOTE: The route() method is quite inefficient we should
+                # think about matching some other way in future.
                 identified_page, args, kwargs = site.root_page.specific.route(
                     request, path_components)
                 ancestor_ids = identified_page.get_ancestors(
@@ -94,10 +97,8 @@ def main_menu(
     """Render the MainMenu instance for the current site."""
     r, site, current_page, section_root, ancestor_ids = get_attrs_from_context(
         context)
-    try:
-        menu = site.main_menu
-    except MainMenu.DoesNotExist:
-        menu = MainMenu.objects.create(site=site)
+
+    menu = MainMenu.get_for_site(site)
 
     if not show_multiple_levels:
         max_levels = 1
@@ -109,6 +110,7 @@ def main_menu(
             current_site=site,
             current_page=current_page,
             current_page_ancestor_ids=ancestor_ids,
+            request_path=r.path,
             check_for_children=max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
             apply_active_classes=apply_active_classes,
@@ -163,6 +165,7 @@ def section_menu(
         current_site=site,
         current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
+        request_path=r.path,
         check_for_children=max_levels > 1,
         allow_repeating_parents=allow_repeating_parents,
         original_menu_tag='section_menu'
@@ -220,6 +223,7 @@ def flat_menu(
     template=app_settings.DEFAULT_FLAT_MENU_TEMPLATE,
     sub_menu_template=app_settings.DEFAULT_SUB_MENU_TEMPLATE,
     use_specific=app_settings.DEFAULT_FLAT_MENU_USE_SPECIFIC,
+    fall_back_to_default_site_menus=flat_menus_fbtdsm,
 ):
     """
     Find a FlatMenu for the current site matching the `handle` provided and
@@ -231,9 +235,9 @@ def flat_menu(
     if not show_multiple_levels:
         max_levels = 1
 
-    try:
-        menu = site.flat_menus.get(handle__exact=handle)
-    except FlatMenu.DoesNotExist:
+    menu = FlatMenu.get_for_site(
+        handle, site, fall_back_to_default_site_menus)
+    if not menu:
         # No menu was found matching `handle`, so gracefully render nothing.
         return ''
 
@@ -242,6 +246,7 @@ def flat_menu(
         current_site=site,
         current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
+        request_path=r.path,
         check_for_children=max_levels > 1,
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
@@ -329,6 +334,7 @@ def sub_menu(
         current_site=site,
         current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
+        request_path=r.path,
         check_for_children=not stop_at_this_level,
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
@@ -390,7 +396,7 @@ def children_menu(
 
 def prime_menu_items(
     menu_items, current_site, current_page, current_page_ancestor_ids,
-    check_for_children=False, allow_repeating_parents=True,
+    request_path, check_for_children=False, allow_repeating_parents=True,
     apply_active_classes=True, use_specific=False, original_menu_tag='',
 ):
     """
@@ -439,8 +445,6 @@ def prime_menu_items(
                         """
                         if type(page) is Page:
                             page = page.specific
-                            if menuitem:
-                                item.link_page = page
                         has_children_in_menu = page.has_submenu_items(
                             current_page=current_page,
                             check_for_children=check_for_children,
@@ -485,7 +489,10 @@ def prime_menu_items(
                         active_class = app_settings.ACTIVE_ANCESTOR_CLASS
                     else:
                         active_class = app_settings.ACTIVE_CLASS
-                elif page.depth > 2 and page.pk in current_page_ancestor_ids:
+                elif(
+                    page.depth >= app_settings.SECTION_ROOT_DEPTH and
+                    page.pk in current_page_ancestor_ids
+                ):
                     active_class = app_settings.ACTIVE_ANCESTOR_CLASS
                 setattr(item, 'active_class', active_class)
 
@@ -509,6 +516,8 @@ def prime_menu_items(
 
         elif page is None:
             setattr(item, 'href', item.link_url + item.url_append)
+            if apply_active_classes and item.link_url == request_path:
+                setattr(item, 'active_class', app_settings.ACTIVE_CLASS)
             primed_menu_items.append(item)
 
     return primed_menu_items

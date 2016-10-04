@@ -51,6 +51,9 @@ coverage.xml
 
 # Django stuff:
 *.log
+manage.py
+wagtailmenus/settings/development.py
+wagtailmenus/development/*
 
 # Sphinx documentation
 docs/_build/
@@ -59,3 +62,4 @@ docs/_build/
 target/
 MANIFEST
 wagtailmenus.sqlite
+*.sqlite

@@ -51,7 +51,7 @@ class MainMenuEditView(ModelFormView):
         self.site = get_object_or_404(Site, id=self.instance_pk)
         self.edit_url = self.model_admin.url_helper.get_action_url(
             'edit', self.instance_pk)
-        self.instance = MainMenu.for_site(self.site)
+        self.instance = MainMenu.get_for_site(self.site)
         self.instance.save()
 
     def get_meta_title(self):
