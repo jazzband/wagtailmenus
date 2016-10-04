@@ -1,4 +1,5 @@
 from __future__ import absolute_import, unicode_literals
+from copy import copy
 
 from django import forms
 from django.utils.text import capfirst
@@ -10,8 +11,8 @@ from django.contrib.admin.utils import quote, unquote
 from wagtail.wagtailadmin import messages
 from wagtail.wagtailcore.models import Site
 
-from wagtail.contrib.modeladmin.views import WMABaseView, ModelFormView
-from .models import MainMenu
+from wagtail.contrib.modeladmin.views import (
+    WMABaseView, EditView, ModelFormView)
 
 
 class SiteSwitchForm(forms.Form):
@@ -51,7 +52,7 @@ class MainMenuEditView(ModelFormView):
         self.site = get_object_or_404(Site, id=self.instance_pk)
         self.edit_url = self.model_admin.url_helper.get_action_url(
             'edit', self.instance_pk)
-        self.instance = MainMenu.get_for_site(self.site)
+        self.instance = self.model.get_for_site(self.site)
         self.instance.save()
 
     def get_meta_title(self):
@@ -94,3 +95,44 @@ class MainMenuEditView(ModelFormView):
 
     def get_template_names(self):
         return ['wagtailmenus/mainmenu_edit.html']
+
+
+class FlatMenuCopyView(EditView):
+    page_title = _('Copying')
+
+    @property
+    def copy_url(self):
+        return self.url_helper.get_action_url('copy', self.pk_quoted)
+
+    def get_meta_title(self):
+        return _('Copying %s') % self.opts.verbose_name
+
+    def check_action_permitted(self, user):
+        return self.permission_helper.user_can_create(user)
+
+    def get_form_kwargs(self):
+        kwargs = super(FlatMenuCopyView, self).get_form_kwargs()
+        """
+        When the form is posted, don't pass an instance to the form. It should
+        create a new one out of the posted data. We also need to nullify any
+        IDs posted for inline menu items, so that new instances of those are
+        created too.
+        """
+        if self.request.method == 'POST':
+            data = copy(self.request.POST)
+            i = 0
+            while(data.get('menu_items-%s-id' % i)):
+                data['menu_items-%s-id' % i] = None
+                i += 1
+            kwargs.update({
+                'data': data,
+                'instance': self.model()
+            })
+        return kwargs
+
+    def get_success_message(self, instance):
+        return _("{model_name} '{instance}' created.").format(
+            model_name=capfirst(self.opts.verbose_name), instance=instance)
+
+    def get_template_names(self):
+        return ['wagtailmenus/flatmenu_copy.html']

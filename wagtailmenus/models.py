@@ -240,12 +240,27 @@ class FlatMenu(ClusterableModel):
     def __str__(self):
         return '%s (%s)' % (self.title, self.handle)
 
+    def clean(self, *args, **kwargs):
+        # Raise validation error for unique_together constraint, as it's not
+        # currently handled properly by wagtail
+        clashes = FlatMenu.objects.filter(site=self.site, handle=self.handle)
+        if self.pk:
+            clashes = clashes.exclude(pk__exact=self.pk)
+        if clashes.count():
+            msg = _("Site and handle must create a unique combination. A menu "
+                    "already exists with these same two values.")
+            raise ValidationError({
+                'site': [msg],
+                'handle': [msg],
+            })
+        super(FlatMenu, self).clean(*args, **kwargs)
+
     panels = (
         MultiFieldPanel(
             heading=_("Settings"),
             children=(
-                FieldPanel('site'),
                 FieldPanel('title'),
+                FieldPanel('site'),
                 FieldPanel('handle'),
                 FieldPanel('heading'),
             )
