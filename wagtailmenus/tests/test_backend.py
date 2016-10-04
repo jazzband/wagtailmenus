@@ -3,8 +3,70 @@ from __future__ import absolute_import, unicode_literals
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.test import TransactionTestCase
+from django_webtest import WebTest
 from wagtail.wagtailcore.models import Site
 from wagtailmenus.models import FlatMenu
+
+
+class CMSUsecaseTests(WebTest):
+
+    # optional: we want some initial data to be able to login
+    fixtures = ['test.json']
+
+    def test_copy_footer_menu(self):
+        get_user_model().objects._create_user(
+            username='test1', email='test1@email.com', password='password',
+            is_staff=True, is_superuser=True)
+
+        site_one = Site.objects.get(id=1)
+        site_two = Site.objects.get(id=2)
+
+        # Start by getting the footer menu for site one
+        site_one_footer_menu = FlatMenu.get_for_site('footer', site_one)
+        copy_view = self.app.get(
+            '/admin/wagtailmenus/flatmenu/copy/%s/' % site_one_footer_menu.pk,
+            user='test1')
+
+        form = copy_view.forms[1]
+        form['site'] = site_two.pk
+        response = form.submit().follow()
+
+        assert len(response.context['object_list']) == 3
+        assert '<div class="changelist-filter col3">' in response
+
+        # Let's just compare the two menu with the old one
+        site_two_footer_menu = FlatMenu.get_for_site('footer', site_two)
+
+        assert site_one_footer_menu.pk != site_two_footer_menu.pk
+        assert site_one_footer_menu.heading == site_two_footer_menu.heading
+        assert site_one_footer_menu.menu_items.count() == site_two_footer_menu.menu_items.count()
+
+    def test_cannot_copy_footer_menu(self):
+        get_user_model().objects._create_user(
+            username='test1', email='test1@email.com', password='password',
+            is_staff=True, is_superuser=True)
+
+        site_one = Site.objects.get(id=1)
+        site_two = Site.objects.get(id=2)
+        # Start by getting the footer menu for site one
+        site_one_footer_menu = FlatMenu.get_for_site('footer', site_one)
+        # Create a new menu from the above one, for site two
+        site_two_footer_menu = site_one_footer_menu
+        site_two_footer_menu.id = None
+        site_two_footer_menu.site = site_two
+        site_two_footer_menu.save()
+        # Refetche menu one
+        site_one_footer_menu = FlatMenu.get_for_site('footer', site_one)
+
+        copy_view = self.app.get(
+            '/admin/wagtailmenus/flatmenu/copy/%s/' % site_one_footer_menu.pk,
+            user='test1')
+        form = copy_view.forms[1]
+        form['site'] = site_two.pk
+        response = form.submit()
+
+        assert 'The flat menu could not be saved due to errors' in response
+        assert 'Site and handle must create a unique combination.' in response
 
 
 class TestSuperUser(TransactionTestCase):
