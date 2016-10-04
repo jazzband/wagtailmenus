@@ -110,7 +110,9 @@ class MenuItem(models.Model):
         max_length=100,
         blank=True,
         help_text=_(
-            "Used to identify a specific menu item in the template code."))
+            "Use this field to optionally specify an additional value for "
+            "each menu item, which you can then reference in custom menu "
+            "templates."))
     url_append = models.CharField(
         verbose_name=_("append to URL"),
         max_length=255,
