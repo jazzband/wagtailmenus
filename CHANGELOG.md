@@ -3,6 +3,7 @@ Changelog
 
 1.5.0 (XX.XX.XXX) IN DEVELOPMENT
 ---------------------------------
+
 * Updated FlatMenu listing in CMS to only show site column and filters if menus
   are defined for more than one site.
 * Added the `fall_back_to_default_site_menus` option to the `flat_menu` tag, to
@@ -29,6 +30,7 @@ Changelog
   of these.
 * Fixed an minor bug in the `prime_menu_items` method, where a `depth`
   value was hard-coded, instead of utilising the `SECTION_ROOT_LEVEL` setting. 
+
 
 1.4.0 (22.09.2016)
 ------------------
@@ -61,6 +63,7 @@ Changelog
 * Added further tests for path matching.
 * Reduced the number of unnecessary calls to `Page.specific` in `menu_tags.py`
   where possible.
+
 
 1.3.0 (06.08.2016)
 ------------------
