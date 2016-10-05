@@ -269,8 +269,8 @@ class ContactPage(MenuPage):
             ))
         return menu_items
 
-    def has_submenu_items(self, current_page, check_for_children,
-                          allow_repeating_parents, original_menu_tag):
+    def has_submenu_items(self, current_page, allow_repeating_parents,
+                          original_menu_tag):
         """
         Because `modify_submenu_items` is being used to add additional menu
         items, we need to indicate in menu templates that `ContactPage` objects
@@ -280,8 +280,7 @@ class ContactPage(MenuPage):
         if original_menu_tag == 'main_menu':
             return True
         return super(ContactPage, self).has_submenu_items(
-            current_page, check_for_children, allow_repeating_parents,
-            original_menu_tag)
+            current_page, allow_repeating_parents, original_menu_tag)
 ```
 
 These change would result in the following HTML output when rendering a `ContactPage` instance in a main menu:
@@ -323,14 +322,13 @@ class SectionRootPage(MenuPage):
         	})
 		return menu_items
 
-	def has_submenu_items(self, current_page, check_for_children,
-                          allow_repeating_parents, original_menu_tag):
+	def has_submenu_items(self, current_page, allow_repeating_parents,
+                          original_menu_tag):
         
         if self.add_submenu_item_for_news:
             return True
         return super(SectionRootPage, self).has_submenu_items(
-            current_page, check_for_children, allow_repeating_parents,
-            original_menu_tag)
+            current_page, allow_repeating_parents, original_menu_tag)
 ```
 
 ### <a id="app-settings"></a>11. Changing the default settings
