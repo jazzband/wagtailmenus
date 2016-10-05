@@ -1,8 +1,14 @@
 Changelog
 =========
 
-1.5.0 (XX.XX.XXX) IN DEVELOPMENT
+1.5.1 (XX.XX.XXX) IN DEVELOPMENT
 ---------------------------------
+
+* Nothing just yet.
+
+
+1.5.0 (05.10.2016)
+------------------
 
 * Updated FlatMenu listing in CMS to only show site column and filters if menus
   are defined for more than one site.
