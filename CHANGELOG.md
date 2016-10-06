@@ -4,7 +4,13 @@ Changelog
 1.5.1 (XX.XX.XXX) IN DEVELOPMENT
 ---------------------------------
 
-* Nothing just yet.
+* `MenuPage.has_submenu_items()` is now only ever called if 
+  `check_for_children` is True in `menu_tags.prime_menu_items()`.
+  This way, the `max_levels` value supplied to the original menu tag is always
+  respected, with no additional levels ever being rendered. 
+  The `check_for_chilren` value passed to `has_submenu_items()` is now always
+  True. Since removing would add breaking changes, it will be removed in a 
+  later feature release.
 
 
 1.5.0 (05.10.2016)

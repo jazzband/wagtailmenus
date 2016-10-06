@@ -433,30 +433,36 @@ def prime_menu_items(
                 expensive, so we try to do the working out only when absolutely
                 necessary.
                 """
-                if (menuitem is None or menuitem.allow_subnav):
+                if (
+                    check_for_children and
+                    (menuitem is None or menuitem.allow_subnav)
+                ):
                     if (
                         hasattr(page, 'has_submenu_items') or
                         hasattr(page.specific_class, 'has_submenu_items')
                     ):
                         """
                         If the page has a `has_submenu_items` method, shift
-                        responsibilty for determining the
-                        `has_children_in_menu` value to that.
+                        responsibilty for determining `has_children_in_menu`
+                        to that. Note that the method will not be accessed
+                        if `check_for_children` is False, so the `max_levels`
+                        value supplied to the original menu tag will always be
+                        respected.
                         """
                         if type(page) is Page:
                             page = page.specific
                         has_children_in_menu = page.has_submenu_items(
                             current_page=current_page,
-                            check_for_children=check_for_children,
+                            check_for_children=True,
                             allow_repeating_parents=allow_repeating_parents,
                             original_menu_tag=original_menu_tag,
                         )
 
-                    elif check_for_children:
+                    else:
                         """
                         The page has no `has_submenu_items` method. Resort to
                         default behaviour (check if there are any children
-                        pages that need representing).
+                        pages that need representing in a sub menu).
                         """
                         has_children_in_menu = (
                             page.get_children().live().in_menu().exists())
