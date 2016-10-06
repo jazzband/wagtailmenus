@@ -453,6 +453,7 @@ def prime_menu_items(
                             page = page.specific
                         has_children_in_menu = page.has_submenu_items(
                             current_page=current_page,
+                            check_for_children=True,
                             allow_repeating_parents=allow_repeating_parents,
                             original_menu_tag=original_menu_tag,
                         )
@@ -461,7 +462,7 @@ def prime_menu_items(
                         """
                         The page has no `has_submenu_items` method. Resort to
                         default behaviour (check if there are any children
-                        pages that need representing).
+                        pages that need representing in a sub menu).
                         """
                         has_children_in_menu = (
                             page.get_children().live().in_menu().exists())
