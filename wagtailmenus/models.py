@@ -68,18 +68,21 @@ class MenuPage(Page):
 
         return menu_items
 
-    def has_submenu_items(self, current_page, allow_repeating_parents,
-                          original_menu_tag):
+    def has_submenu_items(self, current_page, check_for_children,
+                          allow_repeating_parents, original_menu_tag):
         """
+        NOTE: `check_for_children` is always True, so you can ignore it. The
+        argument will be removed from this method in a later feature release.
+
         When rendering pages in a menu template a `has_children_in_menu`
         attribute is added to each page, letting template developers know
         whether or not the item has a submenu that must be rendered.
 
         By default, we return a boolean indicating whether the page has
-        suitable child pages. But, if you are overriding the
-        `modify_submenu_items` method to programatically add items that
-        aren't child pages, you'll likely need to alter this method too, so
-        the template knows there are sub items to be rendered.
+        suitable child pages to include in such a menu. But, if you are
+        overriding the `modify_submenu_items` method to programatically add
+        items that aren't child pages, you'll likely need to alter this method
+        too, so the template knows there are sub items to be rendered.
         """
         return self.get_children().live().in_menu().exists()
 

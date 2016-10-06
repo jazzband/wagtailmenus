@@ -4,15 +4,13 @@ Changelog
 1.5.1 (XX.XX.XXX) IN DEVELOPMENT
 ---------------------------------
 
-* Removed the `check_for_children` argument from `MenuPage.has_submenu_items()`
-  and only try to call that method is `check_for_children` is True in the
-  `menu_tags.prime_menu_items()`. This way, the `max_levels` value supplied to
-  the original menu tag reliably controls how many levels are rendered, which
-  is what most people would expect. I'd originally made `has_submenu_items()`
-  responsible for checking `check_for_children`, so that developers could make
-  the decision to for additional menu items to be rendered regardless. But,
-  I've realised now that it would be an extremely rare edge case, and not worth
-  supporting at the expense of performance / simplicity.
+* `MenuPage.has_submenu_items()` is now only ever called if 
+  `check_for_children` is True in `menu_tags.prime_menu_items()`.
+  This way, the `max_levels` value supplied to the original menu tag is always
+  respected, with no additional levels ever being rendered. 
+  The `check_for_chilren` value passed to `has_submenu_items()` is now always
+  True. Since removing would add breaking changes, it will be removed in a 
+  later feature release.
 
 
 1.5.0 (05.10.2016)
