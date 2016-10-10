@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='flatmenuitem',
             name='url_append',
-            field=models.CharField(blank=True, help_text=b"Use this to optionally append a #hash or querystring to the above page's URL.", max_length=255, verbose_name='append to URL'),
+            field=models.CharField(blank=True, help_text="Use this to optionally append a #hash or querystring to the above page's URL.", max_length=255, verbose_name='append to URL'),
         ),
         migrations.AlterField(
             model_name='mainmenu',
@@ -51,6 +51,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='mainmenuitem',
             name='url_append',
-            field=models.CharField(blank=True, help_text=b"Use this to optionally append a #hash or querystring to the above page's URL.", max_length=255, verbose_name='append to URL'),
+            field=models.CharField(blank=True, help_text="Use this to optionally append a #hash or querystring to the above page's URL.", max_length=255, verbose_name='append to URL'),
         ),
     ]

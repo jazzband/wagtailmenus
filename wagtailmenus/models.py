@@ -119,7 +119,7 @@ class MenuItem(models.Model):
         verbose_name=_("append to URL"),
         max_length=255,
         blank=True,
-        help_text=(
+        help_text=_(
             "Use this to optionally append a #hash or querystring to the "
             "above page's URL.")
     )
