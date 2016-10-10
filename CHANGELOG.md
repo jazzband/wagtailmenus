@@ -1,7 +1,13 @@
 Changelog
 =========
 
-1.5.1 (XX.XX.XXX) IN DEVELOPMENT
+1.5.2 (XX.XX.XXX) IN DEVELOPMENT
+---------------------------------
+
+* Wait and see!
+
+
+1.5.1 (10.10.2016) 
 ---------------------------------
 
 * `MenuPage.has_submenu_items()` is now only ever called if 
@@ -11,7 +17,7 @@ Changelog
   The `check_for_chilren` value passed to `has_submenu_items()` is now always
   True. Since removing would add breaking changes, it will be removed in a 
   later feature release.
-* Fixed a migration-related issue that was django to create new migrations for
+* Fixed a migration-related issue that was Django to create new migrations for
   the app.
 * Fixed an issue where not all help text was marked for translation.
 
