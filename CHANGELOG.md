@@ -11,6 +11,9 @@ Changelog
   The `check_for_chilren` value passed to `has_submenu_items()` is now always
   True. Since removing would add breaking changes, it will be removed in a 
   later feature release.
+* Fixed a migration-related issue that was django to create new migrations for
+  the app.
+* Fixed an issue where not all help text was marked for translation.
 
 
 1.5.0 (05.10.2016)
