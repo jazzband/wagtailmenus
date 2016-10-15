@@ -60,8 +60,14 @@ class ContactPage(MenuPage):
             ))
         return menu_items
 
+<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
     def has_submenu_items(self, current_page, allow_repeating_parents,
                           original_menu_tag, menu_instance=None):
+=======
+    def has_submenu_items(self, current_page, check_for_children,
+                          allow_repeating_parents, original_menu_tag,
+                          menu=None):
+>>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
         """
         Because `modify_submenu_items` is being used to add additional menu
         items, we need to indicate in menu templates that `ContactPage` objects
@@ -71,5 +77,10 @@ class ContactPage(MenuPage):
         if original_menu_tag == 'main_menu':
             return True
         return super(ContactPage, self).has_submenu_items(
+<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
             current_page, allow_repeating_parents, original_menu_tag,
             menu_instance)
+=======
+            current_page, check_for_children, allow_repeating_parents,
+            original_menu_tag, menu)
+>>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree

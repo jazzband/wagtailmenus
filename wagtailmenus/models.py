@@ -19,6 +19,14 @@ from .managers import MenuItemManager
 from .panels import menupage_settings_panels
 
 
+MAX_LEVELS_CHOICES = (
+    (1, _('1: Single-level (flat)')),
+    (2, _('2: One level of sub-navigation')),
+    (3, _('3: Two levels of sub-navigation')),
+    (4, _('4: Three levels of sub-navigation')),
+)
+
+
 class MenuPage(Page):
     repeat_in_subnav = models.BooleanField(
         verbose_name=_("repeat in sub-navigation"),
@@ -86,6 +94,7 @@ class MenuPage(Page):
         items that aren't child pages, you'll likely need to alter this method
         too, so the template knows there are sub items to be rendered.
         """
+
         if menu_instance:
             return menu_instance.page_has_children(self)
         return self.get_children().live().in_menu().exists()
@@ -252,6 +261,7 @@ class Menu(ClusterableModel):
     @cached_property
     def pages_for_display(self):
         """
+<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
         Returns a list of pages for rendering the entire menu (excluding those
         chosen as menu items). All pages must be live, not expired, and set to
         show in menus.
@@ -307,10 +317,32 @@ class Menu(ClusterableModel):
 
     def page_has_children(self, page):
         """
-        Return a boolean to indicate whether a given page has any relevant
+        Return a boolean indicating whether a given page has any relevant
         child pages.
         """
         return page.path in self.page_children_dict
+
+    @cached_property
+    def top_level_page_dict(self):
+        page_dict = {}
+        top_page_ids = self.menu_items.values_list('link_page_id', flat=True)
+        for page in self.pages_for_display:
+            if page.id in top_page_ids:
+                page_dict[page.id] = page
+        return page_dict
+
+    @cached_property
+    def items_for_display(self):
+        """
+        Return a list of menu_items with link_page objects supplemented with
+        'specific' pages that must to be fetched for rendering anyway
+        """
+        new_items = []
+        for item in self.menu_items.for_display():
+            if item.link_page_id:
+                item.link_page = self.top_level_page_dict[item.link_page_id]
+            new_items.append(item)
+        return new_items
 
 
 class MainMenu(Menu):
@@ -326,14 +358,12 @@ class MainMenu(Menu):
             '`max_levels` value to the `main_menu` tag.'
         ),
         default=app_settings.DEFAULT_MAIN_MENU_MAX_LEVELS,
-        choices=app_settings.MAX_LEVELS_CHOICES,
-    )
+        choices=app_settings.MAX_LEVELS_CHOICES)
     use_specific = models.PositiveSmallIntegerField(
         verbose_name=_('specific page usage'),
         choices=app_settings.USE_SPECIFIC_CHOICES,
-        default=app_settings.USE_SPECIFIC_AUTO,
-        help_text=app_settings.USE_SPECIFIC_HELP_TEXT
-    )
+        default=app_settings.DEFAULT_MAIN_MENU_USE_SPECIFIC,
+        help_text=app_settings.USE_SPECIFIC_HELP_TEXT)
 
     class Meta:
         verbose_name = _("main menu")
@@ -388,14 +418,12 @@ class FlatMenu(Menu):
             '`max_levels` value to the `flat_menu` tag.'
         ),
         default=app_settings.DEFAULT_FLAT_MENU_MAX_LEVELS,
-        choices=app_settings.MAX_LEVELS_CHOICES,
-    )
+        choices=app_settings.MAX_LEVELS_CHOICES)
     use_specific = models.PositiveSmallIntegerField(
         verbose_name=_('specific page usage'),
         choices=app_settings.USE_SPECIFIC_CHOICES,
-        default=app_settings.USE_SPECIFIC_OFF,
-        help_text=app_settings.USE_SPECIFIC_HELP_TEXT
-    )
+        default=app_settings.DEFAULT_FLAT_MENU_USE_SPECIFIC,
+        help_text=app_settings.USE_SPECIFIC_HELP_TEXT)
 
     class Meta:
         unique_together = ("site", "handle")

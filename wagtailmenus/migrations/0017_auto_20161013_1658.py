@@ -22,6 +22,7 @@ class Migration(migrations.Migration):
             name='max_levels',
             field=models.PositiveSmallIntegerField(choices=[(1, '1: Single-level (flat)'), (2, '2: One level of sub-navigation'), (3, '3: Two levels of sub-navigation'), (4, '4: Three levels of sub-navigation')], default=2, help_text='The default number of maximum levels to display when rendering this menu. The value can be overidden by supplying a different `max_levels` value to the `main_menu` tag.', verbose_name='maximum levels'),
         ),
+<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
          migrations.AddField(
             model_name='flatmenu',
             name='use_specific',
@@ -42,4 +43,6 @@ class Migration(migrations.Migration):
             name='max_levels',
             field=models.PositiveSmallIntegerField(choices=[(1, '1: No sub-navigation (flat)'), (2, '2: Allow 1 level of sub-navigation'), (3, '3: Allow 2 levels of sub-navigation'), (4, '4: Allow 3 levels of sub-navigation')], default=2, help_text='The default number of maximum levels to display when rendering this menu. The value can be overidden by supplying a different `max_levels` value to the `main_menu` tag.', verbose_name='maximum levels'),
         ),
+=======
+>>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
     ]
