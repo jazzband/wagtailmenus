@@ -223,6 +223,54 @@
     }
 },
 {
+    "model": "wagtailmenus.flatmenu",
+    "pk": 3,
+    "fields": {
+        "site": 1,
+        "title": "Header navigation (secondary)",
+        "handle": "header-secondary",
+        "heading": ""
+    }
+},
+{
+    "model": "wagtailmenus.flatmenuitem",
+    "pk": 9,
+    "fields": {
+        "sort_order": 0,
+        "link_page": 6,
+        "link_url": "",
+        "link_text": "",
+        "allow_subnav": true,
+        "menu": 3
+    }
+},
+{
+    "model": "wagtailmenus.flatmenuitem",
+    "pk": 10,
+    "fields": {
+        "sort_order": 1,
+        "link_page": 12,
+        "link_url": "",
+        "link_text": "",
+        "url_append": "",
+        "allow_subnav": false,
+        "menu": 3
+    }
+},
+{
+    "model": "wagtailmenus.flatmenuitem",
+    "pk": 11,
+    "fields": {
+        "sort_order": 2,
+        "link_page": 13,
+        "link_url": "",
+        "link_text": "",
+        "url_append": "",
+        "allow_subnav": false,
+        "menu": 3
+    }
+},
+{
     "model": "sites.site",
     "pk": 1,
     "fields": {
@@ -393,7 +441,7 @@
         "numchild": 0,
         "title": "Staff vacancies",
         "slug": "staff-vacancies",
-        "content_type": ["tests", "lowlevelpage"],
+        "content_type": ["tests", "typicalpage"],
         "live": true,
         "url_path": "/home/about-us/staff-vacancies/",
         "show_in_menus": false,
@@ -740,7 +788,7 @@
     "fields": {}
 },
 {
-    "model": "tests.lowlevelpage",
+    "model": "tests.typicalpage",
     "pk": 10,
     "fields": {}
 },
