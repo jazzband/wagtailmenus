@@ -18,6 +18,10 @@ class LowLevelPage(Page):
     template = 'page.html'
 
 
+class TypicalPage(Page):
+    template = 'typical-page.html'
+
+
 class ContactPage(MenuPage):
     template = 'page.html'
     parent_page_types = [HomePage]

@@ -217,7 +217,7 @@ def section_menu(
 
 @register.simple_tag(takes_context=True)
 def flat_menu(
-    context, handle, show_menu_heading=True, apply_active_classes=False,
+    context, handle, show_menu_heading=False, apply_active_classes=False,
     show_multiple_levels=False, allow_repeating_parents=True,
     max_levels=app_settings.DEFAULT_FLAT_MENU_MAX_LEVELS,
     template=app_settings.DEFAULT_FLAT_MENU_TEMPLATE,

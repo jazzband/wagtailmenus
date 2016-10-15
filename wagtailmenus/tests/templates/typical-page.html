@@ -1,0 +1,64 @@
+{% load menu_tags %}
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Wagtailmenus Test</title>
+    </head>
+    <body>
+        <header role="banner">
+            <div class="container">
+
+                <a class="logo" href="/" title="Go to home page">Wagtailmenus Test</a>
+
+                <nav role="navigation" class="navbar-default nav-main">
+
+                    <div id="main-menu">
+                        {% main_menu max_levels=3 %}
+                    </div>
+
+                </nav>
+
+                <div id="secondary-nav">
+                    {% flat_menu 'header-secondary' show_multiple_levels=True max_levels=2 %}
+                </div>
+
+            </div>
+        </header>
+
+        <main role="main">
+
+            <div class="container content">
+
+                <div class="row">
+
+                    <div class="content-col">
+                        <h1>{{ self.title }}</h1>
+                    </div>
+
+                    <div class="side-col">
+                        {% section_menu max_levels=2 %}
+                    </div>
+            </div>
+        </main>
+
+        <footer role="contentinfo">
+            <div class="container">
+
+                <div id="nav-footer">
+                    {% flat_menu 'footer' apply_active_classes=True %}
+                </div>
+
+                <div id="nav-contact">
+                    {% flat_menu 'contact' %}
+                </div>
+
+                <p class="rkh"><a href="http://www.rkh.co.uk/" target="_blank" title="Web design and development, Leicester">Website by Rock Kitchen Harris</a></p>
+                
+            </div>
+        </footer>
+
+    </body>
+</html>
