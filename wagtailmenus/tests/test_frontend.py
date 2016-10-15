@@ -190,24 +190,24 @@ class TestTemplateTags(TestCase):
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                         <li class=" top-level"><a href="/about-us/">Section home</a></li>
-                        <li class=" dropdown">
+                        <li class=" dropdown low-level">
                             <a href="/about-us/meet-the-team/" class="dropdown-toggle" id="ddtoggle_7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Meet the team <span class="caret"></span></a>
                             <ul class="dropdown-menu" aria-labelledby="ddtoggle_7">
-                                <li class=""><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
-                                <li class=""><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
-                                <li class=""><a href="/about-us/meet-the-team/staff-member-three/">Staff member three</a></li>
+                                <li class=" low-level"><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
+                                <li class=" low-level"><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
+                                <li class=" low-level"><a href="/about-us/meet-the-team/staff-member-three/">Staff member three</a></li>
                             </ul>
                         </li>
-                        <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
-                        <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                        <li class=" low-level"><a href="/about-us/our-heritage/">Our heritage</a></li>
+                        <li class=" low-level"><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
                 <li class=" dropdown top-level">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
-                        <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
-                        <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
-                        <li class=""><a href="/news-and-events/press/">In the press</a></li>
+                        <li class=" low-level"><a href="/news-and-events/latest-news/">Latest news</a></li>
+                        <li class=" low-level"><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
+                        <li class=" low-level"><a href="/news-and-events/press/">In the press</a></li>
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
@@ -352,24 +352,24 @@ class TestTemplateTags(TestCase):
                         <li class="active top-level">
                             <a href="/about-us/">Section home</a>
                         </li>
-                        <li class=" dropdown">
+                        <li class=" dropdown low-level">
                             <a href="/about-us/meet-the-team/" class="dropdown-toggle" id="ddtoggle_7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Meet the team <span class="caret"></span></a>
                             <ul class="dropdown-menu" aria-labelledby="ddtoggle_7">
-                                <li class=""><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
-                                <li class=""><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
-                                <li class=""><a href="/about-us/meet-the-team/staff-member-three/">Staff member three</a></li>
+                                <li class=" low-level"><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
+                                <li class=" low-level"><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
+                                <li class=" low-level"><a href="/about-us/meet-the-team/staff-member-three/">Staff member three</a></li>
                             </ul>
                         </li>
-                        <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
-                        <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                        <li class=" low-level"><a href="/about-us/our-heritage/">Our heritage</a></li>
+                        <li class=" low-level"><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
                 <li class=" dropdown top-level">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
-                        <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
-                        <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
-                        <li class=""><a href="/news-and-events/press/">In the press</a></li>
+                        <li class=" low-level"><a href="/news-and-events/latest-news/">Latest news</a></li>
+                        <li class=" low-level"><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
+                        <li class=" low-level"><a href="/news-and-events/press/">In the press</a></li>
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
@@ -812,24 +812,24 @@ class TestTemplateTags(TestCase):
                         <li class=" top-level">
                             <a href="/about-us/">Section home</a>
                         </li>
-                        <li class="ancestor dropdown">
+                        <li class="ancestor dropdown low-level">
                             <a href="/about-us/meet-the-team/" class="dropdown-toggle" id="ddtoggle_7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Meet the team <span class="caret"></span></a>
                             <ul class="dropdown-menu" aria-labelledby="ddtoggle_7">
-                                <li class="active"><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
-                                <li class=""><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
-                                <li class=""><a href="/about-us/meet-the-team/staff-member-three/">Staff member three</a></li>
+                                <li class="active low-level"><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
+                                <li class=" low-level"><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
+                                <li class=" low-level"><a href="/about-us/meet-the-team/staff-member-three/">Staff member three</a></li>
                             </ul>
                         </li>
-                        <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
-                        <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                        <li class=" low-level"><a href="/about-us/our-heritage/">Our heritage</a></li>
+                        <li class=" low-level"><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
                 <li class=" dropdown top-level">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
-                        <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
-                        <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
-                        <li class=""><a href="/news-and-events/press/">In the press</a></li>
+                        <li class=" low-level"><a href="/news-and-events/latest-news/">Latest news</a></li>
+                        <li class=" low-level"><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
+                        <li class=" low-level"><a href="/news-and-events/press/">In the press</a></li>
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
