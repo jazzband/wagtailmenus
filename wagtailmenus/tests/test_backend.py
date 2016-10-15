@@ -18,6 +18,10 @@ class CMSUsecaseTests(WebTest):
             username='test1', email='test1@email.com', password='password',
             is_staff=True, is_superuser=True)
 
+        # First check that there are 3 menus
+        response = self.app.get('/admin/wagtailmenus/flatmenu/', user='test1')
+        assert len(response.context['object_list']) == 3
+
         site_one = Site.objects.get(id=1)
         site_two = Site.objects.get(id=2)
 
@@ -31,7 +35,7 @@ class CMSUsecaseTests(WebTest):
         form['site'] = site_two.pk
         response = form.submit().follow()
 
-        assert len(response.context['object_list']) == 3
+        assert len(response.context['object_list']) == 4
         assert '<div class="changelist-filter col3">' in response
 
         # Let's just compare the two menu with the old one
@@ -55,6 +59,7 @@ class CMSUsecaseTests(WebTest):
         site_two_footer_menu.id = None
         site_two_footer_menu.site = site_two
         site_two_footer_menu.save()
+
         # Refetche menu one
         site_one_footer_menu = FlatMenu.get_for_site('footer', site_one)
 
