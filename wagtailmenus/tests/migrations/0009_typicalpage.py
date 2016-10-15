@@ -9,7 +9,6 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('wagtailcore', '0029_unicode_slugfield_dj19'),
         ('tests', '0008_contactpage'),
     ]
 
