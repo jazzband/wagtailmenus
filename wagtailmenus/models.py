@@ -1,8 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 
-from copy import deepcopy
+from collections import defaultdict
+from copy import copy
+
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
@@ -11,9 +14,20 @@ from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, PageChooserPanel, MultiFieldPanel, InlinePanel)
 from wagtail.wagtailcore.models import Page, Orderable
 
-from .app_settings import ACTIVE_CLASS
+from .app_settings import (
+    ACTIVE_CLASS, SECTION_ROOT_DEPTH, DEFAULT_MAIN_MENU_MAX_LEVELS,
+    DEFAULT_FLAT_MENU_MAX_LEVELS
+)
 from .managers import MenuItemManager
 from .panels import menupage_settings_panels
+
+
+MAX_LEVELS_CHOICES = (
+    (1, _('1: Single-level (flat)')),
+    (2, _('2: One level of sub-navigation')),
+    (3, _('3: Two levels of sub-navigation')),
+    (4, _('4: Three levels of sub-navigation')),
+)
 
 
 class MenuPage(Page):
@@ -58,7 +72,7 @@ class MenuPage(Page):
             children in the subnav, so we create a new item and prepend it to
             menu_items.
             """
-            extra = deepcopy(self)
+            extra = copy(self)
             setattr(extra, 'text', self.repeated_item_text or self.title)
             setattr(extra, 'href', self.relative_url(current_site))
             active_class = ''
@@ -71,7 +85,8 @@ class MenuPage(Page):
         return menu_items
 
     def has_submenu_items(self, current_page, check_for_children,
-                          allow_repeating_parents, original_menu_tag):
+                          allow_repeating_parents, original_menu_tag,
+                          menu=None):
         """
         NOTE: `check_for_children` is always True, so you can ignore it. The
         argument will be removed from this method in a later feature release.
@@ -86,6 +101,8 @@ class MenuPage(Page):
         items that aren't child pages, you'll likely need to alter this method
         too, so the template knows there are sub items to be rendered.
         """
+        if menu:
+            return menu.page_has_children(self)
         return self.get_children().live().in_menu().exists()
 
 
@@ -135,9 +152,12 @@ class MenuItem(models.Model):
 
     @property
     def menu_text(self):
+        return self.link_text or self.link_page.title
+
+    def relative_url(self, site=None):
         if self.link_page:
-            return self.link_text or self.link_page.title
-        return self.link_text
+            return self.link_page.relative_url(site) + self.url_append
+        return self.link_url + self.url_append
 
     def clean(self, *args, **kwargs):
         super(MenuItem, self).clean(*args, **kwargs)
@@ -175,10 +195,127 @@ class MenuItem(models.Model):
     )
 
 
-class MainMenu(ClusterableModel):
+class Menu(ClusterableModel):
+
+    max_levels = 1
+
+    class Meta:
+        abstract = True
+
+    def set_max_levels(self, max_levels):
+        if self.max_levels != max_levels:
+            """
+            Set `self.max_levels` to the supplied value and clear any cached
+            attribute values set for a different `max_levels` value.
+            """
+            self.max_levels = max_levels
+            try:
+                del self.pages_for_display
+            except AttributeError:
+                pass
+            try:
+                del self.page_children_dict
+            except AttributeError:
+                pass
+
+    @cached_property
+    def pages_for_display(self):
+        """
+        Returns a list of 'specific' pages for rendering the menu, including
+        top-level pages (those actually chosen for menu items) and their
+        descendants. All pages must be live, not expired, and set to show in
+        menus.
+        """
+        if self.max_levels == 1:
+            # Only return the top-level pages
+            return Page.objects.filter(
+                live=True, expired=False, show_in_menus=True,
+                id__in=self.menu_items.values_list('link_page_id', flat=True)
+            )
+
+        # Build a queryset to get pages for all levels
+        all_pages = Page.objects.none()
+        for item in self.menu_items.page_links_for_display().values(
+            'allow_subnav',
+            'link_page__id',
+            'link_page__path',
+            'link_page__depth'
+        ):
+            # Identify all relevant pages for this menu item
+            page_path = item['link_page__path']
+            page_depth = item['link_page__depth']
+            if item['allow_subnav'] and page_depth >= SECTION_ROOT_DEPTH:
+                # Get the page for this menuitem and any suitable descendants
+                branch_pages = Page.objects.filter(
+                    depth__lt=page_depth + self.max_levels,
+                    path__startswith=page_path,)
+            else:
+                # This is either a homepage link or a page we don't need to
+                # fetch descendants for, so just include the page itself
+                branch_pages = Page.objects.filter(
+                    id__exact=item['link_page__id'])
+            # Add this branch / page to the full tree queryset
+            all_pages = all_pages | branch_pages
+
+        # Filter out any irrelevant pages and run specific()
+        return all_pages.filter(
+            live=True, expired=False, show_in_menus=True).specific()
+
+    @cached_property
+    def page_children_dict(self):
+        """
+        Returns a dictionary of lists, where the keys are 'path' values for
+        pages, and the value is a list of children pages for that page.
+        """
+        children_dict = defaultdict(list)
+        for page in self.pages_for_display:
+            children_dict[page.path[:-page.steplen]].append(page)
+        return children_dict
+
+    def get_children_for_page(self, page):
+        """Return a list of child pages for a given page."""
+        return self.page_children_dict.get(page.path, [])
+
+    def page_has_children(self, page):
+        return page.path in self.page_children_dict
+
+    @cached_property
+    def top_level_page_dict(self):
+        page_dict = {}
+        top_page_ids = self.menu_items.values_list('link_page_id', flat=True)
+        for page in self.pages_for_display:
+            if page.id in top_page_ids:
+                page_dict[page.id] = page
+        return page_dict
+
+    @cached_property
+    def items_for_display(self):
+        """
+        Return a list of menu_items with link_page objects supplemented with
+        'specific' pages that must to be fetched for rendering anyway
+        """
+        new_items = []
+        for item in self.menu_items.for_display():
+            if item.link_page_id:
+                item.link_page = self.top_level_page_dict[item.link_page_id]
+            new_items.append(item)
+        return new_items
+
+
+class MainMenu(Menu):
     site = models.OneToOneField(
         'wagtailcore.Site', related_name="main_menu",
         db_index=True, editable=False, on_delete=models.CASCADE
+    )
+    max_levels = models.PositiveSmallIntegerField(
+        verbose_name=_('maximum levels'),
+        help_text=_(
+            'The default number of maximum levels to display when rendering '
+            'this menu. The value can be overidden by supplying a different '
+            '`max_levels` value to the `main_menu` tag.'
+        ),
+        default=DEFAULT_MAIN_MENU_MAX_LEVELS,
+        choices=MAX_LEVELS_CHOICES,
     )
 
     class Meta:
@@ -201,7 +338,7 @@ class MainMenu(ClusterableModel):
     )
 
 
-class FlatMenu(ClusterableModel):
+class FlatMenu(Menu):
     site = models.ForeignKey(
         'wagtailcore.Site',
         related_name="flat_menus")
@@ -218,6 +355,16 @@ class FlatMenu(ClusterableModel):
         blank=True,
         help_text=_(
             "If supplied, appears above the menu when rendered."))
+    max_levels = models.PositiveSmallIntegerField(
+        verbose_name=_('maximum levels'),
+        help_text=_(
+            'The default number of maximum levels to display when rendering '
+            'this menu. The value can be overidden by supplying a different '
+            '`max_levels` value to the `flat_menu` tag.'
+        ),
+        default=DEFAULT_FLAT_MENU_MAX_LEVELS,
+        choices=MAX_LEVELS_CHOICES,
+    )
 
     class Meta:
         unique_together = ("site", "handle")
