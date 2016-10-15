@@ -74,6 +74,7 @@ def main_menu(
         'original_menu_tag': 'main_menu',
         'section_root': section_root,
         'current_ancestor_ids': ancestor_ids,
+<<<<<<< 745d0b02cb4705e44751865b224d7a4f78fb29db
 <<<<<<< 2cfc37445e4258a7639d28f84f25bc4f064cf531
         'use_specific': use_specific,
     })
@@ -159,6 +160,8 @@ def section_menu(
         'original_menu_tag': 'section_menu',
         'current_ancestor_ids': ancestor_ids,
         'use_specific': use_specific,
+=======
+>>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
 =======
 >>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
     })
