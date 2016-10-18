@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.conf import settings
 
 ACTIVE_CLASS = getattr(
@@ -15,6 +17,9 @@ FLATMENU_MENU_ICON = getattr(
 
 SECTION_ROOT_DEPTH = getattr(
     settings, 'WAGTAILMENUS_SECTION_ROOT_DEPTH', 3)
+
+GUESS_TREE_POSITION_FROM_PATH = getattr(
+    settings, 'WAGTAILMENUS_GUESS_TREE_POSITION_FROM_PATH', True)
 
 DEFAULT_MAIN_MENU_TEMPLATE = getattr(
     settings, 'WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE',

@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
 from django.utils.safestring import mark_safe
@@ -115,6 +117,7 @@ def wagtailmenu_params_helper(page, request, serve_args, serve_kwargs):
         section_root = section_root.specific
     ancestor_ids = page.get_ancestors().values_list('id', flat=True)
     request.META.update({
-        'CURRENT_SECTION_ROOT': section_root,
-        'CURRENT_PAGE_ANCESTOR_IDS': ancestor_ids,
+        'WAGTAILMENUS_CURRENT_SECTION_ROOT': section_root,
+        'WAGTAILMENUS_CURRENT_PAGE': page,
+        'WAGTAILMENUS_CURRENT_PAGE_ANCESTOR_IDS': ancestor_ids,
     })
