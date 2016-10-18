@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList)
 from django.utils.translation import ugettext_lazy as _
