@@ -353,7 +353,7 @@ class MainMenu(Menu):
     panels = (
         MultiFieldPanel(
             heading=_("Menu items"),
-            children=(InlinePanel('menu_items')),
+            children=(InlinePanel('menu_items'),),
         ),
         MultiFieldPanel(
             heading=_("Advanced settings"),
@@ -449,7 +449,7 @@ class FlatMenu(Menu):
         ),
         MultiFieldPanel(
             heading=_("Menu items"),
-            children=(InlinePanel('menu_items')),
+            children=(InlinePanel('menu_items'),),
         ),
         MultiFieldPanel(
             heading=_("Advanced settings"),
