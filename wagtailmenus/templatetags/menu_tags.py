@@ -530,14 +530,9 @@ def prime_menu_items(
                         allow_repeating_parents and use_specific and
                         has_children_in_menu
                     ):
-                        if type(page) is Page:
-                            page = page.specific
                         if getattr(page, 'repeat_in_subnav', False):
                             active_class = ACTIVE_ANCESTOR_CLASS
-                elif(
-                    page.depth >= SECTION_ROOT_DEPTH and
-                    page.pk in current_page_ancestor_ids
-                ):
+                elif page.pk in current_page_ancestor_ids:
                     active_class = ACTIVE_ANCESTOR_CLASS
                 setattr(item, 'active_class', active_class)
 
