@@ -99,13 +99,6 @@ def section_menu(
         # The section root couldn't be identified.
         return ''
 
-    """
-    We want `section_root` to have the same attributes as primed menu
-    items, so it can be used in the same way in a template if required.
-    """
-    setattr(section_root, 'text', section_root.title)
-    setattr(section_root, 'href', section_root.relative_url(site))
-
     children_qs = get_children_for_menu(section_root, 'section_menu',
                                         use_specific)
     menu_items = prime_menu_items(
@@ -123,16 +116,22 @@ def section_menu(
     If section_root has a `modify_submenu_items` method, call it to modify
     the list of menu_items appropriately.
     """
-    if hasattr(section_root, 'modify_submenu_items'):
+    if (
+        hasattr(section_root, 'modify_submenu_items') or
+        hasattr(section_root.specific_class, 'modify_submenu_items')
+    ):
+        if type(section_root) is Page:
+            section_root = section_root.specific
         menu_items = section_root.modify_submenu_items(
             menu_items, current_page, ancestor_ids, site,
             allow_repeating_parents, apply_active_classes, 'section_menu')
 
     """
-    Now we know the subnav/repetition situation, we can set the `active_class`
-    for the section_root page (much like `prime_menu_items` does for pages
-    with children.
+    We want `section_root` to have the same attributes as primed menu
+    items, so it can be used in the same way in a template if required.
     """
+    setattr(section_root, 'text', section_root.title)
+    setattr(section_root, 'href', section_root.relative_url(site))
     if apply_active_classes:
         active_class = ''
         if current_page and section_root.pk == current_page.pk:
