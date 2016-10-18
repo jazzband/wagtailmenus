@@ -40,21 +40,39 @@ Each tag comes with a default template that's designed to be fully accessible an
 
 ## Installation instructions
 
-### For wagtail `1.5` and up
-
 1. Install the package using pip: `pip install wagtailmenus`.
 2. Add `wagtail.contrib.modeladmin` to `INSTALLED_APPS` in your project settings, if it's not there already.
 3. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings.
-4. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
+4. Add `wagtailmenus.context_processors.wagtailmenus` to the `context_processors` list in your `TEMPLATES` setting. The setting should look something like this:
+```python
 
-### For wagtail `1.4.5` and below
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(PROJECT_ROOT, 'templates'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.request',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                'wagtail.contrib.settings.context_processors.settings',
+                'wagtailmenus.context_processors.wagtailmenus',
+            ],
+        },
+    },
+]
 
-Since version `1.2`, watailmenus has depended on the `wagtail.contrib.modeladmin` package that was added to wagtail in `1.5`. However, earlier versions of wagtailmenus can be used with earlier versions of wagtail with the help of another third-party package, [wagtailmodeladmin](https://github.com/rkhleics/wagtailmodeladmin).
+```
+5. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
 
-1. Install `wagtailmodeladmin` by following these instructions: https://github.com/rkhleics/wagtailmodeladmin.
-2. Install this package using pip: `pip install wagtailmenus>=1.1.1,<1.2.0`.
-3. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings (after `wagtailmodeladmin` and before your `core` app).
-4. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
 
 ### Additional steps for `MenuPage` usage
 
@@ -342,6 +360,7 @@ You can override some of wagtailmenus' default behaviour by adding one of more o
 - **`WAGTAILMENUS_MAINMENU_MENU_ICON`** (default: `'list-ol'`): Use this to change the icon used to represent `MainMenu` in the Wagtail admin area.
 - **`WAGTAILMENUS_FLATMENU_MENU_ICON`** (default: `'list-ol'`): Use this to change the icon used to represent `FlatMenu` in the Wagtail admin area.
 - **`WAGTAILMENUS_SECTION_ROOT_DEPTH`** (default: `3`): Use this to specify the 'depth' value of a project's 'section root' pages. For most Wagtail projects, this should be `3` (Root page = 1, Home page = 2), but it may well differ, depending on the needs of the project.
+- **`WAGTAILMENUS_GUESS_TREE_POSITION_FROM_PATH`** (default: `True`): When not using wagtail's routing/serving mechanism to serve page objects, wagtailmenus can use the request path to attempt to identify a 'current' page, 'section root' page, allowing `{% section_menu %}` and active item highlighting to work. If this functionality is not required for your project, you can disable it by setting this value to `False`.
 - **`WAGTAILMENUS_FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS`** (default: `False`): The default value used for `fall_back_to_default_site_menus` option of the `{% flat_menu %}` tag when a parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE`** (default: `'menus/main_menu.html'`): The name of the template used for rendering by the `{% main_menu %}` tag when a `template` parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE`** (default: `'menus/flat_menu.html'`): The name of the template used for rendering by the `{% flat_menu %}` tag when a `template` parameter value isn't provided.

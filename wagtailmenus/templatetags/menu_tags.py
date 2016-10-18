@@ -1,5 +1,6 @@
+from __future__ import unicode_literals
+
 from copy import copy
-from django.http import Http404
 from django.template import Library
 from wagtail.wagtailcore.models import Page
 from ..models import MainMenu, FlatMenu
@@ -12,67 +13,14 @@ register = Library()
 def get_attrs_from_context(context):
     """
     Gets a bunch of useful things from the context/request and returns them as
-    a tuple for use in most menu tags. If `identify_section_from_path` is True,
-    and `request.META['CURRENT_SECTION_ROOT']` hasn't been set by
-    `wagtailmenu_params_helper` (most likely, because it isn't a 'Page'
-    being served), attempt to identify a nearby page / section root from the
-    request path.
+    a tuple for use in most menu tags.
     """
     request = context['request']
     site = request.site
-    current_page = context.get('self', None)
-    section_root = None
-    identified_page = None
-    ancestor_ids = []
-
-    # If section_root` or `current_ancestor_ids` have been added to the
-    # context by a previous `main_menu`, `section_menu` or `flat_menu`
-    # call, then use those values to avoid any more further work
-    section_root = context.get('section_root', None)
-    ancestor_ids = context.get('current_ancestor_ids', [])
-
-    # Fall back to finding values set by `wagtailmenus_params_helper`.
-    if not section_root:
-        section_root = request.META.get('CURRENT_SECTION_ROOT')
-    if not ancestor_ids:
-        ancestor_ids = request.META.get('CURRENT_PAGE_ANCESTOR_IDS', [])
-
-    if not current_page:
-        path_components = [pc for pc in request.path.split('/') if pc]
-        # Keep trying to find a page using the path components until there are
-        # no components left, or a page has been identified
-        first_run = True
-        while path_components and not identified_page:
-            try:
-                # NOTE: The route() method is quite inefficient we should
-                # think about matching some other way in future.
-                identified_page, args, kwargs = site.root_page.specific.route(
-                    request, path_components)
-                ancestor_ids = identified_page.get_ancestors(
-                    inclusive=True).values_list('id', flat=True)
-                if first_run:
-                    # A page was found matching the exact path, so it's safe to
-                    # assume it's the 'current page'
-                    current_page = identified_page
-            except Http404:
-                # No match found, so remove a path component and try again
-                path_components.pop()
-            first_run = False  # Don't use non-exact matches as 'current_page'
-
-    if not section_root and (current_page or identified_page):
-        page = current_page or identified_page
-        if page.depth == app_settings.SECTION_ROOT_DEPTH:
-            section_root = page
-        if page.depth > app_settings.SECTION_ROOT_DEPTH:
-            # Attempt to identify the section root page using either the
-            # current page from the context, or the one identified above
-            section_root = site.root_page.get_descendants().ancestor_of(
-                page, inclusive=True
-            ).filter(depth__exact=app_settings.SECTION_ROOT_DEPTH).first()
-        if section_root and type(section_root) is Page:
-            # We need the 'specific' section_root page, so that we can
-            # look for / use the page's `modify_submenu_items()` method
-            section_root = section_root.specific
+    wagtailmenus_vals = context.get('wagtailmenus_vals')
+    current_page = wagtailmenus_vals.get('current_page')
+    section_root = wagtailmenus_vals.get('section_root')
+    ancestor_ids = wagtailmenus_vals.get('current_page_ancestor_ids')
     return (request, site, current_page, section_root, ancestor_ids)
 
 
