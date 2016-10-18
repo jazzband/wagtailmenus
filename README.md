@@ -86,7 +86,7 @@ TEMPLATES = [
 
 **Skip to a section:**
 
-1. [Defining root-level main menu items in the CMS](#defining-main-menu-items)
+1. [Defining your main menu in the CMS](#defining-main-menus)
 2. [Using the `{% main_menu %}` tag](#main_menu-tag)
 3. [Defining flat menus in the CMS](#defining-flat-menus)
 4. [Using the `{% flat_menu %}` tag](#flat_menu-tag)
@@ -94,17 +94,20 @@ TEMPLATES = [
 6. [Using the `{% children_menu %}` tag](#children_menu-tag)
 7. [Using the `{% sub_menu %}` tag](#sub_menu-tag)
 8. [Writing your own menu templates](#writing-menu-templates)
-9. [Optional repetition of selected pages in menus using `MenuPage`](#using-menupage)
-10. [Adding additional menu items for specific page types](#modifying-submenu-items)
-11. [Overriding default behaviour with settings](#app-settings)
+9. [Repetition of selected pages in sub-menus with `MenuPage`](#using-menupage)
+10. [Performance and use of 'specific' pages](#specific-page-use)
+11. [Adding additional menu items for specific page types](#modifying-submenu-items)
+12. [Overriding default behaviour with settings](#app-settings)
 
-### <a id="defining-main-menu-items"></a>1. Defining root-level main menu items in the CMS
+
+### <a id="defining-main-menus"></a>1. Defining your main menu in the CMS
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on **Settings** in the side menu to access the options in there, then select **Main menu**.
 3. You'll be automatically redirected to the an edit page for the current site (or the 'default' site, if the current site cannot be identified). For multi-site projects, a 'site switcher' will appear in the top right, allowing you to edit main menus for each site. <img alt="Screenshot of MainMenu edit page in Wagtail admin" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-mainmenu-edit.png" />
 4. Use the **MENU ITEMS** inline panel to define the root-level items. If you wish, you can use the `handle` field to specify an additional value for each item, which you'll be able to access in a custom main menu template. **NOTE**: Pages need to be published, and have the `show_in_menus` checkbox checked in order to appear in menus (look under the **Promote** tab when editing pages).
 5. Save your changes to apply them to your site.
+
 
 ### <a id="defining-flat-menus"></a>2. Defining flat menus in the CMS
 
@@ -116,6 +119,7 @@ TEMPLATES = [
 6. Save your changes to apply them to your site.
 
 All of the flat menus created for a project will appear in the menu list page (from step 2, above) making it easy to find, update, copy or delete your menus later. As soon as you create menus for more than one site in a multi-site project, the listing page will give you additional information and filters to help manage your menus, like so: <img alt="Screenshot showing the FlatMenu listing page for a multi-site setup" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-list.png" />
+
 
 ### <a id="main_menu-tag"></a>3. Using the `{% main_menu %}` tag
 
@@ -134,6 +138,7 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 - **`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. You can specify an alternative default template by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings module.
 - **`use_specific`** (default: `False`): If `True`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The default can be altered by adding `WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC=True` to your project's settings module.
 
+
 ### <a id="flat_menu-tag"></a>4. Using the `{% flat_menu %}` tag
 
 1. In whichever template you want your menu to appear, load `menu_tags` using `{% load menu_tags %}`.
@@ -149,6 +154,7 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 - **`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets you specify a template to be used for rendering sub menus (if enabled using `show_multiple_levels`). All subsequent calls to `{% sub_menu %}` within the context of the flat menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. You can specify an alternative default template by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings module.
 - **`fall_back_to_default_site_menus`** (default: `False`): When using the `{% flat_menu %}` tag, wagtailmenus identifies the 'current site', and attempts to find a menu for that site, matching the `handle` provided. By default, if no menu is found for the current site, nothing is rendered. However, if `fall_back_to_default_site_menus=True` is provided, wagtailmenus will search search the 'default' site (In the CMS, this will be the site with the '**Is default site**' checkbox ticked) for a menu with the same handle, and use that instead before giving up. The default behaviour can be altered by adding `WAGTAILMENUS_FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS=True` to your project's settings module.
 - **`use_specific`** (default: `False`): If `True`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The default can be altered by adding `WAGTAILMENUS_DEFAULT_FLAT_MENU_USE_SPECIFIC=True` to your project's settings module.
+
 
 ### <a id="section_menu-tag"></a>5. Using the `{% section_menu %}` tag
 
@@ -168,6 +174,7 @@ The `{% section_menu %}` tag allows you to display a context-aware, page-driven 
 - **`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. You can specify an alternative default template by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings module.
 - **`use_specific`** (default: `False`): If `True`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The default can be altered by adding `WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC=True` to your project's settings module.
 
+
 ### <a id="children_menu-tag"></a>6. Using the `{% children_menu %}` tag
 
 The `{% children_menu %}` tag can be used in page templates to display a menu of children of the current page. You can also use the `parent_page` argument to show children of a different page.
@@ -185,7 +192,8 @@ The `{% children_menu %}` tag can be used in page templates to display a menu of
 - **`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. You can specify an alternative default template by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings module.
 - **`use_specific`** (default: `False`): If `True`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The default can be altered by adding `WAGTAILMENUS_DEFAULT_CHILDREN_MENU_USE_SPECIFIC=True` to your project's settings module.
 
-### <a id="sub_menu-tag"></a>6. Using the `{% sub_menu %}` tag
+
+### <a id="sub_menu-tag"></a>7. Using the `{% sub_menu %}` tag
 
 The `{% sub_menu %}` tag is used within menu templates to render additional levels of pages within a menu. It's designed to pick up on variables added to the context by the other menu tags, and so can behave a little unpredictably if called directly, without those context variables having been set. It requires only one parameter to work, which is `menuitem_or_page`, which can either be an instance of `MainMenuItem`, `FlatMenuItem`, or `Page`.
 
@@ -196,6 +204,7 @@ The `{% sub_menu %}` tag is used within menu templates to render additional leve
 - **`apply_active_classes`**: By default, the tag will inherit this behaviour from whatever was specified for the original menu tag. However, you can override that behaviour by adding either `apply_active_classes=True` or `apply_active_classes=False` to the tag in your custom menu template.
 - **`template`** (default: `'menus/sub_menu.html'`): Lets you render the menu to a template of your choosing. You can also name an alternative template to be used by default, by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings module.
 - **`use_specific`**: By default, the tag will inherit this behaviour from whatever was specified for the original menu tag. However, the value can be overridden by adding `use_specific=True` or `use_specific=False` to the {% sub_menu %} tag in your custom menu template.
+
 
 ### <a id="writing-menu-templates"></a>8. Writing your own menu templates
 
@@ -215,6 +224,7 @@ The following variables are added to the context by all of the above tags, which
 - **`active_class`**: A class name to indicate the 'active' state of the menu item. The value will be 'active' if linking to the current page, or 'ancestor' if linking to one of it's ancestors.
 - **`has_children_in_menu`**: A boolean indicating whether the menu item has children that should be output as a sub-menu.
 
+
 ### <a id="using-menupage"></a>9. Optional repetition of selected pages in menus using `MenuPage`
 
 Let's say you have an **About Us** section on your site. The top-level page has content that is just as important as that on the pages below it (e.g. "Meet the team", "Our mission and values", "Staff vacancies"). Because of this, you'd like visitors to be able to access the root page as easily as those pages. But, your site uses drop-down navigation, and the **About Us** link no longer takes you to that page when clicked... it simply acts as a toggle for hiding and showing it's sub-pages:
@@ -233,7 +243,24 @@ Now, wherever the children of the **About Us** page are output (using one of the
 
 The menu tags do some extra work to make sure both links are never assigned the `'active'` class. When on the 'About Us' page, the tags will treat the repeated item as the 'active' page, and just assign the `'ancestor'` class to the original, so that the behaviour/styling is consistent with other page links rendered at that level.
 
-### <a id="modifying-submenu-items"></a>10. Adding additional menu items for specific page types
+
+### <a id="specific-page-use"></a>10. Performance and use of 'specific' pages
+
+Wagtail makes use of a technique in Django known as 'multi-table inheritance'. In simple terms this means that, when you create an instance of a custom page type model, the data is saved in two different database tables. All of the standard fields from the Page model are stored in one table, and any additional fields on your custom model are saved to a different table. It also means that, in order for Django to return 'specific' page type instances (e.g. an `EventPage`), it needs to fetch and join data from multiple tables; which has a negative effect on performance.
+
+Menu generation is particularly resource intensive, because a menu needs to know a lot of data about a lot of pages (mostly in order to generate URLs correctly for each page). Add a need for 'specific' page instances to that mix, and that intensity is understandably greater, as the data will likely be spread over many different tables (depending on how many custom page types you are using), needing lots of database joins to put everything together.
+
+Because every project has different needs, wagtailmenus give you some fine grained control over how 'specific' pages in your menus. When defining a `MainMenu` or `FlatMenu` in the CMS, the <b>Specfic page use</b> field allows you to choose one of the following options:
+
+- **`OFF`** (value: `0`): Use only standard `Page` model data and methods when rendering. If you aren't using `MenuPage` in your project, don't need to access any custom page model fields in you menu templates, and aren't overriding `get_url_parts()` or other `Page` methods concerned with URL generation, this will offer you optimal performance.
+- **`AUTO`** (value: `1`): Only use specific pages when needed for `MenuPage` operations (e.g. for 'repeating menu item' behaviour, and manipulation of sub-menu items via `has_submenu_items()` and `modify_submenu_items()` methods).
+- **`TOP-LEVEL`** (value: `2`): As `AUTO`, but will always return 'specific' page instances for your top-level menu items (The pages selected as actual menu items). This is useful if you need to access custom page field values in your menu template for top-level items only (e.g. to add tooltip, help text, section colours or images)
+- **`ALWAYS`** (value: `3`): Always return specific page instances. If you need to access custom page field values at all levels of the menu (even in sub-menu templates), or are overriding `get_url_parts()` or other `Page` methods concerned with URL generation, using this option will ensure specific pages are available in menu templates, using as few database queries as possible.
+
+You can override the value set on your `MainMenu` or `FlatMenu` instances by providing a corresponding integer value (`0`, `1`, `2` or `3`) as the `use_specific` option to the `{% main_menu %}` or `{% flat_menu %}` tag in your template, e.g. `{% main_menu use_specific=2 %}`. You can provide the same option/values to the `{% section_menu %}` and `{% children_menu %}` tags also.
+
+
+### <a id="modifying-submenu-items"></a>11. Adding additional menu items for specific page types
 
 If you find yourself needing further control over the items that appear in your menus (perhaps you need to add further items for specific pages, or remove some under certain circumstances), you will likely find the **`modify_submenu_items()`** _(added in 1.3)_ and **`has_submenu_items()`** _(added in 1.4)_ methods on the [`MenuPage`](https://github.com/rkhleics/wagtailmenus/blob/master/wagtailmenus/models.py#L17) model of interest. 
 
@@ -351,7 +378,8 @@ class SectionRootPage(MenuPage):
             original_menu_tag)
 ```
 
-### <a id="app-settings"></a>11. Changing the default settings
+
+### <a id="app-settings"></a>12. Changing the default settings
 
 You can override some of wagtailmenus' default behaviour by adding one of more of the following to your project's settings:
 
@@ -375,6 +403,7 @@ You can override some of wagtailmenus' default behaviour by adding one of more o
 - **`WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC`** (default: `False`): If set to `True`, by default, when rendering a `{% section_menu %}`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The behaviour can be overridden in individual cases using the tag's `use_specific` keyword argument.
 - **`WAGTAILMENUS_DEFAULT_CHILDREN_USE_SPECIFIC`** (default: `False`): If set to `True`, by default, when rendering a `{% children_menu %}`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The behaviour can be overridden in individual cases using the tag's `use_specific` keyword argument.
 - **`WAGTAILMENUS_DEFAULT_FLAT_MENU_USE_SPECIFIC`** (default: `False`): If set to `True`, by default, when rendering a `{% flat_menu %}`, specific page-type objects will be fetched and used for menu items instead of vanilla `Page` objects, using as few database queries as possible. The behaviour can be overridden in individual cases using the tag's `use_specific` keyword argument.
+
 
 ## Contributing
 
