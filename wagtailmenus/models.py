@@ -86,7 +86,6 @@ class MenuPage(Page):
         items that aren't child pages, you'll likely need to alter this method
         too, so the template knows there are sub items to be rendered.
         """
-
         if menu_instance:
             return menu_instance.page_has_children(self)
         return self.get_children().live().in_menu().exists()
@@ -239,7 +238,7 @@ class Menu(ClusterableModel):
             return items_qs.all()
 
         """
-        The menu is being generated with a specificity level of TOP_LEVEL_ONLY
+        The menu is being generated with a specificity level of TOP_LEVEL
         or ALWAYS, which means we need to replace 'link_page' values on
         MenuItem objects with their 'specific' equivalents.
         """
@@ -253,7 +252,6 @@ class Menu(ClusterableModel):
     @cached_property
     def pages_for_display(self):
         """
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
         Returns a list of pages for rendering the entire menu (excluding those
         chosen as menu items). All pages must be live, not expired, and set to
         show in menus.
@@ -313,28 +311,6 @@ class Menu(ClusterableModel):
         child pages.
         """
         return page.path in self.page_children_dict
-
-    @cached_property
-    def top_level_page_dict(self):
-        page_dict = {}
-        top_page_ids = self.menu_items.values_list('link_page_id', flat=True)
-        for page in self.pages_for_display:
-            if page.id in top_page_ids:
-                page_dict[page.id] = page
-        return page_dict
-
-    @cached_property
-    def items_for_display(self):
-        """
-        Return a list of menu_items with link_page objects supplemented with
-        'specific' pages that must to be fetched for rendering anyway
-        """
-        new_items = []
-        for item in self.menu_items.for_display():
-            if item.link_page_id:
-                item.link_page = self.top_level_page_dict[item.link_page_id]
-            new_items.append(item)
-        return new_items
 
 
 class MainMenu(Menu):

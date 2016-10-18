@@ -55,27 +55,10 @@ def get_attrs_from_context(context, guess_tree_position=True):
     return (request, site, current_page, section_root, ancestor_ids)
 
 
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
 @register.simple_tag(takes_context=True)
 def main_menu(
     context, max_levels=None, use_specific=None, apply_active_classes=True,
     allow_repeating_parents=True, show_multiple_levels=True,
-=======
-def get_children_for_menu(page, use_specific):
-    qs = page.get_children().live().in_menu()
-    if use_specific:
-        qs = qs.specific()
-    else:
-        qs = qs.select_related('content_type')
-    return qs
-
-
-@register.simple_tag(takes_context=True)
-def main_menu(
-    context, apply_active_classes=True, allow_repeating_parents=True,
-    show_multiple_levels=True,
-    max_levels=None,
->>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
     template=app_settings.DEFAULT_MAIN_MENU_TEMPLATE,
     sub_menu_template=app_settings.DEFAULT_SUB_MENU_TEMPLATE
 ):
@@ -91,23 +74,16 @@ def main_menu(
 
     if not show_multiple_levels:
         max_levels = 1
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
+
     if max_levels is not None:
         menu.set_max_levels(max_levels)
 
     if use_specific is not None:
         menu.set_use_specific(use_specific)
-=======
-    menu.set_max_levels(max_levels)
->>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
 
     context.update({
         'menu_items': prime_menu_items(
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
             menu_items=menu.top_level_items,
-=======
-            menu_items=menu.items_for_display,
->>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
             current_site=site,
             current_page=current_page,
             current_page_ancestor_ids=ancestor_ids,
@@ -117,19 +93,12 @@ def main_menu(
             check_for_children=max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
             apply_active_classes=apply_active_classes,
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
             menu_instance=menu,
         ),
         'main_menu': menu,
         'use_specific': menu.use_specific,
         'max_levels': menu.max_levels,
         'apply_active_classes': apply_active_classes,
-=======
-            menu=menu,
-            original_menu_tag='main_menu',
-        ),
-        'main_menu': menu,
->>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
         'allow_repeating_parents': allow_repeating_parents,
         'current_level': 1,
         'current_template': template,
@@ -137,8 +106,6 @@ def main_menu(
         'original_menu_tag': 'main_menu',
         'section_root': root,
         'current_ancestor_ids': ancestor_ids,
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
-        'use_specific': use_specific,
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -169,6 +136,7 @@ def flat_menu(
 
     if not show_multiple_levels:
         max_levels = 1
+
     if max_levels is not None:
         menu.set_max_levels(max_levels)
 
@@ -202,28 +170,15 @@ def flat_menu(
         'sub_menu_template': sub_menu_template,
         'original_menu_tag': 'flat_menu',
         'current_ancestor_ids': ancestor_ids,
-=======
->>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
 
 
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
 def get_sub_menu_items_for_page(
     page, request, current_site, current_page, ancestor_ids, use_specific,
     apply_active_classes, allow_repeating_parents, current_level=1,
     max_levels=2, original_menu_tag='', menu_instance=None
-=======
-@register.simple_tag(takes_context=True)
-def flat_menu(
-    context, handle, show_menu_heading=False, apply_active_classes=False,
-    show_multiple_levels=False, allow_repeating_parents=True,
-    max_levels=app_settings.DEFAULT_FLAT_MENU_MAX_LEVELS,
-    template=app_settings.DEFAULT_FLAT_MENU_TEMPLATE,
-    sub_menu_template=app_settings.DEFAULT_SUB_MENU_TEMPLATE,
-    fall_back_to_default_site_menus=flat_menus_fbtdsm,
->>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
 ):
     # Fetch the 'specific' page object where appropriate
     if use_specific == USE_SPECIFIC_ALWAYS and type(page) is Page:
@@ -249,13 +204,8 @@ def flat_menu(
     # will add `href`, `text`, `active_class` and `has_children_in_menu`
     # attributes to each item, to use in menu templates.
     menu_items = prime_menu_items(
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
         menu_items=children_pages,
         current_site=current_site,
-=======
-        menu_items=menu.items_for_display,
-        current_site=site,
->>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
         current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
         request_path=request.path,
@@ -264,7 +214,6 @@ def flat_menu(
         check_for_children=current_level < max_levels,
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
         menu_instance=menu_instance,
     )
 
@@ -292,30 +241,6 @@ def flat_menu(
             menu_instance=menu_instance)
 
     return page, menu_items
-=======
-        menu=menu,
-        original_menu_tag='flat_menu',
-    )
-
-    context.update({
-        'matched_menu': menu,
-        'menu_handle': handle,
-        'menu_heading': menu.heading,
-        'show_menu_heading': show_menu_heading,
-        'apply_active_classes': apply_active_classes,
-        'allow_repeating_parents': allow_repeating_parents,
-        'menu_items': menu_items,
-        'current_level': 1,
-        'max_levels': max_levels,
-        'current_template': template,
-        'sub_menu_template': sub_menu_template,
-        'original_menu_tag': 'flat_menu',
-        'section_root': section_root,
-        'current_ancestor_ids': ancestor_ids,
-    })
-    t = context.template.engine.get_template(template)
-    return t.render(context)
->>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
 
 
 @register.simple_tag(takes_context=True)
@@ -355,7 +280,6 @@ def sub_menu(
 
     original_menu_tag = context.get('original_menu_tag', 'sub_menu')
 
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
     if original_menu_tag == 'main_menu':
         menu_instance = context.get('main_menu')
     elif original_menu_tag == 'flat_menu':
@@ -372,21 +296,6 @@ def sub_menu(
     parent_page, menu_items = get_sub_menu_items_for_page(
         page=parent_page,
         request=request,
-=======
-    menu = None
-    if original_menu_tag == 'main_menu':
-        menu = context.get('main_menu')
-    elif original_menu_tag == 'flat_menu':
-        menu = context.get('matched_menu')
-
-    if menu:
-        children_pages = menu.get_children_for_page(parent_page)
-    else:
-        children_pages = get_children_for_menu(parent_page, use_specific)
-
-    menu_items = prime_menu_items(
-        menu_items=children_pages,
->>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
         current_site=site,
         current_page=current_page,
         ancestor_ids=ancestor_ids,
@@ -449,15 +358,8 @@ def section_menu(
         current_level=1,
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
         allow_repeating_parents=allow_repeating_parents,
         menu_instance=None)
-=======
-        original_menu_tag=original_menu_tag,
-        menu=menu,
-        use_specific=use_specific,
-    )
->>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
 
     """
     We want `section_root` to have the same attributes as primed menu
@@ -477,95 +379,13 @@ def section_menu(
                     active_class = ACTIVE_ANCESTOR_CLASS
         setattr(section_root, 'active_class', active_class)
 
+    context = copy(context)
     context.update({
         'section_root': section_root,
         'menu_items': menu_items,
         'show_section_root': show_section_root,
         'apply_active_classes': apply_active_classes,
         'allow_repeating_parents': allow_repeating_parents,
-        'current_level': 1,
-        'max_levels': max_levels,
-        'current_template': template,
-        'sub_menu_template': sub_menu_template,
-        'original_menu_tag': 'section_menu',
-        'current_ancestor_ids': ancestor_ids,
-        'use_specific': use_specific,
-    })
-    t = context.template.engine.get_template(template)
-    return t.render(context)
-
-
-@register.simple_tag(takes_context=True)
-def section_menu(
-    context, show_section_root=True, show_multiple_levels=True,
-    apply_active_classes=True, allow_repeating_parents=True,
-    max_levels=app_settings.DEFAULT_SECTION_MENU_MAX_LEVELS,
-    template=app_settings.DEFAULT_SECTION_MENU_TEMPLATE,
-    sub_menu_template=app_settings.DEFAULT_SUB_MENU_TEMPLATE,
-    use_specific=app_settings.DEFAULT_SECTION_MENU_USE_SPECIFIC,
-):
-    """Render a section menu for the current section."""
-    r, site, current_page, section_root, ancestor_ids = get_attrs_from_context(
-        context)
-
-    if not show_multiple_levels:
-        max_levels = 1
-
-    if section_root is None:
-        # The section root couldn't be identified.
-        return ''
-
-    """
-    We want `section_root` to have the same attributes as primed menu
-    items, so it can be used in the same way in a template if required.
-    """
-    setattr(section_root, 'text', section_root.title)
-    setattr(section_root, 'href', section_root.relative_url(site))
-
-    children_qs = get_children_for_menu(section_root, use_specific)
-    menu_items = prime_menu_items(
-        menu_items=children_qs,
-        current_site=site,
-        current_page=current_page,
-        current_page_ancestor_ids=ancestor_ids,
-        request_path=r.path,
-        check_for_children=max_levels > 1,
-        allow_repeating_parents=allow_repeating_parents,
-        original_menu_tag='section_menu'
-    )
-
-    """
-    If section_root has a `modify_submenu_items` method, call it to modify
-    the list of menu_items appropriately.
-    """
-    if hasattr(section_root, 'modify_submenu_items'):
-        menu_items = section_root.modify_submenu_items(
-            menu_items, current_page, ancestor_ids, site,
-            allow_repeating_parents, apply_active_classes, 'section_menu')
-
-    """
-    Now we know the subnav/repetition situation, we can set the `active_class`
-    for the section_root page (much like `prime_menu_items` does for pages
-    with children.
-    """
-    if apply_active_classes:
-        active_class = ''
-        if current_page and section_root.pk == current_page.pk:
-            repeat_in_subnav = getattr(section_root, 'repeat_in_subnav', False)
-            if (allow_repeating_parents and menu_items and repeat_in_subnav):
-                active_class = app_settings.ACTIVE_ANCESTOR_CLASS
-            else:
-                active_class = app_settings.ACTIVE_CLASS
-        elif section_root.pk in ancestor_ids:
-            active_class = app_settings.ACTIVE_ANCESTOR_CLASS
-        setattr(section_root, 'active_class', active_class)
-
-    context.update({
-        'section_root': section_root,
-        'show_section_root': show_section_root,
-        'apply_active_classes': apply_active_classes,
-        'allow_repeating_parents': allow_repeating_parents,
-        'menu_items': menu_items,
         'current_level': 1,
         'max_levels': max_levels,
         'current_template': template,
@@ -632,15 +452,9 @@ def children_menu(
 
 def prime_menu_items(
     menu_items, current_site, current_page, current_page_ancestor_ids,
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
     request_path, use_specific, original_menu_tag, check_for_children=False,
     allow_repeating_parents=True, apply_active_classes=True,
     menu_instance=None
-=======
-    request_path, check_for_children=False, allow_repeating_parents=True,
-    apply_active_classes=True, use_specific=False, menu=None,
-    original_menu_tag='',
->>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
 ):
     """
     Prepare a list of `MenuItem` or `Page` objects for rendering to a menu
@@ -652,13 +466,8 @@ def prime_menu_items(
         try:
             """
             `menu_items` is a list of `MenuItem` objects from
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
             `Menu.top_level_items`. Any `link_page` values will have been
-            replaced with specific pages if approprite.
-=======
-            `Menu.items_for_display()`, so the `link_page`s have been replaced
-            with specific pages.
->>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
+            replaced with specific pages if necessary
             """
             page = item.link_page
             menuitem = item
@@ -669,8 +478,6 @@ def prime_menu_items(
             """
             page = item
             menuitem = None
-            if use_specific and type(page) is Page:
-                page = page.specific
             setattr(item, 'text', page.title)
 
         if page:
@@ -679,21 +486,17 @@ def prime_menu_items(
             a sub-menu. It can be expensive, so we try to only do the working
             out when absolutely necessary.
             """
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
             has_children_in_menu = False
             if (
                 check_for_children and page.depth >= SECTION_ROOT_DEPTH and
-=======
-            if (
-                check_for_children and page.depth >= section_root_depth and
->>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
                 (menuitem is None or menuitem.allow_subnav)
             ):
                 if (
-                    hasattr(page, 'has_submenu_items') or
-                    hasattr(page.specific_class, 'has_submenu_items')
+                    use_specific and (
+                        hasattr(page, 'has_submenu_items') or
+                        hasattr(page.specific_class, 'has_submenu_items')
+                    )
                 ):
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
                     if type(page) is Page:
                         page = page.specific
                     """
@@ -731,66 +534,11 @@ def prime_menu_items(
                             page = page.specific
                         if getattr(page, 'repeat_in_subnav', False):
                             active_class = ACTIVE_ANCESTOR_CLASS
-                elif page.pk in current_page_ancestor_ids:
-                    active_class = ACTIVE_ANCESTOR_CLASS
-=======
-                    """
-                    If the page has a `has_submenu_items` method, shift
-                    responsibilty for determining `has_children_in_menu`
-                    to that.
-                    """
-                    if type(page) is Page:
-                        page = page.specific
-                    has_children_in_menu = page.has_submenu_items(
-                        current_page=current_page,
-                        check_for_children=True,
-                        allow_repeating_parents=allow_repeating_parents,
-                        original_menu_tag=original_menu_tag,
-                        menu=menu)
-
-                else:
-                    """
-                    The page has no `has_submenu_items` method. Resort to
-                    checking for the existence of relevant child pages.
-                    """
-                    if menu:
-                        has_children_in_menu = menu.page_has_children(page)
-                    else:
-                        has_children_in_menu = page.get_children().filter(
-                            live=True, show_in_menus=True, expired=False
-                        ).exists()
-
-            setattr(item, 'has_children_in_menu', has_children_in_menu)
-            """
-            Now we're looking to add an appropriate 'active' class to this
-            menu item (but only if we need to).
-            """
-            if apply_active_classes:
-                """
-                Here we are look for a `repeat_in_subnav` value on the page, to
-                see if a link to the same page will be repeated as the first
-                child in a sub menu. If so, THIS menu item will play the role
-                of 'parent', only getting an `active ancestor` class at most.
-                """
-                repeated_in_subnav = False
-                if allow_repeating_parents and has_children_in_menu:
-                    if type(page) is Page:
-                        page = page.specific
-                    repeated_in_subnav = getattr(page, 'repeat_in_subnav',
-                                                 False)
-
-                active_class = ''
-                if current_page and page.pk == current_page.pk:
-                    if repeated_in_subnav:
-                        active_class = app_settings.ACTIVE_ANCESTOR_CLASS
-                    else:
-                        active_class = app_settings.ACTIVE_CLASS
                 elif(
-                    page.depth >= section_root_depth and
+                    page.depth >= SECTION_ROOT_DEPTH and
                     page.pk in current_page_ancestor_ids
                 ):
-                    active_class = app_settings.ACTIVE_ANCESTOR_CLASS
->>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
+                    active_class = ACTIVE_ANCESTOR_CLASS
                 setattr(item, 'active_class', active_class)
 
         elif page is None:
@@ -799,7 +547,6 @@ def prime_menu_items(
             'active' if the URL matches the request.path.
             """
             if apply_active_classes and item.link_url == request_path:
-<<<<<<< 7eacc337855baffe67052ce1b872be61ad05c439
                 setattr(item, 'active_class', ACTIVE_CLASS)
 
         # In case the specific page was fetched during the above operations
@@ -809,12 +556,6 @@ def prime_menu_items(
 
         # Both `Page` and `MenuItem` objects have a `relative_url` method
         # we can use to calculate a value for the `href` attribute.
-=======
-                setattr(item, 'active_class', app_settings.ACTIVE_CLASS)
-
-        # Both `Page` and `MenuItem` objects have a `relative_url` method
-        # we can use to set the `href` attribute.
->>>>>>> - MainMenu and FlatMenu subclass the new Menu class, which has methods for prefetching, analysing and returning data about the page tree
         setattr(item, 'href', item.relative_url(current_site))
         primed_menu_items.append(item)
 
