@@ -19,14 +19,6 @@ from .managers import MenuItemManager
 from .panels import menupage_settings_panels
 
 
-MAX_LEVELS_CHOICES = (
-    (1, _('1: Single-level (flat)')),
-    (2, _('2: One level of sub-navigation')),
-    (3, _('3: Two levels of sub-navigation')),
-    (4, _('4: Three levels of sub-navigation')),
-)
-
-
 class MenuPage(Page):
     repeat_in_subnav = models.BooleanField(
         verbose_name=_("repeat in sub-navigation"),
