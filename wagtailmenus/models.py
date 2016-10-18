@@ -46,7 +46,7 @@ class MenuPage(Page):
     def modify_submenu_items(self, menu_items, current_page,
                              current_ancestor_ids, current_site,
                              allow_repeating_parents, apply_active_classes,
-                             original_menu_tag):
+                             original_menu_tag, menu_instance=None):
         """
         Make any necessary modifications to `menu_items` and return the list
         back to the calling menu tag to render in templates. Any additional
@@ -66,20 +66,16 @@ class MenuPage(Page):
             setattr(extra, 'href', self.relative_url(current_site))
             active_class = ''
             if(apply_active_classes and self == current_page):
-                active_class = ACTIVE_CLASS
+                active_class = app_settings.ACTIVE_CLASS
             setattr(extra, 'active_class', active_class)
 
             menu_items.insert(0, extra)
 
         return menu_items
 
-    def has_submenu_items(self, current_page, check_for_children,
-                          allow_repeating_parents, original_menu_tag,
-                          menu=None):
+    def has_submenu_items(self, current_page, allow_repeating_parents,
+                          original_menu_tag, menu_instance=None):
         """
-        NOTE: `check_for_children` is always True, so you can ignore it. The
-        argument will be removed from this method in a later feature release.
-
         When rendering pages in a menu template a `has_children_in_menu`
         attribute is added to each page, letting template developers know
         whether or not the item has a submenu that must be rendered.
@@ -90,8 +86,8 @@ class MenuPage(Page):
         items that aren't child pages, you'll likely need to alter this method
         too, so the template knows there are sub items to be rendered.
         """
-        if menu:
-            return menu.page_has_children(self)
+        if menu_instance:
+            return menu_instance.page_has_children(self)
         return self.get_children().live().in_menu().exists()
 
 
@@ -187,9 +183,20 @@ class MenuItem(models.Model):
 class Menu(ClusterableModel):
 
     max_levels = 1
+    use_specific = app_settings.USE_SPECIFIC_AUTO
 
     class Meta:
         abstract = True
+
+    def clear_page_cache(self):
+        try:
+            del self.pages_for_display
+        except AttributeError:
+            pass
+        try:
+            del self.page_children_dict
+        except AttributeError:
+            pass
 
     def set_max_levels(self, max_levels):
         if self.max_levels != max_levels:
@@ -198,57 +205,90 @@ class Menu(ClusterableModel):
             attribute values set for a different `max_levels` value.
             """
             self.max_levels = max_levels
-            try:
-                del self.pages_for_display
-            except AttributeError:
-                pass
-            try:
-                del self.page_children_dict
-            except AttributeError:
-                pass
+            self.clear_page_cache()
+
+    def set_use_specific(self, use_specific):
+        if self.use_specific != use_specific:
+            """
+            Set `self.use_specific` to the supplied value and clear some
+            cached values where appropriate.
+            """
+            if(
+                use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL and
+                self.use_specific < app_settings.USE_SPECIFIC_TOP_LEVEL
+            ):
+                try:
+                    del self.top_level_items
+                except AttributeError:
+                    pass
+
+            if (use_specific > self.use_specific):
+                self.clear_page_cache()
+
+            self.use_specific = use_specific
+
+    @cached_property
+    def top_level_items(self):
+        """
+        Return a list of menu_items with link_page objects supplemented with
+        'specific' pages where appropriate.
+        """
+        items_qs = self.menu_items.for_display()
+        if self.use_specific < app_settings.USE_SPECIFIC_TOP_LEVEL:
+            return items_qs.all()
+
+        """
+        The menu is being generated with a specificity level of TOP_LEVEL_ONLY
+        or ALWAYS, which means we need to replace 'link_page' values on
+        MenuItem objects with their 'specific' equivalents.
+        """
+        updated_items = []
+        for item in items_qs.all():
+            if item.link_page_id:
+                item.link_page = item.link_page.specific
+            updated_items.append(item)
+        return updated_items
 
     @cached_property
     def pages_for_display(self):
         """
-        Returns a list of 'specific' pages for rendering the menu, including
-        top-level pages (those actually chosen for menu items) and their
-        descendants. All pages must be live, not expired, and set to show in
-        menus.
+        Returns a list of pages for rendering the entire menu (excluding those
+        chosen as menu items). All pages must be live, not expired, and set to
+        show in menus.
         """
-        if self.max_levels == 1:
-            # Only return the top-level pages
-            return Page.objects.filter(
-                live=True, expired=False, show_in_menus=True,
-                id__in=self.menu_items.values_list('link_page_id', flat=True)
-            )
 
         # Build a queryset to get pages for all levels
         all_pages = Page.objects.none()
-        for item in self.menu_items.page_links_for_display().values(
-            'allow_subnav',
-            'link_page__id',
-            'link_page__path',
-            'link_page__depth'
-        ):
-            # Identify all relevant pages for this menu item
-            page_path = item['link_page__path']
-            page_depth = item['link_page__depth']
-            if item['allow_subnav'] and page_depth >= SECTION_ROOT_DEPTH:
-                # Get the page for this menuitem and any suitable descendants
-                branch_pages = Page.objects.filter(
-                    depth__lt=page_depth + self.max_levels,
-                    path__startswith=page_path,)
-            else:
-                # This is either a homepage link or a page we don't need to
-                # fetch descendants for, so just include the page itself
-                branch_pages = Page.objects.filter(
-                    id__exact=item['link_page__id'])
-            # Add this branch / page to the full tree queryset
-            all_pages = all_pages | branch_pages
 
-        # Filter out any irrelevant pages and run specific()
-        return all_pages.filter(
-            live=True, expired=False, show_in_menus=True).specific()
+        if self.max_levels == 1:
+            # If no additional menus are needed, return an empty queryset
+            return all_pages
+
+        for item in self.top_level_items:
+
+            if item.link_page_id:
+                # If necessary, fetch a 'branch' of suitable descendants for
+                # this menu item and add to the full queryset
+                page_path = item.link_page.path
+                page_depth = item.link_page.depth
+                if(
+                    item.allow_subnav and
+                    page_depth >= app_settings.SECTION_ROOT_DEPTH
+                ):
+                    all_pages = all_pages | Page.objects.filter(
+                        depth__gt=page_depth,
+                        depth__lt=page_depth + self.max_levels,
+                        path__startswith=page_path)
+
+        # Filter the queryset to include only the pages we need for display
+        all_pages = all_pages.filter(
+            live=True, expired=False, show_in_menus=True)
+
+        # Return 'specific' page instances if required
+        if self.use_specific == app_settings.USE_SPECIFIC_ALWAYS:
+            return all_pages.specific()
+
+        return all_pages
 
     @cached_property
     def page_children_dict(self):
@@ -262,33 +302,15 @@ class Menu(ClusterableModel):
         return children_dict
 
     def get_children_for_page(self, page):
-        """Return a list of child pages for a given page."""
+        """Return a list of relevant child pages for a given page."""
         return self.page_children_dict.get(page.path, [])
 
     def page_has_children(self, page):
+        """
+        Return a boolean to indicate whether a given page has any relevant
+        child pages.
+        """
         return page.path in self.page_children_dict
-
-    @cached_property
-    def top_level_page_dict(self):
-        page_dict = {}
-        top_page_ids = self.menu_items.values_list('link_page_id', flat=True)
-        for page in self.pages_for_display:
-            if page.id in top_page_ids:
-                page_dict[page.id] = page
-        return page_dict
-
-    @cached_property
-    def items_for_display(self):
-        """
-        Return a list of menu_items with link_page objects supplemented with
-        'specific' pages that must to be fetched for rendering anyway
-        """
-        new_items = []
-        for item in self.menu_items.for_display():
-            if item.link_page_id:
-                item.link_page = self.top_level_page_dict[item.link_page_id]
-            new_items.append(item)
-        return new_items
 
 
 class MainMenu(Menu):
