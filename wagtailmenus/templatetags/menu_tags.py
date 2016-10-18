@@ -131,7 +131,8 @@ def main_menu(
 
     if not show_multiple_levels:
         max_levels = 1
-    menu.set_max_levels(max_levels)
+    if max_levels is not None:
+        menu.set_max_levels(max_levels)
 
     if use_specific is not None:
         menu.set_use_specific(use_specific)
@@ -191,7 +192,8 @@ def flat_menu(
 
     if not show_multiple_levels:
         max_levels = 1
-    menu.set_max_levels(max_levels)
+    if max_levels is not None:
+        menu.set_max_levels(max_levels)
 
     if use_specific is not None:
         menu.set_use_specific(use_specific)
