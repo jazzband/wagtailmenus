@@ -14,20 +14,9 @@ from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, PageChooserPanel, MultiFieldPanel, InlinePanel)
 from wagtail.wagtailcore.models import Page, Orderable
 
-from .app_settings import (
-    ACTIVE_CLASS, SECTION_ROOT_DEPTH, DEFAULT_MAIN_MENU_MAX_LEVELS,
-    DEFAULT_FLAT_MENU_MAX_LEVELS
-)
+from wagtailmenus import app_settings
 from .managers import MenuItemManager
 from .panels import menupage_settings_panels
-
-
-MAX_LEVELS_CHOICES = (
-    (1, _('1: Single-level (flat)')),
-    (2, _('2: One level of sub-navigation')),
-    (3, _('3: Two levels of sub-navigation')),
-    (4, _('4: Three levels of sub-navigation')),
-)
 
 
 class MenuPage(Page):
@@ -314,8 +303,14 @@ class MainMenu(Menu):
             'this menu. The value can be overidden by supplying a different '
             '`max_levels` value to the `main_menu` tag.'
         ),
-        default=DEFAULT_MAIN_MENU_MAX_LEVELS,
-        choices=MAX_LEVELS_CHOICES,
+        default=app_settings.DEFAULT_MAIN_MENU_MAX_LEVELS,
+        choices=app_settings.MAX_LEVELS_CHOICES,
+    )
+    use_specific = models.PositiveSmallIntegerField(
+        verbose_name=_('specific page usage'),
+        choices=app_settings.USE_SPECIFIC_CHOICES,
+        default=app_settings.USE_SPECIFIC_AUTO,
+        help_text=app_settings.USE_SPECIFIC_HELP_TEXT
     )
 
     class Meta:
@@ -334,7 +329,15 @@ class MainMenu(Menu):
         return _('Main menu for %s') % (self.site.site_name or self.site)
 
     panels = (
-        InlinePanel('menu_items', label=_("Menu items")),
+        MultiFieldPanel(
+            heading=_("Menu items"),
+            children=(InlinePanel('menu_items')),
+        ),
+        MultiFieldPanel(
+            heading=_("Advanced settings"),
+            children=(FieldPanel('max_levels'), FieldPanel('use_specific')),
+            classname="collapsible collapsed",
+        ),
     )
 
 
@@ -362,8 +365,14 @@ class FlatMenu(Menu):
             'this menu. The value can be overidden by supplying a different '
             '`max_levels` value to the `flat_menu` tag.'
         ),
-        default=DEFAULT_FLAT_MENU_MAX_LEVELS,
-        choices=MAX_LEVELS_CHOICES,
+        default=app_settings.DEFAULT_FLAT_MENU_MAX_LEVELS,
+        choices=app_settings.MAX_LEVELS_CHOICES,
+    )
+    use_specific = models.PositiveSmallIntegerField(
+        verbose_name=_('specific page usage'),
+        choices=app_settings.USE_SPECIFIC_CHOICES,
+        default=app_settings.USE_SPECIFIC_OFF,
+        help_text=app_settings.USE_SPECIFIC_HELP_TEXT
     )
 
     class Meta:
@@ -416,7 +425,15 @@ class FlatMenu(Menu):
                 FieldPanel('heading'),
             )
         ),
-        InlinePanel('menu_items', label=_("Menu items")),
+        MultiFieldPanel(
+            heading=_("Menu items"),
+            children=(InlinePanel('menu_items')),
+        ),
+        MultiFieldPanel(
+            heading=_("Advanced settings"),
+            children=(FieldPanel('max_levels'), FieldPanel('use_specific')),
+            classname="collapsible collapsed",
+        ),
     )
 
 
