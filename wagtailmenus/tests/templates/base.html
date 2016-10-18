@@ -23,7 +23,7 @@
                     
                     <h4>Main Menu (max_levels=2)</h4>
                     <div id="main-menu-two-levels">
-                        {% main_menu max_levels=2 sub_menu_template="menus/custom_sub_menu_dropdown.html" %}
+                        {% main_menu max_levels=2 use_specific=3 sub_menu_template="menus/custom_sub_menu_dropdown.html" %}
                     </div>
 
                     <h4>Main Menu (max_levels=3)</h4>
@@ -52,9 +52,6 @@
                 <div id="nav-footer">
                     {% flat_menu 'footer' apply_active_classes=True %}
 
-                </div>
-                <div id="nav-non-existent">
-                    {% flat_menu 'non-existent' %}
                 </div>
                 <p class="rkh"><a href="http://www.rkh.co.uk/" target="_blank" title="Web design and development, Leicester">Website by Rock Kitchen Harris</a></p>
             </div>
