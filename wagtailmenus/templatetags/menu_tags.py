@@ -482,38 +482,32 @@ def prime_menu_items(
             a sub-menu. It can be expensive, so we try to only do the working
             out when absolutely necessary.
             """
-            has_submenu_items = False
+            has_children_in_menu = False
             if (
                 check_for_children and page.depth >= SECTION_ROOT_DEPTH and
                 (menuitem is None or menuitem.allow_subnav)
             ):
-                if (
-                    use_specific and (
-                        hasattr(page, 'has_submenu_items') or
-                        hasattr(page.specific_class, 'has_submenu_items')
-                    )
-                ):
+                if hasattr(page, 'has_submenu_items'):
                     """
-                    If the page has a `has_submenu_items` method, shift
+                    If the page has a `has_submenu_items` method, give
                     responsibilty for determining `has_children_in_menu`
                     to that.
                     """
-                    if type(page) is Page:
-                        page = page.specific
-                    has_submenu_items = page.has_submenu_items(
+                    has_children_in_menu = page.has_submenu_items(
                         current_page=current_page,
                         allow_repeating_parents=allow_repeating_parents,
                         original_menu_tag=original_menu_tag,
                         menu_instance=menu_instance)
 
                 elif menu_instance:
-                    has_submenu_items = menu_instance.page_has_children(page)
+                    has_children_in_menu = menu_instance.page_has_children(
+                        page)
                 else:
-                    has_submenu_items = page.get_children().filter(
+                    has_children_in_menu = page.get_children().filter(
                         live=True, expired=False, show_in_menus=True,
                     ).exists()
 
-            setattr(item, 'has_children_in_menu', has_submenu_items)
+            setattr(item, 'has_children_in_menu', has_children_in_menu)
 
             if apply_active_classes:
                 active_class = ''
@@ -523,16 +517,11 @@ def prime_menu_items(
                     active_class = ACTIVE_CLASS
                     if (
                         allow_repeating_parents and use_specific and
-                        has_submenu_items
+                        has_children_in_menu
                     ):
-                        if type(page) is Page:
-                            page = page.specific
                         if getattr(page, 'repeat_in_subnav', False):
                             active_class = ACTIVE_ANCESTOR_CLASS
-                elif(
-                    page.depth >= SECTION_ROOT_DEPTH and
-                    page.pk in current_page_ancestor_ids
-                ):
+                elif page.pk in current_page_ancestor_ids:
                     active_class = ACTIVE_ANCESTOR_CLASS
                 setattr(item, 'active_class', active_class)
 
