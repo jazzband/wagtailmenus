@@ -1,10 +1,16 @@
 Changelog
 =========
 
-1.5.2 (XX.XX.XXX) IN DEVELOPMENT
+1.6.1 (XX.XX.XXX) IN DEVELOPMENT
 ---------------------------------
 
-* Wait and see!
+
+1.6.0 (XX.XX.XXX) IN DEVELOPMENT
+---------------------------------
+
+* Improved the confirmation messages when saving a menu
+* Added a new test to submit the `MainMenu` edit form and check that
+  it behaves as expected.
 
 
 1.5.1 (10.10.2016) 

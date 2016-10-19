@@ -50,10 +50,12 @@ class MainMenuEditView(ModelFormView):
         self.instance_pk = unquote(instance_pk)
         self.pk_safe = quote(self.instance_pk)
         self.site = get_object_or_404(Site, id=self.instance_pk)
-        self.edit_url = self.model_admin.url_helper.get_action_url(
-            'edit', self.instance_pk)
         self.instance = self.model.get_for_site(self.site)
         self.instance.save()
+
+    @property
+    def edit_url(self):
+        return self.url_helper.get_action_url('edit', self.instance_pk)
 
     def get_meta_title(self):
         return _('Editing %s') % self.opts.verbose_name
@@ -85,9 +87,7 @@ class MainMenuEditView(ModelFormView):
 
     def form_valid(self, form):
         form.save()
-        messages.success(
-            self.request, _("%s updated.") % capfirst(self.model_name)
-        )
+        messages.success(self.request, _("Main menu updated successfully."))
         return redirect(self.edit_url)
 
     def get_error_message(self):
@@ -131,8 +131,7 @@ class FlatMenuCopyView(EditView):
         return kwargs
 
     def get_success_message(self, instance):
-        return _("{model_name} '{instance}' created.").format(
-            model_name=capfirst(self.opts.verbose_name), instance=instance)
+        return _("Flat menu '{instance}' created.").format(instance=instance)
 
     def get_template_names(self):
         return ['wagtailmenus/flatmenu_copy.html']

@@ -73,6 +73,18 @@ class CMSUsecaseTests(WebTest):
         assert 'The flat menu could not be saved due to errors' in response
         assert 'Site and handle must create a unique combination.' in response
 
+    def test_main_menu_save_success(self):
+        get_user_model().objects._create_user(
+            username='test1', email='test1@email.com', password='password',
+            is_staff=True, is_superuser=True)
+
+        edit_view = self.app.get(
+            '/admin/wagtailmenus/mainmenu/edit/1/', user='test1')
+        form = edit_view.forms[2]
+        response = form.submit().follow()
+
+        assert 'Main menu updated successfully.' in response
+
 
 class TestSuperUser(TransactionTestCase):
     fixtures = ['test.json']
@@ -98,8 +110,6 @@ class TestSuperUser(TransactionTestCase):
     def test_mainmenu_edit(self):
         response = self.client.get(
             '/admin/wagtailmenus/mainmenu/edit/1/')
-        self.assertEqual(response.status_code, 200)
-
         # Test 'get_error_message' method on view for additional coverage
         view = response.context['view']
         self.assertTrue(view.get_error_message())
