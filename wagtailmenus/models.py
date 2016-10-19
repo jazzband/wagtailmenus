@@ -1,6 +1,7 @@
 from copy import deepcopy
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
@@ -87,6 +88,7 @@ class MenuPage(Page):
         return self.get_children().live().in_menu().exists()
 
 
+@python_2_unicode_compatible
 class MenuItem(models.Model):
     allow_subnav = False
 
@@ -173,6 +175,7 @@ class MenuItem(models.Model):
     )
 
 
+@python_2_unicode_compatible
 class MainMenu(ClusterableModel):
     site = models.OneToOneField(
         'wagtailcore.Site', related_name="main_menu",
@@ -199,6 +202,7 @@ class MainMenu(ClusterableModel):
     )
 
 
+@python_2_unicode_compatible
 class FlatMenu(ClusterableModel):
     site = models.ForeignKey(
         'wagtailcore.Site',
