@@ -8,9 +8,19 @@ Changelog
 1.6.0 (XX.XX.XXX) IN DEVELOPMENT
 ---------------------------------
 
-* Improved the confirmation messages when saving a menu
+* Improved confirmation messages when saving a menu in the admin area.
 * Added a new test to submit the `MainMenu` edit form and check that
   it behaves as expected.
+* Added a new `context_processor` to handle some of the logic that was
+  previously being done in template tags. Django's `SimpleLazyObject` class is
+  used to reduce the overhead as much as possible, only doing the work when the
+  values are accessed by menu tags.
+* Added the `WAGTAILMENUS_GUESS_TREE_POSITION_FROM_PATH` setting to allow
+  developers to disable the 'guess tree position from path' functionality 
+  that comes into play when serving custom views, where the `before_serve_page`
+  hook isn't activated, and `wagtailmenu_params_helper()` in `wagtail_hooks.py`
+  doesn't get to add it's helpful values to the request/context.
+
 
 
 1.5.1 (10.10.2016) 
