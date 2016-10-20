@@ -45,6 +45,13 @@ DEFAULT_SUB_MENU_TEMPLATE = getattr(
     settings, 'WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE',
     'menus/sub_menu.html')
 
+MAX_LEVELS_CHOICES = (
+    (1, _('1: No sub-navigation (flat)')),
+    (2, _('2: Allow 1 level of sub-navigation')),
+    (3, _('3: Allow 2 levels of sub-navigation')),
+    (4, _('4: Allow 3 levels of sub-navigation')),
+)
+
 DEFAULT_MAIN_MENU_MAX_LEVELS = getattr(
     settings, 'WAGTAILMENUS_DEFAULT_MAIN_MENU_MAX_LEVELS', 2
 )
@@ -59,13 +66,6 @@ DEFAULT_CHILDREN_MENU_MAX_LEVELS = getattr(
 
 DEFAULT_FLAT_MENU_MAX_LEVELS = getattr(
     settings, 'WAGTAILMENUS_DEFAULT_FLAT_MENU_MAX_LEVELS', 1
-)
-
-MAX_LEVELS_CHOICES = (
-    (1, _('1: No sub-navigation (flat)')),
-    (2, _('2: Allow 1 level of sub-navigation')),
-    (3, _('3: Allow 2 levels of sub-navigation')),
-    (4, _('4: Allow 3 levels of sub-navigation')),
 )
 
 USE_SPECIFIC_OFF = 0
@@ -90,7 +90,7 @@ DEFAULT_MAIN_MENU_USE_SPECIFIC = getattr(
 
 DEFAULT_FLAT_MENU_USE_SPECIFIC = getattr(
     settings, 'WAGTAILMENUS_DEFAULT_FLAT_MENU_USE_SPECIFIC',
-    USE_SPECIFIC_AUTO
+    USE_SPECIFIC_OFF
 )
 
 DEFAULT_SECTION_MENU_USE_SPECIFIC = getattr(
