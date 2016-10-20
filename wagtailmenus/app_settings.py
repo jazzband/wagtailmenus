@@ -52,20 +52,12 @@ MAX_LEVELS_CHOICES = (
     (4, _('4: Allow 3 levels of sub-navigation')),
 )
 
-DEFAULT_MAIN_MENU_MAX_LEVELS = getattr(
-    settings, 'WAGTAILMENUS_DEFAULT_MAIN_MENU_MAX_LEVELS', 2
-)
-
 DEFAULT_SECTION_MENU_MAX_LEVELS = getattr(
     settings, 'WAGTAILMENUS_DEFAULT_SECTION_MENU_MAX_LEVELS', 2
 )
 
 DEFAULT_CHILDREN_MENU_MAX_LEVELS = getattr(
     settings, 'WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS', 1
-)
-
-DEFAULT_FLAT_MENU_MAX_LEVELS = getattr(
-    settings, 'WAGTAILMENUS_DEFAULT_FLAT_MENU_MAX_LEVELS', 1
 )
 
 USE_SPECIFIC_OFF = 0
@@ -75,13 +67,9 @@ USE_SPECIFIC_ALWAYS = 3
 USE_SPECIFIC_CHOICES = (
     (USE_SPECIFIC_OFF, _("OFF (Most efficient)")),
     (USE_SPECIFIC_AUTO, _("AUTO")),
-    (USE_SPECIFIC_TOP_LEVEL, _("TOP-LEVEL")),
+    (USE_SPECIFIC_TOP_LEVEL, _("TOP_LEVEL")),
     (USE_SPECIFIC_ALWAYS, _("ALWAYS (Least efficient)")),
 )
-
-USE_SPECIFIC_HELP_TEXT = _(
-    "NOTE: Some menu functionality may be dependant on this setting. Please "
-    "only change if you know what you're doing.")
 
 DEFAULT_MAIN_MENU_USE_SPECIFIC = getattr(
     settings, 'WAGTAILMENUS_DEFAULT_MAIN_MENU_USE_SPECIFIC',
