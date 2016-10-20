@@ -6,6 +6,7 @@ from copy import copy
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.functional import cached_property
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
@@ -327,18 +328,25 @@ class MainMenu(Menu):
     max_levels = models.PositiveSmallIntegerField(
         verbose_name=_('maximum levels'),
         choices=app_settings.MAX_LEVELS_CHOICES,
-        default=app_settings.DEFAULT_MAIN_MENU_MAX_LEVELS,
-        help_text=_(
-            'The default number of maximum levels to display when rendering '
-            'this menu. The value can be overidden by supplying a different '
-            '`max_levels` value to the `main_menu` tag.'
-        )
+        default=2,
+        help_text=mark_safe(_(
+            "The maximum number of levels to display when rendering this "
+            "menu. The value can be overidden by supplying a different "
+            "<code>max_levels</code> value to the <code>{% main_menu %}"
+            "</code> tag in your templates."
+        ))
     )
     use_specific = models.PositiveSmallIntegerField(
         verbose_name=_('specific page usage'),
         choices=app_settings.USE_SPECIFIC_CHOICES,
-        default=app_settings.DEFAULT_MAIN_MENU_USE_SPECIFIC,
-        help_text=app_settings.USE_SPECIFIC_HELP_TEXT)
+        default=app_settings.USE_SPECIFIC_AUTO,
+        help_text=mark_safe(_(
+            "Controls how 'specific' pages objects are fetched and used when "
+            "rendering this menu. This value can be overidden by supplying a "
+            "different <code>use_specific</code> value to the <code>"
+            "{% main_menu %}</code> tag in your templates."
+        ))
+    )
 
     class Meta:
         verbose_name = _("main menu")
@@ -356,10 +364,7 @@ class MainMenu(Menu):
         return _('Main menu for %s') % (self.site.site_name or self.site)
 
     panels = (
-        MultiFieldPanel(
-            heading=_("Menu items"),
-            children=(InlinePanel('menu_items'),),
-        ),
+        InlinePanel('menu_items', label=_("menu items")),
         MultiFieldPanel(
             heading=_("Advanced settings"),
             children=(FieldPanel('max_levels'), FieldPanel('use_specific')),
@@ -390,18 +395,24 @@ class FlatMenu(Menu):
     max_levels = models.PositiveSmallIntegerField(
         verbose_name=_('maximum levels'),
         choices=app_settings.MAX_LEVELS_CHOICES,
-        default=app_settings.DEFAULT_FLAT_MENU_MAX_LEVELS,
-        help_text=_(
-            'The default number of maximum levels to display when rendering '
-            'this menu. The value can be overidden by supplying a different '
-            '`max_levels` value to the `flat_menu` tag.'
-        )
+        default=1,
+        help_text=mark_safe(_(
+            "The maximum number of levels to display when rendering this "
+            "menu. The value can be overidden by supplying a different "
+            "<code>max_levels</code> value to the <code>{% flat_menu %}"
+            "</code> tag in your templates."
+        ))
     )
     use_specific = models.PositiveSmallIntegerField(
         verbose_name=_('specific page usage'),
         choices=app_settings.USE_SPECIFIC_CHOICES,
-        default=app_settings.DEFAULT_FLAT_MENU_USE_SPECIFIC,
-        help_text=app_settings.USE_SPECIFIC_HELP_TEXT
+        default=app_settings.USE_SPECIFIC_AUTO,
+        help_text=mark_safe(_(
+            "Controls how 'specific' pages objects are fetched and used when "
+            "rendering this menu. This value can be overidden by supplying a "
+            "different <code>use_specific</code> value to the <code>"
+            "{% flat_menu %}</code> tag in your templates."
+        ))
     )
 
     class Meta:
@@ -454,10 +465,7 @@ class FlatMenu(Menu):
                 FieldPanel('heading'),
             )
         ),
-        MultiFieldPanel(
-            heading=_("Menu items"),
-            children=(InlinePanel('menu_items'),),
-        ),
+        InlinePanel('menu_items', label=_("menu items")),
         MultiFieldPanel(
             heading=_("Advanced settings"),
             children=(FieldPanel('max_levels'), FieldPanel('use_specific')),
