@@ -22,11 +22,11 @@ from .panels import menupage_settings_panels
 class MenuPage(Page):
     repeat_in_subnav = models.BooleanField(
         verbose_name=_("repeat in sub-navigation"),
+        default=False,
         help_text=_(
             "If checked, a link to this page will be repeated alongside it's "
             "direct children when displaying a sub-navigation for this page."
         ),
-        default=False,
     )
     repeated_item_text = models.CharField(
         verbose_name=_('repeated item link text'),
@@ -118,14 +118,17 @@ class MenuItem(models.Model):
         help_text=_(
             "Use this field to optionally specify an additional value for "
             "each menu item, which you can then reference in custom menu "
-            "templates."))
+            "templates."
+        )
+    )
     url_append = models.CharField(
         verbose_name=_("append to URL"),
         max_length=255,
         blank=True,
         help_text=_(
             "Use this to optionally append a #hash or querystring to the "
-            "above page's URL.")
+            "above page's URL."
+        )
     )
 
     objects = MenuItemManager()
@@ -315,18 +318,22 @@ class Menu(ClusterableModel):
 
 class MainMenu(Menu):
     site = models.OneToOneField(
-        'wagtailcore.Site', related_name="main_menu",
-        db_index=True, editable=False, on_delete=models.CASCADE
+        'wagtailcore.Site',
+        related_name="main_menu",
+        db_index=True,
+        editable=False,
+        on_delete=models.CASCADE
     )
     max_levels = models.PositiveSmallIntegerField(
         verbose_name=_('maximum levels'),
+        choices=app_settings.MAX_LEVELS_CHOICES,
+        default=app_settings.DEFAULT_MAIN_MENU_MAX_LEVELS,
         help_text=_(
             'The default number of maximum levels to display when rendering '
             'this menu. The value can be overidden by supplying a different '
             '`max_levels` value to the `main_menu` tag.'
-        ),
-        default=app_settings.DEFAULT_MAIN_MENU_MAX_LEVELS,
-        choices=app_settings.MAX_LEVELS_CHOICES)
+        )
+    )
     use_specific = models.PositiveSmallIntegerField(
         verbose_name=_('specific page usage'),
         choices=app_settings.USE_SPECIFIC_CHOICES,
@@ -372,26 +379,30 @@ class FlatMenu(Menu):
         max_length=100,
         help_text=_(
             "Used to reference this menu in templates etc. Must be unique "
-            "for the selected site."))
+            "for the selected site."
+        )
+    )
     heading = models.CharField(
         max_length=255,
         blank=True,
-        help_text=_(
-            "If supplied, appears above the menu when rendered."))
+        help_text=_("If supplied, appears above the menu when rendered.")
+    )
     max_levels = models.PositiveSmallIntegerField(
         verbose_name=_('maximum levels'),
+        choices=app_settings.MAX_LEVELS_CHOICES,
+        default=app_settings.DEFAULT_FLAT_MENU_MAX_LEVELS,
         help_text=_(
             'The default number of maximum levels to display when rendering '
             'this menu. The value can be overidden by supplying a different '
             '`max_levels` value to the `flat_menu` tag.'
-        ),
-        default=app_settings.DEFAULT_FLAT_MENU_MAX_LEVELS,
-        choices=app_settings.MAX_LEVELS_CHOICES)
+        )
+    )
     use_specific = models.PositiveSmallIntegerField(
         verbose_name=_('specific page usage'),
         choices=app_settings.USE_SPECIFIC_CHOICES,
         default=app_settings.DEFAULT_FLAT_MENU_USE_SPECIFIC,
-        help_text=app_settings.USE_SPECIFIC_HELP_TEXT)
+        help_text=app_settings.USE_SPECIFIC_HELP_TEXT
+    )
 
     class Meta:
         unique_together = ("site", "handle")
