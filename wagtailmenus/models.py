@@ -221,13 +221,11 @@ class Menu(ClusterableModel):
                 use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL and
                 self.use_specific < app_settings.USE_SPECIFIC_TOP_LEVEL
             ):
+                self.clear_page_cache()
                 try:
                     del self.top_level_items
                 except AttributeError:
                     pass
-
-            if (use_specific > self.use_specific):
-                self.clear_page_cache()
 
             self.use_specific = use_specific
 
