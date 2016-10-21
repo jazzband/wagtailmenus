@@ -70,6 +70,9 @@ class FlatMenuAdmin(ModelAdmin):
     ordering = ('-site__is_default_site', 'site__hostname', 'handle')
     add_to_settings_menu = True
 
+    def get_form_view_extra_css(self):
+        return ['wagtailmenus/css/menu-edit.css'] + self.form_view_extra_css
+
     def copy_view(self, request, instance_pk):
         kwargs = {'model_admin': self, 'instance_pk': instance_pk}
         return FlatMenuCopyView.as_view(**kwargs)(request)

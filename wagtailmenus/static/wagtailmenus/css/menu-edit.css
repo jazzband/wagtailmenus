@@ -1,0 +1,55 @@
+.object .multiple > li {
+    padding-right: 3.5%;
+}
+
+@media screen and (min-width: 50em) {
+
+    label {
+        padding-right: 12px;
+        max-width: 165px;
+        text-align: right;
+        width: 29%;
+    }
+
+    .field-content {
+        width: 70.6%
+    }
+
+    .object fieldset {
+        float: none;
+        width: 100%;
+    }
+
+    .object .multiple {
+        width: 100%
+    }
+
+    .multiple > li {
+        padding-right: 0;
+    }
+
+    .multiple fieldset {
+        width: 100%;
+    }
+
+    .multiple label {
+        max-width: 146px;
+        width: 27%;
+    }
+
+    .multiple .field-content {
+        width: 72.6%
+    }
+
+}
+
+@media screen and (min-width: 60em) {
+
+    .multiple label {
+        width: 23%;
+    }
+
+    .multiple .field-content {
+        width: 76.6%
+    }
+}

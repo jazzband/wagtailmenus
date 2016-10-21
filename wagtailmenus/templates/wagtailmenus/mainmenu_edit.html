@@ -1,6 +1,11 @@
 {% extends "modeladmin/create.html" %}
 {% load i18n %}
 
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ STATIC_URL }}wagtailmenus/css/menu-edit.css" type="text/css" />
+{% endblock %}
+
 {% block content %}
     <header class="nice-padding merged">
         <div class="row">
