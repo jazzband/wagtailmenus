@@ -1,19 +1,11 @@
 Changelog
 =========
 
-2.0.0 (17.11.2016) IN DEVELOPMENT
+1.6.1 (XX.XX.XXX) IN DEVELOPMENT
 ---------------------------------
 
-* Coming soon
 
-
-1.6.1 (04.11.2016) IN DEVELOPMENT
----------------------------------
-
-* Reserved for bug fixes
-
-
-1.6.0 (28.10.2016) IN DEVELOPMENT
+1.6.0 (XX.XX.XXX) IN DEVELOPMENT
 ---------------------------------
 
 * Improved confirmation messages when saving a menu in the admin area.
@@ -28,8 +20,7 @@ Changelog
   that comes into play when serving custom views, where the `before_serve_page`
   hook isn't activated, and `wagtailmenu_params_helper()` in `wagtail_hooks.py`
   doesn't get to add it's helpful values to the request/context.
-* Updated tox environment settings to run tests against wagtail==1.7, and 
-  updated pinned wagtail version in `setup.py` to reflect compatibility.
+
 
 
 1.5.1 (10.10.2016) 
