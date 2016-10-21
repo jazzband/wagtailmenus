@@ -31,14 +31,14 @@ def validate_supplied_values(tag, max_levels=None, use_specific=None,
         if not isinstance(parent_page, Page):
             raise ValueError(_(
                 "The `%s` tag expects `parent_page` to be a `Page` instance. "
-                "A `%s` was supplied.") %
-                (tag, type(parent_page)))
+                "A value of type `%s` was supplied.") %
+                (tag, parent_page.__class__))
     if menuitem_or_page is not None:
         if not isinstance(menuitem_or_page, (Page, MenuItem)):
             raise ValueError(_(
                 "The `%s` tag expects `menuitem_or_page` to be a `Page` or "
-                "`MenuItem` instance. A `%s` was supplied.") %
-                (tag, type(menuitem_or_page)))
+                "`MenuItem` instance. A value of type `%s` was supplied.") %
+                (tag, menuitem_or_page.__class__))
 
 
 def get_attrs_from_context(context, guess_tree_position=True):

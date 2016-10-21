@@ -4,6 +4,7 @@ from django.test import TestCase
 
 from wagtail.wagtailcore.models import Site
 from wagtailmenus.models import MainMenu, FlatMenu
+from wagtailmenus.templatetags.menu_tags import validate_supplied_values
 from bs4 import BeautifulSoup
 
 
@@ -40,6 +41,25 @@ class TestTemplateTags(TestCase):
         menu = FlatMenu.get_for_site('footer', site_two, True)
         self.assertIsNotNone(menu)
         self.assertEqual(menu.pk, site_one_menu_pk)
+
+    def test_validate_supplied_values(self):
+        with self.assertRaisesMessage(ValueError, 'The `main_menu` tag expects `max_levels` to be an integer value between 1 and 5. Please review your template.'):
+            validate_supplied_values(tag='main_menu', max_levels=9)
+
+        with self.assertRaisesMessage(ValueError, 'The `main_menu` tag expects `max_levels` to be an integer value between 1 and 5. Please review your template.'):
+            validate_supplied_values(tag='main_menu', max_levels='1')
+
+        with self.assertRaisesMessage(ValueError, 'The `main_menu` tag expects `use_specific` to be an integer value between 0 and 3. Please review your template.'):
+            validate_supplied_values(tag='main_menu', use_specific=5)
+
+        with self.assertRaisesMessage(ValueError, 'The `main_menu` tag expects `use_specific` to be an integer value between 0 and 3. Please review your template.'):
+            validate_supplied_values(tag='main_menu', use_specific='2')
+
+        with self.assertRaisesMessage(ValueError, "The `main_menu` tag expects `parent_page` to be a `Page` instance. A value of type `<type 'bool'>` was supplied."):
+            validate_supplied_values(tag='main_menu', parent_page=False)
+
+        with self.assertRaisesMessage(ValueError, "The `main_menu` tag expects `menuitem_or_page` to be a `Page` or `MenuItem` instance. A value of type `<type 'int'>` was supplied."):
+            validate_supplied_values(tag='main_menu', menuitem_or_page=5)
 
     def test_homepage(self):
         """

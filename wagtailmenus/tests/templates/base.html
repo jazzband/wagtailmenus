@@ -34,7 +34,7 @@
                 </nav>
 
                 <div id="nav-contact">
-                    {% flat_menu 'contact' show_menu_heading=False %}
+                    {% flat_menu 'contact' show_multiple_levels=False show_menu_heading=False %}
                 </div>
 
             </div>
@@ -51,7 +51,7 @@
             <div class="container">
                 <div id="nav-footer">
                     {% flat_menu 'footer' apply_active_classes=True %}
-
+                    {% flat_menu 'made-up-menu' %}
                 </div>
                 <p class="rkh"><a href="http://www.rkh.co.uk/" target="_blank" title="Web design and development, Leicester">Website by Rock Kitchen Harris</a></p>
             </div>
