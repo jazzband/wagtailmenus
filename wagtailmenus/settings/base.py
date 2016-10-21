@@ -92,3 +92,9 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
+
+WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES = (
+    ('contact', 'contact'),
+    ('footer', 'footer'),
+    ('header-secondary', 'header-secondary'),
+)
