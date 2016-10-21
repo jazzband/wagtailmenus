@@ -16,10 +16,6 @@ matrix:
   - env: TOXENV=py35-dj19-wt16
     python: 3.5  
   - env: TOXENV=py35-dj110-wt16
-    python: 3.5
-  - env: TOXENV=py35-dj19-wt17
-    python: 3.5  
-  - env: TOXENV=py35-dj110-wt17
     python: 3.5  
 install:
 - pip install tox coveralls
