@@ -1,12 +1,8 @@
 {% extends "modeladmin/create.html" %}
 {% load i18n %}
 
-{% block css %}
-    {{ block.super }}
-    <link rel="stylesheet" href="{{ STATIC_URL }}wagtailmenus/css/menu-edit.css" type="text/css" />
-{% endblock %}
-
 {% block content %}
+    
     <header class="nice-padding merged">
         <div class="row">
             <div class="left">
@@ -53,10 +49,10 @@
 {% block extra_css %}
     {% include "wagtailadmin/pages/_editor_css.html" %}
     {{ edit_handler.form.media.css }}
-    {{ site_switcher.media.css }}
+    {{ view.media.css }}
 {% endblock %}
 {% block extra_js %}
     {% include "wagtailadmin/pages/_editor_js.html" %}
     {{ edit_handler.form.media.js }}
-    {{ site_switcher.media.js }}
+    {{ view.media.js }}
 {% endblock %}

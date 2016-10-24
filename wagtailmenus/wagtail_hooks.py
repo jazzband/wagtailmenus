@@ -24,6 +24,9 @@ class MainMenuAdmin(ModelAdmin):
     edit_view_class = MainMenuEditView
     add_to_settings_menu = True
 
+    def get_form_view_extra_css(self):
+        return ['wagtailmenus/css/menu-edit.css'] + self.form_view_extra_css
+
     def get_admin_urls_for_registration(self):
         return (
             url(self.url_helper.get_action_url_pattern('index'),

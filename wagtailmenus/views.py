@@ -55,6 +55,13 @@ class MainMenuEditView(ModelFormView):
         self.instance.save()
 
     @property
+    def media(self):
+        media = super(MainMenuEditView, self).media
+        if self.site_switcher:
+            media += self.site_switcher.media
+        return media
+
+    @property
     def edit_url(self):
         return self.url_helper.get_action_url('edit', self.instance_pk)
 
@@ -83,6 +90,7 @@ class MainMenuEditView(ModelFormView):
         context.update({
             'site': self.site,
             'site_switcher': self.site_switcher,
+            'view': self,
         })
         return context
 
