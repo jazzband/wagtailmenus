@@ -19,6 +19,7 @@ Changelog
 * Improved confirmation messages when saving a menu in the admin area.
 * Added a new test to submit the `MainMenu` edit form and check that
   it behaves as expected.
+* Added some styles to menu add/edit/copy views to improve the UI.
 * Added a new `context_processor` to handle some of the logic that was
   previously being done in template tags. Django's `SimpleLazyObject` class is
   used to reduce the overhead as much as possible, only doing the work when the
