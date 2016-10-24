@@ -30,6 +30,9 @@ Changelog
   doesn't get to add it's helpful values to the request/context.
 * Updated tox environment settings to run tests against wagtail==1.7, and 
   updated pinned wagtail version in `setup.py` to reflect compatibility.
+* Added support for a `WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES` setting that, if
+  set, will turn the `CharField` used for FlatMenu.handle in add/edit/copy
+  forms into a `ChoiceField`, with that setting as the available choices.
 
 
 1.5.1 (10.10.2016) 
