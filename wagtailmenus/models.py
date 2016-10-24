@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from copy import deepcopy
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
@@ -89,6 +90,7 @@ class MenuPage(Page):
         return self.get_children().live().in_menu().exists()
 
 
+@python_2_unicode_compatible
 class MenuItem(models.Model):
     allow_subnav = False
 
@@ -106,11 +108,13 @@ class MenuItem(models.Model):
         null=True,
     )
     link_text = models.CharField(
+        verbose_name=_('link text'),
         max_length=255,
         blank=True,
         help_text=_("Must be set if you wish to link to a custom URL."),
     )
     handle = models.CharField(
+        verbose_name=_('handle'),
         max_length=100,
         blank=True,
         help_text=_(
@@ -175,6 +179,7 @@ class MenuItem(models.Model):
     )
 
 
+@python_2_unicode_compatible
 class MainMenu(ClusterableModel):
     site = models.OneToOneField(
         'wagtailcore.Site', related_name="main_menu",
@@ -201,19 +206,24 @@ class MainMenu(ClusterableModel):
     )
 
 
+@python_2_unicode_compatible
 class FlatMenu(ClusterableModel):
     site = models.ForeignKey(
         'wagtailcore.Site',
+        verbose_name=_('site'),
         related_name="flat_menus")
     title = models.CharField(
+        verbose_name=_('title'),
         max_length=255,
         help_text=_("For internal reference only."))
     handle = models.SlugField(
+        verbose_name=_('handle'),
         max_length=100,
         help_text=_(
             "Used to reference this menu in templates etc. Must be unique "
             "for the selected site."))
     heading = models.CharField(
+        verbose_name=_('heading'),
         max_length=255,
         blank=True,
         help_text=_(
