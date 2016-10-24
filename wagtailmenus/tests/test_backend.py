@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib.auth import get_user_model
@@ -145,6 +146,14 @@ class TestSuperUser(TransactionTestCase):
             response, '<th scope="col"  class="sortable column-site">')
         self.assertNotContains(response,
                                '<div class="changelist-filter col3">')
+
+    def text_flatmenu_list_unicode(self):
+        FlatMenu.objects.create(
+            title="Контакты ссылки", handle="contact", site_id=2)
+        FlatMenu.objects.create(
+            title="Footer ссылки", handle="footer", site_id=2)
+        response = self.client.get('/admin/wagtailmenus/flatmenu/')
+        self.assertEqual(response.status_code, 200)
 
     def test_flatmenu_list_multisite(self):
         site_one = Site.objects.get(id=1)

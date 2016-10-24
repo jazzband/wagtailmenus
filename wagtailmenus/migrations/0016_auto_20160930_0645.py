@@ -15,11 +15,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='flatmenuitem',
             name='handle',
-            field=models.CharField(blank=True, help_text='Use this field to optionally specify an additional value for each menu item, which you can then reference in custom menu templates.', max_length=100),
+            field=models.CharField(verbose_name="handle", blank=True, help_text='Use this field to optionally specify an additional value for each menu item, which you can then reference in custom menu templates.', max_length=100),
         ),
         migrations.AddField(
             model_name='mainmenuitem',
             name='handle',
-            field=models.CharField(blank=True, help_text='Use this field to optionally specify an additional value for each menu item, which you can then reference in custom menu templates.', max_length=100),
+            field=models.CharField(verbose_name="handle", blank=True, help_text='Use this field to optionally specify an additional value for each menu item, which you can then reference in custom menu templates.', max_length=100),
         ),
     ]
