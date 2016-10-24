@@ -24,6 +24,9 @@ class MainMenuAdmin(ModelAdmin):
     edit_view_class = MainMenuEditView
     add_to_settings_menu = True
 
+    def get_form_view_extra_css(self):
+        return ['wagtailmenus/css/menu-edit.css'] + self.form_view_extra_css
+
     def get_admin_urls_for_registration(self):
         return (
             url(self.url_helper.get_action_url_pattern('index'),
@@ -69,6 +72,9 @@ class FlatMenuAdmin(ModelAdmin):
     button_helper_class = FlatMenuButtonHelper
     ordering = ('-site__is_default_site', 'site__hostname', 'handle')
     add_to_settings_menu = True
+
+    def get_form_view_extra_css(self):
+        return ['wagtailmenus/css/menu-edit.css'] + self.form_view_extra_css
 
     def copy_view(self, request, instance_pk):
         kwargs = {'model_admin': self, 'instance_pk': instance_pk}

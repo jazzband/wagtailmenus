@@ -167,8 +167,8 @@ class MenuItem(models.Model):
 
     panels = (
         PageChooserPanel('link_page'),
-        FieldPanel('url_append'),
         FieldPanel('link_url'),
+        FieldPanel('url_append'),
         FieldPanel('link_text'),
         FieldPanel('handle'),
         FieldPanel('allow_subnav'),
