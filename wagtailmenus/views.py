@@ -90,7 +90,6 @@ class MainMenuEditView(ModelFormView):
         context.update({
             'site': self.site,
             'site_switcher': self.site_switcher,
-            'view': self,
         })
         return context
 
