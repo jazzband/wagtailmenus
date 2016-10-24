@@ -12,7 +12,7 @@ The current version is compatible with Wagtail >= 1.5, and Python 2.7, 3.3, 3.4 
 
 ### 1. Gives you independent control over your root-level main menu items
 
-The `MainMenu` model lets you define the root-level items for your projects's main navigation (or one for each site, if it's a multi-site project) using an inline model `MainMenuItem`. These items can link to pages (you can append an optional hash or querystring to the URL, too) or custom URLs. The custom URL field won't force you to enter a valid URL either, so you can add things like *#request-callback* or *#signup* to link to areas on the active page (perhaps as JS modals).
+The `MainMenu` model lets you define the root-level items for your project's main navigation (or one for each site, if it's a multi-site project) using an inline model `MainMenuItem`. These items can link to pages (you can append an optional hash or querystring to the URL, too) or custom URLs. The custom URL field won't force you to enter a valid URL either, so you can add things like *#request-callback* or *#signup* to link to areas on the active page (perhaps as JS modals).
 
 The site's page tree powers everything past the root level, so you don't have to recreate it elsewhere. And as you'd expect, only links to published pages will appear when rendering.
 
@@ -355,6 +355,7 @@ class SectionRootPage(MenuPage):
 
 You can override some of wagtailmenus' default behaviour by adding one of more of the following to your project's settings:
 
+- **`WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES`** (default: `None`): Can be set to a tuple of choices in the [standard Django choices format](https://docs.djangoproject.com/en/1.10/ref/models/fields/#field-choices) to change the `FlatMenu.handle` text field into a select field with fixed choices when adding, editing or copying a `FlatMenu` in Wagtail's admin area.
 - **`WAGTAILMENUS_ACTIVE_CLASS`** (default: `'active'`): The class added to menu items for the currently active page (when using a menu template with `apply_active_classes=True`)
 - **`WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS`** (default: `'ancestor'`): The class added to any menu items for pages that are ancestors of the currently active page (when using a menu template with `apply_active_classes=True`)
 - **`WAGTAILMENUS_MAINMENU_MENU_ICON`** (default: `'list-ol'`): Use this to change the icon used to represent `MainMenu` in the Wagtail admin area.
