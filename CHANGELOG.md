@@ -31,7 +31,7 @@ Changelog
   doesn't get to add it's helpful values to the request/context.
 * Updated tox environment settings to run tests against wagtail==1.7, and 
   updated pinned wagtail version in `setup.py` to reflect compatibility.
-* Added unicode support for python 2.7 and added missing verbose_names from
+* Added unicode support for python 2.7 and added missing verbose_names to
   fields so that they can be translated (Alexey Krasnov & Andy Babic).
 
 
