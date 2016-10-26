@@ -82,7 +82,9 @@ Installation instructions
 
 #. Install the package using pip:
 
-   .. code:: `pip install wagtailmenus`
+   .. code:: bash
+
+    $ pip install wagtailmenus`
 
 #. Add `wagtail.contrib.modeladmin` to `INSTALLED_APPS` in your
    project settings, if it's not there already.
