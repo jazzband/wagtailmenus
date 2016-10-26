@@ -128,10 +128,10 @@ Additional steps for `MenuPage` usage
 
 .. note::
 
-It is not necessary to extend `MenuPage` for all custom page
-types; Just ones you know will be used for pages that may have children,
-and will need the option to repeat themselves in sub-menus when listing
-those children.
+   It is not necessary to extend `MenuPage` for all custom page
+   types; Just ones you know will be used for pages that may have children,
+   and will need the option to repeat themselves in sub-menus when listing
+   those children.
 
 #. In your **core** app and other apps (wherever you have defined a
    custom page/content model to use in your project), import
