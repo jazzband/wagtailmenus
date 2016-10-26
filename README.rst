@@ -113,6 +113,7 @@ TEMPLATES = [
    },
 ]
 
+
 #. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
 
 Additional steps for `MenuPage` usage
