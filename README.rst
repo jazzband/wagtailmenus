@@ -88,28 +88,29 @@ Installation instructions
    `context_processors` list in your `TEMPLATES` setting. The
    setting should look something like this:
 
-   .. code:: python
+.. code:: python
 
-   TEMPLATES = [
-       {
-           'BACKEND': 'django.template.backends.django.DjangoTemplates',
-           'DIRS': [ os.path.join(PROJECT\_ROOT, 'templates'), ],
-           'APP_DIRS': True,
-           'OPTIONS': {
-               'context\_processors': [
-                   'django.contrib.auth.context\_processors.auth',
-                   'django.template.context\_processors.debug',
-                   'django.template.context\_processors.i18n',
-                   'django.template.context\_processors.media',
-                   'django.template.context\_processors.request',
-                   'django.template.context\_processors.static',
-                   'django.template.context\_processors.tz',
-                   'django.contrib.messages.context\_processors.messages',
-                   'wagtail.contrib.settings.context\_processors.settings',
-                   'wagtailmenus.context\_processors.wagtailmenus',
-               ],
-           },
-       }, ]
+TEMPLATES = [
+   {
+       'BACKEND': 'django.template.backends.django.DjangoTemplates',
+       'DIRS': [ os.path.join(PROJECT\_ROOT, 'templates'), ],
+       'APP_DIRS': True,
+       'OPTIONS': {
+           'context\_processors': [
+               'django.contrib.auth.context\_processors.auth',
+               'django.template.context\_processors.debug',
+               'django.template.context\_processors.i18n',
+               'django.template.context\_processors.media',
+               'django.template.context\_processors.request',
+               'django.template.context\_processors.static',
+               'django.template.context\_processors.tz',
+               'django.contrib.messages.context\_processors.messages',
+               'wagtail.contrib.settings.context\_processors.settings',
+               'wagtailmenus.context\_processors.wagtailmenus',
+           ],
+       },
+   },
+]
 
 #. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
 
