@@ -84,7 +84,7 @@ Installation instructions
 
    .. code:: bash
 
-    $ pip install wagtailmenus`
+    $ pip install wagtailmenus
 
 #. Add `wagtail.contrib.modeladmin` to `INSTALLED_APPS` in your
    project settings, if it's not there already.
@@ -93,34 +93,35 @@ Installation instructions
    `context_processors` list in your `TEMPLATES` setting. The
    setting should look something like this:
 
-.. code-block:: python
+   .. code-block:: python
 
-TEMPLATES = [
-   {
-       'BACKEND': 'django.template.backends.django.DjangoTemplates',
-       'DIRS': [ os.path.join(PROJECT\_ROOT, 'templates'), ],
-       'APP_DIRS': True,
-       'OPTIONS': {
-           'context\_processors': [
-               'django.contrib.auth.context\_processors.auth',
-               'django.template.context\_processors.debug',
-               'django.template.context\_processors.i18n',
-               'django.template.context\_processors.media',
-               'django.template.context\_processors.request',
-               'django.template.context\_processors.static',
-               'django.template.context\_processors.tz',
-               'django.contrib.messages.context\_processors.messages',
-               'wagtail.contrib.settings.context\_processors.settings',
-               'wagtail.contrib.settings.context\_processors.settings',
-               'wagtailmenus.context\_processors.wagtailmenus',
-           ],
-       },
-   },
-]
-
+   TEMPLATES = [
+      {
+          'BACKEND': 'django.template.backends.django.DjangoTemplates',
+          'DIRS': [ os.path.join(PROJECT\_ROOT, 'templates'), ],
+          'APP_DIRS': True,
+          'OPTIONS': {
+              'context\_processors': [
+                  'django.contrib.auth.context\_processors.auth',
+                  'django.template.context\_processors.debug',
+                  'django.template.context\_processors.i18n',
+                  'django.template.context\_processors.media',
+                  'django.template.context\_processors.request',
+                  'django.template.context\_processors.static',
+                  'django.template.context\_processors.tz',
+                  'django.contrib.messages.context\_processors.messages',
+                  'wagtail.contrib.settings.context\_processors.settings',
+                  'wagtail.contrib.settings.context\_processors.settings',
+                  'wagtailmenus.context\_processors.wagtailmenus',
+              ],
+          },
+      },
+   ]
 
 #. Run
-   .. code:: $ python manage.py migrate wagtailmenus
+   .. code:: bash
+
+   $ python manage.py migrate wagtailmenus
 
    to set up the initial database tables.
 
@@ -134,7 +135,7 @@ Additional steps for `MenuPage` usage
    and will need the option to repeat themselves in sub-menus when listing
    those children.
 
-#. In your `core` app and other apps (wherever you have defined a
+#. In your **core** app and other apps (wherever you have defined a
    custom page/content model to use in your project), import
    `wagtailmenus.models.MenuPage` and extend that instead of
    `wagtail.wagtailcore.models.Page`.
