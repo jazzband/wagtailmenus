@@ -350,33 +350,35 @@ ancestors of the active page.
 
 **Optional params for `{% section_menu %}`**
 
--  **show_section_root** (default: `True`): Passed through to the
+-  **show_section_root** (default: :code:`True`):
+   Passed through to the
    template used for rendering, where it can be used to conditionally
    display the root page of the current section.
--  **max_levels** (default: `2`): Lets you control how many levels
+-  **max_levels** (default: :code:`2`):
+   Lets you control how many levels
    of pages should be rendered (the section root page does not count as
    a level, just the first set of pages below it). If you only want to
    display the first level of pages below the section root page (whether
-   pages linked to have children or not), add `max_levels=1` to the
+   pages linked to have children or not), add :code:`max_levels=1` to the
    tag in your template. You can display additional levels by providing
    a higher value.
--  **show_multiple_levels** (default: `True`): Adding
-   `show_multiple_levels=False` to the tag in your template
-   essentially overrides `max_levels` to `1`. It's just a little
+-  **show_multiple_levels** (default: :code:`True`):
+   Adding :code:`show_multiple_levels=False` to the tag in your template
+   essentially overrides :code:`max_levels` to :code:`1`. It's just a little
    more descriptive.
--  **allow_repeating_parents** (default: `True`):
+-  **allow_repeating_parents** (default: :code:`True`):
    Repetition-related settings on your pages are respected by default,
-   but you can add `allow_repeating_parents=False` to ignore them, and
+   but you can add :code:`allow_repeating_parents=False` to ignore them, and
    not repeat any pages in sub-menus when rendering.
--  **apply_active_classes** (default: `True`): The tag will add
-   'active' and 'ancestor' classes to the menu items where applicable,
+-  **apply_active_classes** (default: :code:`True`):
+   The tag will add :code:`'active'` and :code:`'ancestor'` classes to the menu items where applicable,
    to indicate the active page and ancestors of that page. To disable
-   this behaviour, add `apply_active_classes=False` to the tag in your
+   this behaviour, add :code:`apply_active_classes=False` to the tag in your
    template.
--  **template** (default: `'menus/section_menu.html'`): Lets you
-   render the menu to a template of your choosing. You can also name an
+-  **template** (default: `'menus/section_menu.html'`):
+   Lets you render the menu to a template of your choosing. You can also name an
    alternative template to be used by default, by adding a
-   `WAGTAILMENUS_DEFAULT_SECTION_MENU_TEMPLATE` setting to your
+   :code:`WAGTAILMENUS_DEFAULT_SECTION_MENU_TEMPLATE` setting to your
    project's settings module.
 -  **sub_menu_template** (default: :code:`'menus/sub_menu.html'`): Lets
    you specify a template to be used for rendering sub menus. All
@@ -393,8 +395,8 @@ ancestors of the active page.
    :code:`WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC=True` to your
    project's settings module.
 
-6. Using the `{% children_menu %}` tag
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+6. Using the :code:`{% children_menu %}` tag
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The :code:`{% children_menu %}` tag can be used in page templates to display
 a menu of children of the current page. You can also use the
@@ -446,8 +448,8 @@ a menu of children of the current page. You can also use the
    :code:`WAGTAILMENUS_DEFAULT_CHILDREN_MENU_USE_SPECIFIC=True` to your
    project's settings module.
 
-6. Using the `{% sub_menu %}` tag
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+6. Using the :code:`{% sub_menu %}` tag
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The :code:`{% sub_menu %}` tag is used within menu templates to render
 additional levels of pages within a menu. It's designed to pick up on
@@ -455,9 +457,9 @@ variables added to the context by the other menu tags, and so can behave
 a little unpredictably if called directly, without those context
 variables having been set. It requires only one parameter to work, which
 is :code:`menuitem_or_page`, which can either be an instance of
-:code:`MainMenuItem`, :code:`FlatMenuItem`, or `Page`.
+:code:`MainMenuItem`, :code:`FlatMenuItem`, or :code:`Page`.
 
-**Optional params for `{% sub_menu %}`**
+**Optional params for :code:`{% sub_menu %}`**
 
 -  **stop_at_this_level**: By default, the tag will figure out
    whether further levels should be rendered or not, depending on what
@@ -533,8 +535,7 @@ as easily as those pages. But, your site uses drop-down navigation, and
 the **About Us** link no longer takes you to that page when clicked...
 it simply acts as a toggle for hiding and showing it's sub-pages:
 
-Presuming the **About Us** page extends
-`wagtailmenus.models.MenuPage`:
+Presuming the **About Us** page extends :code:`wagtailmenus.models.MenuPage`:
 
 #. Edit that page in the CMS, and click on the :code:`Settings` tab.
 #. Uncollapse the **ADVANCED MENU BEHAVIOUR** panel by clicking the
@@ -562,7 +563,7 @@ consistent with other page links rendered at that level.
 If you find yourself needing further control over the items that appear
 in your menus (perhaps you need to add further items for specific pages,
 or remove some under certain circumstances), you will likely find the
-**modify_submenu_items()** *(added in 1.3)* and **has_submenu_items()** *(added in 1.4)* methods on the
+:code:`modify_submenu_items()` *(added in 1.3)* and :code:`has_submenu_items()` *(added in 1.4)* methods on the
 `MenuPage <https://github.com/rkhleics/wagtailmenus/blob/master/wagtailmenus/models.py#L17>`_
 model of interest.
 
@@ -748,17 +749,17 @@ of more of the following to your project's settings:
    The default number of maximum levels rendered by
    :code:`{% section_menu %}` when a `max_levels` parameter value isn't
    provided.
--  **WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS** (default: `1`):
+-  **WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS** (default: :code:`1`):
    The default number of maximum levels rendered by
    :code:`{% children_page_menu %}` when a :code:`max_levels` parameter value
    isn't provided.
 -  **WAGTAILMENUS_DEFAULT_MAIN_MENU_USE_SPECIFIC** (default: :code:`False`):
-   If set to `True`, by default, when rendering a
+   If set to :code:`True`, by default, when rendering a
    :code:`{% main_menu %}`, specific page-type objects will be fetched and
    used for menu items instead of vanilla :code:`Page` objects, using as few
    database queries as possible. The behaviour can be overridden in
    individual cases using the tag's :code:`use_specific` keyword argument.
--  **WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC** (default: `False`):
+-  **WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC** (default: :code:`False`):
    If set to :code:`True`, by default, when rendering a :code:`{% section_menu %}`,
    specific page-type objects will be fetched
    and used for menu items instead of vanilla :code:`Page` objects, using as
