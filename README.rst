@@ -1,4 +1,4 @@
-|Build Status|  | |PyPi Version| | |Coverage Status|
+|Build Status| |PyPi Version| |Coverage Status|
 
 What is wagtailmenus?
 =====================
@@ -12,7 +12,7 @@ The current version is compatible with Wagtail >= 1.5, and Python 2.7,
 What does wagtailmenus do?
 --------------------------
 
-1. Gives you independent control over your root-level main menu items
+#. Gives you independent control over your root-level main menu items
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The `MainMenu` model lets you define the root-level items for your
@@ -27,7 +27,7 @@ The site's page tree powers everything past the root level, so you don't
 have to recreate it elsewhere. And as you'd expect, only links to
 published pages will appear when rendering.
 
-2. Allows you to manage multiple 'flat menus' via the CMS
+#. Allows you to manage multiple 'flat menus' via the CMS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Have you ever hard-coded a menu into a footer at the start of a project,
@@ -53,7 +53,7 @@ find out more). However you choose to do things, a 'copy' feature makes
 it easy to copy existing flat menus from one site to another via
 Wagtail's admin interface.
 
-3. Offers a solution to the issue of key page links becoming 'toggles' in multi-level drop-down menus
+#. Offers a solution to the issue of key page links becoming 'toggles' in multi-level drop-down menus
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Extend the `wagtailmenus.models.MenuPage` model instead of the usual
@@ -66,7 +66,7 @@ consistent in all menus throughout your site.
 No more adding additional pages into the tree. No more hard-coding
 additional links into templates, or resorting to javascript hacks.
 
-4. Gives you a set of powerful template tags to render your menus consistently
+#. Gives you a set of powerful template tags to render your menus consistently
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Each tag comes with a default template that's designed to be fully
