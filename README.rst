@@ -212,8 +212,8 @@ your menus later. As soon as you create menus for more than one site in
 a multi-site project, the listing page will give you additional
 information and filters to help manage your menus, like so:
 
-3. Using the `{% main_menu %}` tag
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+3. Using the :code:`{% main_menu %}` tag
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The :code:`{% main_menu %}` tag allows you to display the :code:`MainMenu`
 defined for the current site in your Wagtail project, with CSS classes
@@ -227,7 +227,7 @@ children for it.
 #. Add :code:`{% main_menu %}` to your template, where you want the menu to
    appear.
 
-**Optional params for `{% main_menu %}`**
+**Optional params for :code:`{% main_menu %}`**
 
 -  **max_levels** (default: `2`): Provide an integer value to
    control how many levels of pages should be rendered. If you only want
@@ -244,12 +244,12 @@ children for it.
    more descriptive.
 -  **allow_repeating_parents** (default: :code:`True`):
    Repetition-related settings on your pages are respected by default,
-   but you can add `allow_repeating_parents=False` to ignore them, and
+   but you can add :code:`allow_repeating_parents=False` to ignore them, and
    not repeat any pages in sub-menus when rendering multiple levels.
 -  **apply_active_classes** (default: :code:`True`): The tag will
    attempt to add 'active' and 'ancestor' CSS classes to the menu items
    (where applicable) to indicate the active page and ancestors of that
-   page. To disable this behaviour, add `apply_active_classes=False`
+   page. To disable this behaviour, add :code:`apply_active_classes=False`
    to the tag in your template. You can change the CSS classes used by
    adding :code:`WAGTAILMENUS_ACTIVE_CLASS` and
    :code:`WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS` settings to your project's
@@ -274,8 +274,8 @@ children for it.
    :code:`WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC=True` to your
    project's settings module.
 
-4. Using the `{% flat_menu %}` tag
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+4. Using the :code:`{% flat_menu %}` tag
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #. In whichever template you want your menu to appear, load
    :code:`menu_tags` using `{% load menu_tags %}`.
@@ -283,69 +283,69 @@ children for it.
    want the menu to appear (where 'menu-handle' is the unique handle for
    the menu you added).
 
-**Optional params for `{% flat_menu %}`**
+**Optional params for :code:`{% flat_menu %}`**
 
--  **show_menu_heading** (default: `True`): Passed through to the
-   template used for rendering, where it can be used to conditionally
+-  **show_menu_heading** (default: :code:`True`):
+   Passed through to the template used for rendering, where it can be used to conditionally
    display a heading above the menu.
--  **show_multiple_levels** (default: `False`): Flat menus are
-   designed for outputting simple, flat lists of links. But, if the need
-   arises, you can add `show_multiple_levels=True` to the tag in your
+-  **show_multiple_levels** (default: :code:`False`):
+   Flat menus are designed for outputting simple, flat lists of links. But, if the need
+   arises, you can add :code:`show_multiple_levels=True` to the tag in your
    template to output multiple page levels. If you haven't already, you
    may also need to check the **"Allow sub-menu for this item"** box for
    the menu items you wish to show further levels for.
--  **max_levels** (default: `2`): If `show_multiple_levels=True`
-   is being provided to enable multiple levels, you can use this
+-  **max_levels** (default: :code:`2`):
+   If :code:`show_multiple_levels=True` is being provided to enable multiple levels, you can use this
    parameter to specify how many levels you'd like to display.
--  **apply_active_classes** (default: `False`): Unlike
-   `main_menu` and `section_menu`, `flat_menu` will NOT attempt to
-   add 'active' and 'ancestor' classes to the menu items by default, as
-   this is often not useful. You can override this by adding
-   `apply_active_classes=true` to the tag in your template.
--  **template** (default: `'menus/flat_menu.html'`): Lets you
-   render the menu to a template of your choosing. You can also name an
+-  **apply_active_classes** (default: :code:`False`):
+   Unlike :code:`main_menu` and :code:`section_menu`, :code:`flat_menu` will **NOT** attempt to
+   add :code:`'active'` and :code:`'ancestor'` classes to the menu items by default, as
+   this is often not useful. You can override this by adding :code:`apply_active_classes=true` to the tag
+   in your template.
+-  **template** (default: :code:`'menus/flat_menu.html'`):
+   Lets you render the menu to a template of your choosing. You can also name an
    alternative template to be used by default, by adding a
    :code:`WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE` setting to your project's
    settings module.
--  **sub_menu_template** (default: `'menus/sub_menu.html'`): Lets
-   you specify a template to be used for rendering sub menus (if enabled
+-  **sub_menu_template** (default: `'menus/sub_menu.html'`):
+   Lets you specify a template to be used for rendering sub menus (if enabled
    using :code:`show_multiple_levels`). All subsequent calls to
-   {% sub_menu %} within the context of the flat menu will use this
-   template unless overridden by providing a `template` value to
-   {% sub_menu %} in a menu template. You can specify an alternative
-   default template by adding a
-   `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's
+   :code:`{% sub_menu %}` within the context of the flat menu will use this
+   template unless overridden by providing a :code:`template` value to
+   :code:`{% sub_menu %}` in a menu template. You can specify an alternative
+   default template by adding a :code:`WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's
    settings module.
--  **fall_back_to_default_site_menus** (default: `False`): When
-   using the `{% flat_menu %}` tag, wagtailmenus identifies the
-   'current site', and attempts to find a menu for that site, matching
-   the `handle` provided. By default, if no menu is found for the
+-  **fall_back_to_default_site_menus** (default: `False`):
+   When using the :code:`{% flat_menu %}` tag, wagtailmenus identifies the
+   :code:`'current site'`, and attempts to find a menu for that site, matching
+   the :code:`handle` provided. By default, if no menu is found for the
    current site, nothing is rendered. However, if
-   `fall_back_to_default_site_menus=True` is provided, wagtailmenus
+   :code:`fall_back_to_default_site_menus=True` is provided, wagtailmenus
    will search search the 'default' site (In the CMS, this will be the
    site with the '**Is default site**' checkbox ticked) for a menu with
    the same handle, and use that instead before giving up. The default
    behaviour can be altered by adding
-   `WAGTAILMENUS_FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS=True` to
+   :code:`WAGTAILMENUS_FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS=True` to
    your project's settings module.
--  **use_specific** (default: `False`): If `True`, specific
+-  **use_specific** (default: :code:`False`):
+   If :code:`True`, specific
    page-type objects will be fetched and used for menu items instead of
-   vanilla `Page` objects, using as few database queries as possible.
+   vanilla :code:`Page` objects, using as few database queries as possible.
    The default can be altered by adding
-   `WAGTAILMENUS_DEFAULT_FLAT_MENU_USE_SPECIFIC=True` to your
+   :code:`WAGTAILMENUS_DEFAULT_FLAT_MENU_USE_SPECIFIC=True` to your
    project's settings module.
 
 5. Using the `{% section_menu %}` tag
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The `{% section_menu %}` tag allows you to display a context-aware,
+The :code:`{% section_menu %}` tag allows you to display a context-aware,
 page-driven menu in your project's templates, with CSS classes
 automatically applied to each item to indicate the active page or
 ancestors of the active page.
 
 #. In whichever template you want the section menu to appear, load
-   `menu_tags` using `{% load menu_tags %}`.
-#. Add `{% section_menu %}` to your template, where you want the menu
+   :code:`menu_tags` using :code:`{% load menu_tags %}`.
+#. Add :code:`{% section_menu %}` to your template, where you want the menu
    to appear.
 
 **Optional params for `{% section_menu %}`**
