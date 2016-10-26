@@ -41,14 +41,13 @@ a single line of code.
 
 Flat menus are designed for outputting simple, flat lists of links, but
 they CAN be made to display multiple levels of pages too. See the
-instructions below for `using the `{% flat_menu %}`
-tag <#flat_menu-tag>`__.
+instructions below for `using the **{% flat_menu %}** tag <#flat_menu-tag>`_.
 
 In a multi-site project, you can choose to define a new set of menus for
 each site, or you can define one set of menus for your default site and
 reuse them for your other sites, or use a combination of both approaches
-for different menus (see the **`fall_back_to_default_site_menus`**
-option in `**Using the `{% flat_menu %}` tag** <#flat_menu-tag>`__ to
+for different menus (see the **:code:`fall_back_to_default_site_menus`**
+option in `**Using the **{% flat_menu %} tag** <#flat_menu-tag>`_ to
 find out more). However you choose to do things, a 'copy' feature makes
 it easy to copy existing flat menus from one site to another via
 Wagtail's admin interface.
@@ -96,7 +95,7 @@ Installation instructions
    .. code:: python
 
    TEMPLATES = [
-      {
+   {
           'BACKEND': 'django.template.backends.django.DjangoTemplates',
           'DIRS': [ os.path.join(PROJECT\_ROOT, 'templates'), ],
           'APP_DIRS': True,
@@ -115,16 +114,14 @@ Installation instructions
                   'wagtailmenus.context\_processors.wagtailmenus',
               ],
           },
-      },
-   ]
+   }, ]
 
-#. Run
+#. Install migrations to set up the initial database tables:
 
    .. code:: bash
 
-   $ python manage.py migrate wagtailmenus
+    $ python manage.py migrate wagtailmenus
 
-   to set up the initial database tables.
 
 Additional steps for `MenuPage` usage
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -308,18 +305,18 @@ children for it.
 -  **`template`** (default: `'menus/flat_menu.html'`): Lets you
    render the menu to a template of your choosing. You can also name an
    alternative template to be used by default, by adding a
-   `WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE` setting to your project's
+   :code:`WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE` setting to your project's
    settings module.
--  **`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets
+-  **:code:`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets
    you specify a template to be used for rendering sub menus (if enabled
-   using `show_multiple_levels`). All subsequent calls to
-   `{% sub_menu %}` within the context of the flat menu will use this
+   using :code:`show_multiple_levels`). All subsequent calls to
+   {% sub_menu %} within the context of the flat menu will use this
    template unless overridden by providing a `template` value to
-   `{% sub_menu %}` in a menu template. You can specify an alternative
+   {% sub_menu %} in a menu template. You can specify an alternative
    default template by adding a
    `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's
    settings module.
--  **`fall_back_to_default_site_menus`** (default: `False`): When
+-  **fall_back_to_default_site_menus** (default: `False`): When
    using the `{% flat_menu %}` tag, wagtailmenus identifies the
    'current site', and attempts to find a menu for that site, matching
    the `handle` provided. By default, if no menu is found for the
@@ -331,7 +328,7 @@ children for it.
    behaviour can be altered by adding
    `WAGTAILMENUS_FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS=True` to
    your project's settings module.
--  **`use_specific`** (default: `False`): If `True`, specific
+-  **use_specific** (default: `False`): If `True`, specific
    page-type objects will be fetched and used for menu items instead of
    vanilla `Page` objects, using as few database queries as possible.
    The default can be altered by adding
@@ -786,7 +783,7 @@ Contributing
 
 If you'd like to become a wagtailmenus contributor, we'd be happy to
 have you. You should start by taking a look at our `contributor
-guidelines <https://github.com/rkhleics/wagtailmenus/blob/master/CONTRIBUTING.md>`__
+guidelines <https://github.com/rkhleics/wagtailmenus/blob/master/CONTRIBUTING.md>`_
 
 .. |Build Status| image:: https://travis-ci.org/rkhleics/wagtailmenus.svg?branch=master
    :target: https://travis-ci.org/rkhleics/wagtailmenus
