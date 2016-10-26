@@ -93,7 +93,7 @@ Installation instructions
    `context_processors` list in your `TEMPLATES` setting. The
    setting should look something like this:
 
-   .. code-block:: python
+   .. code:: python
 
    TEMPLATES = [
       {
@@ -119,6 +119,7 @@ Installation instructions
    ]
 
 #. Run
+
    .. code:: bash
 
    $ python manage.py migrate wagtailmenus
