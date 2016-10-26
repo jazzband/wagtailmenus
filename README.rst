@@ -106,6 +106,7 @@ TEMPLATES = [
                'django.template.context\_processors.tz',
                'django.contrib.messages.context\_processors.messages',
                'wagtail.contrib.settings.context\_processors.settings',
+               'wagtail.contrib.settings.context\_processors.settings',
                'wagtailmenus.context\_processors.wagtailmenus',
            ],
        },
@@ -553,9 +554,8 @@ consistent with other page links rendered at that level.
 If you find yourself needing further control over the items that appear
 in your menus (perhaps you need to add further items for specific pages,
 or remove some under certain circumstances), you will likely find the
-**`modify_submenu_items()`** *(added in 1.3)* and
-**`has_submenu_items()`** *(added in 1.4)* methods on the
-``MenuPage` <https://github.com/rkhleics/wagtailmenus/blob/master/wagtailmenus/models.py#L17>`__
+**modify_submenu_items()** *(added in 1.3)* and **has_submenu_items()** *(added in 1.4)* methods on the
+`MenuPage <https://github.com/rkhleics/wagtailmenus/blob/master/wagtailmenus/models.py#L17>`_
 model of interest.
 
 For example, if you had a `ContactPage` model extended `MenuPage`,
@@ -565,9 +565,7 @@ and in main menus, you wanted to add some additional links below each
 
 .. code:: python
 
-
     from wagtailmenus.models import MenuPage
-
 
     class ContactPage(MenuPage):
         ...
