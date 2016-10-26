@@ -88,7 +88,7 @@ Installation instructions
    `context_processors` list in your `TEMPLATES` setting. The
    setting should look something like this:
 
-.. code:: python
+.. code-block:: python
 
 TEMPLATES = [
    {
