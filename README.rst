@@ -15,9 +15,9 @@ What does wagtailmenus do?
 1. Gives you independent control over your root-level main menu items
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The :class:`wagtailmenus.models.MainMenu` model lets you define the root-level items for your
+The :code:`wagtailmenus.models.MainMenu` model lets you define the root-level items for your
 projects's main navigation (or one for each site, if it's a multi-site
-project) using an inline model :class:`wagtailmenus.models.MainMenuItem`. These items can link to
+project) using an inline model :code:`wagtailmenus.models.MainMenuItem`. These items can link to
 pages (you can append an optional hash or querystring to the URL, too)
 or custom URLs. The custom URL field won't force you to enter a valid
 URL either, so you can add things like *#request-callback* or *#signup*
@@ -128,7 +128,7 @@ Additional steps for `MenuPage` usage
 
 .. note::
 
-   It is not necessary to extend `MenuPage` for all custom page
+   It is not necessary to extend :class:`wagtailmenus.models.MenuPage` for all custom page
    types; Just ones you know will be used for pages that may have children,
    and will need the option to repeat themselves in sub-menus when listing
    those children.
