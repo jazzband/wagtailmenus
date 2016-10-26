@@ -94,8 +94,8 @@ Installation instructions
 
    .. code:: python
 
-   TEMPLATES = [
-   {
+    TEMPLATES = [
+    {
           'BACKEND': 'django.template.backends.django.DjangoTemplates',
           'DIRS': [ os.path.join(PROJECT\_ROOT, 'templates'), ],
           'APP_DIRS': True,
@@ -114,7 +114,7 @@ Installation instructions
                   'wagtailmenus.context\_processors.wagtailmenus',
               ],
           },
-   }, ]
+    }, ]
 
 #. Install migrations to set up the initial database tables:
 
