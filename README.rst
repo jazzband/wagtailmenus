@@ -3,7 +3,7 @@
 What is wagtailmenus?
 =====================
 
-It's an extension for Torchbox's `Wagtail CMS <https://github.com/torchbox/wagtail>`__ to help you manage and
+It's an extension for Torchbox's `Wagtail CMS <https://github.com/torchbox/wagtail>`_ to help you manage and
 render multi-level navigation and simple flat menus in a consistent, flexible way.
 
 The current version is compatible with Wagtail >= 1.5, and Python 2.7,
@@ -15,9 +15,9 @@ What does wagtailmenus do?
 1. Gives you independent control over your root-level main menu items
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The `MainMenu` model lets you define the root-level items for your
+The :class:`wagtailmenus.models.MainMenu` model lets you define the root-level items for your
 projects's main navigation (or one for each site, if it's a multi-site
-project) using an inline model `MainMenuItem`. These items can link to
+project) using an inline model :class:`wagtailmenus.models.MainMenuItem`. These items can link to
 pages (you can append an optional hash or querystring to the URL, too)
 or custom URLs. The custom URL field won't force you to enter a valid
 URL either, so you can add things like *#request-callback* or *#signup*
@@ -56,8 +56,8 @@ Wagtail's admin interface.
 3. Offers a solution to the issue of key page links becoming 'toggles' in multi-level drop-down menus
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Extend the `wagtailmenus.models.MenuPage` model instead of the usual
-`wagtail.wagtailcore.models.Page` to create your custom page types,
+Extend the :class:`wagtailmenus.models.MenuPage` model instead of the usual
+:class:`wagtail.wagtailcore.models.Page` to create your custom page types,
 and gain a couple of extra fields that will allow you to configure
 certain pages to appear again alongside their children in multi-level
 menus. Use the menu tags provided, and that behaviour will remain
@@ -80,7 +80,10 @@ preferred location.
 Installation instructions
 -------------------------
 
-#. Install the package using pip: `pip install wagtailmenus`.
+#. Install the package using pip:
+
+   .. code:: `pip install wagtailmenus`
+
 #. Add `wagtail.contrib.modeladmin` to `INSTALLED_APPS` in your
    project settings, if it's not there already.
 #. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings.
@@ -114,7 +117,10 @@ TEMPLATES = [
 ]
 
 
-#. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
+#. Run
+   .. code:: $ python manage.py migrate wagtailmenus
+
+   to set up the initial database tables.
 
 Additional steps for `MenuPage` usage
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
