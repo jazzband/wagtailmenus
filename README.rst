@@ -55,8 +55,8 @@ Wagtail's admin interface.
 3. Offers a solution to the issue of key page links becoming 'toggles' in multi-level drop-down menus
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Extend the :class:`wagtailmenus.models.MenuPage` model instead of the usual
-:class:`wagtail.wagtailcore.models.Page` to create your custom page types,
+Extend the :code:`wagtailmenus.models.MenuPage` model instead of the usual
+:code:`wagtail.wagtailcore.models.Page` to create your custom page types,
 and gain a couple of extra fields that will allow you to configure
 certain pages to appear again alongside their children in multi-level
 menus. Use the menu tags provided, and that behaviour will remain
@@ -85,11 +85,11 @@ Installation instructions
 
     $ pip install wagtailmenus
 
-#. Add `wagtail.contrib.modeladmin` to `INSTALLED_APPS` in your
+#. Add :code:`wagtail.contrib.modeladmin` to :code:`INSTALLED_APPS` in your
    project settings, if it's not there already.
-#. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings.
-#. Add `wagtailmenus.context_processors.wagtailmenus` to the
-   `context_processors` list in your `TEMPLATES` setting. The
+#. Add :code:`wagtailmenus` to `INSTALLED_APPS` in your project settings.
+#. Add :code:`wagtailmenus.context_processors.wagtailmenus` to the
+   :code:`context_processors` list in your :code:`TEMPLATES` setting. The
    setting should look something like this:
 
    .. code:: python
@@ -128,18 +128,18 @@ Additional steps for `MenuPage` usage
 
 .. note::
 
-   It is not necessary to extend :class:`wagtailmenus.models.MenuPage` for all custom page
+   It is not necessary to extend :code:`wagtailmenus.models.MenuPage` for all custom page
    types; Just ones you know will be used for pages that may have children,
    and will need the option to repeat themselves in sub-menus when listing
    those children.
 
 #. In your **core** app and other apps (wherever you have defined a
    custom page/content model to use in your project), import
-   `wagtailmenus.models.MenuPage` and extend that instead of
-   `wagtail.wagtailcore.models.Page`.
-#. Run `python manage.py makemigrations` to create migrations for the
+   :code:`wagtailmenus.models.MenuPage` and extend that instead of
+   :code:`wagtail.wagtailcore.models.Page`.
+#. Run :code:`python manage.py makemigrations` to create migrations for the
    apps you've updated.
-#. Run `python manage.py migrate` to add apply those migrations.
+#. Run :code:`python manage.py migrate` to add apply those migrations.
 
 How to use wagtailmenus in your project
 ---------------------------------------
@@ -169,15 +169,15 @@ How to use wagtailmenus in your project
    identified). For multi-site projects, a 'site switcher' will appear
    in the top right, allowing you to edit main menus for each site.
 #. Use the **MENU ITEMS** inline panel to define the root-level items.
-   If you wish, you can use the `handle` field to specify an
-   If you wish, you can use the `handle` field to specify an
+   If you wish, you can use the :code:`handle` field to specify an
+   If you wish, you can use the :code:`handle` field to specify an
    additional value for each item, which you'll be able to access in a
    custom main menu template.
 
     .. note::
 
        Pages need to be published, and
-       have the `show_in_menus` checkbox checked in order to appear in
+       have the :code:`show_in_menus` checkbox checked in order to appear in
        menus (look under the **Promote** tab when editing pages).
 
 #. Save your changes to apply them to your site.
@@ -186,12 +186,12 @@ How to use wagtailmenus in your project
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #. Log into the Wagtail CMS for your project (as a superuser).
-#. Click on `Settings` in the side menu to access the options in
-   there, then select `Flat menus` to access the menu list page.
+#. Click on **Settings** in the side menu to access the options in
+   there, then select **Flat menus** to access the menu list page.
 #. Click the button at the top of the page to add a flat menu for your
    site (or one for each of your sites if you are running a multi-site
    setup).
-#. Fill out the form, choosing a 'unique for site' `handle` to
+#. Fill out the form, choosing a 'unique for site' **handle** to
    reference in your templates.
 #. Use the **MENU ITEMS** inline panel to define the links you want the
    menu to have. If you wish, you can use the `handle` field to
@@ -200,7 +200,7 @@ How to use wagtailmenus in your project
 
    .. note::
 
-      Pages need to be published and have the `show_in_menus` checkbox checked in order to
+      Pages need to be published and have the :code:`show_in_menus` checkbox checked in order to
       appear in menus (look under the **Promote** tab when editing pages).
 
 #. Save your changes to apply them to your site.
@@ -215,7 +215,7 @@ information and filters to help manage your menus, like so:
 3. Using the `{% main_menu %}` tag
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The `{% main_menu %}` tag allows you to display the `MainMenu`
+The :code:`{% main_menu %}` tag allows you to display the :code:`MainMenu`
 defined for the current site in your Wagtail project, with CSS classes
 automatically applied to each item to indicate the current page or
 ancestors of the current page. It also does a few sensible things, like
@@ -223,8 +223,8 @@ never adding the 'ancestor' class for a homepage link, or outputting
 children for it.
 
 #. In whichever template you want your main menu to appear, load
-   `menu_tags` using `{% load menu_tags %}`.
-#. Add `{% main_menu %}` to your template, where you want the menu to
+   :code:`menu_tags` using :code:`{% load menu_tags %}`.
+#. Add :code:`{% main_menu %}` to your template, where you want the menu to
    appear.
 
 **Optional params for `{% main_menu %}`**
@@ -233,76 +233,76 @@ children for it.
    control how many levels of pages should be rendered. If you only want
    to display the root-level menu items defined as inlines in the CMS
    (whether the selected pages have children or not), add
-   `max_levels=1` to the tag in your template. You can display
+   :code:`max_levels=1` to the tag in your template. You can display
    additional levels by providing a higher value. You can also override
    the default value by adding a
-   `WAGTAILMENUS_DEFAULT_MAIN_MENU_MAX_LEVELS` setting to your
+   :code:`WAGTAILMENUS_DEFAULT_MAIN_MENU_MAX_LEVELS` setting to your
    project's settings module.
--  **`show_multiple_levels`** (default: `True`): Adding
-   `show_multiple_levels=False` to the tag in your template
-   essentially overrides `max_levels` to `1`. It's just a little
+-  **`show_multiple_levels`** (default: :code:`True`): Adding
+   :code:`show_multiple_levels=False` to the tag in your template
+   essentially overrides :code:`max_levels` to **1**. It's just a little
    more descriptive.
--  **`allow_repeating_parents`** (default: `True`):
+-  **:code:`allow_repeating_parents`** (default: :code:`True`):
    Repetition-related settings on your pages are respected by default,
    but you can add `allow_repeating_parents=False` to ignore them, and
    not repeat any pages in sub-menus when rendering multiple levels.
--  **`apply_active_classes`** (default: `True`): The tag will
+-  **:code:`apply_active_classes`** (default: :code:`True`): The tag will
    attempt to add 'active' and 'ancestor' CSS classes to the menu items
    (where applicable) to indicate the active page and ancestors of that
    page. To disable this behaviour, add `apply_active_classes=False`
    to the tag in your template. You can change the CSS classes used by
-   adding `WAGTAILMENUS_ACTIVE_CLASS` and
-   `WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS` settings to your project's
+   adding :code:`WAGTAILMENUS_ACTIVE_CLASS` and
+   :code:`WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS` settings to your project's
    settings module.
--  **`template`** (default: `'menus/main_menu.html'`): Lets you
+-  **:code:`template`** (default: `'menus/main_menu.html'`): Lets you
    render the menu to a template of your choosing. You can also name an
    alternative template to be used by default, by adding a
-   `WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE` setting to your project's
+   :code:`WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE` setting to your project's
    settings module.
--  **`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets
+-  **:code:`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets
    you specify a template to be used for rendering sub menus. All
-   subsequent calls to `{% sub_menu %}` within the context of the
+   subsequent calls to :code:`{% sub_menu %}` within the context of the
    section menu will use this template unless overridden by providing a
-   `template` value to `{% sub_menu %}` in a menu template. You can
+   `template` value to :code:`{% sub_menu %}` in a menu template. You can
    specify an alternative default template by adding a
-   `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's
+   :code:`WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's
    settings module.
--  **`use_specific`** (default: `False`): If `True`, specific
+-  **:code:`use_specific`** (default: :code:`False`): If :code:`True`, specific
    page-type objects will be fetched and used for menu items instead of
-   vanilla `Page` objects, using as few database queries as possible.
+   vanilla :code:`Page` objects, using as few database queries as possible.
    The default can be altered by adding
-   `WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC=True` to your
+   :code:`WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC=True` to your
    project's settings module.
 
 4. Using the `{% flat_menu %}` tag
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #. In whichever template you want your menu to appear, load
-   `menu_tags` using `{% load menu_tags %}`.
-#. Add `{% flat_menu 'menu-handle' %}` to your template, where you
+   :code:`menu_tags` using `{% load menu_tags %}`.
+#. Add :code:`{% flat_menu 'menu-handle' %}` to your template, where you
    want the menu to appear (where 'menu-handle' is the unique handle for
    the menu you added).
 
 **Optional params for `{% flat_menu %}`**
 
--  **`show_menu_heading`** (default: `True`): Passed through to the
+-  **:code:`show_menu_heading`** (default: `True`): Passed through to the
    template used for rendering, where it can be used to conditionally
    display a heading above the menu.
--  **`show_multiple_levels`** (default: `False`): Flat menus are
+-  **:code:`show_multiple_levels`** (default: `False`): Flat menus are
    designed for outputting simple, flat lists of links. But, if the need
    arises, you can add `show_multiple_levels=True` to the tag in your
    template to output multiple page levels. If you haven't already, you
    may also need to check the **"Allow sub-menu for this item"** box for
    the menu items you wish to show further levels for.
--  **`max_levels`** (default: `2`): If `show_multiple_levels=True`
+-  **:code:`max_levels`** (default: `2`): If `show_multiple_levels=True`
    is being provided to enable multiple levels, you can use this
    parameter to specify how many levels you'd like to display.
--  **`apply_active_classes`** (default: `False`): Unlike
+-  **:code:`apply_active_classes`** (default: `False`): Unlike
    `main_menu` and `section_menu`, `flat_menu` will NOT attempt to
    add 'active' and 'ancestor' classes to the menu items by default, as
    this is often not useful. You can override this by adding
    `apply_active_classes=true` to the tag in your template.
--  **`template`** (default: `'menus/flat_menu.html'`): Lets you
+-  **:code:`template`** (default: `'menus/flat_menu.html'`): Lets you
    render the menu to a template of your choosing. You can also name an
    alternative template to be used by default, by adding a
    :code:`WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE` setting to your project's
