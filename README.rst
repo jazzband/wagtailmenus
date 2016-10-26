@@ -227,7 +227,7 @@ children for it.
 #. Add :code:`{% main_menu %}` to your template, where you want the menu to
    appear.
 
-**Optional params for :code:`{% main_menu %}`**
+**Optional params for `{% main_menu %}`**
 
 -  **max_levels** (default: `2`): Provide an integer value to
    control how many levels of pages should be rendered. If you only want
@@ -283,7 +283,7 @@ children for it.
    want the menu to appear (where 'menu-handle' is the unique handle for
    the menu you added).
 
-**Optional params for :code:`{% flat_menu %}`**
+**Optional params for `{% flat_menu %}`**
 
 -  **show_menu_heading** (default: :code:`True`):
    Passed through to the template used for rendering, where it can be used to conditionally
@@ -459,7 +459,7 @@ variables having been set. It requires only one parameter to work, which
 is :code:`menuitem_or_page`, which can either be an instance of
 :code:`MainMenuItem`, :code:`FlatMenuItem`, or :code:`Page`.
 
-**Optional params for :code:`{% sub_menu %}`**
+**Optional params for `{% sub_menu %}`**
 
 -  **stop_at_this_level**: By default, the tag will figure out
    whether further levels should be rendered or not, depending on what
