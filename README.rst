@@ -97,21 +97,21 @@ Installation instructions
     TEMPLATES = [
     {
           'BACKEND': 'django.template.backends.django.DjangoTemplates',
-          'DIRS': [ os.path.join(PROJECT\_ROOT, 'templates'), ],
+          'DIRS': [ os.path.join(PROJECT_ROOT, 'templates'), ],
           'APP_DIRS': True,
           'OPTIONS': {
               'context\_processors': [
-                  'django.contrib.auth.context\_processors.auth',
-                  'django.template.context\_processors.debug',
-                  'django.template.context\_processors.i18n',
-                  'django.template.context\_processors.media',
-                  'django.template.context\_processors.request',
-                  'django.template.context\_processors.static',
-                  'django.template.context\_processors.tz',
-                  'django.contrib.messages.context\_processors.messages',
-                  'wagtail.contrib.settings.context\_processors.settings',
-                  'wagtail.contrib.settings.context\_processors.settings',
-                  'wagtailmenus.context\_processors.wagtailmenus',
+                  'django.contrib.auth.context_processors.auth',
+                  'django.template.context_processors.debug',
+                  'django.template.context_processors.i18n',
+                  'django.template.context_processors.media',
+                  'django.template.context_processors.request',
+                  'django.template.context_processors.static',
+                  'django.template.context_processors.tz',
+                  'django.contrib.messages.context_processors.messages',
+                  'wagtail.contrib.settings.context_processors.settings',
+                  'wagtail.contrib.settings.context_processors.settings',
+                  'wagtailmenus.context_processors.wagtailmenus',
               ],
           },
     }, ]
