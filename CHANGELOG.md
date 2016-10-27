@@ -13,7 +13,7 @@ Changelog
 * Reserved for bug fixes
 
 
-1.6.0 (28.10.2016) IN DEVELOPMENT
+1.6.0 (28.10.2016)
 ---------------------------------
 
 * Improved confirmation messages when saving a menu in the admin area.
