@@ -1,0 +1,224 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-10-27 09:58+0200\n"
+"PO-Revision-Date: 2016-10-27 10:30+0200\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Last-Translator: François GUÉRIN <fguerin@ville-tourcoing.fr>\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.10\n"
+
+#: models.py:21
+msgid "repeat in sub-navigation"
+msgstr "répéter dans les sous-pages"
+
+#: models.py:23
+msgid ""
+"If checked, a link to this page will be repeated alongside it's direct "
+"children when displaying a sub-navigation for this page."
+msgstr ""
+"Si coché, un lien vers cette page sera répété dans les pages filles directes "
+"quand la sous-navigation sera affichée dans cette page."
+
+#: models.py:29
+msgid "repeated item link text"
+msgstr "Texte de lien pour l'élément répété"
+
+#: models.py:33
+msgid ""
+"e.g. 'Section home' or 'Overview'. If left blank, the page title will be "
+"used."
+msgstr ""
+"Par exemple \"Vue d'ensemble\" ou \"Accueil de section\". Si il est laissé "
+"vide, le titre de la page sera affiché."
+
+#: models.py:97
+msgid "link to an internal page"
+msgstr "lien vers une page interne"
+
+#: models.py:104
+msgid "link to a custom URL"
+msgstr "lien personalisé"
+
+#: models.py:111
+msgid "Must be set if you wish to link to a custom URL."
+msgstr "Doit être validé si vous souhaitez utiliser un lien personnalisé."
+
+#: models.py:117
+msgid ""
+"Use this field to optionally specify an additional value for each menu item, "
+"which you can then reference in custom menu templates."
+msgstr ""
+"Utilisez ce champ si vous souhaitez spécifier une valeur supplémentaire pour "
+"chaque élément du menu, qui pourra alors être utilisé dans un gabarit de "
+"menu personnalisé."
+
+#: models.py:121
+msgid "append to URL"
+msgstr "Ajouter à l'URL"
+
+#: models.py:125
+msgid ""
+"Use this to optionally append a #hash or querystring to the above page's URL."
+msgstr ""
+"Utilisez ce champ pour ajouter un #hash ou une extension de requête à "
+"l'adresse de la page."
+
+#: models.py:133
+msgid "menu item"
+msgstr "élément de menu"
+
+#: models.py:134
+msgid "menu items"
+msgstr "éléments de menu"
+
+#: models.py:148
+msgid "This must be set if you're linking to a custom URL."
+msgstr "Doit être rempli si vous souhaitez lier une adresse personnalisée."
+
+#: models.py:155
+msgid "This must be set if you're not linking to a page."
+msgstr "Doit être rempli si vous ne liez pas une page."
+
+#: models.py:161
+msgid ""
+"You cannot link to both a page and URL. Please review your link and clear "
+"any unwanted values."
+msgstr ""
+"Vous ne pouvez pas lier à la fois une page et une adresse personnalisée. "
+"Vérifiez les liens et supprimez la value superflue."
+
+#: models.py:185 models.py:186
+msgid "main menu"
+msgstr "menu principal"
+
+#: models.py:197
+#, python-format
+msgid "Main menu for %s"
+msgstr "Menu principal pour %s"
+
+#: models.py:200 models.py:272
+msgid "Menu items"
+msgstr "Éléments de menu"
+
+#: models.py:210
+msgid "For internal reference only."
+msgstr "Pour référence interne."
+
+#: models.py:214
+msgid ""
+"Used to reference this menu in templates etc. Must be unique for the "
+"selected site."
+msgstr ""
+"Utilisé pour référencer ce menu dans les gabarits... Doit être unique dans "
+"le site sélectionné !"
+
+#: models.py:220
+msgid "If supplied, appears above the menu when rendered."
+msgstr "Si rempli, apparaît sous le dans le menu quand il est affiché."
+
+#: models.py:224
+msgid "flat menu"
+msgstr "menu additionnel"
+
+#: models.py:225
+msgid "flat menus"
+msgstr "menus additionnels"
+
+#: models.py:254
+msgid ""
+"Site and handle must create a unique combination. A menu already exists with "
+"these same two values."
+msgstr ""
+"Site et manipulateur doivent créé une combinaison unique. Un menu existe "
+"avec ces deux même valeurs."
+
+#: models.py:264 panels.py:41
+msgid "Settings"
+msgstr "Configuration"
+
+#: models.py:280 models.py:292
+msgid "allow sub-menu for this item"
+msgstr "autoriser un ou plusieurs sous-menus pour cet élément"
+
+#: models.py:282 models.py:294
+msgid ""
+"NOTE: The sub-menu might not be displayed, even if checked. It depends on "
+"how the menu is used in this project's templates."
+msgstr ""
+"NOTE : Le sous-menu ne sera pas adffiché, même si la case est cochée. Ça "
+"dépend de la façon dont le menu est utilisé dans les gabarits du projet."
+
+#: panels.py:9
+msgid "Advanced menu behaviour"
+msgstr "Propriétés avancées du menu"
+
+#: panels.py:24
+msgid "Scheduled publishing"
+msgstr "Programmer la publication"
+
+#: templates/wagtailmenus/mainmenu_edit.html:39
+msgid "Save"
+msgstr "Enregistrer"
+
+#: views.py:45
+msgid "Editing"
+msgstr "Éditer"
+
+#: views.py:69
+#, python-format
+msgid "Editing %s"
+msgstr "Éditer %s"
+
+#: views.py:98
+msgid "Main menu updated successfully."
+msgstr "Le menu principal a été mis à jour avec succès."
+
+#: views.py:102
+msgid "The menu could not be saved due to errors."
+msgstr "Ce menu ne peut pas être enregistré, des erreurs subsistent."
+
+#: views.py:109
+msgid "Copying"
+msgstr "Copier"
+
+#: views.py:116
+#, python-format
+msgid "Copying %s"
+msgstr "Copier %s"
+
+#: views.py:142
+#, python-brace-format
+msgid "Flat menu '{instance}' created."
+msgstr "Le menu additionnel '{instance}' a été créé."
+
+#: wagtail_hooks.py:21
+msgid "Main menu"
+msgstr "Menu principal"
+
+#: wagtail_hooks.py:49
+msgid "Copy"
+msgstr "Copier"
+
+#: wagtail_hooks.py:51
+#, python-format
+msgid "Copy this %s"
+msgstr "Copier ce %s"
+
+#: wagtail_hooks.py:70
+msgid "Flat menus"
+msgstr "Menu additionnel"
+
+#: wagtail_hooks.py:112
+msgid "no. of items"
+msgstr "nombre de menus"
