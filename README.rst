@@ -65,6 +65,8 @@ consistent in all menus throughout your site.
 No more adding additional pages into the tree. No more hard-coding
 additional links into templates, or resorting to javascript hacks.
 
+.. image:: screenshots/repeating-item.png
+
 4. Gives you a set of powerful template tags to render your menus consistently
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -75,6 +77,8 @@ template tag allows you to render menus using a template of your
 choosing. You can also override the templates in the same way as any
 other Django project... by putting templates of the same name into a
 preferred location.
+
+.. image:: screenshots/wagtailmenus-menu-templates.png
 
 Installation instructions
 -------------------------
@@ -168,6 +172,10 @@ How to use wagtailmenus in your project
    current site (or the 'default' site, if the current site cannot be
    identified). For multi-site projects, a 'site switcher' will appear
    in the top right, allowing you to edit main menus for each site.
+
+   .. image:: screenshots/wagtailmenus-mainmenu-edit.png
+
+
 #. Use the **MENU ITEMS** inline panel to define the root-level items.
    If you wish, you can use the :code:`handle` field to specify an
    If you wish, you can use the :code:`handle` field to specify an
@@ -180,6 +188,8 @@ How to use wagtailmenus in your project
        have the :code:`show_in_menus` checkbox checked in order to appear in
        menus (look under the **Promote** tab when editing pages).
 
+
+
 #. Save your changes to apply them to your site.
 
 2. Defining flat menus in the CMS
@@ -191,6 +201,9 @@ How to use wagtailmenus in your project
 #. Click the button at the top of the page to add a flat menu for your
    site (or one for each of your sites if you are running a multi-site
    setup).
+
+   .. image:: screenshots/wagtailmenus-flatmenu-edit.png
+
 #. Fill out the form, choosing a 'unique for site' **handle** to
    reference in your templates.
 #. Use the **MENU ITEMS** inline panel to define the links you want the
@@ -211,6 +224,9 @@ page (from step 2, above) making it easy to find, update, copy or delete
 your menus later. As soon as you create menus for more than one site in
 a multi-site project, the listing page will give you additional
 information and filters to help manage your menus, like so:
+
+.. image:: screenshots/wagtailmenus-flatmenu-list.png
+
 
 3. Using the :code:`{% main_menu %}` tag
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -535,13 +551,20 @@ as easily as those pages. But, your site uses drop-down navigation, and
 the **About Us** link no longer takes you to that page when clicked...
 it simply acts as a toggle for hiding and showing it's sub-pages:
 
+.. image:: screenshots/no-repeating-item.png
+
 Presuming the **About Us** page extends :code:`wagtailmenus.models.MenuPage`:
 
 #. Edit that page in the CMS, and click on the :code:`Settings` tab.
 #. Uncollapse the **ADVANCED MENU BEHAVIOUR** panel by clicking the
    downward-pointing arrow next to the panel's label.
+
+   .. image:: screenshots/wagtailmenus-menupage-settings-collapsed.png
+
 #. Tick the **Repeat in sub-navigation** checkbox that appears, and
    publish your changes.
+
+   .. image:: screenshots/wagtailmenus-menupage-settings-visible.png
 
 Now, wherever the children of the **About Us** page are output (using
 one of the above menu tags), an additional link will appear alongside
@@ -550,6 +573,8 @@ above, you'll see *"Section overview"* has been added to the a
 **Repeated item link text** field. With this set, the link text for the
 repeated item should read *"Section overview"*, instead of just
 repeating the page's title, like so:
+
+.. image:: screenshots/repeating-item.png
 
 The menu tags do some extra work to make sure both links are never
 assigned the :code:`'active'` class. When on the 'About Us' page, the tags
