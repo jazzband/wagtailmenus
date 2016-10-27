@@ -33,6 +33,9 @@ Changelog
   updated pinned wagtail version in `setup.py` to reflect compatibility.
 * Added unicode support for python 2.7 and added missing verbose_names to
   fields so that they can be translated (Alexey Krasnov & Andy Babic).
+* Added support for a `WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES` setting that, if
+  set, will turn the `CharField` used for FlatMenu.handle in add/edit/copy
+  forms into a `ChoiceField`, with that setting as the available choices.
 
 
 1.5.1 (10.10.2016) 

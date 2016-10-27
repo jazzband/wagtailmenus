@@ -1,17 +1,20 @@
 from __future__ import absolute_import, unicode_literals
 
 from copy import deepcopy
+from django import forms
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
+
+from wagtail.wagtailadmin.forms import WagtailAdminModelForm
 from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, PageChooserPanel, MultiFieldPanel, InlinePanel)
 from wagtail.wagtailcore.models import Page, Orderable
 
-from .app_settings import ACTIVE_CLASS
+from wagtailmenus import app_settings
 from .managers import MenuItemManager
 from .panels import menupage_settings_panels
 
@@ -63,7 +66,7 @@ class MenuPage(Page):
             setattr(extra, 'href', self.relative_url(current_site))
             active_class = ''
             if(apply_active_classes and self == current_page):
-                active_class = ACTIVE_CLASS
+                active_class = app_settings.ACTIVE_CLASS
             setattr(extra, 'active_class', active_class)
 
             menu_items.insert(0, extra)
@@ -205,6 +208,14 @@ class MainMenu(ClusterableModel):
     )
 
 
+class FlatMenuAdminForm(WagtailAdminModelForm):
+    def __init__(self, *args, **kwargs):
+        super(FlatMenuAdminForm, self).__init__(*args, **kwargs)
+        if app_settings.FLAT_MENUS_HANDLE_CHOICES:
+            self.fields['handle'] = forms.ChoiceField(
+                choices=app_settings.FLAT_MENUS_HANDLE_CHOICES)
+
+
 @python_2_unicode_compatible
 class FlatMenu(ClusterableModel):
     site = models.ForeignKey(
@@ -226,6 +237,8 @@ class FlatMenu(ClusterableModel):
         blank=True,
         help_text=_(
             "If supplied, appears above the menu when rendered."))
+
+    base_form_class = FlatMenuAdminForm
 
     class Meta:
         unique_together = ("site", "handle")
