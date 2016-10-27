@@ -208,17 +208,17 @@ class FlatMenu(ClusterableModel):
         'wagtailcore.Site',
         related_name="flat_menus")
     title = models.CharField(
-        verbose_name=_('Title'),
+        verbose_name=_('title'),
         max_length=255,
         help_text=_("For internal reference only."))
     handle = models.SlugField(
-        verbose_name=_('Handle'),
+        verbose_name=_('handle'),
         max_length=100,
         help_text=_(
             "Used to reference this menu in templates etc. Must be unique "
             "for the selected site."))
     heading = models.CharField(
-        verbose_name=_('Heading'),
+        verbose_name=_('heading'),
         max_length=255,
         blank=True,
         help_text=_(
