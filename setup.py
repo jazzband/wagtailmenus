@@ -13,15 +13,14 @@ setup(
     version=__version__,
     author="Andy Babic",
     author_email="ababic@rkh.co.uk",
-    description=(
-        "Gives you better control over the behaviour of your main menu, and "
-        "allows you to define flat menus for output in templates."),
+    description=("An app to help you manage menus in your Wagtail projects "
+                 "more consistently."),
     long_description=README,
     packages=find_packages(),
     license="MIT",
     keywords="wagtail cms model utility",
-    download_url="https://github.com/rkhleics/wagtailmenus/tarball/v1.5.1",
-    url="https://github.com/rkhleics/wagtailmenus",
+    download_url="https://github.com/rkhleics/wagtailmenus/tarball/v1.6.0",
+    url="https://github.com/rkhleics/wagtailmenus/tree/stable/1.6.x",
     include_package_data=True,
     zip_safe=False,
     classifiers=[
