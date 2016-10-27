@@ -63,3 +63,7 @@ target/
 MANIFEST
 wagtailmenus.sqlite
 *.sqlite
+
+# PyCharm
+.idea/
+

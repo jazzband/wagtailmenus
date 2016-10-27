@@ -106,11 +106,13 @@ class MenuItem(models.Model):
         null=True,
     )
     link_text = models.CharField(
+        verbose_name=_('link text'),
         max_length=255,
         blank=True,
         help_text=_("Must be set if you wish to link to a custom URL."),
     )
     handle = models.CharField(
+        verbose_name=_('handle'),
         max_length=100,
         blank=True,
         help_text=_(
@@ -206,14 +208,17 @@ class FlatMenu(ClusterableModel):
         'wagtailcore.Site',
         related_name="flat_menus")
     title = models.CharField(
+        verbose_name=_('Title'),
         max_length=255,
         help_text=_("For internal reference only."))
     handle = models.SlugField(
+        verbose_name=_('Handle'),
         max_length=100,
         help_text=_(
             "Used to reference this menu in templates etc. Must be unique "
             "for the selected site."))
     heading = models.CharField(
+        verbose_name=_('Heading'),
         max_length=255,
         blank=True,
         help_text=_(
