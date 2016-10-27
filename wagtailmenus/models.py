@@ -3,10 +3,10 @@ from __future__ import absolute_import, unicode_literals
 from copy import deepcopy
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
-
 from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, PageChooserPanel, MultiFieldPanel, InlinePanel)
 from wagtail.wagtailcore.models import Page, Orderable
@@ -89,6 +89,7 @@ class MenuPage(Page):
         return self.get_children().live().in_menu().exists()
 
 
+@python_2_unicode_compatible
 class MenuItem(models.Model):
     allow_subnav = False
 
@@ -100,17 +101,19 @@ class MenuItem(models.Model):
         on_delete=models.CASCADE,
     )
     link_url = models.CharField(
-        max_length=255,
         verbose_name=_('link to a custom URL'),
+        max_length=255,
         blank=True,
         null=True,
     )
     link_text = models.CharField(
+        verbose_name=_('link text'),
         max_length=255,
         blank=True,
         help_text=_("Must be set if you wish to link to a custom URL."),
     )
     handle = models.CharField(
+        verbose_name=_('handle'),
         max_length=100,
         blank=True,
         help_text=_(
@@ -135,9 +138,7 @@ class MenuItem(models.Model):
 
     @property
     def menu_text(self):
-        if self.link_page:
-            return self.link_text or self.link_page.title
-        return self.link_text
+        return self.link_text or self.link_page.title
 
     def clean(self, *args, **kwargs):
         super(MenuItem, self).clean(*args, **kwargs)
@@ -175,9 +176,12 @@ class MenuItem(models.Model):
     )
 
 
+@python_2_unicode_compatible
 class MainMenu(ClusterableModel):
     site = models.OneToOneField(
-        'wagtailcore.Site', related_name="main_menu",
+        'wagtailcore.Site',
+        verbose_name=_('site'),
+        related_name="main_menu",
         db_index=True, editable=False, on_delete=models.CASCADE
     )
 
@@ -201,10 +205,14 @@ class MainMenu(ClusterableModel):
     )
 
 
+@python_2_unicode_compatible
 class FlatMenu(ClusterableModel):
     site = models.ForeignKey(
         'wagtailcore.Site',
-        related_name="flat_menus")
+        verbose_name=_('site'),
+        related_name="flat_menus",
+        db_index=True, on_delete=models.CASCADE
+    )
     title = models.CharField(
         max_length=255,
         help_text=_("For internal reference only."))
@@ -276,8 +284,8 @@ class FlatMenu(ClusterableModel):
 class MainMenuItem(Orderable, MenuItem):
     menu = ParentalKey('MainMenu', related_name="menu_items")
     allow_subnav = models.BooleanField(
-        default=True,
         verbose_name=_("allow sub-menu for this item"),
+        default=True,
         help_text=_(
             "NOTE: The sub-menu might not be displayed, even if checked. "
             "It depends on how the menu is used in this project's templates."
@@ -288,8 +296,8 @@ class MainMenuItem(Orderable, MenuItem):
 class FlatMenuItem(Orderable, MenuItem):
     menu = ParentalKey('FlatMenu', related_name="menu_items")
     allow_subnav = models.BooleanField(
-        default=False,
         verbose_name=_("allow sub-menu for this item"),
+        default=False,
         help_text=_(
             "NOTE: The sub-menu might not be displayed, even if checked. "
             "It depends on how the menu is used in this project's templates."

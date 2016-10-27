@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='mainmenu',
             name='site',
-            field=models.OneToOneField(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='main_menu', to='wagtailcore.Site'),
+            field=models.OneToOneField(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='main_menu', to='wagtailcore.Site', verbose_name='site'),
         ),
         migrations.AlterField(
             model_name='mainmenuitem',

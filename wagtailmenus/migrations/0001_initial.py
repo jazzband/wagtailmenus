@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(help_text='For internal reference only.', max_length=255)),
                 ('handle', models.SlugField(help_text='Used in to reference this menu in templates etc. Must be unique for the selected site.', max_length=100)),
                 ('heading', models.CharField(help_text='If supplied, appears above the menu when displayed on the on the front-end of the site.', max_length=255, blank=True)),
-                ('site', models.ForeignKey(related_name='flat_menus', to='wagtailcore.Site')),
+                ('site', models.ForeignKey(related_name='flat_menus', to='wagtailcore.Site', verbose_name='site')),
             ],
             options={
                 'verbose_name': 'flat menu',

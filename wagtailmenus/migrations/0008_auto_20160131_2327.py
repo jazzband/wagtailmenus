@@ -41,11 +41,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='flatmenuitem',
             name='link_text',
-            field=models.CharField(help_text='Must be set if you wish to link to a custom URL.', max_length=255, blank=True),
+            field=models.CharField(help_text='Must be set if you wish to link to a custom URL.', max_length=255, blank=True, verbose_name='link text'),
         ),
         migrations.AlterField(
             model_name='mainmenuitem',
             name='link_text',
-            field=models.CharField(help_text='Must be set if you wish to link to a custom URL.', max_length=255, blank=True),
+            field=models.CharField(help_text='Must be set if you wish to link to a custom URL.', max_length=255, blank=True, verbose_name='link text'),
         ),
     ]
