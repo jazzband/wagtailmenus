@@ -251,7 +251,7 @@ children for it.
 #. In whichever template you want your main menu to appear, load ``menu_tags`` using ``{% load menu_tags %}``.
 #. Add ``{% main_menu %}`` to your template, where you want the menu to appear.
 
-Optional params for `{% main_menu %}`**
+**Optional params for `{% main_menu %}`**
 
 
 -  **max_levels** (default: `2`): Provide an integer value to
