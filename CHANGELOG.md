@@ -7,10 +7,10 @@ Changelog
 * Coming soon
 
 
-1.6.1 (04.11.2016) IN DEVELOPMENT
+1.6.1 (04.11.2016)
 ---------------------------------
 
-* Reserved for bug fixes
+* French translations added by François GUÉRIN (frague59) 
 
 
 1.6.0 (28.10.2016)
