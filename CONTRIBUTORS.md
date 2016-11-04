@@ -5,3 +5,7 @@
 ## Contributors
 
 * Tim Leguijt (tleguijt)
+
+## Translators
+
+* François GUÉRIN (frague59) 
