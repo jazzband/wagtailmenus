@@ -30,10 +30,11 @@ class ContactPage(MenuPage):
     def modify_submenu_items(self, menu_items, current_page,
                              current_ancestor_ids, current_site,
                              allow_repeating_parents, apply_active_classes,
-                             original_menu_tag):
+                             original_menu_tag, menu_instance=None):
         menu_items = super(ContactPage, self).modify_submenu_items(
             menu_items, current_page, current_ancestor_ids, current_site,
-            allow_repeating_parents, apply_active_classes, original_menu_tag)
+            allow_repeating_parents, apply_active_classes, original_menu_tag,
+            menu_instance)
         """
         If rendering a 'main_menu', add some additional menu items to the end
         of the list that link to various anchored sections on the same page
@@ -59,8 +60,8 @@ class ContactPage(MenuPage):
             ))
         return menu_items
 
-    def has_submenu_items(self, current_page, check_for_children,
-                          allow_repeating_parents, original_menu_tag):
+    def has_submenu_items(self, current_page, allow_repeating_parents,
+                          original_menu_tag, menu_instance=None):
         """
         Because `modify_submenu_items` is being used to add additional menu
         items, we need to indicate in menu templates that `ContactPage` objects
@@ -70,5 +71,5 @@ class ContactPage(MenuPage):
         if original_menu_tag == 'main_menu':
             return True
         return super(ContactPage, self).has_submenu_items(
-            current_page, check_for_children, allow_repeating_parents,
-            original_menu_tag)
+            current_page, allow_repeating_parents, original_menu_tag,
+            menu_instance)

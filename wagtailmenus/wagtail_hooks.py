@@ -121,7 +121,8 @@ def wagtailmenu_params_helper(page, request, serve_args, serve_kwargs):
         page, inclusive=True).filter(depth__exact=SECTION_ROOT_DEPTH).first()
     if section_root:
         section_root = section_root.specific
-    ancestor_ids = page.get_ancestors().values_list('id', flat=True)
+    ancestor_ids = page.get_ancestors().filter(
+        depth__gte=SECTION_ROOT_DEPTH).values_list('id', flat=True)
     request.META.update({
         'WAGTAILMENUS_CURRENT_SECTION_ROOT': section_root,
         'WAGTAILMENUS_CURRENT_PAGE': page,

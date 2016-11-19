@@ -1,49 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.test import TestCase
-from django.core.exceptions import ValidationError
 
-from wagtail.wagtailcore.models import Page, Site
-from wagtailmenus.models import MainMenu, MainMenuItem, FlatMenu
+from wagtail.wagtailcore.models import Site
+from wagtailmenus.models import MainMenu, FlatMenu
+from wagtailmenus.templatetags.menu_tags import validate_supplied_values
 from bs4 import BeautifulSoup
-
-
-class TestModels(TestCase):
-    fixtures = ['test.json']
-
-    def test_mainmenuitem_clean_missing_link_text(self):
-        menu = MainMenu.objects.get(pk=1)
-        new_item = MainMenuItem(menu=menu, link_url='test/')
-        self.assertRaisesMessage(
-            ValidationError,
-            "This must be set if you're linking to a custom URL.",
-            new_item.clean)
-
-    def test_mainmenuitem_clean_missing_link_url(self):
-        menu = MainMenu.objects.get(pk=1)
-        new_item = MainMenuItem(menu=menu)
-        self.assertRaisesMessage(
-            ValidationError,
-            "This must be set if you're not linking to a page.",
-            new_item.clean)
-
-    def test_mainmenuitem_clean_link_url_and_link_page(self):
-        menu = MainMenu.objects.get(pk=1)
-        new_item = MainMenuItem(menu=menu, link_text='Test', link_url='test/', link_page=Page.objects.get(pk=6))
-        self.assertRaisesMessage(
-            ValidationError,
-            "You cannot link to both a page and URL. Please review your link and clear any unwanted values.",
-            new_item.clean)
-
-    def test_mainmenuitem_str(self):
-        menu = MainMenu.objects.get(pk=1)
-        item_1 = menu.menu_items.first()
-        self.assertEqual(item_1.__str__(), 'Home')
-
-    def test_flatmenuitem_str(self):
-        menu = FlatMenu.objects.get(handle='contact')
-        item_1 = menu.menu_items.first()
-        self.assertEqual(item_1.__str__(), 'Call us')
 
 
 class TestTemplateTags(TestCase):
@@ -64,7 +26,7 @@ class TestTemplateTags(TestCase):
         site_one = Site.objects.get(pk=1)
         site_two = Site.objects.get(pk=2)
 
-        # Site one (default) definitiely has a menu defined with the handle 
+        # Site one (default) definitiely has a menu defined with the handle
         # `footer`
         menu = FlatMenu.get_for_site('footer', site_one)
         site_one_menu_pk = menu.pk
@@ -79,6 +41,25 @@ class TestTemplateTags(TestCase):
         menu = FlatMenu.get_for_site('footer', site_two, True)
         self.assertIsNotNone(menu)
         self.assertEqual(menu.pk, site_one_menu_pk)
+
+    def test_validate_supplied_values(self):
+        with self.assertRaisesMessage(ValueError, 'The `main_menu` tag expects `max_levels` to be an integer value between 1 and 5. Please review your template.'):
+            validate_supplied_values(tag='main_menu', max_levels=9)
+
+        with self.assertRaisesMessage(ValueError, 'The `main_menu` tag expects `max_levels` to be an integer value between 1 and 5. Please review your template.'):
+            validate_supplied_values(tag='main_menu', max_levels='1')
+
+        with self.assertRaisesMessage(ValueError, 'The `main_menu` tag expects `use_specific` to be an integer value between 0 and 3. Please review your template.'):
+            validate_supplied_values(tag='main_menu', use_specific=5)
+
+        with self.assertRaisesMessage(ValueError, 'The `main_menu` tag expects `use_specific` to be an integer value between 0 and 3. Please review your template.'):
+            validate_supplied_values(tag='main_menu', use_specific='2')
+
+        with self.assertRaises(ValueError):
+            validate_supplied_values(tag='main_menu', parent_page=False)
+
+        with self.assertRaises(ValueError):
+            validate_supplied_values(tag='main_menu', menuitem_or_page=5)
 
     def test_homepage(self):
         """
@@ -910,3 +891,270 @@ class TestTemplateTags(TestCase):
         </div>
         """
         self.assertHTMLEqual(menu_html, expected_menu_html)
+
+    def test_use_specific_off(self):
+        """
+        The below URL is a custom URL, but the URL matches a real page,
+        which will be indicated in the menus being output. It's using a
+        template where use_specific=0 is supplied to all menu tags, so
+        there should be no repeating items, no programatically added
+        items, and no additional classes present on <li> elements
+        """
+        response = self.client.get('/superheroes/marvel-comics/iron-man/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        main_menu_html = soup.find(id='main-menu').decode()
+        expected_main_menu_html = """
+        <div id="main-menu">
+            <ul class="nav navbar-nav">
+                <li class="">
+                    <a href="/">Home</a>
+                </li>
+                <li class=" dropdown">
+                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>  
+                    <ul aria-labelledby="ddtoggle_6" class="dropdown-menu">
+                        <li class=""><a href="/about-us/meet-the-team/">Meet the team</a></li>
+                        <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
+                        <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                    </ul>
+                </li>
+                <li class=" dropdown">
+                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
+                    <ul aria-labelledby="ddtoggle_14" class="dropdown-menu">
+                        <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
+                        <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
+                        <li class=""><a href="/news-and-events/press/">In the press</a></li>
+                    </ul>
+                </li>
+                <li class=""><a href="http://google.co.uk">Google</a></li>
+                <li class=""><a href="/contact-us/">Contact us</a></li>
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(main_menu_html, expected_main_menu_html)
+
+        seconday_nav_html = soup.find(id='secondary-nav').decode()
+        expected_seconday_nav_html = """
+        <div id="secondary-nav">
+            <ul>
+                <li class="">
+                    <a href="/about-us/">About us</a>
+                    <ul class="sub-menu" data-level="2">
+                        <li class=""><a href="/about-us/meet-the-team/">Meet the team</a></li>
+                        <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
+                        <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                    </ul>
+                </li>
+                <li class=""><a href="/superheroes/marvel-comics/">Marvel Comics</a></li>
+                <li class=""><a href="/superheroes/dc-comics/">D.C. Comics</a></li>
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(seconday_nav_html, expected_seconday_nav_html)
+
+        section_menu_html = soup.find(id='section-menu').decode()
+        expected_section_menu_html = """
+        <div id="section-menu">
+            <a href="/superheroes/" class="ancestor section_root">Superheroes</a>
+            <ul>
+                <li class="ancestor">
+                    <a href="/superheroes/marvel-comics/">Marvel Comics</a>
+                    <ul class="sub-menu" data-level="2">
+                        <li class="active"><a href="/superheroes/marvel-comics/iron-man/">Iron Man</a></li>
+                        <li class=""><a href="/superheroes/marvel-comics/spiderman/">Spiderman</a></li>
+                    </ul>
+                </li>
+                <li class="">
+                    <a href="/superheroes/dc-comics/">D.C. Comics</a>
+                    <ul class="sub-menu" data-level="2">
+                        <li class=""><a href="/superheroes/dc-comics/batman/">Batman</a></li>
+                        <li class=""><a href="/superheroes/dc-comics/wonder-woman/">Wonder Woman</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(section_menu_html, expected_section_menu_html)
+
+    def test_use_specific_top_level(self):
+        """
+        The below URL is a custom URL, but the URL matches a real page,
+        which will be indicated in the menus being output. It's using a
+        template where use_specific=2 is supplied to all menu tags, most of the
+        first level <li> elements should have additional classes from their
+        respective specific model, and should see repeated items and
+        programatically added items too.
+        """
+        response = self.client.get('/superheroes/dc-comics/batman/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        main_menu_html = soup.find(id='main-menu').decode()
+        expected_main_menu_html = """
+        <div id="main-menu">
+            <ul class="nav navbar-nav">
+                <li class=""><a href="/">Home</a></li>
+                <li class=" dropdown top-level">
+                    <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" href="/about-us/" id="ddtoggle_6">About <span class="caret"></span></a>
+                    <ul aria-labelledby="ddtoggle_6" class="dropdown-menu">
+                        <li class=" top-level"><a href="/about-us/">Section home</a></li>
+                        <li class=""><a href="/about-us/meet-the-team/">Meet the team</a></li>
+                        <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
+                        <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                    </ul>
+                </li>
+                <li class=" dropdown top-level">
+                    <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" href="/news-and-events/" id="ddtoggle_14">News &amp; events <span class="caret"></span></a>
+                    <ul aria-labelledby="ddtoggle_14" class="dropdown-menu">
+                        <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
+                        <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
+                        <li class=""><a href="/news-and-events/press/">In the press</a></li>
+                    </ul>
+                </li>
+                <li class=""><a href="http://google.co.uk">Google</a></li>
+                <li class=" dropdown">
+                    <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" href="/contact-us/" id="ddtoggle_18">Contact us <span class="caret"></span></a>
+                    <ul aria-labelledby="ddtoggle_18" class="dropdown-menu">
+                        <li class="support"><a href="/contact-us/#support">Get support</a></li>
+                        <li class="call"><a href="/contact-us/#call">Speak to someone</a></li>
+                        <li class="map"><a href="/contact-us/#map">Map &amp; directions</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(main_menu_html, expected_main_menu_html)
+
+        seconday_nav_html = soup.find(id='secondary-nav').decode()
+        expected_seconday_nav_html = """
+        <div id="secondary-nav">
+            <ul>
+                <li class=" top-level">
+                    <a href="/about-us/">About us</a>
+                    <ul class="sub-menu" data-level="2">
+                        <li class=" top-level"><a href="/about-us/">Section home</a></li>
+                        <li class=""><a href="/about-us/meet-the-team/">Meet the team</a></li>
+                        <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
+                        <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                    </ul>
+                </li>
+                <li class=" low-level"><a href="/superheroes/marvel-comics/">Marvel Comics</a></li>
+                <li class=" low-level"><a href="/superheroes/dc-comics/">D.C. Comics</a></li>
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(seconday_nav_html, expected_seconday_nav_html)
+
+        section_menu_html = soup.find(id='section-menu').decode()
+        expected_section_menu_html = """
+        <div id="section-menu">
+            <a href="/superheroes/" class="ancestor section_root top-level">Superheroes</a>
+            <ul>
+                <li class=" low-level">
+                    <a href="/superheroes/marvel-comics/">Marvel Comics</a>
+                    <ul class="sub-menu" data-level="2">
+                        <li class=""><a href="/superheroes/marvel-comics/iron-man/">Iron Man</a></li>
+                        <li class=""><a href="/superheroes/marvel-comics/spiderman/">Spiderman</a></li>
+                    </ul>
+                </li>
+                <li class="ancestor low-level">
+                    <a href="/superheroes/dc-comics/">D.C. Comics</a>
+                    <ul class="sub-menu" data-level="2">
+                        <li class="active"><a href="/superheroes/dc-comics/batman/">Batman</a></li>
+                        <li class=""><a href="/superheroes/dc-comics/wonder-woman/">Wonder Woman</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(section_menu_html, expected_section_menu_html)
+
+    def test_use_specific_always(self):
+        """
+        The below URL is a custom URL, but the URL matches a real page,
+        which will be indicated in the menus being output. It's using a
+        template where use_specific=3 is supplied to all menu tags, so all
+        <li> elements should have additional classes from their
+        respective specific model.
+        """
+        response = self.client.get('/superheroes/dc-comics/wonder-woman/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        main_menu_html = soup.find(id='main-menu').decode()
+        expected_main_menu_html = """
+        <div id="main-menu">
+            <ul class="nav navbar-nav">
+                <li class=""><a href="/">Home</a></li>
+                <li class=" dropdown top-level">
+                    <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" href="/about-us/" id="ddtoggle_6">About <span class="caret"></span></a>
+                    <ul aria-labelledby="ddtoggle_6" class="dropdown-menu">
+                        <li class=" top-level"><a href="/about-us/">Section home</a></li>
+                        <li class=" low-level"><a href="/about-us/meet-the-team/">Meet the team</a></li>
+                        <li class=" low-level"><a href="/about-us/our-heritage/">Our heritage</a></li>
+                        <li class=" low-level"><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                    </ul>
+                </li>
+                <li class=" dropdown top-level">
+                    <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" href="/news-and-events/" id="ddtoggle_14">News &amp; events <span class="caret"></span></a>
+                    <ul aria-labelledby="ddtoggle_14" class="dropdown-menu">
+                        <li class=" low-level"><a href="/news-and-events/latest-news/">Latest news</a></li>
+                        <li class=" low-level"><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
+                        <li class=" low-level"><a href="/news-and-events/press/">In the press</a></li>
+                    </ul>
+                </li>
+                <li class=""><a href="http://google.co.uk">Google</a></li>
+                <li class=" dropdown">
+                    <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" href="/contact-us/" id="ddtoggle_18">Contact us <span class="caret"></span></a>
+                    <ul aria-labelledby="ddtoggle_18" class="dropdown-menu">
+                        <li class="support"><a href="/contact-us/#support">Get support</a></li>
+                        <li class="call"><a href="/contact-us/#call">Speak to someone</a></li>
+                        <li class="map"><a href="/contact-us/#map">Map &amp; directions</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(main_menu_html, expected_main_menu_html)
+
+        seconday_nav_html = soup.find(id='secondary-nav').decode()
+        expected_seconday_nav_html = """
+        <div id="secondary-nav">
+            <ul>
+                <li class=" top-level">
+                    <a href="/about-us/">About us</a>
+                    <ul class="sub-menu" data-level="2">
+                        <li class=" top-level"><a href="/about-us/">Section home</a></li>
+                        <li class=" low-level"><a href="/about-us/meet-the-team/">Meet the team</a></li>
+                        <li class=" low-level"><a href="/about-us/our-heritage/">Our heritage</a></li>
+                        <li class=" low-level"><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                    </ul>
+                </li>
+                <li class=" low-level"><a href="/superheroes/marvel-comics/">Marvel Comics</a></li>
+                <li class=" low-level"><a href="/superheroes/dc-comics/">D.C. Comics</a></li>
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(seconday_nav_html, expected_seconday_nav_html)
+
+        section_menu_html = soup.find(id='section-menu').decode()
+        expected_section_menu_html = """
+        <div id="section-menu">
+            <a href="/superheroes/" class="ancestor section_root top-level">Superheroes</a>
+            <ul>
+                <li class=" low-level">
+                    <a href="/superheroes/marvel-comics/">Marvel Comics</a>
+                    <ul class="sub-menu" data-level="2">
+                        <li class=" low-level"><a href="/superheroes/marvel-comics/iron-man/">Iron Man</a></li>
+                        <li class=" low-level"><a href="/superheroes/marvel-comics/spiderman/">Spiderman</a></li>
+                    </ul>
+                </li>
+                <li class="ancestor low-level">
+                    <a href="/superheroes/dc-comics/">D.C. Comics</a>
+                    <ul class="sub-menu" data-level="2">
+                        <li class=" low-level"><a href="/superheroes/dc-comics/batman/">Batman</a></li>
+                        <li class="active low-level"><a href="/superheroes/dc-comics/wonder-woman/">Wonder Woman</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(section_menu_html, expected_section_menu_html)

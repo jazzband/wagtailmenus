@@ -1,11 +1,16 @@
 from __future__ import absolute_import, unicode_literals
 
-from copy import deepcopy
+from collections import defaultdict
+from copy import copy
+
 from django import forms
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.functional import cached_property
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
 
@@ -22,11 +27,11 @@ from .panels import menupage_settings_panels
 class MenuPage(Page):
     repeat_in_subnav = models.BooleanField(
         verbose_name=_("repeat in sub-navigation"),
+        default=False,
         help_text=_(
             "If checked, a link to this page will be repeated alongside it's "
             "direct children when displaying a sub-navigation for this page."
         ),
-        default=False,
     )
     repeated_item_text = models.CharField(
         verbose_name=_('repeated item link text'),
@@ -46,7 +51,7 @@ class MenuPage(Page):
     def modify_submenu_items(self, menu_items, current_page,
                              current_ancestor_ids, current_site,
                              allow_repeating_parents, apply_active_classes,
-                             original_menu_tag):
+                             original_menu_tag, menu_instance=None):
         """
         Make any necessary modifications to `menu_items` and return the list
         back to the calling menu tag to render in templates. Any additional
@@ -61,7 +66,7 @@ class MenuPage(Page):
             children in the subnav, so we create a new item and prepend it to
             menu_items.
             """
-            extra = deepcopy(self)
+            extra = copy(self)
             setattr(extra, 'text', self.repeated_item_text or self.title)
             setattr(extra, 'href', self.relative_url(current_site))
             active_class = ''
@@ -73,12 +78,9 @@ class MenuPage(Page):
 
         return menu_items
 
-    def has_submenu_items(self, current_page, check_for_children,
-                          allow_repeating_parents, original_menu_tag):
+    def has_submenu_items(self, current_page, allow_repeating_parents,
+                          original_menu_tag, menu_instance=None):
         """
-        NOTE: `check_for_children` is always True, so you can ignore it. The
-        argument will be removed from this method in a later feature release.
-
         When rendering pages in a menu template a `has_children_in_menu`
         attribute is added to each page, letting template developers know
         whether or not the item has a submenu that must be rendered.
@@ -89,6 +91,8 @@ class MenuPage(Page):
         items that aren't child pages, you'll likely need to alter this method
         too, so the template knows there are sub items to be rendered.
         """
+        if menu_instance:
+            return menu_instance.page_has_children(self)
         return self.get_children().live().in_menu().exists()
 
 
@@ -122,14 +126,17 @@ class MenuItem(models.Model):
         help_text=_(
             "Use this field to optionally specify an additional value for "
             "each menu item, which you can then reference in custom menu "
-            "templates."))
+            "templates."
+        )
+    )
     url_append = models.CharField(
         verbose_name=_("append to URL"),
         max_length=255,
         blank=True,
         help_text=_(
             "Use this to optionally append a #hash or querystring to the "
-            "above page's URL.")
+            "above page's URL."
+        )
     )
 
     objects = MenuItemManager()
@@ -142,6 +149,11 @@ class MenuItem(models.Model):
     @property
     def menu_text(self):
         return self.link_text or self.link_page.title
+
+    def relative_url(self, site=None):
+        if self.link_page:
+            return self.link_page.relative_url(site) + self.url_append
+        return self.link_url + self.url_append
 
     def clean(self, *args, **kwargs):
         super(MenuItem, self).clean(*args, **kwargs)
@@ -179,13 +191,166 @@ class MenuItem(models.Model):
     )
 
 
-@python_2_unicode_compatible
-class MainMenu(ClusterableModel):
+class Menu(ClusterableModel):
+
+    max_levels = 1
+    use_specific = app_settings.USE_SPECIFIC_AUTO
+
+    class Meta:
+        abstract = True
+
+    def clear_page_cache(self):
+        try:
+            del self.pages_for_display
+        except AttributeError:
+            pass
+        try:
+            del self.page_children_dict
+        except AttributeError:
+            pass
+
+    def set_max_levels(self, max_levels):
+        if self.max_levels != max_levels:
+            """
+            Set `self.max_levels` to the supplied value and clear any cached
+            attribute values set for a different `max_levels` value.
+            """
+            self.max_levels = max_levels
+            self.clear_page_cache()
+
+    def set_use_specific(self, use_specific):
+        if self.use_specific != use_specific:
+            """
+            Set `self.use_specific` to the supplied value and clear some
+            cached values where appropriate.
+            """
+            if(
+                use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL and
+                self.use_specific < app_settings.USE_SPECIFIC_TOP_LEVEL
+            ):
+                self.clear_page_cache()
+                try:
+                    del self.top_level_items
+                except AttributeError:
+                    pass
+
+            self.use_specific = use_specific
+
+    @cached_property
+    def top_level_items(self):
+        """
+        Return a list of menu_items with link_page objects supplemented with
+        'specific' pages where appropriate.
+        """
+        items_qs = self.menu_items.for_display()
+        if self.use_specific < app_settings.USE_SPECIFIC_TOP_LEVEL:
+            return items_qs.all()
+
+        """
+        The menu is being generated with a specificity level of TOP_LEVEL
+        or ALWAYS, which means we need to replace 'link_page' values on
+        MenuItem objects with their 'specific' equivalents.
+        """
+        updated_items = []
+        for item in items_qs.all():
+            if item.link_page_id:
+                item.link_page = item.link_page.specific
+            updated_items.append(item)
+        return updated_items
+
+    @cached_property
+    def pages_for_display(self):
+        """
+        Returns a list of pages for rendering the entire menu (excluding those
+        chosen as menu items). All pages must be live, not expired, and set to
+        show in menus.
+        """
+
+        # Build a queryset to get pages for all levels
+        all_pages = Page.objects.none()
+
+        if self.max_levels == 1:
+            # If no additional menus are needed, return an empty queryset
+            return all_pages
+
+        for item in self.top_level_items:
+
+            if item.link_page_id:
+                # If necessary, fetch a 'branch' of suitable descendants for
+                # this menu item and add to the full queryset
+                page_path = item.link_page.path
+                page_depth = item.link_page.depth
+                if(
+                    item.allow_subnav and
+                    page_depth >= app_settings.SECTION_ROOT_DEPTH
+                ):
+                    all_pages = all_pages | Page.objects.filter(
+                        depth__gt=page_depth,
+                        depth__lt=page_depth + self.max_levels,
+                        path__startswith=page_path)
+
+        # Filter the queryset to include only the pages we need for display
+        all_pages = all_pages.filter(
+            live=True, expired=False, show_in_menus=True)
+
+        # Return 'specific' page instances if required
+        if self.use_specific == app_settings.USE_SPECIFIC_ALWAYS:
+            return all_pages.specific()
+
+        return all_pages
+
+    @cached_property
+    def page_children_dict(self):
+        """
+        Returns a dictionary of lists, where the keys are 'path' values for
+        pages, and the value is a list of children pages for that page.
+        """
+        children_dict = defaultdict(list)
+        for page in self.pages_for_display:
+            children_dict[page.path[:-page.steplen]].append(page)
+        return children_dict
+
+    def get_children_for_page(self, page):
+        """Return a list of relevant child pages for a given page."""
+        return self.page_children_dict.get(page.path, [])
+
+    def page_has_children(self, page):
+        """
+        Return a boolean indicating whether a given page has any relevant
+        child pages.
+        """
+        return page.path in self.page_children_dict
+
+
+class MainMenu(Menu):
     site = models.OneToOneField(
         'wagtailcore.Site',
-        verbose_name=_('site'),
         related_name="main_menu",
-        db_index=True, editable=False, on_delete=models.CASCADE
+        db_index=True,
+        editable=False,
+        on_delete=models.CASCADE
+    )
+    max_levels = models.PositiveSmallIntegerField(
+        verbose_name=_('maximum levels'),
+        choices=app_settings.MAX_LEVELS_CHOICES,
+        default=2,
+        help_text=mark_safe(_(
+            "The maximum number of levels to display when rendering this "
+            "menu. The value can be overidden by supplying a different "
+            "<code>max_levels</code> value to the <code>{% main_menu %}"
+            "</code> tag in your templates."
+        ))
+    )
+    use_specific = models.PositiveSmallIntegerField(
+        verbose_name=_('specific page usage'),
+        choices=app_settings.USE_SPECIFIC_CHOICES,
+        default=app_settings.USE_SPECIFIC_AUTO,
+        help_text=mark_safe(_(
+            "Controls how 'specific' pages objects are fetched and used when "
+            "rendering this menu. This value can be overidden by supplying a "
+            "different <code>use_specific</code> value to the <code>"
+            "{% main_menu %}</code> tag in your templates."
+        ))
     )
 
     class Meta:
@@ -204,7 +369,12 @@ class MainMenu(ClusterableModel):
         return _('Main menu for %s') % (self.site.site_name or self.site)
 
     panels = (
-        InlinePanel('menu_items', label=_("Menu items")),
+        InlinePanel('menu_items', label=_("menu items")),
+        MultiFieldPanel(
+            heading=_("Advanced settings"),
+            children=(FieldPanel('max_levels'), FieldPanel('use_specific')),
+            classname="collapsible collapsed",
+        ),
     )
 
 
@@ -216,8 +386,7 @@ class FlatMenuAdminForm(WagtailAdminModelForm):
                 choices=app_settings.FLAT_MENUS_HANDLE_CHOICES)
 
 
-@python_2_unicode_compatible
-class FlatMenu(ClusterableModel):
+class FlatMenu(Menu):
     site = models.ForeignKey(
         'wagtailcore.Site',
         verbose_name=_('site'),
@@ -231,12 +400,36 @@ class FlatMenu(ClusterableModel):
         max_length=100,
         help_text=_(
             "Used to reference this menu in templates etc. Must be unique "
-            "for the selected site."))
+            "for the selected site."
+        )
+    )
     heading = models.CharField(
         max_length=255,
         blank=True,
-        help_text=_(
-            "If supplied, appears above the menu when rendered."))
+        help_text=_("If supplied, appears above the menu when rendered.")
+    )
+    max_levels = models.PositiveSmallIntegerField(
+        verbose_name=_('maximum levels'),
+        choices=app_settings.MAX_LEVELS_CHOICES,
+        default=1,
+        help_text=mark_safe(_(
+            "The maximum number of levels to display when rendering this "
+            "menu. The value can be overidden by supplying a different "
+            "<code>max_levels</code> value to the <code>{% flat_menu %}"
+            "</code> tag in your templates."
+        ))
+    )
+    use_specific = models.PositiveSmallIntegerField(
+        verbose_name=_('specific page usage'),
+        choices=app_settings.USE_SPECIFIC_CHOICES,
+        default=app_settings.USE_SPECIFIC_AUTO,
+        help_text=mark_safe(_(
+            "Controls how 'specific' pages objects are fetched and used when "
+            "rendering this menu. This value can be overidden by supplying a "
+            "different <code>use_specific</code> value to the <code>"
+            "{% flat_menu %}</code> tag in your templates."
+        ))
+    )
 
     base_form_class = FlatMenuAdminForm
 
@@ -290,7 +483,12 @@ class FlatMenu(ClusterableModel):
                 FieldPanel('heading'),
             )
         ),
-        InlinePanel('menu_items', label=_("Menu items")),
+        InlinePanel('menu_items', label=_("menu items")),
+        MultiFieldPanel(
+            heading=_("Advanced settings"),
+            children=(FieldPanel('max_levels'), FieldPanel('use_specific')),
+            classname="collapsible collapsed",
+        ),
     )
 
 

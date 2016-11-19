@@ -1,0 +1,13 @@
+{% load menu_tags %}
+{% if menu_items %}
+	<ul class="sub-menu" data-level="{{ current_level }}">
+	{% for item in menu_items %}
+	    <li class="{{ item.active_class }}{% if item.extra_menuitem_css_class %} {{ item.extra_menuitem_css_class }}{% endif %}">
+	        <a href="{{ item.href }}">{{ item.text }}</a>
+	        {% if item.has_children_in_menu %}
+	            {% sub_menu item %}
+	        {% endif %}
+	    </li>
+	{% endfor %}
+	</ul>
+{% endif %}
