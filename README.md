@@ -267,8 +267,8 @@ Now, wherever the children of the **About Us** page are output (using one of the
 The menu tags do some extra work to make sure both links are never assigned the `'active'` class. When on the 'About Us' page, the tags will treat the repeated item as the 'active' page, and just assign the `'ancestor'` class to the original, so that the behaviour/styling is consistent with other page links rendered at that level.
 
 
-<a id="specific-page-use"></a>10. Performance and use of 'specific' pages
--------------------------------------------------------------------------
+<a id="specific-page-use"></a>10. Specific pages instances and performance
+--------------------------------------------------------------------------
 
 Wagtail makes use of a something known in Django as 'multi-table inheritance'. In simple terms, this means that when you create an instance of a custom page type model, the data is saved in two different database tables. All of the standard fields from Wagtail's `Page` model are stored in one table, and any additional fields from your custom model are saved in another one. It also means that, in order for Django to return 'specific' page type instances (e.g. an `EventPage`), it needs to fetch and join data from multiple tables; which has a negative effect on performance.
 
