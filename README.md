@@ -104,7 +104,7 @@ Using wagtailmenus
 7. [Using the `{% sub_menu %}` tag](#sub_menu-tag)
 8. [Writing your own menu templates](#writing-menu-templates)
 9. [Repetition of selected pages in sub-menus with `MenuPage`](#using-menupage)
-10. [Performance and use of 'specific' pages](#specific-page-use)
+10. [Specific' page instances and performance](#specific-page-use)
 11. [Manipulating sub-menu items for specific page types](#modifying-submenu-items)
 12. [Overriding default behaviour with settings](#app-settings)
 
