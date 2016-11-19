@@ -81,10 +81,10 @@ TEMPLATES = [
 5. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
 
 
-If you want to use `MenuPage`
------------------------------
+Makeing use of `MenuPage`
+-------------------------
 
-While wagtailmenus menu tags will work with any kind of page, to access some of app's more powerful features (e.g. item repetition, programmatic manipulation of sub-menu items), you'll likely want to use the `MenuPage` model as a base for some of your page-type models.
+While wagtailmenus' menu tags will work with your existing page tree and page types, to access some of app's more powerful features (e.g. item repetition, programmatic manipulation of sub-menu items), you'll likely want to use the `MenuPage` model as a base for some of your page-type models.
 
 1. In any app that defines a new page-type model, open the models file and add `MenuPage` to your imports with: `from wagtailmenus.models import MenuPage` 
 2. For any page-types you'd like to become `MenuPage` pages, simply sub-class the `MenuPage` model class instead of the default `wagtail.wagtailcore.models.Page`.
