@@ -24,8 +24,6 @@ The site's page tree powers everything past the root level, so you don't have to
 
 Have you ever hard-coded a menu into a footer at the start of a project, only for those pages never to come into existence? Or maybe the pages were created, but their URLs changed later on, breaking the hard-coded links? How about 'secondary navigation' menus in headers? Flat menus allow you to manage these kind of menus via the CMS, instead of hard-coding them. This means that the page URLs dynamically update to reflect changes, and making updates is possible without having to touch a single line of code.
 
-Flat menus are designed for outputting simple, flat lists of links, but they CAN be made to display multiple levels of pages too. See the instructions below for [using the `{% flat_menu %}` tag](#flat_menu-tag).
-
 In a multi-site project, you can choose to define a new set of menus for each site, or you can define one set of menus for your default site and reuse them for your other sites, or use a combination of both approaches for different menus (see the **`fall_back_to_default_site_menus`** option in [using the `{% flat_menu %}` tag](#flat_menu-tag) to find out more). However you choose to do things, a 'copy' feature makes it easy to copy existing menus from one site to another via the Wagtail admin interface.
 
 3. Provides a solution to key page links becoming just 'toggles' in multi-level drop-downs
