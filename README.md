@@ -283,10 +283,10 @@ Because every project has different needs, wagtailmenus give you some fine grain
 
 All menu tags accept a `use_specific` option, allowing you to override any default settings, or the settings applied via the CMS to individual `MainMenu` and `FlatMenu` objects. As a value, you can pass in the integer value of any of the above options, e.g. `{% main_menu use_specific=2 %}`, or the following variables should be available in the context for you to use instead: 
 
-- `USE_SPECIFIC_OFF` (value: `0`)
-- `USE_SPECIFIC_AUTO` (value `1`), 
-- `USE_SPECIFIC_TOP_LEVEL` (value `2`)
-- `USE_SPECIFIC_ALWAYS` (value `3`)
+- `USE_SPECIFIC_OFF` (value: `0`) e.g. `{% main_menu use_specific=USE_SPECIFIC_OFF %}`
+- `USE_SPECIFIC_AUTO` (value `1`) e.g. `{% main_menu use_specific=USE_SPECIFIC_AUTO %}`
+- `USE_SPECIFIC_TOP_LEVEL` (value `2`) e.g. `{% main_menu use_specific=USE_SPECIFIC_TOP_LEVEL %}`
+- `USE_SPECIFIC_ALWAYS` (value `3`) e.g. `{% main_menu use_specific=USE_SPECIFIC_ALWAYS %}`
 
 
 <a id="modifying-submenu-items"></a>11. Manipulating sub-menu items for specific page types
