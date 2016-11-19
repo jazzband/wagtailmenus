@@ -21,9 +21,9 @@
                         {% main_menu show_multiple_levels=False sub_menu_template="menus/custom_sub_menu_dropdown.html" %}
                     </div>
                     
-                    <h4>Main Menu (max_levels=2, fetch_specific_pages=True)</h4>
+                    <h4>Main Menu (max_levels=2)</h4>
                     <div id="main-menu-two-levels">
-                        {% main_menu max_levels=2 sub_menu_template="menus/custom_sub_menu_dropdown.html" use_specific=True %}
+                        {% main_menu max_levels=2 use_specific=3 sub_menu_template="menus/custom_sub_menu_dropdown.html" %}
                     </div>
 
                     <h4>Main Menu (max_levels=3)</h4>
@@ -34,7 +34,7 @@
                 </nav>
 
                 <div id="nav-contact">
-                    {% flat_menu 'contact' show_menu_heading=False %}
+                    {% flat_menu 'contact' show_multiple_levels=False show_menu_heading=False %}
                 </div>
 
             </div>
@@ -51,10 +51,7 @@
             <div class="container">
                 <div id="nav-footer">
                     {% flat_menu 'footer' apply_active_classes=True %}
-
-                </div>
-                <div id="nav-non-existent">
-                    {% flat_menu 'non-existent' %}
+                    {% flat_menu 'made-up-menu' %}
                 </div>
                 <p class="rkh"><a href="http://www.rkh.co.uk/" target="_blank" title="Web design and development, Leicester">Website by Rock Kitchen Harris</a></p>
             </div>
