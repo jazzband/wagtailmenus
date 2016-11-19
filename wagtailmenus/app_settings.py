@@ -6,6 +6,9 @@ from django.utils.translation import ugettext_lazy as _
 ACTIVE_CLASS = getattr(
     settings, 'WAGTAILMENUS_ACTIVE_CLASS', 'active')
 
+ADD_EDITOR_OVERRIDE_STYLES = getattr(
+    settings, 'WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES', True)
+
 ACTIVE_ANCESTOR_CLASS = getattr(
     settings, 'WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS', 'ancestor')
 

@@ -10,7 +10,8 @@ from wagtail.contrib.modeladmin.helpers import ButtonHelper
 from wagtail.wagtailcore import hooks
 
 from .app_settings import (
-    MAINMENU_MENU_ICON, FLATMENU_MENU_ICON, SECTION_ROOT_DEPTH)
+    MAINMENU_MENU_ICON, FLATMENU_MENU_ICON, SECTION_ROOT_DEPTH,
+    ADD_EDITOR_OVERRIDE_STYLES)
 from .models import MainMenu, FlatMenu
 from .views import (
     MainMenuIndexView, MainMenuEditView, FlatMenuCopyView)
@@ -25,7 +26,9 @@ class MainMenuAdmin(ModelAdmin):
     add_to_settings_menu = True
 
     def get_form_view_extra_css(self):
-        return ['wagtailmenus/css/menu-edit.css'] + self.form_view_extra_css
+        if ADD_EDITOR_OVERRIDE_STYLES:
+            return ['wagtailmenus/css/menu-edit.css']
+        return []
 
     def get_admin_urls_for_registration(self):
         return (
@@ -74,7 +77,9 @@ class FlatMenuAdmin(ModelAdmin):
     add_to_settings_menu = True
 
     def get_form_view_extra_css(self):
-        return ['wagtailmenus/css/menu-edit.css'] + self.form_view_extra_css
+        if ADD_EDITOR_OVERRIDE_STYLES:
+            return ['wagtailmenus/css/menu-edit.css']
+        return []
 
     def copy_view(self, request, instance_pk):
         kwargs = {'model_admin': self, 'instance_pk': instance_pk}
