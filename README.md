@@ -49,12 +49,13 @@ Installing wagtailmenus
 2. Add `wagtail.contrib.modeladmin` to `INSTALLED_APPS` in your project settings, if it's not there already.
 3. Add `wagtailmenus` to `INSTALLED_APPS` in your project settings.
 4. Add `wagtailmenus.context_processors.wagtailmenus` to the `context_processors` list in your `TEMPLATES` setting. The setting should look something like this:
-```python
+    
+	```python
 
-TEMPLATES = [
+    TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-			'DIRS': [
+			'	DIRS': [
 				os.path.join(PROJECT_ROOT, 'templates'),
 			],
 			'APP_DIRS': True,
@@ -74,7 +75,9 @@ TEMPLATES = [
 			},
 		},
 	]
-	```
+	
+    ```
+	
 5. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
 
 
