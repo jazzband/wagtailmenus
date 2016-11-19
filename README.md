@@ -270,18 +270,23 @@ The menu tags do some extra work to make sure both links are never assigned the 
 <a id="specific-page-use"></a>10. Performance and use of 'specific' pages
 -------------------------------------------------------------------------
 
-Wagtail makes use of a technique in Django known as 'multi-table inheritance'. In simple terms this means that, when you create an instance of a custom page type model, the data is saved in two different database tables. All of the standard fields from the Page model are stored in one table, and any additional fields on your custom model are saved to a different table. It also means that, in order for Django to return 'specific' page type instances (e.g. an `EventPage`), it needs to fetch and join data from multiple tables; which has a negative effect on performance.
+Wagtail makes use of a something known in Django as 'multi-table inheritance'. In simple terms, this means that when you create an instance of a custom page type model, the data is saved in two different database tables. All of the standard fields from Wagtail's `Page` model are stored in one table, and any additional fields from your custom model are saved in another one. It also means that, in order for Django to return 'specific' page type instances (e.g. an `EventPage`), it needs to fetch and join data from multiple tables; which has a negative effect on performance.
 
-Menu generation is particularly resource intensive, because a menu needs to know a lot of data about a lot of pages (mostly in order to generate URLs correctly for each page). Add a need for 'specific' page instances to that mix, and that intensity is understandably greater, as the data will likely be spread over many different tables (depending on how many custom page types you are using), needing lots of database joins to put everything together.
+Menu generation is particularly resource intensive, because a menu needs to know a lot of data about a lot of pages (mostly in order to generate URLs correctly for each page). Add a need for 'specific' page instances to that mix (perhaps you need to access mult-lingual field data, or custom fields for outputing additional text, CSS class names or images), and that intensity is understandably greater, as the data will likely be spread over many tables (depending on how many custom page types you are using), needing lots of database joins to put everything together.
 
-Because every project has different needs, wagtailmenus give you some fine grained control over how 'specific' pages in your menus. When defining a `MainMenu` or `FlatMenu` in the CMS, the <b>Specfic page use</b> field allows you to choose one of the following options:
+Because every project has different needs, wagtailmenus give you some fine grained control over how 'specific' pages should be used in your menus. When defining a `MainMenu` or `FlatMenu` in the CMS, the <b>Specfic page use</b> field allows you to choose one of the following options:
 
 - **`OFF`** (value: `0`): Use only standard `Page` model data and methods when rendering. If you aren't using `MenuPage` in your project, don't need to access any custom page model fields in you menu templates, and aren't overriding `get_url_parts()` or other `Page` methods concerned with URL generation, this will offer you optimal performance.
 - **`AUTO`** (value: `1`): Only use specific pages when needed for `MenuPage` operations (e.g. for 'repeating menu item' behaviour, and manipulation of sub-menu items via `has_submenu_items()` and `modify_submenu_items()` methods).
 - **`TOP_LEVEL`** (value: `2`): As `AUTO`, but will always return 'specific' page instances for your top-level menu items (The pages selected as actual menu items). This is useful if you need to access custom page field values in your menu template for top-level items only (e.g. to add tooltip, help text, section colours or images)
 - **`ALWAYS`** (value: `3`): Always return specific page instances. If you need to access custom page field values at all levels of the menu (even in sub-menu templates), or are overriding `get_url_parts()` or other `Page` methods concerned with URL generation, using this option will ensure specific pages are available in menu templates, using as few database queries as possible.
 
-All menu tags accept a `use_specific` option, allowing you to override any default settings, or settings applied via the CMS to individual `MainMenu` and `FlatMenu` objects. As a value, you can pass in the integer value of any of the above options, e.g. `{% main_menu use_specific=2 %}`, or the following values should be available in the context for you to use instead: `USE_SPECIFIC_OFF` (value: `0`), `USE_SPECIFIC_AUTO` (value `1`), `USE_SPECIFIC_TOP_LEVEL` (value `2`) or `USE_SPECIFIC_ALWAYS` (value `3`)
+All menu tags accept a `use_specific` option, allowing you to override any default settings, or the settings applied via the CMS to individual `MainMenu` and `FlatMenu` objects. As a value, you can pass in the integer value of any of the above options, e.g. `{% main_menu use_specific=2 %}`, or the following variables should be available in the context for you to use instead: 
+
+- `USE_SPECIFIC_OFF` (value: `0`)
+- `USE_SPECIFIC_AUTO` (value `1`), 
+- `USE_SPECIFIC_TOP_LEVEL` (value `2`)
+- `USE_SPECIFIC_ALWAYS` (value `3`)
 
 
 <a id="modifying-submenu-items"></a>11. Manipulating sub-menu items for specific page types
