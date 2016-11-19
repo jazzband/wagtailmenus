@@ -53,8 +53,8 @@ Installing wagtailmenus
 	```python
 
     TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    	{
+        	'BACKEND': 'django.template.backends.django.DjangoTemplates',
 			'	DIRS': [
 				os.path.join(PROJECT_ROOT, 'templates'),
 			],
