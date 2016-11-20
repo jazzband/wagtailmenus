@@ -10,29 +10,28 @@ Changelog
 
 * The `use_specific` menu tag argument can now be one of 4 integer values,
   allowing for more fine-grained control over the use of `Page.specific` and
-  `PageQuerySet.specific()` when rendering menu tags.
+  `PageQuerySet.specific()` when rendering menu tags (see README.md for further
+  details).
 * `MainMenu` and `FlatMenu` models now have a `use_specific` field, to allow
   the default `use_specific` setting when rendering that menu to be changed
-  via the admin area, and different preferences to be used for different sites
-  in a multi-site project.
+  via the admin area.
 * `MainMenu` and `FlatMenu` models now have a `max_levels` field, to allow the
   default `max_levels` setting when rendering that menu to be changed via the
-  admin area, and different preferences to be used for different sites in a
-  multi-site project.
-* When rendering a multi-level main menu or flat menu, the `MainMenu` and
-  `FlatMenu` models pre-fetch all of pages needed for menu generation and allow
-  menu tags to request the desired pages from them as they are needed, reducing
-  the need to hit the database multiple times (especially beneficial when menus
-  need 'specific' page instances to function correctly).
+  admin area.
+* When rendering a multi-level `MainMenu` or `FlatMenu, the model instances for
+  those menus pre-fetch all of pages needed to generate the entire menu. 
+  The menu tags then request lists of child pages from menu instance as they 
+  are needed, reducing the need to hit the database at every single branch.
 * The `max_levels`, `use_specific`, `parent_page` and `menuitem_or_page`
   arguments passed to all template tags are now checked to ensure their values
   are valid, and if not, raise a `ValueError` with a helpful message to aid
   debugging.
 * Developers not using the `MenuPage` class or overriding any of wagtail `Page`
-  methods involved in URL generation can now enjoy better avoid performance by
-  choosing not to fetch specific pages at all during rendering (by passing
-  `USE_SPECIFIC_OFF` to the tag, or updating the `use_specific` field value on
-  `MainMenu` or `FlatMenu` instances).
+  methods involved in URL generation can now enjoy better performance by
+  choosing not to fetch any specific pages at all during rendering. Simply
+  pass `use_specific=USE_SPECIFIC_OFF` or `use_specific=0` to the tag, or
+  update the `use_specific` field value on your `MainMenu` or `FlatMenu`
+  instances via the Wagtail admin area.
 * Dropped support for the `WAGTAILMENUS_DEFAULT_MAIN_MENU_MAX_LEVELS` and 
   `WAGTAILMENUS_DEFAULT_FLAT_MENU_MAX_LEVELS` settings. Default values are now
   set using the `max_levels` field on the menu objects themselves.
@@ -47,7 +46,7 @@ Changelog
   instances is `1`, which has the same effect, only if the value is changed via
   the admin area, the changes will be visible without having to explicitly add
   `show_multipl_levels=True` to the tag in templates.
-* The `has_submenu_itmes()` method on `MenuPage` no longer accepts a 
+* The `has_submenu_items()` method on `MenuPage` no longer accepts a 
   `check_for_children` argument.
 * The `modify_submenu_items()` and `has_submenu_items()` methods on the
   `MenuPage` model now both accept an optional `menu_instance` value, so that
