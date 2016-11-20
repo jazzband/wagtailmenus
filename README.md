@@ -9,8 +9,8 @@ It's an extension for Torchbox's [Wagtail CMS](https://github.com/torchbox/wagta
 
 The current version is compatible with Wagtail >= 1.5, and Python 2.7, 3.3, 3.4 and 3.5.
 
-What does wagtailmenus do?
-==========================
+What does it do?
+================
 
 1. Gives you independent control over your root-level main menu items
 ---------------------------------------------------------------------
@@ -19,12 +19,14 @@ The `MainMenu` model lets you define the root-level items for your project's mai
 
 The site's page tree powers everything past the root level, so you don't have to recreate it elsewhere. And as you'd expect, only links to published pages will appear when rendering.
 
+
 2. Allows you to manage multiple 'flat menus' via the CMS
 ---------------------------------------------------------
 
 Have you ever hard-coded a menu into a footer at the start of a project, only for those pages never to come into existence? Or maybe the pages were created, but their URLs changed later on, breaking the hard-coded links? How about 'secondary navigation' menus in headers? Flat menus allow you to manage these kind of menus via the CMS, instead of hard-coding them. This means that the page URLs dynamically update to reflect changes, and making updates is possible without having to touch a single line of code.
 
 In a multi-site project, you can choose to define a new set of menus for each site, or you can define one set of menus for your default site and reuse them for your other sites, or use a combination of both approaches for different menus (see the **`fall_back_to_default_site_menus`** option in [using the `{% flat_menu %}` tag](#flat_menu-tag) to find out more). However you choose to do things, a 'copy' feature makes it easy to copy existing menus from one site to another via the Wagtail admin interface.
+
 
 3. Provides a solution to key page links becoming just 'toggles' in multi-level drop-downs
 ------------------------------------------------------------------------------------------
@@ -35,12 +37,14 @@ No more adding additional pages into the tree. No more hard-coding additional li
 
 <img alt="Screenshot showing the repeated nav item in effect" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/repeating-item.png" />
 
-4. Gives you a set of powerful template tags to render your menus consistently
-------------------------------------------------------------------------------
+
+4. Provides templates and template tags to render menus consistently
+--------------------------------------------------------------------
 
 Each tag comes with a default template that's designed to be fully accessible and compatible with Bootstrap 3. Limiting any project to a set of pre-defined templates would be silly though, which is why every template tag allows you to render menus using a template of your choosing. You can also override the templates in the same way as any other Django project... by putting templates of the same name into a preferred location.
 
 <img alt="Screenshot from Sublime editor showing menu template code" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-menu-templates.png" />
+
 
 Installing wagtailmenus
 =======================
@@ -94,8 +98,6 @@ While wagtailmenus' menu tags will work with your existing page tree and page ty
 
 Using wagtailmenus
 ==================
-
-**Skip to a section:**
 
 1. [Defining your main menu in the CMS](#defining-main-menus)
 2. [Using the `{% main_menu %}` tag](#main_menu-tag)
@@ -421,6 +423,7 @@ class SectionRootPage(MenuPage):
 You can override some of wagtailmenus' default behaviour by adding one of more of the following to your project's settings:
 
 - **`WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES`** (default: `None`): Can be set to a tuple of choices in the [standard Django choices format](https://docs.djangoproject.com/en/1.10/ref/models/fields/#field-choices) to change the `FlatMenu.handle` text field into a select field with fixed choices when adding, editing or copying a `FlatMenu` in Wagtail's admin area.
+- **`WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES`** (default: `True`): By default, wagtailmenus adds some additional styles to improve the readability of the forms on the menu management pages in the Wagtail admin area. If for some reason you don't want to override any styles, you can disable this behaviour by setting to `False`.
 - **`WAGTAILMENUS_ACTIVE_CLASS`** (default: `'active'`): The class added to menu items for the currently active page (when using a menu template with `apply_active_classes=True`)
 - **`WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS`** (default: `'ancestor'`): The class added to any menu items for pages that are ancestors of the currently active page (when using a menu template with `apply_active_classes=True`)
 - **`WAGTAILMENUS_MAINMENU_MENU_ICON`** (default: `'list-ol'`): Use this to change the icon used to represent `MainMenu` in the Wagtail admin area.
@@ -442,4 +445,4 @@ You can override some of wagtailmenus' default behaviour by adding one of more o
 Contributing
 ============
 
-If you'd like to become a wagtailmenus contributor, we'd be happy to have you. You should start by taking a look at our [contributor guidelines](https://github.com/rkhleics/wagtailmenus/blob/master/CONTRIBUTING.md)
+Want to contribute to wagtailmenus? We'd be happy to have you! You should start by taking a look at our [contributor guidelines](https://github.com/rkhleics/wagtailmenus/blob/master/CONTRIBUTING.md)
