@@ -53,7 +53,9 @@ Changelog
   `MenuPage` model now both accept an optional `menu_instance` value, so that
   menu_instance might be called to access pre-fetched page data without hitting
   the database.
-* Other small changes to improve performance.
+* Added the `WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES` setting to allow override
+  styles to be disabled.
+* Other minor performance improvements.
 
 
 1.6.1 (04.11.2016)
