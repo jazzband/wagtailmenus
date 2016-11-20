@@ -42,10 +42,11 @@ Changelog
   `get_sub_menu_items_for_page` method, which is used by `sub_menu`,
   `section_menu` and `children_menu` to do most of their work.
 * The default `show_multiple_levels` value for the `flat_menu` tag is now
-  `True` instead of `False`. The default `max_levels` field value for FlatMenu
-  instances is `1`, which has the same effect, only if the value is changed via
-  the admin area, the changes will be visible without having to explicitly add
-  `show_multipl_levels=True` to the tag in templates.
+  `True` instead of `False`. The default `max_levels` field value for
+  `FlatMenu` instances is `1`, which has the same effect. Only, the value can
+  be changed via the admin area,     and the changes will reflected immediately
+  without having to explicitly add `show_multiple_levels=True` to the tag in
+  templates.
 * The `has_submenu_items()` method on `MenuPage` no longer accepts a 
   `check_for_children` argument.
 * The `modify_submenu_items()` and `has_submenu_items()` methods on the
