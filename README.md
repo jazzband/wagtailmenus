@@ -245,8 +245,8 @@ The following variables are added to the context by all of the above tags, which
 
 **Each item in `menu_items` has the following attributes:**
 
-- **`href`**: The URL that the menu item should link to
-- **`text`**: The text that should be used for the menu item
+- **`href`**: The URL that the menu item should link to.
+- **`text`**: The text that should be used for the menu item.
 - **`active_class`**: A class name to indicate the 'active' state of the menu item. The value will be 'active' if linking to the current page, or 'ancestor' if linking to one of it's ancestors.
 - **`has_children_in_menu`**: A boolean indicating whether the menu item has children that should be output as a sub-menu.
 
@@ -254,7 +254,7 @@ The following variables are added to the context by all of the above tags, which
 <a id="using-menupage"></a>9. Optional repetition of selected pages in menus using `MenuPage`
 ---------------------------------------------------------------------------------------------
 
-Let's say you have an **About Us** section on your site. The top-level page has content that is just as important as that on the pages below it (e.g. "Meet the team", "Our mission and values", "Staff vacancies"). Because of this, you'd like visitors to be able to access the root page as easily as those pages. But, your site uses drop-down navigation, and the **About Us** link no longer takes you to that page when clicked... it simply acts as a toggle for hiding and showing it's sub-pages:
+Let's say you have an **About Us** section on your site. The top-level page has content that is just as important as that on the pages below it (e.g. "Meet the team", "Our mission and values", "Staff vacancies"). Because of this, you'd like visitors to be able to access the root page as easily as those pages. But, your site uses drop-down navigation, and the **About Us** link no longer takes you to that page when clicked... it simply acts as a toggle for hiding and showing its sub-pages:
 
 <img alt="Screenshot showing an example navigation" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/no-repeating-item.png" />
 
@@ -280,10 +280,10 @@ Menu generation is particularly resource intensive, because a menu needs to know
 
 Because every project has different needs, wagtailmenus give you some fine grained control over how 'specific' pages should be used in your menus. When defining a `MainMenu` or `FlatMenu` in the CMS, the <b>Specfic page use</b> field allows you to choose one of the following options:
 
-- **`OFF`** (value: `0`): Use only standard `Page` model data and methods when rendering. If you aren't using `MenuPage` in your project, don't need to access any custom page model fields in you menu templates, and aren't overriding `get_url_parts()` or other `Page` methods concerned with URL generation, this will offer you optimal performance.
+- **`OFF`** (value: `0`): Use only standard `Page` model data and methods, and make the minimum number of database methods when rendering. If you aren't using wagtailmenu's `MenuPage` model in your project, don't need to access any custom page model fields in you menu templates, and aren't overriding `get_url_parts()` or other `Page` methods concerned with URL generation, you should use this option for optimal performance.
 - **`AUTO`** (value: `1`): Only use specific pages when needed for `MenuPage` operations (e.g. for 'repeating menu item' behaviour, and manipulation of sub-menu items via `has_submenu_items()` and `modify_submenu_items()` methods).
 - **`TOP_LEVEL`** (value: `2`): As `AUTO`, but will always return 'specific' page instances for your top-level menu items (The pages selected as actual menu items). This is useful if you need to access custom page field values in your menu template for top-level items only (e.g. to add tooltip, help text, section colours or images)
-- **`ALWAYS`** (value: `3`): Always return specific page instances. If you need to access custom page field values at all levels of the menu (even in sub-menu templates), or are overriding `get_url_parts()` or other `Page` methods concerned with URL generation, using this option will ensure specific pages are available in menu templates, using as few database queries as possible.
+- **`ALWAYS`** (value: `3`): Fetch and return specific page instances for all pages using as few database queries as possible, so that custom page-type data and methods can be accesssed in your menu template. You'll likely need to use this for multilingual sites, or if you have models that override `get_url_parts()` or other `Page` methods concerned with generating page URLs.
 
 All menu tags accept a `use_specific` option, allowing you to override any default settings, or the settings applied via the CMS to individual `MainMenu` and `FlatMenu` objects. As a value, you can pass in the integer value of any of the above options, e.g. `{% main_menu use_specific=2 %}`, or the following variables should be available in the context for you to use instead: 
 
