@@ -1,8 +1,14 @@
 Changelog
 =========
 
-2.0.1 (XX.XX.XXX) IN DEVELOPMENT
+2.0.2 (XX.XX.XXX) IN DEVELOPMENT
 -------------------------------- 
+
+
+2.0.1 (22.11.2016)
+-------------------------------- 
+
+* Bug fix for `main_menu` template tag.
 
 
 2.0.0 (19.11.2016)
