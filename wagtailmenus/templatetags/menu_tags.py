@@ -90,7 +90,7 @@ def main_menu(
             request_path=request.path,
             use_specific=menu.use_specific,
             original_menu_tag='main_menu',
-            check_for_children=max_levels > 1,
+            check_for_children=menu.max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
             apply_active_classes=apply_active_classes,
             menu_instance=menu,
