@@ -9,3 +9,4 @@
 ## Translators
 
 * François GUÉRIN (frague59) 
+* Claudio Marinozzi (pyMan)
