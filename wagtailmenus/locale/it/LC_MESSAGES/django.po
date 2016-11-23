@@ -1,0 +1,360 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-23 17:39+0100\n"
+"PO-Revision-Date: 2016-11-23 18:14+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: it\n"
+"X-Generator: Poedit 1.8.11\n"
+
+#: .\wagtailmenus\app_settings.py:52
+msgid "1: No sub-navigation (flat)"
+msgstr "1: Nessun sottomenù (piatto)"
+
+#: .\wagtailmenus\app_settings.py:53
+msgid "2: Allow 1 level of sub-navigation"
+msgstr "2: Fino a un livello di sottomenù"
+
+#: .\wagtailmenus\app_settings.py:54
+msgid "3: Allow 2 levels of sub-navigation"
+msgstr "3: Fino a 2 livelli di sottomenù"
+
+#: .\wagtailmenus\app_settings.py:55
+msgid "4: Allow 3 levels of sub-navigation"
+msgstr "4: Fino a 3 livelli di sottomenù"
+
+#: .\wagtailmenus\app_settings.py:71
+msgid "OFF (Most efficient)"
+msgstr "No (più efficiente)"
+
+#: .\wagtailmenus\app_settings.py:72
+msgid "AUTO"
+msgstr "Automatico"
+
+#: .\wagtailmenus\app_settings.py:73
+msgid "TOP_LEVEL"
+msgstr "Solo primo livello"
+
+#: .\wagtailmenus\app_settings.py:74
+msgid "ALWAYS (Least efficient)"
+msgstr "Sempre (meno efficiente)"
+
+#: .\wagtailmenus\models.py:29
+msgid "repeat in sub-navigation"
+msgstr "ripeti in sottomenù"
+
+#: .\wagtailmenus\models.py:32
+msgid ""
+"If checked, a link to this page will be repeated alongside it's direct "
+"children when displaying a sub-navigation for this page."
+msgstr ""
+"Se selezionato, un link a questa stessa pagina verrà mostrato insieme alle "
+"voci di menù dei diretti figli quando visualizzato un sottomenù per questa "
+"pagina"
+
+#: .\wagtailmenus\models.py:37
+msgid "repeated item link text"
+msgstr "testo voce di menù ripetuto"
+
+#: .\wagtailmenus\models.py:41
+msgid ""
+"e.g. 'Section home' or 'Overview'. If left blank, the page title will be "
+"used."
+msgstr ""
+"es. 'Sezione Home' o 'Panoramica'. Se vuoto, verrà usato il titolo della "
+"pagina."
+
+#: .\wagtailmenus\models.py:105
+msgid "link to an internal page"
+msgstr "link a pagina interna"
+
+#: .\wagtailmenus\models.py:111
+msgid "link to a custom URL"
+msgstr "link a URL specifico"
+
+#: .\wagtailmenus\models.py:117
+msgid "link text"
+msgstr "testo link"
+
+#: .\wagtailmenus\models.py:120
+msgid "Must be set if you wish to link to a custom URL."
+msgstr "Deve essere valorizzato se definito l'uso di un URL specifico"
+
+#: .\wagtailmenus\models.py:123
+msgid "handle"
+msgstr "alias"
+
+#: .\wagtailmenus\models.py:127
+msgid ""
+"Use this field to optionally specify an additional value for each menu item, "
+"which you can then reference in custom menu templates."
+msgstr ""
+"Opzionalmente usa questo campo per specificare, per ogni voce di menù, un "
+"valore addizionale che può essere poi referenziato in un template di menù "
+"personalizzato."
+
+#: .\wagtailmenus\models.py:133
+msgid "append to URL"
+msgstr "aggiunti all'URL"
+
+#: .\wagtailmenus\models.py:137
+msgid ""
+"Use this to optionally append a #hash or querystring to the above page's URL."
+msgstr ""
+"Usa questo campo per aggiungere, opzionalmente, un #hash o una querystring "
+"all'URL della pagina sopra."
+
+#: .\wagtailmenus\models.py:146
+msgid "menu item"
+msgstr "voce menù"
+
+#: .\wagtailmenus\models.py:147 .\wagtailmenus\models.py:372
+#: .\wagtailmenus\models.py:486
+msgid "menu items"
+msgstr "voci menù"
+
+#: .\wagtailmenus\models.py:164
+msgid "This must be set if you're linking to a custom URL."
+msgstr ""
+"Questo campo deve essere valorizzato se stai linkando un URL specifico."
+
+#: .\wagtailmenus\models.py:171
+msgid "This must be set if you're not linking to a page."
+msgstr "Questo campo deve essere valorizzato se non stai linkando una pagina."
+
+#: .\wagtailmenus\models.py:177
+msgid ""
+"You cannot link to both a page and URL. Please review your link and clear "
+"any unwanted values."
+msgstr ""
+"Non puoi linkare sia una pagina sia un URL specifico. Per favore rivedi i "
+"link ed elimina il valore non desiderato."
+
+#: .\wagtailmenus\models.py:334 .\wagtailmenus\models.py:412
+msgid "maximum levels"
+msgstr "livelli massimi"
+
+#: .\wagtailmenus\models.py:338
+msgid ""
+"The maximum number of levels to display when rendering this menu. The value "
+"can be overidden by supplying a different <code>max_levels</code> value to "
+"the <code>{% main_menu %}</code> tag in your templates."
+msgstr ""
+"Il numero massimo di livelli da mostrare quando si disegna il menù. Il "
+"valore può essere ridefinito fornendo un valore differente per il parametro "
+"<code>max_levels</code> del tag <code>{% main_menu %}</code> nei tuoi "
+"template."
+
+#: .\wagtailmenus\models.py:345 .\wagtailmenus\models.py:423
+msgid "specific page usage"
+msgstr "utilizzo specifico della pagina"
+
+#: .\wagtailmenus\models.py:349
+msgid ""
+"Controls how 'specific' pages objects are fetched and used when rendering "
+"this menu. This value can be overidden by supplying a different "
+"<code>use_specific</code> value to the <code>{% main_menu %}</code> tag in "
+"your templates."
+msgstr ""
+"Controlla come le pagine 'specific' vengono lette e usate quando viene "
+"disegnato il menù. Il valore può essere ridefinito fornendo un valore "
+"differente per il parametro <code>use_specific</code> del tag <code>{% "
+"main_menu %}</code> nei tuoi template."
+
+#: .\wagtailmenus\models.py:357 .\wagtailmenus\models.py:358
+msgid "main menu"
+msgstr "menù principale"
+
+#: .\wagtailmenus\models.py:369
+#, python-format
+msgid "Main menu for %s"
+msgstr "Menù principale per %s"
+
+#: .\wagtailmenus\models.py:374 .\wagtailmenus\models.py:488
+msgid "Advanced settings"
+msgstr "Impostazioni avanzate"
+
+#: .\wagtailmenus\models.py:392
+msgid "site"
+msgstr "sito"
+
+#: .\wagtailmenus\models.py:398
+msgid "For internal reference only."
+msgstr "Solamente per utilizzo interno"
+
+#: .\wagtailmenus\models.py:402
+msgid ""
+"Used to reference this menu in templates etc. Must be unique for the "
+"selected site."
+msgstr ""
+"Usato per referenziare questo menù nei template, ecc. Deve essere univoco "
+"per il sito selezionato."
+
+#: .\wagtailmenus\models.py:409
+msgid "If supplied, appears above the menu when rendered."
+msgstr "Se valorizzato, appare sopra il menù quando disegnato."
+
+#: .\wagtailmenus\models.py:416
+msgid ""
+"The maximum number of levels to display when rendering this menu. The value "
+"can be overidden by supplying a different <code>max_levels</code> value to "
+"the <code>{% flat_menu %}</code> tag in your templates."
+msgstr ""
+"Il numero massimo di livelli da mostrare quando si disegna il menù. Il "
+"valore può essere ridefinito fornendo un valore differente per il parametro "
+"<code>max_levels</code> del tag <code>{% main_menu %}</code> nei tuoi "
+"template."
+
+#: .\wagtailmenus\models.py:427
+msgid ""
+"Controls how 'specific' pages objects are fetched and used when rendering "
+"this menu. This value can be overidden by supplying a different "
+"<code>use_specific</code> value to the <code>{% flat_menu %}</code> tag in "
+"your templates."
+msgstr ""
+"Controlla come le pagine 'specific' vengono lette e usate quando viene "
+"disegnato il menù. Il valore può essere ridefinito fornendo un valore "
+"differente per il parametro <code>use_specific</code> del tag <code>{% "
+"main_menu %}</code> nei tuoi template."
+
+#: .\wagtailmenus\models.py:438
+msgid "flat menu"
+msgstr "menù piatto"
+
+#: .\wagtailmenus\models.py:439
+msgid "flat menus"
+msgstr "menù piatti"
+
+#: .\wagtailmenus\models.py:468
+msgid ""
+"Site and handle must create a unique combination. A menu already exists with "
+"these same two values."
+msgstr ""
+"La coppia sito e alias devono avere un valore univoco. Esiste già un menù "
+"con questa coppia di valori."
+
+#: .\wagtailmenus\models.py:478 .\wagtailmenus\panels.py:41
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: .\wagtailmenus\models.py:498 .\wagtailmenus\models.py:510
+msgid "allow sub-menu for this item"
+msgstr "permetti sottomenù per questo menù"
+
+#: .\wagtailmenus\models.py:501 .\wagtailmenus\models.py:513
+msgid ""
+"NOTE: The sub-menu might not be displayed, even if checked. It depends on "
+"how the menu is used in this project's templates."
+msgstr ""
+"NOTA: Il sottomenù potrebbe non venire visualizzato, anche se selezionato. "
+"Dipende da come il menù è utilizzato nei template del progetto."
+
+#: .\wagtailmenus\panels.py:9
+msgid "Advanced menu behaviour"
+msgstr "Comportamento menù avanzato"
+
+#: .\wagtailmenus\panels.py:24
+msgid "Scheduled publishing"
+msgstr "Pubblicazioni programmate"
+
+#: .\wagtailmenus\templates\wagtailmenus\mainmenu_edit.html:39
+msgid "Save"
+msgstr "Salva"
+
+#: .\wagtailmenus\templatetags\menu_tags.py:23
+#, python-format
+msgid ""
+"The `%s` tag expects `max_levels` to be an integer value between 1 and 5. "
+"Please review your template."
+msgstr ""
+"Il tag `%s` si aspetta `max_levels` come un valore intero da 1 a 5. Per "
+"favore rivedi il tuo template."
+
+#: .\wagtailmenus\templatetags\menu_tags.py:28
+#, python-format
+msgid ""
+"The `%s` tag expects `use_specific` to be an integer value between 0 and 3. "
+"Please review your template."
+msgstr ""
+"Il tag `%s` si aspetta `use_specific` come un valore intero da 0 e 3. Per "
+"favore rivedi il tuo template."
+
+#: .\wagtailmenus\templatetags\menu_tags.py:33
+#, python-format
+msgid ""
+"The `%s` tag expects `parent_page` to be a `Page` instance. A value of type `"
+"%s` was supplied."
+msgstr ""
+"Il tag `%s` si aspetta `parent_page` come l'istanza di una `Page`. Invece è "
+"stato fornito un valore di tipo `%s`."
+
+#: .\wagtailmenus\templatetags\menu_tags.py:39
+#, python-format
+msgid ""
+"The `%s` tag expects `menuitem_or_page` to be a `Page` or `MenuItem` "
+"instance. A value of type `%s` was supplied."
+msgstr ""
+"Il tag `%s` si aspetta `menuitem_or_page` come l'istanza di una `Page` o "
+"`MenuItem`. Invece è stato fornito un valore di tipo `%s`."
+
+#: .\wagtailmenus\views.py:45
+msgid "Editing"
+msgstr "Modifica"
+
+#: .\wagtailmenus\views.py:69
+#, python-format
+msgid "Editing %s"
+msgstr "Modifica %s"
+
+#: .\wagtailmenus\views.py:98
+msgid "Main menu updated successfully."
+msgstr "Menù principale aggiornato con successo."
+
+#: .\wagtailmenus\views.py:102
+msgid "The menu could not be saved due to errors."
+msgstr "Non è stato possibile salvare il menù a seguito di errori."
+
+#: .\wagtailmenus\views.py:109
+msgid "Copying"
+msgstr "Copiatura"
+
+#: .\wagtailmenus\views.py:116
+#, python-format
+msgid "Copying %s"
+msgstr "Copiatura %s"
+
+#: .\wagtailmenus\views.py:142
+msgid "Flat menu '{instance}' created."
+msgstr "Menù piatto `{instance}` creato."
+
+#: .\wagtailmenus\wagtail_hooks.py:22
+msgid "Main menu"
+msgstr "Menù principale"
+
+#: .\wagtailmenus\wagtail_hooks.py:52
+msgid "Copy"
+msgstr "Copia"
+
+#: .\wagtailmenus\wagtail_hooks.py:54
+#, python-format
+msgid "Copy this %s"
+msgstr "Copia questo %s"
+
+#: .\wagtailmenus\wagtail_hooks.py:73
+msgid "Flat menus"
+msgstr "Menù piatti"
+
+#: .\wagtailmenus\wagtail_hooks.py:117
+msgid "no. of items"
+msgstr "N. di voci"
