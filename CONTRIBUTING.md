@@ -62,11 +62,11 @@ to help you debug with your code as you develop:
 4. Now create `manage.py` by copying the example provided:  
    `cp manage.py.example manage.py`
 5. To load some test data into the database, run the following:  
-   `django manage.py loaddata wagtailmenus/tests/fixtures/test.json`
+   `python manage.py loaddata wagtailmenus/tests/fixtures/test.json`
 6. Now run the following and follow the prompts to set up a new superuser:  
-   `django manage.py createsuperuser`
+   `python manage.py createsuperuser`
 7. Now run the project using the standard Django command:  
-   `django manage.py runserver`
+   `python manage.py runserver`
 
 Your local copies of `settings/development.py` and `manage.py` should be
 ignored by git when you push any changes, as will anything you add to the
