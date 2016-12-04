@@ -6,7 +6,7 @@ from copy import copy
 
 from django import forms
 from django.db import models
-from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.core.exceptions import ValidationError
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
@@ -195,6 +195,7 @@ class MenuItem(models.Model):
 class Menu(object):
     max_levels = 1
     use_specific = app_settings.USE_SPECIFIC_AUTO
+    pages_for_display = None
 
     def clear_page_cache(self):
         try:
@@ -232,11 +233,6 @@ class Menu(object):
                     pass
 
             self.use_specific = use_specific
-
-    @cached_property
-    def pages_for_display(self):
-        raise ImproperlyConfigured('Subclasses of Menu must define their own '
-                                   'page_for_display() method.')
 
     @cached_property
     def page_children_dict(self):
