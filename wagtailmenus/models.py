@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
 from collections import defaultdict
@@ -394,9 +395,11 @@ class FlatMenu(Menu):
         db_index=True, on_delete=models.CASCADE
     )
     title = models.CharField(
+        verbose_name=_('title'),
         max_length=255,
         help_text=_("For internal reference only."))
     handle = models.SlugField(
+        verbose_name=_('handle'),
         max_length=100,
         help_text=_(
             "Used to reference this menu in templates etc. Must be unique "
@@ -404,6 +407,7 @@ class FlatMenu(Menu):
         )
     )
     heading = models.CharField(
+        verbose_name=_('heading'),
         max_length=255,
         blank=True,
         help_text=_("If supplied, appears above the menu when rendered.")
