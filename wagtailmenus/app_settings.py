@@ -68,10 +68,10 @@ USE_SPECIFIC_AUTO = 1
 USE_SPECIFIC_TOP_LEVEL = 2
 USE_SPECIFIC_ALWAYS = 3
 USE_SPECIFIC_CHOICES = (
-    (USE_SPECIFIC_OFF, _("OFF (Most efficient)")),
-    (USE_SPECIFIC_AUTO, _("AUTO")),
-    (USE_SPECIFIC_TOP_LEVEL, _("TOP_LEVEL")),
-    (USE_SPECIFIC_ALWAYS, _("ALWAYS (Least efficient)")),
+    (USE_SPECIFIC_OFF, _("Off (most efficient)")),
+    (USE_SPECIFIC_AUTO, _("Auto")),
+    (USE_SPECIFIC_TOP_LEVEL, _("Top level")),
+    (USE_SPECIFIC_ALWAYS, _("Always (least efficient)")),
 )
 
 DEFAULT_SECTION_MENU_USE_SPECIFIC = getattr(

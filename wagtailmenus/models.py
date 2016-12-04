@@ -6,7 +6,7 @@ from copy import copy
 
 from django import forms
 from django.db import models
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
@@ -192,13 +192,9 @@ class MenuItem(models.Model):
     )
 
 
-class Menu(ClusterableModel):
-
+class Menu(object):
     max_levels = 1
     use_specific = app_settings.USE_SPECIFIC_AUTO
-
-    class Meta:
-        abstract = True
 
     def clear_page_cache(self):
         try:
@@ -236,6 +232,70 @@ class Menu(ClusterableModel):
                     pass
 
             self.use_specific = use_specific
+
+    @cached_property
+    def pages_for_display(self):
+        raise ImproperlyConfigured('Subclasses of Menu must define their own '
+                                   'page_for_display() method.')
+
+    @cached_property
+    def page_children_dict(self):
+        """
+        Returns a dictionary of lists, where the keys are 'path' values for
+        pages, and the value is a list of children pages for that page.
+        """
+        children_dict = defaultdict(list)
+        for page in self.pages_for_display:
+            children_dict[page.path[:-page.steplen]].append(page)
+        return children_dict
+
+    def get_children_for_page(self, page):
+        """Return a list of relevant child pages for a given page."""
+        return self.page_children_dict.get(page.path, [])
+
+    def page_has_children(self, page):
+        """
+        Return a boolean indicating whether a given page has any relevant
+        child pages.
+        """
+        return page.path in self.page_children_dict
+
+
+class MenuFromRootPage(Menu):
+    root_page = None
+
+    def __init__(self, root_page, max_levels, use_specific):
+        self.root_page = root_page
+        self.max_levels = max_levels
+        self.use_specific = use_specific
+        super(MenuFromRootPage, self).__init__()
+
+    @cached_property
+    def pages_for_display(self):
+        """
+        Returns a list of pages for rendering all levels of the menu. All pages
+        must be live, not expired, and set to show in menus.
+        """
+        pages = Page.objects.filter(
+            depth__gt=self.root_page.depth,
+            depth__lte=self.root_page.depth + self.max_levels,
+            path__startswith=self.root_page.path,
+            live=True,
+            expired=False,
+            show_in_menus=True,
+        )
+
+        # Return 'specific' page instances if required
+        if self.use_specific == app_settings.USE_SPECIFIC_ALWAYS:
+            return pages.specific()
+
+        return pages
+
+
+class MenuWithMenuItems(ClusterableModel, Menu):
+
+    class Meta:
+        abstract = True
 
     @cached_property
     def top_level_items(self):
@@ -300,30 +360,8 @@ class Menu(ClusterableModel):
 
         return all_pages
 
-    @cached_property
-    def page_children_dict(self):
-        """
-        Returns a dictionary of lists, where the keys are 'path' values for
-        pages, and the value is a list of children pages for that page.
-        """
-        children_dict = defaultdict(list)
-        for page in self.pages_for_display:
-            children_dict[page.path[:-page.steplen]].append(page)
-        return children_dict
 
-    def get_children_for_page(self, page):
-        """Return a list of relevant child pages for a given page."""
-        return self.page_children_dict.get(page.path, [])
-
-    def page_has_children(self, page):
-        """
-        Return a boolean indicating whether a given page has any relevant
-        child pages.
-        """
-        return page.path in self.page_children_dict
-
-
-class MainMenu(Menu):
+class MainMenu(MenuWithMenuItems):
     site = models.OneToOneField(
         'wagtailcore.Site',
         related_name="main_menu",
@@ -387,7 +425,7 @@ class FlatMenuAdminForm(WagtailAdminModelForm):
                 choices=app_settings.FLAT_MENUS_HANDLE_CHOICES)
 
 
-class FlatMenu(Menu):
+class FlatMenu(MenuWithMenuItems):
     site = models.ForeignKey(
         'wagtailcore.Site',
         verbose_name=_('site'),

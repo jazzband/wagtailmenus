@@ -4,10 +4,10 @@ from copy import copy
 from django.template import Library
 from django.utils.translation import ugettext_lazy as _
 from wagtail.wagtailcore.models import Page
-from ..models import MainMenu, FlatMenu, MenuItem
+from ..models import MenuFromRootPage, MainMenu, FlatMenu, MenuItem
 from ..app_settings import (
     ACTIVE_CLASS, ACTIVE_ANCESTOR_CLASS, SECTION_ROOT_DEPTH,
-    USE_SPECIFIC_ALWAYS, USE_SPECIFIC_AUTO, USE_SPECIFIC_TOP_LEVEL
+    USE_SPECIFIC_ALWAYS, USE_SPECIFIC_AUTO
 )
 from wagtailmenus import app_settings
 flat_menus_fbtdsm = app_settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS
@@ -187,18 +187,9 @@ def get_sub_menu_items_for_page(
     # The pages children above will form the basis of the `menu_items`
     # list passed to the template for rendering.
 
-    if menu_instance:
-        children_pages = menu_instance.get_children_for_page(page)
-    else:
-        children_pages = page.get_children().filter(
-            live=True, expired=False, show_in_menus=True)
-        if(
-            use_specific == USE_SPECIFIC_ALWAYS or
-            (use_specific == USE_SPECIFIC_TOP_LEVEL and current_level == 1)
-        ):
-            # We need 'specific' pages, so use `PageQueryset.specific()` to
-            # fetch them with the minimum number of queries.
-            children_pages = children_pages.specific()
+    if not menu_instance:
+        menu_instance = MenuFromRootPage(page, max_levels, use_specific)
+    children_pages = menu_instance.get_children_for_page(page)
 
     # Call `prime_menu_items` to prepare the children pages for output. This
     # will add `href`, `text`, `active_class` and `has_children_in_menu`
@@ -347,6 +338,10 @@ def section_menu(
     if not show_multiple_levels:
         max_levels = 1
 
+    # Create a menu instance that can fetch all pages at once and return
+    # for subpages for each branch as they are needed
+    menu_instance = MenuFromRootPage(root, max_levels, use_specific)
+
     section_root, menu_items = get_sub_menu_items_for_page(
         page=root,
         request=request,
@@ -359,7 +354,8 @@ def section_menu(
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
-        menu_instance=None)
+        menu_instance=menu_instance
+    )
 
     """
     We want `section_root` to have the same attributes as primed menu
@@ -382,6 +378,7 @@ def section_menu(
     context = copy(context)
     context.update({
         'section_root': section_root,
+        'menu_instance': menu_instance,
         'menu_items': menu_items,
         'show_section_root': show_section_root,
         'apply_active_classes': apply_active_classes,
@@ -420,6 +417,10 @@ def children_menu(
     if not parent_page:
         return ''
 
+    # Create a menu instance that can fetch all pages at once and return
+    # for subpages for each branch as they are needed
+    menu_instance = MenuFromRootPage(parent_page, max_levels, use_specific)
+
     parent_page, menu_items = get_sub_menu_items_for_page(
         page=parent_page,
         request=request,
@@ -432,10 +433,11 @@ def children_menu(
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
-        menu_instance=None)
+        menu_instance=menu_instance)
 
     context.update({
         'parent_page': parent_page,
+        'menu_instance': menu_instance,
         'menu_items': menu_items,
         'apply_active_classes': apply_active_classes,
         'allow_repeating_parents': allow_repeating_parents,

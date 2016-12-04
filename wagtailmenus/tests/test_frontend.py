@@ -1049,14 +1049,14 @@ class TestTemplateTags(TestCase):
         <div id="section-menu">
             <a href="/superheroes/" class="ancestor section_root top-level">Superheroes</a>
             <ul>
-                <li class=" low-level">
+                <li class="">
                     <a href="/superheroes/marvel-comics/">Marvel Comics</a>
                     <ul class="sub-menu" data-level="2">
                         <li class=""><a href="/superheroes/marvel-comics/iron-man/">Iron Man</a></li>
                         <li class=""><a href="/superheroes/marvel-comics/spiderman/">Spiderman</a></li>
                     </ul>
                 </li>
-                <li class="ancestor low-level">
+                <li class="ancestor">
                     <a href="/superheroes/dc-comics/">D.C. Comics</a>
                     <ul class="sub-menu" data-level="2">
                         <li class="active"><a href="/superheroes/dc-comics/batman/">Batman</a></li>
