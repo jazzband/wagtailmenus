@@ -52,7 +52,7 @@ class MenuPage(Page):
     def modify_submenu_items(self, menu_items, current_page,
                              current_ancestor_ids, current_site,
                              allow_repeating_parents, apply_active_classes,
-                             original_menu_tag, menu_instance=None):
+                             original_menu_tag, menu_instance):
         """
         Make any necessary modifications to `menu_items` and return the list
         back to the calling menu tag to render in templates. Any additional
@@ -80,7 +80,7 @@ class MenuPage(Page):
         return menu_items
 
     def has_submenu_items(self, current_page, allow_repeating_parents,
-                          original_menu_tag, menu_instance=None):
+                          original_menu_tag, menu_instance):
         """
         When rendering pages in a menu template a `has_children_in_menu`
         attribute is added to each page, letting template developers know
@@ -92,9 +92,7 @@ class MenuPage(Page):
         items that aren't child pages, you'll likely need to alter this method
         too, so the template knows there are sub items to be rendered.
         """
-        if menu_instance:
-            return menu_instance.page_has_children(self)
-        return self.get_children().live().in_menu().exists()
+        return menu_instance.page_has_children(self)
 
 
 @python_2_unicode_compatible

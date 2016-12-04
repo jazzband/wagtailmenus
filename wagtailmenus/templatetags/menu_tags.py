@@ -90,10 +90,10 @@ def main_menu(
             request_path=request.path,
             use_specific=menu.use_specific,
             original_menu_tag='main_menu',
+            menu_instance=menu,
             check_for_children=menu.max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
-            apply_active_classes=apply_active_classes,
-            menu_instance=menu,
+            apply_active_classes=apply_active_classes
         ),
         'main_menu': menu,
         'use_specific': menu.use_specific,
@@ -105,7 +105,7 @@ def main_menu(
         'sub_menu_template': sub_menu_template,
         'original_menu_tag': 'main_menu',
         'section_root': root,
-        'current_ancestor_ids': ancestor_ids,
+        'current_ancestor_ids': ancestor_ids
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -152,10 +152,10 @@ def flat_menu(
             request_path=request.path,
             use_specific=menu.use_specific,
             original_menu_tag='flat_menu',
+            menu_instance=menu,
             check_for_children=menu.max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
-            apply_active_classes=apply_active_classes,
-            menu_instance=menu,
+            apply_active_classes=apply_active_classes
         ),
         'matched_menu': menu,
         'menu_handle': handle,
@@ -169,7 +169,7 @@ def flat_menu(
         'current_template': template,
         'sub_menu_template': sub_menu_template,
         'original_menu_tag': 'flat_menu',
-        'current_ancestor_ids': ancestor_ids,
+        'current_ancestor_ids': ancestor_ids
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -202,10 +202,10 @@ def get_sub_menu_items_for_page(
         request_path=request.path,
         use_specific=use_specific,
         original_menu_tag=original_menu_tag,
+        menu_instance=menu_instance,
         check_for_children=current_level < max_levels,
         allow_repeating_parents=allow_repeating_parents,
-        apply_active_classes=apply_active_classes,
-        menu_instance=menu_instance,
+        apply_active_classes=apply_active_classes
     )
 
     """
@@ -229,7 +229,8 @@ def get_sub_menu_items_for_page(
             allow_repeating_parents=allow_repeating_parents,
             apply_active_classes=apply_active_classes,
             original_menu_tag=original_menu_tag,
-            menu_instance=menu_instance)
+            menu_instance=menu_instance
+        )
 
     return page, menu_items
 
@@ -292,11 +293,12 @@ def sub_menu(
         ancestor_ids=ancestor_ids,
         use_specific=use_specific,
         original_menu_tag=original_menu_tag,
+        menu_instance=menu_instance,
         current_level=current_level,
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
-        allow_repeating_parents=allow_repeating_parents,
-        menu_instance=menu_instance)
+        allow_repeating_parents=allow_repeating_parents
+    )
 
     context = copy(context)
     context.update({
@@ -307,7 +309,7 @@ def sub_menu(
         'current_level': current_level,
         'max_levels': max_levels,
         'current_template': template,
-        'original_menu_tag': original_menu_tag,
+        'original_menu_tag': original_menu_tag
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -350,11 +352,11 @@ def section_menu(
         ancestor_ids=ancestor_ids,
         use_specific=use_specific,
         original_menu_tag='section_menu',
+        menu_instance=menu_instance,
         current_level=1,
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
-        allow_repeating_parents=allow_repeating_parents,
-        menu_instance=menu_instance
+        allow_repeating_parents=allow_repeating_parents
     )
 
     """
@@ -389,7 +391,7 @@ def section_menu(
         'sub_menu_template': sub_menu_template,
         'original_menu_tag': 'section_menu',
         'current_ancestor_ids': ancestor_ids,
-        'use_specific': use_specific,
+        'use_specific': use_specific
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -429,11 +431,12 @@ def children_menu(
         ancestor_ids=ancestor_ids,
         use_specific=use_specific,
         original_menu_tag='children_menu',
+        menu_instance=menu_instance,
         current_level=1,
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
-        allow_repeating_parents=allow_repeating_parents,
-        menu_instance=menu_instance)
+        allow_repeating_parents=allow_repeating_parents
+    )
 
     context.update({
         'parent_page': parent_page,
@@ -446,7 +449,7 @@ def children_menu(
         'original_menu_tag': 'children_menu',
         'current_template': template,
         'sub_menu_template': sub_menu_template,
-        'use_specific': use_specific,
+        'use_specific': use_specific
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -454,9 +457,9 @@ def children_menu(
 
 def prime_menu_items(
     menu_items, current_site, current_page, current_page_ancestor_ids,
-    request_path, use_specific, original_menu_tag, check_for_children=False,
-    allow_repeating_parents=True, apply_active_classes=True,
-    menu_instance=None
+    request_path, use_specific, original_menu_tag, menu_instance,
+    check_for_children=False, allow_repeating_parents=True,
+    apply_active_classes=True
 ):
     """
     Prepare a list of `MenuItem` or `Page` objects for rendering to a menu
@@ -510,15 +513,11 @@ def prime_menu_items(
                         current_page=current_page,
                         allow_repeating_parents=allow_repeating_parents,
                         original_menu_tag=original_menu_tag,
-                        menu_instance=menu_instance)
-
-                elif menu_instance:
+                        menu_instance=menu_instance
+                    )
+                else:
                     has_children_in_menu = menu_instance.page_has_children(
                         page)
-                else:
-                    has_children_in_menu = page.get_children().filter(
-                        live=True, expired=False, show_in_menus=True,
-                    ).exists()
 
             setattr(item, 'has_children_in_menu', has_children_in_menu)
 
