@@ -6,9 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from wagtail.wagtailcore.models import Page
 from ..models import MenuFromRootPage, MainMenu, FlatMenu, MenuItem
 from ..app_settings import (
-    ACTIVE_CLASS, ACTIVE_ANCESTOR_CLASS, SECTION_ROOT_DEPTH,
-    USE_SPECIFIC_ALWAYS, USE_SPECIFIC_AUTO
-)
+    ACTIVE_CLASS, ACTIVE_ANCESTOR_CLASS, SECTION_ROOT_DEPTH, USE_SPECIFIC_AUTO)
 from wagtailmenus import app_settings
 flat_menus_fbtdsm = app_settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS
 
@@ -176,19 +174,11 @@ def flat_menu(
 
 
 def get_sub_menu_items_for_page(
-    page, request, current_site, current_page, ancestor_ids, use_specific,
-    apply_active_classes, allow_repeating_parents, current_level=1,
-    max_levels=2, original_menu_tag='', menu_instance=None
+    page, request, current_site, current_page, ancestor_ids, menu_instance,
+    use_specific, apply_active_classes, allow_repeating_parents,
+    current_level=1, max_levels=2, original_menu_tag=''
 ):
-    # Fetch the 'specific' page object where appropriate
-    if use_specific == USE_SPECIFIC_ALWAYS and type(page) is Page:
-        page = page.specific
-
-    # The pages children above will form the basis of the `menu_items`
-    # list passed to the template for rendering.
-
-    if not menu_instance:
-        menu_instance = MenuFromRootPage(page, max_levels, use_specific)
+    # The menu items will be the children of the provided `page`
     children_pages = menu_instance.get_children_for_page(page)
 
     # Call `prime_menu_items` to prepare the children pages for output. This
@@ -209,9 +199,9 @@ def get_sub_menu_items_for_page(
     )
 
     """
-    If `parent_page` has a `modify_submenu_items` method, send the primed
+    If `page` has a `modify_submenu_items` method, send the primed
     menu_items list to that for further modification (e.g. adding a copy of
-    `parent_page` as the first item, using fields from `MenuPage`)
+    `page` as the first item, using fields from `MenuPage`)
     """
     if (
         use_specific and (
@@ -277,7 +267,7 @@ def sub_menu(
     elif original_menu_tag == 'flat_menu':
         menu_instance = context.get('matched_menu')
     else:
-        menu_instance = None
+        menu_instance = context.get('menu_instance')
 
     # Identify the Page that we need to get children for
     if isinstance(menuitem_or_page, Page):
@@ -291,9 +281,9 @@ def sub_menu(
         current_site=site,
         current_page=current_page,
         ancestor_ids=ancestor_ids,
+        menu_instance=menu_instance,
         use_specific=use_specific,
         original_menu_tag=original_menu_tag,
-        menu_instance=menu_instance,
         current_level=current_level,
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
@@ -350,9 +340,9 @@ def section_menu(
         current_site=site,
         current_page=current_page,
         ancestor_ids=ancestor_ids,
+        menu_instance=menu_instance,
         use_specific=use_specific,
         original_menu_tag='section_menu',
-        menu_instance=menu_instance,
         current_level=1,
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
@@ -429,15 +419,14 @@ def children_menu(
         current_site=site,
         current_page=current_page,
         ancestor_ids=ancestor_ids,
+        menu_instance=menu_instance,
         use_specific=use_specific,
         original_menu_tag='children_menu',
-        menu_instance=menu_instance,
         current_level=1,
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents
     )
-
     context.update({
         'parent_page': parent_page,
         'menu_instance': menu_instance,
