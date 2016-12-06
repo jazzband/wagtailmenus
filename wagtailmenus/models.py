@@ -285,6 +285,14 @@ class MenuFromRootPage(Menu):
 
         return pages
 
+    def get_children_for_page(self, page):
+        """Return a list of relevant child pages for a given page."""
+        if self.max_levels == 1:
+            # If there's only a single level of pages to display, skip the
+            # dict creation / lookup and just return the QuerySet result
+            return self.pages_for_display
+        return super(MenuFromRootPage, self).get_children_for_page(page)
+
 
 class MenuWithMenuItems(ClusterableModel, Menu):
 
