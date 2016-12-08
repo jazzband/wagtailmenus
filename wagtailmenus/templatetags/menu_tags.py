@@ -4,11 +4,9 @@ from copy import copy
 from django.template import Library
 from django.utils.translation import ugettext_lazy as _
 from wagtail.wagtailcore.models import Page
-from ..models import MainMenu, FlatMenu, MenuItem
+from ..models import MenuFromRootPage, MainMenu, FlatMenu, MenuItem
 from ..app_settings import (
-    ACTIVE_CLASS, ACTIVE_ANCESTOR_CLASS, SECTION_ROOT_DEPTH,
-    USE_SPECIFIC_ALWAYS, USE_SPECIFIC_AUTO, USE_SPECIFIC_TOP_LEVEL
-)
+    ACTIVE_CLASS, ACTIVE_ANCESTOR_CLASS, SECTION_ROOT_DEPTH, USE_SPECIFIC_AUTO)
 from wagtailmenus import app_settings
 flat_menus_fbtdsm = app_settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS
 
@@ -90,10 +88,10 @@ def main_menu(
             request_path=request.path,
             use_specific=menu.use_specific,
             original_menu_tag='main_menu',
+            menu_instance=menu,
             check_for_children=menu.max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
-            apply_active_classes=apply_active_classes,
-            menu_instance=menu,
+            apply_active_classes=apply_active_classes
         ),
         'main_menu': menu,
         'use_specific': menu.use_specific,
@@ -105,7 +103,7 @@ def main_menu(
         'sub_menu_template': sub_menu_template,
         'original_menu_tag': 'main_menu',
         'section_root': root,
-        'current_ancestor_ids': ancestor_ids,
+        'current_ancestor_ids': ancestor_ids
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -152,10 +150,10 @@ def flat_menu(
             request_path=request.path,
             use_specific=menu.use_specific,
             original_menu_tag='flat_menu',
+            menu_instance=menu,
             check_for_children=menu.max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
-            apply_active_classes=apply_active_classes,
-            menu_instance=menu,
+            apply_active_classes=apply_active_classes
         ),
         'matched_menu': menu,
         'menu_handle': handle,
@@ -169,36 +167,19 @@ def flat_menu(
         'current_template': template,
         'sub_menu_template': sub_menu_template,
         'original_menu_tag': 'flat_menu',
-        'current_ancestor_ids': ancestor_ids,
+        'current_ancestor_ids': ancestor_ids
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
 
 
 def get_sub_menu_items_for_page(
-    page, request, current_site, current_page, ancestor_ids, use_specific,
-    apply_active_classes, allow_repeating_parents, current_level=1,
-    max_levels=2, original_menu_tag='', menu_instance=None
+    page, request, current_site, current_page, ancestor_ids, menu_instance,
+    use_specific, apply_active_classes, allow_repeating_parents,
+    current_level=1, max_levels=2, original_menu_tag=''
 ):
-    # Fetch the 'specific' page object where appropriate
-    if use_specific == USE_SPECIFIC_ALWAYS and type(page) is Page:
-        page = page.specific
-
-    # The pages children above will form the basis of the `menu_items`
-    # list passed to the template for rendering.
-
-    if menu_instance:
-        children_pages = menu_instance.get_children_for_page(page)
-    else:
-        children_pages = page.get_children().filter(
-            live=True, expired=False, show_in_menus=True)
-        if(
-            use_specific == USE_SPECIFIC_ALWAYS or
-            (use_specific == USE_SPECIFIC_TOP_LEVEL and current_level == 1)
-        ):
-            # We need 'specific' pages, so use `PageQueryset.specific()` to
-            # fetch them with the minimum number of queries.
-            children_pages = children_pages.specific()
+    # The menu items will be the children of the provided `page`
+    children_pages = menu_instance.get_children_for_page(page)
 
     # Call `prime_menu_items` to prepare the children pages for output. This
     # will add `href`, `text`, `active_class` and `has_children_in_menu`
@@ -211,16 +192,16 @@ def get_sub_menu_items_for_page(
         request_path=request.path,
         use_specific=use_specific,
         original_menu_tag=original_menu_tag,
+        menu_instance=menu_instance,
         check_for_children=current_level < max_levels,
         allow_repeating_parents=allow_repeating_parents,
-        apply_active_classes=apply_active_classes,
-        menu_instance=menu_instance,
+        apply_active_classes=apply_active_classes
     )
 
     """
-    If `parent_page` has a `modify_submenu_items` method, send the primed
+    If `page` has a `modify_submenu_items` method, send the primed
     menu_items list to that for further modification (e.g. adding a copy of
-    `parent_page` as the first item, using fields from `MenuPage`)
+    `page` as the first item, using fields from `MenuPage`)
     """
     if (
         use_specific and (
@@ -238,7 +219,8 @@ def get_sub_menu_items_for_page(
             allow_repeating_parents=allow_repeating_parents,
             apply_active_classes=apply_active_classes,
             original_menu_tag=original_menu_tag,
-            menu_instance=menu_instance)
+            menu_instance=menu_instance
+        )
 
     return page, menu_items
 
@@ -285,7 +267,7 @@ def sub_menu(
     elif original_menu_tag == 'flat_menu':
         menu_instance = context.get('matched_menu')
     else:
-        menu_instance = None
+        menu_instance = context.get('menu_instance')
 
     # Identify the Page that we need to get children for
     if isinstance(menuitem_or_page, Page):
@@ -299,13 +281,14 @@ def sub_menu(
         current_site=site,
         current_page=current_page,
         ancestor_ids=ancestor_ids,
+        menu_instance=menu_instance,
         use_specific=use_specific,
         original_menu_tag=original_menu_tag,
         current_level=current_level,
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
-        allow_repeating_parents=allow_repeating_parents,
-        menu_instance=menu_instance)
+        allow_repeating_parents=allow_repeating_parents
+    )
 
     context = copy(context)
     context.update({
@@ -316,7 +299,7 @@ def sub_menu(
         'current_level': current_level,
         'max_levels': max_levels,
         'current_template': template,
-        'original_menu_tag': original_menu_tag,
+        'original_menu_tag': original_menu_tag
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -347,19 +330,24 @@ def section_menu(
     if not show_multiple_levels:
         max_levels = 1
 
+    # Create a menu instance that can fetch all pages at once and return
+    # for subpages for each branch as they are needed
+    menu_instance = MenuFromRootPage(root, max_levels, use_specific)
+
     section_root, menu_items = get_sub_menu_items_for_page(
         page=root,
         request=request,
         current_site=site,
         current_page=current_page,
         ancestor_ids=ancestor_ids,
+        menu_instance=menu_instance,
         use_specific=use_specific,
         original_menu_tag='section_menu',
         current_level=1,
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
-        allow_repeating_parents=allow_repeating_parents,
-        menu_instance=None)
+        allow_repeating_parents=allow_repeating_parents
+    )
 
     """
     We want `section_root` to have the same attributes as primed menu
@@ -382,6 +370,7 @@ def section_menu(
     context = copy(context)
     context.update({
         'section_root': section_root,
+        'menu_instance': menu_instance,
         'menu_items': menu_items,
         'show_section_root': show_section_root,
         'apply_active_classes': apply_active_classes,
@@ -392,7 +381,7 @@ def section_menu(
         'sub_menu_template': sub_menu_template,
         'original_menu_tag': 'section_menu',
         'current_ancestor_ids': ancestor_ids,
-        'use_specific': use_specific,
+        'use_specific': use_specific
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -420,22 +409,27 @@ def children_menu(
     if not parent_page:
         return ''
 
+    # Create a menu instance that can fetch all pages at once and return
+    # for subpages for each branch as they are needed
+    menu_instance = MenuFromRootPage(parent_page, max_levels, use_specific)
+
     parent_page, menu_items = get_sub_menu_items_for_page(
         page=parent_page,
         request=request,
         current_site=site,
         current_page=current_page,
         ancestor_ids=ancestor_ids,
+        menu_instance=menu_instance,
         use_specific=use_specific,
         original_menu_tag='children_menu',
         current_level=1,
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
-        allow_repeating_parents=allow_repeating_parents,
-        menu_instance=None)
-
+        allow_repeating_parents=allow_repeating_parents
+    )
     context.update({
         'parent_page': parent_page,
+        'menu_instance': menu_instance,
         'menu_items': menu_items,
         'apply_active_classes': apply_active_classes,
         'allow_repeating_parents': allow_repeating_parents,
@@ -444,7 +438,7 @@ def children_menu(
         'original_menu_tag': 'children_menu',
         'current_template': template,
         'sub_menu_template': sub_menu_template,
-        'use_specific': use_specific,
+        'use_specific': use_specific
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -452,9 +446,9 @@ def children_menu(
 
 def prime_menu_items(
     menu_items, current_site, current_page, current_page_ancestor_ids,
-    request_path, use_specific, original_menu_tag, check_for_children=False,
-    allow_repeating_parents=True, apply_active_classes=True,
-    menu_instance=None
+    request_path, use_specific, original_menu_tag, menu_instance,
+    check_for_children=False, allow_repeating_parents=True,
+    apply_active_classes=True
 ):
     """
     Prepare a list of `MenuItem` or `Page` objects for rendering to a menu
@@ -508,15 +502,11 @@ def prime_menu_items(
                         current_page=current_page,
                         allow_repeating_parents=allow_repeating_parents,
                         original_menu_tag=original_menu_tag,
-                        menu_instance=menu_instance)
-
-                elif menu_instance:
+                        menu_instance=menu_instance
+                    )
+                else:
                     has_children_in_menu = menu_instance.page_has_children(
                         page)
-                else:
-                    has_children_in_menu = page.get_children().filter(
-                        live=True, expired=False, show_in_menus=True,
-                    ).exists()
 
             setattr(item, 'has_children_in_menu', has_children_in_menu)
 

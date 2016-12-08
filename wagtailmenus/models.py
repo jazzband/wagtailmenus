@@ -52,7 +52,7 @@ class MenuPage(Page):
     def modify_submenu_items(self, menu_items, current_page,
                              current_ancestor_ids, current_site,
                              allow_repeating_parents, apply_active_classes,
-                             original_menu_tag, menu_instance=None):
+                             original_menu_tag, menu_instance):
         """
         Make any necessary modifications to `menu_items` and return the list
         back to the calling menu tag to render in templates. Any additional
@@ -80,7 +80,7 @@ class MenuPage(Page):
         return menu_items
 
     def has_submenu_items(self, current_page, allow_repeating_parents,
-                          original_menu_tag, menu_instance=None):
+                          original_menu_tag, menu_instance):
         """
         When rendering pages in a menu template a `has_children_in_menu`
         attribute is added to each page, letting template developers know
@@ -92,9 +92,7 @@ class MenuPage(Page):
         items that aren't child pages, you'll likely need to alter this method
         too, so the template knows there are sub items to be rendered.
         """
-        if menu_instance:
-            return menu_instance.page_has_children(self)
-        return self.get_children().live().in_menu().exists()
+        return menu_instance.page_has_children(self)
 
 
 @python_2_unicode_compatible
@@ -192,13 +190,10 @@ class MenuItem(models.Model):
     )
 
 
-class Menu(ClusterableModel):
-
+class Menu(object):
     max_levels = 1
     use_specific = app_settings.USE_SPECIFIC_AUTO
-
-    class Meta:
-        abstract = True
+    pages_for_display = None
 
     def clear_page_cache(self):
         try:
@@ -236,6 +231,73 @@ class Menu(ClusterableModel):
                     pass
 
             self.use_specific = use_specific
+
+    @cached_property
+    def page_children_dict(self):
+        """
+        Returns a dictionary of lists, where the keys are 'path' values for
+        pages, and the value is a list of children pages for that page.
+        """
+        children_dict = defaultdict(list)
+        for page in self.pages_for_display:
+            children_dict[page.path[:-page.steplen]].append(page)
+        return children_dict
+
+    def get_children_for_page(self, page):
+        """Return a list of relevant child pages for a given page."""
+        return self.page_children_dict.get(page.path, [])
+
+    def page_has_children(self, page):
+        """
+        Return a boolean indicating whether a given page has any relevant
+        child pages.
+        """
+        return page.path in self.page_children_dict
+
+
+class MenuFromRootPage(Menu):
+    root_page = None
+
+    def __init__(self, root_page, max_levels, use_specific):
+        self.root_page = root_page
+        self.max_levels = max_levels
+        self.use_specific = use_specific
+        super(MenuFromRootPage, self).__init__()
+
+    @cached_property
+    def pages_for_display(self):
+        """
+        Returns a list of pages for rendering all levels of the menu. All pages
+        must be live, not expired, and set to show in menus.
+        """
+        pages = Page.objects.filter(
+            depth__gt=self.root_page.depth,
+            depth__lte=self.root_page.depth + self.max_levels,
+            path__startswith=self.root_page.path,
+            live=True,
+            expired=False,
+            show_in_menus=True,
+        )
+
+        # Return 'specific' page instances if required
+        if self.use_specific == app_settings.USE_SPECIFIC_ALWAYS:
+            return pages.specific()
+
+        return pages
+
+    def get_children_for_page(self, page):
+        """Return a list of relevant child pages for a given page."""
+        if self.max_levels == 1:
+            # If there's only a single level of pages to display, skip the
+            # dict creation / lookup and just return the QuerySet result
+            return self.pages_for_display
+        return super(MenuFromRootPage, self).get_children_for_page(page)
+
+
+class MenuWithMenuItems(ClusterableModel, Menu):
+
+    class Meta:
+        abstract = True
 
     @cached_property
     def top_level_items(self):
@@ -300,30 +362,8 @@ class Menu(ClusterableModel):
 
         return all_pages
 
-    @cached_property
-    def page_children_dict(self):
-        """
-        Returns a dictionary of lists, where the keys are 'path' values for
-        pages, and the value is a list of children pages for that page.
-        """
-        children_dict = defaultdict(list)
-        for page in self.pages_for_display:
-            children_dict[page.path[:-page.steplen]].append(page)
-        return children_dict
 
-    def get_children_for_page(self, page):
-        """Return a list of relevant child pages for a given page."""
-        return self.page_children_dict.get(page.path, [])
-
-    def page_has_children(self, page):
-        """
-        Return a boolean indicating whether a given page has any relevant
-        child pages.
-        """
-        return page.path in self.page_children_dict
-
-
-class MainMenu(Menu):
+class MainMenu(MenuWithMenuItems):
     site = models.OneToOneField(
         'wagtailcore.Site',
         related_name="main_menu",
@@ -387,7 +427,7 @@ class FlatMenuAdminForm(WagtailAdminModelForm):
                 choices=app_settings.FLAT_MENUS_HANDLE_CHOICES)
 
 
-class FlatMenu(Menu):
+class FlatMenu(MenuWithMenuItems):
     site = models.ForeignKey(
         'wagtailcore.Site',
         verbose_name=_('site'),
