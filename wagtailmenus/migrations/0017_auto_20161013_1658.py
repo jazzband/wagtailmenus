@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
+import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
@@ -31,5 +32,10 @@ class Migration(migrations.Migration):
             model_name='mainmenu',
             name='use_specific',
             field=models.PositiveSmallIntegerField(choices=[(0, 'OFF (Most efficient)'), (1, 'AUTO'), (2, 'TOP_LEVEL'), (3, 'ALWAYS (Least efficient)')], default=1, help_text="Controls how 'specific' pages objects are fetched and used when rendering this menu. This value can be overidden by supplying a different <code>use_specific</code> value to the <code>{% main_menu %}</code> tag in your templates.", verbose_name='specific page usage'),
+        ),
+        migrations.AlterField(
+            model_name='mainmenu',
+            name='site',
+            field=models.OneToOneField(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='main_menu', to='wagtailcore.Site'),
         ),
     ]

@@ -3,7 +3,6 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
@@ -27,10 +26,5 @@ class Migration(migrations.Migration):
             model_name='flatmenu',
             name='title',
             field=models.CharField(help_text='For internal reference only.', max_length=255, verbose_name='title'),
-        ),
-        migrations.AlterField(
-            model_name='mainmenu',
-            name='site',
-            field=models.OneToOneField(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='main_menu', to='wagtailcore.Site'),
         ),
     ]
