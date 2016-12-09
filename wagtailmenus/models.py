@@ -417,14 +417,6 @@ class MainMenu(MenuWithMenuItems):
     )
 
 
-class FlatMenuAdminForm(WagtailAdminModelForm):
-    def __init__(self, *args, **kwargs):
-        super(FlatMenuAdminForm, self).__init__(*args, **kwargs)
-        if app_settings.FLAT_MENUS_HANDLE_CHOICES:
-            self.fields['handle'] = forms.ChoiceField(
-                choices=app_settings.FLAT_MENUS_HANDLE_CHOICES)
-
-
 class FlatMenu(MenuWithMenuItems):
     site = models.ForeignKey(
         'wagtailcore.Site',
