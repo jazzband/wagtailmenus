@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
 from collections import defaultdict
 from copy import copy
 
-from django import forms
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.encoding import python_2_unicode_compatible
@@ -15,12 +13,12 @@ from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
 
-from wagtail.wagtailadmin.forms import WagtailAdminModelForm
 from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, PageChooserPanel, MultiFieldPanel, InlinePanel)
 from wagtail.wagtailcore.models import Page, Orderable
 
 from wagtailmenus import app_settings
+from .forms import FlatMenuAdminForm
 from .managers import MenuItemManager
 from .panels import menupage_settings_panels
 
