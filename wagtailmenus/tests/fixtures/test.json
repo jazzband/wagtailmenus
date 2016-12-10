@@ -111,7 +111,7 @@
     "pk": 1,
     "fields": {
         "site": 1,
-        "title": "Contact links",
+        "title": "контакт ссылки",
         "handle": "contact",
         "heading": ""
     }
@@ -157,7 +157,7 @@
     "pk": 2,
     "fields": {
         "site": 1,
-        "title": "Footer links",
+        "title": "odkazy v zápatí",
         "handle": "footer",
         "heading": "Important links"
     }
