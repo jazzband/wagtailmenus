@@ -147,14 +147,6 @@ class TestSuperUser(TransactionTestCase):
         self.assertNotContains(response,
                                '<div class="changelist-filter col3">')
 
-    def text_flatmenu_list_unicode(self):
-        FlatMenu.objects.create(
-            title="Контакты ссылки", handle="contact", site_id=2)
-        FlatMenu.objects.create(
-            title="Footer ссылки", handle="footer", site_id=2)
-        response = self.client.get('/admin/wagtailmenus/flatmenu/')
-        self.assertEqual(response.status_code, 200)
-
     def test_flatmenu_list_multisite(self):
         site_one = Site.objects.get(id=1)
         site_two = Site.objects.get(id=2)
