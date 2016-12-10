@@ -86,3 +86,20 @@ DEFAULT_CHILDREN_MENU_USE_SPECIFIC = getattr(
 
 FLAT_MENUS_HANDLE_CHOICES = getattr(
     settings, 'WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES', None)
+
+
+MAIN_MENU_MODEL = getattr(
+    settings, 'WAGTAILMENUS_MAIN_MENU_MODEL', 'wagtailmenus.MainMenu'
+)
+
+MAIN_MENU_ITEMS_RELATED_NAME = getattr(
+    settings, 'WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME', 'menu_items'
+)
+
+FLAT_MENU_MODEL = getattr(
+    settings, 'WAGTAILMENUS_FLAT_MENU_MODEL', 'wagtailmenus.FlatMenu'
+)
+
+FLAT_MENU_ITEMS_RELATED_NAME = getattr(
+    settings, 'WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME', 'menu_items'
+)

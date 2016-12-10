@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -9,24 +10,28 @@ from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.contrib.modeladmin.helpers import ButtonHelper
 from wagtail.wagtailcore import hooks
 
-from .app_settings import (
-    MAINMENU_MENU_ICON, FLATMENU_MENU_ICON, SECTION_ROOT_DEPTH,
-    ADD_EDITOR_OVERRIDE_STYLES)
-from .models import MainMenu, FlatMenu
-from .views import (
-    MainMenuIndexView, MainMenuEditView, FlatMenuCopyView)
+from wagtailmenus import get_main_menu_model, get_flat_menu_model, app_settings
+from .models import AbstractMainMenu, AbstractFlatMenu
+from .views import MainMenuIndexView, MainMenuEditView, FlatMenuCopyView
 
 
 class MainMenuAdmin(ModelAdmin):
-    model = MainMenu
+    model = get_main_menu_model()
     menu_label = _('Main menu')
-    menu_icon = MAINMENU_MENU_ICON
+    menu_icon = app_settings.MAINMENU_MENU_ICON
     index_view_class = MainMenuIndexView
     edit_view_class = MainMenuEditView
     add_to_settings_menu = True
 
+    def __init__(self, *args, **kwargs):
+        super(MainMenuAdmin, self).__init__(*args, **kwargs)
+        if not issubclass(self.model, AbstractMainMenu):
+            raise ImproperlyConfigured(
+                "Your custom MainMenu model must be a sub-class of "
+                "`wagtailmenus.models.AbstractMainMenu`.")
+
     def get_form_view_extra_css(self):
-        if ADD_EDITOR_OVERRIDE_STYLES:
+        if app_settings.ADD_EDITOR_OVERRIDE_STYLES:
             return ['wagtailmenus/css/menu-edit.css']
         return []
 
@@ -69,15 +74,22 @@ class FlatMenuButtonHelper(ButtonHelper):
 
 
 class FlatMenuAdmin(ModelAdmin):
-    model = FlatMenu
+    model = get_flat_menu_model()
     menu_label = _('Flat menus')
-    menu_icon = FLATMENU_MENU_ICON
+    menu_icon = app_settings.FLATMENU_MENU_ICON
     button_helper_class = FlatMenuButtonHelper
     ordering = ('-site__is_default_site', 'site__hostname', 'handle')
     add_to_settings_menu = True
 
+    def __init__(self, *args, **kwargs):
+        super(FlatMenuAdmin, self).__init__(*args, **kwargs)
+        if not issubclass(self.model, AbstractFlatMenu):
+            raise ImproperlyConfigured(
+                "Your custom FlatMenu model must be a sub-class of "
+                "`wagtailmenus.models.AbstractFlatMenu`.")
+
     def get_form_view_extra_css(self):
-        if ADD_EDITOR_OVERRIDE_STYLES:
+        if app_settings.ADD_EDITOR_OVERRIDE_STYLES:
             return ['wagtailmenus/css/menu-edit.css']
         return []
 
@@ -123,11 +135,13 @@ modeladmin_register(FlatMenuAdmin)
 @hooks.register('before_serve_page')
 def wagtailmenu_params_helper(page, request, serve_args, serve_kwargs):
     section_root = request.site.root_page.get_descendants().ancestor_of(
-        page, inclusive=True).filter(depth__exact=SECTION_ROOT_DEPTH).first()
+        page, inclusive=True
+    ).filter(depth__exact=app_settings.SECTION_ROOT_DEPTH).first()
     if section_root:
         section_root = section_root.specific
     ancestor_ids = page.get_ancestors().filter(
-        depth__gte=SECTION_ROOT_DEPTH).values_list('id', flat=True)
+        depth__gte=app_settings.SECTION_ROOT_DEPTH
+    ).values_list('id', flat=True)
     request.META.update({
         'WAGTAILMENUS_CURRENT_SECTION_ROOT': section_root,
         'WAGTAILMENUS_CURRENT_PAGE': page,

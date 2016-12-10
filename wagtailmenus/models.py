@@ -47,10 +47,11 @@ class MenuPage(Page):
     class Meta:
         abstract = True
 
-    def modify_submenu_items(self, menu_items, current_page,
-                             current_ancestor_ids, current_site,
-                             allow_repeating_parents, apply_active_classes,
-                             original_menu_tag, menu_instance):
+    def modify_submenu_items(
+        self, menu_items, current_page, current_ancestor_ids, current_site,
+        allow_repeating_parents, apply_active_classes, original_menu_tag,
+        menu_instance
+    ):
         """
         Make any necessary modifications to `menu_items` and return the list
         back to the calling menu tag to render in templates. Any additional
@@ -65,20 +66,16 @@ class MenuPage(Page):
             children in the subnav, so we create a new item and prepend it to
             menu_items.
             """
-            extra = copy(self)
-            setattr(extra, 'text', self.repeated_item_text or self.title)
-            setattr(extra, 'href', self.relative_url(current_site))
-            active_class = ''
-            if(apply_active_classes and self == current_page):
-                active_class = app_settings.ACTIVE_CLASS
-            setattr(extra, 'active_class', active_class)
-
-            menu_items.insert(0, extra)
-
+            menu_items.insert(0, self.get_repeated_menu_item(
+                current_page, current_site, apply_active_classes,
+                original_menu_tag
+            ))
         return menu_items
 
-    def has_submenu_items(self, current_page, allow_repeating_parents,
-                          original_menu_tag, menu_instance):
+    def has_submenu_items(
+        self, current_page, allow_repeating_parents, original_menu_tag,
+        menu_instance
+    ):
         """
         When rendering pages in a menu template a `has_children_in_menu`
         attribute is added to each page, letting template developers know
@@ -91,6 +88,21 @@ class MenuPage(Page):
         too, so the template knows there are sub items to be rendered.
         """
         return menu_instance.page_has_children(self)
+
+    def get_repeated_menu_item(
+        self, current_page, current_site, apply_active_classes,
+        original_menu_tag
+    ):
+        """Return something that can be used to display a 'repeated' menu item
+        for this specific page."""
+        menuitem = copy(self)
+        setattr(menuitem, 'text', self.repeated_item_text or self.title)
+        setattr(menuitem, 'href', self.relative_url(current_site))
+        active_class = ''
+        if apply_active_classes and self == current_page:
+            active_class = app_settings.ACTIVE_CLASS
+        setattr(menuitem, 'active_class', active_class)
+        return menuitem
 
 
 @python_2_unicode_compatible
@@ -114,7 +126,10 @@ class MenuItem(models.Model):
         verbose_name=_('link text'),
         max_length=255,
         blank=True,
-        help_text=_("Must be set if you wish to link to a custom URL."),
+        help_text=_(
+            "Provide the text to use for a custom URL, or set on an internal "
+            "page link to use instead of the page's title."
+        ),
     )
     handle = models.CharField(
         verbose_name=_('handle'),
@@ -361,13 +376,14 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         return all_pages
 
 
-class MainMenu(MenuWithMenuItems):
+class AbstractMainMenu(MenuWithMenuItems):
     site = models.OneToOneField(
         'wagtailcore.Site',
-        related_name="main_menu",
+        verbose_name=_('site'),
         db_index=True,
         editable=False,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="+",
     )
     max_levels = models.PositiveSmallIntegerField(
         verbose_name=_('maximum levels'),
@@ -393,6 +409,7 @@ class MainMenu(MenuWithMenuItems):
     )
 
     class Meta:
+        abstract = True
         verbose_name = _("main menu")
         verbose_name_plural = _("main menu")
 
@@ -408,7 +425,9 @@ class MainMenu(MenuWithMenuItems):
         return _('Main menu for %s') % (self.site.site_name or self.site)
 
     panels = (
-        InlinePanel('menu_items', label=_("menu items")),
+        InlinePanel(
+            app_settings.MAIN_MENU_ITEMS_RELATED_NAME, label=_("menu items")
+        ),
         MultiFieldPanel(
             heading=_("Advanced settings"),
             children=(FieldPanel('max_levels'), FieldPanel('use_specific')),
@@ -417,17 +436,41 @@ class MainMenu(MenuWithMenuItems):
     )
 
 
-class FlatMenu(MenuWithMenuItems):
+class MainMenu(AbstractMainMenu):
+    pass
+
+
+class AbstractMainMenuItem(Orderable, MenuItem):
+    allow_subnav = models.BooleanField(
+        verbose_name=_("allow sub-menu for this item"),
+        default=True,
+        help_text=_(
+            "NOTE: The sub-menu might not be displayed, even if checked. "
+            "It depends on how the menu is used in this project's templates."
+        )
+    )
+
+    class Meta:
+        abstract = True
+
+
+class MainMenuItem(AbstractMainMenuItem):
+    menu = ParentalKey('MainMenu', related_name="menu_items")
+
+
+class AbstractFlatMenu(MenuWithMenuItems):
     site = models.ForeignKey(
         'wagtailcore.Site',
         verbose_name=_('site'),
-        related_name="flat_menus",
-        db_index=True, on_delete=models.CASCADE
+        db_index=True,
+        on_delete=models.CASCADE,
+        related_name='+'
     )
     title = models.CharField(
         verbose_name=_('title'),
         max_length=255,
-        help_text=_("For internal reference only."))
+        help_text=_("For internal reference only.")
+    )
     handle = models.SlugField(
         verbose_name=_('handle'),
         max_length=100,
@@ -468,6 +511,7 @@ class FlatMenu(MenuWithMenuItems):
     base_form_class = FlatMenuAdminForm
 
     class Meta:
+        abstract = True
         unique_together = ("site", "handle")
         verbose_name = _("flat menu")
         verbose_name_plural = _("flat menus")
@@ -495,17 +539,18 @@ class FlatMenu(MenuWithMenuItems):
     def clean(self, *args, **kwargs):
         # Raise validation error for unique_together constraint, as it's not
         # currently handled properly by wagtail
-        clashes = FlatMenu.objects.filter(site=self.site, handle=self.handle)
+        clashes = self.__class__.objects.filter(site=self.site,
+                                                handle=self.handle)
         if self.pk:
             clashes = clashes.exclude(pk__exact=self.pk)
-        if clashes.count():
+        if clashes.exists():
             msg = _("Site and handle must create a unique combination. A menu "
                     "already exists with these same two values.")
             raise ValidationError({
                 'site': [msg],
                 'handle': [msg],
             })
-        super(FlatMenu, self).clean(*args, **kwargs)
+        super(AbstractFlatMenu, self).clean(*args, **kwargs)
 
     panels = (
         MultiFieldPanel(
@@ -517,7 +562,9 @@ class FlatMenu(MenuWithMenuItems):
                 FieldPanel('heading'),
             )
         ),
-        InlinePanel('menu_items', label=_("menu items")),
+        InlinePanel(
+            app_settings.FLAT_MENU_ITEMS_RELATED_NAME, label=_("menu items")
+        ),
         MultiFieldPanel(
             heading=_("Advanced settings"),
             children=(FieldPanel('max_levels'), FieldPanel('use_specific')),
@@ -526,20 +573,11 @@ class FlatMenu(MenuWithMenuItems):
     )
 
 
-class MainMenuItem(Orderable, MenuItem):
-    menu = ParentalKey('MainMenu', related_name="menu_items")
-    allow_subnav = models.BooleanField(
-        verbose_name=_("allow sub-menu for this item"),
-        default=True,
-        help_text=_(
-            "NOTE: The sub-menu might not be displayed, even if checked. "
-            "It depends on how the menu is used in this project's templates."
-        )
-    )
+class FlatMenu(AbstractFlatMenu):
+    pass
 
 
-class FlatMenuItem(Orderable, MenuItem):
-    menu = ParentalKey('FlatMenu', related_name="menu_items")
+class AbstractFlatMenuItem(Orderable, MenuItem):
     allow_subnav = models.BooleanField(
         verbose_name=_("allow sub-menu for this item"),
         default=False,
@@ -548,3 +586,10 @@ class FlatMenuItem(Orderable, MenuItem):
             "It depends on how the menu is used in this project's templates."
         )
     )
+
+    class Meta:
+        abstract = True
+
+
+class FlatMenuItem(AbstractFlatMenuItem):
+    menu = ParentalKey('FlatMenu', related_name="menu_items")
