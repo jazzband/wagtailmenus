@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.http import Http404
 from django.utils.functional import SimpleLazyObject
-from wagtailmenus import app_settings
+from . import app_settings
 
 
 def wagtailmenus(request):

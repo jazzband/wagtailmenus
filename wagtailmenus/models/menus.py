@@ -15,12 +15,12 @@ from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, MultiFieldPanel, InlinePanel)
 from wagtail.wagtailcore.models import Page
 
-from wagtailmenus import app_settings
+from .. import app_settings
 from ..forms import FlatMenuAdminForm
 
 
 # ########################################################
-# Base
+# Base classes
 # ########################################################
 
 class Menu(object):
@@ -200,7 +200,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
 
 
 # ########################################################
-# Abstract
+# Abstract models
 # ########################################################
 
 @python_2_unicode_compatible
@@ -408,7 +408,7 @@ class AbstractFlatMenu(MenuWithMenuItems):
 
 
 # ########################################################
-# Concrete
+# Concrete models
 # ########################################################
 
 class MainMenu(AbstractMainMenu):

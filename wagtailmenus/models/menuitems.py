@@ -10,11 +10,12 @@ from modelcluster.fields import ParentalKey
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, PageChooserPanel
 from wagtail.wagtailcore.models import Orderable
 
+from .. import app_settings
 from ..managers import MenuItemManager
 
 
 #########################################################
-# Base
+# Base classes
 #########################################################
 
 class MenuItem(object):
@@ -23,7 +24,7 @@ class MenuItem(object):
 
 
 #########################################################
-# Abstract
+# Abstract models
 #########################################################
 
 @python_2_unicode_compatible
@@ -82,7 +83,9 @@ class AbstractMenuItem(models.Model, MenuItem):
 
     @property
     def menu_text(self):
-        return self.link_text or self.link_page.title
+        return self.link_text or getattr(
+            self.link_page, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT, None
+        ) or self.link_page.title
 
     def relative_url(self, site=None):
         if self.link_page:
@@ -158,7 +161,7 @@ class AbstractFlatMenuItem(Orderable, AbstractMenuItem):
 
 
 #########################################################
-# Concrete
+# Concrete models
 #########################################################
 
 class MainMenuItem(AbstractMainMenuItem):

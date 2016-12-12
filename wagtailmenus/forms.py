@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from django import forms
 from wagtail.wagtailadmin.forms import WagtailAdminModelForm
 
-from wagtailmenus import app_settings
+from . import app_settings
 
 
 class FlatMenuAdminForm(WagtailAdminModelForm):

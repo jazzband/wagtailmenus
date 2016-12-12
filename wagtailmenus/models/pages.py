@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from wagtail.wagtailcore.models import Page
 
-from wagtailmenus import app_settings
+from .. import app_settings
 from ..panels import menupage_settings_panels
 
 

@@ -5,9 +5,7 @@ from django.template import Library
 from django.utils.translation import ugettext_lazy as _
 from wagtail.wagtailcore.models import Page
 from ..models import MenuFromRootPage, MainMenu, FlatMenu, MenuItem
-from ..app_settings import (
-    ACTIVE_CLASS, ACTIVE_ANCESTOR_CLASS, SECTION_ROOT_DEPTH, USE_SPECIFIC_AUTO)
-from wagtailmenus import app_settings
+from .. import app_settings
 flat_menus_fbtdsm = app_settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS
 
 register = Library()
@@ -248,7 +246,8 @@ def sub_menu(
     current_level = previous_level + 1
 
     if use_specific is None:
-        use_specific = context.get('use_specific', USE_SPECIFIC_AUTO)
+        use_specific = context.get(
+            'use_specific', app_settings.USE_SPECIFIC_AUTO)
 
     if apply_active_classes is None:
         apply_active_classes = context.get('apply_active_classes', True)
@@ -356,15 +355,15 @@ def section_menu(
     setattr(section_root, 'text', section_root.title)
     setattr(section_root, 'href', section_root.relative_url(site))
     if apply_active_classes:
-        active_class = ACTIVE_ANCESTOR_CLASS
+        active_class = app_settings.ACTIVE_ANCESTOR_CLASS
         if current_page and section_root.pk == current_page.pk:
             # `section_root` is the current page, so should probably have
             # the 'active' class. But, not if there's a repeated item in
             # menu_items that already has the 'active' class.
-            active_class = ACTIVE_CLASS
+            active_class = app_settings.ACTIVE_CLASS
             if allow_repeating_parents and use_specific and menu_items:
-                if menu_items[0].active_class == ACTIVE_CLASS:
-                    active_class = ACTIVE_ANCESTOR_CLASS
+                if menu_items[0].active_class == app_settings.ACTIVE_CLASS:
+                    active_class = app_settings.ACTIVE_ANCESTOR_CLASS
         setattr(section_root, 'active_class', active_class)
 
     context = copy(context)
@@ -472,7 +471,10 @@ def prime_menu_items(
             """
             page = item
             menuitem = None
-            setattr(item, 'text', page.title)
+            text = getattr(
+                page, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT, None
+            ) or page.title
+            setattr(item, 'text', text)
 
         if page:
             """
@@ -482,7 +484,8 @@ def prime_menu_items(
             """
             has_children_in_menu = False
             if (
-                check_for_children and page.depth >= SECTION_ROOT_DEPTH and
+                check_for_children and
+                page.depth >= app_settings.SECTION_ROOT_DEPTH and
                 (menuitem is None or menuitem.allow_subnav)
             ):
                 if (
@@ -515,7 +518,7 @@ def prime_menu_items(
                 if(current_page and page.pk == current_page.pk):
                     # This is the current page, so the menu item should
                     # probably have the 'active' class
-                    active_class = ACTIVE_CLASS
+                    active_class = app_settings.ACTIVE_CLASS
                     if (
                         allow_repeating_parents and use_specific and
                         has_children_in_menu
@@ -523,9 +526,9 @@ def prime_menu_items(
                         if type(page) is Page:
                             page = page.specific
                         if getattr(page, 'repeat_in_subnav', False):
-                            active_class = ACTIVE_ANCESTOR_CLASS
+                            active_class = app_settings.ACTIVE_ANCESTOR_CLASS
                 elif page.pk in current_page_ancestor_ids:
-                    active_class = ACTIVE_ANCESTOR_CLASS
+                    active_class = app_settings.ACTIVE_ANCESTOR_CLASS
                 setattr(item, 'active_class', active_class)
 
         elif page is None:
@@ -534,7 +537,7 @@ def prime_menu_items(
             'active' if the URL matches the request.path.
             """
             if apply_active_classes and item.link_url == request_path:
-                setattr(item, 'active_class', ACTIVE_CLASS)
+                setattr(item, 'active_class', app_settings.ACTIVE_CLASS)
 
         # In case the specific page was fetched during the above operations
         # We'll set `MenuItem.link_page` to that specific page.
