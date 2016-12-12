@@ -319,20 +319,32 @@ class TestInvalidCustomMenuModels(TestCase):
 
     @override_settings(WAGTAILMENUS_MAIN_MENU_MODEL='CustomMainMenu',)
     def test_main_menu_invalid_format(self):
-        with self.assertRaisesMessage(ImproperlyConfigured, "WAGTAILMENUS_MAIN_MENU_MODEL must be of the form 'app_label.model_name'"):
-            model = get_main_menu_model()
+        with self.assertRaisesMessage(ImproperlyConfigured, (
+                "WAGTAILMENUS_MAIN_MENU_MODEL must be of the form "
+                "'app_label.model_name'"
+        )):
+            get_main_menu_model()
 
     @override_settings(WAGTAILMENUS_MAIN_MENU_MODEL='tests.NonExistentMainMenu',)
     def test_main_menu_no_existent(self):
-        with self.assertRaisesMessage(ImproperlyConfigured, "WAGTAILMENUS_MAIN_MENU_MODEL refers to model 'tests.NonExistentMainMenu' has not been installed"):
-            model = get_main_menu_model()
+        with self.assertRaisesMessage(ImproperlyConfigured, (
+            "WAGTAILMENUS_MAIN_MENU_MODEL refers to model "
+            "'tests.NonExistentMainMenu' that has not been installed"
+        )):
+            get_main_menu_model()
 
     @override_settings(WAGTAILMENUS_FLAT_MENU_MODEL='CustomFlatMenu',)
     def test_flat_menu_invalid_format(self):
-        with self.assertRaisesMessage(ImproperlyConfigured, "WAGTAILMENUS_FLAT_MENU_MODEL must be of the form 'app_label.model_name'"):
-            model = get_flat_menu_model()
+        with self.assertRaisesMessage(ImproperlyConfigured, (
+            "WAGTAILMENUS_FLAT_MENU_MODEL must be of the form "
+            "'app_label.model_name'"
+        )):
+            get_flat_menu_model()
 
     @override_settings(WAGTAILMENUS_FLAT_MENU_MODEL='tests.NonExistentFlatMenu',)
     def test_flat_menu_no_existent(self):
-        with self.assertRaisesMessage(ImproperlyConfigured, "WAGTAILMENUS_FLAT_MENU_MODEL refers to model 'tests.NonExistentFlatMenu' has not been installed"):
-            model = get_flat_menu_model()
+        with self.assertRaisesMessage(ImproperlyConfigured, (
+            "WAGTAILMENUS_FLAT_MENU_MODEL refers to model "
+            "'tests.NonExistentFlatMenu' that has not been installed"
+        )):
+            get_flat_menu_model()
