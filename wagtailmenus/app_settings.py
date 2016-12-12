@@ -6,30 +6,23 @@ from django.utils.translation import ugettext_lazy as _
 
 class Settings:
 
-    @property
-    def USE_SPECIFIC_OFF(self):
-        return 0
+    USE_SPECIFIC_OFF = 0
+    USE_SPECIFIC_AUTO = 1
+    USE_SPECIFIC_TOP_LEVEL = 2
+    USE_SPECIFIC_ALWAYS = 3
+    USE_SPECIFIC_CHOICES = (
+        (USE_SPECIFIC_OFF, _("Off (most efficient)")),
+        (USE_SPECIFIC_AUTO, _("Auto")),
+        (USE_SPECIFIC_TOP_LEVEL, _("Top level")),
+        (USE_SPECIFIC_ALWAYS, _("Always (least efficient)")),
+    )
 
-    @property
-    def USE_SPECIFIC_AUTO(self):
-        return 1
-
-    @property
-    def USE_SPECIFIC_TOP_LEVEL(self):
-        return 2
-
-    @property
-    def USE_SPECIFIC_ALWAYS(self):
-        return 3
-
-    @property
-    def USE_SPECIFIC_CHOICES(self):
-        return (
-            (self.USE_SPECIFIC_OFF, _("Off (most efficient)")),
-            (self.USE_SPECIFIC_AUTO, _("Auto")),
-            (self.USE_SPECIFIC_TOP_LEVEL, _("Top level")),
-            (self.USE_SPECIFIC_ALWAYS, _("Always (least efficient)")),
-        )
+    MAX_LEVELS_CHOICES = (
+        (1, _('1: No sub-navigation (flat)')),
+        (2, _('2: Allow 1 level of sub-navigation')),
+        (3, _('3: Allow 2 levels of sub-navigation')),
+        (4, _('4: Allow 3 levels of sub-navigation')),
+    )
 
     @property
     def ACTIVE_CLASS(self):
@@ -120,15 +113,6 @@ class Settings:
         )
 
     @property
-    def MAX_LEVELS_CHOICES(self):
-        return (
-            (1, _('1: No sub-navigation (flat)')),
-            (2, _('2: Allow 1 level of sub-navigation')),
-            (3, _('3: Allow 2 levels of sub-navigation')),
-            (4, _('4: Allow 3 levels of sub-navigation')),
-        )
-
-    @property
     def DEFAULT_SECTION_MENU_MAX_LEVELS(self):
         return getattr(
             settings, 'WAGTAILMENUS_DEFAULT_SECTION_MENU_MAX_LEVELS', 2
@@ -165,15 +149,15 @@ class Settings:
         )
 
     @property
-    def MAIN_MENU_MODEL(self):
+    def PAGE_FIELD_FOR_MENU_ITEM_TEXT(self):
         return getattr(
-            settings, 'WAGTAILMENUS_MAIN_MENU_MODEL', 'wagtailmenus.MainMenu'
+            settings, "WAGTAILMENUS_PAGE_FIELD_FOR_MENU_ITEM_TEXT", 'title'
         )
 
     @property
-    def MAIN_MENU_ITEMS_RELATED_NAME(self):
+    def MAIN_MENU_MODEL(self):
         return getattr(
-            settings, 'WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME', 'menu_items'
+            settings, 'WAGTAILMENUS_MAIN_MENU_MODEL', 'wagtailmenus.MainMenu'
         )
 
     @property
@@ -183,13 +167,13 @@ class Settings:
         )
 
     @property
-    def FLAT_MENU_ITEMS_RELATED_NAME(self):
+    def MAIN_MENU_ITEMS_RELATED_NAME(self):
         return getattr(
-            settings, 'WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME', 'menu_items'
+            settings, 'WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME', 'menu_items'
         )
 
     @property
-    def PAGE_FIELD_FOR_MENU_ITEM_TEXT(self):
+    def FLAT_MENU_ITEMS_RELATED_NAME(self):
         return getattr(
-            settings, "WAGTAILMENUS_PAGE_FIELD_FOR_MENU_ITEM_TEXT", 'title'
+            settings, 'WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME', 'menu_items'
         )
