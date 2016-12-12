@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-from django.conf import settings
 from django.test import TestCase, override_settings
 from bs4 import BeautifulSoup
 

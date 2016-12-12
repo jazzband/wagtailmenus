@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
-from django.core.exceptions import ImproperlyConfigured
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -11,7 +10,6 @@ from wagtail.contrib.modeladmin.helpers import ButtonHelper
 from wagtail.wagtailcore import hooks
 
 from . import app_settings, get_main_menu_model, get_flat_menu_model
-from .models import AbstractMainMenu, AbstractFlatMenu
 from .views import MainMenuIndexView, MainMenuEditView, FlatMenuCopyView
 
 
@@ -22,13 +20,6 @@ class MainMenuAdmin(ModelAdmin):
     index_view_class = MainMenuIndexView
     edit_view_class = MainMenuEditView
     add_to_settings_menu = True
-
-    def __init__(self, *args, **kwargs):
-        super(MainMenuAdmin, self).__init__(*args, **kwargs)
-        if not issubclass(self.model, AbstractMainMenu):
-            raise ImproperlyConfigured(
-                "Your custom MainMenu model must be a sub-class of "
-                "`wagtailmenus.models.AbstractMainMenu`.")
 
     def get_form_view_extra_css(self):
         if app_settings.ADD_EDITOR_OVERRIDE_STYLES:
@@ -80,13 +71,6 @@ class FlatMenuAdmin(ModelAdmin):
     button_helper_class = FlatMenuButtonHelper
     ordering = ('-site__is_default_site', 'site__hostname', 'handle')
     add_to_settings_menu = True
-
-    def __init__(self, *args, **kwargs):
-        super(FlatMenuAdmin, self).__init__(*args, **kwargs)
-        if not issubclass(self.model, AbstractFlatMenu):
-            raise ImproperlyConfigured(
-                "Your custom FlatMenu model must be a sub-class of "
-                "`wagtailmenus.models.AbstractFlatMenu`.")
 
     def get_form_view_extra_css(self):
         if app_settings.ADD_EDITOR_OVERRIDE_STYLES:
