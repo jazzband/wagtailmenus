@@ -4,8 +4,10 @@ from copy import copy
 from django.template import Library
 from django.utils.translation import ugettext_lazy as _
 from wagtail.wagtailcore.models import Page
-from ..models import MenuFromRootPage, MainMenu, FlatMenu, MenuItem
-from .. import app_settings
+
+from .. import app_settings, get_main_menu_model, get_flat_menu_model
+from ..models import MenuFromRootPage, MenuItem
+
 flat_menus_fbtdsm = app_settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS
 
 register = Library()
@@ -66,7 +68,7 @@ def main_menu(
         context, guess_tree_position=True)
 
     # Find a matching menu
-    menu = MainMenu.get_for_site(site)
+    menu = get_main_menu_model().get_for_site(site)
 
     if not show_multiple_levels:
         max_levels = 1
@@ -124,8 +126,9 @@ def flat_menu(
         context, guess_tree_position=False)
 
     # Find a matching menu
-    menu = FlatMenu.get_for_site(
-        handle, site, fall_back_to_default_site_menus)
+    menu = get_flat_menu_model().get_for_site(
+        handle, site, fall_back_to_default_site_menus
+    )
     if not menu:
         # No menu was found matching `handle`, so gracefully render nothing.
         return ''
