@@ -133,12 +133,6 @@ class MenuWithMenuItems(ClusterableModel, Menu):
     class Meta:
         abstract = True
 
-    def get_menu_items_manager(self):
-        raise NotImplementedError(
-            'MenuWithMenuItems subclasses must define their own '
-            'get_menu_items_manager() method.'
-        )
-
     @cached_property
     def top_level_items(self):
         """Return a list of menu items with link_page objects supplemented with
