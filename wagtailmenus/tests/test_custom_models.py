@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
+from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase, override_settings
+from wagtailmenus import get_main_menu_model, get_flat_menu_model
 from bs4 import BeautifulSoup
 
 
@@ -213,10 +215,7 @@ class TestCustomMenuModels(TestCase):
         """
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
-    @override_settings(
-        WAGTAILMENUS_MAIN_MENU_MODEL='tests.CustomMainMenu',
-        LANGUAGE_CODE="de",
-    )
+    @override_settings(LANGUAGE_CODE="de",)
     def test_custom_main_menu_german(self):
         response = self.client.get('/superheroes/dc-comics/batman/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -286,10 +285,7 @@ class TestCustomMenuModels(TestCase):
         </div>"""
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
-    @override_settings(
-        WAGTAILMENUS_FLAT_MENU_MODEL='tests.CustomFlatMenu',
-        LANGUAGE_CODE="de",
-    )
+    @override_settings(LANGUAGE_CODE="de",)
     def test_custom_flat_menu_german(self):
         """
         Test that the HTML output by the 'flat_menu' tag (when using the handle
@@ -317,3 +313,26 @@ class TestCustomMenuModels(TestCase):
             </div>
         </div>"""
         self.assertHTMLEqual(menu_html, expected_menu_html)
+
+
+class TestInvalidCustomMenuModels(TestCase):
+
+    @override_settings(WAGTAILMENUS_MAIN_MENU_MODEL='CustomMainMenu',)
+    def test_main_menu_invalid_format(self):
+        with self.assertRaisesMessage(ImproperlyConfigured, "WAGTAILMENUS_MAIN_MENU_MODEL must be of the form 'app_label.model_name'"):
+            model = get_main_menu_model()
+
+    @override_settings(WAGTAILMENUS_MAIN_MENU_MODEL='tests.NonExistentMainMenu',)
+    def test_main_menu_no_existent(self):
+        with self.assertRaisesMessage(ImproperlyConfigured, "WAGTAILMENUS_MAIN_MENU_MODEL refers to model 'tests.NonExistentMainMenu' has not been installed"):
+            model = get_main_menu_model()
+
+    @override_settings(WAGTAILMENUS_FLAT_MENU_MODEL='CustomFlatMenu',)
+    def test_flat_menu_invalid_format(self):
+        with self.assertRaisesMessage(ImproperlyConfigured, "WAGTAILMENUS_FLAT_MENU_MODEL must be of the form 'app_label.model_name'"):
+            model = get_flat_menu_model()
+
+    @override_settings(WAGTAILMENUS_FLAT_MENU_MODEL='tests.NonExistentFlatMenu',)
+    def test_flat_menu_no_existent(self):
+        with self.assertRaisesMessage(ImproperlyConfigured, "WAGTAILMENUS_FLAT_MENU_MODEL refers to model 'tests.NonExistentFlatMenu' has not been installed"):
+            model = get_flat_menu_model()

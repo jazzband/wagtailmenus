@@ -40,12 +40,12 @@ def get_main_menu_model():
         return apps.get_model(model_string)
     except ValueError:
         raise ImproperlyConfigured(
-            "WAGTAILMENUS_MAIN_MENU_MODEL must be of the form \
-            'app_label.model_name'")
+            "WAGTAILMENUS_MAIN_MENU_MODEL must be of the form "
+            "'app_label.model_name'")
     except LookupError:
         raise ImproperlyConfigured(
-            "WAGTAILMENUS_MAIN_MENU_MODEL refers to model '%s' that has not \
-            been installed" % model_string
+            "WAGTAILMENUS_MAIN_MENU_MODEL refers to model '%s' that has not "
+            "been installed" % model_string
         )
 
 
@@ -62,10 +62,10 @@ def get_flat_menu_model():
         return apps.get_model(model_string)
     except ValueError:
         raise ImproperlyConfigured(
-            "WAGTAILMENUS_FLAT_MENU_MODEL must be of the form \
-            'app_label.model_name'")
+            "WAGTAILMENUS_FLAT_MENU_MODEL must be of the form "
+            "'app_label.model_name'")
     except LookupError:
         raise ImproperlyConfigured(
-            "WAGTAILMENUS_FLAT_MENU_MODEL refers to model '%s' that has not \
-            been installed" % model_string
+            "WAGTAILMENUS_FLAT_MENU_MODEL refers to model '%s' that has not "
+            "been installed" % model_string
         )
