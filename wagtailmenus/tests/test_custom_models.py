@@ -168,7 +168,6 @@ class TestCustomMenuItemsFrench(TestCase):
 @override_settings(
     WAGTAILMENUS_MAIN_MENU_MODEL='tests.CustomMainMenu',
     WAGTAILMENUS_FLAT_MENU_MODEL='tests.CustomFlatMenu',
-    WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES=False,
 )
 class TestCustomMenuModels(TestCase):
     fixtures = ['test.json']

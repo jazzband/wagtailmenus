@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.test import TransactionTestCase
+from django.test import TransactionTestCase, override_settings
 from django_webtest import WebTest
 from wagtail.wagtailcore.models import Site
 from wagtailmenus.models import FlatMenu
@@ -108,6 +108,7 @@ class TestSuperUser(TransactionTestCase):
         response = self.client.get('/admin/wagtailmenus/mainmenu/')
         self.assertRedirects(response, '/admin/wagtailmenus/mainmenu/edit/1/')
 
+    @override_settings(WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES=False,)
     def test_mainmenu_edit(self):
         response = self.client.get(
             '/admin/wagtailmenus/mainmenu/edit/1/')
@@ -174,6 +175,7 @@ class TestSuperUser(TransactionTestCase):
             response, '<th scope="col"  class="sortable column-site">')
         self.assertContains(response, '<div class="changelist-filter col3">')
 
+    @override_settings(WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES=False,)
     def test_flatmenu_edit(self):
         response = self.client.get(
             '/admin/wagtailmenus/flatmenu/edit/1/')

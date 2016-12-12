@@ -13,8 +13,12 @@ from . import app_settings, get_main_menu_model, get_flat_menu_model
 from .views import MainMenuIndexView, MainMenuEditView, FlatMenuCopyView
 
 
+main_menu_model = get_main_menu_model()
+flat_menu_model = get_flat_menu_model()
+
+
 class MainMenuAdmin(ModelAdmin):
-    model = get_main_menu_model()
+    model = main_menu_model
     menu_label = _('Main menu')
     menu_icon = app_settings.MAINMENU_MENU_ICON
     index_view_class = MainMenuIndexView
@@ -65,7 +69,7 @@ class FlatMenuButtonHelper(ButtonHelper):
 
 
 class FlatMenuAdmin(ModelAdmin):
-    model = get_flat_menu_model()
+    model = flat_menu_model
     menu_label = _('Flat menus')
     menu_icon = app_settings.FLATMENU_MENU_ICON
     button_helper_class = FlatMenuButtonHelper
