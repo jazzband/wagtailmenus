@@ -1,8 +1,10 @@
 from __future__ import absolute_import, unicode_literals
 from django.core.exceptions import ImproperlyConfigured
-from .app_settings import MAIN_MENU_MODEL, FLAT_MENU_MODEL
+from .app_settings import Settings
 
 __version__ = '2.1.0'
+
+app_settings = Settings()
 
 
 def get_main_menu_model_string():
@@ -12,7 +14,7 @@ def get_main_menu_model_string():
     main menu model (such as in foreign keys), but the model itself is not
     required.
     """
-    return MAIN_MENU_MODEL
+    return app_settings.MAIN_MENU_MODEL
 
 
 def get_flat_menu_model_string():
@@ -22,7 +24,7 @@ def get_flat_menu_model_string():
     flat menu model (such as in foreign keys), but the model itself is not
     required.
     """
-    return FLAT_MENU_MODEL
+    return app_settings.FLAT_MENU_MODEL
 
 
 def get_main_menu_model():
