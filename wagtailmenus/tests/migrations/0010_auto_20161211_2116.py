@@ -13,7 +13,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('wagtailmenus', '0020_auto_20161210_0004'),
-        ('wagtailcore', '0030_index_on_pagerevision_created_at'),
         ('tests', '0009_typicalpage'),
     ]
 
