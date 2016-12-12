@@ -173,6 +173,7 @@ class TestCustomMenuModels(TestCase):
     fixtures = ['test.json']
     maxDiff = None
 
+    @override_settings(LANGUAGE_CODE="it",)
     def test_custom_main_menu_english(self):
         response = self.client.get('/superheroes/dc-comics/batman/')
         soup = BeautifulSoup(response.content, 'html5lib')
