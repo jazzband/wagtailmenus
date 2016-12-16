@@ -113,7 +113,7 @@ class FlatMenuAdmin(ModelAdmin):
         return self.get_queryset(request).values('site').distinct().count() > 1
 
     def items(self, obj):
-        return obj.menu_items.count()
+        return obj.get_menu_items_manager.count()
     items.short_description = _('no. of items')
 
 
