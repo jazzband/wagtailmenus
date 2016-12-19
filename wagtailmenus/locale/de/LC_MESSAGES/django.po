@@ -1,0 +1,372 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-19 07:52+0000\n"
+"PO-Revision-Date: 2016-12-19 10:02+0100\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: Pierre Geier\n"
+"Language-Team: Pierre \"bloodywing\" Geier <bloodywing@neocomy.net>\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ../../..\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: app_settings.py:52
+msgid "1: No sub-navigation (flat)"
+msgstr "1: Keine Untermenüs (flach)"
+
+#: app_settings.py:53
+msgid "2: Allow 1 level of sub-navigation"
+msgstr "2: Erlaube 1 Untermenü"
+
+#: app_settings.py:54
+msgid "3: Allow 2 levels of sub-navigation"
+msgstr "3: Erlaube 2 Untermenüs"
+
+#: app_settings.py:55
+msgid "4: Allow 3 levels of sub-navigation"
+msgstr "4: Erlaube 3 Untermenüs"
+
+#: app_settings.py:71
+msgid "Off (most efficient)"
+msgstr "Aus (Am effizientesten)"
+
+#: app_settings.py:72
+msgid "Auto"
+msgstr "Auto"
+
+#: app_settings.py:73
+msgid "Top level"
+msgstr "Oberste Ebene"
+
+#: app_settings.py:74
+msgid "Always (least efficient)"
+msgstr "Immer (am wenigsten effizient)"
+
+#: models.py:28
+msgid "repeat in sub-navigation"
+msgstr "In Untermenüs wiederholen"
+
+#: models.py:31
+#, fuzzy
+msgid ""
+"If checked, a link to this page will be repeated alongside it's direct "
+"children when displaying a sub-navigation for this page."
+msgstr ""
+"Wenn markiert, dann wird ein Link zu dieser Seite zusammen mit den direkten "
+"Kindern angezeigt wenn für diese Untermenüs angezeigt werden."
+
+#: models.py:36
+msgid "repeated item link text"
+msgstr "Link text wiederholen"
+
+#: models.py:40
+msgid ""
+"e.g. 'Section home' or 'Overview'. If left blank, the page title will be "
+"used."
+msgstr ""
+"z.B. 'Sektion Start' oder 'Übersicht'. Wenn leer gelassen, dann wird der "
+"Seitentitel benutzt."
+
+#: models.py:102
+msgid "link to an internal page"
+msgstr "Link zu internen Seite"
+
+#: models.py:108
+msgid "link to a custom URL"
+msgstr "Link zu einer eigenen URL"
+
+#: models.py:114
+msgid "link text"
+msgstr "Link Text"
+
+#: models.py:117
+msgid "Must be set if you wish to link to a custom URL."
+msgstr "Muss gesetzt werden wenn sie eine eigene URL verlinken möchten."
+
+#: models.py:120 models.py:432
+#, fuzzy
+msgid "handle"
+msgstr "Alias"
+
+#: models.py:124
+msgid ""
+"Use this field to optionally specify an additional value for each menu item, "
+"which you can then reference in custom menu templates."
+msgstr ""
+"Nutze dieses optionale Feld um einen zusätzlichen Wert für jeden Menüeintrag "
+"festzulegen, welcher dann in eigenen Menütemplates referenziert werden kann."
+
+#: models.py:130
+msgid "append to URL"
+msgstr "an URL anheften"
+
+#: models.py:134
+msgid ""
+"Use this to optionally append a #hash or querystring to the above page's URL."
+msgstr ""
+"Benutzte um einen optionalen #hash oder Query an die obige Seiten URL "
+"anzuheften."
+
+#: models.py:143
+msgid "menu item"
+msgstr "Menüeintrag"
+
+#: models.py:144 models.py:411 models.py:520
+msgid "menu items"
+msgstr "Menüeinträge"
+
+#: models.py:161
+msgid "This must be set if you're linking to a custom URL."
+msgstr "Das muss gesetzt werden wenn sie eine eigene URL verlinken."
+
+#: models.py:168
+msgid "This must be set if you're not linking to a page."
+msgstr ""
+"Das muss gesetzt werden wenn sie nicht zu einer eigenen Seite verlinken."
+
+#: models.py:174
+msgid ""
+"You cannot link to both a page and URL. Please review your link and clear "
+"any unwanted values."
+msgstr ""
+"Sie können keine Seite und URL gleichzeitig angeben. Bitte überprüfen sie "
+"ihren Link und entfernen sie ungewollte Werte."
+
+#: models.py:373 models.py:446
+msgid "maximum levels"
+msgstr "Maximaltiefe"
+
+#: models.py:377
+msgid ""
+"The maximum number of levels to display when rendering this menu. The value "
+"can be overidden by supplying a different <code>max_levels</code> value to "
+"the <code>{% main_menu %}</code> tag in your templates."
+msgstr ""
+"Maximaltiefe wenn das Menü gerendert wird. Der Wert kann überschrieben "
+"werden indem man <code>max_levels</code> im <code>{% main_menu %}</code> tag "
+"in den Templates mit angibt."
+
+#: models.py:384 models.py:457
+#, fuzzy
+msgid "specific page usage"
+msgstr "Seitenbenutzung angeben"
+
+#: models.py:388
+msgid ""
+"Controls how 'specific' pages objects are fetched and used when rendering "
+"this menu. This value can be overidden by supplying a different "
+"<code>use_specific</code> value to the <code>{% main_menu %}</code> tag in "
+"your templates."
+msgstr ""
+"Bestimmt wie 'bestimmte' Seitenobject geholt und benutzt werden wenn dieses "
+"Menü gerendert wird. Der Wert kann überschrieben werden indem man "
+"<code>use_specific</code> im <code>{% main_menu %}</code> tag in den "
+"Templates mit angibt."
+
+#: models.py:396 models.py:397
+msgid "main menu"
+msgstr "Haupmenü"
+
+#: models.py:408
+#, python-format
+msgid "Main menu for %s"
+msgstr "Hauptmenü für %s"
+
+#: models.py:413 models.py:522
+msgid "Advanced settings"
+msgstr "Fortgeschrittene Einstellungen"
+
+#: models.py:423
+msgid "site"
+msgstr "Seite"
+
+#: models.py:428
+msgid "title"
+msgstr "Titel"
+
+#: models.py:430
+msgid "For internal reference only."
+msgstr "Nur für interne Verwendung."
+
+#: models.py:435
+msgid ""
+"Used to reference this menu in templates etc. Must be unique for the "
+"selected site."
+msgstr ""
+"Verwendet um dieses Menü in Templates zu referenzieren. Muss einzigartig für "
+"die ausgewählte Seite sein."
+
+#: models.py:440
+msgid "heading"
+msgstr "Überschrift"
+
+#: models.py:443
+msgid "If supplied, appears above the menu when rendered."
+msgstr ""
+"Wenn angegeben erscheint dies oberhalb des Menüs, wen es gerendert wird."
+
+#: models.py:450
+msgid ""
+"The maximum number of levels to display when rendering this menu. The value "
+"can be overidden by supplying a different <code>max_levels</code> value to "
+"the <code>{% flat_menu %}</code> tag in your templates."
+msgstr ""
+"Maximaltiefe wenn das Menü gerendert wird. Der Wert kann überschrieben "
+"werden indem man <code>max_levels</code> im <code>{% flat_menu %}</code> tag "
+"in den Templates mit angibt."
+
+#: models.py:461
+msgid ""
+"Controls how 'specific' pages objects are fetched and used when rendering "
+"this menu. This value can be overidden by supplying a different "
+"<code>use_specific</code> value to the <code>{% flat_menu %}</code> tag in "
+"your templates."
+msgstr ""
+"Bestimmt wie 'bestimmte' Seitenobject geholt und benutzt werden wenn dieses "
+"Menü gerendert wird. Der Wert kann überschrieben werden indem man "
+"<code>use_specific</code> im <code>{% flat_menu %}</code> tag in den "
+"Templates mit angibt."
+
+#: models.py:472
+msgid "flat menu"
+msgstr "Flaches Menü"
+
+#: models.py:473
+msgid "flat menus"
+msgstr "Flache Menüs"
+
+#: models.py:502
+msgid ""
+"Site and handle must create a unique combination. A menu already exists with "
+"these same two values."
+msgstr ""
+"Seite und Alias müssen eine einzigartige Kombination bilden. Es existiert "
+"schon ein Eintrag mit diesen zwei Werten."
+
+#: models.py:512 panels.py:41
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: models.py:532 models.py:544
+msgid "allow sub-menu for this item"
+msgstr "Untermenü für diesen Eintrag erlauben"
+
+#: models.py:535 models.py:547
+msgid ""
+"NOTE: The sub-menu might not be displayed, even if checked. It depends on "
+"how the menu is used in this project's templates."
+msgstr ""
+"HINWEIS: Das Untermenü wird eventuell nicht angezeigt, selbst wenn es hier "
+"ausgewählt wurde. Das hängt ab davon wie das Menü im Projekttemplate "
+"verwendet wird."
+
+#: panels.py:9
+msgid "Advanced menu behaviour"
+msgstr "Fortgeschrittenes Menüverhalten"
+
+#: panels.py:24
+msgid "Scheduled publishing"
+msgstr "Geplante Veröffentlichung"
+
+#: templates/wagtailmenus/mainmenu_edit.html:39
+msgid "Save"
+msgstr "Speichern"
+
+#: templatetags/menu_tags.py:21
+#, python-format
+msgid ""
+"The `%s` tag expects `max_levels` to be an integer value between 1 and 5. "
+"Please review your template."
+msgstr ""
+"Das `%s`Tag erwartet das `max_levels` eine ganze Zahl zwischen 1 und 5 ist. "
+"Bitte überprüfen dein Template."
+
+#: templatetags/menu_tags.py:26
+#, python-format
+msgid ""
+"The `%s` tag expects `use_specific` to be an integer value between 0 and 3. "
+"Please review your template."
+msgstr ""
+"Das `%s`Tag erwartet das `use_specific` eine ganze Zahl zwischen 0 und 3 "
+"ist. Bitte überprüfen dein Template."
+
+#: templatetags/menu_tags.py:31
+#, python-format
+msgid ""
+"The `%s` tag expects `parent_page` to be a `Page` instance. A value of type `"
+"%s` was supplied."
+msgstr ""
+"Das `%s`Tag erwartet das `parent_page` eine `Page` Instanz ist. Ein Wert vom "
+"Typ `%s`wurde jedoch übergeben."
+
+#: templatetags/menu_tags.py:37
+#, python-format
+msgid ""
+"The `%s` tag expects `menuitem_or_page` to be a `Page` or `MenuItem` "
+"instance. A value of type `%s` was supplied."
+msgstr ""
+"Das `%s`Tag erwartet das `menuitem_or_page` eine `Page` oder "
+"`MenuItem`Instanz ist. Ein Wert vom Typ `%s`wurde jedoch übergeben."
+
+#: views.py:45
+msgid "Editing"
+msgstr "Bearbeiten"
+
+#: views.py:69
+#, python-format
+msgid "Editing %s"
+msgstr "Bearbeite %s"
+
+#: views.py:98
+msgid "Main menu updated successfully."
+msgstr "Hauptmenü erfolgreich aktualisiert."
+
+#: views.py:102
+msgid "The menu could not be saved due to errors."
+msgstr "Das Menü konnte aufgrund von Fehlern nicht gespeichert werden."
+
+#: views.py:109
+msgid "Copying"
+msgstr "Kopieren"
+
+#: views.py:116
+#, python-format
+msgid "Copying %s"
+msgstr "Kopiere %s"
+
+#: views.py:142
+#, python-brace-format
+msgid "Flat menu '{instance}' created."
+msgstr "Flaches Menü '{instance}' erstellt."
+
+#: wagtail_hooks.py:22
+msgid "Main menu"
+msgstr "Hauptmenü"
+
+#: wagtail_hooks.py:52
+msgid "Copy"
+msgstr "Kopieren"
+
+#: wagtail_hooks.py:54
+#, fuzzy, python-format
+msgid "Copy this %s"
+msgstr "Kopiere diesen %s"
+
+#: wagtail_hooks.py:73
+msgid "Flat menus"
+msgstr "Flache Menüs"
+
+#: wagtail_hooks.py:117
+msgid "no. of items"
+msgstr "Anz. der Einträge"
