@@ -6,13 +6,18 @@ from django.contrib.auth.models import Group
 from django.test import TransactionTestCase, override_settings
 from django_webtest import WebTest
 from wagtail.wagtailcore.models import Site
-from wagtailmenus.models import FlatMenu
+from wagtailmenus import get_flat_menu_model
+
+
+FlatMenu = get_flat_menu_model()
 
 
 class CMSUsecaseTests(WebTest):
 
     # optional: we want some initial data to be able to login
     fixtures = ['test.json']
+    base_flatmenu_admin_url = '/admin/wagtailmenus/flatmenu/'
+    base_mainmenu_admin_url = '/admin/wagtailmenus/mainmenu/'
 
     def test_copy_footer_menu(self):
         get_user_model().objects._create_user(
@@ -20,7 +25,7 @@ class CMSUsecaseTests(WebTest):
             is_staff=True, is_superuser=True)
 
         # First check that there are 3 menus
-        response = self.app.get('/admin/wagtailmenus/flatmenu/', user='test1')
+        response = self.app.get(self.base_flatmenu_admin_url, user='test1')
         assert len(response.context['object_list']) == 3
 
         site_one = Site.objects.get(id=1)
@@ -29,7 +34,7 @@ class CMSUsecaseTests(WebTest):
         # Start by getting the footer menu for site one
         site_one_footer_menu = FlatMenu.get_for_site('footer', site_one)
         copy_view = self.app.get(
-            '/admin/wagtailmenus/flatmenu/copy/%s/' % site_one_footer_menu.pk,
+            '%scopy/%s/' % (self.base_flatmenu_admin_url, site_one_footer_menu.pk),
             user='test1')
 
         form = copy_view.forms[1]
@@ -44,7 +49,7 @@ class CMSUsecaseTests(WebTest):
 
         assert site_one_footer_menu.pk != site_two_footer_menu.pk
         assert site_one_footer_menu.heading == site_two_footer_menu.heading
-        assert site_one_footer_menu.menu_items.count() == site_two_footer_menu.menu_items.count()
+        assert site_one_footer_menu.get_menu_items_manager().count() == site_two_footer_menu.get_menu_items_manager().count()
 
     def test_cannot_copy_footer_menu(self):
         get_user_model().objects._create_user(
@@ -65,7 +70,7 @@ class CMSUsecaseTests(WebTest):
         site_one_footer_menu = FlatMenu.get_for_site('footer', site_one)
 
         copy_view = self.app.get(
-            '/admin/wagtailmenus/flatmenu/copy/%s/' % site_one_footer_menu.pk,
+            '%scopy/%s/' % (self.base_flatmenu_admin_url, site_one_footer_menu.pk),
             user='test1')
         form = copy_view.forms[1]
         form['site'] = site_two.pk
@@ -80,7 +85,7 @@ class CMSUsecaseTests(WebTest):
             is_staff=True, is_superuser=True)
 
         edit_view = self.app.get(
-            '/admin/wagtailmenus/mainmenu/edit/1/', user='test1')
+            '%sedit/1/' % self.base_mainmenu_admin_url, user='test1')
         form = edit_view.forms[2]
         response = form.submit().follow()
 
@@ -143,10 +148,8 @@ class TestSuperUser(TransactionTestCase):
     def test_flatmenu_list(self):
         response = self.client.get('/admin/wagtailmenus/flatmenu/')
         self.assertEqual(response.status_code, 200)
-        self.assertNotContains(
-            response, '<th scope="col"  class="sortable column-site">')
-        self.assertNotContains(response,
-                               '<div class="changelist-filter col3">')
+        self.assertNotContains(response, '<th scope="col"  class="sortable column-site">')
+        self.assertNotContains(response, '<div class="changelist-filter col3">')
 
     def test_flatmenu_list_multisite(self):
         site_one = Site.objects.get(id=1)

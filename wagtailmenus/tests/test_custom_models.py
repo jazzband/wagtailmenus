@@ -2,6 +2,7 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.core.exceptions import ImproperlyConfigured
+from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 from wagtailmenus import get_main_menu_model, get_flat_menu_model
 from bs4 import BeautifulSoup
@@ -13,8 +14,36 @@ from bs4 import BeautifulSoup
     LANGUAGE_CODE="de",
 )
 class TestCustomMenuItemsGerman(TestCase):
-    fixtures = ['test.json']
+    fixtures = ['test.json', 'test_cutom_models.json']
     maxDiff = None
+
+    def setUp(self):
+        get_user_model().objects._create_user(
+            username='test1', email='test1@email.com', password='password',
+            is_staff=True, is_superuser=True)
+        self.client.login(username='test1', password='password')
+
+    def test_mainmenu_list(self):
+        response = self.client.get('/admin/wagtailmenus/mainmenu/')
+        self.assertRedirects(response, '/admin/wagtailmenus/mainmenu/edit/1/')
+
+    def test_mainmenu_edit(self):
+        response = self.client.get(
+            '/admin/wagtailmenus/mainmenu/edit/1/')
+        # Test 'get_error_message' method on view for additional coverage
+        view = response.context['view']
+        self.assertTrue(view.get_error_message())
+
+    def test_flatmenu_list(self):
+        response = self.client.get('/admin/wagtailmenus/flatmenu/')
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, '<th scope="col"  class="sortable column-site">')
+        self.assertNotContains(response, '<div class="changelist-filter col3">')
+
+    def test_flatmenu_edit(self):
+        response = self.client.get(
+            '/admin/wagtailmenus/flatmenu/edit/1/')
+        self.assertEqual(response.status_code, 200)
 
     def test_translated_main_menu(self):
         response = self.client.get('/superheroes/dc-comics/batman/')
@@ -92,7 +121,7 @@ class TestCustomMenuItemsGerman(TestCase):
     LANGUAGE_CODE="fr",
 )
 class TestCustomMenuItemsFrench(TestCase):
-    fixtures = ['test.json']
+    fixtures = ['test.json', 'test_cutom_models.json']
     maxDiff = None
 
     def test_translated_main_menu(self):
@@ -170,8 +199,36 @@ class TestCustomMenuItemsFrench(TestCase):
     WAGTAILMENUS_FLAT_MENU_MODEL='tests.CustomFlatMenu',
 )
 class TestCustomMenuModels(TestCase):
-    fixtures = ['test.json']
+    fixtures = ['test.json', 'test_cutom_models.json']
     maxDiff = None
+
+    def setUp(self):
+        get_user_model().objects._create_user(
+            username='test1', email='test1@email.com', password='password',
+            is_staff=True, is_superuser=True)
+        self.client.login(username='test1', password='password')
+
+    def test_mainmenu_list(self):
+        response = self.client.get('/admin/tests/custommainmenu/')
+        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, '/admin/tests/custommainmenu/edit/1/')
+
+    def test_mainmenu_edit(self):
+        response = self.client.get('/admin/tests/custommainmenu/edit/1/')
+        # Test 'get_error_message' method on view for additional coverage
+        self.assertEqual(response.status_code, 200)
+        view = response.context['view']
+        self.assertTrue(view.get_error_message())
+
+    def test_flatmenu_list(self):
+        response = self.client.get('/admin/tests/customflatmenu/')
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, '<th scope="col"  class="sortable column-site">')
+        self.assertNotContains(response, '<div class="changelist-filter col3">')
+
+    def test_flatmenu_edit(self):
+        response = self.client.get('/admin/tests/customflatmenu/edit/1/')
+        self.assertEqual(response.status_code, 200)
 
     @override_settings(LANGUAGE_CODE="it",)
     def test_custom_main_menu_english(self):
@@ -316,7 +373,7 @@ class TestCustomMenuModels(TestCase):
 
 
 class TestInvalidCustomMenuModels(TestCase):
-    fixtures = ['test.json']
+    fixtures = ['test.json', 'test_cutom_models.json']
 
     @override_settings(WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME='invalid_related_name',)
     def test_invalid_main_menu_items_related_name(self):
