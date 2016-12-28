@@ -152,6 +152,7 @@
         "menu": 1
     }
 },
+
 {
     "model": "wagtailmenus.flatmenu",
     "pk": 2,
@@ -886,14 +887,20 @@
     "model": "tests.toplevelpage",
     "pk": 6,
     "fields": {
+        "title_de": "Über uns",
+        "title_fr": "À propos de nous",
         "repeat_in_subnav": true,
-        "repeated_item_text": "Section home"
+        "repeated_item_text": "Section home",
+        "repeated_item_text_de": "Abschnitt zu Hause",
+        "repeated_item_text_fr": "Section accueil"
     }
 },
 {
     "model": "tests.toplevelpage",
     "pk": 11,
     "fields": {
+        "title_de": "Superhelden",
+        "title_fr": "Superheroes",
         "repeat_in_subnav": false,
         "repeated_item_text": ""
     }
@@ -902,6 +909,8 @@
     "model": "tests.toplevelpage",
     "pk": 14,
     "fields": {
+        "title_de": "News & Veranstaltungen",
+        "title_fr": "Nouvelles et événements",
         "repeat_in_subnav": false,
         "repeated_item_text": ""
     }
@@ -918,6 +927,8 @@
     "model": "tests.toplevelpage",
     "pk": 19,
     "fields": {
+        "title_de": "Recht",
+        "title_fr": "Légal",
         "repeat_in_subnav": false,
         "repeated_item_text": ""
     }

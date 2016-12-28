@@ -9,24 +9,20 @@ from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.contrib.modeladmin.helpers import ButtonHelper
 from wagtail.wagtailcore import hooks
 
-from .app_settings import (
-    MAINMENU_MENU_ICON, FLATMENU_MENU_ICON, SECTION_ROOT_DEPTH,
-    ADD_EDITOR_OVERRIDE_STYLES)
-from .models import MainMenu, FlatMenu
-from .views import (
-    MainMenuIndexView, MainMenuEditView, FlatMenuCopyView)
+from . import app_settings, get_main_menu_model, get_flat_menu_model
+from .views import MainMenuIndexView, MainMenuEditView, FlatMenuCopyView
 
 
 class MainMenuAdmin(ModelAdmin):
-    model = MainMenu
+    model = get_main_menu_model()
     menu_label = _('Main menu')
-    menu_icon = MAINMENU_MENU_ICON
+    menu_icon = app_settings.MAINMENU_MENU_ICON
     index_view_class = MainMenuIndexView
     edit_view_class = MainMenuEditView
     add_to_settings_menu = True
 
     def get_form_view_extra_css(self):
-        if ADD_EDITOR_OVERRIDE_STYLES:
+        if app_settings.ADD_EDITOR_OVERRIDE_STYLES:
             return ['wagtailmenus/css/menu-edit.css']
         return []
 
@@ -69,15 +65,15 @@ class FlatMenuButtonHelper(ButtonHelper):
 
 
 class FlatMenuAdmin(ModelAdmin):
-    model = FlatMenu
+    model = get_flat_menu_model()
     menu_label = _('Flat menus')
-    menu_icon = FLATMENU_MENU_ICON
+    menu_icon = app_settings.FLATMENU_MENU_ICON
     button_helper_class = FlatMenuButtonHelper
     ordering = ('-site__is_default_site', 'site__hostname', 'handle')
     add_to_settings_menu = True
 
     def get_form_view_extra_css(self):
-        if ADD_EDITOR_OVERRIDE_STYLES:
+        if app_settings.ADD_EDITOR_OVERRIDE_STYLES:
             return ['wagtailmenus/css/menu-edit.css']
         return []
 
@@ -113,7 +109,7 @@ class FlatMenuAdmin(ModelAdmin):
         return self.get_queryset(request).values('site').distinct().count() > 1
 
     def items(self, obj):
-        return obj.menu_items.count()
+        return obj.get_menu_items_manager().count()
     items.short_description = _('no. of items')
 
 
@@ -123,11 +119,13 @@ modeladmin_register(FlatMenuAdmin)
 @hooks.register('before_serve_page')
 def wagtailmenu_params_helper(page, request, serve_args, serve_kwargs):
     section_root = request.site.root_page.get_descendants().ancestor_of(
-        page, inclusive=True).filter(depth__exact=SECTION_ROOT_DEPTH).first()
+        page, inclusive=True
+    ).filter(depth__exact=app_settings.SECTION_ROOT_DEPTH).first()
     if section_root:
         section_root = section_root.specific
     ancestor_ids = page.get_ancestors().filter(
-        depth__gte=SECTION_ROOT_DEPTH).values_list('id', flat=True)
+        depth__gte=app_settings.SECTION_ROOT_DEPTH
+    ).values_list('id', flat=True)
     request.META.update({
         'WAGTAILMENUS_CURRENT_SECTION_ROOT': section_root,
         'WAGTAILMENUS_CURRENT_PAGE': page,

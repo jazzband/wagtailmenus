@@ -3,17 +3,19 @@ from __future__ import absolute_import, unicode_literals
 from copy import copy
 
 from django import forms
-from django.utils.text import capfirst
-from django.utils.translation import ugettext as _
+from django.contrib.admin.utils import quote, unquote
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
-from django.contrib.admin.utils import quote, unquote
+from django.utils.text import capfirst
+from django.utils.translation import ugettext as _
 
 from wagtail.wagtailadmin import messages
 from wagtail.wagtailcore.models import Site
 
 from wagtail.contrib.modeladmin.views import (
     WMABaseView, EditView, ModelFormView)
+
+from . import app_settings
 
 
 class SiteSwitchForm(forms.Form):
@@ -129,8 +131,12 @@ class FlatMenuCopyView(EditView):
         if self.request.method == 'POST':
             data = copy(self.request.POST)
             i = 0
-            while(data.get('menu_items-%s-id' % i)):
-                data['menu_items-%s-id' % i] = None
+            while(data.get('%s-%s-id' % (
+                app_settings.FLAT_MENU_ITEMS_RELATED_NAME, i
+            ))):
+                data['%s-%s-id' % (
+                    app_settings.FLAT_MENU_ITEMS_RELATED_NAME, i
+                )] = None
                 i += 1
             kwargs.update({
                 'data': data,

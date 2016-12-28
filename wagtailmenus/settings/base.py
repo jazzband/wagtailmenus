@@ -8,6 +8,8 @@ TIME_ZONE = 'Europe/London'
 USE_TZ = True
 USE_I18N = True
 USE_L10N = True
+LANGUAGE_CODE = 'en'
+
 
 INSTALLED_APPS = (
     'wagtail.contrib.settings',

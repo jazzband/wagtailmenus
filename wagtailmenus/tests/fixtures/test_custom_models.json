@@ -1,0 +1,267 @@
+[
+{
+    "model": "tests.mainmenucustommenuitem",
+    "pk": 1,
+    "fields": {
+        "sort_order": 0,
+        "link_page": 5,
+        "link_url": "",
+        "link_text": "",
+        "url_append": "",
+        "menu": 1,
+        "allow_subnav": true
+    }
+},
+{
+    "model": "tests.mainmenucustommenuitem",
+    "pk": 2,
+    "fields": {
+        "sort_order": 1,
+        "link_page": 6,
+        "link_url": "",
+        "link_text": "About",
+        "link_text_de": "Etwa",
+        "link_text_fr": "Sur",
+        "url_append": "",
+        "menu": 1,
+        "allow_subnav": true
+    }
+},
+{
+    "model": "tests.mainmenucustommenuitem",
+    "pk": 3,
+    "fields": {
+        "sort_order": 2,
+        "link_page": 11,
+        "link_url": "",
+        "link_text": "Superheroes",
+        "link_text_de": "Superhelden",
+        "link_text_fr": "Superheroes",
+        "url_append": "",
+        "menu": 1,
+        "allow_subnav": true
+    }
+},
+{
+    "model": "tests.mainmenucustommenuitem",
+    "pk": 4,
+    "fields": {
+        "sort_order": 3,
+        "link_page": 14,
+        "link_url": "",
+        "link_text": "",
+        "url_append": "",
+        "menu": 1,
+        "allow_subnav": true
+    }
+},
+{
+    "model": "tests.mainmenucustommenuitem",
+    "pk": 5,
+    "fields": {
+        "sort_order": 4,
+        "link_page": null,
+        "link_url": "http://google.co.uk",
+        "link_text": "Google",
+        "url_append": "",
+        "menu": 1,
+        "allow_subnav": true
+    }
+},
+{
+    "model": "tests.mainmenucustommenuitem",
+    "pk": 6,
+    "fields": {
+        "sort_order": 5,
+        "link_page": 18,
+        "link_url": "",
+        "link_text": "",
+        "url_append": "",
+        "menu": 1,
+        "allow_subnav": true
+    }
+},
+{
+    "model": "tests.flatmenucustommenuitem",
+    "pk": 1,
+    "fields": {
+        "sort_order": 0,
+        "link_page": 18,
+        "link_url": "",
+        "link_text": "Call us",
+        "link_text_de": "Rufen Sie uns an",
+        "link_text_fr": "Appelez-nous",
+        "url_append": "#offices",
+        "menu": 1
+    }
+},
+{
+    "model": "tests.flatmenucustommenuitem",
+    "pk": 2,
+    "fields": {
+        "sort_order": 1,
+        "link_page": null,
+        "link_url": "#advisor-chat",
+        "link_text": "Chat to an advisor",
+        "link_text_de": "Chat mit einem Berater",
+        "link_text_fr": "Chat à un conseiller",
+        "url_append": "",
+        "menu": 1
+    }
+},
+{
+    "model": "tests.flatmenucustommenuitem",
+    "pk": 3,
+    "fields": {
+        "sort_order": 2,
+        "link_page": null,
+        "link_url": "#request-callback",
+        "link_text": "Request a callback",
+        "link_text_de": "Rückruf anfordern",
+        "link_text_fr": "Demander un rappel",
+        "url_append": "",
+        "menu": 1
+    }
+},
+{
+    "model": "tests.custommainmenu",
+    "pk": 1,
+    "fields": {
+        "site": 1
+    }
+},
+{
+    "model": "tests.custommainmenuitem",
+    "pk": 1,
+    "fields": {
+        "sort_order": 0,
+        "link_page": 5,
+        "link_url": "",
+        "link_text": "",
+        "url_append": "",
+        "menu": 1,
+        "allow_subnav": true
+    }
+},
+{
+    "model": "tests.custommainmenuitem",
+    "pk": 2,
+    "fields": {
+        "sort_order": 1,
+        "link_page": 6,
+        "link_url": "",
+        "link_text": "About",
+        "link_text_de": "Etwa",
+        "link_text_fr": "Sur",
+        "url_append": "",
+        "menu": 1,
+        "allow_subnav": true
+    }
+},
+{
+    "model": "tests.custommainmenuitem",
+    "pk": 3,
+    "fields": {
+        "sort_order": 2,
+        "link_page": 11,
+        "link_url": "",
+        "link_text": "Superheroes",
+        "link_text_de": "Superhelden",
+        "link_text_fr": "Superheroes",
+        "url_append": "",
+        "menu": 1,
+        "allow_subnav": true
+    }
+},
+{
+    "model": "tests.custommainmenuitem",
+    "pk": 4,
+    "fields": {
+        "sort_order": 3,
+        "link_page": 14,
+        "link_url": "",
+        "link_text": "",
+        "url_append": "",
+        "menu": 1,
+        "allow_subnav": true
+    }
+},
+{
+    "model": "tests.custommainmenuitem",
+    "pk": 5,
+    "fields": {
+        "sort_order": 4,
+        "link_page": null,
+        "link_url": "http://google.co.uk",
+        "link_text": "Google",
+        "url_append": "",
+        "menu": 1,
+        "allow_subnav": true
+    }
+},
+{
+    "model": "tests.custommainmenuitem",
+    "pk": 6,
+    "fields": {
+        "sort_order": 5,
+        "link_page": 18,
+        "link_url": "",
+        "link_text": "",
+        "url_append": "",
+        "menu": 1,
+        "allow_subnav": true
+    }
+},
+{
+    "model": "tests.customflatmenu",
+    "pk": 1,
+    "fields": {
+        "site": 1,
+        "title": "контакт ссылки",
+        "handle": "contact",
+        "heading": ""
+    }
+},
+{
+    "model": "tests.customflatmenuitem",
+    "pk": 1,
+    "fields": {
+        "sort_order": 0,
+        "link_page": 18,
+        "link_url": "",
+        "link_text": "Call us",
+        "link_text_de": "Rufen Sie uns an",
+        "link_text_fr": "Appelez-nous",
+        "url_append": "#offices",
+        "menu": 1
+    }
+},
+{
+    "model": "tests.customflatmenuitem",
+    "pk": 2,
+    "fields": {
+        "sort_order": 1,
+        "link_page": null,
+        "link_url": "#advisor-chat",
+        "link_text": "Chat to an advisor",
+        "link_text_de": "Chat mit einem Berater",
+        "link_text_fr": "Chat à un conseiller",
+        "url_append": "",
+        "menu": 1
+    }
+},
+{
+    "model": "tests.customflatmenuitem",
+    "pk": 3,
+    "fields": {
+        "sort_order": 2,
+        "link_page": null,
+        "link_url": "#request-callback",
+        "link_text": "Request a callback",
+        "link_text_de": "Rückruf anfordern",
+        "link_text_fr": "Demander un rappel",
+        "url_append": "",
+        "menu": 1
+    }
+}
+]
