@@ -1,14 +1,44 @@
 Changelog
 =========
 
-2.0.2 (XX.XX.XXX) IN DEVELOPMENT
+2.X.X (XX.XX.XXX) IN DEVELOPMENT
 -------------------------------- 
+
+
+2.1.0 (28.12.2016)
+-------------------------------- 
+
+* Added official support for wagtail v1.8
+* Turned `wagtailmenus.app_settings` into a real settings module.
+* Added `WAGTAILMENUS_MAIN_MENU_MODEL` and `WAGTAILMENUS_FLAT_MENU_MODEL`
+  settings to allow the default main and flat menu models to be swapped out for
+  custom models.
+* Added `WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME` and 
+  `WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME` settings to allow the default
+  menu item models to be swapped out for custom models.
+* Added the `WAGTAILMENUS_PAGE_FIELD_FOR_MENU_ITEM_TEXT` setting to allow 
+  developers to specify a page attribute other than `title` to be used to
+  populate the `text` attribute for menu items linking to pages.
+* Added german translation by Pierre (@bloodywing).
+* Split models.py into 3 logically-named files to make models easier to find.
+
+
+2.0.3 (08.12.2016)
+-------------------------------- 
+
+Fixed migration related issue raised by @urlsangel.
+
+
+2.0.2 (08.12.2016)
+-------------------------------- 
+
+This release is broken and shouldn't be used. Skip to v2.0.3 instead.
 
 
 2.0.1 (22.11.2016)
 -------------------------------- 
 
-* Bug fix for `main_menu` template tag.
+Bug fix for `main_menu` template tag.
 
 
 2.0.0 (19.11.2016)
