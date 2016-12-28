@@ -13,8 +13,6 @@ matrix:
     python: 3.5
   - env: TOXENV=py35-dj19-wt15
     python: 3.5  
-  - env: TOXENV=py35-dj19-wt16
-    python: 3.5  
   - env: TOXENV=py35-dj110-wt16
     python: 3.5
   - env: TOXENV=py35-dj110-wt17
