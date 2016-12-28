@@ -446,7 +446,7 @@ If you only wish to change the menu item models (e.g. to add images, extra field
 
 		menu = ParentalKey(
 			'wagtailmenus.MainMenu',
-			related_name="custom_menu_items" # use something sensible here
+			related_name="custom_menu_items" # important for step 3!
 		)
 		image = models.ForeignKey(
 			get_image_model_string(),
@@ -476,7 +476,7 @@ If you only wish to change the menu item models (e.g. to add images, extra field
 		
 		menu = ParentalKey(
 			'wagtailmenus.FlatMenu',
-			related_name="custom_menu_items" # use something sensible here
+			related_name="custom_menu_items" # important for step 3!
 		)
 
 		...
@@ -492,7 +492,7 @@ If you only wish to change the menu item models (e.g. to add images, extra field
 	WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME = "custom_menu_items"
 
 	# Set this to the 'related_name' attribute used on the ParentalKey field
-	WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = "translated_menu_items"
+	WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = "custom_menu_items"
 
 	```
 
@@ -527,9 +527,10 @@ If it's the main and flat menu models themselves that you wish to override, that
 	        self.fr_field = fr_field
 
 	    def __get__(self, instance, owner):
-	        if translation.get_language() == 'de':
+	    	active_language = translation.get_language()
+	        if active_language == 'de':
 	            return getattr(instance, self.de_field)
-	        elif translation.get_language() == 'fr':
+	        elif active_language == 'fr':
 	            return getattr(instance, self.fr_field)
 	        return getattr(instance, self.en_field)
 
