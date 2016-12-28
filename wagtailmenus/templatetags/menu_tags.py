@@ -475,8 +475,8 @@ def prime_menu_items(
             page = item
             menuitem = None
             text = getattr(
-                page, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT, None
-            ) or page.title
+                page, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT, page.title
+            )
             setattr(item, 'text', text)
 
         if page:
