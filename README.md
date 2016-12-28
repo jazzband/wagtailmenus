@@ -507,6 +507,7 @@ If it's the main and flat menu models themselves that you wish to override, that
 
 	```python
 	from django.db import models
+	from django.utils import translation
 	from django.utils.translation import ugettext_lazy as _
 	from modelcluster.fields import ParentalKey
 	from wagtail.wagtailadmin.edit_handlers import (
@@ -517,6 +518,20 @@ If it's the main and flat menu models themselves that you wish to override, that
 		AbstractMainMenu, AbstractMainMenuItem, 
 		AbstractFlatMenu, AbstractFlatMenuItem,
 	)
+
+	
+	class TranslatedField(object):
+	    def __init__(self, en_field, de_field, fr_field):
+	        self.en_field = en_field
+	        self.de_field = de_field
+	        self.fr_field = fr_field
+
+	    def __get__(self, instance, owner):
+	        if translation.get_language() == 'de':
+	            return getattr(instance, self.de_field)
+	        elif translation.get_language() == 'fr':
+	            return getattr(instance, self.fr_field)
+	        return getattr(instance, self.en_field)
 
 	
 	class TranslatedMainMenu(AbstractMainMenu):
@@ -530,7 +545,6 @@ If it's the main and flat menu models themselves that you wish to override, that
 			TranslatedMainMenu, # we can directly reference the model above
 			related_name=app_settings.MAIN_MENU_ITEMS_RELATED_NAME
 		)
-
 		link_text_de = models.CharField(
 	        verbose_name=_("link text (german)"),
 	        max_length=255,
@@ -541,6 +555,18 @@ If it's the main and flat menu models themselves that you wish to override, that
 	        max_length=255,
 	        blank=True,
 	    )
+	    translated_link_text = TranslatedField(
+        	'link_text', 'link_text_de', 'link_text_fr'
+    	)
+
+    	@property
+    	def menu_text(self):
+    		"""Use `translated_link_text` instead of just `link_text`"""
+	        return self.translated_link_text or getattr(
+	            self.link_page,
+	            app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
+	            self.link_page.title
+	        )
 
 	    # Also override the panels attribute, so that the new fields appear
 		# in the admin interface
@@ -567,6 +593,9 @@ If it's the main and flat menu models themselves that you wish to override, that
 	        max_length=255,
 	        blank=True,
 	    )
+	    translated_heading = TranslatedField(
+        	'heading', 'heading_de', 'heading_fr'
+    	)
 
 		panels = (
 	        MultiFieldPanel(
@@ -590,6 +619,7 @@ If it's the main and flat menu models themselves that you wish to override, that
 	        AbstractFlatMenu.panels[2],
 	    )
 
+
 	class TranslatedFlatMenuItem(AbstractFlatMenuItem):
 		"""A custom menu item model to be used by ``TranslatedFlatMenu``"""
 	
@@ -597,7 +627,6 @@ If it's the main and flat menu models themselves that you wish to override, that
 			TranslatedFlatMenu, # we can use the model from above
 			related_name=app_settings.FLAT_MENU_ITEMS_RELATED_NAME
 		)
-
 		link_text_de = models.CharField(
 	        verbose_name=_("link text (german)"),
 	        max_length=255,
@@ -608,6 +637,18 @@ If it's the main and flat menu models themselves that you wish to override, that
 	        max_length=255,
 	        blank=True,
 	    )
+	    translated_link_text = TranslatedField(
+        	'link_text', 'link_text_de', 'link_text_fr'
+    	)
+
+    	@property
+    	def menu_text(self):
+    		"""Use `translated_link_text` instead of just `link_text`"""
+	        return self.translated_link_text or getattr(
+	            self.link_page,
+	            app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
+	            self.link_page.title
+	        )
 
 	    # Also override the panels attribute, so that the new fields appear
 		# in the admin interface
