@@ -1,10 +1,15 @@
 from __future__ import absolute_import, unicode_literals
-from django.core.exceptions import ImproperlyConfigured
-from .app_settings import Settings
 
 __version__ = '2.1.0'
 
-app_settings = Settings()
+default_app_config = 'wagtailmenus.apps.WagtailMenusConfig'
+app_settings = None
+
+
+def initialize_settings():
+    global app_settings
+    from .app_settings import Settings
+    app_settings = Settings()
 
 
 def get_main_menu_model_string():
@@ -35,6 +40,8 @@ def get_main_menu_model():
     if no custom model is defined.
     """
     from django.apps import apps
+    from django.core.exceptions import ImproperlyConfigured
+
     model_string = get_main_menu_model_string()
     try:
         return apps.get_model(model_string)
@@ -57,6 +64,8 @@ def get_flat_menu_model():
     if no custom model is defined.
     """
     from django.apps import apps
+    from django.core.exceptions import ImproperlyConfigured
+
     model_string = get_flat_menu_model_string()
     try:
         return apps.get_model(model_string)
