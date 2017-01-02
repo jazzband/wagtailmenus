@@ -1,10 +1,13 @@
 ## Authors
 
-* Andy Babic (Rock Kitchen Harris) twitter: @andyjbabic
+* Andy Babic (ababic), twitter: @andyjbabic
+
 
 ## Contributors
 
+* Adrian Tijsseling (adriaant)
 * Tim Leguijt (tleguijt)
+
 
 ## Translators
 
