@@ -27,6 +27,7 @@ class MultilingualMenuItem(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ('sort_order',)
 
     def menu_text(self):
         return self.translated_link_text or getattr(
