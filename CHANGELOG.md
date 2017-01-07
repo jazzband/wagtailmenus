@@ -5,6 +5,14 @@ Changelog
 -------------------------------- 
 
 
+2.1.2 (07.01.2017)
+-------------------------------- 
+
+* Fixed a bug preventing reordered menu items from retaining their new order 
+  after saving. The Meta class on the new abstract models had knocked out the
+  `sort_order` ordering from `wagtail.wagtailcore.models.Orderable`.
+
+
 2.1.1 (02.01.2017)
 -------------------------------- 
 
@@ -14,7 +22,7 @@ Changelog
 2.1.0 (28.12.2016)
 -------------------------------- 
 
-* Added official support for wagtail v1.8
+* Added official support for wagtail v1.8.
 * Turned `wagtailmenus.app_settings` into a real settings module.
 * Added `WAGTAILMENUS_MAIN_MENU_MODEL` and `WAGTAILMENUS_FLAT_MENU_MODEL`
   settings to allow the default main and flat menu models to be swapped out for

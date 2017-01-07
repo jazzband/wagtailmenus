@@ -144,6 +144,7 @@ class AbstractMainMenuItem(Orderable, AbstractMenuItem):
 
     class Meta:
         abstract = True
+        ordering = ('sort_order',)
 
 
 class AbstractFlatMenuItem(Orderable, AbstractMenuItem):
@@ -160,6 +161,7 @@ class AbstractFlatMenuItem(Orderable, AbstractMenuItem):
 
     class Meta:
         abstract = True
+        ordering = ('sort_order',)
 
 
 #########################################################
