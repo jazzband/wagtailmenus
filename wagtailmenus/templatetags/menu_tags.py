@@ -361,11 +361,17 @@ def section_menu(
         active_class = app_settings.ACTIVE_ANCESTOR_CLASS
         if current_page and section_root.pk == current_page.pk:
             # `section_root` is the current page, so should probably have
-            # the 'active' class. But, not if there's a repeated item in
-            # menu_items that already has the 'active' class.
+            # the 'active' class.
             active_class = app_settings.ACTIVE_CLASS
+            # But not if there's a 'repeated item' in menu_items that already
+            # has the 'active' class.
             if allow_repeating_parents and use_specific and menu_items:
-                if menu_items[0].active_class == app_settings.ACTIVE_CLASS:
+                # TODO: We might want to make this check more than just the
+                # first item
+                if(
+                    getattr(menu_items[0], 'active_class', '') ==
+                    app_settings.ACTIVE_CLASS
+                ):
                     active_class = app_settings.ACTIVE_ANCESTOR_CLASS
         setattr(section_root, 'active_class', active_class)
 

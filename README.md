@@ -367,6 +367,8 @@ class ContactPage(MenuPage):
             menu_instance)
 ```
 
+**NOTE:** If you're overriding `modify_submenu_items()`, please ensure 'repeated menu items' are still added as the first item in the returned `menu_items` list. If not, active class highlighting might not work as expected in some places.
+
 These change would result in the following HTML output when rendering a `ContactPage` instance in a main menu:
 
 ```html
