@@ -304,7 +304,12 @@ For example, if you had a `ContactPage` model extended `MenuPage`, and in main m
 
 ```python
 
+from collections import namedtuple
+
 from wagtailmenus.models import MenuPage
+
+
+MenuItem = namedtuple('MenuItem', 'text href active_class')
 
 
 class ContactPage(MenuPage):
@@ -327,28 +332,28 @@ class ContactPage(MenuPage):
         if original_menu_tag == 'main_menu':
             base_url = self.relative_url(current_site)
             """
-            Additional menu items can be objects with the necessary attributes,
-            or simple dictionaries. `href` is used for the link URL, and `text`
+            Additional menu items can be objects with the necessary attributes.
+	    `href` is used for the link URL, and `text`
             is the text displayed for each link. Below, I've also used
             `active_class` to add some additional CSS classes to these items,
             so that I can target them with additional CSS  
             """
             menu_items.extend((
-                {
-                    'text': 'Get support',
-                    'href': base_url + '#support',
-                    'active_class': 'support',
-                },
-                {
-                    'text': 'Speak to someone',
-                    'href': base_url + '#call',
-                    'active_class': 'call',
-                },
-                {
-                    'text': 'Map & directions',
-                    'href': base_url + '#map',
-                    'active_class': 'map',
-                },
+                MenuItem(
+                    text='Get support',
+                    href=base_url + '#support',
+                    active_class='support',
+                ),
+                MenuItem(
+                    text='Speak to someone',
+                    href=base_url + '#call',
+                    active_class='call',
+                ),
+                MenuItem(
+                    text='Map & directions',
+                    href=base_url + '#map',
+                    active_class='map',
+                ),
             ))
         return menu_items
 
