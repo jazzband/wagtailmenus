@@ -5,6 +5,15 @@ Changelog
 -------------------------------- 
 
 
+2.1.3 (20.01.2017)
+-------------------------------- 
+
+* Fixed a bug in the `section_menu` tag when attempting to apply the correct
+  active class to `section_root` when the `modify_submenu_items()` method has 
+  been overridden to return additional items without an `active_class`
+  attribute (like in the example code in README).
+
+
 2.1.2 (07.01.2017)
 -------------------------------- 
 
