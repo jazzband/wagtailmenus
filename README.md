@@ -100,8 +100,8 @@ Using wagtailmenus
 ==================
 
 1. [Defining your main menu in the CMS](#defining-main-menus)
-2. [Using the `{% main_menu %}` tag](#main_menu-tag)
-3. [Defining flat menus in the CMS](#defining-flat-menus)
+2. [Defining flat menus in the CMS](#defining-flat-menus)
+3. [Using the `{% main_menu %}` tag](#main_menu-tag)
 4. [Using the `{% flat_menu %}` tag](#flat_menu-tag)
 5. [Using the `{% section_menu %}` tag](#section_menu-tag)
 6. [Using the `{% children_menu %}` tag](#children_menu-tag)
