@@ -91,7 +91,11 @@ class AbstractMenuItem(models.Model, MenuItem):
 
     def relative_url(self, site=None):
         if self.link_page:
-            return self.link_page.relative_url(site) + self.url_append
+            rel_url = self.link_page.relative_url(site)
+            # rel_url could be None in case page is not routable
+            # for some reason
+            if rel_url:
+                return rel_url + self.url_append
         return self.link_url + self.url_append
 
     def clean(self, *args, **kwargs):
