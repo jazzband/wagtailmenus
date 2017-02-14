@@ -94,8 +94,9 @@ class AbstractMenuItem(models.Model, MenuItem):
             rel_url = self.link_page.relative_url(site)
             # rel_url could be None in case page is not routable
             # for some reason
-            if rel_url:
-                return rel_url + self.url_append
+            if rel_url is None:
+                return ''
+            return rel_url + self.url_append
         return self.link_url + self.url_append
 
     def clean(self, *args, **kwargs):
