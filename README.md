@@ -159,9 +159,7 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 
 **Where wagtailmenus looks for templates**
 
-If you don't uses the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering.
-
-If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
+If you don't uses the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
 
 For the menu itself:
 
@@ -213,9 +211,7 @@ For any sub menus:
 
 **Where wagtailmenus looks for templates**
 
-If you don't uses the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering.
-
-If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
+If you don't uses the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
 
 For the menu itself:
 
@@ -292,9 +288,7 @@ The `{% section_menu %}` tag allows you to display a context-aware, page-driven 
 
 **Where wagtailmenus looks for templates**
 
-If you don't uses the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering.
-
-If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
+If you don't uses the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
 
 For the menu itself:
 
@@ -346,9 +340,7 @@ The `{% children_menu %}` tag can be used in page templates to display a menu of
 
 **Where wagtailmenus looks for templates**
 
-If you don't uses the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering.
-
-If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
+If you don't uses the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
 
 For the menu itself:
 
