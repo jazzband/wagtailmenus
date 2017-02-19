@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from wagtail.wagtailcore.models import Site
 from wagtailmenus.models import MainMenu, FlatMenu
@@ -892,6 +892,7 @@ class TestTemplateTags(TestCase):
         """
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
+    @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True)
     def test_use_specific_off(self):
         """
         The below URL is a custom URL, but the URL matches a real page,
