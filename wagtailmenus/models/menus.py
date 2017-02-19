@@ -407,12 +407,12 @@ class AbstractFlatMenu(MenuWithMenuItems):
         ):
             hostname = request.site.hostname
             template_names.extend([
-                "%s/menus/flat/%s/sub_menu.html" % (hostname, self.handle,),
-                "%s/menus/flat/%s_sub_menu.html" % (hostname, self.handle,),
-                "%s/menus/%s/sub_menu.html" % (hostname, self.handle,),
-                "%s/menus/%s_sub_menu.html" % (hostname, self.handle,),
-                "%s/menus/flat/sub_menu.html" % hostname,
-                "%s/menus/sub_menu.html" % hostname,
+                "menus/%s/flat/%s/sub_menu.html" % (hostname, self.handle,),
+                "menus/%s/flat/%s_sub_menu.html" % (hostname, self.handle,),
+                "menus/%s/%s/sub_menu.html" % (hostname, self.handle,),
+                "menus/%s/%s_sub_menu.html" % (hostname, self.handle,),
+                "menus/%s/flat/sub_menu.html" % hostname,
+                "menus/%s/sub_menu.html" % hostname,
             ])
         template_names.extend([
             "menus/flat/%s/sub_menu.html" % self.handle,
