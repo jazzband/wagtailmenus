@@ -259,30 +259,6 @@ class AbstractMainMenu(MenuWithMenuItems):
                 )
             )
 
-    def get_template_names(self, request, template_name=None):
-        """Returns a list of template names to search for when rendering this
-        menu to a template. The first template that is found will be used."""
-
-        if template_name:
-            return [template_name]
-        return [
-            "menus/main/menu.html",
-            app_settings.DEFAULT_MAIN_MENU_TEMPLATE,
-        ]
-
-    def get_sub_menu_template_names(self, request, template_name=None):
-        """Returns a list of template names to search for when rendering a
-        sub menu for this menu to a template. The first template that is found
-        will be used."""
-
-        if template_name:
-            return [template_name]
-        return [
-            "menus/main/sub_menu.html",
-            "menus/main_sub_menu.html",
-            app_settings.DEFAULT_SUB_MENU_TEMPLATE,
-        ]
-
     panels = (
         InlinePanel(
             app_settings.MAIN_MENU_ITEMS_RELATED_NAME, label=_("menu items")
@@ -393,16 +369,28 @@ class AbstractFlatMenu(MenuWithMenuItems):
 
         if template_name:
             return [template_name]
-        return [
-            "menus/flat/%s/menu.html" % (self.handle,),
-            "menus/flat/%s/flat_menu.html" % (self.handle,),
-            "menus/flat/%s.html" % (self.handle,),
-            "menus/%s/menu.html" % (self.handle,),
-            "menus/%s/flat_menu.html" % (self.handle,),
-            "menus/%s.html" % (self.handle,),
+        template_names = []
+        if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and request.site:
+            hostname = request.site.hostname
+            template_names.extend([
+                "%s/menus/flat/%s/menu.html" % (hostname, self.handle,),
+                "%s/menus/flat/%s.html" % (hostname, self.handle,),
+                "%s/menus/%s/menu.html" % (hostname, self.handle,),
+                "%s/menus/%s.html" % (hostname, self.handle,),
+                "%s/menus/flat/default.html" % hostname,
+                "%s/menus/flat/menu.html" % hostname,
+                "%s/menus/flat_menu.html" % hostname,
+            ])
+        template_names.extend([
+            "menus/flat/%s/menu.html" % self.handle,
+            "menus/flat/%s.html" % self.handle,
+            "menus/%s/menu.html" % self.handle,
+            "menus/%s.html" % self.handle,
+            "menus/flat/default.html",
             "menus/flat/menu.html",
             app_settings.DEFAULT_FLAT_MENU_TEMPLATE,
-        ]
+        ])
+        return template_names
 
     def get_sub_menu_template_names(self, request, template_name=None):
         """Returns a list of template names to search for when rendering a
@@ -411,14 +399,26 @@ class AbstractFlatMenu(MenuWithMenuItems):
 
         if template_name:
             return [template_name]
-        return [
-            "menus/flat/%s/sub_menu.html" % (self.handle,),
-            "menus/flat/%s_sub_menu.html" % (self.handle,),
-            "menus/%s/sub_menu.html" % (self.handle,),
-            "menus/%s_sub_menu.html" % (self.handle,),
+        template_names = []
+        if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and request.site:
+            hostname = request.site.hostname
+            template_names.extend([
+                "%s/menus/flat/%s/sub_menu.html" % (hostname, self.handle,),
+                "%s/menus/flat/%s_sub_menu.html" % (hostname, self.handle,),
+                "%s/menus/%s/sub_menu.html" % (hostname, self.handle,),
+                "%s/menus/%s_sub_menu.html" % (hostname, self.handle,),
+                "%s/menus/flat/sub_menu.html" % hostname,
+                "%s/menus/sub_menu.html" % hostname,
+            ])
+        template_names.extend([
+            "menus/flat/%s/sub_menu.html" % self.handle,
+            "menus/flat/%s_sub_menu.html" % self.handle,
+            "menus/%s/sub_menu.html" % self.handle,
+            "menus/%s_sub_menu.html" % self.handle,
             "menus/flat/sub_menu.html",
             app_settings.DEFAULT_SUB_MENU_TEMPLATE,
-        ]
+        ])
+        return template_names
 
     def clean(self, *args, **kwargs):
         """Raise validation error for unique_together constraint, as it's not

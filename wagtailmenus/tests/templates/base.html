@@ -18,17 +18,17 @@
 
                     <h4>Main Menu (show_multiple_levels=False)</h4>
                     <div id="main-menu-one-level">
-                        {% main_menu show_multiple_levels=False sub_menu_template="menus/custom_sub_menu_dropdown.html" %}
+                        {% main_menu show_multiple_levels=False %}
                     </div>
                     
                     <h4>Main Menu (max_levels=2)</h4>
                     <div id="main-menu-two-levels">
-                        {% main_menu max_levels=2 use_specific=3 sub_menu_template="menus/custom_sub_menu_dropdown.html" %}
+                        {% main_menu max_levels=2 use_specific=3 %}
                     </div>
 
                     <h4>Main Menu (max_levels=3)</h4>
                     <div id="main-menu-three-levels">
-                        {% main_menu max_levels=3 sub_menu_template="menus/custom_sub_menu_dropdown.html" %}
+                        {% main_menu max_levels=3 %}
                     </div>
 
                 </nav>

@@ -31,5 +31,3 @@ ROOT_URLCONF = 'wagtailmenus.development.urls'
 WAGTAIL_SITE_NAME = 'Wagtailmenus development'
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INTERNAL_IPS = ['127.0.0.1']
-
-WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE = 'menus/custom_main_menu.html'

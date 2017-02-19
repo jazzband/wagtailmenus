@@ -15,12 +15,12 @@
 
                 <nav role="navigation" class="navbar-default nav-main">
                     <div id="main-menu">
-                        {% main_menu max_levels=2 use_specific=2 template="menus/custom_main_menu.html" sub_menu_template="menus/custom_sub_menu_dropdown.html" %}
+                        {% main_menu max_levels=2 use_specific=2 %}
                     </div>
                 </nav>
 
                 <div id="secondary-nav">
-                    {% flat_menu 'header-secondary' max_levels=2 use_specific=USE_SPECIFIC_TOP_LEVEL template="menus/custom_flat_menu.html" sub_menu_template="menus/custom_sub_menu.html" %}
+                    {% flat_menu 'header-secondary' max_levels=2 use_specific=USE_SPECIFIC_TOP_LEVEL %}
                 </div>
 
             </div>
