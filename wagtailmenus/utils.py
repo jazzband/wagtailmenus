@@ -22,11 +22,13 @@ def get_template_names(menu_tag, request, override):
     if override:
         return [override]
     template_names = []
-    if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and request.site:
+    if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and getattr(
+        request, 'site', None
+    ):
         hostname = request.site.hostname
         template_names.extend([
-            "%s/menus/%s/menu.html" % (hostname, menu_tag),
-            "%s/menus/%s_menu.html" % (hostname, menu_tag),
+            "menus/%s/%s/menu.html" % (hostname, menu_tag),
+            "menus/%s/%s_menu.html" % (hostname, menu_tag),
         ])
     template_names.append("menus/%s/menu.html" % menu_tag)
     if menu_tag == 'main':
@@ -42,12 +44,14 @@ def get_sub_menu_template_names(menu_tag, request, override):
     if override:
         return [override]
     template_names = []
-    if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and request.site:
+    if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and getattr(
+        request, 'site', None
+    ):
         hostname = request.site.hostname
         template_names.extend([
-            "%s/menus/%s/sub_menu.html" % (hostname, menu_tag),
-            "%s/menus/%s_sub_menu.html" % (hostname, menu_tag),
-            "%s/menus/sub_menu.html" % (hostname, menu_tag),
+            "menus/%s/%s/sub_menu.html" % (hostname, menu_tag),
+            "menus/%s/%s_sub_menu.html" % (hostname, menu_tag),
+            "menus/%s/sub_menu.html" % hostname,
         ])
     template_names.extend([
         "menus/%s/sub_menu.html" % menu_tag,

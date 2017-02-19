@@ -370,16 +370,18 @@ class AbstractFlatMenu(MenuWithMenuItems):
         if template_name:
             return [template_name]
         template_names = []
-        if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and request.site:
+        if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and getattr(
+            request, 'site', None
+        ):
             hostname = request.site.hostname
             template_names.extend([
-                "%s/menus/flat/%s/menu.html" % (hostname, self.handle,),
-                "%s/menus/flat/%s.html" % (hostname, self.handle,),
-                "%s/menus/%s/menu.html" % (hostname, self.handle,),
-                "%s/menus/%s.html" % (hostname, self.handle,),
-                "%s/menus/flat/default.html" % hostname,
-                "%s/menus/flat/menu.html" % hostname,
-                "%s/menus/flat_menu.html" % hostname,
+                "menus/%s/flat/%s/menu.html" % (hostname, self.handle,),
+                "menus/%s/flat/%s.html" % (hostname, self.handle,),
+                "menus/%s/%s/menu.html" % (hostname, self.handle,),
+                "menus/%s/%s.html" % (hostname, self.handle,),
+                "menus/%s/flat/menu.html" % hostname,
+                "menus/%s/flat/default.html" % hostname,
+                "menus/%s/flat_menu.html" % hostname,
             ])
         template_names.extend([
             "menus/flat/%s/menu.html" % self.handle,
@@ -400,7 +402,9 @@ class AbstractFlatMenu(MenuWithMenuItems):
         if template_name:
             return [template_name]
         template_names = []
-        if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and request.site:
+        if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and getattr(
+            request, 'site', None
+        ):
             hostname = request.site.hostname
             template_names.extend([
                 "%s/menus/flat/%s/sub_menu.html" % (hostname, self.handle,),
