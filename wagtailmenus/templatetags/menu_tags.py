@@ -57,14 +57,13 @@ def get_attrs_from_context(context, guess_tree_position=True):
 def main_menu(
     context, max_levels=None, use_specific=None, apply_active_classes=True,
     allow_repeating_parents=True, show_multiple_levels=True,
-    template=app_settings.DEFAULT_MAIN_MENU_TEMPLATE,
-    sub_menu_template=app_settings.DEFAULT_SUB_MENU_TEMPLATE
+    template=None, sub_menu_template=None
 ):
     validate_supplied_values('main_menu', max_levels=max_levels,
                              use_specific=use_specific)
 
     # Variabalise relevant attributes from context
-    request, site, current_page, root, ancestor_ids = get_attrs_from_context(
+    r, site, current_page, root, ancestor_ids = get_attrs_from_context(
         context, guess_tree_position=True)
 
     # Find a matching menu
@@ -79,13 +78,19 @@ def main_menu(
     if use_specific is not None:
         menu.set_use_specific(use_specific)
 
+    tnames = menu.get_template_names(r, template)
+    t = context.template.engine.select_template(tnames)
+
+    submenu_tnames = menu.get_sub_menu_template_names(r, sub_menu_template)
+    submenu_t = context.template.engine.select_template(submenu_tnames)
+
     context.update({
         'menu_items': prime_menu_items(
             menu_items=menu.top_level_items,
             current_site=site,
             current_page=current_page,
             current_page_ancestor_ids=ancestor_ids,
-            request_path=request.path,
+            request_path=r.path,
             use_specific=menu.use_specific,
             original_menu_tag='main_menu',
             menu_instance=menu,
@@ -99,13 +104,12 @@ def main_menu(
         'apply_active_classes': apply_active_classes,
         'allow_repeating_parents': allow_repeating_parents,
         'current_level': 1,
-        'current_template': template,
-        'sub_menu_template': sub_menu_template,
+        'current_template': t.name,
+        'sub_menu_template': submenu_t.name,
         'original_menu_tag': 'main_menu',
         'section_root': root,
         'current_ancestor_ids': ancestor_ids
     })
-    t = context.template.engine.get_template(template)
     return t.render(context)
 
 
