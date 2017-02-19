@@ -20,7 +20,7 @@ register = Library()
 def main_menu(
     context, max_levels=None, use_specific=None, apply_active_classes=True,
     allow_repeating_parents=True, show_multiple_levels=True,
-    template=None, sub_menu_template=None
+    template='', sub_menu_template=''
 ):
     validate_supplied_values('main_menu', max_levels=max_levels,
                              use_specific=use_specific)
@@ -83,7 +83,7 @@ def flat_menu(
     context, handle, max_levels=None, use_specific=None,
     show_menu_heading=False, apply_active_classes=False,
     allow_repeating_parents=True, show_multiple_levels=True,
-    template=None, sub_menu_template=None,
+    template='', sub_menu_template='',
     fall_back_to_default_site_menus=flat_menus_fbtdsm,
 ):
     validate_supplied_values('flat_menu', max_levels=max_levels,
@@ -203,8 +203,7 @@ def get_sub_menu_items_for_page(
 @register.simple_tag(takes_context=True)
 def sub_menu(
     context, menuitem_or_page, stop_at_this_level=None, use_specific=None,
-    allow_repeating_parents=None, apply_active_classes=None,
-    template=None
+    allow_repeating_parents=None, apply_active_classes=None, template=''
 ):
     """
     Retrieve the children pages for the `menuitem_or_page` provided, turn them
@@ -232,7 +231,7 @@ def sub_menu(
     if allow_repeating_parents is None:
         allow_repeating_parents = context.get('allow_repeating_parents', True)
 
-    if template is None:
+    if not template:
         template = context.get(
             'sub_menu_template', app_settings.DEFAULT_SUB_MENU_TEMPLATE)
 
@@ -287,7 +286,7 @@ def section_menu(
     context, show_section_root=True, show_multiple_levels=True,
     apply_active_classes=True, allow_repeating_parents=True,
     max_levels=app_settings.DEFAULT_SECTION_MENU_MAX_LEVELS,
-    template=None, sub_menu_template=None,
+    template='', sub_menu_template='',
     use_specific=app_settings.DEFAULT_SECTION_MENU_USE_SPECIFIC,
 ):
     """Render a section menu for the current section."""
@@ -381,7 +380,7 @@ def children_menu(
     context, parent_page=None, allow_repeating_parents=True,
     apply_active_classes=False,
     max_levels=app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS,
-    template=None, sub_menu_template=None,
+    template='', sub_menu_template='',
     use_specific=app_settings.DEFAULT_CHILDREN_MENU_USE_SPECIFIC,
 ):
     request, site, current_page, root, ancestor_ids = get_attrs_from_context(
