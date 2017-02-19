@@ -154,9 +154,41 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 - **`use_specific`** (default: `None`): Provide a value to override the `use_specific` field value defined on your main menu. Allows you to control how wagtailmenus makes use of `PageQuerySet.specific()` and `Page.specific` when rendering the menu. Take a look at the [Specific pages instances and performance](#specific-page-use) section below to find out more.
 - **`allow_repeating_parents`** (default: `True`): Repetition-related settings on your pages are respected by default, but you can add `allow_repeating_parents=False` to ignore them, and not repeat any pages in sub-menus when rendering multiple levels.
 - **`apply_active_classes`** (default: `True`): The tag will attempt to add 'active' and 'ancestor' CSS classes to the menu items (where applicable) to indicate the active page and ancestors of that page. To disable this behaviour, add `apply_active_classes=False` to the tag in your template. You can change the CSS classes used by adding `WAGTAILMENUS_ACTIVE_CLASS` and `WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS` settings to your project's settings module.
-- **`template`** (default: `'menus/main_menu.html'`): Lets you render the menu to a template of your choosing. You can also name an alternative template to be used by default, by adding a `WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE` setting to your project's settings module.
-- **`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. You can specify an alternative default template by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings module.
+- **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
+- **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 
+**Where wagtailmenus looks for templates**
+
+If you don't uses the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
+
+For the menu itself:
+
+- `"menus/main/menu.html"`
+- `"menus/main_menu.html"`
+
+For any sub menus:
+
+- `"menus/main/sub_menu.html"`
+- `"menus/main_sub_menu.html"`
+- `"menus/sub_menu.html"`
+
+If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`, that list of locations will be as follows (where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddelware`):
+
+For the menu itself:
+
+- `"menus/example.com/main/menu.html"`
+- `"menus/example.com/main_menu.html"`
+- `"menus/main/menu.html"`
+- `"menus/main_menu.html"`
+
+For any sub menus:
+
+- `"menus/example.com/main/sub_menu.html"`
+- `"menus/example.com/main_sub_menu.html"`
+- `"menus/example.com/sub_menu.html"`
+- `"menus/main/sub_menu.html"`
+- `"menus/main_sub_menu.html"`
+- `"menus/sub_menu.html"`
 
 
 <a id="flat_menu-tag"></a>4. Using the `{% flat_menu %}` tag
@@ -174,9 +206,65 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 - **`apply_active_classes`** (default: `False`): Unlike `main_menu` and `section_menu`, `flat_menu` will NOT attempt to add 'active' and 'ancestor' classes to the menu items by default, as this is often not useful. You can override this by adding `apply_active_classes=true` to the tag in your template.
 - **`allow_repeating_parents`** (default: `True`): Repetition-related settings on your pages are respected by default, but you can add `allow_repeating_parents=False` to ignore them, and not repeat any pages in sub-menus when rendering. Please note that using this option will only have an effect if `use_specific` has a value of `1` or higher.
 - **`fall_back_to_default_site_menus`** (default: `False`): When using the `{% flat_menu %}` tag, wagtailmenus identifies the 'current site', and attempts to find a menu for that site, matching the `handle` provided. By default, if no menu is found for the current site, nothing is rendered. However, if `fall_back_to_default_site_menus=True` is provided, wagtailmenus will search search the 'default' site (In the CMS, this will be the site with the '**Is default site**' checkbox ticked) for a menu with the same handle, and use that instead before giving up. The default behaviour can be altered by adding `WAGTAILMENUS_FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS=True` to your project's settings.
-- **`template`** (default: `'menus/flat_menu.html'`): Lets you render the menu to a template of your choosing. You can also name an alternative template to be used by default, by adding a `WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE` setting to your project's settings.
-- **`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets you specify a template to be used for rendering sub menus (if enabled using `show_multiple_levels`). All subsequent calls to `{% sub_menu %}` within the context of the flat menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. You can specify an alternative default template by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings.
+- **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
+- **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus (if enabled using `show_multiple_levels`). All subsequent calls to `{% sub_menu %}` within the context of the flat menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 
+**Where wagtailmenus looks for templates**
+
+If you don't uses the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
+
+For the menu itself:
+
+- `"menus/flat/handle/menu.html"`
+- `"menus/flat/handle.html"`
+- `"menus/handle/menu.html"`
+- `"menus/handle.html"`
+- `"menus/flat/default.html"`
+- `"menus/flat/menu.html"`
+- `"menus/flat_menu.html"`
+
+For any sub menus:
+
+- `"menus/flat/handle/sub_menu.html"`
+- `"menus/flat/handle_sub_menu.html"`
+- `"menus/handle/sub_menu.html"`
+- `"menus/handle_sub_menu.html"`
+- `"menus/flat/sub_menu.html"`
+- `"menus/sub_menu.html"`
+
+If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`, that list of locations will be as follows (where `handle` is the `handle` of the `FlatMenu` being rendered and `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddelware`):
+
+For the menu itself:
+
+- `"menus/example.com/flat/handle/menu.html"`
+- `"menus/example.com/flat/handle.html"`
+- `"menus/example.com/handle/menu.html"`
+- `"menus/example.com/handle.html"`
+- `"menus/example.com/flat/menu.html"`
+- `"menus/example.com/flat/default.html"`
+- `"menus/example.com/flat_menu.html"`
+- `"menus/flat/handle/menu.html"`
+- `"menus/flat/handle.html"`
+- `"menus/handle/menu.html"`
+- `"menus/handle.html"`
+- `"menus/flat/default.html"`
+- `"menus/flat/menu.html"`
+- `"menus/flat_menu.html"`
+
+For any sub menus:
+
+- `"menus/example.com/flat/handle/sub_menu.html"`
+- `"menus/example.com/flat/handle_sub_menu.html"`
+- `"menus/example.com/handle/sub_menu.html"`
+- `"menus/example.com/handle_sub_menu.html"`
+- `"menus/example.com/flat/sub_menu.html"`
+- `"menus/example.com/sub_menu.html"`
+- `"menus/flat/handle/sub_menu.html"`
+- `"menus/flat/handle_sub_menu.html"`
+- `"menus/handle/sub_menu.html"`
+- `"menus/handle_sub_menu.html"`
+- `"menus/flat/sub_menu.html"`
+- `"menus/sub_menu.html"`
 
 
 <a id="section_menu-tag"></a>5. Using the `{% section_menu %}` tag
@@ -195,8 +283,41 @@ The `{% section_menu %}` tag allows you to display a context-aware, page-driven 
 - **`show_multiple_levels`** (default: `True`): Adding `show_multiple_levels=False` to the tag in your template essentially overrides `max_levels` to `1`. It's just a little more descriptive.  
 - **`apply_active_classes`** (default: `True`): The tag will add 'active' and 'ancestor' classes to the menu items where applicable, to indicate the active page and ancestors of that page. To disable this behaviour, add `apply_active_classes=False` to the tag in your template.
 - **`allow_repeating_parents`** (default: `True`): Repetition-related settings on your pages are respected by default, but you can add `allow_repeating_parents=False` to ignore them, and not repeat any pages in sub-menus when rendering. Please note that using this option will only have an effect if `use_specific` has a value of `1` or higher.
-- **`template`** (default: `'menus/section_menu.html'`): Lets you render the menu to a template of your choosing. You can also name an alternative template to be used by default, by adding a `WAGTAILMENUS_DEFAULT_SECTION_MENU_TEMPLATE` setting to your project's settings.
-- **`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. You can specify an alternative default template by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings.
+- **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
+- **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
+
+**Where wagtailmenus looks for templates**
+
+If you don't uses the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
+
+For the menu itself:
+
+- `"menus/section/menu.html"`
+- `"menus/section_menu.html"`
+
+For any sub menus:
+
+- `"menus/section/sub_menu.html"`
+- `"menus/section_sub_menu.html"`
+- `"menus/sub_menu.html"`
+
+If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`, that list of locations will be as follows (where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddelware`):
+
+For the menu itself:
+
+- `"menus/example.com/section/menu.html"`
+- `"menus/example.com/section_menu.html"`
+- `"menus/section/menu.html"`
+- `"menus/section_menu.html"`
+
+For any sub menus:
+
+- `"menus/example.com/section/sub_menu.html"`
+- `"menus/example.com/section_sub_menu.html"`
+- `"menus/example.com/sub_menu.html"`
+- `"menus/section/sub_menu.html"`
+- `"menus/section_sub_menu.html"`
+- `"menus/sub_menu.html"`
 
 
 <a id="children_menu-tag"></a>6. Using the `{% children_menu %}` tag
@@ -214,8 +335,41 @@ The `{% children_menu %}` tag can be used in page templates to display a menu of
 - **`use_specific`** (default: `1`): Allows you to control how wagtailmenus makes use of `PageQuerySet.specific()` and `Page.specific` when rendering the menu. Take a look at the [Specific pages instances and performance](#specific-page-use) section below for a description of the option values supported. The default value can be altered by adding a `WAGTAILMENUS_DEFAULT_CHILDREN_MENU_USE_SPECIFIC` setting to your project's settings.
 - **`apply_active_classes`** (default: `False`): Unlike `main_menu` and `section_menu`, `children_menu` will NOT attempt to add 'active' and 'ancestor' classes to the menu items by default, as this is often not useful. You can override this by adding `apply_active_classes=true` to the tag in your template.
 - **`allow_repeating_parents`** (default: `True`): Repetition-related settings on your pages are respected by default, but you can add `allow_repeating_parents=False` to ignore them, and not repeat any pages in sub-menus when rendering. Please note that using this option will only have an effect if `use_specific` has a value of `1` or higher.
-- **`template`** (default: `'menus/children_menu.html'`): Lets you render the menu to a template of your choosing. You can also name an alternative template to be used by default, by adding a `WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE` setting to your project's settings.
-- **`sub_menu_template`** (default: `'menus/sub_menu.html'`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. You can specify an alternative default template by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings.
+- **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
+- **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
+
+**Where wagtailmenus looks for templates**
+
+If you don't uses the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
+
+For the menu itself:
+
+- `"menus/children/menu.html"`
+- `"menus/children_menu.html"`
+
+For any sub menus:
+
+- `"menus/children/sub_menu.html"`
+- `"menus/children_sub_menu.html"`
+- `"menus/sub_menu.html"`
+
+If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`, that list of locations will be as follows (where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddelware`):
+
+For the menu itself:
+
+- `"menus/example.com/children/menu.html"`
+- `"menus/example.com/children_menu.html"`
+- `"menus/children/menu.html"`
+- `"menus/children_menu.html"`
+
+For any sub menus:
+
+- `"menus/example.com/children/sub_menu.html"`
+- `"menus/example.com/children_sub_menu.html"`
+- `"menus/example.com/sub_menu.html"`
+- `"menus/children/sub_menu.html"`
+- `"menus/children_sub_menu.html"`
+- `"menus/sub_menu.html"`
 
 
 <a id="sub_menu-tag"></a>7. Using the `{% sub_menu %}` tag
@@ -228,7 +382,7 @@ The `{% sub_menu %}` tag is used within menu templates to render additional leve
 - **`stop_at_this_level`**: By default, the tag will figure out whether further levels should be rendered or not, depending on what you supplied as `max_levels` to the original menu tag. However, you can override that behaviour by adding either `stop_at_this_level=True` or `stop_at_this_level=False` to the tag in your custom menu template.
 - **`apply_active_classes`**: By default, the tag will inherit this behaviour from whatever was specified for the original menu tag. However, you can override that behaviour by adding either `apply_active_classes=True` or `apply_active_classes=False` to the tag in your custom menu template.
 - **`allow_repeating_parents`**: By default, the tag will inherit this behaviour from whatever was specified for the original menu tag. However, you can override that behaviour by adding either `allow_repeating_parents=True` or `allow_repeating_parents=False` to the tag in your custom menu template.
-- **`template`** (default: `'menus/sub_menu.html'`): Lets you render the menu to a template of your choosing. You can also name an alternative template to be used by default, by adding a `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE` setting to your project's settings.
+- **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not specified, the `sub_menu_template` value added to the context by the original menu tag will be used.
 - **`use_specific`**: By default, the tag will inherit this behaviour from whatever was specified for the original menu tag. However, the value can be overridden by passing this option to the {% sub_menu %} tag in your custom menu template. Take a look at the [Specific pages instances and performance](#specific-page-use) section below for a description of the option values supported.
 
 
@@ -694,6 +848,7 @@ You can override some of wagtailmenus' default behaviour by adding one of more o
 - **`WAGTAILMENUS_MAINMENU_MENU_ICON`** (default: `'list-ol'`): Use this to change the icon used to represent `MainMenu` in the Wagtail admin area.
 - **`WAGTAILMENUS_FLATMENU_MENU_ICON`** (default: `'list-ol'`): Use this to change the icon used to represent `FlatMenu` in the Wagtail admin area.
 - **`WAGTAILMENUS_SECTION_ROOT_DEPTH`** (default: `3`): Use this to specify the 'depth' value of a project's 'section root' pages. For most Wagtail projects, this should be `3` (Root page = 1, Home page = 2), but it may well differ, depending on the needs of the project.
+- **`WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS`** (default: `False`): If you have a multi-site project where each site may require it's own set of menu templates, you can change this setting to `True` to have wagtailmenus automatically look in additional site-specific locations when finding templates for rendering.  
 - **`WAGTAILMENUS_GUESS_TREE_POSITION_FROM_PATH`** (default: `True`): When not using wagtail's routing/serving mechanism to serve page objects, wagtailmenus can use the request path to attempt to identify a 'current' page, 'section root' page, allowing `{% section_menu %}` and active item highlighting to work. If this functionality is not required for your project, you can disable it by setting this value to `False`.
 - **`WAGTAILMENUS_FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS`** (default: `False`): The default value used for `fall_back_to_default_site_menus` option of the `{% flat_menu %}` tag when a parameter value isn't provided.
 - **`WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE`** (default: `'menus/main_menu.html'`): The name of the template used for rendering by the `{% main_menu %}` tag when a `template` parameter value isn't provided.

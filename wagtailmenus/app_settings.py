@@ -53,6 +53,12 @@ class Settings:
         )
 
     @property
+    def SITE_SPECIFIC_TEMPLATE_DIRS(self):
+        return getattr(
+            settings, 'WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS', False
+        )
+
+    @property
     def SECTION_ROOT_DEPTH(self):
         return getattr(
             settings, 'WAGTAILMENUS_SECTION_ROOT_DEPTH', 3

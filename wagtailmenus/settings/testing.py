@@ -18,5 +18,3 @@ ROOT_URLCONF = 'wagtailmenus.tests.urls'
 WAGTAIL_SITE_NAME = 'Wagtailmenus Test'
 LOGIN_URL = 'wagtailadmin_login'
 LOGIN_REDIRECT_URL = 'wagtailadmin_home'
-
-WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE = 'menus/custom_main_menu.html'

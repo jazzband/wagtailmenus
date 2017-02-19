@@ -363,6 +363,67 @@ class AbstractFlatMenu(MenuWithMenuItems):
                 )
             )
 
+    def get_template_names(self, request, template_name=None):
+        """Returns a list of template names to search for when rendering this
+        menu to a template. The first template that is found will be used."""
+
+        if template_name:
+            return [template_name]
+        template_names = []
+        if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and getattr(
+            request, 'site', None
+        ):
+            hostname = request.site.hostname
+            template_names.extend([
+                "menus/%s/flat/%s/menu.html" % (hostname, self.handle,),
+                "menus/%s/flat/%s.html" % (hostname, self.handle,),
+                "menus/%s/%s/menu.html" % (hostname, self.handle,),
+                "menus/%s/%s.html" % (hostname, self.handle,),
+                "menus/%s/flat/menu.html" % hostname,
+                "menus/%s/flat/default.html" % hostname,
+                "menus/%s/flat_menu.html" % hostname,
+            ])
+        template_names.extend([
+            "menus/flat/%s/menu.html" % self.handle,
+            "menus/flat/%s.html" % self.handle,
+            "menus/%s/menu.html" % self.handle,
+            "menus/%s.html" % self.handle,
+            "menus/flat/default.html",
+            "menus/flat/menu.html",
+            app_settings.DEFAULT_FLAT_MENU_TEMPLATE,
+        ])
+        return template_names
+
+    def get_sub_menu_template_names(self, request, template_name=None):
+        """Returns a list of template names to search for when rendering a
+        sub menu for this menu to a template. The first template that is found
+        will be used."""
+
+        if template_name:
+            return [template_name]
+        template_names = []
+        if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and getattr(
+            request, 'site', None
+        ):
+            hostname = request.site.hostname
+            template_names.extend([
+                "menus/%s/flat/%s/sub_menu.html" % (hostname, self.handle,),
+                "menus/%s/flat/%s_sub_menu.html" % (hostname, self.handle,),
+                "menus/%s/%s/sub_menu.html" % (hostname, self.handle,),
+                "menus/%s/%s_sub_menu.html" % (hostname, self.handle,),
+                "menus/%s/flat/sub_menu.html" % hostname,
+                "menus/%s/sub_menu.html" % hostname,
+            ])
+        template_names.extend([
+            "menus/flat/%s/sub_menu.html" % self.handle,
+            "menus/flat/%s_sub_menu.html" % self.handle,
+            "menus/%s/sub_menu.html" % self.handle,
+            "menus/%s_sub_menu.html" % self.handle,
+            "menus/flat/sub_menu.html",
+            app_settings.DEFAULT_SUB_MENU_TEMPLATE,
+        ])
+        return template_names
+
     def clean(self, *args, **kwargs):
         """Raise validation error for unique_together constraint, as it's not
         currently handled properly by wagtail."""
