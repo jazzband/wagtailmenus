@@ -14,4 +14,5 @@
 * François GUÉRIN (frague59) 
 * Claudio Marinozzi (pyMan)
 * Pierre Geier (bloodywing)
+* Max Kurama (MaxKurama)
 

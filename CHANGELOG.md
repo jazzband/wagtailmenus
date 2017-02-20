@@ -4,6 +4,18 @@ Changelog
 2.X.X (XX.XX.XXX) IN DEVELOPMENT
 -------------------------------- 
 
+2.2.0 (20.02.2017)
+-------------------------------- 
+
+* Utilise Django's built-in 'django.template.loader.select_template()' method
+  to provide a more intuitive way for developers to override templates for
+  specific menus without having to explicitly specify alternative templates 
+  via settings or via the `template` and `sub_menu_template` options for
+  each menu tag. See the updated documentation for each tag for information
+  about where wagtailmenus looks for templates.
+* Brazilian Portuguese language translations added by @MaxKurama.
+* Added try/except to `AbstractMenuItem.relative_url()` so that errors aren't
+  thrown when `Page.relative_url` returns `None` for some reason.
 
 2.1.3 (20.01.2017)
 -------------------------------- 
