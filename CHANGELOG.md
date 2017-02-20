@@ -7,12 +7,17 @@ Changelog
 2.2.0 (20.02.2017)
 -------------------------------- 
 
-* Utilise Django's built-in 'django.template.loader.select_template()' method
+* Utilise Django's 'django.template.loader.select_template()' method
   to provide a more intuitive way for developers to override templates for
   specific menus without having to explicitly specify alternative templates 
   via settings or via the `template` and `sub_menu_template` options for
   each menu tag. See the updated documentation for each tag for information
   about where wagtailmenus looks for templates.
+* Added the `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` setting to allow 
+  developers to choose to have wagtailmenus look in additional site-specific
+  locations for templates to render menus.
+* Moved some methods out of `template_tags/menu_tags.py` into a new `utils.py`
+  file to make `menu_tags.py` easier to read / maintain in future.
 * Brazilian Portuguese language translations added by @MaxKurama.
 * Added try/except to `AbstractMenuItem.relative_url()` so that errors aren't
   thrown when `Page.relative_url` returns `None` for some reason.
