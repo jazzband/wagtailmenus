@@ -4,6 +4,11 @@ Changelog
 2.X.X (XX.XX.XXX) IN DEVELOPMENT
 -------------------------------- 
 
+* Updated travis/tox test settings to test against Wagtail 1.9 & Django 1.10.
+* Removed a couple of less useful travis/tox environment tests to help with
+  test speed.
+
+
 2.2.0 (20.02.2017)
 -------------------------------- 
 
