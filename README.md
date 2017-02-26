@@ -41,7 +41,7 @@ No more adding additional pages into the tree. No more hard-coding additional li
 4. Provides templates and template tags to render menus consistently
 --------------------------------------------------------------------
 
-Each tag comes with a default template that's designed to be fully accessible and compatible with Bootstrap 3. Limiting any project to a set of pre-defined templates would be silly though, which is why every template tag allows you to render menus using a template of your choosing. You can also override the templates in the same way as any other Django project... by putting templates of the same name into a preferred location.
+Each menu tag comes with a default template that's designed to be fully accessible and compatible with Bootstrap 3, but wagtailmenus makes it easy to use your own. Every template tag accepts a `template` and `sub_menu_template` argument to let you explicitly override templates. Or, you can simply put your custom menu templates in a preferred location and have wagtailmenus find the right template automatically. You can even configure wagtailmenus to look for different sets of templates for each site in a multi-site project. See the instructions for each tag to find out more.
 
 <img alt="Screenshot from Sublime editor showing menu template code" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-menu-templates.png" />
 
@@ -90,10 +90,10 @@ Making use of `MenuPage`
 
 While wagtailmenus' menu tags will work with your existing page tree and page types, to access some of the app's more powerful features (e.g. item repetition, programmatic manipulation of sub-menu items), you'll likely want to use the `MenuPage` model as a base for some of your page-type models.
 
-1. In any app that defines a new page-type model, open the models file and add `MenuPage` to your imports with: `from wagtailmenus.models import MenuPage` 
-2. For any page-types you'd like to become `MenuPage` pages, simply sub-class the `MenuPage` model class instead of the default `wagtail.wagtailcore.models.Page`.
+1. Import `MenuPage` in your `models.py` file like so: `from wagtailmenus.models import MenuPage` 
+2. For any page-types that you'd like to become `MenuPage` pages, simply subclass `MenuPage` instead of `wagtail.wagtailcore.models.Page`.
 2. Run `python manage.py makemigrations` to create migrations for the apps you've updated.
-3. Run `python manage.py migrate` to add apply those migrations.
+3. Run `python manage.py migrate` to apply the migrations.
 
 
 Using wagtailmenus
@@ -157,7 +157,7 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 - **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 - **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 
-**Where wagtailmenus looks for templates**
+**Where `{% main_menu %}` looks for templates**
 
 If you don't use the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
 
@@ -209,7 +209,7 @@ For any sub menus:
 - **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 - **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus (if enabled using `show_multiple_levels`). All subsequent calls to `{% sub_menu %}` within the context of the flat menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 
-**Where wagtailmenus looks for templates**
+**Where `{% flat_menu %}` looks for templates**
 
 If you don't use the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows (where `handle` is the `handle` of the `FlatMenu` being rendered:
 
@@ -286,7 +286,7 @@ The `{% section_menu %}` tag allows you to display a context-aware, page-driven 
 - **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 - **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 
-**Where wagtailmenus looks for templates**
+**Where `{% section_menu %}` looks for templates**
 
 If you don't use the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
 
@@ -338,7 +338,7 @@ The `{% children_menu %}` tag can be used in page templates to display a menu of
 - **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 - **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 
-**Where wagtailmenus looks for templates**
+**Where `{% children_menu %}` looks for templates**
 
 If you don't use the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
 
@@ -406,7 +406,7 @@ The following variables are added to the context by all of the above tags, which
 - **`has_children_in_menu`**: A boolean indicating whether the menu item has children that should be output as a sub-menu.
 
 
-<a id="using-menupage"></a>9. Optional repetition of selected pages in menus using `MenuPage`
+<a id="using-menupage"></a>9. Repetition of selected pages in menus using `MenuPage`
 ---------------------------------------------------------------------------------------------
 
 Let's say you have an **About Us** section on your site. The top-level page has content that is just as important as that on the pages below it (e.g. "Meet the team", "Our mission and values", "Staff vacancies"). Because of this, you'd like visitors to be able to access the root page as easily as those pages. But, your site uses drop-down navigation, and the **About Us** link no longer takes you to that page when clicked... it simply acts as a toggle for hiding and showing its sub-pages:
