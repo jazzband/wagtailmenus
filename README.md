@@ -7,7 +7,7 @@ What is wagtailmenus?
 
 It's an extension for Torchbox's [Wagtail CMS](https://github.com/torchbox/wagtail) to help you manage and render multi-level navigation and simple flat menus in a consistent, flexible way.
 
-The current version is compatible with Wagtail 1.5 to 1.8, and Python 2.7, 3.3, 3.4 and 3.5.
+The current version is compatible with Wagtail 1.5 to 1.9, and Python 2.7, 3.3, 3.4 and 3.5.
 
 What does it do?
 ================
