@@ -4,13 +4,14 @@ from copy import copy
 from django.template import Library
 from wagtail.wagtailcore.models import Page
 
-from .. import app_settings, get_main_menu_model, get_flat_menu_model
-from ..models import MenuFromRootPage
-from ..utils import (
-    get_attrs_from_context, get_template_names, get_sub_menu_template_names,
-    validate_supplied_values
+from wagtailmenus import app_settings
+from wagtailmenus.models import MenuFromRootPage
+from wagtailmenus.utils.misc import (
+    get_attrs_from_context, validate_supplied_values
 )
-
+from wagtailmenus.utils.template import (
+    get_template_names, get_sub_menu_template_names
+)
 flat_menus_fbtdsm = app_settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS
 
 register = Library()
@@ -30,7 +31,7 @@ def main_menu(
         context, guess_tree_position=True)
 
     # Find a matching menu
-    menu = get_main_menu_model().get_for_site(site)
+    menu = app_settings.MAIN_MENU_MODEL_CLASS.get_for_site(site)
 
     if not show_multiple_levels:
         max_levels = 1
@@ -94,7 +95,7 @@ def flat_menu(
         context, guess_tree_position=False)
 
     # Find a matching menu
-    menu = get_flat_menu_model().get_for_site(
+    menu = app_settings.FLAT_MENU_MODEL_CLASS.get_for_site(
         handle, site, fall_back_to_default_site_menus
     )
     if not menu:

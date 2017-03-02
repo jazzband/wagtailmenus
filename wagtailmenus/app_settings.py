@@ -1,10 +1,8 @@
-from __future__ import absolute_import, unicode_literals
-
-from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 
-class Settings:
+class AppSettings(object):
+    """Props to django-allauth for the inspiration"""
 
     USE_SPECIFIC_OFF = 0
     USE_SPECIFIC_AUTO = 1
@@ -16,7 +14,6 @@ class Settings:
         (USE_SPECIFIC_TOP_LEVEL, _("Top level")),
         (USE_SPECIFIC_ALWAYS, _("Always (least efficient)")),
     )
-
     MAX_LEVELS_CHOICES = (
         (1, _('1: No sub-navigation (flat)')),
         (2, _('2: Allow 1 level of sub-navigation')),
@@ -24,162 +21,153 @@ class Settings:
         (4, _('4: Allow 3 levels of sub-navigation')),
     )
 
+    def __init__(self, prefix):
+        self.prefix = prefix
+
+    def _setting(self, name, default):
+        from django.conf import settings
+        return getattr(settings, self.prefix + name, default)
+
+    def _model_class(self, from_setting):
+        from django.apps import apps
+        from django.core.exceptions import ImproperlyConfigured
+        model_name = getattr(self, from_setting)
+        try:
+            return apps.get_model(model_name)
+        except ValueError:
+            raise ImproperlyConfigured(
+                "%s%s must be of the form 'app_label.model_name'" %
+                (self.prefix, from_setting)
+            )
+        except LookupError:
+            raise ImproperlyConfigured(
+                "%s%s refers to model '%s' that has not been installed" %
+                (self.prefix, from_setting, model_name)
+            )
+
     @property
     def ACTIVE_CLASS(self):
-        return getattr(settings, 'WAGTAILMENUS_ACTIVE_CLASS', 'active')
+        return self._setting('ACTIVE_CLASS', 'active')
 
     @property
     def ADD_EDITOR_OVERRIDE_STYLES(self):
-        return getattr(
-            settings, 'WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES', True
-        )
+        return self._setting('ADD_EDITOR_OVERRIDE_STYLES', True)
 
     @property
     def ACTIVE_ANCESTOR_CLASS(self):
-        return getattr(
-            settings, 'WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS', 'ancestor'
-        )
+        return self._setting('ACTIVE_ANCESTOR_CLASS', 'ancestor')
 
     @property
     def MAINMENU_MENU_ICON(self):
-        return getattr(
-            settings, 'WAGTAILMENUS_MAINMENU_MENU_ICON', 'list-ol'
-        )
+        return self._setting('MAINMENU_MENU_ICON', 'list-ol')
 
     @property
     def FLATMENU_MENU_ICON(self):
-        return getattr(
-            settings, 'WAGTAILMENUS_FLATMENU_MENU_ICON', 'list-ol'
-        )
+        return self._setting('FLATMENU_MENU_ICON', 'list-ol')
 
     @property
     def SITE_SPECIFIC_TEMPLATE_DIRS(self):
-        return getattr(
-            settings, 'WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS', False
-        )
+        return self._setting('SITE_SPECIFIC_TEMPLATE_DIRS', False)
 
     @property
     def SECTION_ROOT_DEPTH(self):
-        return getattr(
-            settings, 'WAGTAILMENUS_SECTION_ROOT_DEPTH', 3
-        )
+        return self._setting('SECTION_ROOT_DEPTH', 3)
 
     @property
     def GUESS_TREE_POSITION_FROM_PATH(self):
-        return getattr(
-            settings, 'WAGTAILMENUS_GUESS_TREE_POSITION_FROM_PATH', True
-        )
+        return self._setting('GUESS_TREE_POSITION_FROM_PATH', True)
 
     @property
     def FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS(self):
-        return getattr(
-            settings,
-            'WAGTAILMENUS_FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS',
-            False
+        return self._setting(
+            'FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS', False
         )
 
     @property
     def DEFAULT_MAIN_MENU_TEMPLATE(self):
-        return getattr(
-            settings,
-            'WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE',
-            'menus/main_menu.html'
+        return self._setting(
+            'DEFAULT_MAIN_MENU_TEMPLATE', 'menus/main_menu.html'
         )
 
     @property
     def DEFAULT_FLAT_MENU_TEMPLATE(self):
-        return getattr(
-            settings,
-            'WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE',
-            'menus/flat_menu.html'
+        return self._setting(
+            'DEFAULT_FLAT_MENU_TEMPLATE', 'menus/flat_menu.html'
         )
 
     @property
     def DEFAULT_SECTION_MENU_TEMPLATE(self):
-        return getattr(
-            settings,
-            'WAGTAILMENUS_DEFAULT_SECTION_MENU_TEMPLATE',
-            'menus/section_menu.html'
+        return self._setting(
+            'DEFAULT_SECTION_MENU_TEMPLATE', 'menus/section_menu.html'
         )
 
     @property
     def DEFAULT_CHILDREN_MENU_TEMPLATE(self):
-        return getattr(
-            settings,
-            'WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE',
-            'menus/children_menu.html'
+        return self._setting(
+            'DEFAULT_CHILDREN_MENU_TEMPLATE', 'menus/children_menu.html'
         )
 
     @property
     def DEFAULT_SUB_MENU_TEMPLATE(self):
-        return getattr(
-            settings,
-            'WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE',
-            'menus/sub_menu.html'
+        return self._setting(
+            'DEFAULT_SUB_MENU_TEMPLATE', 'menus/sub_menu.html'
         )
 
     @property
     def DEFAULT_SECTION_MENU_MAX_LEVELS(self):
-        return getattr(
-            settings, 'WAGTAILMENUS_DEFAULT_SECTION_MENU_MAX_LEVELS', 2
-        )
+        return self._setting('DEFAULT_SECTION_MENU_MAX_LEVELS', 2)
 
     @property
     def DEFAULT_CHILDREN_MENU_MAX_LEVELS(self):
-        return getattr(
-            settings, 'WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS', 1
-        )
+        return self._setting('DEFAULT_CHILDREN_MENU_MAX_LEVELS', 1)
 
     @property
     def DEFAULT_SECTION_MENU_USE_SPECIFIC(self):
-        return getattr(
-            settings,
-            'WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC',
-            self.USE_SPECIFIC_AUTO
+        return self._setting(
+            'DEFAULT_SECTION_MENU_USE_SPECIFIC', self.USE_SPECIFIC_AUTO
         )
 
     @property
     def DEFAULT_CHILDREN_MENU_USE_SPECIFIC(self):
-        return getattr(
-            settings,
-            'WAGTAILMENUS_DEFAULT_CHILDREN_MENU_USE_SPECIFIC',
-            self.USE_SPECIFIC_AUTO
+        return self._setting(
+            'DEFAULT_CHILDREN_MENU_USE_SPECIFIC', self.USE_SPECIFIC_AUTO
         )
 
     @property
     def FLAT_MENUS_HANDLE_CHOICES(self):
-        return getattr(
-            settings,
-            'WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES',
-            None
-        )
+        return self._setting('FLAT_MENUS_HANDLE_CHOICES', None)
 
     @property
     def PAGE_FIELD_FOR_MENU_ITEM_TEXT(self):
-        return getattr(
-            settings, "WAGTAILMENUS_PAGE_FIELD_FOR_MENU_ITEM_TEXT", 'title'
-        )
+        return self._setting("PAGE_FIELD_FOR_MENU_ITEM_TEXT", 'title')
 
     @property
     def MAIN_MENU_MODEL(self):
-        return getattr(
-            settings, 'WAGTAILMENUS_MAIN_MENU_MODEL', 'wagtailmenus.MainMenu'
-        )
+        return self._setting('MAIN_MENU_MODEL', 'wagtailmenus.MainMenu')
+
+    @property
+    def MAIN_MENU_MODEL_CLASS(self):
+        return self._model_class('MAIN_MENU_MODEL')
 
     @property
     def FLAT_MENU_MODEL(self):
-        return getattr(
-            settings, 'WAGTAILMENUS_FLAT_MENU_MODEL', 'wagtailmenus.FlatMenu'
-        )
+        return self._setting('FLAT_MENU_MODEL', 'wagtailmenus.FlatMenu')
+
+    @property
+    def FLAT_MENU_MODEL_CLASS(self):
+        return self._model_class('FLAT_MENU_MODEL')
 
     @property
     def MAIN_MENU_ITEMS_RELATED_NAME(self):
-        return getattr(
-            settings, 'WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME', 'menu_items'
-        )
+        return self._setting('MAIN_MENU_ITEMS_RELATED_NAME', 'menu_items')
 
     @property
     def FLAT_MENU_ITEMS_RELATED_NAME(self):
-        return getattr(
-            settings, 'WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME', 'menu_items'
-        )
+        return self._setting('FLAT_MENU_ITEMS_RELATED_NAME', 'menu_items')
+
+
+import sys  # noqa
+
+app_settings = AppSettings('WAGTAILMENUS_')
+app_settings.__name__ = __name__
+sys.modules[__name__] = app_settings
