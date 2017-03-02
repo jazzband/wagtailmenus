@@ -4,11 +4,14 @@ from copy import copy
 from django.template import Library
 from wagtail.wagtailcore.models import Page
 
-from .. import app_settings, get_main_menu_model, get_flat_menu_model
-from ..models import MenuFromRootPage
-from ..utils import (
-    get_attrs_from_context, get_template_names, get_sub_menu_template_names,
-    validate_supplied_values
+from wagtailmenus import app_settings
+from wagtailmenus.models import get_main_menu_model, get_flat_menu_model
+from wagtailmenus.models.menus import MenuFromRootPage
+from wagtailmenus.utils.misc import (
+    get_attrs_from_context, validate_supplied_values
+)
+from wagtailmenus.utils.template import (
+    get_template_names, get_sub_menu_template_names
 )
 
 flat_menus_fbtdsm = app_settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS

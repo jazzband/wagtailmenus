@@ -1,15 +1,12 @@
-from __future__ import absolute_import, unicode_literals
+from __future__ import unicode_literals
+from wagtailmenus.utils.version import get_version
 
-__version__ = '2.2.0'
+# major.minor.patch.release.number
+# release must be one of alpha, beta, rc, or final
+VERSION = (2, 2, 0, 'alpha', 0)
+__version__ = get_version(VERSION)
 
 default_app_config = 'wagtailmenus.apps.WagtailMenusConfig'
-app_settings = None
-
-
-def initialize_settings():
-    global app_settings
-    from .app_settings import Settings
-    app_settings = Settings()
 
 
 def get_main_menu_model_string():
@@ -19,6 +16,7 @@ def get_main_menu_model_string():
     main menu model (such as in foreign keys), but the model itself is not
     required.
     """
+    from wagtailmenus import app_settings
     return app_settings.MAIN_MENU_MODEL
 
 
@@ -29,52 +27,27 @@ def get_flat_menu_model_string():
     flat menu model (such as in foreign keys), but the model itself is not
     required.
     """
+    from wagtailmenus import app_settings
     return app_settings.FLAT_MENU_MODEL
 
 
 def get_main_menu_model():
     """
-    Get the image model from the ``WAGTAILMENUS_MAIN_MENU_MODEL`` setting.
-    Useful for developers extending wagtailmenus, and need the actaul model.
+    Get the model from the ``WAGTAILMENUS_MAIN_MENU_MODEL`` setting.
+    Useful for developers extending wagtailmenus, and need the actual model.
     Defaults to the standard :class:`~wagtailmenus.models.MainMenu` model
     if no custom model is defined.
     """
-    from django.apps import apps
-    from django.core.exceptions import ImproperlyConfigured
-
-    model_string = get_main_menu_model_string()
-    try:
-        return apps.get_model(model_string)
-    except ValueError:
-        raise ImproperlyConfigured(
-            "WAGTAILMENUS_MAIN_MENU_MODEL must be of the form "
-            "'app_label.model_name'")
-    except LookupError:
-        raise ImproperlyConfigured(
-            "WAGTAILMENUS_MAIN_MENU_MODEL refers to model '%s' that has not "
-            "been installed" % model_string
-        )
+    from wagtailmenus import app_settings
+    return app_settings.MAIN_MENU_MODEL_CLASS
 
 
 def get_flat_menu_model():
     """
-    Get the image model from the ``WAGTAILMENUS_FLAT_MENU_MODEL`` setting.
+    Get the model from the ``WAGTAILMENUS_FLAT_MENU_MODEL`` setting.
     Useful for developers extending wagtailmenus, and need to the actual model.
     Defaults to the standard :class:`~wagtailmenus.models.FlatMenu` model
     if no custom model is defined.
     """
-    from django.apps import apps
-    from django.core.exceptions import ImproperlyConfigured
-
-    model_string = get_flat_menu_model_string()
-    try:
-        return apps.get_model(model_string)
-    except ValueError:
-        raise ImproperlyConfigured(
-            "WAGTAILMENUS_FLAT_MENU_MODEL must be of the form "
-            "'app_label.model_name'")
-    except LookupError:
-        raise ImproperlyConfigured(
-            "WAGTAILMENUS_FLAT_MENU_MODEL refers to model '%s' that has not "
-            "been installed" % model_string
-        )
+    from wagtailmenus import app_settings
+    return app_settings.FLAT_MENU_MODEL_CLASS
