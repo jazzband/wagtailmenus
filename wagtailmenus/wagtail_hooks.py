@@ -9,8 +9,7 @@ from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.contrib.modeladmin.helpers import ButtonHelper
 from wagtail.wagtailcore import hooks
 
-from . import app_settings
-from .models import get_main_menu_model, get_flat_menu_model
+from . import app_settings, get_main_menu_model, get_flat_menu_model
 from .views import MainMenuIndexView, MainMenuEditView, FlatMenuCopyView
 
 
