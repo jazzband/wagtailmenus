@@ -22,27 +22,28 @@ class AppSettings(object):
     )
 
     def __init__(self, prefix):
-        self.prefix = prefix
+        from django.conf import settings
+        self._prefix = prefix
+        self._settings = settings
 
     def _setting(self, name, default):
-        from django.conf import settings
-        return getattr(settings, self.prefix + name, default)
+        return getattr(self._settings, self._prefix + name, default)
 
-    def _model_class(self, from_setting):
+    def _model_class(self, model_name_setting_name):
         from django.apps import apps
         from django.core.exceptions import ImproperlyConfigured
-        model_name = getattr(self, from_setting)
+        model_name = getattr(self, model_name_setting_name)
         try:
             return apps.get_model(model_name)
         except ValueError:
             raise ImproperlyConfigured(
                 "%s%s must be of the form 'app_label.model_name'" %
-                (self.prefix, from_setting)
+                (self._prefix, model_name_setting_name)
             )
         except LookupError:
             raise ImproperlyConfigured(
                 "%s%s refers to model '%s' that has not been installed" %
-                (self.prefix, from_setting, model_name)
+                (self._prefix, model_name_setting_name, model_name)
             )
 
     @property
