@@ -8,6 +8,21 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
+# Testing dependencies
+testing_extras = [
+    'django-webtest>=1.8.0',
+    'beautifulsoup4>=4.4.1,<4.5.02',
+    'coverage>=3.7.0',
+]
+
+documentation_extras = [
+    'pyenchant==1.6.6',
+    'sphinxcontrib-spelling>=2.3.0',
+    'Sphinx>=1.3.1',
+    'sphinx-autobuild>=0.5.2',
+    'sphinx_rtd_theme>=0.1.8',
+]
+
 setup(
     name="wagtailmenus",
     version=__version__,
@@ -34,5 +49,9 @@ setup(
     ],
     install_requires=[
         "wagtail>=1.5",
-    ]
+    ],
+    extras_require={
+        'testing': testing_extras,
+        'docs': documentation_extras
+    },
 )

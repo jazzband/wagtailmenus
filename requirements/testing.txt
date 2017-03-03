@@ -1,6 +1,0 @@
--r base.txt
-
-django-webtest>=1.8.0
-beautifulsoup4>=4.4.1,<4.5.0
-coverage>=3.6
-tox
