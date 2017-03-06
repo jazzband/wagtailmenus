@@ -19,3 +19,8 @@ def get_main_version(version):
     "Returns main version (X.Y[.Z]) from VERSION."
     parts = 2 if version[2] == 0 else 3
     return '.'.join(str(x) for x in version[:parts])
+
+
+def get_stable_branch_name(version):
+    parts = (version[0], version[1], 'x')
+    return '.'.join(str(x) for x in parts)
