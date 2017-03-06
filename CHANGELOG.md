@@ -4,9 +4,20 @@ Changelog
 2.X.X (XX.XX.XXX) IN DEVELOPMENT
 -------------------------------- 
 
+
+2.2.1 (06.03.2017)
+-------------------------------- 
+
 * Updated travis/tox test settings to test against Wagtail 1.9 & Django 1.10.
 * Removed a couple of less useful travis/tox environment tests to help with
   test speed.
+* Made use of 'extras_require' in setup.py to replace multiple requirements 
+  files.
+* Optimised the app_settings module so that we can ditch the questionably stuff 
+  we're doing with global value manipulation on app load (solution inspired by 
+  django-allauth).
+* Added new symantic version handling to the project (solution inspired by
+  wagtail)
 
 
 2.2.0 (20.02.2017)
