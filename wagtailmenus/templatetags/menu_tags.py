@@ -30,6 +30,9 @@ def main_menu(
     request, site, current_page, root, ancestor_ids = get_attrs_from_context(
         context, guess_tree_position=True)
 
+    if request is None:
+        return ''
+
     # Find a matching menu
     menu = app_settings.MAIN_MENU_MODEL_CLASS.get_for_site(site)
 
@@ -93,6 +96,9 @@ def flat_menu(
     # Variabalise relevant attributes from context
     request, site, current_page, root, ancestor_ids = get_attrs_from_context(
         context, guess_tree_position=False)
+
+    if request is None:
+        return ''
 
     # Find a matching menu
     menu = app_settings.FLAT_MENU_MODEL_CLASS.get_for_site(
@@ -217,6 +223,9 @@ def sub_menu(
     request, site, current_page, root, ancestor_ids = get_attrs_from_context(
         context, guess_tree_position=False)
 
+    if request is None:
+        return ''
+
     max_levels = context.get(
         'max_levels', app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS)
     previous_level = context.get('current_level', 2)
@@ -299,8 +308,7 @@ def section_menu(
     request, site, current_page, root, ancestor_ids = get_attrs_from_context(
         context, guess_tree_position=True)
 
-    # If the section root couldn't be identified, render nothing.
-    if root is None:
+    if request is None or root is None:
         return ''
 
     if not show_multiple_levels:
@@ -384,12 +392,15 @@ def children_menu(
     template='', sub_menu_template='',
     use_specific=app_settings.DEFAULT_CHILDREN_MENU_USE_SPECIFIC,
 ):
-    request, site, current_page, root, ancestor_ids = get_attrs_from_context(
-        context, guess_tree_position=False)
-
     validate_supplied_values(
         'children_menu', max_levels=max_levels, use_specific=use_specific,
         parent_page=parent_page)
+
+    request, site, current_page, root, ancestor_ids = get_attrs_from_context(
+        context, guess_tree_position=False)
+
+    if request is None:
+        return ''
 
     # Use current page as parent_page if no value supplied
     if parent_page is None:

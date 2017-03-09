@@ -8,8 +8,16 @@ def get_attrs_from_context(context, guess_tree_position=True):
     Gets a bunch of useful things from the context/request and returns them as
     a tuple for use in most menu tags.
     """
-    request = context['request']
-    site = request.site
+    try:
+        request = context['request']
+    except KeyError:
+        request = None
+
+    try:
+        site = request.site
+    except AttributeError:
+        site = None
+
     wagtailmenus_vals = context.get('wagtailmenus_vals')
     current_page = wagtailmenus_vals.get('current_page')
     section_root = wagtailmenus_vals.get('section_root')
