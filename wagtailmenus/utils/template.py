@@ -1,3 +1,4 @@
+from .misc import get_site_from_request
 from wagtailmenus import app_settings
 
 
@@ -5,10 +6,9 @@ def get_template_names(menu_tag, request, override):
     if override:
         return [override]
     template_names = []
-    if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and getattr(
-        request, 'site', None
-    ):
-        hostname = request.site.hostname
+    site = get_site_from_request(request)
+    if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
+        hostname = site.hostname
         template_names.extend([
             "menus/%s/%s/menu.html" % (hostname, menu_tag),
             "menus/%s/%s_menu.html" % (hostname, menu_tag),

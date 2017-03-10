@@ -56,7 +56,7 @@ def main_menu(
             current_site=site,
             current_page=current_page,
             current_page_ancestor_ids=ancestor_ids,
-            request_path=request.path,
+            request_path=getattr(request, 'path', ''),
             use_specific=menu.use_specific,
             original_menu_tag='main_menu',
             menu_instance=menu,
@@ -125,7 +125,7 @@ def flat_menu(
             current_site=site,
             current_page=current_page,
             current_page_ancestor_ids=ancestor_ids,
-            request_path=request.path,
+            request_path=getattr(request, 'path', ''),
             use_specific=menu.use_specific,
             original_menu_tag='flat_menu',
             menu_instance=menu,
@@ -166,7 +166,7 @@ def get_sub_menu_items_for_page(
         current_site=current_site,
         current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
-        request_path=request.path,
+        request_path=getattr(request, 'path', ''),
         use_specific=use_specific,
         original_menu_tag=original_menu_tag,
         menu_instance=menu_instance,
@@ -299,7 +299,6 @@ def section_menu(
     request, site, current_page, root, ancestor_ids = get_attrs_from_context(
         context, guess_tree_position=True)
 
-    # If the section root couldn't be identified, render nothing.
     if root is None:
         return ''
 
@@ -384,12 +383,12 @@ def children_menu(
     template='', sub_menu_template='',
     use_specific=app_settings.DEFAULT_CHILDREN_MENU_USE_SPECIFIC,
 ):
-    request, site, current_page, root, ancestor_ids = get_attrs_from_context(
-        context, guess_tree_position=False)
-
     validate_supplied_values(
         'children_menu', max_levels=max_levels, use_specific=use_specific,
         parent_page=parent_page)
+
+    request, site, current_page, root, ancestor_ids = get_attrs_from_context(
+        context, guess_tree_position=False)
 
     # Use current page as parent_page if no value supplied
     if parent_page is None:
@@ -532,7 +531,7 @@ def prime_menu_items(
         elif page is None:
             """
             This is a `MenuItem` for a custom URL. It can be classed as
-            'active' if the URL matches the request.path.
+            'active' if the URL matches the request path.
             """
             if apply_active_classes and item.link_url == request_path:
                 setattr(item, 'active_class', app_settings.ACTIVE_CLASS)
