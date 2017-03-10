@@ -1,5 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
-from wagtail.wagtailcore.models import Page
+from wagtail.wagtailcore.models import Page, Site
 from wagtailmenus.models.menuitems import MenuItem
 
 
@@ -13,16 +13,21 @@ def get_attrs_from_context(context, guess_tree_position=True):
     except KeyError:
         request = None
 
-    try:
-        site = request.site
-    except AttributeError:
-        site = None
-
+    site = get_site_from_request(request)
     wagtailmenus_vals = context.get('wagtailmenus_vals')
     current_page = wagtailmenus_vals.get('current_page')
     section_root = wagtailmenus_vals.get('section_root')
     ancestor_ids = wagtailmenus_vals.get('current_page_ancestor_ids')
     return (request, site, current_page, section_root, ancestor_ids)
+
+
+def get_site_from_request(request, fallback_to_default=True):
+    try:
+        return request.site
+    except AttributeError:
+        if fallback_to_default:
+            return Site.objects.filter(is_default_site=True).first()
+    return None
 
 
 def validate_supplied_values(tag, max_levels=None, use_specific=None,

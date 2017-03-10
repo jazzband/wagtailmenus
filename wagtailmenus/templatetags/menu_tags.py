@@ -30,9 +30,6 @@ def main_menu(
     request, site, current_page, root, ancestor_ids = get_attrs_from_context(
         context, guess_tree_position=True)
 
-    if request is None:
-        return ''
-
     # Find a matching menu
     menu = app_settings.MAIN_MENU_MODEL_CLASS.get_for_site(site)
 
@@ -59,7 +56,7 @@ def main_menu(
             current_site=site,
             current_page=current_page,
             current_page_ancestor_ids=ancestor_ids,
-            request_path=request.path,
+            request_path=getattr(request, 'path', ''),
             use_specific=menu.use_specific,
             original_menu_tag='main_menu',
             menu_instance=menu,
@@ -97,9 +94,6 @@ def flat_menu(
     request, site, current_page, root, ancestor_ids = get_attrs_from_context(
         context, guess_tree_position=False)
 
-    if request is None:
-        return ''
-
     # Find a matching menu
     menu = app_settings.FLAT_MENU_MODEL_CLASS.get_for_site(
         handle, site, fall_back_to_default_site_menus
@@ -131,7 +125,7 @@ def flat_menu(
             current_site=site,
             current_page=current_page,
             current_page_ancestor_ids=ancestor_ids,
-            request_path=request.path,
+            request_path=getattr(request, 'path', ''),
             use_specific=menu.use_specific,
             original_menu_tag='flat_menu',
             menu_instance=menu,
@@ -172,7 +166,7 @@ def get_sub_menu_items_for_page(
         current_site=current_site,
         current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
-        request_path=request.path,
+        request_path=getattr(request, 'path', ''),
         use_specific=use_specific,
         original_menu_tag=original_menu_tag,
         menu_instance=menu_instance,
@@ -222,9 +216,6 @@ def sub_menu(
     # Variabalise relevant attributes from context
     request, site, current_page, root, ancestor_ids = get_attrs_from_context(
         context, guess_tree_position=False)
-
-    if request is None:
-        return ''
 
     max_levels = context.get(
         'max_levels', app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS)
@@ -308,7 +299,7 @@ def section_menu(
     request, site, current_page, root, ancestor_ids = get_attrs_from_context(
         context, guess_tree_position=True)
 
-    if request is None or root is None:
+    if root is None:
         return ''
 
     if not show_multiple_levels:
@@ -398,9 +389,6 @@ def children_menu(
 
     request, site, current_page, root, ancestor_ids = get_attrs_from_context(
         context, guess_tree_position=False)
-
-    if request is None:
-        return ''
 
     # Use current page as parent_page if no value supplied
     if parent_page is None:
@@ -543,7 +531,7 @@ def prime_menu_items(
         elif page is None:
             """
             This is a `MenuItem` for a custom URL. It can be classed as
-            'active' if the URL matches the request.path.
+            'active' if the URL matches the request path.
             """
             if apply_active_classes and item.link_url == request_path:
                 setattr(item, 'active_class', app_settings.ACTIVE_CLASS)
