@@ -49,6 +49,10 @@ SECRET_KEY = 'fake-key'
 LOGIN_URL = 'wagtailadmin_login'
 LOGIN_REDIRECT_URL = 'wagtailadmin_home'
 
+LOCALE_PATHS = (
+    os.path.join(PROJECT_ROOT, 'locale'),
+)
+
 # =============================================================================
 # Templates
 # =============================================================================

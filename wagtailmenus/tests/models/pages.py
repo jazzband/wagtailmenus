@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 
 from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, MultiFieldPanel, PublishingPanel
@@ -12,22 +11,22 @@ from .utils import TranslatedField
 
 class MultilingualMenuPage(MenuPage):
     title_de = models.CharField(
-        verbose_name=_('title (de)'),
+        verbose_name='title (de)',
         blank=True,
         max_length=255,
     )
     title_fr = models.CharField(
-        verbose_name=_('title (fr)'),
+        verbose_name='title (fr)',
         blank=True,
         max_length=255,
     )
     repeated_item_text_de = models.CharField(
-        verbose_name=_('repeated item link text (de)'),
+        verbose_name='repeated item link text (de)',
         blank=True,
         max_length=255,
     )
     repeated_item_text_fr = models.CharField(
-        verbose_name=_('repeated item link text (fr)'),
+        verbose_name='repeated item link text (fr)',
         blank=True,
         max_length=255,
     )
@@ -54,7 +53,7 @@ class MultilingualMenuPage(MenuPage):
     settings_panels = [
         PublishingPanel(),
         MultiFieldPanel(
-            heading=_("Advanced menu behaviour"),
+            heading="Advanced menu behaviour",
             classname="collapsible collapsed",
             children=(
                 FieldPanel('repeat_in_subnav'),

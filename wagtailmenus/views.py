@@ -68,7 +68,9 @@ class MainMenuEditView(ModelFormView):
         return self.url_helper.get_action_url('edit', self.instance_pk)
 
     def get_meta_title(self):
-        return _('Editing %s') % self.opts.verbose_name
+        return _('Editing %(model_name)s') % {
+            'model_name': self.opts.verbose_name
+        }
 
     def get_page_subtitle(self):
         return capfirst(self.opts.verbose_name)
@@ -115,7 +117,9 @@ class FlatMenuCopyView(EditView):
         return self.url_helper.get_action_url('copy', self.pk_quoted)
 
     def get_meta_title(self):
-        return _('Copying %s') % self.opts.verbose_name
+        return _('Copying %(model_name)s') % {
+            'model_name': self.opts.verbose_name,
+        }
 
     def check_action_permitted(self, user):
         return self.permission_helper.user_can_create(user)

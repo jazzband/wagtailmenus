@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from modelcluster.fields import ParentalKey
 from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, MultiFieldPanel, PageChooserPanel)
@@ -12,12 +11,12 @@ from .utils import TranslatedField
 
 class MultilingualMenuItem(models.Model):
     link_text_de = models.CharField(
-        verbose_name=_('link text (de)'),
+        verbose_name='link text (de)',
         max_length=255,
         blank=True,
     )
     link_text_fr = models.CharField(
-        verbose_name=_('link text (fr)'),
+        verbose_name='link text (fr)',
         max_length=255,
         blank=True,
     )
@@ -75,12 +74,12 @@ class CustomMainMenu(AbstractMainMenu):
 
 class CustomFlatMenu(AbstractFlatMenu):
     heading_de = models.CharField(
-        verbose_name=_('heading (de)'),
+        verbose_name='heading (de)',
         max_length=255,
         blank=True,
     )
     heading_fr = models.CharField(
-        verbose_name=_('heading (fr)'),
+        verbose_name='heading (fr)',
         max_length=255,
         blank=True,
     )
@@ -90,7 +89,7 @@ class CustomFlatMenu(AbstractFlatMenu):
 
     panels = (
         MultiFieldPanel(
-            heading=_("Settings"),
+            heading="Settings",
             children=(
                 FieldPanel('title'),
                 FieldPanel('site'),
@@ -98,7 +97,7 @@ class CustomFlatMenu(AbstractFlatMenu):
             )
         ),
         MultiFieldPanel(
-            heading=_("Heading"),
+            heading="Heading",
             children=(
                 FieldPanel('heading'),
                 FieldPanel('heading_de'),

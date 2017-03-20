@@ -47,7 +47,9 @@ class FlatMenuButtonHelper(ButtonHelper):
             'url': self.url_helper.get_action_url('copy', quote(pk)),
             'label': _('Copy'),
             'classname': cn,
-            'title': _('Copy this %s') % self.verbose_name,
+            'title': _('Copy this %(model_name)s') % {
+                'model_name': self.verbose_name,
+            },
         }
 
     def get_buttons_for_obj(self, obj, exclude=[], classnames_add=[],

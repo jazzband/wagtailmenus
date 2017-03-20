@@ -242,7 +242,9 @@ class AbstractMainMenu(MenuWithMenuItems):
         return instance
 
     def __str__(self):
-        return _('Main menu for %s') % (self.site.site_name or self.site)
+        return _('Main menu for %(site_name)s') % {
+            'site_name': self.site.site_name or self.site
+        }
 
     def get_menu_items_manager(self):
         try:
