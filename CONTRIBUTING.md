@@ -99,3 +99,7 @@ take longer to complete, but running them is as simple as entering the
 following command:
 
 `tox`
+
+## Translations
+
+Please submit any new or improved translations through [Transifex](https://www.transifex.com/rkhleics/wagtailmenus/).
