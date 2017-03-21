@@ -871,3 +871,5 @@ Contributing
 ============
 
 Want to contribute to wagtailmenus? We'd be happy to have you! You should start by taking a look at our [contributor guidelines](https://github.com/rkhleics/wagtailmenus/blob/master/CONTRIBUTING.md)
+
+We also welcome translations for wagtailmenus' interface. Translation work should be submitted through [Transifex](https://www.transifex.com/rkhleics/wagtailmenus/).
