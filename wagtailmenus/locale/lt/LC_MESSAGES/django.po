@@ -1,0 +1,403 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wagtailmenus 2.2.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-03-20 13:29+0000\n"
+"PO-Revision-Date: 2017-03-20 16:22+0200\n"
+"Last-Translator: Matas Dailyda\n"
+"Language-Team: LT <matas@dailyda.com>\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
+"%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 1.7.3\n"
+
+#: wagtailmenus/app_settings.py:12
+msgid "Off (most efficient)"
+msgstr "Išjungta (labiausiai efektyvu)"
+
+#: wagtailmenus/app_settings.py:13
+msgid "Auto"
+msgstr "Automatiškai"
+
+#: wagtailmenus/app_settings.py:14
+msgid "Top level"
+msgstr "Aukščiausias lygis"
+
+#: wagtailmenus/app_settings.py:15
+msgid "Always (least efficient)"
+msgstr "Visada (mažiausiai efektyvu)"
+
+#: wagtailmenus/app_settings.py:18
+msgid "1: No sub-navigation (flat)"
+msgstr "1: Nėra sub-navigacijos (plokščias)"
+
+#: wagtailmenus/app_settings.py:19
+msgid "2: Allow 1 level of sub-navigation"
+msgstr "2: Leisti 1 lygio sub-navigaciją"
+
+#: wagtailmenus/app_settings.py:20
+msgid "3: Allow 2 levels of sub-navigation"
+msgstr "3: Leist 2 lygių sub-navigaciją"
+
+#: wagtailmenus/app_settings.py:21
+msgid "4: Allow 3 levels of sub-navigation"
+msgstr "4: Leisti 3 lygių sub-navigaciją"
+
+#: wagtailmenus/models/menuitems.py:37
+msgid "link to an internal page"
+msgstr "nurodyti į vidinį puslapį"
+
+#: wagtailmenus/models/menuitems.py:43
+msgid "link to a custom URL"
+msgstr "nurodyti į specifinį URL"
+
+#: wagtailmenus/models/menuitems.py:49
+msgid "link text"
+msgstr "nuorodos tekstas"
+
+#: wagtailmenus/models/menuitems.py:53
+msgid ""
+"Provide the text to use for a custom URL, or set on an internal page link to "
+"use instead of the page's title."
+msgstr ""
+"Pateikite tekstą kuris bus naudojamas specifiniam URL, arba nustatykite "
+"vidinio puslapio nuorodą kuri bus naudojama vietoje puslapio pavadinimo."
+
+#: wagtailmenus/models/menuitems.py:58 wagtailmenus/models/menus.py:289
+msgid "handle"
+msgstr "papildomas atributas"
+
+#: wagtailmenus/models/menuitems.py:62
+msgid ""
+"Use this field to optionally specify an additional value for each menu item, "
+"which you can then reference in custom menu templates."
+msgstr ""
+"Naudokite šį lauką kad nustatyti papildomą reikšmę kiekvienam meniu punktui, "
+"kurią vėliau galite pasiekti sukurtuose meniu šablonuose."
+
+#: wagtailmenus/models/menuitems.py:68
+msgid "append to URL"
+msgstr "pridėti prie URL"
+
+#: wagtailmenus/models/menuitems.py:72
+msgid ""
+"Use this to optionally append a #hash or querystring to the above page's URL."
+msgstr "Naudokite tai kad pridėti #hash or užklausos tekstą šio puslapio URL."
+
+#: wagtailmenus/models/menuitems.py:81
+msgid "menu item"
+msgstr "meniu punktas"
+
+#: wagtailmenus/models/menuitems.py:82 wagtailmenus/models/menus.py:264
+#: wagtailmenus/models/menus.py:455
+msgid "menu items"
+msgstr "meniu punktai"
+
+#: wagtailmenus/models/menuitems.py:106
+msgid "This must be set if you're linking to a custom URL."
+msgstr "Tai turi būti nustatyta jei naudojate specifinį URL."
+
+#: wagtailmenus/models/menuitems.py:113
+msgid "This must be set if you're not linking to a page."
+msgstr "Tai turi būti nustatyta jei nenaudojate nuorodos į puslapį."
+
+#: wagtailmenus/models/menuitems.py:119
+msgid ""
+"You cannot link to both a page and URL. Please review your link and clear "
+"any unwanted values."
+msgstr ""
+"Negalite kurti puslapio nuorodos į puslapį kartu su URL. Prašome peržiūrėti "
+"nuorodą ir panaikinti netinkamas reikšmes."
+
+#: wagtailmenus/models/menuitems.py:140 wagtailmenus/models/menuitems.py:157
+msgid "allow sub-menu for this item"
+msgstr "įgalinti sub-meniu šiam punktui"
+
+#: wagtailmenus/models/menuitems.py:143 wagtailmenus/models/menuitems.py:160
+msgid ""
+"NOTE: The sub-menu might not be displayed, even if checked. It depends on "
+"how the menu is used in this project's templates."
+msgstr ""
+"Pastaba: Sub-meniu gali būti nerodomas, net jei ir pažymėta. Tai priklauso "
+"nuo to kaip meniu yra naudojamas projekto šablonuose."
+
+#: wagtailmenus/models/menus.py:204 wagtailmenus/models/menus.py:278
+msgid "site"
+msgstr "tinklalapis"
+
+#: wagtailmenus/models/menus.py:211 wagtailmenus/models/menus.py:303
+msgid "maximum levels"
+msgstr "didžiausias galimas lygis"
+
+#: wagtailmenus/models/menus.py:215
+msgid ""
+"The maximum number of levels to display when rendering this menu. The value "
+"can be overidden by supplying a different <code>max_levels</code> value to "
+"the <code>{% main_menu %}</code> tag in your templates."
+msgstr ""
+"Didžiausias galimas kiekis lygių kurie bus atvaizduojami meniu. Reikšmė gali "
+"būti perrašyta pateikiant kitą <code>max_levels</code> reikšmę <code>{% "
+"main_menu %}</code> žymenoje šablonuose."
+
+#: wagtailmenus/models/menus.py:222 wagtailmenus/models/menus.py:314
+msgid "specific page usage"
+msgstr "specifinis puslapių naudojimas"
+
+#: wagtailmenus/models/menus.py:226
+msgid ""
+"Controls how 'specific' pages objects are fetched and used when rendering "
+"this menu. This value can be overidden by supplying a different "
+"<code>use_specific</code> value to the <code>{% main_menu %}</code> tag in "
+"your templates."
+msgstr ""
+"Nustato kaip 'specifiniai' puslapių objektai yra paimami ir naudojami kai "
+"generuojamas šis meniu. Reikšmė gali būti perrašyta pateikiant kitą "
+"<code>use_specific</code> reikšmę <code>{% main_menu %}</code> žymenoje "
+"šablonuose."
+
+#: wagtailmenus/models/menus.py:235 wagtailmenus/models/menus.py:236
+msgid "main menu"
+msgstr "pagrindinis meniu"
+
+#: wagtailmenus/models/menus.py:245
+#, python-format
+msgid "Main menu for %s"
+msgstr "Pagrindinis %s meniu"
+
+#: wagtailmenus/models/menus.py:267 wagtailmenus/models/menus.py:458
+msgid "Advanced settings"
+msgstr "Išplėstiniai nustatymai"
+
+#: wagtailmenus/models/menus.py:284
+msgid "title"
+msgstr "pavadinimas"
+
+#: wagtailmenus/models/menus.py:286
+msgid "For internal reference only."
+msgstr "Tik vidiniam pasirėmimui."
+
+#: wagtailmenus/models/menus.py:292
+msgid ""
+"Used to reference this menu in templates etc. Must be unique for the "
+"selected site."
+msgstr ""
+"Naudojama pasiekiant šį meniu šablonuose. Turi būti unikalus pasirinktam "
+"tinklalapiui."
+
+#: wagtailmenus/models/menus.py:297
+msgid "heading"
+msgstr "Antraštė"
+
+#: wagtailmenus/models/menus.py:300
+msgid "If supplied, appears above the menu when rendered."
+msgstr "Jei pateikta, atvaizduojama virš meniu."
+
+#: wagtailmenus/models/menus.py:307
+msgid ""
+"The maximum number of levels to display when rendering this menu. The value "
+"can be overidden by supplying a different <code>max_levels</code> value to "
+"the <code>{% flat_menu %}</code> tag in your templates."
+msgstr ""
+"Didžiausias galimas kiekis lygių kurie bus atvaizduojami meniu. Reikšmė gali "
+"būti perrašyta pateikiant kitą <code>max_levels</code> reikšmę <code>{% "
+"flat_menu %}</code> žymenoje šablonuose."
+
+#: wagtailmenus/models/menus.py:318
+msgid ""
+"Controls how 'specific' pages objects are fetched and used when rendering "
+"this menu. This value can be overidden by supplying a different "
+"<code>use_specific</code> value to the <code>{% flat_menu %}</code> tag in "
+"your templates."
+msgstr ""
+"Nustato kaip 'specifiniai' puslapių objektai yra paimami ir naudojami kai "
+"generuojamas šis meniu. Reikšmė gali būti perrašyta pateikiant kitą "
+"<code>use_specific</code> reikšmę <code>{% flat_menu %}</code> žymenoje "
+"šablonuose."
+
+#: wagtailmenus/models/menus.py:330
+msgid "flat menu"
+msgstr "plokščias meniu"
+
+#: wagtailmenus/models/menus.py:331
+msgid "flat menus"
+msgstr "plokšti meniu"
+
+#: wagtailmenus/models/menus.py:436
+msgid ""
+"Site and handle must create a unique combination. A menu already exists with "
+"these same two values."
+msgstr ""
+"Tinklalapis ir papildomas atributas turi sukurti unikalią kombinaciją. Meniu "
+"su tomis pačiomis reikšmėmis jau egzistuoja."
+
+#: wagtailmenus/models/menus.py:446 wagtailmenus/panels.py:41
+#: wagtailmenus/tests/models/menus.py:93
+msgid "Settings"
+msgstr "Nustatymai"
+
+#: wagtailmenus/models/pages.py:16
+msgid "repeat in sub-navigation"
+msgstr "atkartoti sub-navigacijoje"
+
+#: wagtailmenus/models/pages.py:19
+msgid ""
+"If checked, a link to this page will be repeated alongside it's direct "
+"children when displaying a sub-navigation for this page."
+msgstr ""
+"Jei pažymėta, nuoroda į šį puslapį bus atkartota kartu su vidiniais "
+"elementais kai atvaizduojama sub-navigacija šiam puslapiui."
+
+#: wagtailmenus/models/pages.py:24
+msgid "repeated item link text"
+msgstr "atkartoto punkto nuorodos tekstas"
+
+#: wagtailmenus/models/pages.py:28
+msgid ""
+"e.g. 'Section home' or 'Overview'. If left blank, the page title will be "
+"used."
+msgstr ""
+"pvz. 'Pagrindinė skiltis' arba 'Apie'. Jei bus palikta tuščia, bus naudojama "
+"puslapio antraštė."
+
+#: wagtailmenus/panels.py:9 wagtailmenus/tests/models/pages.py:57
+msgid "Advanced menu behaviour"
+msgstr "Išplėstinis meniu veikimas"
+
+#: wagtailmenus/panels.py:24
+msgid "Scheduled publishing"
+msgstr "Planuojamas publikavimas"
+
+#: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:39
+msgid "Save"
+msgstr "Išsaugoti"
+
+#: wagtailmenus/tests/models/menus.py:15
+msgid "link text (de)"
+msgstr "nuorodos tekstas (de)"
+
+#: wagtailmenus/tests/models/menus.py:20
+msgid "link text (fr)"
+msgstr "nuorodos tekstas (fr)"
+
+#: wagtailmenus/tests/models/menus.py:78
+msgid "heading (de)"
+msgstr "antraštė (de)"
+
+#: wagtailmenus/tests/models/menus.py:83
+msgid "heading (fr)"
+msgstr "antraštė (fr)"
+
+#: wagtailmenus/tests/models/menus.py:101
+msgid "Heading"
+msgstr "Antraštė"
+
+#: wagtailmenus/tests/models/pages.py:15
+msgid "title (de)"
+msgstr "pavadinimas (de)"
+
+#: wagtailmenus/tests/models/pages.py:20
+msgid "title (fr)"
+msgstr "pavadinimas (fr)"
+
+#: wagtailmenus/tests/models/pages.py:25
+msgid "repeated item link text (de)"
+msgstr "atkartoto punkto nuorodos tekstas (de)"
+
+#: wagtailmenus/tests/models/pages.py:30
+msgid "repeated item link text (fr)"
+msgstr "atkartoto punkto nuorodos tekstas (fr)"
+
+#: wagtailmenus/utils/misc.py:38
+#, python-format
+msgid ""
+"The `%s` tag expects `max_levels` to be an integer value between 1 and 5. "
+"Please review your template."
+msgstr ""
+"`%s` žymena reikalauja kad `max_levels` būtų sveikasis skaičius tarp 1 ir 5. "
+"Prašome peržiūrėti savo šabloną."
+
+#: wagtailmenus/utils/misc.py:43
+#, python-format
+msgid ""
+"The `%s` tag expects `use_specific` to be an integer value between 0 and 3. "
+"Please review your template."
+msgstr ""
+"`%s` žymena reikalauja kad `use_specific` būtų sveikasis skaičius tarp 0 ir "
+"3. Prašome peržiūrėti savo šabloną."
+
+#: wagtailmenus/utils/misc.py:48
+#, python-format
+msgid ""
+"The `%s` tag expects `parent_page` to be a `Page` instance. A value of type `"
+"%s` was supplied."
+msgstr ""
+"`%s` žymena reikalauja kad `parent_page` būtų `Page` objektas. Buvo pateikta "
+"`%s` reikšmė."
+
+#: wagtailmenus/utils/misc.py:54
+#, python-format
+msgid ""
+"The `%s` tag expects `menuitem_or_page` to be a `Page` or `MenuItem` "
+"instance. A value of type `%s` was supplied."
+msgstr ""
+"`%s` žymena reikalauja kad `menuitem_or_page`  būtų `Page` arba `MenuItem` "
+"objektas. Buvo pateikta `%s` reikšmė."
+
+#: wagtailmenus/views.py:47
+msgid "Editing"
+msgstr "Redaguojama"
+
+#: wagtailmenus/views.py:71
+#, python-format
+msgid "Editing %s"
+msgstr "Redaguojama %s"
+
+#: wagtailmenus/views.py:100
+msgid "Main menu updated successfully."
+msgstr "Pagrindinis meniu sėkmingai atnaujintas."
+
+#: wagtailmenus/views.py:104
+msgid "The menu could not be saved due to errors."
+msgstr "Meniu negalėjo būti išsaugotas dėl klaidų."
+
+#: wagtailmenus/views.py:111
+msgid "Copying"
+msgstr "Kopijuojama"
+
+#: wagtailmenus/views.py:118
+#, python-format
+msgid "Copying %s"
+msgstr "Kopijuojama %s"
+
+#: wagtailmenus/views.py:148
+msgid "Flat menu '{instance}' created."
+msgstr "Plokščias meniu '{instance}' sukurtas."
+
+#: wagtailmenus/wagtail_hooks.py:18
+msgid "Main menu"
+msgstr "Pagrindinis meniu"
+
+#: wagtailmenus/wagtail_hooks.py:48
+msgid "Copy"
+msgstr "Kopijuoti"
+
+#: wagtailmenus/wagtail_hooks.py:50
+#, python-format
+msgid "Copy this %s"
+msgstr "Kopijuoti %s"
+
+#: wagtailmenus/wagtail_hooks.py:69
+msgid "Flat menus"
+msgstr "Plokšti meniu"
+
+#: wagtailmenus/wagtail_hooks.py:113
+msgid "no. of items"
+msgstr "vnt."
