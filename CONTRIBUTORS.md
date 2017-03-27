@@ -1,6 +1,7 @@
 ## Authors
 
-* Andy Babic (ababic), twitter: @andyjbabic
+* Andy Babic (ababic)
+  twitter.com/andyjbabic
 
 
 ## Contributors
@@ -15,4 +16,5 @@
 * Claudio Marinozzi (pyMan)
 * Pierre Geier (bloodywing)
 * Max Kurama (MaxKurama)
+* Matas Dailyda (treavis)
 

@@ -5,6 +5,17 @@ Changelog
 -------------------------------- 
 
 
+2.2.2 (27.03.2017)
+-------------------------------- 
+
+* Got project set up in Transifex.
+* Updated translatable strings throughout the project to use named variable
+  substitution, and unmarked a few exception messages.
+* Add Lithuanian translations (submitted by Matas Dailyda).
+* Better handle situations where `request` isn't available in the context, or
+  `request.site` hasn't been set.
+
+
 2.2.1 (06.03.2017)
 -------------------------------- 
 
