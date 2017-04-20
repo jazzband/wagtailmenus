@@ -82,7 +82,7 @@ Installing wagtailmenus
 	
     ```
 	
-5. Run `python manage.py migrate wagtailmenus` to set up the initial database tables.
+5. Run `python manage.py migrate wagtailmenus` to create the necessary database tables.
 
 
 Making use of `MenuPage`
@@ -92,8 +92,10 @@ While wagtailmenus' menu tags will work with your existing page tree and page ty
 
 1. Import `MenuPage` in your `models.py` file like so: `from wagtailmenus.models import MenuPage` 
 2. For any page-types that you'd like to become `MenuPage` pages, simply subclass `MenuPage` instead of `wagtail.wagtailcore.models.Page`.
-2. Run `python manage.py makemigrations` to create migrations for the apps you've updated.
-3. Run `python manage.py migrate` to apply the migrations.
+3. Run `python manage.py makemigrations` to create migrations for the apps you've updated.
+4. Run `python manage.py migrate` to apply the migrations.
+
+If for some reason subclassing `MenuPage` won't work (perhaps you need to subclass another model based on `Page`, such as wagtail's `AbstractForm` and `AbstractEmailForm` models), you can import and use `wagtailmenus.models.MenuPageMixin` instead to gain the same fields and functionality. However, you will need to override `settings_panels` on your model yourself to surface the fields in the page editor interface.
 
 
 Using wagtailmenus

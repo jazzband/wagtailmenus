@@ -11,7 +11,7 @@ from .. import app_settings
 from ..panels import menupage_settings_panels
 
 
-class MenuPage(Page):
+class MenuPageMixin(models.Model):
     repeat_in_subnav = models.BooleanField(
         verbose_name=_("repeat in sub-navigation"),
         default=False,
@@ -29,8 +29,6 @@ class MenuPage(Page):
             "will be used."
         )
     )
-
-    settings_panels = menupage_settings_panels
 
     class Meta:
         abstract = True
@@ -92,3 +90,11 @@ class MenuPage(Page):
             active_class = app_settings.ACTIVE_CLASS
         setattr(menuitem, 'active_class', active_class)
         return menuitem
+
+
+class MenuPage(Page, MenuPageMixin):
+
+    settings_panels = menupage_settings_panels
+
+    class Meta:
+        abstract = True
