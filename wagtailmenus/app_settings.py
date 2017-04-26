@@ -29,7 +29,7 @@ class AppSettings(object):
     def _setting(self, name, default):
         return getattr(self._settings, self._prefix + name, default)
 
-    def _model_class(self, model_name_setting_name):
+    def model_class_from_setting(self, model_name_setting_name):
         from django.apps import apps
         from django.core.exceptions import ImproperlyConfigured
         model_name = getattr(self, model_name_setting_name)
@@ -44,6 +44,20 @@ class AppSettings(object):
             raise ImproperlyConfigured(
                 "%s%s refers to model '%s' that has not been installed" %
                 (self._prefix, model_name_setting_name, model_name)
+            )
+
+    def python_class_from_setting(self, path_setting_name):
+        import importlib
+        from django.core.exceptions import ImproperlyConfigured
+        import_path = getattr(self, path_setting_name)
+        module_name, class_name = import_path.rsplit(".", 1)
+        try:
+            return getattr(importlib.import_module(module_name), class_name)
+        except ValueError:
+            raise ImproperlyConfigured(
+                "No class matching the path '%s' could be imported. Please "
+                "check your %sROOT_PAGE_MENU_CLASS_PATH and %s%s settings."
+                % (import_path, self._prefix, self._prefix, path_setting_name)
             )
 
     @property
@@ -148,7 +162,7 @@ class AppSettings(object):
 
     @property
     def MAIN_MENU_MODEL_CLASS(self):
-        return self._model_class('MAIN_MENU_MODEL')
+        return self.model_class_from_setting('MAIN_MENU_MODEL')
 
     @property
     def FLAT_MENU_MODEL(self):
@@ -156,7 +170,7 @@ class AppSettings(object):
 
     @property
     def FLAT_MENU_MODEL_CLASS(self):
-        return self._model_class('FLAT_MENU_MODEL')
+        return self.model_class_from_setting('FLAT_MENU_MODEL')
 
     @property
     def MAIN_MENU_ITEMS_RELATED_NAME(self):
@@ -165,6 +179,32 @@ class AppSettings(object):
     @property
     def FLAT_MENU_ITEMS_RELATED_NAME(self):
         return self._setting('FLAT_MENU_ITEMS_RELATED_NAME', 'menu_items')
+
+    @property
+    def ROOT_PAGE_MENU_CLASS_PATH(self):
+        return self._setting(
+            'ROOT_PAGE_MENU_CLASS_PATH', 'wagtailmenus.models.MenuFromRootPage'
+        )
+
+    @property
+    def CHILDREN_MENU_CLASS_PATH(self):
+        return self._setting(
+            'CHILDREN_MENU_CLASS_PATH', self.ROOT_PAGE_MENU_CLASS_PATH
+        )
+
+    @property
+    def CHILDREN_MENU_CLASS(self):
+        return self.python_class_from_setting('CHILDREN_MENU_CLASS_PATH')
+
+    @property
+    def SECTION_MENU_CLASS_PATH(self):
+        return self._setting(
+            'SECTION_MENU_CLASS_PATH', self.ROOT_PAGE_MENU_CLASS_PATH
+        )
+
+    @property
+    def SECTION_MENU_CLASS(self):
+        return self.python_class_from_setting('SECTION_MENU_CLASS_PATH')
 
 
 import sys  # noqa
