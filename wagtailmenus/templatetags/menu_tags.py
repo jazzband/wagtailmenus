@@ -33,6 +33,8 @@ def main_menu(
     # Find a matching menu
     menu = app_settings.MAIN_MENU_MODEL_CLASS.get_for_site(site)
 
+    menu.set_request(request)
+
     if not show_multiple_levels:
         max_levels = 1
 
@@ -98,9 +100,12 @@ def flat_menu(
     menu = app_settings.FLAT_MENU_MODEL_CLASS.get_for_site(
         handle, site, fall_back_to_default_site_menus
     )
+
     if not menu:
         # No menu was found matching `handle`, so gracefully render nothing.
         return ''
+
+    menu.set_request(request)
 
     if not show_multiple_levels:
         max_levels = 1
@@ -307,7 +312,7 @@ def section_menu(
 
     # Create a menu instance that can fetch all pages at once and return
     # for subpages for each branch as they are needed
-    menu_instance = MenuFromRootPage(root, max_levels, use_specific)
+    menu_instance = MenuFromRootPage(root, max_levels, use_specific, request)
 
     section_root, menu_items = get_sub_menu_items_for_page(
         page=root,
@@ -398,7 +403,8 @@ def children_menu(
 
     # Create a menu instance that can fetch all pages at once and return
     # for subpages for each branch as they are needed
-    menu_instance = MenuFromRootPage(parent_page, max_levels, use_specific)
+    menu_instance = MenuFromRootPage(parent_page, max_levels, use_specific,
+                                     request)
 
     parent_page, menu_items = get_sub_menu_items_for_page(
         page=parent_page,
