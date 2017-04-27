@@ -40,7 +40,7 @@ class AppSettings(object):
         except(ImportError, ValueError):
             raise ImproperlyConfigured(
                 "'%s' is not a valid import path. %s%s must be a full "
-                "dotted python module path e.g. 'project.app.file.Class'" %
+                "dotted python import path e.g. 'project.app.file.Class'" %
                 (import_path, self._prefix, path_setting_name)
             )
 
