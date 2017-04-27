@@ -109,11 +109,10 @@ class MenuFromRootPage(Menu):
 
     root_page = None
 
-    def __init__(self, root_page, max_levels, use_specific, request):
+    def __init__(self, root_page, max_levels, use_specific):
         self.root_page = root_page
         self.max_levels = max_levels
         self.use_specific = use_specific
-        self.request = request
         super(MenuFromRootPage, self).__init__()
 
     @cached_property

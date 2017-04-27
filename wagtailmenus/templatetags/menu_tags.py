@@ -312,8 +312,9 @@ def section_menu(
 
     # Create a menu instance that can fetch all pages at once and return
     # for subpages for each branch as they are needed
-    menu_instance = app_settings.SECTION_MENU_CLASS(
-        root, max_levels, use_specific, request)
+    menu_instance = app_settings.SECTION_MENU_CLASS(root, max_levels,
+                                                    use_specific)
+    menu_instance.set_request(request)
 
     section_root, menu_items = get_sub_menu_items_for_page(
         page=root,
@@ -404,8 +405,9 @@ def children_menu(
 
     # Create a menu instance that can fetch all pages at once and return
     # for subpages for each branch as they are needed
-    menu_instance = app_settings.CHILDREN_MENU_CLASS(
-        parent_page, max_levels, use_specific, request)
+    menu_instance = app_settings.CHILDREN_MENU_CLASS(parent_page, max_levels,
+                                                     use_specific)
+    menu_instance.set_request(request)
 
     parent_page, menu_items = get_sub_menu_items_for_page(
         page=parent_page,

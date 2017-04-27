@@ -29,35 +29,36 @@ class AppSettings(object):
     def _setting(self, name, default):
         return getattr(self._settings, self._prefix + name, default)
 
-    def model_class_from_setting(self, model_name_setting_name):
+    def module_from_path_setting(self, path_setting_name):
+        from importlib import import_module
+        from django.core.exceptions import ImproperlyConfigured
+
+        import_path = getattr(self, path_setting_name)
+        module_path, class_name = import_path.rsplit(".", 1)
+        try:
+            return getattr(import_module(module_path), class_name)
+        except(ImportError, ValueError):
+            raise ImproperlyConfigured(
+                "'%s' is not a valid import path. %s%s must be a full "
+                "the dotted python path e.g. 'project.app.file.Class'" %
+                (import_path, self._prefix, path_setting_name)
+            )
+
+    def model_from_path_setting(self, path_setting_name):
         from django.apps import apps
         from django.core.exceptions import ImproperlyConfigured
-        model_name = getattr(self, model_name_setting_name)
+        model_name = getattr(self, path_setting_name)
         try:
             return apps.get_model(model_name)
         except ValueError:
             raise ImproperlyConfigured(
                 "%s%s must be of the form 'app_label.model_name'" %
-                (self._prefix, model_name_setting_name)
+                (self._prefix, path_setting_name)
             )
         except LookupError:
             raise ImproperlyConfigured(
                 "%s%s refers to model '%s' that has not been installed" %
-                (self._prefix, model_name_setting_name, model_name)
-            )
-
-    def python_class_from_setting(self, path_setting_name):
-        import importlib
-        from django.core.exceptions import ImproperlyConfigured
-        import_path = getattr(self, path_setting_name)
-        module_name, class_name = import_path.rsplit(".", 1)
-        try:
-            return getattr(importlib.import_module(module_name), class_name)
-        except ValueError:
-            raise ImproperlyConfigured(
-                "No class matching the path '%s' could be imported. Please "
-                "check your %sROOT_PAGE_MENU_CLASS_PATH and %s%s settings."
-                % (import_path, self._prefix, self._prefix, path_setting_name)
+                (self._prefix, path_setting_name, model_name)
             )
 
     @property
@@ -162,7 +163,7 @@ class AppSettings(object):
 
     @property
     def MAIN_MENU_MODEL_CLASS(self):
-        return self.model_class_from_setting('MAIN_MENU_MODEL')
+        return self.model_from_path_setting('MAIN_MENU_MODEL')
 
     @property
     def FLAT_MENU_MODEL(self):
@@ -170,7 +171,7 @@ class AppSettings(object):
 
     @property
     def FLAT_MENU_MODEL_CLASS(self):
-        return self.model_class_from_setting('FLAT_MENU_MODEL')
+        return self.model_from_path_setting('FLAT_MENU_MODEL')
 
     @property
     def MAIN_MENU_ITEMS_RELATED_NAME(self):
@@ -194,7 +195,7 @@ class AppSettings(object):
 
     @property
     def CHILDREN_MENU_CLASS(self):
-        return self.python_class_from_setting('CHILDREN_MENU_CLASS_PATH')
+        return self.module_from_path_setting('CHILDREN_MENU_CLASS_PATH')
 
     @property
     def SECTION_MENU_CLASS_PATH(self):
@@ -204,7 +205,7 @@ class AppSettings(object):
 
     @property
     def SECTION_MENU_CLASS(self):
-        return self.python_class_from_setting('SECTION_MENU_CLASS_PATH')
+        return self.module_from_path_setting('SECTION_MENU_CLASS_PATH')
 
 
 import sys  # noqa
