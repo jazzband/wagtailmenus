@@ -372,7 +372,7 @@ class AbstractFlatMenu(MenuWithMenuItems):
         except AttributeError:
             raise ImproperlyConfigured(
                 "'%s' isn't a valid relationship name for accessing menu "
-                "items from the model '%s'. Check that your "
+                "items from %s. Check that your "
                 "`WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME` setting matches "
                 "the `related_name` used on your MenuItem model's "
                 "`ParentalKey` field." % (
