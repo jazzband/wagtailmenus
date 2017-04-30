@@ -147,11 +147,14 @@ class MenuWithMenuItems(ClusterableModel, Menu):
     class Meta:
         abstract = True
 
+    def get_base_menuitem_queryset(self):
+        return self.get_menu_items_manager().for_display()
+
     @cached_property
     def top_level_items(self):
         """Return a list of menu items with link_page objects supplemented with
         'specific' pages where appropriate."""
-        items_qs = self.get_menu_items_manager().for_display()
+        items_qs = self.get_base_menuitem_queryset()
         if self.use_specific < app_settings.USE_SPECIFIC_TOP_LEVEL:
             return items_qs.all()
 
@@ -369,7 +372,7 @@ class AbstractFlatMenu(MenuWithMenuItems):
         except AttributeError:
             raise ImproperlyConfigured(
                 "'%s' isn't a valid relationship name for accessing menu "
-                "items from %s. Check that your "
+                "items from the model '%s'. Check that your "
                 "`WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME` setting matches "
                 "the `related_name` used on your MenuItem model's "
                 "`ParentalKey` field." % (
