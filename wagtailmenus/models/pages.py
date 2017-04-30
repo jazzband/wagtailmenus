@@ -34,9 +34,9 @@ class MenuPageMixin(models.Model):
         abstract = True
 
     def modify_submenu_items(
-        self, menu_items, current_page, current_ancestor_ids, current_site,
-        allow_repeating_parents, apply_active_classes, original_menu_tag,
-        menu_instance
+        self, request, menu_items, current_page, current_ancestor_ids,
+        current_site, allow_repeating_parents, apply_active_classes,
+        original_menu_tag, menu_instance
     ):
         """
         Make any necessary modifications to `menu_items` and return the list
@@ -53,14 +53,14 @@ class MenuPageMixin(models.Model):
             menu_items.
             """
             menu_items.insert(0, self.get_repeated_menu_item(
-                current_page, current_site, apply_active_classes,
+                request, current_page, current_site, apply_active_classes,
                 original_menu_tag
             ))
         return menu_items
 
     def has_submenu_items(
-        self, current_page, allow_repeating_parents, original_menu_tag,
-        menu_instance
+        self, request, current_page, allow_repeating_parents,
+        original_menu_tag, menu_instance
     ):
         """
         When rendering pages in a menu template a `has_children_in_menu`
@@ -76,7 +76,7 @@ class MenuPageMixin(models.Model):
         return menu_instance.page_has_children(self)
 
     def get_repeated_menu_item(
-        self, current_page, current_site, apply_active_classes,
+        self, request, current_page, current_site, apply_active_classes,
         original_menu_tag
     ):
         """Return something that can be used to display a 'repeated' menu item
