@@ -140,6 +140,14 @@ class MenuFromRootPage(Menu):
         return super(MenuFromRootPage, self).get_children_for_page(page)
 
 
+class SectionMenu(MenuFromRootPage):
+    pass
+
+
+class ChildrenMenu(MenuFromRootPage):
+    pass
+
+
 class MenuWithMenuItems(ClusterableModel, Menu):
     """A base model class for menus who's 'menu_items' are defined by
     a set of 'menu item' model instances."""

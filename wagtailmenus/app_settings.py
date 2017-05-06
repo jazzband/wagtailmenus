@@ -182,15 +182,9 @@ class AppSettings(object):
         return self._setting('FLAT_MENU_ITEMS_RELATED_NAME', 'menu_items')
 
     @property
-    def ROOT_PAGE_MENU_CLASS_PATH(self):
-        return self._setting(
-            'ROOT_PAGE_MENU_CLASS_PATH', 'wagtailmenus.models.MenuFromRootPage'
-        )
-
-    @property
     def CHILDREN_MENU_CLASS_PATH(self):
         return self._setting(
-            'CHILDREN_MENU_CLASS_PATH', self.ROOT_PAGE_MENU_CLASS_PATH
+            'CHILDREN_MENU_CLASS_PATH', 'wagtailmenus.models.ChildrenMenu'
         )
 
     @property
@@ -200,7 +194,7 @@ class AppSettings(object):
     @property
     def SECTION_MENU_CLASS_PATH(self):
         return self._setting(
-            'SECTION_MENU_CLASS_PATH', self.ROOT_PAGE_MENU_CLASS_PATH
+            'SECTION_MENU_CLASS_PATH', 'wagtailmenus.models.SectionMenu'
         )
 
     @property
