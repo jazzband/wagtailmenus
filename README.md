@@ -863,6 +863,75 @@ If it's the main and flat menu models themselves that you wish to override, that
 
 4.	**That's it!** The custom models will now be used instead of the default ones. The default models and their data will remain intact, even if you can no longer see them via the admin area. If you need to, you can easily write a data migration to populate your new models from existing data.
 
+**Overriding menu class used by `{% section_menu %}`**
+
+Like the `main_menu` and `flat_menu` tags, the `section_menu` template tag uses a `Menu` class to fetch the data needed to render a menu. Though, because the data depends entirely on the current root page, it's just a plain Python class and not a Django model.
+
+The class `wagtailmenus.models.menus.SectionMenu` is used by default, but you can use the `WAGTAILMENUS_SECTION_MENU_CLASS_PATH` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify which pages are included). For custom classes, it's recommended that you subclass the `SectionMenu` class and override any methods as required e.g:
+
+
+	```python
+
+	# mysite/menus/models.py
+
+	from django.utils.translation import ugettext_lazy as _
+	from wagtail.wagtailcore.models import Page
+    from wagtailmenus.models import SectionMenu
+
+	
+	class CustomSectionMenu(SectionMenu):
+	    
+	    def get_base_page_queryset(self):
+	   		# Show draft and expired pages in menu for superusers
+	    	if self.request.user.is_superuser:
+	    		return Page.objects.filter(show_in_menus=True)
+	    	# Resort to default behaviour for everybody else
+	    	return super(CustomSectionMenu, self).get_base_page_queryset()
+
+    ```
+
+    ```python
+
+    # mysite/settings/base.py
+
+	WAGTAILMENUS_SECTION_MENU_CLASS_PATH = "mysite.menus.models.CustomSectionMenu"
+
+	```
+
+**Overriding menu class used by `{% children_menu %}`**
+
+Like all of the other tags, the `children_menu` template tag uses a `Menu` class to fetch the data needed to render a menu. Though, because the data depends entirely on the specified parent page, it's just a plain Python class and not a Django model.
+
+The class `wagtailmenus.models.menus.ChildreMenu` is used by default, but you can use the `WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify which pages are included). For custom classes, it's recommended that you subclass `ChildrenMenu` and override any methods as required e.g:
+
+
+	```python
+
+	# mysite/menus/models.py
+
+	from django.utils.translation import ugettext_lazy as _
+	from wagtail.wagtailcore.models import Page
+    from wagtailmenus.models import ChildrenMenu
+
+	
+	class CustomChildrenMenu(ChildrenMenu):
+	    
+	    def get_base_page_queryset(self):
+	   		# Show draft and expired pages in menu for superusers
+	    	if self.request.user.is_superuser:
+	    		return Page.objects.filter(show_in_menus=True)
+	    	# Resort to default behaviour for everybody else
+	    	return super(CustomChildrenMenu, self).get_base_page_queryset()
+
+    ```
+
+    ```python
+
+    # mysite/settings/base.py
+
+	WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH = "mysite.menus.models.CustomChildrenMenu"
+
+	```
 
 <a id="app-settings"></a>13. Settings reference
 -----------------------------------------------
@@ -893,6 +962,8 @@ You can override some of wagtailmenus' default behaviour by adding one of more o
 - **`WAGTAILMENUS_FLAT_MENU_MODEL`** (default: `'wagtailmenus.FlatMenu'`): Use this to specify a custom model to use for flat menus instead of the default. The model should be a subclass of `wagtailmenus.AbstractFlatMenu`. See [Overriding the default wagtailmenus models](#custom-models) for more details.
 - **`WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME`** (default: `'menu_items'`): Use this to specify the 'related name' that should be used to access menu items from main menu instances. Used to replace the default `MainMenuItem` model with a custom one. See [Overriding the default wagtailmenus models](#custom-models) for more details.
 - **`WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME`** (default: `'menu_items'`): Use this to specify the 'related name' that should be used to access menu items from flat menu instances. Used to replace the default `FlatMenuItem` model with a custom one. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+- **`WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH`** (default: `'wagtailmenus.models.menus.ChildrenMenu'`): Use this to specify a custom class to be used by wagtailmenus' `children_menu` tag. The value should be the import path of your custom class as a string, e.g. 'mysite.app_name.models.CustomClass'. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+- **`WAGTAILMENUS_SECTION_MENU_CLASS_PATH`** (default: `'wagtailmenus.models.menus.SectionMenu'`): Use this to specify a custom class to be used by wagtailmenus' `section_menu` tag. The value should be the import path of your custom class as a string, e.g. 'mysite.app_name.models.CustomClass'. See [Overriding the default wagtailmenus models](#custom-models) for more details.
 
 
 Contributing
