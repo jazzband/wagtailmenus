@@ -467,15 +467,15 @@ class ContactPage(MenuPage):
     ...
 
     def modify_submenu_items(
-        self, menu_items, current_page, current_ancestor_ids, current_site,
-        allow_repeating_parents, apply_active_classes, original_menu_tag,
-        menu_instance=None
+        self, request, menu_items, current_page, current_ancestor_ids, 
+        current_site, allow_repeating_parents, apply_active_classes,
+        original_menu_tag, menu_instance
     ):
         # Apply default modifications first of all
         menu_items = super(ContactPage, self).modify_submenu_items(
-            menu_items, current_page, current_ancestor_ids, current_site,
-            allow_repeating_parents, apply_active_classes, original_menu_tag,
-            menu_instance)
+            request, menu_items, current_page, current_ancestor_ids, 
+            current_site, allow_repeating_parents, apply_active_classes,
+            original_menu_tag, menu_instance)
         """
         If rendering a 'main_menu', add some additional menu items to the end
         of the list that link to various anchored sections on the same page
@@ -508,7 +508,7 @@ class ContactPage(MenuPage):
             ))
         return menu_items
 
-    def has_submenu_items(self, current_page, allow_repeating_parents,
+    def has_submenu_items(self, request, current_page, allow_repeating_parents,
     		          original_menu_tag, menu_instance=None):
         """
         Because `modify_submenu_items` is being used to add additional menu
@@ -519,7 +519,7 @@ class ContactPage(MenuPage):
         if original_menu_tag == 'main_menu':
             return True
         return super(ContactPage, self).has_submenu_items(
-            current_page, allow_repeating_parents, original_menu_tag,
+            request, current_page, allow_repeating_parents, original_menu_tag,
             menu_instance)
 ```
 
@@ -554,9 +554,9 @@ class SectionRootPage(MenuPage):
         menu_instance=None
     ):
         menu_items = super(SectionRootPage,self).modify_menu_items(
-            menu_items, current_page, current_ancestor_ids, current_site,
-            allow_repeating_parents, apply_active_classes, original_menu_tag,
-            menu_insance)
+            request, menu_items, current_page, current_ancestor_ids, 
+         	current_site, allow_repeating_parents, apply_active_classes,
+         	original_menu_tag, menu_insance)
 	    
         if self.add_submenu_item_for_news:
             menu_items.append({
@@ -566,14 +566,40 @@ class SectionRootPage(MenuPage):
             })
         return menu_items
 
-    def has_submenu_items(self, current_page, allow_repeating_parents,
-                          original_menu_tag, menu_instance=None):
+    def has_submenu_items(self, request, current_page, allow_repeating_parents,
+                          original_menu_tag, menu_instance):
         
         if self.add_submenu_item_for_news:
             return True
         return super(SectionRootPage, self).has_submenu_items(
-            current_page, allow_repeating_parents, original_menu_tag,
+            request, current_page, allow_repeating_parents, original_menu_tag,
             menu_instance)
+```
+
+A tidier version of the above code is given below:
+
+```python
+
+from django.db import models
+from wagtailmenus.models import MenuPage
+
+class SectionRootPage(MenuPage):
+    add_submenu_item_for_news = models.BooleanField(default=False)
+
+    def modify_submenu_items(self, **kwargs):
+        menu_items = super(SectionRootPage,self).modify_menu_items(**kwargs)
+        if self.add_submenu_item_for_news:
+            menu_items.append({
+                'href': '/news/',
+                'text': 'Read the news',
+                'active_class': 'news-link',
+            })
+        return menu_items
+
+    def has_submenu_items(self, **kwargs):
+        if self.add_submenu_item_for_news:
+            return True
+        return super(SectionRootPage, self).has_submenu_items(**kwargs)
 ```
 
 
