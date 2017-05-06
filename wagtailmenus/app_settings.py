@@ -29,13 +29,12 @@ class AppSettings(object):
     def _setting(self, name, default):
         return getattr(self._settings, self._prefix + name, default)
 
-    def module_from_path_setting(self, path_setting_name):
+    def class_from_path_setting(self, path_setting_name):
         from importlib import import_module
         from django.core.exceptions import ImproperlyConfigured
-
-        import_path = getattr(self, path_setting_name)
-        module_path, class_name = import_path.rsplit(".", 1)
         try:
+            import_path = getattr(self, path_setting_name)
+            module_path, class_name = import_path.rsplit(".", 1)
             return getattr(import_module(module_path), class_name)
         except(ImportError, ValueError):
             raise ImproperlyConfigured(
@@ -189,7 +188,7 @@ class AppSettings(object):
 
     @property
     def CHILDREN_MENU_CLASS(self):
-        return self.module_from_path_setting('CHILDREN_MENU_CLASS_PATH')
+        return self.class_from_path_setting('CHILDREN_MENU_CLASS_PATH')
 
     @property
     def SECTION_MENU_CLASS_PATH(self):
@@ -199,7 +198,7 @@ class AppSettings(object):
 
     @property
     def SECTION_MENU_CLASS(self):
-        return self.module_from_path_setting('SECTION_MENU_CLASS_PATH')
+        return self.class_from_path_setting('SECTION_MENU_CLASS_PATH')
 
 
 import sys  # noqa
