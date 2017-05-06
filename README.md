@@ -863,7 +863,7 @@ If it's the main and flat menu models themselves that you wish to override, that
 
 4.	**That's it!** The custom models will now be used instead of the default ones. The default models and their data will remain intact, even if you can no longer see them via the admin area. If you need to, you can easily write a data migration to populate your new models from existing data.
 
-**Overriding menu class used by `{% section_menu %}`**
+**Overriding the menu class used by `{% section_menu %}`**
 
 Like the `main_menu` and `flat_menu` tags, the `section_menu` template tag uses a `Menu` class to fetch the data needed to render a menu. Though, because the data depends entirely on the current root page, it's just a plain Python class and not a Django model.
 
@@ -898,7 +898,7 @@ The class `wagtailmenus.models.menus.SectionMenu` is used by default, but you ca
 
 	```
 
-**Overriding menu class used by `{% children_menu %}`**
+**Overriding the menu class used by `{% children_menu %}`**
 
 Like all of the other tags, the `children_menu` template tag uses a `Menu` class to fetch the data needed to render a menu. Though, because the data depends entirely on the specified parent page, it's just a plain Python class and not a Django model.
 
