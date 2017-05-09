@@ -467,15 +467,14 @@ class ContactPage(MenuPage):
     ...
 
     def modify_submenu_items(
-        self, request, menu_items, current_page, current_ancestor_ids, 
+        self, menu_items, current_page, current_ancestor_ids, 
         current_site, allow_repeating_parents, apply_active_classes,
-        original_menu_tag, menu_instance
+        original_menu_tag, menu_instance, request
     ):
         # Apply default modifications first of all
         menu_items = super(ContactPage, self).modify_submenu_items(
-            request, menu_items, current_page, current_ancestor_ids, 
-            current_site, allow_repeating_parents, apply_active_classes,
-            original_menu_tag, menu_instance)
+            menu_items, current_page, current_ancestor_ids, current_site, allow_repeating_parents, apply_active_classes, original_menu_tag,
+            menu_instance, request)
         """
         If rendering a 'main_menu', add some additional menu items to the end
         of the list that link to various anchored sections on the same page
@@ -508,8 +507,10 @@ class ContactPage(MenuPage):
             ))
         return menu_items
 
-    def has_submenu_items(self, request, current_page, allow_repeating_parents,
-    		          original_menu_tag, menu_instance=None):
+    def has_submenu_items(
+    	self, current_page, allow_repeating_parents, original_menu_tag, 
+    	menu_instance, request
+    ):
         """
         Because `modify_submenu_items` is being used to add additional menu
         items, we need to indicate in menu templates that `ContactPage` objects
@@ -519,8 +520,8 @@ class ContactPage(MenuPage):
         if original_menu_tag == 'main_menu':
             return True
         return super(ContactPage, self).has_submenu_items(
-            request, current_page, allow_repeating_parents, original_menu_tag,
-            menu_instance)
+            current_page, allow_repeating_parents, original_menu_tag,
+            menu_instance, request)
 ```
 
 **NOTE:** If you're overriding `modify_submenu_items()`, please ensure 'repeated menu items' are still added as the first item in the returned `menu_items` list. If not, active class highlighting might not work as expected in some places.
@@ -551,12 +552,12 @@ class SectionRootPage(MenuPage):
     def modify_submenu_items(
         self, menu_items, current_page, current_ancestor_ids, current_site,
         allow_repeating_parents, apply_active_classes, original_menu_tag='',
-        menu_instance=None
+        menu_instance, request
     ):
         menu_items = super(SectionRootPage,self).modify_menu_items(
-            request, menu_items, current_page, current_ancestor_ids, 
+            menu_items, current_page, current_ancestor_ids, 
          	current_site, allow_repeating_parents, apply_active_classes,
-         	original_menu_tag, menu_insance)
+         	original_menu_tag, menu_instance, request)
 	    
         if self.add_submenu_item_for_news:
             menu_items.append({
@@ -566,40 +567,16 @@ class SectionRootPage(MenuPage):
             })
         return menu_items
 
-    def has_submenu_items(self, request, current_page, allow_repeating_parents,
-                          original_menu_tag, menu_instance):
+    def has_submenu_items(
+    	self, current_page, allow_repeating_parents, original_menu_tag,
+    	menu_instance, request
+    ):
         
         if self.add_submenu_item_for_news:
             return True
         return super(SectionRootPage, self).has_submenu_items(
-            request, current_page, allow_repeating_parents, original_menu_tag,
-            menu_instance)
-```
-
-A tidier version of the above code is given below:
-
-```python
-
-from django.db import models
-from wagtailmenus.models import MenuPage
-
-class SectionRootPage(MenuPage):
-    add_submenu_item_for_news = models.BooleanField(default=False)
-
-    def modify_submenu_items(self, **kwargs):
-        menu_items = super(SectionRootPage,self).modify_menu_items(**kwargs)
-        if self.add_submenu_item_for_news:
-            menu_items.append({
-                'href': '/news/',
-                'text': 'Read the news',
-                'active_class': 'news-link',
-            })
-        return menu_items
-
-    def has_submenu_items(self, **kwargs):
-        if self.add_submenu_item_for_news:
-            return True
-        return super(SectionRootPage, self).has_submenu_items(**kwargs)
+            current_page, allow_repeating_parents, original_menu_tag,
+            menu_instance, request)
 ```
 
 
@@ -872,7 +849,7 @@ The class `wagtailmenus.models.menus.SectionMenu` is used by default, but you ca
 
 	```python
 
-	# mysite/menus/models.py
+	# mysite/appname/models.py
 
 	from django.utils.translation import ugettext_lazy as _
 	from wagtail.wagtailcore.models import Page
@@ -929,7 +906,7 @@ The class `wagtailmenus.models.menus.ChildrenMenu` is used by default, but you c
 
     # mysite/settings/base.py
 
-	WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH = "mysite.menus.models.CustomChildrenMenu"
+	WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH = "mysite.appname.models.CustomChildrenMenu"
 
 	```
 

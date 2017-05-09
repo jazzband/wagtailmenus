@@ -41,12 +41,12 @@ class MultilingualMenuPage(MenuPage):
         abstract = True
 
     def get_repeated_menu_item(
-        self, request, current_page, current_site, apply_active_classes,
-        original_menu_tag
+        self, current_page, current_site, apply_active_classes,
+        original_menu_tag, request
     ):
         item = super(MultilingualMenuPage, self).get_repeated_menu_item(
-            request, current_page, current_site, apply_active_classes,
-            original_menu_tag)
+            current_page, current_site, apply_active_classes,
+            original_menu_tag, request)
         item.text = self.translated_repeated_item_text or self.translated_title
         return item
 
@@ -91,12 +91,12 @@ class ContactPage(MenuPage):
     subpage_types = []
 
     def modify_submenu_items(
-        self, request, menu_items, current_page, current_ancestor_ids,
+        self, menu_items, current_page, current_ancestor_ids,
         current_site, allow_repeating_parents, apply_active_classes,
         original_menu_tag, menu_instance=None
     ):
         menu_items = super(ContactPage, self).modify_submenu_items(
-            request, menu_items, current_page, current_ancestor_ids,
+            menu_items, current_page, current_ancestor_ids,
             current_site, allow_repeating_parents, apply_active_classes,
             original_menu_tag, menu_instance)
         """
@@ -125,7 +125,7 @@ class ContactPage(MenuPage):
         return menu_items
 
     def has_submenu_items(
-        self, request, current_page, allow_repeating_parents,
+        self, current_page, allow_repeating_parents,
         original_menu_tag, menu_instance=None
     ):
         """
@@ -137,5 +137,5 @@ class ContactPage(MenuPage):
         if original_menu_tag == 'main_menu':
             return True
         return super(ContactPage, self).has_submenu_items(
-            request, current_page, allow_repeating_parents, original_menu_tag,
+            current_page, allow_repeating_parents, original_menu_tag,
             menu_instance)

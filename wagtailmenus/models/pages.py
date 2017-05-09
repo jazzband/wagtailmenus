@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+import warnings
 from copy import copy
 
 from django.db import models
@@ -33,10 +34,36 @@ class MenuPageMixin(models.Model):
     class Meta:
         abstract = True
 
+    def _modify_submenu_items_proxy(self, **kwargs):
+        try:
+            return self.modify_submenu_items(**kwargs)
+        except TypeError:
+            kwargs.pop('request')
+            warnings.warn(
+                "The modify_submenu_items() method on your '%s' model "
+                "should accept a 'request' keyword argument. This will be "
+                "required in wagtailmenus 2.4" % self.__class__.__name__,
+                DeprecationWarning
+            )
+        return self.modify_submenu_items(**kwargs)
+
+    def _has_submenu_items_proxy(self, **kwargs):
+        try:
+            return self.has_submenu_items(**kwargs)
+        except TypeError:
+            kwargs.pop('request')
+            warnings.warn(
+                "The has_submenu_items() method on your '%s' model "
+                "should accept a 'request' keyword argument. This will be "
+                "required in wagtailmenus 2.4" % self.__class__.__name__,
+                DeprecationWarning
+            )
+        return self.has_submenu_items(**kwargs)
+
     def modify_submenu_items(
-        self, request, menu_items, current_page, current_ancestor_ids,
+        self, menu_items, current_page, current_ancestor_ids,
         current_site, allow_repeating_parents, apply_active_classes,
-        original_menu_tag, menu_instance
+        original_menu_tag, menu_instance=None, request=None
     ):
         """
         Make any necessary modifications to `menu_items` and return the list
@@ -52,16 +79,25 @@ class MenuPageMixin(models.Model):
             children in the subnav, so we create a new item and prepend it to
             menu_items.
             """
-            menu_items.insert(0, self.get_repeated_menu_item(
-                request, current_page, current_site, apply_active_classes,
-                original_menu_tag
-            ))
+            args = [current_page, current_site, apply_active_classes,
+                    original_menu_tag, request]
+            try:
+                repeated_item = self.get_repeated_menu_item(*args)
+            except TypeError:
+                warnings.warn(
+                    "The get_repeated_menu_item() method on your '%s' model "
+                    "should accept a HttpRequest object as a 6th positional "
+                    "argument. This will be required in wagtailmenus 2.4" %
+                    self.__class__.__name__, DeprecationWarning
+                )
+                print(args)
+                args.pop()
+                repeated_item = self.get_repeated_menu_item(*args)
+            menu_items.insert(0, repeated_item)
         return menu_items
 
-    def has_submenu_items(
-        self, request, current_page, allow_repeating_parents,
-        original_menu_tag, menu_instance
-    ):
+    def has_submenu_items(self, current_page, allow_repeating_parents,
+                          original_menu_tag, menu_instance=None, request=None):
         """
         When rendering pages in a menu template a `has_children_in_menu`
         attribute is added to each page, letting template developers know
@@ -76,8 +112,8 @@ class MenuPageMixin(models.Model):
         return menu_instance.page_has_children(self)
 
     def get_repeated_menu_item(
-        self, request, current_page, current_site, apply_active_classes,
-        original_menu_tag
+        self, current_page, current_site, apply_active_classes,
+        original_menu_tag, request=None
     ):
         """Return something that can be used to display a 'repeated' menu item
         for this specific page."""
