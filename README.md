@@ -234,7 +234,7 @@ For any sub menus:
 - `"menus/flat/sub_menu.html"`
 - `"menus/sub_menu.html"`
 
-If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`, that list of locations will be as follows (where `handle` is the `handle` of the `FlatMenu` being rendered and `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddelware`):
+If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`, that list of locations will be as follows (where `handle` is the `handle` of the `FlatMenu` being rendered and `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
 
 For the menu itself:
 
@@ -303,7 +303,7 @@ For any sub menus:
 - `"menus/section_sub_menu.html"`
 - `"menus/sub_menu.html"`
 
-If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`, that list of locations will be as follows (where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddelware`):
+If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`, that list of locations will be as follows (where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
 
 For the menu itself:
 
@@ -355,7 +355,7 @@ For any sub menus:
 - `"menus/children_sub_menu.html"`
 - `"menus/sub_menu.html"`
 
-If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`, that list of locations will be as follows (where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddelware`):
+If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`, that list of locations will be as follows (where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
 
 For the menu itself:
 
@@ -894,7 +894,7 @@ The class `wagtailmenus.models.menus.SectionMenu` is used by default, but you ca
 
     # mysite/settings/base.py
 
-	WAGTAILMENUS_SECTION_MENU_CLASS_PATH = "mysite.menus.models.CustomSectionMenu"
+	WAGTAILMENUS_SECTION_MENU_CLASS_PATH = "mysite.appname.models.CustomSectionMenu"
 
 	```
 
@@ -902,12 +902,12 @@ The class `wagtailmenus.models.menus.SectionMenu` is used by default, but you ca
 
 Like all of the other tags, the `children_menu` template tag uses a `Menu` class to fetch the data needed to render a menu. Though, because the data depends entirely on the specified parent page, it's just a plain Python class and not a Django model.
 
-The class `wagtailmenus.models.menus.ChildreMenu` is used by default, but you can use the `WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify which pages are included). For custom classes, it's recommended that you subclass `ChildrenMenu` and override any methods as required e.g:
+The class `wagtailmenus.models.menus.ChildrenMenu` is used by default, but you can use the `WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify which pages are included). For custom classes, it's recommended that you subclass `ChildrenMenu` and override any methods as required e.g:
 
 
 	```python
 
-	# mysite/menus/models.py
+	# mysite/appname/models.py
 
 	from django.utils.translation import ugettext_lazy as _
 	from wagtail.wagtailcore.models import Page
@@ -957,13 +957,13 @@ You can override some of wagtailmenus' default behaviour by adding one of more o
 - **`WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS`** (default: `1`): The maximum number of levels rendered by the `{% children_menu %}` tag when a `max_levels` parameter value isn't specified.
 - **`WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC`** (default: `USE_SPECIFIC_AUTO`): Controls how 'specific' pages objects are fetched and used during rendering of the `{% section_menu %}` tag when the `use_specific` parameter value isn't supplied. 
 - **`WAGTAILMENUS_DEFAULT_CHILDREN_USE_SPECIFIC`** (default: `USE_SPECIFIC_AUTO`): Controls how 'specific' pages objects are fetched and used during rendering of the `{% children_menu %}` tag when the `use_specific` parameter value isn't supplied. 
-- **`WAGTAILMENUS_PAGE_FIELD_FOR_MENU_ITEM_TEXT`** (default: `'title'`): When preparing menu items for rendering, wagtailmenus looks for a field, attribute or property method with this name on each page object to populate a `text` attribute on the menu item. NOTE: wagtailmenus will only be able to access custom page attributes if specific pages are being used (See [Specific pages instances and performance](#specific-page-use) for more details). The page's `title` attribute will be used as a fallback if no attribute can found matching specified name.
+- **`WAGTAILMENUS_PAGE_FIELD_FOR_MENU_ITEM_TEXT`** (default: `'title'`): When preparing menu items for rendering, wagtailmenus looks for a field, attribute or property method with this name on each page object to populate a `text` attribute on the menu item. NOTE: wagtailmenus will only be able to access custom page attributes if specific pages are being used (See [Specific pages instances and performance](#specific-page-use) for more details). The page's `title` attribute will be used as a fall-back if no attribute can found matching specified name.
 - **`WAGTAILMENUS_MAIN_MENU_MODEL`** (default: `'wagtailmenus.MainMenu'`): Use this to specify a custom model to use for main menus instead of the default. The model should be a subclass of `wagtailmenus.AbstractMainMenu`. See [Overriding the default wagtailmenus models](#custom-models) for more details.
 - **`WAGTAILMENUS_FLAT_MENU_MODEL`** (default: `'wagtailmenus.FlatMenu'`): Use this to specify a custom model to use for flat menus instead of the default. The model should be a subclass of `wagtailmenus.AbstractFlatMenu`. See [Overriding the default wagtailmenus models](#custom-models) for more details.
 - **`WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME`** (default: `'menu_items'`): Use this to specify the 'related name' that should be used to access menu items from main menu instances. Used to replace the default `MainMenuItem` model with a custom one. See [Overriding the default wagtailmenus models](#custom-models) for more details.
 - **`WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME`** (default: `'menu_items'`): Use this to specify the 'related name' that should be used to access menu items from flat menu instances. Used to replace the default `FlatMenuItem` model with a custom one. See [Overriding the default wagtailmenus models](#custom-models) for more details.
-- **`WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH`** (default: `'wagtailmenus.models.menus.ChildrenMenu'`): Use this to specify a custom class to be used by wagtailmenus' `children_menu` tag. The value should be the import path of your custom class as a string, e.g. 'mysite.app_name.models.CustomClass'. See [Overriding the default wagtailmenus models](#custom-models) for more details.
-- **`WAGTAILMENUS_SECTION_MENU_CLASS_PATH`** (default: `'wagtailmenus.models.menus.SectionMenu'`): Use this to specify a custom class to be used by wagtailmenus' `section_menu` tag. The value should be the import path of your custom class as a string, e.g. 'mysite.app_name.models.CustomClass'. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+- **`WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH`** (default: `'wagtailmenus.models.menus.ChildrenMenu'`): Use this to specify a custom class to be used by wagtailmenus' `children_menu` tag. The value should be the import path of your custom class as a string, e.g. 'mysite.appname.models.CustomClass'. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+- **`WAGTAILMENUS_SECTION_MENU_CLASS_PATH`** (default: `'wagtailmenus.models.menus.SectionMenu'`): Use this to specify a custom class to be used by wagtailmenus' `section_menu` tag. The value should be the import path of your custom class as a string, e.g. 'mysite.appname.models.CustomClass'. See [Overriding the default wagtailmenus models](#custom-models) for more details.
 
 
 Contributing
