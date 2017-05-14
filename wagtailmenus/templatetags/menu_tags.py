@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import warnings
 
 from copy import copy
 from django.template import Library
@@ -186,23 +187,30 @@ def get_sub_menu_items_for_page(
     """
     if (
         use_specific and (
-            hasattr(page, '_modify_submenu_items_proxy') or
-            hasattr(page.specific_class, '_modify_submenu_items_proxy')
+            hasattr(page, 'modify_submenu_items') or
+            hasattr(page.specific_class, 'modify_submenu_items')
         )
     ):
         if type(page) is Page:
             page = page.specific
-        menu_items = page._modify_submenu_items_proxy(
-            menu_items=menu_items,
-            current_page=current_page,
-            current_ancestor_ids=ancestor_ids,
-            current_site=current_site,
-            allow_repeating_parents=allow_repeating_parents,
-            apply_active_classes=apply_active_classes,
-            original_menu_tag=original_menu_tag,
-            menu_instance=menu_instance,
-            request=request,
-        )
+
+        args = [
+            menu_items, current_page, ancestor_ids, current_site,
+            allow_repeating_parents, apply_active_classes, original_menu_tag,
+            menu_instance, request
+        ]
+        try:
+            menu_items = page.modify_submenu_items(*args)
+        except TypeError:
+            warning_msg = (
+                "The '%s' model's 'modify_submenu_items' method should be "
+                "updated to accept a 'request' argument"
+                % page.__class__.__name__
+            )
+            warnings.warn(warning_msg)
+        args.pop()  # try without 'request' arg
+        menu_items = page.modify_submenu_items(*args)
+
     return page, menu_items
 
 
@@ -496,8 +504,8 @@ def prime_menu_items(
             ):
                 if (
                     use_specific and (
-                        hasattr(page, '_has_submenu_items_proxy') or
-                        hasattr(page.specific_class, '_has_submenu_items_proxy')
+                        hasattr(page, 'has_submenu_items') or
+                        hasattr(page.specific_class, 'has_submenu_items')
                     )
                 ):
                     if type(page) is Page:
@@ -507,13 +515,22 @@ def prime_menu_items(
                     responsibilty for determining `has_children_in_menu`
                     to that.
                     """
-                    has_children_in_menu = page._has_submenu_items_proxy(
-                        current_page=current_page,
-                        allow_repeating_parents=allow_repeating_parents,
-                        original_menu_tag=original_menu_tag,
-                        menu_instance=menu_instance,
-                        request=request,
-                    )
+                    args = [
+                        current_page, allow_repeating_parents,
+                        original_menu_tag, menu_instance, request
+                    ]
+                    try:
+                        has_children_in_menu = page.has_submenu_items(*args)
+                    except TypeError:
+                        warning_msg = (
+                            "The '%s' model's 'has_submenu_items' method "
+                            "should be updated to accept a 'request' argument"
+                            % page.__class__.__name__
+                        )
+                        warnings.warn(warning_msg)
+                    args.pop()  # try without 'request' arg
+                    has_children_in_menu = page.has_submenu_items(*args)
+
                 else:
                     has_children_in_menu = menu_instance.page_has_children(
                         page)

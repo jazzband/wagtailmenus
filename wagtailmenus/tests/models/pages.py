@@ -40,13 +40,31 @@ class MultilingualMenuPage(MenuPage):
     class Meta:
         abstract = True
 
+    def modify_submenu_items(
+        self, menu_items, current_page, current_ancestor_ids,
+        current_site, allow_repeating_parents, apply_active_classes,
+        original_menu_tag, menu_instance=None
+    ):
+        return super(MultilingualMenuPage, self).modify_submenu_items(
+            menu_items, current_page, current_ancestor_ids,
+            current_site, allow_repeating_parents, apply_active_classes,
+            original_menu_tag, menu_instance)
+
+    def has_submenu_items(
+        self, current_page, allow_repeating_parents, original_menu_tag,
+        menu_instance=None
+    ):
+        return super(MultilingualMenuPage, self).has_submenu_items(
+            current_page, allow_repeating_parents, original_menu_tag,
+            menu_instance)
+
     def get_repeated_menu_item(
         self, current_page, current_site, apply_active_classes,
-        original_menu_tag, request
+        original_menu_tag
     ):
         item = super(MultilingualMenuPage, self).get_repeated_menu_item(
             current_page, current_site, apply_active_classes,
-            original_menu_tag, request)
+            original_menu_tag)
         item.text = self.translated_repeated_item_text or self.translated_title
         return item
 
@@ -93,7 +111,7 @@ class ContactPage(MenuPage):
     def modify_submenu_items(
         self, menu_items, current_page, current_ancestor_ids,
         current_site, allow_repeating_parents, apply_active_classes,
-        original_menu_tag, menu_instance=None
+        original_menu_tag, menu_instance
     ):
         menu_items = super(ContactPage, self).modify_submenu_items(
             menu_items, current_page, current_ancestor_ids,
@@ -126,7 +144,7 @@ class ContactPage(MenuPage):
 
     def has_submenu_items(
         self, current_page, allow_repeating_parents,
-        original_menu_tag, menu_instance=None
+        original_menu_tag, menu_instance
     ):
         """
         Because `modify_submenu_items` is being used to add additional menu
