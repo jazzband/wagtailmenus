@@ -115,10 +115,11 @@ class AbstractMenuItem(models.Model, MenuItem):
             })
 
         if self.link_url and self.link_page:
-            raise ValidationError(_(
-                "You cannot link to both a page and URL. Please review your "
-                "link and clear any unwanted values."
-            ))
+            msg = _('A menu item cannot link to both a page and a custom URL.')
+            raise ValidationError({
+                'link_page': [msg],
+                'link_url': [msg],
+            })
 
     def __str__(self):
         return self.menu_text

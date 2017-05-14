@@ -35,7 +35,7 @@ class TestModels(TestCase):
             link_page=Page.objects.get(pk=6))
         self.assertRaisesMessage(
             ValidationError,
-            "You cannot link to both a page and URL. Please review your link and clear any unwanted values.",
+            "A menu item cannot link to both a page and a custom URL.",
             new_item.clean)
 
     def test_mainmenuitem_str(self):
