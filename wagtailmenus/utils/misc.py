@@ -7,11 +7,7 @@ def get_attrs_from_context(context, guess_tree_position=True):
     Gets a bunch of useful things from the context/request and returns them as
     a tuple for use in most menu tags.
     """
-    try:
-        request = context['request']
-    except KeyError:
-        request = None
-
+    request = context.get('request')
     site = get_site_from_request(request)
     wagtailmenus_vals = context.get('wagtailmenus_vals')
     current_page = wagtailmenus_vals.get('current_page')
@@ -21,11 +17,10 @@ def get_attrs_from_context(context, guess_tree_position=True):
 
 
 def get_site_from_request(request, fallback_to_default=True):
-    try:
+    if getattr(request, 'site', None):
         return request.site
-    except AttributeError:
-        if fallback_to_default:
-            return Site.objects.filter(is_default_site=True).first()
+    if fallback_to_default:
+        return Site.objects.filter(is_default_site=True).first()
     return None
 
 

@@ -6,7 +6,7 @@ def get_template_names(menu_tag, request, override):
     if override:
         return [override]
     template_names = []
-    site = get_site_from_request(request)
+    site = get_site_from_request(request, fallback_to_default=True)
     if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
         hostname = site.hostname
         template_names.extend([

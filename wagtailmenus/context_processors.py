@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.http import Http404
 from django.utils.functional import SimpleLazyObject
 from . import app_settings
+from .utils.misc import get_site_from_request
 
 
 def wagtailmenus(request):
@@ -13,7 +14,7 @@ def wagtailmenus(request):
         ancestor_ids = request.META.get(
             'WAGTAILMENUS_CURRENT_PAGE_ANCESTOR_IDS')
         match = None
-        site = request.site
+        site = get_site_from_request(request, fallback_to_default=True)
 
         guess_pos = app_settings.GUESS_TREE_POSITION_FROM_PATH
         sroot_depth = app_settings.SECTION_ROOT_DEPTH
