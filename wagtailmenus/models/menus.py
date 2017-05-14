@@ -29,6 +29,7 @@ class Menu(object):
     max_levels = 1
     use_specific = app_settings.USE_SPECIFIC_AUTO
     pages_for_display = None
+    request = None
 
     def clear_page_cache(self):
         try:
@@ -39,6 +40,10 @@ class Menu(object):
             del self.page_children_dict
         except AttributeError:
             pass
+
+    def get_base_page_queryset(self):
+        return Page.objects.filter(live=True, expired=False,
+                                   show_in_menus=True)
 
     def set_max_levels(self, max_levels):
         if self.max_levels != max_levels:
@@ -66,6 +71,18 @@ class Menu(object):
                     pass
 
             self.use_specific = use_specific
+
+    def set_request(self, request):
+        """
+        Set `self.request` to the supplied HttpRequest, so that developers can
+        make use of it in subclasses
+        """
+        self.request = request
+
+    @property
+    def pages_for_display(self):
+        raise NotImplementedError("Subclasses of `Menu` must define their own "
+                                  "'pages_for_display' method")
 
     @cached_property
     def page_children_dict(self):
@@ -102,13 +119,10 @@ class MenuFromRootPage(Menu):
     def pages_for_display(self):
         """Returns a list of pages for rendering all levels of the menu. All
         pages must be live, not expired, and set to show in menus."""
-        pages = Page.objects.filter(
+        pages = self.get_base_page_queryset().filter(
             depth__gt=self.root_page.depth,
             depth__lte=self.root_page.depth + self.max_levels,
             path__startswith=self.root_page.path,
-            live=True,
-            expired=False,
-            show_in_menus=True,
         )
 
         # Return 'specific' page instances if required
@@ -126,6 +140,14 @@ class MenuFromRootPage(Menu):
         return super(MenuFromRootPage, self).get_children_for_page(page)
 
 
+class SectionMenu(MenuFromRootPage):
+    pass
+
+
+class ChildrenMenu(MenuFromRootPage):
+    pass
+
+
 class MenuWithMenuItems(ClusterableModel, Menu):
     """A base model class for menus who's 'menu_items' are defined by
     a set of 'menu item' model instances."""
@@ -133,11 +155,14 @@ class MenuWithMenuItems(ClusterableModel, Menu):
     class Meta:
         abstract = True
 
+    def get_base_menuitem_queryset(self):
+        return self.get_menu_items_manager().for_display()
+
     @cached_property
     def top_level_items(self):
         """Return a list of menu items with link_page objects supplemented with
         'specific' pages where appropriate."""
-        items_qs = self.get_menu_items_manager().for_display()
+        items_qs = self.get_base_menuitem_queryset()
         if self.use_specific < app_settings.USE_SPECIFIC_TOP_LEVEL:
             return items_qs.all()
 
@@ -183,8 +208,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
                         path__startswith=page_path)
 
         # Filter the queryset to include only the pages we need for display
-        all_pages = all_pages.filter(
-            live=True, expired=False, show_in_menus=True)
+        all_pages = all_pages & self.get_base_page_queryset()
 
         # Return 'specific' page instances if required
         if self.use_specific == app_settings.USE_SPECIFIC_ALWAYS:

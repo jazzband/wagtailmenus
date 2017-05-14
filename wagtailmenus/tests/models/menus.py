@@ -3,10 +3,18 @@ from modelcluster.fields import ParentalKey
 from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, MultiFieldPanel, PageChooserPanel)
 from wagtailmenus.models import (
-    AbstractMainMenu, AbstractMainMenuItem, AbstractFlatMenu,
-    AbstractFlatMenuItem)
+    ChildrenMenu, SectionMenu, AbstractMainMenu, AbstractMainMenuItem,
+    AbstractFlatMenu, AbstractFlatMenuItem)
 
 from .utils import TranslatedField
+
+
+class CustomChildrenMenu(ChildrenMenu):
+    pass
+
+
+class CustomSectionMenu(SectionMenu):
+    pass
 
 
 class MultilingualMenuItem(models.Model):
@@ -28,6 +36,7 @@ class MultilingualMenuItem(models.Model):
         abstract = True
         ordering = ('sort_order',)
 
+    @property
     def menu_text(self):
         return self.translated_link_text or getattr(
             self.link_page, 'translated_title', None

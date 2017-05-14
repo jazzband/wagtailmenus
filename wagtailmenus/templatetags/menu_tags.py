@@ -1,11 +1,11 @@
 from __future__ import unicode_literals
+import warnings
 
 from copy import copy
 from django.template import Library
 from wagtail.wagtailcore.models import Page
 
 from wagtailmenus import app_settings
-from wagtailmenus.models import MenuFromRootPage
 from wagtailmenus.utils.misc import (
     get_attrs_from_context, validate_supplied_values
 )
@@ -33,6 +33,8 @@ def main_menu(
     # Find a matching menu
     menu = app_settings.MAIN_MENU_MODEL_CLASS.get_for_site(site)
 
+    menu.set_request(request)
+
     if not show_multiple_levels:
         max_levels = 1
 
@@ -52,11 +54,11 @@ def main_menu(
     c = copy(context)
     c.update({
         'menu_items': prime_menu_items(
+            request=request,
             menu_items=menu.top_level_items,
             current_site=site,
             current_page=current_page,
             current_page_ancestor_ids=ancestor_ids,
-            request_path=getattr(request, 'path', ''),
             use_specific=menu.use_specific,
             original_menu_tag='main_menu',
             menu_instance=menu,
@@ -98,9 +100,12 @@ def flat_menu(
     menu = app_settings.FLAT_MENU_MODEL_CLASS.get_for_site(
         handle, site, fall_back_to_default_site_menus
     )
+
     if not menu:
         # No menu was found matching `handle`, so gracefully render nothing.
         return ''
+
+    menu.set_request(request)
 
     if not show_multiple_levels:
         max_levels = 1
@@ -121,11 +126,11 @@ def flat_menu(
     c = copy(context)
     c.update({
         'menu_items': prime_menu_items(
+            request=request,
             menu_items=menu.top_level_items,
             current_site=site,
             current_page=current_page,
             current_page_ancestor_ids=ancestor_ids,
-            request_path=getattr(request, 'path', ''),
             use_specific=menu.use_specific,
             original_menu_tag='flat_menu',
             menu_instance=menu,
@@ -151,7 +156,7 @@ def flat_menu(
 
 
 def get_sub_menu_items_for_page(
-    page, request, current_site, current_page, ancestor_ids, menu_instance,
+    request, page, current_site, current_page, ancestor_ids, menu_instance,
     use_specific, apply_active_classes, allow_repeating_parents,
     current_level=1, max_levels=2, original_menu_tag=''
 ):
@@ -162,11 +167,11 @@ def get_sub_menu_items_for_page(
     # will add `href`, `text`, `active_class` and `has_children_in_menu`
     # attributes to each item, to use in menu templates.
     menu_items = prime_menu_items(
+        request=request,
         menu_items=children_pages,
         current_site=current_site,
         current_page=current_page,
         current_page_ancestor_ids=ancestor_ids,
-        request_path=getattr(request, 'path', ''),
         use_specific=use_specific,
         original_menu_tag=original_menu_tag,
         menu_instance=menu_instance,
@@ -188,16 +193,24 @@ def get_sub_menu_items_for_page(
     ):
         if type(page) is Page:
             page = page.specific
-        menu_items = page.modify_submenu_items(
-            menu_items=menu_items,
-            current_page=current_page,
-            current_ancestor_ids=ancestor_ids,
-            current_site=current_site,
-            allow_repeating_parents=allow_repeating_parents,
-            apply_active_classes=apply_active_classes,
-            original_menu_tag=original_menu_tag,
-            menu_instance=menu_instance
-        )
+
+        args = [
+            menu_items, current_page, ancestor_ids, current_site,
+            allow_repeating_parents, apply_active_classes, original_menu_tag,
+            menu_instance, request
+        ]
+        try:
+            menu_items = page.modify_submenu_items(*args)
+        except TypeError:
+            warning_msg = (
+                "The '%s' model's 'modify_submenu_items' method should be "
+                "updated to accept a 'request' argument"
+                % page.__class__.__name__
+            )
+            warnings.warn(warning_msg)
+        args.pop()  # try without 'request' arg
+        menu_items = page.modify_submenu_items(*args)
+
     return page, menu_items
 
 
@@ -252,8 +265,8 @@ def sub_menu(
         parent_page = menuitem_or_page.link_page
 
     parent_page, menu_items = get_sub_menu_items_for_page(
-        page=parent_page,
         request=request,
+        page=parent_page,
         current_site=site,
         current_page=current_page,
         ancestor_ids=ancestor_ids,
@@ -307,11 +320,13 @@ def section_menu(
 
     # Create a menu instance that can fetch all pages at once and return
     # for subpages for each branch as they are needed
-    menu_instance = MenuFromRootPage(root, max_levels, use_specific)
+    menu_instance = app_settings.SECTION_MENU_CLASS(root, max_levels,
+                                                    use_specific)
+    menu_instance.set_request(request)
 
     section_root, menu_items = get_sub_menu_items_for_page(
-        page=root,
         request=request,
+        page=root,
         current_site=site,
         current_page=current_page,
         ancestor_ids=ancestor_ids,
@@ -398,11 +413,13 @@ def children_menu(
 
     # Create a menu instance that can fetch all pages at once and return
     # for subpages for each branch as they are needed
-    menu_instance = MenuFromRootPage(parent_page, max_levels, use_specific)
+    menu_instance = app_settings.CHILDREN_MENU_CLASS(parent_page, max_levels,
+                                                     use_specific)
+    menu_instance.set_request(request)
 
     parent_page, menu_items = get_sub_menu_items_for_page(
-        page=parent_page,
         request=request,
+        page=parent_page,
         current_site=site,
         current_page=current_page,
         ancestor_ids=ancestor_ids,
@@ -441,15 +458,15 @@ def children_menu(
 
 
 def prime_menu_items(
-    menu_items, current_site, current_page, current_page_ancestor_ids,
-    request_path, use_specific, original_menu_tag, menu_instance,
-    check_for_children=False, allow_repeating_parents=True,
-    apply_active_classes=True
+    request, menu_items, current_site, current_page, current_page_ancestor_ids,
+    use_specific, original_menu_tag, menu_instance, check_for_children=False,
+    allow_repeating_parents=True, apply_active_classes=True
 ):
     """
     Prepare a list of `MenuItem` or `Page` objects for rendering to a menu
     template.
     """
+
     primed_menu_items = []
 
     for item in menu_items:
@@ -498,12 +515,22 @@ def prime_menu_items(
                     responsibilty for determining `has_children_in_menu`
                     to that.
                     """
-                    has_children_in_menu = page.has_submenu_items(
-                        current_page=current_page,
-                        allow_repeating_parents=allow_repeating_parents,
-                        original_menu_tag=original_menu_tag,
-                        menu_instance=menu_instance
-                    )
+                    args = [
+                        current_page, allow_repeating_parents,
+                        original_menu_tag, menu_instance, request
+                    ]
+                    try:
+                        has_children_in_menu = page.has_submenu_items(*args)
+                    except TypeError:
+                        warning_msg = (
+                            "The '%s' model's 'has_submenu_items' method "
+                            "should be updated to accept a 'request' argument"
+                            % page.__class__.__name__
+                        )
+                        warnings.warn(warning_msg)
+                    args.pop()  # try without 'request' arg
+                    has_children_in_menu = page.has_submenu_items(*args)
+
                 else:
                     has_children_in_menu = menu_instance.page_has_children(
                         page)
@@ -533,6 +560,7 @@ def prime_menu_items(
             This is a `MenuItem` for a custom URL. It can be classed as
             'active' if the URL matches the request path.
             """
+            request_path = getattr(request, 'path', '')
             if apply_active_classes and item.link_url == request_path:
                 setattr(item, 'active_class', app_settings.ACTIVE_CLASS)
 

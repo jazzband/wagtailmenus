@@ -29,21 +29,35 @@ class AppSettings(object):
     def _setting(self, name, default):
         return getattr(self._settings, self._prefix + name, default)
 
-    def _model_class(self, model_name_setting_name):
+    def class_from_path_setting(self, path_setting_name):
+        from importlib import import_module
+        from django.core.exceptions import ImproperlyConfigured
+        try:
+            import_path = getattr(self, path_setting_name)
+            module_path, class_name = import_path.rsplit(".", 1)
+            return getattr(import_module(module_path), class_name)
+        except(ImportError, ValueError):
+            raise ImproperlyConfigured(
+                "'%s' is not a valid import path. %s%s must be a full "
+                "dotted python import path e.g. 'project.app.file.Class'" %
+                (import_path, self._prefix, path_setting_name)
+            )
+
+    def model_from_path_setting(self, path_setting_name):
         from django.apps import apps
         from django.core.exceptions import ImproperlyConfigured
-        model_name = getattr(self, model_name_setting_name)
+        model_name = getattr(self, path_setting_name)
         try:
             return apps.get_model(model_name)
         except ValueError:
             raise ImproperlyConfigured(
                 "%s%s must be of the form 'app_label.model_name'" %
-                (self._prefix, model_name_setting_name)
+                (self._prefix, path_setting_name)
             )
         except LookupError:
             raise ImproperlyConfigured(
                 "%s%s refers to model '%s' that has not been installed" %
-                (self._prefix, model_name_setting_name, model_name)
+                (self._prefix, path_setting_name, model_name)
             )
 
     @property
@@ -148,7 +162,7 @@ class AppSettings(object):
 
     @property
     def MAIN_MENU_MODEL_CLASS(self):
-        return self._model_class('MAIN_MENU_MODEL')
+        return self.model_from_path_setting('MAIN_MENU_MODEL')
 
     @property
     def FLAT_MENU_MODEL(self):
@@ -156,7 +170,7 @@ class AppSettings(object):
 
     @property
     def FLAT_MENU_MODEL_CLASS(self):
-        return self._model_class('FLAT_MENU_MODEL')
+        return self.model_from_path_setting('FLAT_MENU_MODEL')
 
     @property
     def MAIN_MENU_ITEMS_RELATED_NAME(self):
@@ -165,6 +179,26 @@ class AppSettings(object):
     @property
     def FLAT_MENU_ITEMS_RELATED_NAME(self):
         return self._setting('FLAT_MENU_ITEMS_RELATED_NAME', 'menu_items')
+
+    @property
+    def CHILDREN_MENU_CLASS_PATH(self):
+        return self._setting(
+            'CHILDREN_MENU_CLASS_PATH', 'wagtailmenus.models.ChildrenMenu'
+        )
+
+    @property
+    def CHILDREN_MENU_CLASS(self):
+        return self.class_from_path_setting('CHILDREN_MENU_CLASS_PATH')
+
+    @property
+    def SECTION_MENU_CLASS_PATH(self):
+        return self._setting(
+            'SECTION_MENU_CLASS_PATH', 'wagtailmenus.models.SectionMenu'
+        )
+
+    @property
+    def SECTION_MENU_CLASS(self):
+        return self.class_from_path_setting('SECTION_MENU_CLASS_PATH')
 
 
 import sys  # noqa

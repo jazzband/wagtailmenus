@@ -387,6 +387,18 @@ class TestCustomMenuModels(TestCase):
         </div>"""
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
+    @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomChildrenMenu',)
+    def test_children_menu_override(self):
+        from wagtailmenus import app_settings
+        from wagtailmenus.tests.models import CustomChildrenMenu
+        self.assertEquals(app_settings.CHILDREN_MENU_CLASS, CustomChildrenMenu)
+
+    @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomSectionMenu', )
+    def test_section_menu_override(self):
+        from wagtailmenus import app_settings
+        from wagtailmenus.tests.models import CustomSectionMenu
+        self.assertEqual(app_settings.SECTION_MENU_CLASS, CustomSectionMenu)
+
 
 class TestInvalidCustomMenuModels(TestCase):
     fixtures = ['test.json', 'test_custom_models.json']
@@ -444,3 +456,23 @@ class TestInvalidCustomMenuModels(TestCase):
             "'tests.NonExistentFlatMenu' that has not been installed"
         )):
             get_flat_menu_model()
+
+    @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH='CustomChildrenMenu',)
+    def test_children_menu_invalid_path(self):
+        with self.assertRaisesMessage(ImproperlyConfigured, (
+            "'CustomChildrenMenu' is not a valid import path. "
+            "WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH must be a full dotted "
+            "python import path e.g. 'project.app.file.Class'"
+        )):
+            from wagtailmenus import app_settings
+            app_settings.CHILDREN_MENU_CLASS
+
+    @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='CustomSectionMenu', )
+    def test_section_menu_invalid_path(self):
+        with self.assertRaisesMessage(ImproperlyConfigured, (
+            "'CustomSectionMenu' is not a valid import path. "
+            "WAGTAILMENUS_SECTION_MENU_CLASS_PATH must be a full dotted "
+            "python import path e.g. 'project.app.file.Class'"
+        )):
+            from wagtailmenus import app_settings
+            app_settings.SECTION_MENU_CLASS
