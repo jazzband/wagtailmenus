@@ -1,4 +1,4 @@
-wagtail>=1.9,<1.10
+wagtail>=1.10,<1.11
 beautifulsoup4>=4.4.1,<4.5.0
 django-debug-toolbar
 django-extensions
