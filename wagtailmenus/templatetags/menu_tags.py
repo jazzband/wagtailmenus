@@ -202,14 +202,14 @@ def get_sub_menu_items_for_page(
         try:
             menu_items = page.modify_submenu_items(*args)
         except TypeError:
+            args.pop()  # try without 'request' arg
+            menu_items = page.modify_submenu_items(*args)
             warning_msg = (
                 "The '%s' model's 'modify_submenu_items' method should be "
                 "updated to accept a 'request' argument"
                 % page.__class__.__name__
             )
             warnings.warn(warning_msg)
-        args.pop()  # try without 'request' arg
-        menu_items = page.modify_submenu_items(*args)
 
     return page, menu_items
 
@@ -522,15 +522,14 @@ def prime_menu_items(
                     try:
                         has_children_in_menu = page.has_submenu_items(*args)
                     except TypeError:
+                        args.pop()  # try without 'request' arg
+                        has_children_in_menu = page.has_submenu_items(*args)
                         warning_msg = (
                             "The '%s' model's 'has_submenu_items' method "
                             "should be updated to accept a 'request' argument"
                             % page.__class__.__name__
                         )
                         warnings.warn(warning_msg)
-                    args.pop()  # try without 'request' arg
-                    has_children_in_menu = page.has_submenu_items(*args)
-
                 else:
                     has_children_in_menu = menu_instance.page_has_children(
                         page)
