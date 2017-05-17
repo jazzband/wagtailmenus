@@ -5,7 +5,7 @@ from wagtail.wagtailadmin.edit_handlers import (
 )
 from wagtail.wagtailcore.models import Page
 
-from wagtailmenus.models import MenuPage
+from wagtailmenus.models import MenuPage, AbstractLinkPage
 from .utils import TranslatedField
 
 
@@ -157,3 +157,7 @@ class ContactPage(MenuPage):
         return super(ContactPage, self).has_submenu_items(
             current_page, allow_repeating_parents, original_menu_tag,
             menu_instance, request)
+
+
+class LinkPage(AbstractLinkPage):
+    pass

@@ -3,13 +3,18 @@ from __future__ import absolute_import, unicode_literals
 import warnings
 from copy import copy
 
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from wagtail.wagtailcore.models import Page
 
 from .. import app_settings
-from ..panels import menupage_settings_panels
+from ..forms import LinkPageAdminForm
+from ..panels import menupage_settings_panels, linkpage_edit_handler
 
 
 class MenuPageMixin(models.Model):
@@ -106,3 +111,98 @@ class MenuPage(Page, MenuPageMixin):
 
     class Meta:
         abstract = True
+
+
+class AbstractLinkPage(Page):
+    link_page = models.ForeignKey(
+        'wagtailcore.Page',
+        verbose_name=_('link to an internal page'),
+        blank=True,
+        null=True,
+        related_name='+',
+        on_delete=models.SET_NULL,
+    )
+    link_url = models.CharField(
+        verbose_name=_('link to a custom URL'),
+        max_length=255,
+        blank=True,
+        null=True,
+    )
+    url_append = models.CharField(
+        verbose_name=_("append to URL"),
+        max_length=255,
+        blank=True,
+        help_text=_(
+            "Use this to optionally append a #hash or querystring to the "
+            "above page's URL."
+        )
+    )
+
+    subpage_types = []  # Don't allow subpages
+    base_form_class = LinkPageAdminForm
+
+    class Meta:
+        abstract = True
+
+    def __init__(self, *args, **kwargs):
+        # Set `show_in_menus` to True by default, but leave as False if
+        # it has been set
+        super(AbstractLinkPage, self).__init__(*args, **kwargs)
+        if not self.pk:
+            self.show_in_menus = True
+
+    @cached_property
+    def link_page_specific(self):
+        if self.link_page_id:
+            return self.link_page.specific
+        return None
+
+    def full_clean(self, *args, **kwargs):
+        self.slug = ''  # have wagtail always generate a new unique slug
+        super(AbstractLinkPage, self).full_clean(*args, **kwargs)
+
+    def clean(self, *args, **kwargs):
+        if self.link_page_id == self.id:
+            msg = _("A link page cannot link to itself")
+            raise ValidationError({'link_page': msg})
+        if not self.link_url and not self.link_page:
+            msg = _("You must choose a page or provide a custom URL.")
+            raise ValidationError({'link_page': msg, 'link_url': msg})
+        if self.link_url and self.link_page:
+            msg = _("Linking to both a page and custom URL is not permitted.")
+            raise ValidationError({'link_page': msg, 'link_url': msg})
+        super(AbstractLinkPage, self).clean(*args, **kwargs)
+
+    def get_sitemap_urls(self):
+        return []  # don't include pages of this type in sitemaps
+
+    def get_url(self, request=None, current_site=None):
+        # Return the target link URL as the page URL
+        current_site = current_site or getattr(request, 'site', None)
+        try:
+            if current_site:
+                url = self.link_page_specific.relative_url(current_site)
+            else:
+                url = self.link_page_specific.url
+            return url + self.url_append
+        except TypeError:
+            return ''
+        if self.link_url:
+            return self.link_url + self.url_append
+        return ''
+
+    url = property(get_url)
+
+    def relative_url(self, current_site, request=None):
+        return self.get_url(request=request, current_site=current_site)
+
+    def serve(self, request, *args, **kwargs):
+        # Display appropriate message if previewing
+        if getattr(request, 'is_preview', False):
+            return HttpResponse(_("This page redirects to: %(url)s") % {
+                'url': self.get_url(request)
+            })
+        # Redirect to target URL if served
+        return redirect(self.get_url(request))
+
+    edit_handler = linkpage_edit_handler
