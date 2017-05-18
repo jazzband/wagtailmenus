@@ -157,41 +157,60 @@ class AbstractLinkPage(Page):
             return self.link_page.specific
         return None
 
-    def full_clean(self, *args, **kwargs):
-        self.slug = ''  # have wagtail always generate a new unique slug
-        super(AbstractLinkPage, self).full_clean(*args, **kwargs)
-
     def clean(self, *args, **kwargs):
-        if self.link_page_id == self.id:
-            msg = _("A link page cannot link to itself")
-            raise ValidationError({'link_page': msg})
+        if self.link_page and isinstance(
+            self.link_page_specific, AbstractLinkPage
+        ):
+            raise ValidationError({
+                'link_page': _("A link page cannot link to another link page"),
+            })
         if not self.link_url and not self.link_page:
-            msg = _("You must choose a page or provide a custom URL.")
-            raise ValidationError({'link_page': msg, 'link_url': msg})
+            raise ValidationError(
+                _("You must choose an internal page or provide a custom URL")
+            )
         if self.link_url and self.link_page:
-            msg = _("Linking to both a page and custom URL is not permitted.")
-            raise ValidationError({'link_page': msg, 'link_url': msg})
+            raise ValidationError(
+                _("Linking to both a page and custom URL is not permitted")
+            )
         super(AbstractLinkPage, self).clean(*args, **kwargs)
 
     def get_sitemap_urls(self):
         return []  # don't include pages of this type in sitemaps
 
-    def get_url(self, request=None, current_site=None):
-        # Return the target link URL as the page URL
-        current_site = current_site or getattr(request, 'site', None)
-        try:
+    def _url_base(self, request=None, current_site=None, full_url=False):
+        # Return the url of the page being linked to, or the custom URL
+        if self.link_page:
+            page = self.link_page_specific
+            if full_url:
+                if hasattr(page, 'get_full_url'):
+                    return page.get_full_url(request=request)
+                return page.full_url
+            if hasattr(page, 'get_url'):
+                return page.get_url(request=request, current_site=current_site)
             if current_site:
-                url = self.link_page_specific.relative_url(current_site)
-            else:
-                url = self.link_page_specific.url
-            return url + self.url_append
+                return page.relative_url(current_site)
+            return page.url
+        return self.link_url
+
+    def get_url(self, request=None, current_site=None):
+        try:
+            base = self._url_base(request=request, current_site=current_site)
+            return base + self.url_append
         except TypeError:
-            return ''
-        if self.link_url:
-            return self.link_url + self.url_append
+            pass  # link page is not routable
         return ''
 
     url = property(get_url)
+
+    def get_full_url(self, request=None):
+        try:
+            base = self._url_base(request=request, full_url=True)
+            return base + self.url_append
+        except TypeError:
+            pass  # link page is not routable
+        return ''
+
+    full_url = property(get_full_url)
 
     def relative_url(self, current_site, request=None):
         return self.get_url(request=request, current_site=current_site)
