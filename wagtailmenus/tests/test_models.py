@@ -15,7 +15,7 @@ class TestModels(TestCase):
         new_item = MainMenuItem(menu=menu, link_url='test/')
         self.assertRaisesMessage(
             ValidationError,
-            "This must be set if you're linking to a custom URL.",
+            "This field is required when linking to a custom URL",
             new_item.clean)
 
     def test_mainmenuitem_clean_missing_link_url(self):
@@ -23,7 +23,7 @@ class TestModels(TestCase):
         new_item = MainMenuItem(menu=menu)
         self.assertRaisesMessage(
             ValidationError,
-            "This must be set if you're not linking to a page.",
+            "Please choose an internal page or provide a custom URL",
             new_item.clean)
 
     def test_mainmenuitem_clean_link_url_and_link_page(self):
@@ -35,7 +35,7 @@ class TestModels(TestCase):
             link_page=Page.objects.get(pk=6))
         self.assertRaisesMessage(
             ValidationError,
-            "A menu item cannot link to both a page and a custom URL.",
+            "Linking to both a page and custom URL is not permitted",
             new_item.clean)
 
     def test_mainmenuitem_str(self):

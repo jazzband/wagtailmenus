@@ -166,7 +166,7 @@ class AbstractLinkPage(Page):
             })
         if not self.link_url and not self.link_page:
             raise ValidationError(
-                _("You must choose an internal page or provide a custom URL")
+                _("Please choose an internal page or provide a custom URL")
             )
         if self.link_url and self.link_page:
             raise ValidationError(
