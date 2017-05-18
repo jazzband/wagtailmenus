@@ -179,25 +179,31 @@ class AbstractLinkPage(Page):
 
     def _url_base(self, request=None, current_site=None, full_url=False):
         # Return the url of the page being linked to, or the custom URL
-        if self.link_page:
-            page = self.link_page_specific
-            if full_url:
-                if hasattr(page, 'get_full_url'):
-                    return page.get_full_url(request=request)
-                return page.full_url
-            if hasattr(page, 'get_url'):
-                return page.get_url(request=request, current_site=current_site)
-            if current_site:
-                return page.relative_url(current_site)
-            return page.url
-        return self.link_url
+        if self.link_url:
+            return self.link_url
+
+        p = self.link_page_specific  # for tidier referencing below
+        if full_url:
+            # Try for 'get_full_url' method (added in Wagtail 1.11) or fall
+            # back to 'full_url' property
+            if hasattr(p, 'get_full_url'):
+                return p.get_full_url(request=request)
+            return p.full_url
+
+        # Try for 'get_url' method (added in Wagtail 1.11) or fall back to
+        # established 'relative_url' method or 'url' property
+        if hasattr(p, 'get_url'):
+            return p.get_url(request=request, current_site=current_site)
+        if current_site:
+            return p.relative_url(current_site=current_site)
+        return p.url
 
     def get_url(self, request=None, current_site=None):
         try:
             base = self._url_base(request=request, current_site=current_site)
             return base + self.url_append
         except TypeError:
-            pass  # link page is not routable
+            pass  # self.link_page is not routable
         return ''
 
     url = property(get_url)
@@ -207,7 +213,7 @@ class AbstractLinkPage(Page):
             base = self._url_base(request=request, full_url=True)
             return base + self.url_append
         except TypeError:
-            pass  # link page is not routable
+            pass  # self.link_page is not routable
         return ''
 
     full_url = property(get_full_url)
