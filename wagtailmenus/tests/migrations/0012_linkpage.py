@@ -9,7 +9,6 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('wagtailcore', '0032_add_bulk_delete_page_permission'),
         ('tests', '0011_auto_20170106_2355'),
     ]
 
