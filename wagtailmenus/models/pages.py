@@ -227,7 +227,7 @@ class AbstractLinkPage(Page):
         # Display appropriate message if previewing
         if getattr(request, 'is_preview', False):
             return HttpResponse(_("This page redirects to: %(url)s") % {
-                'url': self.get_url(request)
+                'url': self.get_full_url(request)
             })
         # Redirect to target URL if served
         return redirect(self.get_url(request))

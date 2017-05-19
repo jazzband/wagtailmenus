@@ -123,6 +123,26 @@ class LinkPageCMSTest(WebTest):
             '/admin/pages/%s/edit/' % self.link_page_id,
             user='test1')
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'value="RKH Website"')
+
+    def test_view_draft_linkpage(self):
+        response = self.app.get(
+            '/admin/pages/%s/view_draft/' % self.link_page_id,
+            user='test1')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'This page redirects to: https://www.rkh.co.uk#testing')
+
+    def test_view_draft_linkpage_to_page(self):
+        # First, lets update the example LinkPage to link to a page instead of a custom URL
+        link_page = LinkPage.objects.get(id=self.link_page_id)
+        link_page.link_url = ''
+        link_page.link_page_id = self.parent_page_id
+        link_page.save()
+        response = self.app.get(
+            '/admin/pages/%s/view_draft/' % self.link_page_id,
+            user='test1')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'This page redirects to: http://www.wagtailmenus.co.uk:8000/#testing')
 
 
 class TestSuperUser(TransactionTestCase):
