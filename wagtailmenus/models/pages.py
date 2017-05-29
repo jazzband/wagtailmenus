@@ -166,12 +166,12 @@ class AbstractLinkPage(Page):
             })
         if not self.link_url and not self.link_page:
             msg = _("Please choose an internal page or provide a custom URL")
-            ValidationError({
+            raise ValidationError({
                 'link_url': msg, 'link_page': msg,
             })
         if self.link_url and self.link_page:
             msg = _("Linking to both a page and custom URL is not permitted")
-            ValidationError({
+            raise ValidationError({
                 'link_url': msg, 'link_page': msg,
             })
         super(AbstractLinkPage, self).clean(*args, **kwargs)

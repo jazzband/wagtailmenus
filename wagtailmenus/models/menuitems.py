@@ -98,23 +98,14 @@ class AbstractMenuItem(models.Model, MenuItem):
 
     def clean(self, *args, **kwargs):
         if not self.link_url and not self.link_page:
-            raise ValidationError({
-                'link_url': [
-                    _("Please choose an internal page or provide a custom URL"),
-                ]
-            })
+            msg = _("Please choose an internal page or provide a custom URL")
+            raise ValidationError({'link_url': msg})
         if self.link_url and self.link_page:
             msg = _("Linking to both a page and custom URL is not permitted")
-            raise ValidationError({
-                'link_page': [msg],
-                'link_url': [msg],
-            })
+            raise ValidationError({'link_page': msg, 'link_url': msg})
         if self.link_url and not self.link_text:
-            raise ValidationError({
-                'link_text': [
-                    _("This field is required when linking to a custom URL"),
-                ]
-            })
+            msg = _("This field is required when linking to a custom URL")
+            raise ValidationError({'link_text': msg})
         super(AbstractMenuItem, self).clean(*args, **kwargs)
 
     def __str__(self):
