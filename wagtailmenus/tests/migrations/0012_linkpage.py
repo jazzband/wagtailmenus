@@ -20,6 +20,7 @@ class Migration(migrations.Migration):
                 ('link_url', models.CharField(blank=True, max_length=255, null=True, verbose_name='link to a custom URL')),
                 ('url_append', models.CharField(blank=True, help_text="Use this to optionally append a #hash or querystring to the above page's URL.", max_length=255, verbose_name='append to URL')),
                 ('link_page', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailcore.Page', verbose_name='link to an internal page')),
+                ('extra_classes', models.CharField(blank=True, help_text='Optionally specify additional css classes to be added to this page when it appears in menus as a menu item.', max_length=100, verbose_name='menu item css classes')),
             ],
             options={
                 'abstract': False,

@@ -7,7 +7,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from wagtail.wagtailcore.models import Page
@@ -137,6 +136,15 @@ class AbstractLinkPage(Page):
             "above page's URL."
         )
     )
+    extra_classes = models.CharField(
+        verbose_name=_('menu item css classes'),
+        max_length=100,
+        blank=True,
+        help_text=_(
+            "Optionally specify additional css classes to be added to this "
+            "page when it appears in menus as a menu item."
+        )
+    )
 
     subpage_types = []  # Don't allow subpages
     base_form_class = LinkPageAdminForm
@@ -151,30 +159,47 @@ class AbstractLinkPage(Page):
         if not self.pk:
             self.show_in_menus = True
 
-    @cached_property
-    def link_page_specific(self):
-        if self.link_page_id:
-            return self.link_page.specific
-        return None
-
     def clean(self, *args, **kwargs):
         if self.link_page and isinstance(
-            self.link_page_specific, AbstractLinkPage
+            self.link_page.specific, AbstractLinkPage
         ):
-            raise ValidationError({
-                'link_page': _("A link page cannot link to another link page"),
-            })
+            msg = _("A link page cannot link to another link page")
+            raise ValidationError({'link_page': msg})
         if not self.link_url and not self.link_page:
             msg = _("Please choose an internal page or provide a custom URL")
-            raise ValidationError({
-                'link_url': msg, 'link_page': msg,
-            })
+            raise ValidationError({'link_url': msg, 'link_page': msg})
         if self.link_url and self.link_page:
             msg = _("Linking to both a page and custom URL is not permitted")
-            raise ValidationError({
-                'link_url': msg, 'link_page': msg,
-            })
+            raise ValidationError({'link_url': msg, 'link_page': msg})
         super(AbstractLinkPage, self).clean(*args, **kwargs)
+
+    def link_page_should_be_shown(self, request=None, current_site=None,
+                                  menu_instance=None, original_menu_tag=''):
+        """
+        Like menu items, link pages linking to pages should only be included
+        in menus when the target page is live and is itself configured to
+        appear in menus. Returns a boolean indicating as much
+        """
+        if self.link_page:
+            if(
+                not self.link_page.show_in_menus or
+                not self.link_page.live or
+                self.link_page.expired
+            ):
+                return False
+        return True
+
+    def show_in_menus_custom(self, request=None, current_site=None,
+                             menu_instance=None, original_menu_tag=''):
+        """
+        Return a boolean indicating whether this page should be included in
+        menus being rendered.
+        """
+        if not self.show_in_menus:
+            return False
+        if not self.link_page:
+            return True
+        return self.link_page_should_be_shown()
 
     def get_sitemap_urls(self):
         return []  # don't include pages of this type in sitemaps
@@ -184,7 +209,7 @@ class AbstractLinkPage(Page):
         if self.link_url:
             return self.link_url
 
-        p = self.link_page_specific  # for tidier referencing below
+        p = self.link_page.specific  # for tidier referencing below
         if full_url:
             # Try for 'get_full_url' method (added in Wagtail 1.11) or fall
             # back to 'full_url' property
@@ -196,8 +221,8 @@ class AbstractLinkPage(Page):
         # established 'relative_url' method or 'url' property
         if hasattr(p, 'get_url'):
             return p.get_url(request=request, current_site=current_site)
-        if current_site:
-            return p.relative_url(current_site=current_site)
+        if current_site or getattr(request, 'site', None): 
+            return p.relative_url(current_site=current_site or request.site)
         return p.url
 
     def get_url(self, request=None, current_site=None):
@@ -230,6 +255,9 @@ class AbstractLinkPage(Page):
                 'url': self.get_full_url(request)
             })
         # Redirect to target URL if served
-        return redirect(self.get_url(request))
+        site = getattr(request, 'site', None)
+        return redirect(
+            self.relative_url(current_site=site, request=request)
+        )
 
     edit_handler = linkpage_edit_handler
