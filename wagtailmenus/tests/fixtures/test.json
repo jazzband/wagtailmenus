@@ -285,7 +285,7 @@
     "fields": {
         "path": "0001",
         "depth": 1,
-        "numchild": 1,
+        "numchild": 2,
         "title": "Root",
         "slug": "root",
         "content_type": ["wagtailcore", "page"],
@@ -295,6 +295,23 @@
         "show_in_menus": false,
         "first_published_at": null,
         "latest_revision_created_at": null
+    }
+},
+{
+    "model": "wagtailcore.page",
+    "pk": 2,
+    "fields": {
+        "path": "00010001",
+        "depth": 2,
+        "numchild": 0,
+        "title": "Non-routable page",
+        "slug": "non-routable-page",
+        "content_type": ["wagtailcore", "page"],
+        "live": true,
+        "url_path": "/non-routable-page/",
+        "show_in_menus": true,
+        "first_published_at": "2016-04-18T11:12:19.295Z",
+        "latest_revision_created_at": "2016-04-18T11:54:50.842Z"
     }
 },
 {

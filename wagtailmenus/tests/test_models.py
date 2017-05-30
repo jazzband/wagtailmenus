@@ -147,7 +147,7 @@ class TestLinkPage(TestCase):
     fixtures = ['test.json']
 
     def setUp(self):
-        # Create a couple of link pages for testing
+        # Create a few of link pages for testing
         site = Site.objects.select_related('root_page').get(is_default_site=True)
         self.site = site
 
@@ -179,7 +179,16 @@ class TestLinkPage(TestCase):
         self.assertEqual(linkpage_to_url.get_sitemap_urls(), [])
         self.linkpage_to_url = linkpage_to_url
 
+        linkpage_to_non_routable_page = LinkPage(
+            title='Go to this unroutable page',
+            link_page_id=2,
+            url_append='?somevar=value'
+        )
+        site.root_page.add_child(instance=linkpage_to_non_routable_page)
+        self.linkpage_to_non_routable_page = linkpage_to_non_routable_page
+
     def test_url_methods(self):
+        # When linking to a page
         self.assertEqual(
             self.linkpage_to_page.relative_url(self.site),
             '/superheroes/marvel-comics/spiderman/?somevar=value'
@@ -188,6 +197,12 @@ class TestLinkPage(TestCase):
             self.linkpage_to_page.full_url,
             'http://www.wagtailmenus.co.uk:8000/superheroes/marvel-comics/spiderman/?somevar=value'
         )
+
+        # When linking to a non-routable page
+        self.assertEqual(self.linkpage_to_non_routable_page.relative_url(self.site), '')
+        self.assertEqual(self.linkpage_to_non_routable_page.full_url, '')
+
+        # When linking to a custom url
         self.assertEqual(
             self.linkpage_to_url.relative_url(self.site), 'https://www.google.co.uk?somevar=value'
         )
