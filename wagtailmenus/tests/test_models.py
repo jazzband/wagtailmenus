@@ -179,12 +179,25 @@ class TestLinkPage(TestCase):
         self.assertEqual(linkpage_to_url.get_sitemap_urls(), [])
         self.linkpage_to_url = linkpage_to_url
 
+    def test_url_methods(self):
+        self.assertEqual(
+            self.linkpage_to_page.relative_url(self.site),
+            '/superheroes/marvel-comics/spiderman/?somevar=value'
+        )
+        self.assertEqual(
+            self.linkpage_to_page.full_url,
+            'http://www.wagtailmenus.co.uk:8000/superheroes/marvel-comics/spiderman/?somevar=value'
+        )
+        self.assertEqual(
+            self.linkpage_to_url.relative_url(self.site), 'https://www.google.co.uk?somevar=value'
+        )
+        self.assertEqual(
+            self.linkpage_to_url.full_url, 'https://www.google.co.uk?somevar=value'
+        )
+
     def test_linkpage_visibility(self):
         page_link_html = (
             '<a href="/superheroes/marvel-comics/spiderman/?somevar=value">Find out about Spiderman</a>'
-        )
-        url_link_html = (
-            '<a href="https://www.google.co.uk">Do a google search</a>'
         )
         # When the target page is live, the linkpage should appear
         response = self.client.get('/')

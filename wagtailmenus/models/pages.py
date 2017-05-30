@@ -221,8 +221,8 @@ class AbstractLinkPage(Page):
         # established 'relative_url' method or 'url' property
         if hasattr(p, 'get_url'):
             return p.get_url(request=request, current_site=current_site)
-        if current_site or getattr(request, 'site', None): 
-            return p.relative_url(current_site=current_site or request.site)
+        if current_site:
+            return p.relative_url(current_site=current_site)
         return p.url
 
     def get_url(self, request=None, current_site=None):
