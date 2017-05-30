@@ -3,8 +3,9 @@ from __future__ import absolute_import, unicode_literals
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-from wagtail.wagtailcore.models import Page
+from wagtail.wagtailcore.models import Page, Site
 from wagtailmenus.models import MainMenu, MainMenuItem, FlatMenu
+from wagtailmenus.tests.models import LinkPage
 
 
 class TestModels(TestCase):
@@ -140,3 +141,104 @@ class TestModels(TestCase):
         with self.assertNumQueries(0):
             for p in menu.pages_for_display:
                 assert type(p) is not Page
+
+
+class TestLinkPage(TestCase):
+    fixtures = ['test.json']
+
+    def setUp(self):
+        # Create a couple of link pages for testing
+        site = Site.objects.select_related('root_page').get(is_default_site=True)
+        self.site = site
+
+        linkpage_to_page = LinkPage(
+            title='Find out about Spiderman',
+            link_page_id=30,
+            url_append='?somevar=value'
+        )
+        site.root_page.add_child(instance=linkpage_to_page)
+
+        # Check that the above page was saved and has field values we expect
+        self.assertTrue(linkpage_to_page.id)
+        self.assertTrue(linkpage_to_page.show_in_menus)
+        self.assertTrue(linkpage_to_page.show_in_menus_custom())
+        self.assertEqual(linkpage_to_page.get_sitemap_urls(), [])
+        self.linkpage_to_page = linkpage_to_page
+
+        linkpage_to_url = LinkPage(
+            title='Do a google search',
+            link_url="https://www.google.co.uk",
+            url_append='?somevar=value'
+        )
+        site.root_page.add_child(instance=linkpage_to_url)
+
+        # Check that the above page was saved and has field values we expect
+        self.assertTrue(linkpage_to_url.id)
+        self.assertTrue(linkpage_to_url.show_in_menus)
+        self.assertTrue(linkpage_to_url.show_in_menus_custom())
+        self.assertEqual(linkpage_to_url.get_sitemap_urls(), [])
+        self.linkpage_to_url = linkpage_to_url
+
+    def test_linkpage_visibility(self):
+        page_link_html = (
+            '<a href="/superheroes/marvel-comics/spiderman/?somevar=value">Find out about Spiderman</a>'
+        )
+        url_link_html = (
+            '<a href="https://www.google.co.uk">Do a google search</a>'
+        )
+        # When the target page is live, the linkpage should appear
+        response = self.client.get('/')
+        self.assertContains(response, page_link_html, html=True)
+
+        # When the target page is not live, the linkpage shouldn't appear
+        target_page = self.linkpage_to_page.link_page
+        target_page.live = False
+        target_page.save()
+        response = self.client.get('/')
+        self.assertNotContains(response, page_link_html, html=True)
+
+        # When the target page isn't set to appear in menus, the linkpage
+        # shouldn't appear
+        target_page.live = True
+        target_page.show_in_menus = False
+        target_page.save()
+        response = self.client.get('/')
+        self.assertNotContains(response, page_link_html, html=True)
+
+        # When the target page is 'expired', the linkpage shouldn't appear
+        target_page.show_in_menus = True
+        target_page.expired = True
+        target_page.save()
+        response = self.client.get('/')
+        self.assertNotContains(response, page_link_html, html=True)
+
+    def test_linkpage_clean(self):
+        linkpage = self.linkpage_to_page
+        linkpage.link_url = 'https://www.rkh.co.uk/'
+        self.assertRaisesMessage(
+            ValidationError,
+            "Linking to both a page and custom URL is not permitted",
+            linkpage.clean
+        )
+
+        linkpage.link_url = ''
+        linkpage.link_page = None
+        self.assertRaisesMessage(
+            ValidationError,
+            "Please choose an internal page or provide a custom URL",
+            linkpage.clean
+        )
+
+        linkpage.link_page = linkpage
+        self.assertRaisesMessage(
+            ValidationError,
+            "A link page cannot link to another link page",
+            linkpage.clean
+        )
+
+    def test_linkpage_redirects_when_served(self):
+        response = self.client.get('/find-out-about-spiderman/')
+        self.assertRedirects(
+            response,
+            '/superheroes/marvel-comics/spiderman/?somevar=value'
+        )
