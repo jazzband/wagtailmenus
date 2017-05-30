@@ -40,6 +40,7 @@ linkpage_panels = [
         PageChooserPanel('link_page'),
         FieldPanel('link_url'),
         FieldPanel('url_append'),
+        FieldPanel('extra_classes'),
     ])
 ]
 

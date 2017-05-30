@@ -12,6 +12,7 @@ from wagtailmenus.utils.misc import (
 from wagtailmenus.utils.template import (
     get_template_names, get_sub_menu_template_names
 )
+from wagtailmenus.models import AbstractLinkPage
 flat_menus_fbtdsm = app_settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS
 
 register = Library()
@@ -492,7 +493,21 @@ def prime_menu_items(
 
         if page:
             """
-            First we work out whether this item should be flagged as needing
+            Special treatment for link pages
+            """
+            if issubclass(page.specific_class, AbstractLinkPage):
+                if type(page) is Page:
+                    page = page.specific
+                if page.show_in_menus_custom(
+                    request, current_site, menu_instance, original_menu_tag
+                ):
+                    setattr(item, 'active_class', page.extra_classes)
+                    setattr(item, 'href', page.relative_url(current_site))
+                    primed_menu_items.append(item)
+                continue
+
+            """
+            Work out whether this item should be flagged as needing
             a sub-menu. It can be expensive, so we try to only do the working
             out when absolutely necessary.
             """
