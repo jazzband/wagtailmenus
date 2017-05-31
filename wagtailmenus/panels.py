@@ -38,6 +38,7 @@ linkpage_panels = [
     MultiFieldPanel([
         FieldPanel('title', classname="title"),
         PageChooserPanel('link_page'),
+        FieldPanel('link_page_title_as_text'),
         FieldPanel('link_url'),
         FieldPanel('url_append'),
         FieldPanel('extra_classes'),
