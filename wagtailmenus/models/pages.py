@@ -121,6 +121,10 @@ class AbstractLinkPage(Page):
         related_name='+',
         on_delete=models.SET_NULL,
     )
+    link_page_title_as_text = models.BooleanField(
+        default=False,
+        verbose_name=_("use this page's title as link text"),
+    )
     link_url = models.CharField(
         verbose_name=_('link to a custom URL'),
         max_length=255,
@@ -132,8 +136,7 @@ class AbstractLinkPage(Page):
         max_length=255,
         blank=True,
         help_text=_(
-            "Use this to optionally append a #hash or querystring to the "
-            "above page's URL."
+            "Use this to optionally append a #hash or querystring to the URL."
         )
     )
     extra_classes = models.CharField(
@@ -141,8 +144,8 @@ class AbstractLinkPage(Page):
         max_length=100,
         blank=True,
         help_text=_(
-            "Optionally specify additional css classes to be added to this "
-            "page when it appears in menus as a menu item."
+            "Optionally specify css classes to be added to this page when it "
+            "appears in menus."
         )
     )
 
@@ -159,6 +162,18 @@ class AbstractLinkPage(Page):
         if not self.pk:
             self.show_in_menus = True
 
+    def link_text(self):
+        """Return a string to use as link text when this page appears in
+        menus."""
+        if self.link_page_id and self.link_page_title_as_text:
+            return getattr(
+                self.link_page,
+                app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
+                self.link_page.title
+            )
+        return self.title
+    text = property(link_text)
+
     def clean(self, *args, **kwargs):
         if self.link_page and isinstance(
             self.link_page.specific, AbstractLinkPage
@@ -173,8 +188,10 @@ class AbstractLinkPage(Page):
             raise ValidationError({'link_url': msg, 'link_page': msg})
         super(AbstractLinkPage, self).clean(*args, **kwargs)
 
-    def link_page_should_be_shown(self, request=None, current_site=None,
-                                  menu_instance=None, original_menu_tag=''):
+    def link_page_is_suitable_for_display(
+        self, request=None, current_site=None, menu_instance=None,
+        original_menu_tag=''
+    ):
         """
         Like menu items, link pages linking to pages should only be included
         in menus when the target page is live and is itself configured to
@@ -199,7 +216,7 @@ class AbstractLinkPage(Page):
             return False
         if not self.link_page:
             return True
-        return self.link_page_should_be_shown()
+        return self.link_page_is_suitable_for_display()
 
     def get_sitemap_urls(self):
         return []  # don't include pages of this type in sitemaps
