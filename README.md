@@ -85,17 +85,42 @@ Installing wagtailmenus
 5. Run `python manage.py migrate wagtailmenus` to create the necessary database tables.
 
 
-Making use of `MenuPage`
-------------------------
+Using the `MenuPage` model
+--------------------------
 
 While wagtailmenus' menu tags will work with your existing page tree and page types, to access some of the app's more powerful features (e.g. item repetition, programmatic manipulation of sub-menu items), you'll likely want to use the `MenuPage` model as a base for some of your page-type models.
 
-1. Import `MenuPage` in your `models.py` file like so: `from wagtailmenus.models import MenuPage` 
+1. Import `MenuPage` into your `models.py` file like so: `from wagtailmenus.models import MenuPage` 
 2. For any page-types that you'd like to become `MenuPage` pages, simply subclass `MenuPage` instead of `wagtail.wagtailcore.models.Page`.
 3. Run `python manage.py makemigrations` to create migrations for the apps you've updated.
 4. Run `python manage.py migrate` to apply the migrations.
 
 If for some reason subclassing `MenuPage` won't work (perhaps you need to subclass another model based on `Page`, such as wagtail's `AbstractForm` and `AbstractEmailForm` models), you can import and use `wagtailmenus.models.MenuPageMixin` instead to gain the same fields and functionality. However, you will need to override `settings_panels` on your model yourself to surface the fields in the page editor interface.
+
+
+Using the `AbstractLinkPage` model
+----------------------------------
+
+Because menus only allow you to define the top-level items in a menu, the `AbstractLinkPage` model was added in version 2.3 to give you a way to add additional links into multi-level menus past the top level. 
+
+As with menu items, link pages can link to other pages or custom URLs. If linking to another page, the link will automatically hide if the target page is unpublished, expires, or is set to no longer show in menus. It will also appear again if the target page is published or set to show in menus again. 
+
+To use it, you simply need to subclass it to create a new, non-abstract model in your project, just like in the following example: 
+
+```python
+
+from wagtailmenus.models import AbstractLinkPage
+
+
+class LinkPage(AbstractLinkPage):
+    pass
+
+ ```
+
+Then run `python manage.py makemigrations` to create a migration for your new model, then `python manage.py migrate` to perform the necessary database operations.
+
+By default, link pages are not allowed to have children, and shouldn't appear
+in Wagtail-generated sitemaps, or search results.
 
 
 Using wagtailmenus

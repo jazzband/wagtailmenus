@@ -1,7 +1,8 @@
 from __future__ import absolute_import, unicode_literals
 
 from wagtail.wagtailadmin.edit_handlers import (
-    FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList)
+    FieldPanel, FieldRowPanel, MultiFieldPanel, PageChooserPanel, ObjectList,
+    TabbedInterface)
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -19,7 +20,7 @@ menupage_panel = MultiFieldPanel(
 MenuPage abstract class.
 """
 
-menupage_settings_panels = (
+menupage_settings_panels = [
     MultiFieldPanel(
         heading=_("Scheduled publishing"),
         classname="publishing",
@@ -31,11 +32,28 @@ menupage_settings_panels = (
         )
     ),
     menupage_panel,
-)
+]
+
+linkpage_panels = [
+    MultiFieldPanel([
+        FieldPanel('title', classname="title"),
+        PageChooserPanel('link_page'),
+        FieldPanel('link_url'),
+        FieldPanel('url_append'),
+        FieldPanel('extra_classes'),
+    ])
+]
 
 """
 The above `settings_panels` arrangement configured as tab, for easier
 integration into custom edit_handlers.
 """
 menupage_settings_tab = ObjectList(
-    menupage_settings_panels, heading=_("Settings"), classname="settings")
+    menupage_settings_panels, heading=_("Settings"), classname="settings"
+)
+
+linkpage_tab = ObjectList(
+    linkpage_panels, heading=_("Settings"), classname="settings"
+)
+
+linkpage_edit_handler = TabbedInterface([linkpage_tab])

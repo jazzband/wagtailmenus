@@ -1,7 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
-from django.db import models
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
@@ -31,7 +31,6 @@ class MenuItem(object):
 class AbstractMenuItem(models.Model, MenuItem):
     """A model class that defines a base set of fields and methods for all
     'menu item' models."""
-
     link_page = models.ForeignKey(
         'wagtailcore.Page',
         verbose_name=_('link to an internal page'),
@@ -45,14 +44,14 @@ class AbstractMenuItem(models.Model, MenuItem):
         blank=True,
         null=True,
     )
-    link_text = models.CharField(
-        verbose_name=_('link text'),
+    url_append = models.CharField(
+        verbose_name=_("append to URL"),
         max_length=255,
         blank=True,
         help_text=_(
-            "Provide the text to use for a custom URL, or set on an internal "
-            "page link to use instead of the page's title."
-        ),
+            "Use this to optionally append a #hash or querystring to the "
+            "above page's URL."
+        )
     )
     handle = models.CharField(
         verbose_name=_('handle'),
@@ -64,14 +63,14 @@ class AbstractMenuItem(models.Model, MenuItem):
             "templates."
         )
     )
-    url_append = models.CharField(
-        verbose_name=_("append to URL"),
+    link_text = models.CharField(
+        verbose_name=_('link text'),
         max_length=255,
         blank=True,
         help_text=_(
-            "Use this to optionally append a #hash or querystring to the "
-            "above page's URL."
-        )
+            "Provide the text to use for a custom URL, or set on an internal "
+            "page link to use instead of the page's title."
+        ),
     )
 
     objects = MenuItemManager()
@@ -98,40 +97,28 @@ class AbstractMenuItem(models.Model, MenuItem):
         return self.link_url + self.url_append
 
     def clean(self, *args, **kwargs):
-        super(AbstractMenuItem, self).clean(*args, **kwargs)
-
-        if self.link_url and not self.link_text:
-            raise ValidationError({
-                'link_text': [
-                    _("This must be set if you're linking to a custom URL."),
-                ]
-            })
-
         if not self.link_url and not self.link_page:
-            raise ValidationError({
-                'link_url': [
-                    _("This must be set if you're not linking to a page."),
-                ]
-            })
-
+            msg = _("Please choose an internal page or provide a custom URL")
+            raise ValidationError({'link_url': msg})
         if self.link_url and self.link_page:
-            msg = _('A menu item cannot link to both a page and a custom URL.')
-            raise ValidationError({
-                'link_page': [msg],
-                'link_url': [msg],
-            })
+            msg = _("Linking to both a page and custom URL is not permitted")
+            raise ValidationError({'link_page': msg, 'link_url': msg})
+        if self.link_url and not self.link_text:
+            msg = _("This field is required when linking to a custom URL")
+            raise ValidationError({'link_text': msg})
+        super(AbstractMenuItem, self).clean(*args, **kwargs)
 
     def __str__(self):
         return self.menu_text
 
-    panels = (
+    panels = [
         PageChooserPanel('link_page'),
         FieldPanel('link_url'),
         FieldPanel('url_append'),
         FieldPanel('link_text'),
         FieldPanel('handle'),
         FieldPanel('allow_subnav'),
-    )
+    ]
 
 
 class AbstractMainMenuItem(Orderable, AbstractMenuItem):

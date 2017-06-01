@@ -12,6 +12,7 @@ from wagtailmenus.utils.misc import (
 from wagtailmenus.utils.template import (
     get_template_names, get_sub_menu_template_names
 )
+from wagtailmenus.models import AbstractLinkPage, MenuItem
 flat_menus_fbtdsm = app_settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS
 
 register = Library()
@@ -470,7 +471,8 @@ def prime_menu_items(
     primed_menu_items = []
 
     for item in menu_items:
-        try:
+
+        if isinstance(item, MenuItem):
             """
             `menu_items` is a list of `MenuItem` objects from
             `Menu.top_level_items`. Any `link_page` values will have been
@@ -479,7 +481,23 @@ def prime_menu_items(
             page = item.link_page
             menuitem = item
             setattr(item, 'text', item.menu_text)
-        except AttributeError:
+
+        elif issubclass(item.specific_class, AbstractLinkPage):
+            """
+            Special treatment for link pages
+            """
+            if type(item) is Page:
+                item = item.specific
+            if item.show_in_menus_custom(
+                request, current_site, menu_instance, original_menu_tag
+            ):
+                setattr(item, 'active_class', item.extra_classes)
+                setattr(item, 'text', item.menu_text(request))
+                setattr(item, 'href', item.relative_url(current_site, request))
+                primed_menu_items.append(item)
+            continue
+
+        else:
             """
             `menu_items` is a list of `Page` objects
             """
@@ -492,7 +510,7 @@ def prime_menu_items(
 
         if page:
             """
-            First we work out whether this item should be flagged as needing
+            Work out whether this item should be flagged as needing
             a sub-menu. It can be expensive, so we try to only do the working
             out when absolutely necessary.
             """
