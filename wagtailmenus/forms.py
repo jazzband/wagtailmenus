@@ -19,5 +19,7 @@ class FlatMenuAdminForm(WagtailAdminModelForm):
 class LinkPageAdminForm(WagtailAdminPageForm):
     def __init__(self, *args, **kwargs):
         super(LinkPageAdminForm, self).__init__(*args, **kwargs)
-        self.fields['title'].label = _('Link text')
-        self.fields['title'].help_text = None
+        self.fields['title'].help_text = _(
+            "By default, this will be used as the link text when appearing "
+            "in menus."
+        )

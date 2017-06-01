@@ -121,10 +121,6 @@ class AbstractLinkPage(Page):
         related_name='+',
         on_delete=models.SET_NULL,
     )
-    link_page_title_as_text = models.BooleanField(
-        default=False,
-        verbose_name=_("use this page's title as link text"),
-    )
     link_url = models.CharField(
         verbose_name=_('link to a custom URL'),
         max_length=255,
@@ -150,6 +146,7 @@ class AbstractLinkPage(Page):
     )
 
     subpage_types = []  # Don't allow subpages
+    search_fields = []  # Don't surface these pages in search results
     base_form_class = LinkPageAdminForm
 
     class Meta:
@@ -162,17 +159,15 @@ class AbstractLinkPage(Page):
         if not self.pk:
             self.show_in_menus = True
 
-    def link_text(self):
+    def menu_text(self, request=None):
         """Return a string to use as link text when this page appears in
         menus."""
-        if self.link_page_id and self.link_page_title_as_text:
-            return getattr(
-                self.link_page,
-                app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
-                self.link_page.title
-            )
+        if(
+            app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT != 'menu_text' and
+            hasattr(self, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT)
+        ):
+            return getattr(self, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT)
         return self.title
-    text = property(link_text)
 
     def clean(self, *args, **kwargs):
         if self.link_page and isinstance(

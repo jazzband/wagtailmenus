@@ -117,9 +117,10 @@ class LinkPage(AbstractLinkPage):
 
  ```
 
- Then run `python manage.py makemigrations` to create a migration for your new model, then `python manage.py migrate` to set up the necessary database tables.
+Then run `python manage.py makemigrations` to create a migration for your new model, then `python manage.py migrate` to perform the necessary database operations.
 
- You'll then be able to add pages of that type to any part of the page tree.
+By default, link pages are not allowed to have children, and shouldn't appear
+in Wagtail-generated sitemaps, or search results.
 
 
 Using wagtailmenus

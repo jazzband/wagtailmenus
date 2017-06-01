@@ -492,7 +492,8 @@ def prime_menu_items(
                 request, current_site, menu_instance, original_menu_tag
             ):
                 setattr(item, 'active_class', item.extra_classes)
-                setattr(item, 'href', item.relative_url(current_site))
+                setattr(item, 'text', item.menu_text(request))
+                setattr(item, 'href', item.relative_url(current_site, request))
                 primed_menu_items.append(item)
             continue
 
