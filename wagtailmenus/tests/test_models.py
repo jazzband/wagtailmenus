@@ -168,7 +168,8 @@ class TestLinkPage(TestCase):
         linkpage_to_url = LinkPage(
             title='Do a google search',
             link_url="https://www.google.co.uk",
-            url_append='?somevar=value'
+            url_append='?somevar=value',
+            extra_classes='google external',
         )
         site.root_page.add_child(instance=linkpage_to_url)
 
@@ -214,9 +215,14 @@ class TestLinkPage(TestCase):
         page_link_html = (
             '<a href="/superheroes/marvel-comics/spiderman/?somevar=value">Find out about Spiderman</a>'
         )
-        # When the target page is live, the linkpage should appear
+
+        url_link_html = (
+            '<li class="google external"><a href="https://www.google.co.uk?somevar=value">Do a google search</a></li>'
+        )
+        # When the target page is live, both the 'Spiderman' and 'Google' link should appear 
         response = self.client.get('/')
         self.assertContains(response, page_link_html, html=True)
+        self.assertContains(response, url_link_html, html=True)
 
         # When the target page is not live, the linkpage shouldn't appear
         target_page = self.linkpage_to_page.link_page
