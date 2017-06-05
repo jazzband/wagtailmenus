@@ -2,7 +2,7 @@ from wagtail.wagtailcore.models import Page, Site
 from wagtailmenus.models.menuitems import MenuItem
 
 
-def get_attrs_from_context(context, guess_tree_position=True):
+def get_attrs_from_context(context):
     """
     Gets a bunch of useful things from the context/request and returns them as
     a tuple for use in most menu tags.
