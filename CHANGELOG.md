@@ -4,7 +4,7 @@ Changelog
 2.X.X (XX.XX.XXX) IN DEVELOPMENT
 -------------------------------- 
 
-2.3.0 (20.06.2017)
+2.3.0 (XX.06.2017)
 -------------------------------- 
 
 * Added wagtail 1.10 and django 1.11 test environments to tox.
