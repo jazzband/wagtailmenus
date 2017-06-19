@@ -4,6 +4,31 @@ Changelog
 2.X.X (XX.XX.XXX) IN DEVELOPMENT
 -------------------------------- 
 
+2.3.0 (20.06.2017)
+-------------------------------- 
+
+* Added wagtail 1.10 and django 1.11 test environments to tox.
+* Abstracted out most model functionality from `MenuPage` to a `MenuPageMixin`
+  model, that can be used with existing page type models.
+* In situations where the request.site is hasn't been set by wagtail's 
+  `SiteMiddleware`, have the wagtailmenus context processor use the default
+  site to generate menus with.
+* Added the `WAGTAILMENUS_SECTION_MENU_CLASS_PATH` setting, which can be used
+  to override the `Menu` class used when using the `{% section_menu %}` tag.
+* Added the `WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH` setting, which can be used
+  to override the `Menu` class used when using the `{% children_menu %}` tag.
+* All `Menu` classes are now 'request aware', meaning `self.request` will
+  return the current `HttpRequest` object within most methods. 
+* Added a `get_base_page_queryset()` method to all `Menu` classes, that can be
+  overridden to change the base page QuerySet used when identifying pages to
+  be included in a menu when rendering. For example developers could use 
+  `self.request.user` to only ever include pages that the current user has
+  some permission for.
+* Updated AbstractMenuItem.clean() to only ever return field-specific
+  validation errors, because Wagtail doesn't render non-field errors for
+  related models added to the editor interface using `InlinePanel`.
+* Renamed `test_frontend.py` to `test_menu_rendering.py` 
+
 
 2.2.2 (27.03.2017)
 -------------------------------- 
