@@ -7,12 +7,14 @@ Changelog
 2.3.0 (XX.06.2017)
 -------------------------------- 
 
-* Added wagtail 1.10 and django 1.11 test environments to tox.
-* Abstracted out most model functionality from `MenuPage` to a `MenuPageMixin`
-  model, that can be used with existing page type models.
-* In situations where the request.site is hasn't been set by wagtail's 
-  `SiteMiddleware`, have the wagtailmenus context processor use the default
-  site to generate menus with.
+* Added an 'AbstractLinkPage' model to wagtailmenus.models that can be easily
+  sub-classed and used in projects to create 'link pages' that act in a similar
+  fashion to menu items when appearing in menus, but can be placed in any part
+  of the page tree.
+* Updated 'modify_submenu_items', 'has_submenu_items' and 
+  'get_repeated_menu_item' methods on MenuPageMixin / MenuPage to accept a 
+  'request' parameter, which is used to pass in the current `HttpRequest` 
+  object the menu is being rendered for.
 * Added the `WAGTAILMENUS_SECTION_MENU_CLASS_PATH` setting, which can be used
   to override the `Menu` class used when using the `{% section_menu %}` tag.
 * Added the `WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH` setting, which can be used
@@ -24,10 +26,16 @@ Changelog
   be included in a menu when rendering. For example developers could use 
   `self.request.user` to only ever include pages that the current user has
   some permission for.
+* Abstracted out most model functionality from `MenuPage` to a `MenuPageMixin`
+  model, that can be used with existing page type models.
+* Added wagtail 1.10 and django 1.11 test environments to tox.
+* Renamed `test_frontend.py` to `test_menu_rendering.py`
+* In situations where the request.site is hasn't been set by wagtail's 
+  `SiteMiddleware`, have the wagtailmenus context processor use the default
+  site to generate menus with.
 * Updated AbstractMenuItem.clean() to only ever return field-specific
   validation errors, because Wagtail doesn't render non-field errors for
   related models added to the editor interface using `InlinePanel`.
-* Renamed `test_frontend.py` to `test_menu_rendering.py` 
 
 
 2.2.2 (27.03.2017)
