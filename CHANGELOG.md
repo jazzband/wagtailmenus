@@ -4,7 +4,7 @@ Changelog
 2.X.X (XX.XX.XXX) IN DEVELOPMENT
 -------------------------------- 
 
-2.3.0 (XX.06.2017)
+2.3.0 (21.06.2017)
 -------------------------------- 
 
 * Added an 'AbstractLinkPage' model to wagtailmenus.models that can be easily
@@ -30,8 +30,8 @@ Changelog
   model, that can be used with existing page type models.
 * Added wagtail 1.10 and django 1.11 test environments to tox.
 * Renamed `test_frontend.py` to `test_menu_rendering.py`
-* In situations where the request.site is hasn't been set by wagtail's 
-  `SiteMiddleware`, have the wagtailmenus context processor use the default
+* In situations where `request.site` hasn't been set by wagtail's 
+  `SiteMiddleware`, the wagtailmenus context processor use the default
   site to generate menus with.
 * Updated AbstractMenuItem.clean() to only ever return field-specific
   validation errors, because Wagtail doesn't render non-field errors for
