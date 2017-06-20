@@ -6,6 +6,8 @@ from django.template import Library
 from wagtail.wagtailcore.models import Page
 
 from wagtailmenus import app_settings
+from wagtailmenus.utils.deprecation import RemovedInWagtailMenus25Warning
+from wagtailmenus.utils.inspection import accepts_kwarg
 from wagtailmenus.utils.misc import (
     get_attrs_from_context, validate_supplied_values
 )
@@ -195,22 +197,30 @@ def get_sub_menu_items_for_page(
         if type(page) is Page:
             page = page.specific
 
-        args = [
-            menu_items, current_page, ancestor_ids, current_site,
-            allow_repeating_parents, apply_active_classes, original_menu_tag,
-            menu_instance, request
-        ]
-        try:
-            menu_items = page.modify_submenu_items(*args)
-        except TypeError:
-            args.pop()  # try without 'request' arg
-            menu_items = page.modify_submenu_items(*args)
+        # Create dict of kwargs to send to `modify_submenu_items`
+        method_kwargs = {
+            'menu_items': menu_items,
+            'current_page': current_page,
+            'current_ancestor_ids': ancestor_ids,
+            'current_site': current_site,
+            'allow_repeating_parents': allow_repeating_parents,
+            'apply_active_classes': apply_active_classes,
+            'original_menu_tag': original_menu_tag,
+            'menu_instance': menu_instance,
+        }
+        if accepts_kwarg(page.modify_submenu_items, 'request'):
+            method_kwargs['request'] = request
+        else:
             warning_msg = (
-                "The '%s' model's 'modify_submenu_items' method should be "
-                "updated to accept a 'request' argument"
-                % page.__class__.__name__
+                "The 'modify_submenu_items' method on '%s' should be "
+                "updated to accept a 'request' keyword argument. View the "
+                "2.3 release notes for more info: https://github.com/rkhleics/"
+                "wagtailmenus/releases/tag/v.2.3.0" % page.__class__.__name__,
             )
-            warnings.warn(warning_msg)
+            warnings.warn(warning_msg, RemovedInWagtailMenus25Warning)
+
+        # Call `modify_submenu_items` using the above kwargs dict
+        menu_items = page.modify_submenu_items(**method_kwargs)
 
     return page, menu_items
 
@@ -533,21 +543,32 @@ def prime_menu_items(
                     responsibilty for determining `has_children_in_menu`
                     to that.
                     """
-                    args = [
-                        current_page, allow_repeating_parents,
-                        original_menu_tag, menu_instance, request
-                    ]
-                    try:
-                        has_children_in_menu = page.has_submenu_items(*args)
-                    except TypeError:
-                        args.pop()  # try without 'request' arg
-                        has_children_in_menu = page.has_submenu_items(*args)
+
+                    # Create dict of kwargs to send to `has_submenu_items`
+                    method_kwargs = {
+                        'current_page': current_page,
+                        'allow_repeating_parents': allow_repeating_parents,
+                        'original_menu_tag': original_menu_tag,
+                        'menu_instance': menu_instance,
+                    }
+                    if accepts_kwarg(page.has_submenu_items, 'request'):
+                        method_kwargs['request'] = request
+                    else:
                         warning_msg = (
-                            "The '%s' model's 'has_submenu_items' method "
-                            "should be updated to accept a 'request' argument"
-                            % page.__class__.__name__
+                            "The 'has_submenu_items' method on '%s' should be "
+                            "updated to accept a 'request' keyword "
+                            "argument. View the 2.3 release notes for more "
+                            "info: https://github.com/rkhleics/wagtailmenus/"
+                            "releases/tag/v.2.3.0" % page.__class__.__name__
                         )
-                        warnings.warn(warning_msg)
+                        warnings.warn(
+                            warning_msg, RemovedInWagtailMenus25Warning
+                        )
+
+                    # Call `has_submenu_items` using the above kwargs dict
+                    has_children_in_menu = page.has_submenu_items(
+                        **method_kwargs)
+
                 else:
                     has_children_in_menu = menu_instance.page_has_children(
                         page)
