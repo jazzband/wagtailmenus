@@ -111,7 +111,7 @@ class ContactPage(MenuPage):
     def modify_submenu_items(
         self, menu_items, current_page, current_ancestor_ids,
         current_site, allow_repeating_parents, apply_active_classes,
-        original_menu_tag, menu_instance, request
+        original_menu_tag, menu_instance=None, request=None
     ):
         menu_items = super(ContactPage, self).modify_submenu_items(
             menu_items, current_page, current_ancestor_ids,
@@ -144,7 +144,7 @@ class ContactPage(MenuPage):
 
     def has_submenu_items(
         self, current_page, allow_repeating_parents,
-        original_menu_tag, menu_instance, request
+        original_menu_tag, menu_instance=None, request=None
     ):
         """
         Because `modify_submenu_items` is being used to add additional menu
