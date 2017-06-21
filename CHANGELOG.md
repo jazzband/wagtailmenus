@@ -36,6 +36,7 @@ Changelog
 * Updated AbstractMenuItem.clean() to only ever return field-specific
   validation errors, because Wagtail doesn't render non-field errors for
   related models added to the editor interface using `InlinePanel`.
+* Added Russian translations (submitted by Alex einsfr).
 
 
 2.2.2 (27.03.2017)
