@@ -104,7 +104,7 @@ class FlatMenuAdmin(ModelAdmin):
 
     def handle_formatted(self, obj):
         return mark_safe('<code>%s</code>' % obj.handle)
-    handle_formatted.short_description = 'handle'
+    handle_formatted.short_description = _('handle')
     handle_formatted.admin_order_field = 'handle'
 
     def is_multisite_listing(self, request):
