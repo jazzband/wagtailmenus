@@ -47,28 +47,28 @@ Each menu tag comes with a default template that's designed to be fully accessib
 	```python
 
     TEMPLATES = [
-    	{
-        	'BACKEND': 'django.template.backends.django.DjangoTemplates',
-			'	DIRS': [
-				os.path.join(PROJECT_ROOT, 'templates'),
-			],
-			'APP_DIRS': True,
-			'OPTIONS': {
-				'context_processors': [
-					'django.contrib.auth.context_processors.auth',
-					'django.template.context_processors.debug',
-					'django.template.context_processors.i18n',
-					'django.template.context_processors.media',
-					'django.template.context_processors.request',
-					'django.template.context_processors.static',
-					'django.template.context_processors.tz',
-					'django.contrib.messages.context_processors.messages',
-					'wagtail.contrib.settings.context_processors.settings',
-					'wagtailmenus.context_processors.wagtailmenus',
-				],
-			},
-		},
-	]
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [
+                os.path.join(PROJECT_ROOT, 'templates'),
+            ],
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'context_processors': [
+                    'django.contrib.auth.context_processors.auth',
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.i18n',
+                    'django.template.context_processors.media',
+                    'django.template.context_processors.request',
+                    'django.template.context_processors.static',
+                    'django.template.context_processors.tz',
+                    'django.contrib.messages.context_processors.messages',
+                    'wagtail.contrib.settings.context_processors.settings',
+                    'wagtailmenus.context_processors.wagtailmenus',
+                ],
+            },
+        },
+    ]
 	
     ```
 	
@@ -499,7 +499,8 @@ class ContactPage(MenuPage):
     ):
         # Apply default modifications first of all
         menu_items = super(ContactPage, self).modify_submenu_items(
-            menu_items, current_page, current_ancestor_ids, current_site, allow_repeating_parents, apply_active_classes, original_menu_tag,
+            menu_items, current_page, current_ancestor_ids, current_site, 
+            allow_repeating_parents, apply_active_classes, original_menu_tag,
             menu_instance, request)
         """
         If rendering a 'main_menu', add some additional menu items to the end
@@ -618,54 +619,52 @@ If you only wish to change the menu item models (e.g. to add images, extra field
 	
 	```python
 
-	from django.db import models
-	from django.utils.translation import ugettext_lazy as _
-	from modelcluster.fields import ParentalKey
-	from wagtail.wagtailimages import get_image_model_string
-	from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
-	from wagtail.wagtailadmin.edit_handlers import FieldPanel, PageChooserPanel
-	from wagtailmenus.models import AbstractMainMenuItem, AbstractFlatMenuItem
+    from django.db import models
+    from django.utils.translation import ugettext_lazy as _
+    from modelcluster.fields import ParentalKey
+    from wagtail.wagtailimages import get_image_model_string
+    from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
+    from wagtail.wagtailadmin.edit_handlers import FieldPanel, PageChooserPanel
+    from wagtailmenus.models import AbstractMainMenuItem, AbstractFlatMenuItem
 
 
-	class CustomMainMenuItem(AbstractMainMenuItem):
-		"""A custom menu item model to be used by ``wagtailmenus.MainMenu``"""
+    class CustomMainMenuItem(AbstractMainMenuItem):
+        """A custom menu item model to be used by ``wagtailmenus.MainMenu``"""
 
-		menu = ParentalKey(
-			'wagtailmenus.MainMenu',
-			related_name="custom_menu_items" # important for step 3!
-		)
-		image = models.ForeignKey(
-			get_image_model_string(),
-			blank=True,
-			null=True,
-			on_delete=models.SET_NULL,
-		)
-		hover_description = models.CharField(
-			max_length=250,
-			blank=True
-		)
+        menu = ParentalKey(
+            'wagtailmenus.MainMenu',
+            related_name="custom_menu_items" # important for step 3!
+        )
+        image = models.ForeignKey(
+            get_image_model_string(),
+            blank=True,
+            null=True,
+            on_delete=models.SET_NULL,
+        )
+        hover_description = models.CharField(
+            max_length=250,
+            blank=True
+        )
 
-		# Also override the panels attribute, so that the new fields appear
-		# in the admin interface
-		panels = (
-	        PageChooserPanel('link_page'),
-	        ImageChooserPanel('image'),
-	        FieldPanel('link_url'),
-	        FieldPanel('url_append'),
-	        FieldPanel('link_text'),
-	        FieldPanel('hover_description'),
-	        FieldPanel('allow_subnav'),
-	    )
+        # Also override the panels attribute, so that the new fields appear
+        # in the admin interface
+        panels = (
+            PageChooserPanel('link_page'),
+            ImageChooserPanel('image'),
+            FieldPanel('link_url'),
+            FieldPanel('url_append'),
+            FieldPanel('link_text'),
+            FieldPanel('hover_description'),
+            FieldPanel('allow_subnav'),
+        )
 
-	class CustomFlatMenuItem(AbstractFlatMenuItem):
-		"""A custom menu item model to be used by ``wagtailmenus.FlatMenu``"""
-		
-		menu = ParentalKey(
-			'wagtailmenus.FlatMenu',
-			related_name="custom_menu_items" # important for step 3!
-		)
+    class CustomFlatMenuItem(AbstractFlatMenuItem):
+        """A custom menu item model to be used by ``wagtailmenus.FlatMenu``"""
 
-		...
+        menu = ParentalKey(
+            'wagtailmenus.FlatMenu',
+            related_name="custom_menu_items" # important for step 3!
+        )
 	```
 
 2.	Run `python manage.py makemigrations appname` (where appname is the name of the app where you created your new models, e.g. 'core') to create migrations for your new models. Then run `python manage.py migrate appname` to create the necessary database tables.
@@ -674,11 +673,11 @@ If you only wish to change the menu item models (e.g. to add images, extra field
 
 	```python
 
-	# Set this to the 'related_name' attribute used on the ParentalKey field
-	WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME = "custom_menu_items"
+    # Set this to the 'related_name' attribute used on the ParentalKey field
+    WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME = "custom_menu_items"
 
-	# Set this to the 'related_name' attribute used on the ParentalKey field
-	WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = "custom_menu_items"
+    # Set this to the 'related_name' attribute used on the ParentalKey field
+    WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = "custom_menu_items"
 
 	```
 
@@ -691,177 +690,162 @@ If it's the main and flat menu models themselves that you wish to override, that
 
 1.	Create your custom models by subclassing wagtailmenus' abstract model classes. e.g:
 
-	```python
-	from django.db import models
-	from django.utils import translation
-	from django.utils.translation import ugettext_lazy as _
-	from modelcluster.fields import ParentalKey
-	from wagtail.wagtailadmin.edit_handlers import (
-    	FieldPanel, MultiFieldPanel, PageChooserPanel
-    )
+    ```python
+    from django.db import models
+    from django.utils import translation
+    from django.utils.translation import ugettext_lazy as _
+    from modelcluster.fields import ParentalKey
+    from wagtail.wagtailadmin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel
     from wagtailmenus import app_settings
-    from wagtailmenus.models import (
-		AbstractMainMenu, AbstractMainMenuItem, 
-		AbstractFlatMenu, AbstractFlatMenuItem,
-	)
+    from wagtailmenus.models import AbstractMainMenu, AbstractMainMenuItem, AbstractFlatMenu, AbstractFlatMenuItem
 
-	
-	class TranslatedField(object):
-	    def __init__(self, en_field, de_field, fr_field):
-	        self.en_field = en_field
-	        self.de_field = de_field
-	        self.fr_field = fr_field
 
-	    def __get__(self, instance, owner):
-	    	active_language = translation.get_language()
-	        if active_language == 'de':
-	            return getattr(instance, self.de_field)
-	        elif active_language == 'fr':
-	            return getattr(instance, self.fr_field)
-	        return getattr(instance, self.en_field)
+    class TranslatedField(object):
+        def __init__(self, en_field, de_field, fr_field):
+            self.en_field = en_field
+            self.de_field = de_field
+            self.fr_field = fr_field
 
-	
-	class TranslatedMainMenu(AbstractMainMenu):
-    	pass
+        def __get__(self, instance, owner):
+            active_language = translation.get_language()
+            if active_language == 'de':
+                return getattr(instance, self.de_field)
+            if active_language == 'fr':
+                return getattr(instance, self.fr_field)
+            return getattr(instance, self.en_field)
+
+
+    class TranslatedMainMenu(AbstractMainMenu):
+        pass
 
 
     class TranslatedMainMenuItem(AbstractMainMenuItem):
-		"""A custom menu item model to be used by ``TranslatedMainMenu``"""
-	
-		menu = ParentalKey(
-			TranslatedMainMenu, # we can directly reference the model above
-			related_name=app_settings.MAIN_MENU_ITEMS_RELATED_NAME
-		)
-		link_text_de = models.CharField(
-	        verbose_name=_("link text (german)"),
-	        max_length=255,
-	        blank=True,
-	    )
-	    link_text_fr = models.CharField(
-	        verbose_name=_("link text (french)"),
-	        max_length=255,
-	        blank=True,
-	    )
-	    translated_link_text = TranslatedField(
-        	'link_text', 'link_text_de', 'link_text_fr'
-    	)
+    """A custom menu item model to be used by ``TranslatedMainMenu``"""
+        menu = ParentalKey(
+            TranslatedMainMenu, # we can directly reference the model above
+            related_name=app_settings.MAIN_MENU_ITEMS_RELATED_NAME
+        )
+        link_text_de = models.CharField(
+            verbose_name=_("link text (german)"),
+            max_length=255,
+            blank=True,
+        )
+        link_text_fr = models.CharField(
+            verbose_name=_("link text (french)"),
+            max_length=255,
+            blank=True,
+        )
+        translated_link_text = TranslatedField('link_text', 'link_text_de', 'link_text_fr')
 
-    	@property
-    	def menu_text(self):
-    		"""Use `translated_link_text` instead of just `link_text`"""
-	        return self.translated_link_text or getattr(
-	            self.link_page,
-	            app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
-	            self.link_page.title
-	        )
+        @property
+        def menu_text(self):
+            """Use `translated_link_text` instead of just `link_text`"""
+            return self.translated_link_text or getattr(
+                self.link_page,
+                app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
+                self.link_page.title
+            )
 
-	    # Also override the panels attribute, so that the new fields appear
-		# in the admin interface
-	    panels = (
-	        PageChooserPanel("link_page"),
-	        FieldPanel("link_url"),
-	        FieldPanel("url_append"),
-	        FieldPanel("link_text"),
-	        FieldPanel("link_text_de"),
-	        FieldPanel("link_text_fr"),
-	        FieldPanel("handle"),
-	        FieldPanel("allow_subnav"),
-	    )
-
+        # Also override the panels attribute, so that the new fields appear
+        # in the admin interface
+        panels = (
+            PageChooserPanel("link_page"),
+            FieldPanel("link_url"),
+            FieldPanel("url_append"),
+            FieldPanel("link_text"),
+            FieldPanel("link_text_de"),
+            FieldPanel("link_text_fr"),
+            FieldPanel("handle"),
+            FieldPanel("allow_subnav"),
+        )
 
     class TranslatedFlatMenu(AbstractFlatMenu):
-	    heading_de = models.CharField(
-	        verbose_name=_("heading (german)"),
-	        max_length=255,
-	        blank=True,
-	    )
-	    heading_fr = models.CharField(
-	        verbose_name=_("heading (french)"),
-	        max_length=255,
-	        blank=True,
-	    )
-	    translated_heading = TranslatedField(
-        	'heading', 'heading_de', 'heading_fr'
-    	)
+        heading_de = models.CharField(
+            verbose_name=_("heading (german)"),
+            max_length=255,
+            blank=True,
+        )
+        heading_fr = models.CharField(
+            verbose_name=_("heading (french)"),
+            max_length=255,
+            blank=True,
+        )
+        translated_heading = TranslatedField('heading', 'heading_de', 'heading_fr')
 
-		panels = (
-	        MultiFieldPanel(
-	            heading=_("Settings"),
-	            children=(
-	                FieldPanel("title"),
-	                FieldPanel("site"),
-	                FieldPanel("handle"),
-	            )
-	        ),
-	        MultiFieldPanel(
-	            heading=_("Heading"),
-	            children=(
-	                FieldPanel("heading"),
-	                FieldPanel("heading_de"),
-	                FieldPanel("heading_fr"),
-	            ),
-	            classname='collapsible'
-	        ),
-	        AbstractFlatMenu.panels[1],
-	        AbstractFlatMenu.panels[2],
-	    )
+        panels = (
+            MultiFieldPanel(
+                heading=_("Settings"),
+                children=(
+                    FieldPanel("title"),
+                    FieldPanel("site"),
+                    FieldPanel("handle"),
+                )
+            ),
+            MultiFieldPanel(
+                heading=_("Heading"),
+                children=(
+                    FieldPanel("heading"),
+                    FieldPanel("heading_de"),
+                    FieldPanel("heading_fr"),
+                ),
+                classname='collapsible'
+            ),
+            AbstractFlatMenu.panels[1],
+            AbstractFlatMenu.panels[2],
+        )
 
+    class TranslatedFlatMenuItem(AbstractFlatMenuItem):
+        """A custom menu item model to be used by ``TranslatedFlatMenu``"""
 
-	class TranslatedFlatMenuItem(AbstractFlatMenuItem):
-		"""A custom menu item model to be used by ``TranslatedFlatMenu``"""
-	
-		menu = ParentalKey(
-			TranslatedFlatMenu, # we can use the model from above
-			related_name=app_settings.FLAT_MENU_ITEMS_RELATED_NAME
-		)
-		link_text_de = models.CharField(
-	        verbose_name=_("link text (german)"),
-	        max_length=255,
-	        blank=True,
-	    )
-	    link_text_fr = models.CharField(
-	        verbose_name=_("link text (french)"),
-	        max_length=255,
-	        blank=True,
-	    )
-	    translated_link_text = TranslatedField(
-        	'link_text', 'link_text_de', 'link_text_fr'
-    	)
+        menu = ParentalKey(
+            TranslatedFlatMenu, # we can use the model from above
+            related_name=app_settings.FLAT_MENU_ITEMS_RELATED_NAME
+        )
+        link_text_de = models.CharField(
+            verbose_name=_("link text (german)"),
+            max_length=255,
+            blank=True,
+        )
+        link_text_fr = models.CharField(
+            verbose_name=_("link text (french)"),
+            max_length=255,
+            blank=True,
+        )
+        translated_link_text = TranslatedField('link_text', 'link_text_de', 'link_text_fr')
 
-    	@property
-    	def menu_text(self):
-    		"""Use `translated_link_text` instead of just `link_text`"""
-	        return self.translated_link_text or getattr(
-	            self.link_page,
-	            app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
-	            self.link_page.title
-	        )
+        @property
+        def menu_text(self):
+            """Use `translated_link_text` instead of just `link_text`"""
+            return self.translated_link_text or getattr(
+                self.link_page,
+                app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
+                self.link_page.title
+            )
 
-	    # Also override the panels attribute, so that the new fields appear
-		# in the admin interface
-	    panels = (
-	        PageChooserPanel("link_page"),
-	        FieldPanel("link_url"),
-	        FieldPanel("url_append"),
-	        FieldPanel("link_text"),
-	        FieldPanel("link_text_de"),
-	        FieldPanel("link_text_fr"),
-	        FieldPanel("handle"),
-	        FieldPanel("allow_subnav"),
-	    )
-
-	```
+        # Also override the panels attribute, so that the new fields appear
+        # in the admin interface
+        panels = (
+            PageChooserPanel("link_page"),
+            FieldPanel("link_url"),
+            FieldPanel("url_append"),
+            FieldPanel("link_text"),
+            FieldPanel("link_text_de"),
+            FieldPanel("link_text_fr"),
+            FieldPanel("handle"),
+            FieldPanel("allow_subnav"),
+        )
+    ```
 
 2.	Run `python manage.py makemigrations appname` (replace 'appname' with the name of the app where your new menu models are defined, e.g. 'core') to create migrations for your new models. Then run `python manage.py migrate appname` to create the necessary database tables.
 
 3.	Add the following settings to your project to tell wagtailmenus to use your custom menu models instead of the default ones (replace 'appname' with the name of the app where your new menu models are defined, e.g. 'core'). e.g:
 
-	```python
-
-	WAGTAILMENUS_MAIN_MENU_MODEL = "appname.TranslatedMainMenu"
-	WAGTAILMENUS_FLAT_MENU_MODEL = "appname.TranslatedFlatMenu"
-
-	```
+    ```python
+    
+    WAGTAILMENUS_MAIN_MENU_MODEL = "appname.TranslatedMainMenu"
+    WAGTAILMENUS_FLAT_MENU_MODEL = "appname.TranslatedFlatMenu"
+    
+    ```
 
 4.	**That's it!** The custom models will now be used instead of the default ones. The default models and their data will remain intact, even if you can no longer see them via the admin area. If you need to, you can easily write a data migration to populate your new models from existing data.
 
@@ -871,34 +855,32 @@ Like the `main_menu` and `flat_menu` tags, the `section_menu` template tag uses 
 
 The class `wagtailmenus.models.menus.SectionMenu` is used by default, but you can use the `WAGTAILMENUS_SECTION_MENU_CLASS_PATH` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify which pages are included). For custom classes, it's recommended that you subclass the `SectionMenu` class and override any methods as required e.g:
 
+```python
 
-	```python
+# mysite/appname/models.py
 
-	# mysite/appname/models.py
+from django.utils.translation import ugettext_lazy as _
+from wagtail.wagtailcore.models import Page
+from wagtailmenus.models import SectionMenu
 
-	from django.utils.translation import ugettext_lazy as _
-	from wagtail.wagtailcore.models import Page
-    from wagtailmenus.models import SectionMenu
 
-	
-	class CustomSectionMenu(SectionMenu):
+class CustomSectionMenu(SectionMenu):
 	    
-	    def get_base_page_queryset(self):
-	   		# Show draft and expired pages in menu for superusers
-	    	if self.request.user.is_superuser:
-	    		return Page.objects.filter(show_in_menus=True)
-	    	# Resort to default behaviour for everybody else
-	    	return super(CustomSectionMenu, self).get_base_page_queryset()
+    def get_base_page_queryset(self):
+	    # Show draft and expired pages in menu for superusers
+	    if self.request.user.is_superuser:
+	        return Page.objects.filter(show_in_menus=True)
+	    # Resort to default behaviour for everybody else
+	    return super(CustomSectionMenu, self).get_base_page_queryset()
+```
+    
+```python
 
-    ```
+# mysite/settings/base.py
 
-    ```python
+WAGTAILMENUS_SECTION_MENU_CLASS_PATH = "mysite.appname.models.CustomSectionMenu"
 
-    # mysite/settings/base.py
-
-	WAGTAILMENUS_SECTION_MENU_CLASS_PATH = "mysite.appname.models.CustomSectionMenu"
-
-	```
+```
 
 ### Overriding the menu class used by `{% children_menu %}`
 
@@ -906,34 +888,31 @@ Like all of the other tags, the `children_menu` template tag uses a `Menu` class
 
 The class `wagtailmenus.models.menus.ChildrenMenu` is used by default, but you can use the `WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify which pages are included). For custom classes, it's recommended that you subclass `ChildrenMenu` and override any methods as required e.g:
 
+```python
 
-	```python
+# mysite/appname/models.py
 
-	# mysite/appname/models.py
+from django.utils.translation import ugettext_lazy as _
+from wagtail.wagtailcore.models import Page
+from wagtailmenus.models import ChildrenMenu
 
-	from django.utils.translation import ugettext_lazy as _
-	from wagtail.wagtailcore.models import Page
-    from wagtailmenus.models import ChildrenMenu
 
-	
-	class CustomChildrenMenu(ChildrenMenu):
-	    
-	    def get_base_page_queryset(self):
-	   		# Show draft and expired pages in menu for superusers
-	    	if self.request.user.is_superuser:
-	    		return Page.objects.filter(show_in_menus=True)
-	    	# Resort to default behaviour for everybody else
-	    	return super(CustomChildrenMenu, self).get_base_page_queryset()
+class CustomChildrenMenu(ChildrenMenu):
+    def get_base_page_queryset(self):
+	# Show draft and expired pages in menu for superusers
+	if self.request.user.is_superuser:
+		return Page.objects.filter(show_in_menus=True)
+	# Resort to default behaviour for everybody else
+	return super(CustomChildrenMenu, self).get_base_page_queryset()
+```
 
-    ```
+```python
 
-    ```python
+# mysite/settings/base.py
 
-    # mysite/settings/base.py
+WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH = "mysite.appname.models.CustomChildrenMenu"
 
-	WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH = "mysite.appname.models.CustomChildrenMenu"
-
-	```
+```
 
 
 ## <a id="app-settings"></a>13. Settings reference
