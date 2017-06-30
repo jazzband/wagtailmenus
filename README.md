@@ -31,7 +31,7 @@ Extend the `wagtailmenus.models.MenuPage` model instead of the usual `wagtail.wa
 Unlike other solutions you may have seen/used before, `wagtailmenus` takes the view that your project's page tree is the best place for defining the structure of your site, and the natural order of pages at each level. Having different representations of that structure/order defined elsewhere (e.g. in several manually-defined 'menus') could easily become a maintenence nightmare for large, regularly-updated sites. Because of this, wagtailmenus only lets you to specify the top-level items for a menu - your page tree powers everything past that. This means:
 
 - Even if the top-level items may differ, the 'site structure' portayed in front-end menus will remain consistent, whatever the template tag being used to do the rendering.
-- Pages (and their descendants) will automatically disappear from menus if they become 'unpublished' or 'expired', or `Show in menus` is unchecked for some reason.
+- Pages (and in a lot of cases, their descendants) will automatically disappear from menus if they become 'unpublished' or 'expired', or `Show in menus` is unchecked for some reason.
 
 ## 5. Provides templates and template tags to render menus consistently
 
