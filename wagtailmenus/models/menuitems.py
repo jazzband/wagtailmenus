@@ -161,9 +161,17 @@ class AbstractFlatMenuItem(Orderable, AbstractMenuItem):
 
 class MainMenuItem(AbstractMainMenuItem):
     """The default model class to use for 'main menu' menu items."""
-    menu = ParentalKey('wagtailmenus.MainMenu', related_name="menu_items")
+    menu = ParentalKey(
+        'wagtailmenus.MainMenu',
+        on_delete=models.CASCADE,
+        related_name="menu_items"
+    )
 
 
 class FlatMenuItem(AbstractFlatMenuItem):
     """The default model class to use for 'flat menu' menu items."""
-    menu = ParentalKey('wagtailmenus.FlatMenu', related_name="menu_items")
+    menu = ParentalKey(
+        'wagtailmenus.FlatMenu',
+        on_delete=models.CASCADE,
+        related_name="menu_items"
+    )
