@@ -10,11 +10,9 @@ The current version is compatible with Wagtail 1.5 to 1.10 and Python 2.7, 3.3, 
 
 # What does it do?
 
-## 1. Gives you independent control over your root-level main menu items
+## 1. Gives you independent control over your top-level main menu items
 
-The `MainMenu` model lets you define the root-level items for your project's main navigation (or one for each site, if it's a multi-site project) using an inline model `MainMenuItem`. These items can link to pages (you can append an optional hash or querystring to the URL, too) or custom URLs. The custom URL field won't force you to enter a valid URL either, so you can add things like *#request-callback* or *#signup* to link to areas on the active page (perhaps as JS modals).
-
-The site's page tree powers everything past the root level, so you don't have to recreate it elsewhere. And as you'd expect, only links to published pages will appear when rendering.
+The `MainMenu` model lets you define the top-level items for your site's main menu (or one for each site, if it's a multi-site project) using an inline model `MainMenuItem`. These items can link to pages (you can append an optional hash or querystring to the URL, too) or custom URLs. The custom URL field won't force you to enter a valid URL either, so you can add things like *#request-callback* or *#signup* to link to areas on the active page (perhaps as JS modals).
 
 ## 2. Allows you to manage multiple 'flat menus' via the CMS
 
@@ -26,11 +24,16 @@ In a multi-site project, you can choose to define a new set of menus for each si
 
 Extend the `wagtailmenus.models.MenuPage` model instead of the usual `wagtail.wagtailcore.models.Page` to create your custom page types, and gain a couple of extra fields that will allow you to configure certain pages to appear again alongside their children in multi-level menus. Use the menu tags provided, and that behaviour will remain consistent in all menus throughout your site.
 
-No more adding additional pages into the tree. No more hard-coding additional links into templates, or resorting to javascript hacks.
-
 <img alt="Screenshot showing the repeated nav item in effect" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/repeating-item.png" />
 
-## 4. Provides templates and template tags to render menus consistently
+## 4. Respects your page tree and doesn't make you repeat yourself
+
+Unlike other solutions you may have seen/used before, `wagtailmenus` takes the view that your project's page tree is the best place for defining the structure of your site, and the natural order of pages at each level. Having different representations of that structure/order defined elsewhere (e.g. in several manually-defined 'menus') could easily become a maintenence nightmare for large, regularly-updated sites. Because of this, wagtailmenus only lets you to specify the top-level items for a menu - your page tree powers everything past that. This means:
+
+- Even if the top-level items may differ, the 'site structure' portayed in front-end menus will remain consistent, whatever the template tag being used to do the rendering.
+- Pages (and their descendants) will automatically disappear from menus if they become 'unpublished' or 'expired', or `Show in menus` is unchecked for some reason.
+
+## 5. Provides templates and template tags to render menus consistently
 
 Each menu tag comes with a default template that's designed to be fully accessible and compatible with Bootstrap 3, but wagtailmenus makes it easy to use your own. Every template tag accepts a `template` and `sub_menu_template` argument to let you explicitly override templates. Or, you can simply put your custom menu templates in a preferred location and have wagtailmenus find the right template automatically. You can even configure wagtailmenus to look for different sets of templates for each site in a multi-site project. See the instructions for each tag to find out more.
 
