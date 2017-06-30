@@ -922,32 +922,161 @@ WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH = "mysite.appname.models.CustomChildrenMen
 
 You can override some of wagtailmenus' default behaviour by adding one of more of the following to your project's settings:
 
-- **`WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES`** (default: `None`): Can be set to a tuple of choices in the [standard Django choices format](https://docs.djangoproject.com/en/1.10/ref/models/fields/#field-choices) to change the `FlatMenu.handle` text field into a select field with fixed choices when adding, editing or copying a `FlatMenu` in Wagtail's admin area.
-- **`WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES`** (default: `True`): By default, wagtailmenus adds some additional styles to improve the readability of the forms on the menu management pages in the Wagtail admin area. If for some reason you don't want to override any styles, you can disable this behaviour by setting to `False`.
-- **`WAGTAILMENUS_ACTIVE_CLASS`** (default: `'active'`): The class added to menu items for the currently active page (when using a menu template with `apply_active_classes=True`)
-- **`WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS`** (default: `'ancestor'`): The class added to any menu items for pages that are ancestors of the currently active page (when using a menu template with `apply_active_classes=True`)
-- **`WAGTAILMENUS_MAINMENU_MENU_ICON`** (default: `'list-ol'`): Use this to change the icon used to represent `MainMenu` in the Wagtail admin area.
-- **`WAGTAILMENUS_FLATMENU_MENU_ICON`** (default: `'list-ol'`): Use this to change the icon used to represent `FlatMenu` in the Wagtail admin area.
-- **`WAGTAILMENUS_SECTION_ROOT_DEPTH`** (default: `3`): Use this to specify the 'depth' value of a project's 'section root' pages. For most Wagtail projects, this should be `3` (Root page = 1, Home page = 2), but it may well differ, depending on the needs of the project.
-- **`WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS`** (default: `False`): If you have a multi-site project where each site may require it's own set of menu templates, you can change this setting to `True` to have wagtailmenus automatically look in additional site-specific locations when finding templates for rendering.  
-- **`WAGTAILMENUS_GUESS_TREE_POSITION_FROM_PATH`** (default: `True`): When not using wagtail's routing/serving mechanism to serve page objects, wagtailmenus can use the request path to attempt to identify a 'current' page, 'section root' page, allowing `{% section_menu %}` and active item highlighting to work. If this functionality is not required for your project, you can disable it by setting this value to `False`.
-- **`WAGTAILMENUS_FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS`** (default: `False`): The default value used for `fall_back_to_default_site_menus` option of the `{% flat_menu %}` tag when a parameter value isn't provided.
-- **`WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE`** (default: `'menus/main_menu.html'`): The name of the template used for rendering by the `{% main_menu %}` tag when a `template` parameter value isn't provided.
-- **`WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE`** (default: `'menus/flat_menu.html'`): The name of the template used for rendering by the `{% flat_menu %}` tag when a `template` parameter value isn't provided.
-- **`WAGTAILMENUS_DEFAULT_SECTION_MENU_TEMPLATE`** (default: `'menus/section_menu.html'`): The name of the template used for rendering by the `{% section_menu %}` tag when a `template` parameter value isn't provided.
-- **`WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE`** (default: `'menus/children_menu.html'`): The name of the template used for rendering by the `{% children_menu %}` tag when a `template` parameter value isn't provided.
-- **`WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE`** (default: `'menus/sub_menu.html'`): The name of the template used for rendering by the `{% sub_menu %}` tag when a `template` parameter value isn't provided.
-- **`WAGTAILMENUS_DEFAULT_SECTION_MENU_MAX_LEVELS`** (default: `2`): The maximum number of levels rendered by the `{% section_menu %}` tag when a `max_levels` parameter value isn't specified.
-- **`WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS`** (default: `1`): The maximum number of levels rendered by the `{% children_menu %}` tag when a `max_levels` parameter value isn't specified.
-- **`WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC`** (default: `USE_SPECIFIC_AUTO`): Controls how 'specific' pages objects are fetched and used during rendering of the `{% section_menu %}` tag when the `use_specific` parameter value isn't supplied. 
-- **`WAGTAILMENUS_DEFAULT_CHILDREN_USE_SPECIFIC`** (default: `USE_SPECIFIC_AUTO`): Controls how 'specific' pages objects are fetched and used during rendering of the `{% children_menu %}` tag when the `use_specific` parameter value isn't supplied. 
-- **`WAGTAILMENUS_PAGE_FIELD_FOR_MENU_ITEM_TEXT`** (default: `'title'`): When preparing menu items for rendering, wagtailmenus looks for a field, attribute or property method with this name on each page object to populate a `text` attribute on the menu item. NOTE: wagtailmenus will only be able to access custom page attributes if specific pages are being used (See [Specific pages instances and performance](#specific-page-use) for more details). The page's `title` attribute will be used as a fall-back if no attribute can found matching specified name.
-- **`WAGTAILMENUS_MAIN_MENU_MODEL`** (default: `'wagtailmenus.MainMenu'`): Use this to specify a custom model to use for main menus instead of the default. The model should be a subclass of `wagtailmenus.AbstractMainMenu`. See [Overriding the default wagtailmenus models](#custom-models) for more details.
-- **`WAGTAILMENUS_FLAT_MENU_MODEL`** (default: `'wagtailmenus.FlatMenu'`): Use this to specify a custom model to use for flat menus instead of the default. The model should be a subclass of `wagtailmenus.AbstractFlatMenu`. See [Overriding the default wagtailmenus models](#custom-models) for more details.
-- **`WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME`** (default: `'menu_items'`): Use this to specify the 'related name' that should be used to access menu items from main menu instances. Used to replace the default `MainMenuItem` model with a custom one. See [Overriding the default wagtailmenus models](#custom-models) for more details.
-- **`WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME`** (default: `'menu_items'`): Use this to specify the 'related name' that should be used to access menu items from flat menu instances. Used to replace the default `FlatMenuItem` model with a custom one. See [Overriding the default wagtailmenus models](#custom-models) for more details.
-- **`WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH`** (default: `'wagtailmenus.models.menus.ChildrenMenu'`): Use this to specify a custom class to be used by wagtailmenus' `children_menu` tag. The value should be the import path of your custom class as a string, e.g. 'mysite.appname.models.CustomClass'. See [Overriding the default wagtailmenus models](#custom-models) for more details.
-- **`WAGTAILMENUS_SECTION_MENU_CLASS_PATH`** (default: `'wagtailmenus.models.menus.SectionMenu'`): Use this to specify a custom class to be used by wagtailmenus' `section_menu` tag. The value should be the import path of your custom class as a string, e.g. 'mysite.appname.models.CustomClass'. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+#### `WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES`
+
+Default value: `None`
+
+Can be set to a tuple of choices in the [standard Django choices format](https://docs.djangoproject.com/en/1.10/ref/models/fields/#field-choices) to change the `FlatMenu.handle` text field into a select field with fixed choices when adding, editing or copying a `FlatMenu` in Wagtail's admin area.
+
+#### `WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES`
+
+Default value: `True`
+
+By default, wagtailmenus adds some additional styles to improve the readability of the forms on the menu management pages in the Wagtail admin area. If for some reason you don't want to override any styles, you can disable this behaviour by setting to `False`.
+
+#### `WAGTAILMENUS_ACTIVE_CLASS`
+
+Default value: `'active'`
+
+The class added to menu items for the currently active page (when using a menu template with `apply_active_classes=True`)
+
+#### `WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS`
+
+Default value: `'ancestor'`
+
+The class added to any menu items for pages that are ancestors of the currently active page (when using a menu template with `apply_active_classes=True`)
+
+#### `WAGTAILMENUS_MAINMENU_MENU_ICON`
+
+Default value: `'list-ol'`
+
+Use this to change the icon used to represent `MainMenu` in the Wagtail admin area.
+
+#### `WAGTAILMENUS_FLATMENU_MENU_ICON`
+
+Default value: `'list-ol'`
+
+Use this to change the icon used to represent `FlatMenu` in the Wagtail admin area.
+
+#### `WAGTAILMENUS_SECTION_ROOT_DEPTH`
+
+Default value: `3`
+
+Use this to specify the 'depth' value of a project's 'section root' pages. For most Wagtail projects, this should be `3` (Root page = 1, Home page = 2), but it may well differ, depending on the needs of the project.
+
+#### `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS`
+
+Default value: `False`
+
+If you have a multi-site project where each site may require it's own set of menu templates, you can change this setting to `True` to have wagtailmenus automatically look in additional site-specific locations when finding templates for rendering.  
+
+#### `WAGTAILMENUS_GUESS_TREE_POSITION_FROM_PATH`
+
+Default value: `True`
+
+When not using wagtail's routing/serving mechanism to serve page objects, wagtailmenus can use the request path to attempt to identify a 'current' page, 'section root' page, allowing `{% section_menu %}` and active item highlighting to work. If this functionality is not required for your project, you can disable it by setting this value to `False`.
+
+#### `WAGTAILMENUS_FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS`
+
+Default value: `False`
+
+The default value used for `fall_back_to_default_site_menus` option of the `{% flat_menu %}` tag when a parameter value isn't provided.
+
+#### `WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE`
+
+Default value: `'menus/main_menu.html'`
+
+The name of the template used for rendering by the `{% main_menu %}` tag when a `template` parameter value isn't provided.
+
+#### `WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE`
+
+Default value: `'menus/flat_menu.html'`
+
+The name of the template used for rendering by the `{% flat_menu %}` tag when a `template` parameter value isn't provided.
+
+#### `WAGTAILMENUS_DEFAULT_SECTION_MENU_TEMPLATE`
+
+Default value: `'menus/section_menu.html'`
+
+The name of the template used for rendering by the `{% section_menu %}` tag when a `template` parameter value isn't provided.
+
+#### `WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE`
+
+Default value: `'menus/children_menu.html'`
+
+The name of the template used for rendering by the `{% children_menu %}` tag when a `template` parameter value isn't provided.
+
+#### `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE`
+
+Default value: `'menus/sub_menu.html'`
+
+The name of the template used for rendering by the `{% sub_menu %}` tag when a `template` parameter value isn't provided.
+
+#### `WAGTAILMENUS_DEFAULT_SECTION_MENU_MAX_LEVELS`
+
+Default value: `2`
+
+The maximum number of levels rendered by the `{% section_menu %}` tag when a `max_levels` parameter value isn't specified.
+
+#### `WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS`
+
+Default value: `1`
+
+The maximum number of levels rendered by the `{% children_menu %}` tag when a `max_levels` parameter value isn't specified.
+
+#### `WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC`
+
+Default value: `USE_SPECIFIC_AUTO`
+
+Controls how 'specific' pages objects are fetched and used during rendering of the `{% section_menu %}` tag when the `use_specific` parameter value isn't supplied. 
+
+#### `WAGTAILMENUS_DEFAULT_CHILDREN_USE_SPECIFIC`
+
+Default value: `USE_SPECIFIC_AUTO`
+
+Controls how 'specific' pages objects are fetched and used during rendering of the `{% children_menu %}` tag when the `use_specific` parameter value isn't supplied. 
+
+#### `WAGTAILMENUS_PAGE_FIELD_FOR_MENU_ITEM_TEXT`
+
+Default value: `'title'`
+
+When preparing menu items for rendering, wagtailmenus looks for a field, attribute or property method with this name on each page object to populate a `text` attribute on the menu item. NOTE: wagtailmenus will only be able to access custom page attributes if specific pages are being used (See [Specific pages instances and performance](#specific-page-use) for more details). The page's `title` attribute will be used as a fall-back if no attribute can found matching specified name.
+
+#### `WAGTAILMENUS_MAIN_MENU_MODEL`
+
+Default value: `'wagtailmenus.MainMenu'`
+
+Use this to specify a custom model to use for main menus instead of the default. The model should be a subclass of `wagtailmenus.AbstractMainMenu`. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+
+#### `WAGTAILMENUS_FLAT_MENU_MODEL`
+
+Default value: `'wagtailmenus.FlatMenu'`
+
+Use this to specify a custom model to use for flat menus instead of the default. The model should be a subclass of `wagtailmenus.AbstractFlatMenu`. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+
+#### `WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME`
+
+Default value: `'menu_items'`
+
+Use this to specify the 'related name' that should be used to access menu items from main menu instances. Used to replace the default `MainMenuItem` model with a custom one. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+
+#### `WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME`
+
+Default value: `'menu_items'`
+
+Use this to specify the 'related name' that should be used to access menu items from flat menu instances. Used to replace the default `FlatMenuItem` model with a custom one. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+
+#### `WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH`
+
+Default value: `'wagtailmenus.models.menus.ChildrenMenu'`
+
+Use this to specify a custom class to be used by wagtailmenus' `children_menu` tag. The value should be the import path of your custom class as a string, e.g. 'mysite.appname.models.CustomClass'. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+
+#### `WAGTAILMENUS_SECTION_MENU_CLASS_PATH`
+
+Default value: `'wagtailmenus.models.menus.SectionMenu'`
+
+Use this to specify a custom class to be used by wagtailmenus' `section_menu` tag. The value should be the import path of your custom class as a string, e.g. 'mysite.appname.models.CustomClass'. See [Overriding the default wagtailmenus models](#custom-models) for more details.
 
 
 # Contributing
