@@ -193,7 +193,7 @@ By default, the list of locations will be as follows:
 
 #### When `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`
 
-That list of locations will be as follows (where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
+That list of locations will be as follows, where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
 
 ##### For the menu itself:
 
@@ -258,7 +258,7 @@ By default, the list of locations will be as follows:
 
 #### When `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`
 
-That list of locations will be as follows (where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
+That list of locations will be as follows, where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
 
 #### For the menu itself:
 
@@ -332,7 +332,7 @@ By default, the list of locations will be as follows:
 
 #### When `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`
 
-That list of locations will be as follows (where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
+That list of locations will be as follows, where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
 
 ##### For the menu itself:
 
@@ -389,7 +389,7 @@ By default, the list of locations will be as follows:
 
 #### When `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`
 
-That list of locations will be as follows (where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
+That list of locations will be as follows, where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
 
 ##### For the menu itself:
 
