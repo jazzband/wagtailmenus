@@ -633,7 +633,8 @@ If you only wish to change the menu item models (e.g. to add images, extra field
 
         menu = ParentalKey(
             'wagtailmenus.MainMenu',
-            related_name="custom_menu_items" # important for step 3!
+            on_delete=models.CASCADE,
+            related_name="custom_menu_items", # important for step 3!
         )
         image = models.ForeignKey(
             get_image_model_string(),
@@ -663,7 +664,8 @@ If you only wish to change the menu item models (e.g. to add images, extra field
 
         menu = ParentalKey(
             'wagtailmenus.FlatMenu',
-            related_name="custom_menu_items" # important for step 3!
+            on_delete=models.CASCADE,
+            related_name="custom_menu_items", # important for step 3!
         )
 	```
 
@@ -723,7 +725,8 @@ If it's the main and flat menu models themselves that you wish to override, that
     """A custom menu item model to be used by ``TranslatedMainMenu``"""
         menu = ParentalKey(
             TranslatedMainMenu, # we can directly reference the model above
-            related_name=app_settings.MAIN_MENU_ITEMS_RELATED_NAME
+            on_delete=models.CASCADE,
+            related_name=app_settings.MAIN_MENU_ITEMS_RELATED_NAME,
         )
         link_text_de = models.CharField(
             verbose_name=_("link text (german)"),
@@ -799,7 +802,8 @@ If it's the main and flat menu models themselves that you wish to override, that
 
         menu = ParentalKey(
             TranslatedFlatMenu, # we can use the model from above
-            related_name=app_settings.FLAT_MENU_ITEMS_RELATED_NAME
+            on_delete=models.CASCADE,
+            related_name=app_settings.FLAT_MENU_ITEMS_RELATED_NAME,
         )
         link_text_de = models.CharField(
             verbose_name=_("link text (german)"),
