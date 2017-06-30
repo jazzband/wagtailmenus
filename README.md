@@ -727,7 +727,7 @@ If it's the main and flat menu models themselves that you wish to override, that
 
 
     class TranslatedMainMenuItem(AbstractMainMenuItem):
-    """A custom menu item model to be used by ``TranslatedMainMenu``"""
+        """A custom menu item model to be used by ``TranslatedMainMenu``"""
         menu = ParentalKey(
             TranslatedMainMenu, # we can directly reference the model above
             on_delete=models.CASCADE,
@@ -874,13 +874,13 @@ from wagtailmenus.models import SectionMenu
 
 
 class CustomSectionMenu(SectionMenu):
-	    
+    
     def get_base_page_queryset(self):
-	    # Show draft and expired pages in menu for superusers
-	    if self.request.user.is_superuser:
-	        return Page.objects.filter(show_in_menus=True)
-	    # Resort to default behaviour for everybody else
-	    return super(CustomSectionMenu, self).get_base_page_queryset()
+        # Show draft and expired pages in menu for superusers
+        if self.request.user.is_superuser:
+            return Page.objects.filter(show_in_menus=True)
+        # Resort to default behaviour for everybody else
+        return super(CustomSectionMenu, self).get_base_page_queryset()
 ```
     
 ```python
