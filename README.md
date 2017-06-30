@@ -559,14 +559,16 @@ class ContactPage(MenuPage):
 These change would result in the following HTML output when rendering a `ContactPage` instance in a main menu:
 
 ```html
-	<li class=" dropdown">
-        <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
-        <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
-            <li class="support"><a href="/contact-us/#support">Get support</a></li>
-            <li class="call"><a href="/contact-us/#call">Speak to someone</a></li>
-            <li class="map"><a href="/contact-us/#map">Map &amp; directions</a></li>
-        </ul>
-    </li>
+...
+<li class=" dropdown">
+    <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
+    <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
+        <li class="support"><a href="/contact-us/#support">Get support</a></li>
+        <li class="call"><a href="/contact-us/#call">Speak to someone</a></li>
+        <li class="map"><a href="/contact-us/#map">Map &amp; directions</a></li>
+    </ul>
+</li>
+...
 ```
 
 You can also modify sub-menu items based on field values for specific instances, rather than doing the same for every page of the same type. Here's another example:
