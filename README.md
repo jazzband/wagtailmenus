@@ -26,16 +26,9 @@ Extend the `wagtailmenus.models.MenuPage` model instead of the usual `wagtail.wa
 
 <img alt="Screenshot showing the repeated nav item in effect" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/repeating-item.png" />
 
-## 4. Respects your page tree and doesn't make you repeat yourself
+## 4. Provides templates and template tags to render menus consistently
 
-Unlike other solutions you may have seen/used before, `wagtailmenus` takes the view that your project's page tree is the best place for defining the structure of your site, and the natural order of pages at each level. Having different representations of that structure/order defined elsewhere (e.g. in several manually-defined 'menus') could easily become a maintenence nightmare for large, regularly-updated sites. Because of this, wagtailmenus only lets you to specify the top-level items for a menu - your page tree powers everything past that. This means:
-
-- Even if the top-level items may differ, the 'site structure' portayed in front-end menus will remain consistent, whatever the template tag being used to do the rendering.
-- Pages (and in a lot of cases, their descendants) will automatically disappear from menus if they become 'unpublished' or 'expired', or `Show in menus` is unchecked for some reason.
-
-## 5. Provides templates and template tags to render menus consistently
-
-Each menu tag comes with a default template that's designed to be fully accessible and compatible with Bootstrap 3, but wagtailmenus makes it easy to use your own. Every template tag accepts a `template` and `sub_menu_template` argument to let you explicitly override templates. Or, you can simply put your custom menu templates in a preferred location and have wagtailmenus find the right template automatically. You can even configure wagtailmenus to look for different sets of templates for each site in a multi-site project. See the instructions for each tag to find out more.
+Each menu tag comes with a default template that's designed to be fully accessible and compatible with Bootstrap 3, but wagtailmenus makes it easy to use your own. Every template tag accepts a `template` and `sub_menu_template` argument to let you explicitly override templates. Or, you can simply put your custom menu templates in a preferred location within your project and wagtailmenus will pick them up automatically. You can even configure wagtailmenus to look for different sets of templates for each site in a multi-site project. See the instructions for each tag to find out more.
 
 <img alt="Screenshot from Sublime editor showing menu template code" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-menu-templates.png" />
 
