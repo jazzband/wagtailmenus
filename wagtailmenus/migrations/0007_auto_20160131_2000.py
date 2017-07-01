@@ -22,11 +22,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='flatmenuitem',
             name='link_page',
-            field=models.ForeignKey(verbose_name='Link to an internal page', blank=True, to='wagtailcore.Page', null=True),
+            field=models.ForeignKey(verbose_name='Link to an internal page', blank=True, on_delete=models.deletion.CASCADE, to='wagtailcore.Page', null=True),
         ),
         migrations.AlterField(
             model_name='mainmenuitem',
             name='link_page',
-            field=models.ForeignKey(verbose_name='Link to an internal page', blank=True, to='wagtailcore.Page', null=True),
+            field=models.ForeignKey(verbose_name='Link to an internal page', blank=True, on_delete=models.deletion.CASCADE, to='wagtailcore.Page', null=True),
         ),
     ]

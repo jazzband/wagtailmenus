@@ -2,52 +2,38 @@
 [![PyPi Version](https://img.shields.io/pypi/v/wagtailmenus.svg)](https://pypi.python.org/pypi/wagtailmenus)
 [![Coverage Status](https://coveralls.io/repos/github/rkhleics/wagtailmenus/badge.svg?branch=master)](https://coveralls.io/github/rkhleics/wagtailmenus?branch=master)
 
-What is wagtailmenus?
-=====================
+# What is wagtailmenus?
 
 It's an extension for Torchbox's [Wagtail CMS](https://github.com/torchbox/wagtail) to help you manage and render multi-level navigation and simple flat menus in a consistent, flexible way.
 
 The current version is compatible with Wagtail 1.5 to 1.10 and Python 2.7, 3.3, 3.4, 3.5 and 3.6
 
-What does it do?
-================
+# What does it do?
 
-1. Gives you independent control over your root-level main menu items
----------------------------------------------------------------------
+## 1. Gives you independent control over your top-level main menu items
 
-The `MainMenu` model lets you define the root-level items for your project's main navigation (or one for each site, if it's a multi-site project) using an inline model `MainMenuItem`. These items can link to pages (you can append an optional hash or querystring to the URL, too) or custom URLs. The custom URL field won't force you to enter a valid URL either, so you can add things like *#request-callback* or *#signup* to link to areas on the active page (perhaps as JS modals).
+The `MainMenu` model lets you define the top-level items for your site's main menu (or one for each site, if it's a multi-site project) using an inline model `MainMenuItem`. These items can link to pages (you can append an optional hash or querystring to the URL, too) or custom URLs. The custom URL field won't force you to enter a valid URL either, so you can add things like *#request-callback* or *#signup* to link to areas on the active page (perhaps as JS modals).
 
-The site's page tree powers everything past the root level, so you don't have to recreate it elsewhere. And as you'd expect, only links to published pages will appear when rendering.
-
-
-2. Allows you to manage multiple 'flat menus' via the CMS
----------------------------------------------------------
+## 2. Allows you to manage multiple 'flat menus' via the CMS
 
 Have you ever hard-coded a menu into a footer at the start of a project, only for those pages never to come into existence? Or maybe the pages were created, but their URLs changed later on, breaking the hard-coded links? How about 'secondary navigation' menus in headers? Flat menus allow you to manage these kind of menus via the CMS, instead of hard-coding them. This means that the page URLs dynamically update to reflect changes, and making updates is possible without having to touch a single line of code.
 
 In a multi-site project, you can choose to define a new set of menus for each site, or you can define one set of menus for your default site and reuse them for your other sites, or use a combination of both approaches for different menus (see the **`fall_back_to_default_site_menus`** option in [using the `{% flat_menu %}` tag](#flat_menu-tag) to find out more). However you choose to do things, a 'copy' feature makes it easy to copy existing menus from one site to another via the Wagtail admin interface.
 
-
-3. Provides a solution to key page links becoming just 'toggles' in multi-level drop-downs
-------------------------------------------------------------------------------------------
+## 3. Provides a solution to key page links becoming just 'toggles' in multi-level drop-downs
 
 Extend the `wagtailmenus.models.MenuPage` model instead of the usual `wagtail.wagtailcore.models.Page` to create your custom page types, and gain a couple of extra fields that will allow you to configure certain pages to appear again alongside their children in multi-level menus. Use the menu tags provided, and that behaviour will remain consistent in all menus throughout your site.
 
-No more adding additional pages into the tree. No more hard-coding additional links into templates, or resorting to javascript hacks.
-
 <img alt="Screenshot showing the repeated nav item in effect" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/repeating-item.png" />
 
+## 4. Provides templates and template tags to render menus consistently
 
-4. Provides templates and template tags to render menus consistently
---------------------------------------------------------------------
-
-Each menu tag comes with a default template that's designed to be fully accessible and compatible with Bootstrap 3, but wagtailmenus makes it easy to use your own. Every template tag accepts a `template` and `sub_menu_template` argument to let you explicitly override templates. Or, you can simply put your custom menu templates in a preferred location and have wagtailmenus find the right template automatically. You can even configure wagtailmenus to look for different sets of templates for each site in a multi-site project. See the instructions for each tag to find out more.
+Each menu tag comes with a default template that's designed to be fully accessible and compatible with Bootstrap 3, but wagtailmenus makes it easy to use your own. Every template tag accepts a `template` and `sub_menu_template` argument to let you explicitly override templates. Or, you can simply put your custom menu templates in a preferred location within your project and wagtailmenus will pick them up automatically. You can even configure wagtailmenus to look for different sets of templates for each site in a multi-site project. See the instructions for each tag to find out more.
 
 <img alt="Screenshot from Sublime editor showing menu template code" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-menu-templates.png" />
 
 
-Installing wagtailmenus
-=======================
+# Installing wagtailmenus
 
 1. Install the package using pip: `pip install wagtailmenus`.
 2. Add `wagtail.contrib.modeladmin` to `INSTALLED_APPS` in your project settings, if it's not there already.
@@ -57,36 +43,35 @@ Installing wagtailmenus
 	```python
 
     TEMPLATES = [
-    	{
-        	'BACKEND': 'django.template.backends.django.DjangoTemplates',
-			'	DIRS': [
-				os.path.join(PROJECT_ROOT, 'templates'),
-			],
-			'APP_DIRS': True,
-			'OPTIONS': {
-				'context_processors': [
-					'django.contrib.auth.context_processors.auth',
-					'django.template.context_processors.debug',
-					'django.template.context_processors.i18n',
-					'django.template.context_processors.media',
-					'django.template.context_processors.request',
-					'django.template.context_processors.static',
-					'django.template.context_processors.tz',
-					'django.contrib.messages.context_processors.messages',
-					'wagtail.contrib.settings.context_processors.settings',
-					'wagtailmenus.context_processors.wagtailmenus',
-				],
-			},
-		},
-	]
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [
+                os.path.join(PROJECT_ROOT, 'templates'),
+            ],
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'context_processors': [
+                    'django.contrib.auth.context_processors.auth',
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.i18n',
+                    'django.template.context_processors.media',
+                    'django.template.context_processors.request',
+                    'django.template.context_processors.static',
+                    'django.template.context_processors.tz',
+                    'django.contrib.messages.context_processors.messages',
+                    'wagtail.contrib.settings.context_processors.settings',
+                    'wagtailmenus.context_processors.wagtailmenus',
+                ],
+            },
+        },
+    ]
 	
     ```
 	
 5. Run `python manage.py migrate wagtailmenus` to create the necessary database tables.
 
 
-Using the `MenuPage` model
---------------------------
+## Using the `MenuPage` model (optional)
 
 While wagtailmenus' menu tags will work with your existing page tree and page types, to access some of the app's more powerful features (e.g. item repetition, programmatic manipulation of sub-menu items), you'll likely want to use the `MenuPage` model as a base for some of your page-type models.
 
@@ -98,8 +83,7 @@ While wagtailmenus' menu tags will work with your existing page tree and page ty
 If for some reason subclassing `MenuPage` won't work (perhaps you need to subclass another model based on `Page`, such as wagtail's `AbstractForm` and `AbstractEmailForm` models), you can import and use `wagtailmenus.models.MenuPageMixin` instead to gain the same fields and functionality. However, you will need to override `settings_panels` on your model yourself to surface the fields in the page editor interface.
 
 
-Using the `AbstractLinkPage` model
-----------------------------------
+## Using the `AbstractLinkPage` model (optional)
 
 Because menus only allow you to define the top-level items in a menu, the `AbstractLinkPage` model was added in version 2.3 to give you a way to add additional links into multi-level menus past the top level. 
 
@@ -123,8 +107,7 @@ By default, link pages are not allowed to have children, and shouldn't appear
 in Wagtail-generated sitemaps, or search results.
 
 
-Using wagtailmenus
-==================
+# Using wagtailmenus
 
 1. [Defining your main menu in the CMS](#defining-main-menus)
 2. [Defining flat menus in the CMS](#defining-flat-menus)
@@ -141,8 +124,7 @@ Using wagtailmenus
 13. [Settings reference](#app-settings)
 
 
-<a id="defining-main-menus"></a>1. Defining your main menu in the CMS
----------------------------------------------------------------------
+## <a id="defining-main-menus"></a>1. Defining your main menu in the CMS
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on **Settings** in the side menu to access the options in there, then select **Main menu**.
@@ -152,8 +134,7 @@ Using wagtailmenus
 6. Save your changes to apply them to your site.
 
 
-<a id="defining-flat-menus"></a>2. Defining flat menus in the CMS
------------------------------------------------------------------
+## <a id="defining-flat-menus"></a>2. Defining flat menus in the CMS
 
 1. Log into the Wagtail CMS for your project (as a superuser).
 2. Click on `Settings` in the side menu to access the options in there, then select `Flat menus` to access the menu list page.
@@ -166,15 +147,14 @@ Using wagtailmenus
 All of the flat menus created for a project will appear in the menu list page (from step 2, above) making it easy to find, update, copy or delete your menus later. As soon as you create menus for more than one site in a multi-site project, the listing page will give you additional information and filters to help manage your menus, like so: <img alt="Screenshot showing the FlatMenu listing page for a multi-site setup" src="https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/screenshots/wagtailmenus-flatmenu-list.png" />
 
 
-<a id="main_menu-tag"></a>3. Using the `{% main_menu %}` tag
-------------------------------------------------------------
+## <a id="main_menu-tag"></a>3. Using the `{% main_menu %}` tag
 
 The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the current site in your Wagtail project, with CSS classes automatically applied to each item to indicate the current page or ancestors of the current page. It also does a few sensible things, like never adding the 'ancestor' class for a homepage link, or outputting children for it.
 
 1. In whichever template you want your main menu to appear, load `menu_tags` using `{% load menu_tags %}`.
 2. Add `{% main_menu %}` to your template, where you want the menu to appear.
 
-**Optional params for `{% main_menu %}`**
+### Optional arguments accepted:
 
 - **`show_multiple_levels`** (default: `True`): Adding `show_multiple_levels=False` to the tag in your template is essentially a more descriptive way of adding `max_levels` to `1`.
 - **`max_levels`** (default: `None`): Provide an integer value to override the `max_levels` field value defined on your menu. Controls how many levels should be rendered (when `show_multiple_levels` is `True`).
@@ -184,31 +164,38 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 - **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 - **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 
-**Where `{% main_menu %}` looks for templates**
 
-If you don't use the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
+### Where `{% main_menu %}` looks for templates
 
-For the menu itself:
+If you don't use the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering.
+
+#### When `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False`
+
+By default, the list of locations will be as follows:
+
+##### For the menu itself:
 
 - `"menus/main/menu.html"`
 - `"menus/main_menu.html"`
 
-For any sub menus:
+##### For any sub menus:
 
 - `"menus/main/sub_menu.html"`
 - `"menus/main_sub_menu.html"`
 - `"menus/sub_menu.html"`
 
-If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`, that list of locations will be as follows (where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddelware`):
+#### When `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`
 
-For the menu itself:
+That list of locations will be as follows, where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
+
+##### For the menu itself:
 
 - `"menus/example.com/main/menu.html"`
 - `"menus/example.com/main_menu.html"`
 - `"menus/main/menu.html"`
 - `"menus/main_menu.html"`
 
-For any sub menus:
+##### For any sub menus:
 
 - `"menus/example.com/main/sub_menu.html"`
 - `"menus/example.com/main_sub_menu.html"`
@@ -218,13 +205,12 @@ For any sub menus:
 - `"menus/sub_menu.html"`
 
 
-<a id="flat_menu-tag"></a>4. Using the `{% flat_menu %}` tag
-------------------------------------------------------------
+## <a id="flat_menu-tag"></a>4. Using the `{% flat_menu %}` tag
 
 1. In whichever template you want your menu to appear, load `menu_tags` using `{% load menu_tags %}`.
 2. Add `{% flat_menu 'menu-handle' %}` to your template, where you want the menu to appear (where 'menu-handle' is the unique handle for the menu you added).
 
-**Optional params for `{% flat_menu %}`**
+### Optional arguments accepted:
 
 - **`show_menu_heading`** (default: `True`): Passed through to the template used for rendering, where it can be used to conditionally display a heading above the menu.
 - **`show_multiple_levels`** (default: `True`): Flat menus are designed for outputting simple, flat lists of links. But, you can alter the `max_levels` field value on your`FlatMenu` objects in the CMS to enable multi-level output for specific menus. If you want to absolutely never show anything but the `MenuItem` objects defined on the menu, you can override this behaviour by adding `show_multiple_levels=False` to the tag in your template.
@@ -236,11 +222,15 @@ For any sub menus:
 - **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 - **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus (if enabled using `show_multiple_levels`). All subsequent calls to `{% sub_menu %}` within the context of the flat menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 
-**Where `{% flat_menu %}` looks for templates**
+### Where `{% flat_menu %}` looks for templates
 
-If you don't use the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows (where `handle` is the `handle` of the `FlatMenu` being rendered:
+If you don't use the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering.
 
-For the menu itself:
+#### When `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False`
+
+By default, the list of locations will be as follows:
+
+##### For the menu itself:
 
 - `"menus/flat/handle/menu.html"`
 - `"menus/flat/handle.html"`
@@ -250,7 +240,7 @@ For the menu itself:
 - `"menus/flat/menu.html"`
 - `"menus/flat_menu.html"`
 
-For any sub menus:
+##### For any sub menus:
 
 - `"menus/flat/handle/sub_menu.html"`
 - `"menus/flat/handle_sub_menu.html"`
@@ -259,9 +249,11 @@ For any sub menus:
 - `"menus/flat/sub_menu.html"`
 - `"menus/sub_menu.html"`
 
-If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`, that list of locations will be as follows (where `handle` is the `handle` of the `FlatMenu` being rendered and `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
+#### When `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`
 
-For the menu itself:
+That list of locations will be as follows, where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
+
+#### For the menu itself:
 
 - `"menus/example.com/flat/handle/menu.html"`
 - `"menus/example.com/flat/handle.html"`
@@ -278,7 +270,7 @@ For the menu itself:
 - `"menus/flat/menu.html"`
 - `"menus/flat_menu.html"`
 
-For any sub menus:
+#### For any sub menus:
 
 - `"menus/example.com/flat/handle/sub_menu.html"`
 - `"menus/example.com/flat/handle_sub_menu.html"`
@@ -294,15 +286,14 @@ For any sub menus:
 - `"menus/sub_menu.html"`
 
 
-<a id="section_menu-tag"></a>5. Using the `{% section_menu %}` tag
-------------------------------------------------------------------
+## <a id="section_menu-tag"></a>5. Using the `{% section_menu %}` tag
 
 The `{% section_menu %}` tag allows you to display a context-aware, page-driven menu in your project's templates, with CSS classes automatically applied to each item to indicate the active page or ancestors of the active page.  
 
 1. In whichever template you want the section menu to appear, load `menu_tags` using `{% load menu_tags %}`.
 2. Add `{% section_menu %}` to your template, where you want the menu to appear.
 
-**Optional params for `{% section_menu %}`**
+### Optional arguments accepted:
 
 - **`show_section_root`** (default: `True`): Passed through to the template used for rendering, where it can be used to conditionally display the root page of the current section.
 - **`max_levels`** (default: `2`): Lets you control how many levels of pages should be rendered (the section root page does not count as a level, just the first set of pages below it). If you only want to display the first level of pages below the section root page (whether pages linked to have children or not), add `max_levels=1` to the tag in your template. You can display additional levels by providing a higher value.
@@ -313,31 +304,37 @@ The `{% section_menu %}` tag allows you to display a context-aware, page-driven 
 - **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 - **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 
-**Where `{% section_menu %}` looks for templates**
+### Where `{% section_menu %}` looks for templates
 
-If you don't use the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
+If you don't use the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. 
 
-For the menu itself:
+#### When `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False`
+
+By default, the list of locations will be as follows:
+
+##### For the menu itself:
 
 - `"menus/section/menu.html"`
 - `"menus/section_menu.html"`
 
-For any sub menus:
+##### For any sub menus:
 
 - `"menus/section/sub_menu.html"`
 - `"menus/section_sub_menu.html"`
 - `"menus/sub_menu.html"`
 
-If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`, that list of locations will be as follows (where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
+#### When `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`
 
-For the menu itself:
+That list of locations will be as follows, where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
+
+##### For the menu itself:
 
 - `"menus/example.com/section/menu.html"`
 - `"menus/example.com/section_menu.html"`
 - `"menus/section/menu.html"`
 - `"menus/section_menu.html"`
 
-For any sub menus:
+##### For any sub menus:
 
 - `"menus/example.com/section/sub_menu.html"`
 - `"menus/example.com/section_sub_menu.html"`
@@ -347,15 +344,14 @@ For any sub menus:
 - `"menus/sub_menu.html"`
 
 
-<a id="children_menu-tag"></a>6. Using the `{% children_menu %}` tag
---------------------------------------------------------------------
+## <a id="children_menu-tag"></a>6. Using the `{% children_menu %}` tag
 
 The `{% children_menu %}` tag can be used in page templates to display a menu of children of the current page. You can also use the `parent_page` argument to show children of a different page.
 
 1. In whichever template you want the menu to appear, load `menu_tags` using `{% load menu_tags %}`.
 2. Use the `{% children_menu %}` tag where you want the menu to appear.
 
-**Optional params for `{% children_menu %}`**
+### Optional arguments accepted:
 
 - **`parent_page`**: The tag will automatically pick up `self` from the context to render the children for the active page, but you render a children menu for a different page, if desired. To do so, add `parent_page=page_obj` to the tag in your template, where `page_obj` is the `Page` instance you wish to display children for.
 - **`max_levels`** (default: `1`): Lets you control how many levels of pages should be rendered. For example, if you want to display the direct children pages and their children too, add `max_levels=2` to the tag in your template.
@@ -365,31 +361,37 @@ The `{% children_menu %}` tag can be used in page templates to display a menu of
 - **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 - **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 
-**Where `{% children_menu %}` looks for templates**
+### Where `{% children_menu %}` looks for templates
 
-If you don't use the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False` (the default), the list of locations will be as follows:
+If you don't use the `template` and `sub_menu_template` parameters to specify templates explicitly, wagtailmenus will look in a list of gradually less specific locations for templates to use for rendering. 
 
-For the menu itself:
+#### When `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `False`
+
+By default, the list of locations will be as follows:
+
+##### For the menu itself:
 
 - `"menus/children/menu.html"`
 - `"menus/children_menu.html"`
 
-For any sub menus:
+##### For any sub menus:
 
 - `"menus/children/sub_menu.html"`
 - `"menus/children_sub_menu.html"`
 - `"menus/sub_menu.html"`
 
-If `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`, that list of locations will be as follows (where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
+#### When `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` is `True`
 
-For the menu itself:
+That list of locations will be as follows, where `example.com` is the `hostname` field value of the current site (added to `request.site` by wagtail's `SiteMiddleware`):
+
+##### For the menu itself:
 
 - `"menus/example.com/children/menu.html"`
 - `"menus/example.com/children_menu.html"`
 - `"menus/children/menu.html"`
 - `"menus/children_menu.html"`
 
-For any sub menus:
+##### For any sub menus:
 
 - `"menus/example.com/children/sub_menu.html"`
 - `"menus/example.com/children_sub_menu.html"`
@@ -399,12 +401,11 @@ For any sub menus:
 - `"menus/sub_menu.html"`
 
 
-<a id="sub_menu-tag"></a>7. Using the `{% sub_menu %}` tag
-----------------------------------------------------------
+## <a id="sub_menu-tag"></a>7. Using the `{% sub_menu %}` tag
 
 The `{% sub_menu %}` tag is used within menu templates to render additional levels of pages within a menu. It's designed to pick up on variables added to the context by the other menu tags, and so can behave a little unpredictably if called directly, without those context variables having been set. It requires only one parameter to work, which is `menuitem_or_page`, which can either be an instance of `MainMenuItem`, `FlatMenuItem`, or `Page`.
 
-**Optional params for `{% sub_menu %}`**
+### Optional arguments accepted:
 
 - **`stop_at_this_level`**: By default, the tag will figure out whether further levels should be rendered or not, depending on what you supplied as `max_levels` to the original menu tag. However, you can override that behaviour by adding either `stop_at_this_level=True` or `stop_at_this_level=False` to the tag in your custom menu template.
 - **`apply_active_classes`**: By default, the tag will inherit this behaviour from whatever was specified for the original menu tag. However, you can override that behaviour by adding either `apply_active_classes=True` or `apply_active_classes=False` to the tag in your custom menu template.
@@ -413,8 +414,7 @@ The `{% sub_menu %}` tag is used within menu templates to render additional leve
 - **`use_specific`**: By default, the tag will inherit this behaviour from whatever was specified for the original menu tag. However, the value can be overridden by passing this option to the {% sub_menu %} tag in your custom menu template. Take a look at the [Specific pages instances and performance](#specific-page-use) section below for a description of the option values supported.
 
 
-<a id="writing-menu-templates"></a>8. Writing your own menu templates
----------------------------------------------------------------------
+## <a id="writing-menu-templates"></a>8. Writing your own menu templates
 
 The following variables are added to the context by all of the above tags, which you can make use of in your templates:
 
@@ -425,7 +425,7 @@ The following variables are added to the context by all of the above tags, which
 - **`allow_repeating_parents`**: A boolean indicating whether `MenuPage` fields should be respected when rendering further menu levels.
 - **`apply_active_classes`**: A boolean indicating whether `sub_menu` tags should attempt to add  'active' and 'ancestor' classes to menu items when rendering further menu levels.
 
-**Each item in `menu_items` has the following attributes:**
+### Each item in `menu_items` has the following attributes:
 
 - **`href`**: The URL that the menu item should link to.
 - **`text`**: The text that should be used for the menu item.
@@ -433,8 +433,7 @@ The following variables are added to the context by all of the above tags, which
 - **`has_children_in_menu`**: A boolean indicating whether the menu item has children that should be output as a sub-menu.
 
 
-<a id="using-menupage"></a>9. Repetition of selected pages in menus using `MenuPage`
----------------------------------------------------------------------------------------------
+## <a id="using-menupage"></a>9. Repetition of selected pages in menus using `MenuPage`
 
 Let's say you have an **About Us** section on your site. The top-level page has content that is just as important as that on the pages below it (e.g. "Meet the team", "Our mission and values", "Staff vacancies"). Because of this, you'd like visitors to be able to access the root page as easily as those pages. But, your site uses drop-down navigation, and the **About Us** link no longer takes you to that page when clicked... it simply acts as a toggle for hiding and showing its sub-pages:
 
@@ -453,8 +452,7 @@ Now, wherever the children of the **About Us** page are output (using one of the
 The menu tags do some extra work to make sure both links are never assigned the `'active'` class. When on the 'About Us' page, the tags will treat the repeated item as the 'active' page, and just assign the `'ancestor'` class to the original, so that the behaviour/styling is consistent with other page links rendered at that level.
 
 
-<a id="specific-page-use"></a>10. Specific pages instances and performance
---------------------------------------------------------------------------
+## <a id="specific-page-use"></a>10. Specific pages instances and performance
 
 Wagtail makes use of a something known in Django as 'multi-table inheritance'. In simple terms, this means that when you create an instance of a custom page type model, the data is saved in two different database tables. All of the standard fields from Wagtail's `Page` model are stored in one table, and any additional fields from your custom model are saved in another one. It also means that, in order for Django to return 'specific' page type instances (e.g. an `EventPage`), it needs to fetch and join data from multiple tables; which has a negative effect on performance.
 
@@ -476,8 +474,7 @@ All menu tags accept a `use_specific` argument, allowing you to override any def
 - `USE_SPECIFIC_ALWAYS` (value `3`) e.g. `{% main_menu use_specific=USE_SPECIFIC_ALWAYS %}`
 
 
-<a id="modifying-submenu-items"></a>11. Manipulating sub-menu items for specific page types
--------------------------------------------------------------------------------------------
+## <a id="modifying-submenu-items"></a>11. Manipulating sub-menu items for specific page types
 
 If you find yourself needing further control over the items that appear in your menus (perhaps you need to add further items for specific pages, or remove some under certain circumstances), you will likely find the **`modify_submenu_items()`** _(added in 1.3)_ and **`has_submenu_items()`** _(added in 1.4)_ methods on the [`MenuPage`](https://github.com/rkhleics/wagtailmenus/blob/master/wagtailmenus/models.py#L17) model of interest. 
 
@@ -498,7 +495,8 @@ class ContactPage(MenuPage):
     ):
         # Apply default modifications first of all
         menu_items = super(ContactPage, self).modify_submenu_items(
-            menu_items, current_page, current_ancestor_ids, current_site, allow_repeating_parents, apply_active_classes, original_menu_tag,
+            menu_items, current_page, current_ancestor_ids, current_site, 
+            allow_repeating_parents, apply_active_classes, original_menu_tag,
             menu_instance, request)
         """
         If rendering a 'main_menu', add some additional menu items to the end
@@ -554,14 +552,16 @@ class ContactPage(MenuPage):
 These change would result in the following HTML output when rendering a `ContactPage` instance in a main menu:
 
 ```html
-	<li class=" dropdown">
-        <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
-        <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
-            <li class="support"><a href="/contact-us/#support">Get support</a></li>
-            <li class="call"><a href="/contact-us/#call">Speak to someone</a></li>
-            <li class="map"><a href="/contact-us/#map">Map &amp; directions</a></li>
-        </ul>
-    </li>
+...
+<li class=" dropdown">
+    <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
+    <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
+        <li class="support"><a href="/contact-us/#support">Get support</a></li>
+        <li class="call"><a href="/contact-us/#call">Speak to someone</a></li>
+        <li class="map"><a href="/contact-us/#map">Map &amp; directions</a></li>
+    </ul>
+</li>
+...
 ```
 
 You can also modify sub-menu items based on field values for specific instances, rather than doing the same for every page of the same type. Here's another example:
@@ -605,12 +605,11 @@ class SectionRootPage(MenuPage):
 ```
 
 
-<a id="custom-models"></a>12. Overriding the default wagtailmenus models
-------------------------------------------------------------------------
+## <a id="custom-models"></a>12. Overriding the default wagtailmenus models
 
 There are a couple of ways in which you can customise the menu and menu item models used by wagtailmenus. 
 
-**Overriding just the menu item models**
+### Overriding just the menu item models
 
 If you only wish to change the menu item models (e.g. to add images, extra fields for translated text), but are happy for the 'main menu' and 'flat menu' models themselves to remain unchanged, you can utilise the `WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME` and `WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME` settings.
 
@@ -618,54 +617,54 @@ If you only wish to change the menu item models (e.g. to add images, extra field
 	
 	```python
 
-	from django.db import models
-	from django.utils.translation import ugettext_lazy as _
-	from modelcluster.fields import ParentalKey
-	from wagtail.wagtailimages import get_image_model_string
-	from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
-	from wagtail.wagtailadmin.edit_handlers import FieldPanel, PageChooserPanel
-	from wagtailmenus.models import AbstractMainMenuItem, AbstractFlatMenuItem
+    from django.db import models
+    from django.utils.translation import ugettext_lazy as _
+    from modelcluster.fields import ParentalKey
+    from wagtail.wagtailimages import get_image_model_string
+    from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
+    from wagtail.wagtailadmin.edit_handlers import FieldPanel, PageChooserPanel
+    from wagtailmenus.models import AbstractMainMenuItem, AbstractFlatMenuItem
 
 
-	class CustomMainMenuItem(AbstractMainMenuItem):
-		"""A custom menu item model to be used by ``wagtailmenus.MainMenu``"""
+    class CustomMainMenuItem(AbstractMainMenuItem):
+        """A custom menu item model to be used by ``wagtailmenus.MainMenu``"""
 
-		menu = ParentalKey(
-			'wagtailmenus.MainMenu',
-			related_name="custom_menu_items" # important for step 3!
-		)
-		image = models.ForeignKey(
-			get_image_model_string(),
-			blank=True,
-			null=True,
-			on_delete=models.SET_NULL,
-		)
-		hover_description = models.CharField(
-			max_length=250,
-			blank=True
-		)
+        menu = ParentalKey(
+            'wagtailmenus.MainMenu',
+            on_delete=models.CASCADE,
+            related_name="custom_menu_items", # important for step 3!
+        )
+        image = models.ForeignKey(
+            get_image_model_string(),
+            blank=True,
+            null=True,
+            on_delete=models.SET_NULL,
+        )
+        hover_description = models.CharField(
+            max_length=250,
+            blank=True
+        )
 
-		# Also override the panels attribute, so that the new fields appear
-		# in the admin interface
-		panels = (
-	        PageChooserPanel('link_page'),
-	        ImageChooserPanel('image'),
-	        FieldPanel('link_url'),
-	        FieldPanel('url_append'),
-	        FieldPanel('link_text'),
-	        FieldPanel('hover_description'),
-	        FieldPanel('allow_subnav'),
-	    )
+        # Also override the panels attribute, so that the new fields appear
+        # in the admin interface
+        panels = (
+            PageChooserPanel('link_page'),
+            ImageChooserPanel('image'),
+            FieldPanel('link_url'),
+            FieldPanel('url_append'),
+            FieldPanel('link_text'),
+            FieldPanel('hover_description'),
+            FieldPanel('allow_subnav'),
+        )
 
-	class CustomFlatMenuItem(AbstractFlatMenuItem):
-		"""A custom menu item model to be used by ``wagtailmenus.FlatMenu``"""
-		
-		menu = ParentalKey(
-			'wagtailmenus.FlatMenu',
-			related_name="custom_menu_items" # important for step 3!
-		)
+    class CustomFlatMenuItem(AbstractFlatMenuItem):
+        """A custom menu item model to be used by ``wagtailmenus.FlatMenu``"""
 
-		...
+        menu = ParentalKey(
+            'wagtailmenus.FlatMenu',
+            on_delete=models.CASCADE,
+            related_name="custom_menu_items", # important for step 3!
+        )
 	```
 
 2.	Run `python manage.py makemigrations appname` (where appname is the name of the app where you created your new models, e.g. 'core') to create migrations for your new models. Then run `python manage.py migrate appname` to create the necessary database tables.
@@ -674,302 +673,412 @@ If you only wish to change the menu item models (e.g. to add images, extra field
 
 	```python
 
-	# Set this to the 'related_name' attribute used on the ParentalKey field
-	WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME = "custom_menu_items"
+    # Set this to the 'related_name' attribute used on the ParentalKey field
+    WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME = "custom_menu_items"
 
-	# Set this to the 'related_name' attribute used on the ParentalKey field
-	WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = "custom_menu_items"
+    # Set this to the 'related_name' attribute used on the ParentalKey field
+    WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = "custom_menu_items"
 
 	```
 
 4.	**That's it!** The custom models will now be used instead of the default ones. The default models and their data will remain intact, even if you can no longer see them via the admin area. If you need to, you can easily write a data migration to populate your new models from existing data.
 
 
-**Overriding the menu AND menu item models**
+### Overriding the menu AND menu item models
 
 If it's the main and flat menu models themselves that you wish to override, that's possible too. But, because the default menu item models are tied to the default menu models, you'll also need to create custom menu item models (whether you wish to change their behaviour or not).
 
 1.	Create your custom models by subclassing wagtailmenus' abstract model classes. e.g:
 
-	```python
-	from django.db import models
-	from django.utils import translation
-	from django.utils.translation import ugettext_lazy as _
-	from modelcluster.fields import ParentalKey
-	from wagtail.wagtailadmin.edit_handlers import (
-    	FieldPanel, MultiFieldPanel, PageChooserPanel
-    )
+    ```python
+    from django.db import models
+    from django.utils import translation
+    from django.utils.translation import ugettext_lazy as _
+    from modelcluster.fields import ParentalKey
+    from wagtail.wagtailadmin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel
     from wagtailmenus import app_settings
-    from wagtailmenus.models import (
-		AbstractMainMenu, AbstractMainMenuItem, 
-		AbstractFlatMenu, AbstractFlatMenuItem,
-	)
+    from wagtailmenus.models import AbstractMainMenu, AbstractMainMenuItem, AbstractFlatMenu, AbstractFlatMenuItem
 
-	
-	class TranslatedField(object):
-	    def __init__(self, en_field, de_field, fr_field):
-	        self.en_field = en_field
-	        self.de_field = de_field
-	        self.fr_field = fr_field
 
-	    def __get__(self, instance, owner):
-	    	active_language = translation.get_language()
-	        if active_language == 'de':
-	            return getattr(instance, self.de_field)
-	        elif active_language == 'fr':
-	            return getattr(instance, self.fr_field)
-	        return getattr(instance, self.en_field)
+    class TranslatedField(object):
+        def __init__(self, en_field, de_field, fr_field):
+            self.en_field = en_field
+            self.de_field = de_field
+            self.fr_field = fr_field
 
-	
-	class TranslatedMainMenu(AbstractMainMenu):
-    	pass
+        def __get__(self, instance, owner):
+            active_language = translation.get_language()
+            if active_language == 'de':
+                return getattr(instance, self.de_field)
+            if active_language == 'fr':
+                return getattr(instance, self.fr_field)
+            return getattr(instance, self.en_field)
+
+
+    class TranslatedMainMenu(AbstractMainMenu):
+        pass
 
 
     class TranslatedMainMenuItem(AbstractMainMenuItem):
-		"""A custom menu item model to be used by ``TranslatedMainMenu``"""
-	
-		menu = ParentalKey(
-			TranslatedMainMenu, # we can directly reference the model above
-			related_name=app_settings.MAIN_MENU_ITEMS_RELATED_NAME
-		)
-		link_text_de = models.CharField(
-	        verbose_name=_("link text (german)"),
-	        max_length=255,
-	        blank=True,
-	    )
-	    link_text_fr = models.CharField(
-	        verbose_name=_("link text (french)"),
-	        max_length=255,
-	        blank=True,
-	    )
-	    translated_link_text = TranslatedField(
-        	'link_text', 'link_text_de', 'link_text_fr'
-    	)
+        """A custom menu item model to be used by ``TranslatedMainMenu``"""
+        menu = ParentalKey(
+            TranslatedMainMenu, # we can directly reference the model above
+            on_delete=models.CASCADE,
+            related_name=app_settings.MAIN_MENU_ITEMS_RELATED_NAME,
+        )
+        link_text_de = models.CharField(
+            verbose_name=_("link text (german)"),
+            max_length=255,
+            blank=True,
+        )
+        link_text_fr = models.CharField(
+            verbose_name=_("link text (french)"),
+            max_length=255,
+            blank=True,
+        )
+        translated_link_text = TranslatedField('link_text', 'link_text_de', 'link_text_fr')
 
-    	@property
-    	def menu_text(self):
-    		"""Use `translated_link_text` instead of just `link_text`"""
-	        return self.translated_link_text or getattr(
-	            self.link_page,
-	            app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
-	            self.link_page.title
-	        )
+        @property
+        def menu_text(self):
+            """Use `translated_link_text` instead of just `link_text`"""
+            return self.translated_link_text or getattr(
+                self.link_page,
+                app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
+                self.link_page.title
+            )
 
-	    # Also override the panels attribute, so that the new fields appear
-		# in the admin interface
-	    panels = (
-	        PageChooserPanel("link_page"),
-	        FieldPanel("link_url"),
-	        FieldPanel("url_append"),
-	        FieldPanel("link_text"),
-	        FieldPanel("link_text_de"),
-	        FieldPanel("link_text_fr"),
-	        FieldPanel("handle"),
-	        FieldPanel("allow_subnav"),
-	    )
-
+        # Also override the panels attribute, so that the new fields appear
+        # in the admin interface
+        panels = (
+            PageChooserPanel("link_page"),
+            FieldPanel("link_url"),
+            FieldPanel("url_append"),
+            FieldPanel("link_text"),
+            FieldPanel("link_text_de"),
+            FieldPanel("link_text_fr"),
+            FieldPanel("handle"),
+            FieldPanel("allow_subnav"),
+        )
 
     class TranslatedFlatMenu(AbstractFlatMenu):
-	    heading_de = models.CharField(
-	        verbose_name=_("heading (german)"),
-	        max_length=255,
-	        blank=True,
-	    )
-	    heading_fr = models.CharField(
-	        verbose_name=_("heading (french)"),
-	        max_length=255,
-	        blank=True,
-	    )
-	    translated_heading = TranslatedField(
-        	'heading', 'heading_de', 'heading_fr'
-    	)
+        heading_de = models.CharField(
+            verbose_name=_("heading (german)"),
+            max_length=255,
+            blank=True,
+        )
+        heading_fr = models.CharField(
+            verbose_name=_("heading (french)"),
+            max_length=255,
+            blank=True,
+        )
+        translated_heading = TranslatedField('heading', 'heading_de', 'heading_fr')
 
-		panels = (
-	        MultiFieldPanel(
-	            heading=_("Settings"),
-	            children=(
-	                FieldPanel("title"),
-	                FieldPanel("site"),
-	                FieldPanel("handle"),
-	            )
-	        ),
-	        MultiFieldPanel(
-	            heading=_("Heading"),
-	            children=(
-	                FieldPanel("heading"),
-	                FieldPanel("heading_de"),
-	                FieldPanel("heading_fr"),
-	            ),
-	            classname='collapsible'
-	        ),
-	        AbstractFlatMenu.panels[1],
-	        AbstractFlatMenu.panels[2],
-	    )
+        panels = (
+            MultiFieldPanel(
+                heading=_("Settings"),
+                children=(
+                    FieldPanel("title"),
+                    FieldPanel("site"),
+                    FieldPanel("handle"),
+                )
+            ),
+            MultiFieldPanel(
+                heading=_("Heading"),
+                children=(
+                    FieldPanel("heading"),
+                    FieldPanel("heading_de"),
+                    FieldPanel("heading_fr"),
+                ),
+                classname='collapsible'
+            ),
+            AbstractFlatMenu.panels[1],
+            AbstractFlatMenu.panels[2],
+        )
 
+    class TranslatedFlatMenuItem(AbstractFlatMenuItem):
+        """A custom menu item model to be used by ``TranslatedFlatMenu``"""
 
-	class TranslatedFlatMenuItem(AbstractFlatMenuItem):
-		"""A custom menu item model to be used by ``TranslatedFlatMenu``"""
-	
-		menu = ParentalKey(
-			TranslatedFlatMenu, # we can use the model from above
-			related_name=app_settings.FLAT_MENU_ITEMS_RELATED_NAME
-		)
-		link_text_de = models.CharField(
-	        verbose_name=_("link text (german)"),
-	        max_length=255,
-	        blank=True,
-	    )
-	    link_text_fr = models.CharField(
-	        verbose_name=_("link text (french)"),
-	        max_length=255,
-	        blank=True,
-	    )
-	    translated_link_text = TranslatedField(
-        	'link_text', 'link_text_de', 'link_text_fr'
-    	)
+        menu = ParentalKey(
+            TranslatedFlatMenu, # we can use the model from above
+            on_delete=models.CASCADE,
+            related_name=app_settings.FLAT_MENU_ITEMS_RELATED_NAME,
+        )
+        link_text_de = models.CharField(
+            verbose_name=_("link text (german)"),
+            max_length=255,
+            blank=True,
+        )
+        link_text_fr = models.CharField(
+            verbose_name=_("link text (french)"),
+            max_length=255,
+            blank=True,
+        )
+        translated_link_text = TranslatedField('link_text', 'link_text_de', 'link_text_fr')
 
-    	@property
-    	def menu_text(self):
-    		"""Use `translated_link_text` instead of just `link_text`"""
-	        return self.translated_link_text or getattr(
-	            self.link_page,
-	            app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
-	            self.link_page.title
-	        )
+        @property
+        def menu_text(self):
+            """Use `translated_link_text` instead of just `link_text`"""
+            return self.translated_link_text or getattr(
+                self.link_page,
+                app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
+                self.link_page.title
+            )
 
-	    # Also override the panels attribute, so that the new fields appear
-		# in the admin interface
-	    panels = (
-	        PageChooserPanel("link_page"),
-	        FieldPanel("link_url"),
-	        FieldPanel("url_append"),
-	        FieldPanel("link_text"),
-	        FieldPanel("link_text_de"),
-	        FieldPanel("link_text_fr"),
-	        FieldPanel("handle"),
-	        FieldPanel("allow_subnav"),
-	    )
-
-	```
+        # Also override the panels attribute, so that the new fields appear
+        # in the admin interface
+        panels = (
+            PageChooserPanel("link_page"),
+            FieldPanel("link_url"),
+            FieldPanel("url_append"),
+            FieldPanel("link_text"),
+            FieldPanel("link_text_de"),
+            FieldPanel("link_text_fr"),
+            FieldPanel("handle"),
+            FieldPanel("allow_subnav"),
+        )
+    ```
 
 2.	Run `python manage.py makemigrations appname` (replace 'appname' with the name of the app where your new menu models are defined, e.g. 'core') to create migrations for your new models. Then run `python manage.py migrate appname` to create the necessary database tables.
 
 3.	Add the following settings to your project to tell wagtailmenus to use your custom menu models instead of the default ones (replace 'appname' with the name of the app where your new menu models are defined, e.g. 'core'). e.g:
 
-	```python
-
-	WAGTAILMENUS_MAIN_MENU_MODEL = "appname.TranslatedMainMenu"
-	WAGTAILMENUS_FLAT_MENU_MODEL = "appname.TranslatedFlatMenu"
-
-	```
+    ```python
+    
+    WAGTAILMENUS_MAIN_MENU_MODEL = "appname.TranslatedMainMenu"
+    WAGTAILMENUS_FLAT_MENU_MODEL = "appname.TranslatedFlatMenu"
+    
+    ```
 
 4.	**That's it!** The custom models will now be used instead of the default ones. The default models and their data will remain intact, even if you can no longer see them via the admin area. If you need to, you can easily write a data migration to populate your new models from existing data.
 
-**Overriding the menu class used by `{% section_menu %}`**
+### Overriding the menu class used by `{% section_menu %}`
 
 Like the `main_menu` and `flat_menu` tags, the `section_menu` template tag uses a `Menu` class to fetch the data needed to render a menu. Though, because the data depends entirely on the current root page, it's just a plain Python class and not a Django model.
 
 The class `wagtailmenus.models.menus.SectionMenu` is used by default, but you can use the `WAGTAILMENUS_SECTION_MENU_CLASS_PATH` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify which pages are included). For custom classes, it's recommended that you subclass the `SectionMenu` class and override any methods as required e.g:
 
+```python
 
-	```python
+# mysite/appname/models.py
 
-	# mysite/appname/models.py
+from django.utils.translation import ugettext_lazy as _
+from wagtail.wagtailcore.models import Page
+from wagtailmenus.models import SectionMenu
 
-	from django.utils.translation import ugettext_lazy as _
-	from wagtail.wagtailcore.models import Page
-    from wagtailmenus.models import SectionMenu
 
-	
-	class CustomSectionMenu(SectionMenu):
-	    
-	    def get_base_page_queryset(self):
-	   		# Show draft and expired pages in menu for superusers
-	    	if self.request.user.is_superuser:
-	    		return Page.objects.filter(show_in_menus=True)
-	    	# Resort to default behaviour for everybody else
-	    	return super(CustomSectionMenu, self).get_base_page_queryset()
+class CustomSectionMenu(SectionMenu):
+    
+    def get_base_page_queryset(self):
+        # Show draft and expired pages in menu for superusers
+        if self.request.user.is_superuser:
+            return Page.objects.filter(show_in_menus=True)
+        # Resort to default behaviour for everybody else
+        return super(CustomSectionMenu, self).get_base_page_queryset()
+```
+    
+```python
 
-    ```
+# mysite/settings/base.py
 
-    ```python
+WAGTAILMENUS_SECTION_MENU_CLASS_PATH = "mysite.appname.models.CustomSectionMenu"
 
-    # mysite/settings/base.py
+```
 
-	WAGTAILMENUS_SECTION_MENU_CLASS_PATH = "mysite.appname.models.CustomSectionMenu"
-
-	```
-
-**Overriding the menu class used by `{% children_menu %}`**
+### Overriding the menu class used by `{% children_menu %}`
 
 Like all of the other tags, the `children_menu` template tag uses a `Menu` class to fetch the data needed to render a menu. Though, because the data depends entirely on the specified parent page, it's just a plain Python class and not a Django model.
 
 The class `wagtailmenus.models.menus.ChildrenMenu` is used by default, but you can use the `WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify which pages are included). For custom classes, it's recommended that you subclass `ChildrenMenu` and override any methods as required e.g:
 
+```python
 
-	```python
+# mysite/appname/models.py
 
-	# mysite/appname/models.py
+from django.utils.translation import ugettext_lazy as _
+from wagtail.wagtailcore.models import Page
+from wagtailmenus.models import ChildrenMenu
 
-	from django.utils.translation import ugettext_lazy as _
-	from wagtail.wagtailcore.models import Page
-    from wagtailmenus.models import ChildrenMenu
 
-	
-	class CustomChildrenMenu(ChildrenMenu):
-	    
-	    def get_base_page_queryset(self):
-	   		# Show draft and expired pages in menu for superusers
-	    	if self.request.user.is_superuser:
-	    		return Page.objects.filter(show_in_menus=True)
-	    	# Resort to default behaviour for everybody else
-	    	return super(CustomChildrenMenu, self).get_base_page_queryset()
+class CustomChildrenMenu(ChildrenMenu):
+    def get_base_page_queryset(self):
+	# Show draft and expired pages in menu for superusers
+	if self.request.user.is_superuser:
+		return Page.objects.filter(show_in_menus=True)
+	# Resort to default behaviour for everybody else
+	return super(CustomChildrenMenu, self).get_base_page_queryset()
+```
 
-    ```
+```python
 
-    ```python
+# mysite/settings/base.py
 
-    # mysite/settings/base.py
+WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH = "mysite.appname.models.CustomChildrenMenu"
 
-	WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH = "mysite.appname.models.CustomChildrenMenu"
+```
 
-	```
 
-<a id="app-settings"></a>13. Settings reference
------------------------------------------------
+## <a id="app-settings"></a>13. Settings reference
 
 You can override some of wagtailmenus' default behaviour by adding one of more of the following to your project's settings:
 
-- **`WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES`** (default: `None`): Can be set to a tuple of choices in the [standard Django choices format](https://docs.djangoproject.com/en/1.10/ref/models/fields/#field-choices) to change the `FlatMenu.handle` text field into a select field with fixed choices when adding, editing or copying a `FlatMenu` in Wagtail's admin area.
-- **`WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES`** (default: `True`): By default, wagtailmenus adds some additional styles to improve the readability of the forms on the menu management pages in the Wagtail admin area. If for some reason you don't want to override any styles, you can disable this behaviour by setting to `False`.
-- **`WAGTAILMENUS_ACTIVE_CLASS`** (default: `'active'`): The class added to menu items for the currently active page (when using a menu template with `apply_active_classes=True`)
-- **`WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS`** (default: `'ancestor'`): The class added to any menu items for pages that are ancestors of the currently active page (when using a menu template with `apply_active_classes=True`)
-- **`WAGTAILMENUS_MAINMENU_MENU_ICON`** (default: `'list-ol'`): Use this to change the icon used to represent `MainMenu` in the Wagtail admin area.
-- **`WAGTAILMENUS_FLATMENU_MENU_ICON`** (default: `'list-ol'`): Use this to change the icon used to represent `FlatMenu` in the Wagtail admin area.
-- **`WAGTAILMENUS_SECTION_ROOT_DEPTH`** (default: `3`): Use this to specify the 'depth' value of a project's 'section root' pages. For most Wagtail projects, this should be `3` (Root page = 1, Home page = 2), but it may well differ, depending on the needs of the project.
-- **`WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS`** (default: `False`): If you have a multi-site project where each site may require it's own set of menu templates, you can change this setting to `True` to have wagtailmenus automatically look in additional site-specific locations when finding templates for rendering.  
-- **`WAGTAILMENUS_GUESS_TREE_POSITION_FROM_PATH`** (default: `True`): When not using wagtail's routing/serving mechanism to serve page objects, wagtailmenus can use the request path to attempt to identify a 'current' page, 'section root' page, allowing `{% section_menu %}` and active item highlighting to work. If this functionality is not required for your project, you can disable it by setting this value to `False`.
-- **`WAGTAILMENUS_FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS`** (default: `False`): The default value used for `fall_back_to_default_site_menus` option of the `{% flat_menu %}` tag when a parameter value isn't provided.
-- **`WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE`** (default: `'menus/main_menu.html'`): The name of the template used for rendering by the `{% main_menu %}` tag when a `template` parameter value isn't provided.
-- **`WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE`** (default: `'menus/flat_menu.html'`): The name of the template used for rendering by the `{% flat_menu %}` tag when a `template` parameter value isn't provided.
-- **`WAGTAILMENUS_DEFAULT_SECTION_MENU_TEMPLATE`** (default: `'menus/section_menu.html'`): The name of the template used for rendering by the `{% section_menu %}` tag when a `template` parameter value isn't provided.
-- **`WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE`** (default: `'menus/children_menu.html'`): The name of the template used for rendering by the `{% children_menu %}` tag when a `template` parameter value isn't provided.
-- **`WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE`** (default: `'menus/sub_menu.html'`): The name of the template used for rendering by the `{% sub_menu %}` tag when a `template` parameter value isn't provided.
-- **`WAGTAILMENUS_DEFAULT_SECTION_MENU_MAX_LEVELS`** (default: `2`): The maximum number of levels rendered by the `{% section_menu %}` tag when a `max_levels` parameter value isn't specified.
-- **`WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS`** (default: `1`): The maximum number of levels rendered by the `{% children_menu %}` tag when a `max_levels` parameter value isn't specified.
-- **`WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC`** (default: `USE_SPECIFIC_AUTO`): Controls how 'specific' pages objects are fetched and used during rendering of the `{% section_menu %}` tag when the `use_specific` parameter value isn't supplied. 
-- **`WAGTAILMENUS_DEFAULT_CHILDREN_USE_SPECIFIC`** (default: `USE_SPECIFIC_AUTO`): Controls how 'specific' pages objects are fetched and used during rendering of the `{% children_menu %}` tag when the `use_specific` parameter value isn't supplied. 
-- **`WAGTAILMENUS_PAGE_FIELD_FOR_MENU_ITEM_TEXT`** (default: `'title'`): When preparing menu items for rendering, wagtailmenus looks for a field, attribute or property method with this name on each page object to populate a `text` attribute on the menu item. NOTE: wagtailmenus will only be able to access custom page attributes if specific pages are being used (See [Specific pages instances and performance](#specific-page-use) for more details). The page's `title` attribute will be used as a fall-back if no attribute can found matching specified name.
-- **`WAGTAILMENUS_MAIN_MENU_MODEL`** (default: `'wagtailmenus.MainMenu'`): Use this to specify a custom model to use for main menus instead of the default. The model should be a subclass of `wagtailmenus.AbstractMainMenu`. See [Overriding the default wagtailmenus models](#custom-models) for more details.
-- **`WAGTAILMENUS_FLAT_MENU_MODEL`** (default: `'wagtailmenus.FlatMenu'`): Use this to specify a custom model to use for flat menus instead of the default. The model should be a subclass of `wagtailmenus.AbstractFlatMenu`. See [Overriding the default wagtailmenus models](#custom-models) for more details.
-- **`WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME`** (default: `'menu_items'`): Use this to specify the 'related name' that should be used to access menu items from main menu instances. Used to replace the default `MainMenuItem` model with a custom one. See [Overriding the default wagtailmenus models](#custom-models) for more details.
-- **`WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME`** (default: `'menu_items'`): Use this to specify the 'related name' that should be used to access menu items from flat menu instances. Used to replace the default `FlatMenuItem` model with a custom one. See [Overriding the default wagtailmenus models](#custom-models) for more details.
-- **`WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH`** (default: `'wagtailmenus.models.menus.ChildrenMenu'`): Use this to specify a custom class to be used by wagtailmenus' `children_menu` tag. The value should be the import path of your custom class as a string, e.g. 'mysite.appname.models.CustomClass'. See [Overriding the default wagtailmenus models](#custom-models) for more details.
-- **`WAGTAILMENUS_SECTION_MENU_CLASS_PATH`** (default: `'wagtailmenus.models.menus.SectionMenu'`): Use this to specify a custom class to be used by wagtailmenus' `section_menu` tag. The value should be the import path of your custom class as a string, e.g. 'mysite.appname.models.CustomClass'. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+#### `WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES`
+
+Default value: `None`
+
+Can be set to a tuple of choices in the [standard Django choices format](https://docs.djangoproject.com/en/1.10/ref/models/fields/#field-choices) to change the `FlatMenu.handle` text field into a select field with fixed choices when adding, editing or copying a `FlatMenu` in Wagtail's admin area.
+
+#### `WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES`
+
+Default value: `True`
+
+By default, wagtailmenus adds some additional styles to improve the readability of the forms on the menu management pages in the Wagtail admin area. If for some reason you don't want to override any styles, you can disable this behaviour by setting to `False`.
+
+#### `WAGTAILMENUS_ACTIVE_CLASS`
+
+Default value: `'active'`
+
+The class added to menu items for the currently active page (when using a menu template with `apply_active_classes=True`)
+
+#### `WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS`
+
+Default value: `'ancestor'`
+
+The class added to any menu items for pages that are ancestors of the currently active page (when using a menu template with `apply_active_classes=True`)
+
+#### `WAGTAILMENUS_MAINMENU_MENU_ICON`
+
+Default value: `'list-ol'`
+
+Use this to change the icon used to represent `MainMenu` in the Wagtail admin area.
+
+#### `WAGTAILMENUS_FLATMENU_MENU_ICON`
+
+Default value: `'list-ol'`
+
+Use this to change the icon used to represent `FlatMenu` in the Wagtail admin area.
+
+#### `WAGTAILMENUS_SECTION_ROOT_DEPTH`
+
+Default value: `3`
+
+Use this to specify the 'depth' value of a project's 'section root' pages. For most Wagtail projects, this should be `3` (Root page = 1, Home page = 2), but it may well differ, depending on the needs of the project.
+
+#### `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS`
+
+Default value: `False`
+
+If you have a multi-site project where each site may require it's own set of menu templates, you can change this setting to `True` to have wagtailmenus automatically look in additional site-specific locations when finding templates for rendering.  
+
+#### `WAGTAILMENUS_GUESS_TREE_POSITION_FROM_PATH`
+
+Default value: `True`
+
+When not using wagtail's routing/serving mechanism to serve page objects, wagtailmenus can use the request path to attempt to identify a 'current' page, 'section root' page, allowing `{% section_menu %}` and active item highlighting to work. If this functionality is not required for your project, you can disable it by setting this value to `False`.
+
+#### `WAGTAILMENUS_FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS`
+
+Default value: `False`
+
+The default value used for `fall_back_to_default_site_menus` option of the `{% flat_menu %}` tag when a parameter value isn't provided.
+
+#### `WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE`
+
+Default value: `'menus/main_menu.html'`
+
+The name of the template used for rendering by the `{% main_menu %}` tag when a `template` parameter value isn't provided.
+
+#### `WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE`
+
+Default value: `'menus/flat_menu.html'`
+
+The name of the template used for rendering by the `{% flat_menu %}` tag when a `template` parameter value isn't provided.
+
+#### `WAGTAILMENUS_DEFAULT_SECTION_MENU_TEMPLATE`
+
+Default value: `'menus/section_menu.html'`
+
+The name of the template used for rendering by the `{% section_menu %}` tag when a `template` parameter value isn't provided.
+
+#### `WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE`
+
+Default value: `'menus/children_menu.html'`
+
+The name of the template used for rendering by the `{% children_menu %}` tag when a `template` parameter value isn't provided.
+
+#### `WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE`
+
+Default value: `'menus/sub_menu.html'`
+
+The name of the template used for rendering by the `{% sub_menu %}` tag when a `template` parameter value isn't provided.
+
+#### `WAGTAILMENUS_DEFAULT_SECTION_MENU_MAX_LEVELS`
+
+Default value: `2`
+
+The maximum number of levels rendered by the `{% section_menu %}` tag when a `max_levels` parameter value isn't specified.
+
+#### `WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS`
+
+Default value: `1`
+
+The maximum number of levels rendered by the `{% children_menu %}` tag when a `max_levels` parameter value isn't specified.
+
+#### `WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC`
+
+Default value: `USE_SPECIFIC_AUTO`
+
+Controls how 'specific' pages objects are fetched and used during rendering of the `{% section_menu %}` tag when the `use_specific` parameter value isn't supplied. 
+
+#### `WAGTAILMENUS_DEFAULT_CHILDREN_USE_SPECIFIC`
+
+Default value: `USE_SPECIFIC_AUTO`
+
+Controls how 'specific' pages objects are fetched and used during rendering of the `{% children_menu %}` tag when the `use_specific` parameter value isn't supplied. 
+
+#### `WAGTAILMENUS_PAGE_FIELD_FOR_MENU_ITEM_TEXT`
+
+Default value: `'title'`
+
+When preparing menu items for rendering, wagtailmenus looks for a field, attribute or property method with this name on each page object to populate a `text` attribute on the menu item. NOTE: wagtailmenus will only be able to access custom page attributes if specific pages are being used (See [Specific pages instances and performance](#specific-page-use) for more details). The page's `title` attribute will be used as a fall-back if no attribute can found matching specified name.
+
+#### `WAGTAILMENUS_MAIN_MENU_MODEL`
+
+Default value: `'wagtailmenus.MainMenu'`
+
+Use this to specify a custom model to use for main menus instead of the default. The model should be a subclass of `wagtailmenus.AbstractMainMenu`. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+
+#### `WAGTAILMENUS_FLAT_MENU_MODEL`
+
+Default value: `'wagtailmenus.FlatMenu'`
+
+Use this to specify a custom model to use for flat menus instead of the default. The model should be a subclass of `wagtailmenus.AbstractFlatMenu`. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+
+#### `WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME`
+
+Default value: `'menu_items'`
+
+Use this to specify the 'related name' that should be used to access menu items from main menu instances. Used to replace the default `MainMenuItem` model with a custom one. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+
+#### `WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME`
+
+Default value: `'menu_items'`
+
+Use this to specify the 'related name' that should be used to access menu items from flat menu instances. Used to replace the default `FlatMenuItem` model with a custom one. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+
+#### `WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH`
+
+Default value: `'wagtailmenus.models.menus.ChildrenMenu'`
+
+Use this to specify a custom class to be used by wagtailmenus' `children_menu` tag. The value should be the import path of your custom class as a string, e.g. 'mysite.appname.models.CustomClass'. See [Overriding the default wagtailmenus models](#custom-models) for more details.
+
+#### `WAGTAILMENUS_SECTION_MENU_CLASS_PATH`
+
+Default value: `'wagtailmenus.models.menus.SectionMenu'`
+
+Use this to specify a custom class to be used by wagtailmenus' `section_menu` tag. The value should be the import path of your custom class as a string, e.g. 'mysite.appname.models.CustomClass'. See [Overriding the default wagtailmenus models](#custom-models) for more details.
 
 
-Contributing
-============
+# Contributing
 
 Want to contribute to wagtailmenus? We'd be happy to have you! You should start by taking a look at our [contributor guidelines](https://github.com/rkhleics/wagtailmenus/blob/master/CONTRIBUTING.md)
 

@@ -61,7 +61,9 @@ class MainMenuCustomMenuItem(MultilingualMenuItem, AbstractMainMenuItem):
     `WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME = 'custom_menu_items'
     """
     menu = ParentalKey(
-        'wagtailmenus.MainMenu', related_name="custom_menu_items"
+        'wagtailmenus.MainMenu',
+        on_delete=models.CASCADE,
+        related_name="custom_menu_items"
     )
 
 
@@ -73,7 +75,9 @@ class FlatMenuCustomMenuItem(MultilingualMenuItem, AbstractFlatMenuItem):
     """
 
     menu = ParentalKey(
-        'wagtailmenus.FlatMenu', related_name="custom_menu_items"
+        'wagtailmenus.FlatMenu',
+        on_delete=models.CASCADE,
+        related_name="custom_menu_items"
     )
 
 
@@ -126,7 +130,11 @@ class CustomMainMenuItem(MultilingualMenuItem, AbstractMainMenuItem):
     `WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME` setting doesn't need to be
     overridden ('menu_items' is the default value)."""
 
-    menu = ParentalKey('CustomMainMenu', related_name="menu_items")
+    menu = ParentalKey(
+        'CustomMainMenu',
+        on_delete=models.CASCADE,
+        related_name="menu_items"
+    )
 
 
 class CustomFlatMenuItem(MultilingualMenuItem, AbstractFlatMenuItem):
@@ -136,4 +144,8 @@ class CustomFlatMenuItem(MultilingualMenuItem, AbstractFlatMenuItem):
     `WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME` setting doesn't need to be
     overridden ('menu_items' is the default value)."""
 
-    menu = ParentalKey('CustomFlatMenu', related_name="menu_items")
+    menu = ParentalKey(
+        'CustomFlatMenu',
+        on_delete=models.CASCADE,
+        related_name="menu_items"
+    )
