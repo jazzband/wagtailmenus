@@ -11,6 +11,7 @@ Changelog
 * Code example formatting fixes, and better use of headings in README.md.
 * Added 'on_delete=models.CASCADE' to all relationship fields on models where
   no 'on_delete' behaviour was previously set (Django 2.0 compatibility).
+* Marked a missing string for translation (@einsfr)
 * Updated translations for Lithuanian, Portuguese (Brazil), and Russian.
   Many thanks to @mamorim, @matas.dailyda and @einsfr!
 
