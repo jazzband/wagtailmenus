@@ -18,4 +18,5 @@
 * Max Kurama (MaxKurama)
 * Matas Dailyda (treavis)
 * Alex (einsfr)
+* Marcos Amorim (mamorim)
 

@@ -54,6 +54,8 @@ msgstr "4: Leisti 3 lygių sub-navigaciją"
 msgid ""
 "By default, this will be used as the link text when appearing in menus."
 msgstr ""
+"Pagal nutylėjimą, tai bus naudojama kaip nuorodos tekstas kuris bus "
+"atvaizduojamas meniu."
 
 #: wagtailmenus/models/menuitems.py:36 wagtailmenus/models/pages.py:129
 msgid "link to an internal page"
@@ -109,15 +111,15 @@ msgstr "meniu punktai"
 
 #: wagtailmenus/models/menuitems.py:101 wagtailmenus/models/pages.py:190
 msgid "Please choose an internal page or provide a custom URL"
-msgstr ""
+msgstr "Pasirinkite vidinį puslapi arba pateikite URL"
 
 #: wagtailmenus/models/menuitems.py:104 wagtailmenus/models/pages.py:193
 msgid "Linking to both a page and custom URL is not permitted"
-msgstr ""
+msgstr "Nukreipimas kartu į puslapį ir URL yra negalimas"
 
 #: wagtailmenus/models/menuitems.py:107
 msgid "This field is required when linking to a custom URL"
-msgstr ""
+msgstr "Šis laukas privalomas kai nukreipiama į URL"
 
 #: wagtailmenus/models/menuitems.py:128 wagtailmenus/models/menuitems.py:145
 msgid "allow sub-menu for this item"
@@ -271,26 +273,29 @@ msgstr ""
 
 #: wagtailmenus/models/pages.py:146
 msgid "Use this to optionally append a #hash or querystring to the URL."
-msgstr ""
+msgstr "Papildomai pridėkite #hash'ą arba užklausos tekstą prie URL."
 
 #: wagtailmenus/models/pages.py:150
 msgid "menu item css classes"
-msgstr ""
+msgstr "meniu punkto css klasės"
 
 #: wagtailmenus/models/pages.py:154
 msgid ""
 "Optionally specify css classes to be added to this page when it appears in "
 "menus."
 msgstr ""
+"Papildomai galite nurodyti css klases kurios bus pridėtos į šį puslapį kai "
+"jis bus atvaizduojamas meniu."
 
 #: wagtailmenus/models/pages.py:187
 msgid "A link page cannot link to another link page"
 msgstr ""
+"Nukreipiamasis puslapis negali nukreipti į kitą nukreipiamąjį puslapį."
 
 #: wagtailmenus/models/pages.py:277
 #, python-format
 msgid "This page redirects to: %(url)s"
-msgstr ""
+msgstr "Šis puslapis nukreipia į: %(url)s"
 
 #: wagtailmenus/panels.py:10
 msgid "Advanced menu behaviour"
