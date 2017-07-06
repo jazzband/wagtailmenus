@@ -96,6 +96,16 @@ class AbstractMenuItem(models.Model, MenuItem):
                 return ''
         return self.link_url + self.url_append
 
+    def get_full_url(self):
+        if self.link_page:
+            try:
+                return self.link_page.full_url + self.url_append
+            except TypeError:
+                return ''
+        return self.link_url + self.url_append
+
+    full_url = property(get_full_url)
+
     def clean(self, *args, **kwargs):
         if not self.link_url and not self.link_page:
             msg = _("Please choose an internal page or provide a custom URL")

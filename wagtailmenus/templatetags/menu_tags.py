@@ -24,7 +24,7 @@ register = Library()
 def main_menu(
     context, max_levels=None, use_specific=None, apply_active_classes=True,
     allow_repeating_parents=True, show_multiple_levels=True,
-    template='', sub_menu_template=''
+    template='', sub_menu_template='', use_absolute_url=False,
 ):
     validate_supplied_values('main_menu', max_levels=max_levels,
                              use_specific=use_specific)
@@ -67,7 +67,8 @@ def main_menu(
             menu_instance=menu,
             check_for_children=menu.max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
-            apply_active_classes=apply_active_classes
+            apply_active_classes=apply_active_classes,
+            use_absolute_url=use_absolute_url,
         ),
         'main_menu': menu,
         'use_specific': menu.use_specific,
@@ -91,6 +92,7 @@ def flat_menu(
     allow_repeating_parents=True, show_multiple_levels=True,
     template='', sub_menu_template='',
     fall_back_to_default_site_menus=flat_menus_fbtdsm,
+    use_absolute_url=False,
 ):
     validate_supplied_values('flat_menu', max_levels=max_levels,
                              use_specific=use_specific)
@@ -139,7 +141,8 @@ def flat_menu(
             menu_instance=menu,
             check_for_children=menu.max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
-            apply_active_classes=apply_active_classes
+            apply_active_classes=apply_active_classes,
+            use_absolute_url=use_absolute_url,
         ),
         'matched_menu': menu,
         'menu_handle': handle,
@@ -161,7 +164,7 @@ def flat_menu(
 def get_sub_menu_items_for_page(
     request, page, current_site, current_page, ancestor_ids, menu_instance,
     use_specific, apply_active_classes, allow_repeating_parents,
-    current_level=1, max_levels=2, original_menu_tag=''
+    current_level=1, max_levels=2, original_menu_tag='', use_absolute_url=False,
 ):
     # The menu items will be the children of the provided `page`
     children_pages = menu_instance.get_children_for_page(page)
@@ -180,7 +183,8 @@ def get_sub_menu_items_for_page(
         menu_instance=menu_instance,
         check_for_children=current_level < max_levels,
         allow_repeating_parents=allow_repeating_parents,
-        apply_active_classes=apply_active_classes
+        apply_active_classes=apply_active_classes,
+        use_absolute_url=use_absolute_url,
     )
 
     """
@@ -228,7 +232,8 @@ def get_sub_menu_items_for_page(
 @register.simple_tag(takes_context=True)
 def sub_menu(
     context, menuitem_or_page, stop_at_this_level=None, use_specific=None,
-    allow_repeating_parents=None, apply_active_classes=None, template=''
+    allow_repeating_parents=None, apply_active_classes=None, template='',
+    use_absolute_url=False,
 ):
     """
     Retrieve the children pages for the `menuitem_or_page` provided, turn them
@@ -287,7 +292,8 @@ def sub_menu(
         current_level=current_level,
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
-        allow_repeating_parents=allow_repeating_parents
+        allow_repeating_parents=allow_repeating_parents,
+        use_absolute_url=use_absolute_url,
     )
 
     # Prepare context and render
@@ -313,6 +319,7 @@ def section_menu(
     max_levels=app_settings.DEFAULT_SECTION_MENU_MAX_LEVELS,
     template='', sub_menu_template='',
     use_specific=app_settings.DEFAULT_SECTION_MENU_USE_SPECIFIC,
+    use_absolute_url=False,
 ):
     """Render a section menu for the current section."""
 
@@ -347,7 +354,8 @@ def section_menu(
         current_level=1,
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
-        allow_repeating_parents=allow_repeating_parents
+        allow_repeating_parents=allow_repeating_parents,
+        use_absolute_url=use_absolute_url,
     )
 
     """
@@ -408,6 +416,7 @@ def children_menu(
     max_levels=app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS,
     template='', sub_menu_template='',
     use_specific=app_settings.DEFAULT_CHILDREN_MENU_USE_SPECIFIC,
+    use_absolute_url=False,
 ):
     validate_supplied_values(
         'children_menu', max_levels=max_levels, use_specific=use_specific,
@@ -440,7 +449,8 @@ def children_menu(
         current_level=1,
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
-        allow_repeating_parents=allow_repeating_parents
+        allow_repeating_parents=allow_repeating_parents,
+        use_absolute_url=use_absolute_url,
     )
 
     # Identify templates for rendering
@@ -471,7 +481,7 @@ def children_menu(
 def prime_menu_items(
     request, menu_items, current_site, current_page, current_page_ancestor_ids,
     use_specific, original_menu_tag, menu_instance, check_for_children=False,
-    allow_repeating_parents=True, apply_active_classes=True
+    allow_repeating_parents=True, apply_active_classes=True, use_absolute_url=False,
 ):
     """
     Prepare a list of `MenuItem` or `Page` objects for rendering to a menu
@@ -503,7 +513,10 @@ def prime_menu_items(
             ):
                 setattr(item, 'active_class', item.extra_classes)
                 setattr(item, 'text', item.menu_text(request))
-                setattr(item, 'href', item.relative_url(current_site, request))
+                if use_absolute_url:
+                    setattr(item, 'href', item.full_url)
+                else:
+                    setattr(item, 'href', item.relative_url(current_site, request))
                 primed_menu_items.append(item)
             continue
 
@@ -608,8 +621,13 @@ def prime_menu_items(
             menuitem.link_page = page
 
         # Both `Page` and `MenuItem` objects have a `relative_url` method
-        # we can use to calculate a value for the `href` attribute.
-        setattr(item, 'href', item.relative_url(current_site))
+        # and a `full_url` property we can use to calculate a value for
+        # the `href` attribute.
+        if use_absolute_url:
+            url = item.full_url
+        else:
+            url = item.relative_url(current_site)
+        setattr(item, 'href', url)
         primed_menu_items.append(item)
 
     return primed_menu_items
