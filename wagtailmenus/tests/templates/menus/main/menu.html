@@ -4,7 +4,7 @@
     <li class="{{ item.active_class }}{% if item.has_children_in_menu %} dropdown{% endif %}{% if item.link_page and item.link_page.extra_menuitem_css_class %} {{ item.link_page.extra_menuitem_css_class }}{% endif %}">
         <a href="{{ item.href }}"{% if item.has_children_in_menu %} class="dropdown-toggle" id="ddtoggle_{{ item.link_page.pk }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"{% endif %}>{{ item.text }}{% if item.has_children_in_menu %} <span class="caret"></span>{% endif %}</a>
         {% if item.has_children_in_menu %}
-        	{% sub_menu item %}
+        	{% sub_menu item use_absolute_url=use_absolute_url%}
         {% endif %}
     </li>       
 {% endfor %}
