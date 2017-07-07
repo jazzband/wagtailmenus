@@ -876,6 +876,34 @@ class TestTemplateTags(TestCase):
         """
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
+        response = self.client.get('/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='nav-footer-absolute-urls').decode()
+        expected_menu_html = """
+        <div id="nav-footer-absolute-urls">
+            <div class="flat-menu footer with_heading">
+                <h4>Important links</h4>
+                <ul>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/legal/accessibility/">Accessibility</a>
+                    </li>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/legal/privacy-policy/">Privacy policy</a>
+                    </li>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/legal/terms-and-conditions/">Terms and conditions</a>
+                    </li>
+                    <li class="">
+                        <a href="/about-us/meet-the-team/custom-url/">Meet the team's pets</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
     def test_custom_page_menu_output(self):
         response = self.client.get('/custom-url/')
         soup = BeautifulSoup(response.content, 'html5lib')
