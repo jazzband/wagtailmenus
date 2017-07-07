@@ -367,7 +367,11 @@ def section_menu(
     items, so it can be used in the same way in a template if required.
     """
     setattr(section_root, 'text', section_root.title)
-    setattr(section_root, 'href', section_root.relative_url(site))
+    if use_absolute_url:
+        url = section_root.full_url
+    else:
+        url = section_root.relative_url(site)
+    setattr(section_root, 'href', url)
     if apply_active_classes:
         active_class = app_settings.ACTIVE_ANCESTOR_CLASS
         if current_page and section_root.pk == current_page.pk:
