@@ -80,7 +80,8 @@ def main_menu(
         'sub_menu_template': submenu_t.name,
         'original_menu_tag': 'main_menu',
         'section_root': root,
-        'current_ancestor_ids': ancestor_ids
+        'current_ancestor_ids': ancestor_ids,
+        'use_absolute_url': use_absolute_url,
     })
     return t.render(c)
 
@@ -156,7 +157,8 @@ def flat_menu(
         'current_template': t.name,
         'sub_menu_template': submenu_t.name,
         'original_menu_tag': 'flat_menu',
-        'current_ancestor_ids': ancestor_ids
+        'current_ancestor_ids': ancestor_ids,
+        'use_absolute_url': use_absolute_url,
     })
     return t.render(c)
 
@@ -211,6 +213,7 @@ def get_sub_menu_items_for_page(
             'apply_active_classes': apply_active_classes,
             'original_menu_tag': original_menu_tag,
             'menu_instance': menu_instance,
+            'use_absolute_url': use_absolute_url,
         }
         if accepts_kwarg(page.modify_submenu_items, 'request'):
             method_kwargs['request'] = request
@@ -306,7 +309,8 @@ def sub_menu(
         'current_level': current_level,
         'max_levels': max_levels,
         'current_template': template,
-        'original_menu_tag': original_menu_tag
+        'original_menu_tag': original_menu_tag,
+        'use_absolute_url': use_absolute_url,
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -404,7 +408,8 @@ def section_menu(
         'sub_menu_template': submenu_t.name,
         'original_menu_tag': 'section_menu',
         'current_ancestor_ids': ancestor_ids,
-        'use_specific': use_specific
+        'use_specific': use_specific,
+        'use_absolute_url': use_absolute_url,
     })
     return t.render(c)
 
@@ -473,7 +478,8 @@ def children_menu(
         'original_menu_tag': 'children_menu',
         'current_template': t.name,
         'sub_menu_template': submenu_t.name,
-        'use_specific': use_specific
+        'use_specific': use_specific,
+        'use_absolute_url': use_absolute_url,
     })
     return t.render(c)
 
@@ -514,9 +520,10 @@ def prime_menu_items(
                 setattr(item, 'active_class', item.extra_classes)
                 setattr(item, 'text', item.menu_text(request))
                 if use_absolute_url:
-                    setattr(item, 'href', item.full_url)
+                    url = item.full_url
                 else:
-                    setattr(item, 'href', item.relative_url(current_site, request))
+                    url = item.relative_url(current_site, request)
+                setattr(item, 'href', url)
                 primed_menu_items.append(item)
             continue
 

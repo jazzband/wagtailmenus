@@ -43,7 +43,7 @@ class MenuPageMixin(models.Model):
     def modify_submenu_items(
         self, menu_items, current_page, current_ancestor_ids, current_site,
         allow_repeating_parents, apply_active_classes, original_menu_tag,
-        menu_instance=None, request=None
+        menu_instance=None, request=None, use_absolute_url=False,
     ):
         """
         Make any necessary modifications to `menu_items` and return the list
@@ -66,6 +66,7 @@ class MenuPageMixin(models.Model):
                 'current_site': current_site,
                 'apply_active_classes': apply_active_classes,
                 'original_menu_tag': original_menu_tag,
+                'use_absolute_url': use_absolute_url,
             }
             if accepts_kwarg(self.get_repeated_menu_item, 'request'):
                 method_kwargs['request'] = request
@@ -100,14 +101,18 @@ class MenuPageMixin(models.Model):
 
     def get_repeated_menu_item(
         self, current_page, current_site, apply_active_classes,
-        original_menu_tag, request=None
+        original_menu_tag, request=None, use_absolute_url=False,
     ):
         """Return something that can be used to display a 'repeated' menu item
         for this specific page."""
 
         menuitem = copy(self)
         setattr(menuitem, 'text', self.repeated_item_text or self.title)
-        setattr(menuitem, 'href', self.relative_url(current_site))
+        if use_absolute_url:
+            url = self.full_url
+        else:
+            url = self.relative_url(current_site)
+        setattr(menuitem, 'href', url)
         active_class = ''
         if apply_active_classes and self == current_page:
             active_class = app_settings.ACTIVE_CLASS
