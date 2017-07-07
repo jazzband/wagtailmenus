@@ -207,7 +207,7 @@ class TestTemplateTags(TestCase):
 
     def test_homepage_main_menu_absolute_urls(self):
         """
-        Test '{{ main_menu use_absolute_url=True }}' output for homepage
+        Test '{{ main_menu use_absolute_urls=True }}' output for homepage
         """
         response = self.client.get('/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -341,7 +341,7 @@ class TestTemplateTags(TestCase):
 
     def test_homepage_children_absolute_urls(self):
         """
-        Test '{% children_menu use_absolute_url=True %}' output for homepage
+        Test '{% children_menu use_absolute_urls=True %}' output for homepage
         """
         response = self.client.get('/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -465,7 +465,7 @@ class TestTemplateTags(TestCase):
 
     def test_about_us_main_menu_absolute_urls(self):
         """
-                Test '{{ main_menu use_absolute_url=True }}' output for homepage
+                Test '{{ main_menu use_absolute_urls=True }}' output for homepage
                 """
         response = self.client.get('/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -589,7 +589,7 @@ class TestTemplateTags(TestCase):
 
     def test_about_us_section_menu_absolute_urls(self):
         """
-        Test '{% section_menu use_absolute_url=True %}' output for 'About us' page
+        Test '{% section_menu use_absolute_urls=True %}' output for 'About us' page
         """
         response = self.client.get('/about-us/')
         soup = BeautifulSoup(response.content, 'html5lib')
@@ -760,7 +760,7 @@ class TestTemplateTags(TestCase):
 
     def test_marvel_comics_section_absolute_urls(self):
         """
-        Test '{% section_menu use_absolute_url=True %}' output for 'Marvel comics' page
+        Test '{% section_menu use_absolute_urls=True %}' output for 'Marvel comics' page
         """
         response = self.client.get('/superheroes/marvel-comics/')
         soup = BeautifulSoup(response.content, 'html5lib')
