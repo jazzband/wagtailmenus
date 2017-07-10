@@ -213,7 +213,6 @@ def get_sub_menu_items_for_page(
             'apply_active_classes': apply_active_classes,
             'original_menu_tag': original_menu_tag,
             'menu_instance': menu_instance,
-            'use_absolute_urls': use_absolute_urls,
         }
         if accepts_kwarg(page.modify_submenu_items, 'request'):
             method_kwargs['request'] = request
@@ -223,6 +222,17 @@ def get_sub_menu_items_for_page(
                 "updated to accept a 'request' keyword argument. View the "
                 "2.3 release notes for more info: https://github.com/rkhleics/"
                 "wagtailmenus/releases/tag/v.2.3.0" % page.__class__.__name__,
+            )
+            warnings.warn(warning_msg, RemovedInWagtailMenus25Warning)
+
+        if accepts_kwarg(page.modify_submenu_items, 'use_absolute_urls'):
+            method_kwargs['use_absolute_urls'] = use_absolute_urls
+        else:
+            warning_msg = (
+                "The 'modify_submenu_items' method on '%s' should be "
+                "updated to accept a 'use_absolute_urls' keyword argument. View the "
+                "2.4 release notes for more info: https://github.com/rkhleics/"
+                "wagtailmenus/releases/tag/v.2.4.0" % page.__class__.__name__,
             )
             warnings.warn(warning_msg, RemovedInWagtailMenus25Warning)
 
