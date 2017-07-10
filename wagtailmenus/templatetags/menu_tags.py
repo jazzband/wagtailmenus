@@ -6,7 +6,7 @@ from django.template import Library
 from wagtail.wagtailcore.models import Page
 
 from wagtailmenus import app_settings
-from wagtailmenus.utils.deprecation import RemovedInWagtailMenus25Warning
+from wagtailmenus.utils.deprecation import RemovedInWagtailMenus25Warning, RemovedInWagtailMenus26Warning
 from wagtailmenus.utils.inspection import accepts_kwarg
 from wagtailmenus.utils.misc import (
     get_attrs_from_context, validate_supplied_values
@@ -234,7 +234,7 @@ def get_sub_menu_items_for_page(
                 "2.4 release notes for more info: https://github.com/rkhleics/"
                 "wagtailmenus/releases/tag/v.2.4.0" % page.__class__.__name__,
             )
-            warnings.warn(warning_msg, RemovedInWagtailMenus25Warning)
+            warnings.warn(warning_msg, RemovedInWagtailMenus26Warning)
 
         # Call `modify_submenu_items` using the above kwargs dict
         menu_items = page.modify_submenu_items(**method_kwargs)

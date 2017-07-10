@@ -1,11 +1,14 @@
 from __future__ import absolute_import, unicode_literals
 
+import warnings
+
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
 from wagtail.wagtailcore.models import Page, Site
 from wagtailmenus.models import MainMenu, MainMenuItem, FlatMenu
 from wagtailmenus.tests.models import LinkPage
+from wagtailmenus.utils.deprecation import RemovedInWagtailMenus26Warning
 
 
 class TestModels(TestCase):
@@ -276,3 +279,22 @@ class TestLinkPage(TestCase):
             response,
             '/superheroes/marvel-comics/spiderman/?somevar=value'
         )
+
+
+class TestNoAbsoluteUrlsPage(TestCase):
+    fixtures = ['updated_test.json']
+
+    def test_raises_deprecation_warning(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always', RemovedInWagtailMenus26Warning)
+            self.client.get('/compatibility-test-page/')
+            self.assertNotEqual(len(w), 0)
+            warning_messages = set(str(warning.message) for warning in w)
+            # Make sure our expected warning was logged
+            self.assertTrue(
+                any(
+                    "'modify_submenu_items' method on 'NoAbsoluteUrlsPage' should"
+                    " be updated to accept a 'use_absolute_urls' keyword" in msg
+                    for msg in warning_messages
+                )
+            )

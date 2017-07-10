@@ -159,5 +159,33 @@ class ContactPage(MenuPage):
             menu_instance, request)
 
 
+class NoAbsoluteUrlsPage(MenuPage):
+    """
+    Ensure that we can handle pages that do not specify the `use_absolute_urls` kwarg.
+    """
+
+    template = 'page.html'
+    parent_page_types = [HomePage]
+
+    def modify_submenu_items(
+        self, menu_items, current_page, current_ancestor_ids,
+        current_site, allow_repeating_parents, apply_active_classes,
+        original_menu_tag, menu_instance=None,
+    ):
+        return super(NoAbsoluteUrlsPage, self).modify_submenu_items(
+            menu_items, current_page, current_ancestor_ids,
+            current_site, allow_repeating_parents, apply_active_classes,
+            original_menu_tag, menu_instance)
+
+    def get_repeated_menu_item(
+        self, current_page, current_site, apply_active_classes,
+        original_menu_tag,
+    ):
+        return super(NoAbsoluteUrlsPage, self).get_repeated_menu_item(
+            current_page, current_site, apply_active_classes,
+            original_menu_tag,
+        )
+
+
 class LinkPage(AbstractLinkPage):
     pass
