@@ -109,7 +109,12 @@ class MenuPageMixin(models.Model):
         menuitem = copy(self)
         setattr(menuitem, 'text', self.repeated_item_text or self.title)
         if use_absolute_urls:
-            url = self.full_url
+            # Try for 'get_full_url' method (added in Wagtail 1.11) or fall
+            # back to 'full_url' property
+            if hasattr(self, 'get_full_url'):
+                url = self.get_full_url(request=request)
+            else:
+                url = self.full_url
         else:
             url = self.relative_url(current_site)
         setattr(menuitem, 'href', url)
