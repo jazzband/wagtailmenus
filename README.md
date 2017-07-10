@@ -6,7 +6,7 @@
 
 It's an extension for Torchbox's [Wagtail CMS](https://github.com/torchbox/wagtail) to help you manage and render multi-level navigation and simple flat menus in a consistent, flexible way.
 
-The current version is compatible with Wagtail 1.5 to 1.10 and Python 2.7, 3.3, 3.4, 3.5 and 3.6
+The current version is compatible with Wagtail 1.5 to 1.11 and Python 2.7, 3.3, 3.4, 3.5 and 3.6
 
 # What does it do?
 
