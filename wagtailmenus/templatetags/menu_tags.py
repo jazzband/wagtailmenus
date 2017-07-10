@@ -24,7 +24,7 @@ register = Library()
 def main_menu(
     context, max_levels=None, use_specific=None, apply_active_classes=True,
     allow_repeating_parents=True, show_multiple_levels=True,
-    template='', sub_menu_template='', use_absolute_urls=None,
+    template='', sub_menu_template='', use_absolute_urls=False,
 ):
     validate_supplied_values('main_menu', max_levels=max_levels,
                              use_specific=use_specific)
@@ -46,9 +46,6 @@ def main_menu(
 
     if use_specific is not None:
         menu.set_use_specific(use_specific)
-
-    if use_absolute_urls is None:
-        use_absolute_urls = context.get('use_absolute_urls', False)
 
     # Identify templates for rendering
     template_names = get_template_names('main', request, template)
@@ -96,7 +93,7 @@ def flat_menu(
     allow_repeating_parents=True, show_multiple_levels=True,
     template='', sub_menu_template='',
     fall_back_to_default_site_menus=flat_menus_fbtdsm,
-    use_absolute_urls=None,
+    use_absolute_urls=False,
 ):
     validate_supplied_values('flat_menu', max_levels=max_levels,
                              use_specific=use_specific)
@@ -124,9 +121,6 @@ def flat_menu(
 
     if use_specific is not None:
         menu.set_use_specific(use_specific)
-
-    if use_absolute_urls is None:
-        use_absolute_urls = context.get('use_absolute_urls', False)
 
     template_names = menu.get_template_names(request, template)
     t = context.template.engine.select_template(template_names)
@@ -332,7 +326,7 @@ def section_menu(
     max_levels=app_settings.DEFAULT_SECTION_MENU_MAX_LEVELS,
     template='', sub_menu_template='',
     use_specific=app_settings.DEFAULT_SECTION_MENU_USE_SPECIFIC,
-    use_absolute_urls=None,
+    use_absolute_urls=False,
 ):
     """Render a section menu for the current section."""
 
@@ -348,9 +342,6 @@ def section_menu(
 
     if not show_multiple_levels:
         max_levels = 1
-
-    if use_absolute_urls is None:
-        use_absolute_urls = context.get('use_absolute_urls', False)
 
     # Create a menu instance that can fetch all pages at once and return
     # for subpages for each branch as they are needed
@@ -437,7 +428,7 @@ def children_menu(
     max_levels=app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS,
     template='', sub_menu_template='',
     use_specific=app_settings.DEFAULT_CHILDREN_MENU_USE_SPECIFIC,
-    use_absolute_urls=None,
+    use_absolute_urls=False,
 ):
     validate_supplied_values(
         'children_menu', max_levels=max_levels, use_specific=use_specific,
@@ -451,9 +442,6 @@ def children_menu(
         parent_page = context.get('self')
     if not parent_page:
         return ''
-
-    if use_absolute_urls is None:
-        use_absolute_urls = context.get('use_absolute_urls', False)
 
     # Create a menu instance that can fetch all pages at once and return
     # for subpages for each branch as they are needed
