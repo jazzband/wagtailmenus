@@ -19,6 +19,8 @@ matrix:
     python: 3.6 
   - env: TOXENV=py36-dj111-wt110
     python: 3.6 
+  - env: TOXENV=py36-dj111-wt111
+    python: 3.6 
 install:
 - pip install tox coveralls
 script:
