@@ -644,16 +644,16 @@ def prime_menu_items(
         if menuitem and page:
             menuitem.link_page = page
 
-        # Both `Page` and `MenuItem` objects have a `relative_url` method
-        # and a `get_full_url` method (added in Wagtail 1.11) or `full_url`
-        # property (Wagtail versions prior to 1.11) we can use to calculate a
-        # value for the `href` attribute.
         if use_absolute_urls:
+            # Pages only have `get_full_url` from Wagtail 1.11 onwards
             if hasattr(item, 'get_full_url'):
                 url = item.get_full_url(request=request)
+            # Fallback for Wagtail versions prior to 1.11
             else:
                 url = item.full_url
         else:
+            # Both `Page` and `MenuItem` objects have a `relative_url` method
+            # that we can use to calculate a value for the `href` attribute.
             url = item.relative_url(current_site)
         setattr(item, 'href', url)
         primed_menu_items.append(item)
