@@ -537,7 +537,7 @@ def prime_menu_items(
                 setattr(item, 'active_class', item.extra_classes)
                 setattr(item, 'text', item.menu_text(request))
                 if use_absolute_urls:
-                    url = item.full_url
+                    url = item.get_full_url(request=request)
                 else:
                     url = item.relative_url(current_site, request)
                 setattr(item, 'href', url)
