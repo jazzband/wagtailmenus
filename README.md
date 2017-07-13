@@ -163,6 +163,7 @@ The `{% main_menu %}` tag allows you to display the `MainMenu` defined for the c
 - **`apply_active_classes`** (default: `True`): The tag will attempt to add 'active' and 'ancestor' CSS classes to the menu items (where applicable) to indicate the active page and ancestors of that page. To disable this behaviour, add `apply_active_classes=False` to the tag in your template. You can change the CSS classes used by adding `WAGTAILMENUS_ACTIVE_CLASS` and `WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS` settings to your project's settings module.
 - **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 - **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
+- **`use_absolute_page_urls`** (default: `False`): By default, relative page URLs are used for the `href` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add `use_absolute_page_urls=True` to the `{% main_menu %}` tag in your template. The preference will also be respected automatically by any subsequent calls to `{% sub_menu %}` during the course of rendering the menu (unless explicitly overridden in custom menu templates). **NOTE**: Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
 
 
 ### Where `{% main_menu %}` looks for templates
@@ -221,6 +222,8 @@ That list of locations will be as follows, where `example.com` is the `hostname`
 - **`fall_back_to_default_site_menus`** (default: `False`): When using the `{% flat_menu %}` tag, wagtailmenus identifies the 'current site', and attempts to find a menu for that site, matching the `handle` provided. By default, if no menu is found for the current site, nothing is rendered. However, if `fall_back_to_default_site_menus=True` is provided, wagtailmenus will search search the 'default' site (In the CMS, this will be the site with the '**Is default site**' checkbox ticked) for a menu with the same handle, and use that instead before giving up. The default behaviour can be altered by adding `WAGTAILMENUS_FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS=True` to your project's settings.
 - **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 - **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus (if enabled using `show_multiple_levels`). All subsequent calls to `{% sub_menu %}` within the context of the flat menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
+- **`use_absolute_page_urls`** (default: `False`): By default, relative page URLs are used for the `href` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add `use_absolute_page_urls=True` to the `{% flat_menu %}` tag in your template. The preference will also be respected automatically by any subsequent calls to `{% sub_menu %}` during the course of rendering the menu (unless explicitly overridden in custom menu templates). **NOTE**: Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
+
 
 ### Where `{% flat_menu %}` looks for templates
 
@@ -303,6 +306,8 @@ The `{% section_menu %}` tag allows you to display a context-aware, page-driven 
 - **`allow_repeating_parents`** (default: `True`): Repetition-related settings on your pages are respected by default, but you can add `allow_repeating_parents=False` to ignore them, and not repeat any pages in sub-menus when rendering. Please note that using this option will only have an effect if `use_specific` has a value of `1` or higher.
 - **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 - **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
+- **`use_absolute_page_urls`** (default: `False`): By default, relative page URLs are used for the `href` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add `use_absolute_page_urls=True` to the `{% section_menu %}` tag in your template. The preference will also be respected automatically by any subsequent calls to `{% sub_menu %}` during the course of rendering the menu (unless explicitly overridden in custom menu templates). **NOTE**: Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
+
 
 ### Where `{% section_menu %}` looks for templates
 
@@ -360,6 +365,8 @@ The `{% children_menu %}` tag can be used in page templates to display a menu of
 - **`allow_repeating_parents`** (default: `True`): Repetition-related settings on your pages are respected by default, but you can add `allow_repeating_parents=False` to ignore them, and not repeat any pages in sub-menus when rendering. Please note that using this option will only have an effect if `use_specific` has a value of `1` or higher.
 - **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
 - **`sub_menu_template`** (default: `''`): Lets you specify a template to be used for rendering sub menus. All subsequent calls to `{% sub_menu %}` within the context of the section menu will use this template unless overridden by providing a `template` value to `{% sub_menu %}` in a menu template. If not provided, wagtailmenus will look in several locations for an appropriate template (see below for details).
+- **`use_absolute_page_urls`** (default: `False`): By default, relative page URLs are used for the `href` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add `use_absolute_page_urls=True` to the `{% children_menu %}` tag in your template. The preference will also be respected automatically by any subsequent calls to `{% sub_menu %}` during the course of rendering the menu (unless explicitly overridden in custom menu templates). **NOTE**: Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
+
 
 ### Where `{% children_menu %}` looks for templates
 
@@ -412,6 +419,7 @@ The `{% sub_menu %}` tag is used within menu templates to render additional leve
 - **`allow_repeating_parents`**: By default, the tag will inherit this behaviour from whatever was specified for the original menu tag. However, you can override that behaviour by adding either `allow_repeating_parents=True` or `allow_repeating_parents=False` to the tag in your custom menu template.
 - **`template`** (default: `''`): Lets you render the menu to a template of your choosing. If not specified, the `sub_menu_template` value added to the context by the original menu tag will be used.
 - **`use_specific`**: By default, the tag will inherit this behaviour from whatever was specified for the original menu tag. However, the value can be overridden by passing this option to the {% sub_menu %} tag in your custom menu template. Take a look at the [Specific pages instances and performance](#specific-page-use) section below for a description of the option values supported.
+- **`use_absolute_page_urls`** (default: `None`): By default, the tag will inherit this behaviour from whatever was specified for the original menu tag. However, this can be overridden by explicitly adding `use_absolute_page_urls=True` or `use_absolute_page_urls=False` to a `{% sub_menu %}` tag in a custom menu template. If `True`, absolute page URLs will be used for the `href` attributes on page links, instead of relative URLs.
 
 
 ## <a id="writing-menu-templates"></a>8. Writing your own menu templates
@@ -424,6 +432,7 @@ The following variables are added to the context by all of the above tags, which
 - **`max_levels`**: The maximum number of levels that should be rendered, as determined by the original `main_menu`, `section_menu`, `flat_menu` or `children_menu` tag call.
 - **`allow_repeating_parents`**: A boolean indicating whether `MenuPage` fields should be respected when rendering further menu levels.
 - **`apply_active_classes`**: A boolean indicating whether `sub_menu` tags should attempt to add  'active' and 'ancestor' classes to menu items when rendering further menu levels.
+- **`use_absolute_page_urls`**: A boolean indicating whether absolute page URLs should be used for page links when rendering.
 
 ### Each item in `menu_items` has the following attributes:
 
@@ -491,13 +500,13 @@ class ContactPage(MenuPage):
     def modify_submenu_items(
         self, menu_items, current_page, current_ancestor_ids, 
         current_site, allow_repeating_parents, apply_active_classes,
-        original_menu_tag, menu_instance, request
+        original_menu_tag, menu_instance, request, use_absolute_page_urls
     ):
         # Apply default modifications first of all
         menu_items = super(ContactPage, self).modify_submenu_items(
             menu_items, current_page, current_ancestor_ids, current_site, 
             allow_repeating_parents, apply_active_classes, original_menu_tag,
-            menu_instance, request)
+            menu_instance, request, use_absolute_page_urls)
         """
         If rendering a 'main_menu', add some additional menu items to the end
         of the list that link to various anchored sections on the same page
@@ -577,12 +586,12 @@ class SectionRootPage(MenuPage):
     def modify_submenu_items(
         self, menu_items, current_page, current_ancestor_ids, current_site,
         allow_repeating_parents, apply_active_classes, original_menu_tag='',
-        menu_instance, request
+        menu_instance, request, use_absolute_page_urls
     ):
         menu_items = super(SectionRootPage,self).modify_menu_items(
             menu_items, current_page, current_ancestor_ids, 
          	current_site, allow_repeating_parents, apply_active_classes,
-         	original_menu_tag, menu_instance, request)
+         	original_menu_tag, menu_instance, request, use_absolute_page_urls)
 	    
         if self.add_submenu_item_for_news:
             menu_items.append({

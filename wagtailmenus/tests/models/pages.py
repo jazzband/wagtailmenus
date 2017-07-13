@@ -43,12 +43,12 @@ class MultilingualMenuPage(MenuPage):
     def modify_submenu_items(
         self, menu_items, current_page, current_ancestor_ids,
         current_site, allow_repeating_parents, apply_active_classes,
-        original_menu_tag, menu_instance, request
+        original_menu_tag, menu_instance, request, use_absolute_page_urls
     ):
         return super(MultilingualMenuPage, self).modify_submenu_items(
             menu_items, current_page, current_ancestor_ids,
             current_site, allow_repeating_parents, apply_active_classes,
-            original_menu_tag, menu_instance, request)
+            original_menu_tag, menu_instance, request, use_absolute_page_urls)
 
     def has_submenu_items(
         self, current_page, allow_repeating_parents, original_menu_tag,
@@ -60,11 +60,11 @@ class MultilingualMenuPage(MenuPage):
 
     def get_repeated_menu_item(
         self, current_page, current_site, apply_active_classes,
-        original_menu_tag, request
+        original_menu_tag, request, use_absolute_page_urls
     ):
         item = super(MultilingualMenuPage, self).get_repeated_menu_item(
             current_page, current_site, apply_active_classes,
-            original_menu_tag, request)
+            original_menu_tag, request, use_absolute_page_urls)
         item.text = self.translated_repeated_item_text or self.translated_title
         return item
 
@@ -111,12 +111,12 @@ class ContactPage(MenuPage):
     def modify_submenu_items(
         self, menu_items, current_page, current_ancestor_ids,
         current_site, allow_repeating_parents, apply_active_classes,
-        original_menu_tag, menu_instance=None, request=None
+        original_menu_tag, menu_instance=None, request=None, use_absolute_page_urls=False
     ):
         menu_items = super(ContactPage, self).modify_submenu_items(
             menu_items, current_page, current_ancestor_ids,
             current_site, allow_repeating_parents, apply_active_classes,
-            original_menu_tag, menu_instance)
+            original_menu_tag, menu_instance, use_absolute_page_urls=use_absolute_page_urls)
         """
         If rendering a 'main_menu', add some additional menu items to the end
         of the list that link to various anchored sections on the same page
@@ -157,6 +157,34 @@ class ContactPage(MenuPage):
         return super(ContactPage, self).has_submenu_items(
             current_page, allow_repeating_parents, original_menu_tag,
             menu_instance, request)
+
+
+class NoAbsoluteUrlsPage(MenuPage):
+    """
+    Ensure that we can handle pages that do not specify the `use_absolute_page_urls` kwarg.
+    """
+
+    template = 'page.html'
+    parent_page_types = [HomePage]
+
+    def modify_submenu_items(
+        self, menu_items, current_page, current_ancestor_ids,
+        current_site, allow_repeating_parents, apply_active_classes,
+        original_menu_tag, menu_instance=None,
+    ):
+        return super(NoAbsoluteUrlsPage, self).modify_submenu_items(
+            menu_items, current_page, current_ancestor_ids,
+            current_site, allow_repeating_parents, apply_active_classes,
+            original_menu_tag, menu_instance)
+
+    def get_repeated_menu_item(
+        self, current_page, current_site, apply_active_classes,
+        original_menu_tag,
+    ):
+        return super(NoAbsoluteUrlsPage, self).get_repeated_menu_item(
+            current_page, current_site, apply_active_classes,
+            original_menu_tag,
+        )
 
 
 class LinkPage(AbstractLinkPage):

@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from wagtail.wagtailcore.models import Page
 
 from wagtailmenus.utils.inspection import accepts_kwarg
-from wagtailmenus.utils.deprecation import RemovedInWagtailMenus25Warning
+from wagtailmenus.utils.deprecation import RemovedInWagtailMenus25Warning, RemovedInWagtailMenus26Warning
 from .. import app_settings
 from ..forms import LinkPageAdminForm
 from ..panels import menupage_settings_panels, linkpage_edit_handler
@@ -43,7 +43,7 @@ class MenuPageMixin(models.Model):
     def modify_submenu_items(
         self, menu_items, current_page, current_ancestor_ids, current_site,
         allow_repeating_parents, apply_active_classes, original_menu_tag,
-        menu_instance=None, request=None
+        menu_instance=None, request=None, use_absolute_page_urls=False,
     ):
         """
         Make any necessary modifications to `menu_items` and return the list
@@ -78,6 +78,19 @@ class MenuPageMixin(models.Model):
                     self.__class__.__name__
                 )
                 warnings.warn(msg, RemovedInWagtailMenus25Warning)
+
+            if accepts_kwarg(self.get_repeated_menu_item, 'use_absolute_page_urls'):
+                method_kwargs['use_absolute_page_urls'] = use_absolute_page_urls
+            else:
+                msg = (
+                    "The 'get_repeated_menu_item' method on '%s' should be "
+                    "updated to accept a 'use_absolute_page_urls' keyword argument. View the "
+                    "2.4 release notes for more info: https://github.com/"
+                    "rkhleics/wagtailmenus/releases/tag/v.2.4.0" %
+                    self.__class__.__name__
+                )
+                warnings.warn(msg, RemovedInWagtailMenus26Warning)
+
             # Call `get_repeated_menu_item` using the above kwargs dict
             repeated_item = self.get_repeated_menu_item(**method_kwargs)
             menu_items.insert(0, repeated_item)
@@ -100,14 +113,23 @@ class MenuPageMixin(models.Model):
 
     def get_repeated_menu_item(
         self, current_page, current_site, apply_active_classes,
-        original_menu_tag, request=None
+        original_menu_tag, request=None, use_absolute_page_urls=False,
     ):
         """Return something that can be used to display a 'repeated' menu item
         for this specific page."""
 
         menuitem = copy(self)
         setattr(menuitem, 'text', self.repeated_item_text or self.title)
-        setattr(menuitem, 'href', self.relative_url(current_site))
+        if use_absolute_page_urls:
+            # Try for 'get_full_url' method (added in Wagtail 1.11) or fall
+            # back to 'full_url' property
+            if hasattr(self, 'get_full_url'):
+                url = self.get_full_url(request=request)
+            else:
+                url = self.full_url
+        else:
+            url = self.relative_url(current_site)
+        setattr(menuitem, 'href', url)
         active_class = ''
         if apply_active_classes and self == current_page:
             active_class = app_settings.ACTIVE_CLASS

@@ -17,6 +17,11 @@
 			<div id="children-menu-three-levels">
 				{% children_menu max_levels=3 allow_repeating_parents=False %}
 			</div>
+
+            <h4>Children Menu (use_absolute_page_urls=True)</h4>
+			<div id="children-menu-absolute-urls">
+				{% children_menu use_absolute_page_urls=True %}
+			</div>
 		</div>
 
 		<div class="content-secondary">
@@ -28,6 +33,11 @@
 			<h4>Section Menu (max_levels=2)</h4>
 			<div id="section-menu-two-levels">
 				{% section_menu max_levels=2 %}
+			</div>
+
+            <h4>Section Menu (use_absolute_page_urls=True)</h4>
+			<div id="section-menu-absolute-url">
+				{% section_menu use_absolute_page_urls=True %}
 			</div>
 
 		</div>

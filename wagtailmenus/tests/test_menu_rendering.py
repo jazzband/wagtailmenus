@@ -205,6 +205,75 @@ class TestTemplateTags(TestCase):
         """
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
+    def test_homepage_main_menu_absolute_urls(self):
+        """
+        Test '{{ main_menu use_absolute_page_urls=True }}' output for homepage
+        """
+        response = self.client.get('/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='main-menu-absolute-url').decode()
+        expected_menu_html = """
+        <div id="main-menu-absolute-url">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="http://www.wagtailmenus.co.uk:8000/">Home</a>
+                </li>       
+                <li class=" dropdown top-level">
+                    <a href="http://www.wagtailmenus.co.uk:8000/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
+                        <li class=" top-level">
+                            <a href="http://www.wagtailmenus.co.uk:8000/about-us/">Section home</a>
+                        </li>
+                        <li class="">
+                            <a href="http://www.wagtailmenus.co.uk:8000/about-us/meet-the-team/">Meet the team</a>
+                        </li>
+                        <li class="">
+                            <a href="http://www.wagtailmenus.co.uk:8000/about-us/our-heritage/">Our heritage</a>
+                        </li>
+                        <li class="">
+                            <a href="http://www.wagtailmenus.co.uk:8000/about-us/mission-and-values/">Our mission and values</a>
+                        </li>
+                    </ul>  
+                </li>       
+                <li class=" dropdown top-level">
+                    <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
+                        <li class="">
+                            <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/latest-news/">Latest news</a>
+                        </li>
+                        <li class="">
+                            <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/upcoming-events/">Upcoming events</a>
+                        </li>
+                        <li class="">
+                            <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/press/">In the press</a>
+                        </li>
+                    </ul>
+                </li>       
+                <li class="">
+                    <a href="http://google.co.uk">Google</a>
+                </li>       
+                <li class=" dropdown">
+                    <a href="http://www.wagtailmenus.co.uk:8000/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
+                        <li class="support">
+                            <a href="/contact-us/#support">Get support</a>
+                        </li>
+                        <li class="call">
+                            <a href="/contact-us/#call">Speak to someone</a>
+                        </li>
+                    
+                        <li class="map">
+                            <a href="/contact-us/#map">Map &amp; directions</a>
+                        </li>
+                    </ul>
+                </li>       
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
     def test_homepage_children_menu_one_level(self):
         """
         Test '{% children_menu %}' output for homepage
@@ -264,6 +333,33 @@ class TestTemplateTags(TestCase):
                         <li class=""><a href="/legal/privacy-policy/">Privacy policy</a></li>
                         <li class=""><a href="/legal/terms-and-conditions/">Terms and conditions</a></li>
                     </ul>
+                </li>
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
+    def test_homepage_children_absolute_urls(self):
+        """
+        Test '{% children_menu use_absolute_page_urls=True %}' output for homepage
+        """
+        response = self.client.get('/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+        menu_html = soup.find(id='children-menu-absolute-url').decode()
+        expected_menu_html = """
+        <div id="children-menu-absolute-url">
+            <ul>
+                <li class="">
+                    <a href="http://www.wagtailmenus.co.uk:8000/about-us/">About us</a>
+                </li>
+                <li class="">
+                    <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/">News &amp; events</a>
+                </li>
+                <li class="">
+                    <a href="http://www.wagtailmenus.co.uk:8000/contact-us/">Contact us</a>
+                </li>
+                <li class="">
+                    <a href="http://www.wagtailmenus.co.uk:8000/legal/">Legal</a>
                 </li>
             </ul>
         </div>
@@ -367,6 +463,75 @@ class TestTemplateTags(TestCase):
         """
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
+    def test_about_us_main_menu_absolute_urls(self):
+        """
+                Test '{{ main_menu use_absolute_page_urls=True }}' output for homepage
+                """
+        response = self.client.get('/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='main-menu-absolute-url').decode()
+        expected_menu_html = """
+            <div id="main-menu-absolute-url">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="http://www.wagtailmenus.co.uk:8000/">Home</a>
+                    </li>       
+                    <li class=" dropdown top-level">
+                        <a href="http://www.wagtailmenus.co.uk:8000/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
+                        <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
+                            <li class=" top-level">
+                                <a href="http://www.wagtailmenus.co.uk:8000/about-us/">Section home</a>
+                            </li>
+                            <li class="">
+                                <a href="http://www.wagtailmenus.co.uk:8000/about-us/meet-the-team/">Meet the team</a>
+                            </li>
+                            <li class="">
+                                <a href="http://www.wagtailmenus.co.uk:8000/about-us/our-heritage/">Our heritage</a>
+                            </li>
+                            <li class="">
+                                <a href="http://www.wagtailmenus.co.uk:8000/about-us/mission-and-values/">Our mission and values</a>
+                            </li>
+                        </ul>  
+                    </li>       
+                    <li class=" dropdown top-level">
+                        <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
+                        <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
+                            <li class="">
+                                <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/latest-news/">Latest news</a>
+                            </li>
+                            <li class="">
+                                <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/upcoming-events/">Upcoming events</a>
+                            </li>
+                            <li class="">
+                                <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/press/">In the press</a>
+                            </li>
+                        </ul>
+                    </li>       
+                    <li class="">
+                        <a href="http://google.co.uk">Google</a>
+                    </li>       
+                    <li class=" dropdown">
+                        <a href="http://www.wagtailmenus.co.uk:8000/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
+                        <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
+                            <li class="support">
+                                <a href="/contact-us/#support">Get support</a>
+                            </li>
+                            <li class="call">
+                                <a href="/contact-us/#call">Speak to someone</a>
+                            </li>
+    
+                            <li class="map">
+                                <a href="/contact-us/#map">Map &amp; directions</a>
+                            </li>
+                        </ul>
+                    </li>       
+                </ul>
+            </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
     def test_about_us_section_menu_two_levels(self):
         """
         Test '{% section_menu %}' output for 'About us' page
@@ -422,6 +587,49 @@ class TestTemplateTags(TestCase):
         """
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
+    def test_about_us_section_menu_absolute_urls(self):
+        """
+        Test '{% section_menu use_absolute_page_urls=True %}' output for 'About us' page
+        """
+        response = self.client.get('/about-us/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='section-menu-absolute-url').decode()
+        expected_menu_html = """
+        <div id="section-menu-absolute-url">
+            <nav class="nav-section" role="navigation">
+                    <a href="http://www.wagtailmenus.co.uk:8000/about-us/" class="ancestor section_root">About us</a>
+                <ul>
+                    <li class="active">
+                        <a href="http://www.wagtailmenus.co.uk:8000/about-us/">Section home</a>
+                    </li>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/about-us/meet-the-team/">Meet the team</a>
+                <ul>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/about-us/meet-the-team/staff-member-one/">Staff member one</a>
+                    </li>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/about-us/meet-the-team/staff-member-two/">Staff member two</a>
+                    </li>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/about-us/meet-the-team/staff-member-three/">Staff member three</a>
+                    </li>
+                </ul>
+                    </li>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/about-us/our-heritage/">Our heritage</a>
+                    </li>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/about-us/mission-and-values/">Our mission and values</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
     def test_about_us_children_menu_one_level(self):
         """
         Test '{{ sub_menu self }}' output for 'About us' page
@@ -461,6 +669,33 @@ class TestTemplateTags(TestCase):
                 </li>
                 <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
                 <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
+    def test_about_us_children_absolute_urls(self):
+        """
+        Test '{{ sub_menu self }}' output for 'About us' page
+        """
+        response = self.client.get('/about-us/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+        menu_html = soup.find(id='children-menu-absolute-urls').decode()
+        expected_menu_html = """
+        <div id="children-menu-absolute-urls">
+            <ul>
+                <li class="">
+                    <a href="http://www.wagtailmenus.co.uk:8000/about-us/">Section home</a>
+                </li>
+                <li class="">
+                    <a href="http://www.wagtailmenus.co.uk:8000/about-us/meet-the-team/">Meet the team</a>
+                </li>
+                <li class="">
+                    <a href="http://www.wagtailmenus.co.uk:8000/about-us/our-heritage/">Our heritage</a>
+                </li>
+                <li class="">
+                    <a href="http://www.wagtailmenus.co.uk:8000/about-us/mission-and-values/">Our mission and values</a>
+                </li>
             </ul>
         </div>
         """
@@ -517,6 +752,48 @@ class TestTemplateTags(TestCase):
                 <ul>
                     <li class="active"><a href="/superheroes/marvel-comics/">Marvel Comics</a></li>
                     <li class=""><a href="/superheroes/dc-comics/">D.C. Comics</a></li>
+                </ul>
+            </nav>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
+    def test_marvel_comics_section_absolute_urls(self):
+        """
+        Test '{% section_menu use_absolute_page_urls=True %}' output for 'Marvel comics' page
+        """
+        response = self.client.get('/superheroes/marvel-comics/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='section-menu-absolute-url').decode()
+        expected_menu_html = """
+        <div id="section-menu-absolute-url">
+            <nav class="nav-section" role="navigation">
+                    <a href="http://www.wagtailmenus.co.uk:8000/superheroes/" class="ancestor section_root">Superheroes</a>
+                <ul>
+                    <li class="active">
+                        <a href="http://www.wagtailmenus.co.uk:8000/superheroes/marvel-comics/">Marvel Comics</a>
+                <ul>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/superheroes/marvel-comics/iron-man/">Iron Man</a>
+                    </li>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/superheroes/marvel-comics/spiderman/">Spiderman</a>
+                    </li>
+                </ul>
+                    </li>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/superheroes/dc-comics/">D.C. Comics</a>
+                <ul>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/superheroes/dc-comics/batman/">Batman</a>
+                    </li>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/superheroes/dc-comics/wonder-woman/">Wonder Woman</a>
+                    </li>
+                </ul>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -593,6 +870,34 @@ class TestTemplateTags(TestCase):
                     <li class=""><a href="/legal/privacy-policy/">Privacy policy</a></li>
                     <li class=""><a href="/legal/terms-and-conditions/">Terms and conditions</a></li>
                     <li class="active"><a href="/about-us/meet-the-team/custom-url/">Meet the team's pets</a></li>
+                </ul>
+            </div>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
+        response = self.client.get('/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='nav-footer-absolute-urls').decode()
+        expected_menu_html = """
+        <div id="nav-footer-absolute-urls">
+            <div class="flat-menu footer with_heading">
+                <h4>Important links</h4>
+                <ul>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/legal/accessibility/">Accessibility</a>
+                    </li>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/legal/privacy-policy/">Privacy policy</a>
+                    </li>
+                    <li class="">
+                        <a href="http://www.wagtailmenus.co.uk:8000/legal/terms-and-conditions/">Terms and conditions</a>
+                    </li>
+                    <li class="">
+                        <a href="/about-us/meet-the-team/custom-url/">Meet the team's pets</a>
+                    </li>
                 </ul>
             </div>
         </div>
