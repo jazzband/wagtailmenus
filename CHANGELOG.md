@@ -1,8 +1,10 @@
 Changelog
 =========
 
-2.X.X (XX.XX.XXX) IN DEVELOPMENT
--------------------------------- 
+2.4.0 (XX.XX.XXX) IN DEVELOPMENT
+--------------------------------
+
+* Added official support for Wagtail 1.11
 
 
 2.3.1 (01.07.2017)
