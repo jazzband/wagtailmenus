@@ -22,7 +22,7 @@ matrix:
   - env: TOXENV=py36-dj111-wt111
     python: 3.6 
 install:
-- pip install tox coveralls
+- pip install tox codecov
 script:
 - tox
-after_success: coveralls
+after_success: codecov
