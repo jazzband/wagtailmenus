@@ -10,3 +10,7 @@ removed_in_next_version_warning = RemovedInWagtailMenus24Warning
 
 class RemovedInWagtailMenus25Warning(PendingDeprecationWarning):
     pass
+
+
+class RemovedInWagtailMenus26Warning(PendingDeprecationWarning):
+    pass

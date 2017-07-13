@@ -96,6 +96,20 @@ class AbstractMenuItem(models.Model, MenuItem):
                 return ''
         return self.link_url + self.url_append
 
+    def get_full_url(self, request=None):
+        if self.link_page:
+            try:
+                # Try for 'get_full_url' method (added in Wagtail 1.11) or fall
+                # back to 'full_url' property
+                if hasattr(self.link_page, 'get_full_url'):
+                    full_url = self.link_page.get_full_url(request=request)
+                else:
+                    full_url = self.link_page.full_url
+                return full_url + self.url_append
+            except TypeError:
+                return ''
+        return self.link_url + self.url_append
+
     def clean(self, *args, **kwargs):
         if not self.link_url and not self.link_page:
             msg = _("Please choose an internal page or provide a custom URL")
