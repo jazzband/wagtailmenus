@@ -427,9 +427,11 @@ The `{% sub_menu %}` tag is used within menu templates to render additional leve
 The following variables are added to the context by all of the above tags, which you can make use of in your templates:
 
 - **`menu_items`**: A list of `MenuItem` or `Page` objects with additional attributes added to help render menu items for the current level.
-- **`current_level`**: The current level being rendered. This starts at `1` for the initial template tag call, then increments each time `sub_menu` is called recursively in rendering that same menu.
+- **`current_level`**: An integer indicating the current level being rendered. This starts at `1` for the initial template tag call, then increments each time `sub_menu` is called recursively for rendering a particular branch of a menu. 
+- **`max_levels`**: An integer indicating the maximum number of levels that should be rendered for the current menu, as determined by the original `main_menu`, `section_menu`, `flat_menu` or `children_menu` tag call.
 - **`current_template`**: The name of the template currently being used for rendering. This is most useful when rendering a `sub_menu` template that calls `sub_menu` recursively, and you wish to use the same template for all recursions.
-- **`max_levels`**: The maximum number of levels that should be rendered, as determined by the original `main_menu`, `section_menu`, `flat_menu` or `children_menu` tag call.
+- **`sub_menu_template`**: The name of the template that should be used for rendering any further levels (should be picked up automatically by the `sub_menu` tag)
+- **`original_menu_tag`**: A string value indicating the name of tag was originally called in order to render the branch currently being rendered. The value will be one of `"main_menu"`, `"flat_menu"`, `"section_menu"` or `"children_menu"`.
 - **`allow_repeating_parents`**: A boolean indicating whether `MenuPage` fields should be respected when rendering further menu levels.
 - **`apply_active_classes`**: A boolean indicating whether `sub_menu` tags should attempt to add  'active' and 'ancestor' classes to menu items when rendering further menu levels.
 - **`use_absolute_page_urls`**: A boolean indicating whether absolute page URLs should be used for page links when rendering.
