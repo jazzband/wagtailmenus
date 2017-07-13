@@ -24,7 +24,7 @@ register = Library()
 def main_menu(
     context, max_levels=None, use_specific=None, apply_active_classes=True,
     allow_repeating_parents=True, show_multiple_levels=True,
-    template='', sub_menu_template='', use_absolute_urls=False,
+    template='', sub_menu_template='', use_absolute_page_urls=False,
 ):
     validate_supplied_values('main_menu', max_levels=max_levels,
                              use_specific=use_specific)
@@ -68,7 +68,7 @@ def main_menu(
             check_for_children=menu.max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
             apply_active_classes=apply_active_classes,
-            use_absolute_urls=use_absolute_urls,
+            use_absolute_page_urls=use_absolute_page_urls,
         ),
         'main_menu': menu,
         'use_specific': menu.use_specific,
@@ -81,7 +81,7 @@ def main_menu(
         'original_menu_tag': 'main_menu',
         'section_root': root,
         'current_ancestor_ids': ancestor_ids,
-        'use_absolute_urls': use_absolute_urls,
+        'use_absolute_page_urls': use_absolute_page_urls,
     })
     return t.render(c)
 
@@ -93,7 +93,7 @@ def flat_menu(
     allow_repeating_parents=True, show_multiple_levels=True,
     template='', sub_menu_template='',
     fall_back_to_default_site_menus=flat_menus_fbtdsm,
-    use_absolute_urls=False,
+    use_absolute_page_urls=False,
 ):
     validate_supplied_values('flat_menu', max_levels=max_levels,
                              use_specific=use_specific)
@@ -143,7 +143,7 @@ def flat_menu(
             check_for_children=menu.max_levels > 1,
             allow_repeating_parents=allow_repeating_parents,
             apply_active_classes=apply_active_classes,
-            use_absolute_urls=use_absolute_urls,
+            use_absolute_page_urls=use_absolute_page_urls,
         ),
         'matched_menu': menu,
         'menu_handle': handle,
@@ -158,7 +158,7 @@ def flat_menu(
         'sub_menu_template': submenu_t.name,
         'original_menu_tag': 'flat_menu',
         'current_ancestor_ids': ancestor_ids,
-        'use_absolute_urls': use_absolute_urls,
+        'use_absolute_page_urls': use_absolute_page_urls,
     })
     return t.render(c)
 
@@ -166,7 +166,7 @@ def flat_menu(
 def get_sub_menu_items_for_page(
     request, page, current_site, current_page, ancestor_ids, menu_instance,
     use_specific, apply_active_classes, allow_repeating_parents,
-    current_level=1, max_levels=2, original_menu_tag='', use_absolute_urls=False,
+    current_level=1, max_levels=2, original_menu_tag='', use_absolute_page_urls=False,
 ):
     # The menu items will be the children of the provided `page`
     children_pages = menu_instance.get_children_for_page(page)
@@ -186,7 +186,7 @@ def get_sub_menu_items_for_page(
         check_for_children=current_level < max_levels,
         allow_repeating_parents=allow_repeating_parents,
         apply_active_classes=apply_active_classes,
-        use_absolute_urls=use_absolute_urls,
+        use_absolute_page_urls=use_absolute_page_urls,
     )
 
     """
@@ -225,12 +225,12 @@ def get_sub_menu_items_for_page(
             )
             warnings.warn(warning_msg, RemovedInWagtailMenus25Warning)
 
-        if accepts_kwarg(page.modify_submenu_items, 'use_absolute_urls'):
-            method_kwargs['use_absolute_urls'] = use_absolute_urls
+        if accepts_kwarg(page.modify_submenu_items, 'use_absolute_page_urls'):
+            method_kwargs['use_absolute_page_urls'] = use_absolute_page_urls
         else:
             warning_msg = (
                 "The 'modify_submenu_items' method on '%s' should be "
-                "updated to accept a 'use_absolute_urls' keyword argument. View the "
+                "updated to accept a 'use_absolute_page_urls' keyword argument. View the "
                 "2.4 release notes for more info: https://github.com/rkhleics/"
                 "wagtailmenus/releases/tag/v.2.4.0" % page.__class__.__name__,
             )
@@ -246,7 +246,7 @@ def get_sub_menu_items_for_page(
 def sub_menu(
     context, menuitem_or_page, stop_at_this_level=None, use_specific=None,
     allow_repeating_parents=None, apply_active_classes=None, template='',
-    use_absolute_urls=None,
+    use_absolute_page_urls=None,
 ):
     """
     Retrieve the children pages for the `menuitem_or_page` provided, turn them
@@ -274,8 +274,8 @@ def sub_menu(
     if allow_repeating_parents is None:
         allow_repeating_parents = context.get('allow_repeating_parents', True)
 
-    if use_absolute_urls is None:
-        use_absolute_urls = context.get('use_absolute_urls', False)
+    if use_absolute_page_urls is None:
+        use_absolute_page_urls = context.get('use_absolute_page_urls', False)
 
     if not template:
         template = context.get(
@@ -309,7 +309,7 @@ def sub_menu(
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
-        use_absolute_urls=use_absolute_urls,
+        use_absolute_page_urls=use_absolute_page_urls,
     )
 
     # Prepare context and render
@@ -323,7 +323,7 @@ def sub_menu(
         'max_levels': max_levels,
         'current_template': template,
         'original_menu_tag': original_menu_tag,
-        'use_absolute_urls': use_absolute_urls,
+        'use_absolute_page_urls': use_absolute_page_urls,
     })
     t = context.template.engine.get_template(template)
     return t.render(context)
@@ -336,7 +336,7 @@ def section_menu(
     max_levels=app_settings.DEFAULT_SECTION_MENU_MAX_LEVELS,
     template='', sub_menu_template='',
     use_specific=app_settings.DEFAULT_SECTION_MENU_USE_SPECIFIC,
-    use_absolute_urls=False,
+    use_absolute_page_urls=False,
 ):
     """Render a section menu for the current section."""
 
@@ -372,7 +372,7 @@ def section_menu(
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
-        use_absolute_urls=use_absolute_urls,
+        use_absolute_page_urls=use_absolute_page_urls,
     )
 
     """
@@ -380,7 +380,7 @@ def section_menu(
     items, so it can be used in the same way in a template if required.
     """
     setattr(section_root, 'text', section_root.title)
-    if use_absolute_urls:
+    if use_absolute_page_urls:
         url = section_root.full_url
     else:
         url = section_root.relative_url(site)
@@ -426,7 +426,7 @@ def section_menu(
         'original_menu_tag': 'section_menu',
         'current_ancestor_ids': ancestor_ids,
         'use_specific': use_specific,
-        'use_absolute_urls': use_absolute_urls,
+        'use_absolute_page_urls': use_absolute_page_urls,
     })
     return t.render(c)
 
@@ -438,7 +438,7 @@ def children_menu(
     max_levels=app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS,
     template='', sub_menu_template='',
     use_specific=app_settings.DEFAULT_CHILDREN_MENU_USE_SPECIFIC,
-    use_absolute_urls=False,
+    use_absolute_page_urls=False,
 ):
     validate_supplied_values(
         'children_menu', max_levels=max_levels, use_specific=use_specific,
@@ -472,7 +472,7 @@ def children_menu(
         max_levels=max_levels,
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
-        use_absolute_urls=use_absolute_urls,
+        use_absolute_page_urls=use_absolute_page_urls,
     )
 
     # Identify templates for rendering
@@ -496,7 +496,7 @@ def children_menu(
         'current_template': t.name,
         'sub_menu_template': submenu_t.name,
         'use_specific': use_specific,
-        'use_absolute_urls': use_absolute_urls,
+        'use_absolute_page_urls': use_absolute_page_urls,
     })
     return t.render(c)
 
@@ -504,7 +504,7 @@ def children_menu(
 def prime_menu_items(
     request, menu_items, current_site, current_page, current_page_ancestor_ids,
     use_specific, original_menu_tag, menu_instance, check_for_children=False,
-    allow_repeating_parents=True, apply_active_classes=True, use_absolute_urls=False,
+    allow_repeating_parents=True, apply_active_classes=True, use_absolute_page_urls=False,
 ):
     """
     Prepare a list of `MenuItem` or `Page` objects for rendering to a menu
@@ -536,7 +536,7 @@ def prime_menu_items(
             ):
                 setattr(item, 'active_class', item.extra_classes)
                 setattr(item, 'text', item.menu_text(request))
-                if use_absolute_urls:
+                if use_absolute_page_urls:
                     url = item.get_full_url(request=request)
                 else:
                     url = item.relative_url(current_site, request)
@@ -644,7 +644,7 @@ def prime_menu_items(
         if menuitem and page:
             menuitem.link_page = page
 
-        if use_absolute_urls:
+        if use_absolute_page_urls:
             # Pages only have `get_full_url` from Wagtail 1.11 onwards
             if hasattr(item, 'get_full_url'):
                 url = item.get_full_url(request=request)

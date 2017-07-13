@@ -43,7 +43,7 @@ class MenuPageMixin(models.Model):
     def modify_submenu_items(
         self, menu_items, current_page, current_ancestor_ids, current_site,
         allow_repeating_parents, apply_active_classes, original_menu_tag,
-        menu_instance=None, request=None, use_absolute_urls=False,
+        menu_instance=None, request=None, use_absolute_page_urls=False,
     ):
         """
         Make any necessary modifications to `menu_items` and return the list
@@ -79,12 +79,12 @@ class MenuPageMixin(models.Model):
                 )
                 warnings.warn(msg, RemovedInWagtailMenus25Warning)
 
-            if accepts_kwarg(self.get_repeated_menu_item, 'use_absolute_urls'):
-                method_kwargs['use_absolute_urls'] = use_absolute_urls
+            if accepts_kwarg(self.get_repeated_menu_item, 'use_absolute_page_urls'):
+                method_kwargs['use_absolute_page_urls'] = use_absolute_page_urls
             else:
                 msg = (
                     "The 'get_repeated_menu_item' method on '%s' should be "
-                    "updated to accept a 'use_absolute_urls' keyword argument. View the "
+                    "updated to accept a 'use_absolute_page_urls' keyword argument. View the "
                     "2.4 release notes for more info: https://github.com/"
                     "rkhleics/wagtailmenus/releases/tag/v.2.4.0" %
                     self.__class__.__name__
@@ -113,14 +113,14 @@ class MenuPageMixin(models.Model):
 
     def get_repeated_menu_item(
         self, current_page, current_site, apply_active_classes,
-        original_menu_tag, request=None, use_absolute_urls=False,
+        original_menu_tag, request=None, use_absolute_page_urls=False,
     ):
         """Return something that can be used to display a 'repeated' menu item
         for this specific page."""
 
         menuitem = copy(self)
         setattr(menuitem, 'text', self.repeated_item_text or self.title)
-        if use_absolute_urls:
+        if use_absolute_page_urls:
             # Try for 'get_full_url' method (added in Wagtail 1.11) or fall
             # back to 'full_url' property
             if hasattr(self, 'get_full_url'):

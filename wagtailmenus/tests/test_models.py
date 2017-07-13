@@ -300,7 +300,7 @@ class TestNoAbsoluteUrlsPage(TestCase):
             self.assertTrue(
                 any(
                     "'modify_submenu_items' method on 'NoAbsoluteUrlsPage' should"
-                    " be updated to accept a 'use_absolute_urls' keyword" in msg
+                    " be updated to accept a 'use_absolute_page_urls' keyword" in msg
                     for msg in warning_messages
                 )
             )
