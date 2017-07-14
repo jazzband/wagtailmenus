@@ -9,7 +9,6 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('wagtailcore', '0033_remove_golive_expiry_help_text'),
         ('tests', '0013_auto_20170630_1002'),
     ]
 

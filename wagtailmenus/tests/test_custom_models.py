@@ -391,7 +391,7 @@ class TestCustomMenuModels(TestCase):
     def test_children_menu_override(self):
         from wagtailmenus import app_settings
         from wagtailmenus.tests.models import CustomChildrenMenu
-        self.assertEquals(app_settings.CHILDREN_MENU_CLASS, CustomChildrenMenu)
+        self.assertEqual(app_settings.CHILDREN_MENU_CLASS, CustomChildrenMenu)
 
     @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomSectionMenu', )
     def test_section_menu_override(self):
