@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-21 21:34+0100\n"
+"POT-Creation-Date: 2017-07-14 11:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Andy Babic <ababic@rkh.co.uk>, 2017\n"
 "Language-Team: Portuguese (Brazil) (https://www.transifex.com/rkhleics/teams/73023/pt_BR/)\n"
@@ -55,15 +55,15 @@ msgid ""
 "By default, this will be used as the link text when appearing in menus."
 msgstr "Por padrão, esse será o texto do link usado quando aparecer em menus."
 
-#: wagtailmenus/models/menuitems.py:36 wagtailmenus/models/pages.py:129
+#: wagtailmenus/models/menuitems.py:36 wagtailmenus/models/pages.py:151
 msgid "link to an internal page"
 msgstr "link para uma página interna"
 
-#: wagtailmenus/models/menuitems.py:42 wagtailmenus/models/pages.py:136
+#: wagtailmenus/models/menuitems.py:42 wagtailmenus/models/pages.py:158
 msgid "link to a custom URL"
 msgstr "link para uma URL personalizada"
 
-#: wagtailmenus/models/menuitems.py:48 wagtailmenus/models/pages.py:142
+#: wagtailmenus/models/menuitems.py:48 wagtailmenus/models/pages.py:164
 msgid "append to URL"
 msgstr "adicionar a URL"
 
@@ -76,6 +76,7 @@ msgstr ""
 "página"
 
 #: wagtailmenus/models/menuitems.py:57 wagtailmenus/models/menus.py:315
+#: wagtailmenus/wagtail_hooks.py:107
 msgid "handle"
 msgstr "handle"
 
@@ -108,24 +109,24 @@ msgstr "item do menu"
 msgid "menu items"
 msgstr "itens do menu"
 
-#: wagtailmenus/models/menuitems.py:101 wagtailmenus/models/pages.py:190
+#: wagtailmenus/models/menuitems.py:115 wagtailmenus/models/pages.py:212
 msgid "Please choose an internal page or provide a custom URL"
 msgstr ""
 "Por favor, selecione uma página interna ou especifique uma URL personalizada"
 
-#: wagtailmenus/models/menuitems.py:104 wagtailmenus/models/pages.py:193
+#: wagtailmenus/models/menuitems.py:118 wagtailmenus/models/pages.py:215
 msgid "Linking to both a page and custom URL is not permitted"
 msgstr "Não é permitido fazer link para uma página e uma URL personalizada"
 
-#: wagtailmenus/models/menuitems.py:107
+#: wagtailmenus/models/menuitems.py:121
 msgid "This field is required when linking to a custom URL"
 msgstr "Campo obrigatório caso esteja fazendo link para uma URL personalizada"
 
-#: wagtailmenus/models/menuitems.py:128 wagtailmenus/models/menuitems.py:145
+#: wagtailmenus/models/menuitems.py:142 wagtailmenus/models/menuitems.py:159
 msgid "allow sub-menu for this item"
 msgstr "permitir sub-menus para esse item"
 
-#: wagtailmenus/models/menuitems.py:131 wagtailmenus/models/menuitems.py:148
+#: wagtailmenus/models/menuitems.py:145 wagtailmenus/models/menuitems.py:162
 msgid ""
 "NOTE: The sub-menu might not be displayed, even if checked. It depends on "
 "how the menu is used in this project's templates."
@@ -271,16 +272,16 @@ msgstr ""
 "Exemplo: 'Seção Home' ou 'Visualização'. Se for deixado em banco, será "
 "utilizado o título da página."
 
-#: wagtailmenus/models/pages.py:146
+#: wagtailmenus/models/pages.py:168
 msgid "Use this to optionally append a #hash or querystring to the URL."
 msgstr ""
 "Use esse campo opcionalmente para adicionar um #hash ou querystring a URL."
 
-#: wagtailmenus/models/pages.py:150
+#: wagtailmenus/models/pages.py:172
 msgid "menu item css classes"
 msgstr "Classes css para itens do menu"
 
-#: wagtailmenus/models/pages.py:154
+#: wagtailmenus/models/pages.py:176
 msgid ""
 "Optionally specify css classes to be added to this page when it appears in "
 "menus."
@@ -288,12 +289,12 @@ msgstr ""
 "Opcionalmente, especifique classes css a serem adicionadas para essa página "
 "quando ela aparecer em menus."
 
-#: wagtailmenus/models/pages.py:187
+#: wagtailmenus/models/pages.py:209
 msgid "A link page cannot link to another link page"
 msgstr ""
 "Uma página de ligação não pode fazer link para outra página de ligação"
 
-#: wagtailmenus/models/pages.py:277
+#: wagtailmenus/models/pages.py:299
 #, python-format
 msgid "This page redirects to: %(url)s"
 msgstr "Essa página redireciona para: %(url)s"
