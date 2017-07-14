@@ -1,6 +1,8 @@
 language: python
 cache: pip
-sudo: false
+dist: trusty
+sudo: required
+
 matrix:
   include:
   - env: TOXENV=py27-dj18-wt15
@@ -21,8 +23,12 @@ matrix:
     python: 3.6 
   - env: TOXENV=py36-dj111-wt111
     python: 3.6 
+
 install:
 - pip install tox codecov
+
 script:
 - tox
-after_success: codecov
+
+after_success: 
+- codecov
