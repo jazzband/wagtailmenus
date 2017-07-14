@@ -1,8 +1,14 @@
 Changelog
 =========
 
-2.X.X (XX.XX.XXX) IN DEVELOPMENT
+2.4.0 (XX.XX.XXX) IN DEVELOPMENT
 -------------------------------- 
+
+* Added the 'use_absolute_page_urls' argument to all template tags. When a 
+  value equating to `True` is provided, the menu will be rendered using the 
+  'full URL' for each page (including the protocol/domain derived from the 
+  relevant `wagtailcore.models.Site` object), instead the 'relative URL' used
+  by default. Developed by Trent Holliday of Morris Technology and Andy Babic.
 
 
 2.3.1 (01.07.2017)
@@ -11,7 +17,7 @@ Changelog
 * Code example formatting fixes, and better use of headings in README.md.
 * Added 'on_delete=models.CASCADE' to all relationship fields on models where
   no 'on_delete' behaviour was previously set (Django 2.0 compatibility).
-* Marked a missing string for translation (@einsfr)
+* Marked a missing string for translation (@einsfr).
 * Updated translations for Lithuanian, Portuguese (Brazil), and Russian.
   Many thanks to @mamorim, @matas.dailyda and @einsfr!
 

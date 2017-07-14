@@ -8,6 +8,7 @@
 
 * Adrian Tijsseling (adriaant)
 * Tim Leguijt (tleguijt)
+* Trent Holiday (trumpet2012)
 
 
 ## Translators
