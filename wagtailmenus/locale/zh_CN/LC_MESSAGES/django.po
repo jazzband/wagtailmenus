@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-21 21:34+0100\n"
+"POT-Creation-Date: 2017-07-14 11:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: 汇民 王 <whuim@qq.com>, 2017\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/rkhleics/teams/73023/zh_CN/)\n"
@@ -55,15 +55,15 @@ msgid ""
 "By default, this will be used as the link text when appearing in menus."
 msgstr "默认情况下，这将用作菜单中显示的链接文本。"
 
-#: wagtailmenus/models/menuitems.py:36 wagtailmenus/models/pages.py:129
+#: wagtailmenus/models/menuitems.py:36 wagtailmenus/models/pages.py:151
 msgid "link to an internal page"
 msgstr "链接到内部页面"
 
-#: wagtailmenus/models/menuitems.py:42 wagtailmenus/models/pages.py:136
+#: wagtailmenus/models/menuitems.py:42 wagtailmenus/models/pages.py:158
 msgid "link to a custom URL"
 msgstr "链接到自定义的网址"
 
-#: wagtailmenus/models/menuitems.py:48 wagtailmenus/models/pages.py:142
+#: wagtailmenus/models/menuitems.py:48 wagtailmenus/models/pages.py:164
 msgid "append to URL"
 msgstr "附加到网址"
 
@@ -74,6 +74,7 @@ msgid ""
 msgstr "使用此选项可以将一个哈希值或查询字符串附加到上述页面的URL。"
 
 #: wagtailmenus/models/menuitems.py:57 wagtailmenus/models/menus.py:315
+#: wagtailmenus/wagtail_hooks.py:107
 msgid "handle"
 msgstr "句柄"
 
@@ -102,23 +103,23 @@ msgstr "菜单项"
 msgid "menu items"
 msgstr "菜单项"
 
-#: wagtailmenus/models/menuitems.py:101 wagtailmenus/models/pages.py:190
+#: wagtailmenus/models/menuitems.py:115 wagtailmenus/models/pages.py:212
 msgid "Please choose an internal page or provide a custom URL"
 msgstr "请选择一个内部页面或提供一个自定义网址"
 
-#: wagtailmenus/models/menuitems.py:104 wagtailmenus/models/pages.py:193
+#: wagtailmenus/models/menuitems.py:118 wagtailmenus/models/pages.py:215
 msgid "Linking to both a page and custom URL is not permitted"
 msgstr "不允许同时链接到页面和自定义网址"
 
-#: wagtailmenus/models/menuitems.py:107
+#: wagtailmenus/models/menuitems.py:121
 msgid "This field is required when linking to a custom URL"
 msgstr "链接到自定义网址时此字段必填"
 
-#: wagtailmenus/models/menuitems.py:128 wagtailmenus/models/menuitems.py:145
+#: wagtailmenus/models/menuitems.py:142 wagtailmenus/models/menuitems.py:159
 msgid "allow sub-menu for this item"
 msgstr "允许此项有子菜单"
 
-#: wagtailmenus/models/menuitems.py:131 wagtailmenus/models/menuitems.py:148
+#: wagtailmenus/models/menuitems.py:145 wagtailmenus/models/menuitems.py:162
 msgid ""
 "NOTE: The sub-menu might not be displayed, even if checked. It depends on "
 "how the menu is used in this project's templates."
@@ -248,25 +249,25 @@ msgid ""
 "used."
 msgstr "例如：“章节首页”或“概述”。如果留空，将使用页面标题。"
 
-#: wagtailmenus/models/pages.py:146
+#: wagtailmenus/models/pages.py:168
 msgid "Use this to optionally append a #hash or querystring to the URL."
 msgstr "使用此可选选项可以将一个哈希值或查询字符串附加到URL。"
 
-#: wagtailmenus/models/pages.py:150
+#: wagtailmenus/models/pages.py:172
 msgid "menu item css classes"
 msgstr "菜单项css类"
 
-#: wagtailmenus/models/pages.py:154
+#: wagtailmenus/models/pages.py:176
 msgid ""
 "Optionally specify css classes to be added to this page when it appears in "
 "menus."
 msgstr "（可选）指定在菜单中显示此页面时要添加页面的CSS类。"
 
-#: wagtailmenus/models/pages.py:187
+#: wagtailmenus/models/pages.py:209
 msgid "A link page cannot link to another link page"
 msgstr "一个链接页面不能链接到另一个链接页面"
 
-#: wagtailmenus/models/pages.py:277
+#: wagtailmenus/models/pages.py:299
 #, python-format
 msgid "This page redirects to: %(url)s"
 msgstr "这个页面重定向到：%(url)s"
