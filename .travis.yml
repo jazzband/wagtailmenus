@@ -1,7 +1,7 @@
 language: python
 cache: pip
 dist: trusty
-sudo: false
+sudo: required
 
 matrix:
   include:
