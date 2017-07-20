@@ -115,7 +115,7 @@ class MenuPageMixin(models.Model):
         """
         return menu_instance.page_has_children(self)
 
-    def get_text_for_repeated_item(
+    def get_text_for_repeated_menu_item(
         self, request=None, current_site=None, original_menu_tag='', **kwargs
     ):
         """Return the a string to use as 'text' for this page when it is being
@@ -137,7 +137,7 @@ class MenuPageMixin(models.Model):
         menuitem = copy(self)
 
         # Set/reset 'text'
-        menuitem.text = self.get_text_for_repeated_item(
+        menuitem.text = self.get_text_for_repeated_menu_item(
             request, current_site, original_menu_tag
         )
 
