@@ -111,6 +111,18 @@ class MenuPageMixin(models.Model):
         """
         return menu_instance.page_has_children(self)
 
+    def get_text_for_repeated_item(
+        self, request=None, current_site=None, original_menu_tag='', **kwargs
+    ):
+        """Return the a string to use as 'text' for this page when it is being
+        included as a 'repeated' menu item in a menu. You might want to
+        override this method if you're creating a multilingual site and you
+        have different translations of 'repeated_item_text' that you wish to
+        surface."""
+        return self.repeated_item_text or getattr(
+            self, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT, self.title
+        )
+
     def get_repeated_menu_item(
         self, current_page, current_site, apply_active_classes,
         original_menu_tag, request=None, use_absolute_page_urls=False,
@@ -119,7 +131,13 @@ class MenuPageMixin(models.Model):
         for this specific page."""
 
         menuitem = copy(self)
-        setattr(menuitem, 'text', self.repeated_item_text or self.title)
+
+        # Set/reset 'text'
+        menuitem.text = self.get_text_for_repeated_item(
+            request, current_site, original_menu_tag
+        )
+
+        # Set/reset 'href'
         if use_absolute_page_urls:
             # Try for 'get_full_url' method (added in Wagtail 1.11) or fall
             # back to 'full_url' property
@@ -129,11 +147,17 @@ class MenuPageMixin(models.Model):
                 url = self.full_url
         else:
             url = self.relative_url(current_site)
-        setattr(menuitem, 'href', url)
-        active_class = ''
+        menuitem.href = url
+
+        # Set/reset 'active_class'
         if apply_active_classes and self == current_page:
-            active_class = app_settings.ACTIVE_CLASS
-        setattr(menuitem, 'active_class', active_class)
+            menuitem.active_class = app_settings.ACTIVE_CLASS
+        else:
+            menuitem.active_class = ''
+
+        # Set/reset 'has_children_in_menu'
+        menuitem.has_children_in_menu = False
+
         return menuitem
 
 
