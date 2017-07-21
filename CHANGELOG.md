@@ -11,6 +11,15 @@ Changelog
   by default. Developed by Trent Holliday of Morris Technology and Andy Babic.
 
 
+2.3.2 (21.07.2017)
+-------------------------------- 
+
+* Fixed a bug that resting in {% sub_menu %} being called recursively (
+  until raising a "maximum recursion depth exceeded" exception) if a 
+  'repeated menu item' was added at anything past the 2nd level. Thanks to
+  @pyMan for raising/investigating.
+
+
 2.3.1 (01.07.2017)
 -------------------------------- 
 
@@ -57,6 +66,15 @@ Changelog
 * Added Russian translations (submitted by Alex einsfr).
 
 
+2.2.3 (21.07.2017)
+-------------------------------- 
+
+* Fixed a bug that resting in {% sub_menu %} being called recursively (
+  until raising a "maximum recursion depth exceeded" exception) if a 
+  'repeated menu item' was added at anything past the 2nd level. Thanks to
+  @pyMan for raising/investigating.
+
+
 2.2.2 (27.03.2017)
 -------------------------------- 
 
@@ -100,6 +118,16 @@ Changelog
 * Brazilian Portuguese language translations added by @MaxKurama.
 * Added try/except to `AbstractMenuItem.relative_url()` so that errors aren't
   thrown when `Page.relative_url` returns `None` for some reason.
+
+
+2.1.4 (21.07.2017)
+-------------------------------- 
+
+* Fixed a bug that resting in {% sub_menu %} being called recursively (
+  until raising a "maximum recursion depth exceeded" exception) if a 
+  'repeated menu item' was added at anything past the 2nd level. Thanks to
+  @pyMan for raising/investigating.
+
 
 2.1.3 (20.01.2017)
 -------------------------------- 
