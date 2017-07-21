@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
-__version__ = '2.1.3'
+__version__ = '2.1.4'
 
 default_app_config = 'wagtailmenus.apps.WagtailMenusConfig'
 app_settings = None
