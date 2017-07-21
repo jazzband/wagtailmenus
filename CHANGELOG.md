@@ -14,7 +14,7 @@ Changelog
 2.3.2 (21.07.2017)
 -------------------------------- 
 
-* Fixed a bug that resulting in {% sub_menu %} being called recursively (
+* Fixed a bug that would result in {% sub_menu %} being called recursively (
   until raising a "maximum recursion depth exceeded" exception) if a 
   'repeated menu item' was added at anything past the 2nd level. Thanks to
   @pyMan for raising/investigating.
@@ -69,7 +69,7 @@ Changelog
 2.2.3 (21.07.2017)
 -------------------------------- 
 
-* Fixed a bug that resulting in {% sub_menu %} being called recursively (
+* Fixed a bug that would result in {% sub_menu %} being called recursively (
   until raising a "maximum recursion depth exceeded" exception) if a 
   'repeated menu item' was added at anything past the 2nd level. Thanks to
   @pyMan for raising/investigating.
@@ -123,7 +123,7 @@ Changelog
 2.1.4 (21.07.2017)
 -------------------------------- 
 
-* Fixed a bug that resulting in {% sub_menu %} being called recursively (
+* Fixed a bug that would result in {% sub_menu %} being called recursively (
   until raising a "maximum recursion depth exceeded" exception) if a 
   'repeated menu item' was added at anything past the 2nd level. Thanks to
   @pyMan for raising/investigating.
