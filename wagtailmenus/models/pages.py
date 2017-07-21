@@ -112,6 +112,7 @@ class MenuPageMixin(models.Model):
         if apply_active_classes and self == current_page:
             active_class = app_settings.ACTIVE_CLASS
         setattr(menuitem, 'active_class', active_class)
+        setattr(menuitem, 'has_children_in_menu', False)
         return menuitem
 
 
