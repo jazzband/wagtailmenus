@@ -1,12 +1,21 @@
 Changelog
 =========
 
-2.X.X (XX.XX.XXX) IN DEVELOPMENT
+2.1.X (XX.XX.XXX) IN DEVELOPMENT
 -------------------------------- 
+
+
+2.1.4 (21.07.2017)
+-------------------------------- 
+
+* Fixed a bug that resulted in {% sub_menu %} being called recursively (
+  until raising a "maximum recursion depth exceeded" exception) if a 
+  'repeated menu item' was added at anything past the 2nd level (thanks to
+  @pyMan for raising/investigating)
 
 
 2.1.3 (20.01.2017)
--------------------------------- 
+------------------
 
 * Fixed a bug in the `section_menu` tag when attempting to apply the correct
   active class to `section_root` when the `modify_submenu_items()` method has 
@@ -15,7 +24,7 @@ Changelog
 
 
 2.1.2 (07.01.2017)
--------------------------------- 
+------------------
 
 * Fixed a bug preventing reordered menu items from retaining their new order 
   after saving. The Meta class on the new abstract models had knocked out the
@@ -23,13 +32,13 @@ Changelog
 
 
 2.1.1 (02.01.2017)
--------------------------------- 
+------------------
 
 * Fixed import error on pip install from version 2.1.0 (Adriaan Tijsseling)
 
 
 2.1.0 (28.12.2016)
--------------------------------- 
+------------------
 
 * Added official support for wagtail v1.8.
 * Turned `wagtailmenus.app_settings` into a real settings module.
@@ -47,19 +56,19 @@ Changelog
 
 
 2.0.3 (08.12.2016)
--------------------------------- 
+------------------ 
 
 Fixed migration related issue raised by @urlsangel.
 
 
 2.0.2 (08.12.2016)
--------------------------------- 
+------------------ 
 
 This release is broken and shouldn't be used. Skip to v2.0.3 instead.
 
 
 2.0.1 (22.11.2016)
--------------------------------- 
+------------------
 
 Bug fix for `main_menu` template tag.
 
