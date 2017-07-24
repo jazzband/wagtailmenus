@@ -27,7 +27,8 @@ If you're happy with the default ``MainMenu`` model, but wish customise the menu
     ``AbstractMainMenuItem``:
 
     .. code-block:: python
-        :caption: appname/models.py
+        
+        # appname/models.py
 
         from django.db import models
         from django.utils.translation import ugettext_lazy as _
@@ -104,7 +105,8 @@ If you also need to override the ``MainMenu`` model, that's possible too. But, b
     ``AbstractMainMenu`` and ``AbstractMainMenuItem`` model classes:
 
     .. code-block:: python
-        :caption: appname/models.py
+        
+        # appname/models.py
 
         from django.db import models
         from django.utils import translation
@@ -154,7 +156,8 @@ If you also need to override the ``MainMenu`` model, that's possible too. But, b
     model instead of the default one. e.g:
 
     .. code-block:: python
-        :caption: settings.py
+        
+        # settings.py
 
         WAGTAILMENUS_MAIN_MENU_MODEL = "appname.LimitedMainMenu"
 
@@ -179,7 +182,8 @@ If you're happy with the default ``FlatMenu`` model, but wish customise the menu
 1.  Within your project, define your custom model by subclassing ``AbstractFlatMenuItem``:
     
     .. code-block:: python
-        :caption: apname/models.py
+        
+        # apname/models.py
 
         from django.db import models
         from django.utils.translation import ugettext_lazy as _
@@ -237,7 +241,8 @@ If you're happy with the default ``FlatMenu`` model, but wish customise the menu
     instead of the default one. e.g:
 
     .. code-block:: python
-        :caption: settings.py
+        
+        # settings.py
 
         # Use the 'related_name' attribute you used on your custom model's ParentalKey field
         WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = "custom_menu_items"
@@ -257,7 +262,8 @@ If you also need to override the ``FlatMenu`` model, that's possible too. But, b
     ``AbstractFlatMenu`` and ``AbstractFlatMenuItem`` model classes:
     
     .. code-block:: python
-        :caption: appname/models.py
+        
+        # appname/models.py
 
         from django.db import models
         from django.utils import translation
@@ -381,7 +387,8 @@ If you also need to override the ``FlatMenu`` model, that's possible too. But, b
     menu model instead of the default one. e.g:
 
     .. code-block:: python
-        :caption: settings.py
+        
+        # settings.py
 
         WAGTAILMENUS_FLAT_MENU_MODEL = "appname.TranslatedFlatMenu"
 
@@ -403,7 +410,8 @@ Like the ``main_menu`` and ``flat_menu`` tags, the ``section_menu`` tag uses a `
 The class ``wagtailmenus.models.menus.SectionMenu`` is used by default, but you can use the ``WAGTAILMENUS_SECTION_MENU_CLASS_PATH`` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify the base queryset that determines which pages should be included when rendering). To implement a custom classes, it's recommended that you subclass the ``SectionMenu`` and override any methods as required, like in the following example:
 
 .. code-block:: python
-    :caption: mysite/appname/models.py
+    
+    # mysite/appname/models.py
 
     from django.utils.translation import ugettext_lazy as _
     from wagtail.wagtailcore.models import Page
@@ -421,7 +429,8 @@ The class ``wagtailmenus.models.menus.SectionMenu`` is used by default, but you 
 
     
 .. code-block:: python
-    :caption: settings.py
+    
+    # settings.py
 
     WAGTAILMENUS_SECTION_MENU_CLASS_PATH = "mysite.appname.models.CustomSectionMenu"
 
@@ -436,7 +445,8 @@ Like all of the other tags, the ``children_menu`` tag uses a ``Menu`` class to f
 The class ``wagtailmenus.models.menus.ChildrenMenu`` is used by default, but you can use the ``WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH`` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify which pages are included). For custom classes, it's recommended that you subclass ``ChildrenMenu`` and override any methods as required e.g:
 
 .. code-block:: python
-    :caption: appname/menus.py
+    
+    # appname/menus.py
 
     from django.utils.translation import ugettext_lazy as _
     from wagtail.wagtailcore.models import Page
@@ -453,7 +463,8 @@ The class ``wagtailmenus.models.menus.ChildrenMenu`` is used by default, but you
 
 
 .. code-block:: python
-    :caption: settings.py
+    
+    # settings.py
 
     WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH = "mysite.appname.models.CustomChildrenMenu"
 

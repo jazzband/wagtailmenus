@@ -5,7 +5,7 @@
 The ``MenuPage`` and ``MenuPageMixin`` models
 =============================================
 
-The `MenuPageMixin` and `MenuPage` models were created specifically to solve the problem of important page links becoming merely toggles in multi-level menus, preventing users from accessing them easily.
+The ``MenuPageMixin`` and ``MenuPage`` models were created specifically to solve the problem of important page links becoming merely toggles in multi-level menus, preventing users from accessing them easily.
 
 .. contents::
     :local:
@@ -26,24 +26,26 @@ Let's say you have an **About Us** section on your site. The top-level "About Us
 
 If the **About Us** page uses a model that subclasses ``MenuPage`` or ``MenuPageMixin``, you can solve this issue by doing the following:
 
-#   Edit the page via the CMS, and click on the `Settings` tab.
+1.  Edit the page via the CMS, and click on the "Settings" tab.
 
-#   Uncollapse the **ADVANCED MENU BEHAVIOUR** panel by clicking the downward-pointing arrow next to the panel's label
+2.  Uncollapse the "ADVANCED MENU BEHAVIOUR" panel by clicking the
+    downward-pointing arrow next to the panel's label
 
     .. image:: _static/images/wagtailmenus-menupage-settings-collapsed.png
         :alt: Screenshot showing the collapsed 'advanced menu behaviour' panel in the editor interface
     
-#   Tick the **Repeat in sub-navigation** checkbox that appears, and publish your changes. 
+3.  Tick the **Repeat in sub-navigation** checkbox that appears, and publish
+    your changes. 
 
     .. image:: _static/images/wagtailmenus-menupage-settings-visible.png
         :alt: Screenshot show the expanded 'advanced menu behaviour' panel
 
-Now, wherever the children of the **About Us** page are output (using one of the above menu tags), an additional link will appear alongside them, allowing the that page to be accessed more easily. In the example above, you'll see *"Section overview"* has been added to the a **Repeated item link text** field. With this set, the link text for the repeated item should read *"Section overview"*, instead of just repeating the page's title, like so:
+Now, wherever the children of the **About Us** page are output (using one of the above menu tags), an additional link will appear alongside them, allowing the that page to be accessed more easily. In the example above, you'll see **"Section overview"** has been added to the a **Repeated item link text** field. With this set, the link text for the repeated item should read **"Section overview"**, instead of just repeating the page's title, like so:
 
 .. image:: _static/images/repeating-item.png
     :alt: Screenshot showing the repeated nav item appearing in a rendered menu
 
-The menu tags do some extra work to ensure both links are never assigned the ``'active'`` class. When on the 'About Us' page, the tags will treat the repeated item as the 'active' page, and just assign the ``'ancestor'`` class to the original, so that the behaviour/styling is consistent with other page links rendered at that level.
+The menu tags do some extra work to ensure both links are never assigned the 'active' class. When on the 'About Us' page, the tags will treat the repeated item as the 'active' page, and just assign the 'ancestor' class to the original, so that the styling is consistent with other page links rendered at that level.
 
 
 .. _implementing_menupage:
@@ -51,10 +53,13 @@ The menu tags do some extra work to ensure both links are never assigned the ``'
 Implementing ``MenuPage`` into your project
 =========================================== 
 
-#   Subclass ``wagtailmenus.models.MenuPage`` on your model instead of the usual ``wagtail.wagtacore.models.Page``, just like in the following example: 
+1.  Subclass ``wagtailmenus.models.MenuPage`` on your model instead of the
+    usual ``wagtail.wagtacore.models.Page``, just like in the following
+    example: 
 
     .. code-block:: python
-        :caption: appname/models.py
+        
+        # appname/models.py
 
         from wagtailmenus.models import MenuPage
 
@@ -70,7 +75,8 @@ Implementing ``MenuPage`` into your project
     Or, if you're using an abstract 'base' model in you project to improve consistency of common functionality, you could update the base model, like so:
 
     .. code-block:: python
-        :caption: appname/models.py
+        
+        # appname/models.py
 
         from wagtailmenus.models import MenuPage
 
@@ -87,10 +93,16 @@ Implementing ``MenuPage`` into your project
             ...
 
 
-#   If you're not overriding the ``settings_panels`` attribute on any of the models involved, you can skip this step. But, if you are overriding the ``settings_panels`` attribute on a custom model to surface other custom fields in that tab, you'll need to include additional panels to surface the new ``MenuPage`` fields in the page edit interface. Wagtailmenus includes a pre-defined ``menupage_panel`` to make this easier, which you can use like this:
+2.  If you're not overriding the ``settings_panels`` attribute on any of the
+    models involved, you can skip this step. But, if you are overriding the
+    ``settings_panels`` attribute on a custom model to surface other custom
+    fields in that tab, you'll need to include additional panels to surface the
+    new ``MenuPage`` fields in the page edit interface. Wagtailmenus includes a pre-defined ``menupage_panel`` to make this easier, which you can use like
+    this:
 
     .. code-block:: python
-        :caption: appname/models.py
+        
+        # appname/models.py
 
         from wagtailmenus.models import MenuPage
         from wagtailmenus.panels import menupage_panel
@@ -116,13 +128,13 @@ Implementing ``MenuPage`` into your project
             ]
             ...
 
-#   Create migtations for any models you've updated by running:
+3.  Create migtations for any models you've updated by running:
     
     .. code-block:: console
 
         python manage.py makemigrations appname
 
-#   Apply the new migrations by running:
+4.  Apply the new migrations by running:
 
     .. code-block:: console
 
@@ -143,7 +155,8 @@ Wagtail has a restriction that forbids models from subclassing more than one oth
 1.   Subclass ``wagtailmenus.models.MenuPageMixin`` to create your model, including it to the right of any other class that subclasses ``Page``: 
 
     .. code-block:: python
-        :caption: appname/models.py
+        
+        # appname/models.py
 
         from wagtail.wagtailforms.models import AbstractEmailForm
         from wagtailmenus.models import MenuPageMixin
@@ -192,7 +205,8 @@ The functionaliy exists to allow ``MenuPage`` pages to add repeating links to th
 For example, if you had a ``ContactPage`` model, and in main menus, you wanted to add some additional links below each ``ContactPage``,  you could achieve that by overriding the ``modify_submenu_items()`` and ``has_submenu_items()`` methods like so:
 
 .. code-block:: python
-    :caption: appname/models.py
+    
+    # appname/models.py
 
     from wagtailmenus.models import MenuPage
 
@@ -295,7 +309,8 @@ The above changes would result in the following HTML output when rendering a ``C
 You can also modify sub-menu items based on field values for specific instances, rather than doing the same for every page of the same type. Here's another example:
 
 .. code-block:: python
-    :caption: appname/models.py
+    
+    # appname/models.py
 
     from django.db import models
     from wagtailmenus.models import MenuPage

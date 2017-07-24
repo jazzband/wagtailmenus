@@ -633,7 +633,8 @@ Example usage
 ------------- 
 
 .. code-block:: html
-    :caption: menus/custom_main_menu.html
+    
+    # menus/custom_main_menu.html
 
     ...
     {% load menu_tags %}
