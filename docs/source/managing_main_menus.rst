@@ -23,11 +23,11 @@ Managing main menus via the CMS
     each item, which you'll be able to access in a custom main menu template.
 
     .. NOTE:: 
-        Pages must be published and have a ``show_in_menus`` value of ``True``
-        to appear in menus, even if they are selected as menu items. If you're
-        not seeing pages appear in a menu after adding them, edit the page and 
-        ensure the **Show in menus** checkbox is checked (found under the 
-        **Promote** tab by default).
+        Even if selected as menu items, pages must be 'live' and have a 
+        ``show_in_menus`` value of ``True`` in order to appear in menus. If
+        you're expecting to see new page links in a menu, but the pages are not
+        showing up, edit the page and check whether the "Show in menus"
+        checkbox is checked (found under the "Promote" tab by default).
 
 5.  At the very bottom of the form, you'll find the **ADVANCED SETTINGS** 
     panel, which is collapsed by default. Click on the arrow icon next to the

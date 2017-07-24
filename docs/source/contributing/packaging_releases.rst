@@ -7,8 +7,8 @@ Preparing for a new release
 
 Follow the steps outlined below to prep changes in your fork:
 
-1.  Merge any changes from ``upstream/master`` are merged into your fork's
-    ``master`` branch.
+1.  Merge any changes from ``upstream/master`` into your fork's ``master``
+    branch.
 
     .. code-block:: console
 

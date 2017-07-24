@@ -17,20 +17,19 @@ To access the flat menu list, do the following:
 
 1.  Log into the Wagtail CMS for your project (as a superuser).
 
-2.  Click on **Settings** in the side menu, then click on **Flat menus** from 
-    the options that appear.
+2.  Click on "Settings" in the side menu, then on "Flat menus".
 
 
 Adding a new flat menu
 ======================
 
-1.  From the listing page above, click the **Add flat menu** button
+1.  From the listing page above, click the "Add flat menu" button
     
     .. image:: _static/images/wagtailmenus-flatmenu-add.png
-        :alt: Screenshot indicating the location of the 'Add flat menu' button
+        :alt: Screenshot indicating the location of the "Add flat menu" button
 
-2.  Fill out the form, choosing a unique for site **handle** to reference in
-    your templates. 
+2.  Fill out the form, choosing a unique-for-site "handle", which you'll use
+    to reference the menu when using the ``{% flat_menu %}`` tag. 
 
     .. image:: _static/images/wagtailmenus-flatmenu-edit.png
         :alt: Screenshot showing the FlatMenu edit interface
@@ -42,23 +41,23 @@ Adding a new flat menu
         the ``handle`` field will become a select field, saving you from
         having to enter values manually.
     
-3.  Use the **MENU ITEMS** inline panel to define the links you want the menu
+3.  Use the "MENU ITEMS" inline panel to define the links you want the menu
     to have. If you wish, you can use the **handle** field to specify an
     additional value for each item, which you'll be able to access in
     from within menu templates.
     
     .. NOTE:: 
-        Pages must be published and have a ``show_in_menus`` value of ``True``
-        to appear in menus, even if they are selected as menu items. If you're
-        not seeing pages appear in a menu after adding them, edit the page and 
-        ensure the **Show in menus** checkbox is checked (found under the 
-        **Promote** tab by default).
+        Even if selected as menu items, pages must be 'live' and have a 
+        ``show_in_menus`` value of ``True`` in order to appear in menus. If
+        you're expecting to see new page links in a menu, but the pages are not
+        showing up, edit the page and check whether the "Show in menus"
+        checkbox is checked (found under the "Promote" tab by default).
 
-4.  At the very bottom of the form, you'll find the **ADVANCED SETTINGS**
+4.  At the very bottom of the form, you'll find the "ADVANCED SETTINGS"
     panel, which is collapsed by default. Click on the arrow icon next to the
     heading to reveal the **Maximum levels** and **Specific usage** fields,
     which you can alter to fit the needs of your project. For more information
-    about specific usage see :ref:`specific_pages`
+    about usage specific pages in menus, see :ref:`specific_pages`
 
 5.  Click on the **Save** button at the bottom of the page to save your
     changes.
