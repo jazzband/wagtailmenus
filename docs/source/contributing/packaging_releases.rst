@@ -7,13 +7,24 @@ Preparing for a new release
 
 Follow the steps outlined below to prep changes in your fork:
 
-1.  Ensure that any changes from ``upstream/master`` are merged into your
-    fork's ``master`` branch.
+1.  Merge any changes from ``upstream/master`` are merged into your fork's
+    ``master`` branch.
 
-2.  From your fork's ``master`` branch, create a new ``release-prep/X.X.X``
-    branch to push commits to, and ensure it's the active branch.  
+    .. code-block:: console
 
-3.  Update ``__version__`` in ``wagtailmenus/__init__.py``.
+        git fetch upstream
+        git checkout master
+        git merge upstream/master
+
+2.  From your fork's ``master`` branch, create a new branch for prepping the
+    release, e.g.:
+
+    .. code-block:: console
+
+        git checkout -b release-prep/2.X.X
+
+3.  Update ``__version__`` in ``wagtailmenus/__init__.py`` to reflect the new
+    release version.
 
 4.  Make sure ``CHANGELOG.md`` is updated with details of any changes since
     the last release.
@@ -67,8 +78,8 @@ When satisfied with the PR for prepping the files:
 1.  From https://github.com/rkhleics/wagtailmenus/pulls, merge the PR into the
     ``master`` branch using the "merge commit" option.
 
-2.  Locally, cd to the project's root directory, activate the `master` branch,
-    and ensure the local copy is up-to-date: 
+2.  Locally, cd to the project's root directory, checkout the ``master``
+    branch, and ensure the local copy is up-to-date: 
 
     .. code-block:: console
         
@@ -114,7 +125,7 @@ When satisfied with the PR for prepping the files:
 
     .. code-block:: console
         
-        git tag -a vX.X.X
+        git tag -a v2.X.X
         git push --tags
 
 9.  Create a new source distribution and universal wheel for the new version
