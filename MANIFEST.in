@@ -1,5 +1,5 @@
 include LICENSE.txt
-include README.md
+include README.rst
 include CHANGELOG.md
 include runtests.py
 recursive-include wagtailmenus *.html
