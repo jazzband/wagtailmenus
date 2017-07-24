@@ -2,17 +2,6 @@
 Template tags reference
 =======================
 
-To use any of the menu tags in your templates, you need to first load the tags into your template like so:
-
-.. code-block::html
-    
-    ...
-    {% load menu_tags %}
-    ...
-
-
-Learn more about how to use each tag below:
-
 .. contents::
     :local:
     :depth: 2
@@ -634,8 +623,6 @@ Example usage
 
 .. code-block:: html
     
-    # menus/custom_main_menu.html
-
     ...
     {% load menu_tags %}
     ...
