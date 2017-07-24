@@ -1,0 +1,7 @@
+================================
+Wagtailmenus 2.1.2 release notes
+================================
+
+This is a maintenence release to fix a bug that was preventing reordered menu
+items from retaining their new order after saving (the ``Meta`` class on the 
+new abstract models had knocked out the ``sort_order`` ordering from ``wagtail.wagtailcore.models.Orderable``).
