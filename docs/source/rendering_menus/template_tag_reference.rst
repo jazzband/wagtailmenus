@@ -31,6 +31,7 @@ Example usage
 Supported arguments
 -------------------
 
+-----
 
 ``show_multiple_levels``
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -43,6 +44,7 @@ No         ``bool``             ``True``
 
 Adding ``show_multiple_levels=False`` to the tag in your template is essentially a more descriptive way of adding ``max_levels`` to ``1``.
 
+-----
 
 ``max_levels``
 ~~~~~~~~~~~~~~
@@ -55,6 +57,7 @@ No         ``int``              ``None``
 
 Provide an integer value to override the ``max_levels`` field value defined on your menu. Controls how many levels should be rendered (when ``show_multiple_levels`` is ``True``).
 
+-----
 
 ``use_specific``
 ~~~~~~~~~~~~~~~~
@@ -67,6 +70,7 @@ No         ``int`` (see :ref:`specific_pages_values`)   ``None``
 
 Provide a value to override the ``use_specific`` field value defined on your main menu. Allows you to control how wagtailmenus makes use of ``PageQuerySet.specific()`` and ``Page.specific`` when rendering the menu. For more information and examples, see: :ref:`specific_pages_tag_args`.
 
+-----
 
 ``allow_repeating_parents``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -79,6 +83,7 @@ No         ``bool``             ``True``
 
 Item repetition settings set on each page are respected by default, but you can add ``allow_repeating_parents=False`` to ignore them, and not repeat any pages in sub-menus when rendering multiple levels.
 
+-----
 
 ``apply_active_classes``
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -93,6 +98,7 @@ The tag will attempt to add 'active' and 'ancestor' CSS classes to the menu item
 
 You can change the CSS class strings used to indicate 'active' and 'ancestor' statuses by utilising the :ref:`ACTIVE_CLASS` and :ref:`ACTIVE_ANCESTOR_CLASS` settings.
 
+-----
 
 ``template``
 ~~~~~~~~~~~~
@@ -109,6 +115,7 @@ For more information about overriding templates, see: :ref:`custom_templates`.
 
 For a list of preferred template paths this tag, see: :ref:`custom_templates_main_menu`.
 
+-----
 
 ``sub_menu_template``
 ~~~~~~~~~~~~~~~~~~~~~
@@ -125,6 +132,7 @@ For more information about overriding templates, see: :ref:`custom_templates`.
 
 For a list of preferred template paths this tag, see: :ref:`custom_templates_main_menu`.
 
+-----
 
 ``use_absolute_page_urls``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -141,7 +149,7 @@ By default, relative page URLs are used for the ``href`` attribute on page links
     .. NOTE:
         Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
 
-
+-----
 .. _flat_menu:
 
 The ``flat_menu`` tag
@@ -165,6 +173,7 @@ Example usage
 Supported arguments
 -------------------
 
+-----
 
 ``handle``
 ~~~~~~~~~~
@@ -178,6 +187,7 @@ Required?  Expected value type  Default value
 The unique handle for the flat menu you want to render, e.g. ``'info'``,
 ``'contact'``, or ``'services'``. You don't need to include the ``handle`` key if supplying as the first argument to the tag (you can just do ``{% flat_menu 'menu_handle' %}``).
 
+-----
 
 ``show_menu_heading``
 ~~~~~~~~~~~~~~~~~~~~~
@@ -190,6 +200,7 @@ No         ``bool``             ``True``
 
 Passed through to the template used for rendering, where it can be used to conditionally display a heading above the menu.
 
+-----
 
 ``show_multiple_levels``
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -202,6 +213,7 @@ No         ``bool``             ``True``
 
 Flat menus are designed for outputting simple, flat lists of links. But, you can alter the ``max_levels`` field value on your ``FlatMenu`` objects in the CMS to enable multi-level output for specific menus. If you want to absolutely never show anything but the ``MenuItem`` objects defined on the menu, you can override this behaviour by adding ``show_multiple_levels=False`` to the tag in your template.
 
+-----
 
 ``max_levels``
 ~~~~~~~~~~~~~~
@@ -214,6 +226,7 @@ No         ``int``              ``None``
 
 Provide an integer value to override the ``max_levels`` field value defined on your menu. Controls how many levels should be rendered (when ``show_multiple_levels`` is ``True``).
 
+-----
 
 ``use_specific``
 ~~~~~~~~~~~~~~~~
@@ -228,6 +241,7 @@ Provide a value to override the ``use_specific`` field value defined on your fla
 
 For more information and examples, see: :ref:`specific_pages_tag_args`.
 
+-----
 
 ``apply_active_classes``
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -242,6 +256,7 @@ Unlike ``main_menu`` and ``section_menu``, ``flat_menu`` will NOT attempt to add
 
 You can change the CSS class strings used to indicate 'active' and 'ancestor' statuses by utilising the :ref:`ACTIVE_CLASS` and :ref:`ACTIVE_ANCESTOR_CLASS` settings.
 
+-----
 
 ``allow_repeating_parents``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -254,6 +269,7 @@ No         ``bool``             ``True``
 
 Repetition-related settings on your pages are respected by default, but you can add ``allow_repeating_parents=False`` to ignore them, and not repeat any pages in sub-menus when rendering. Please note that using this option will only have an effect if ``use_specific`` has a value of ``1`` or higher.
 
+-----
 
 ``fall_back_to_default_site_menus``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -268,6 +284,7 @@ When using the ``flat_menu`` tag, wagtailmenus identifies the 'current site', an
 
 The default value can be changed to ``True`` by utilising the :ref:`FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS` setting.
 
+-----
 
 ``template``
 ~~~~~~~~~~~~
@@ -284,6 +301,7 @@ For more information about overriding templates, see: :ref:`custom_templates`.
 
 For a list of preferred template paths this tag, see: :ref:`custom_templates_flat_menu`.
 
+-----
 
 ``sub_menu_template``
 ~~~~~~~~~~~~~~~~~~~~~
@@ -300,6 +318,7 @@ For more information about overriding templates, see: :ref:`custom_templates`.
 
 For a list of preferred template paths this tag, see: :ref:`custom_templates_flat_menu`.
 
+-----
 
 ``use_absolute_page_urls``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -315,6 +334,7 @@ By default, relative page URLs are used for the ``href`` attribute on page links
     .. NOTE:
         Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
 
+-----
 
 .. _section_menu:
 
@@ -341,6 +361,7 @@ Example usage
 Supported arguments
 -------------------
 
+-----
 
 ``show_section_root``
 ~~~~~~~~~~~~~~~~~~~~~
@@ -353,6 +374,7 @@ No         ``bool``             ``True``
 
 Passed through to the template used for rendering, where it can be used to conditionally display the root page of the current section.
 
+-----
 
 ``max_levels``
 ~~~~~~~~~~~~~~
@@ -367,6 +389,7 @@ Lets you control how many levels of pages should be rendered (the section root p
 
 The default value can be changed by utilising the :ref:`DEFAULT_SECTION_MENU_MAX_LEVELS` setting.
 
+-----
 
 ``use_specific``
 ~~~~~~~~~~~~~~~~
@@ -383,6 +406,7 @@ For more information and examples, see: :ref:`specific_pages_tag_args`.
 
 The default value can be altered by utilising the :ref:`DEFAULT_SECTION_MENU_USE_SPECIFIC` setting.
 
+-----
 
 ``show_multiple_levels``
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -395,6 +419,7 @@ No         ``bool``             ``True``
 
 Adding ``show_multiple_levels=False`` to the tag in your template essentially overrides ``max_levels`` to ``1``. It's just a little more descriptive.  
 
+-----
 
 ``apply_active_classes``
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -409,6 +434,7 @@ The tag will add 'active' and 'ancestor' classes to the menu items where applica
 
 You can change the CSS class strings used to indicate 'active' and 'ancestor' statuses by utilising the :ref:`ACTIVE_CLASS` and :ref:`ACTIVE_ANCESTOR_CLASS` settings.
 
+-----
 
 ``allow_repeating_parents``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -421,6 +447,7 @@ No         ``bool``             ``True``
 
 Repetition-related settings on your pages are respected by default, but you can add ``allow_repeating_parents=False`` to ignore them, and not repeat any pages in sub-menus when rendering. Please note that using this option will only have an effect if ``use_specific`` has a value of ``1`` or higher.
 
+-----
 
 ``template``
 ~~~~~~~~~~~~
@@ -437,6 +464,7 @@ For more information about overriding templates, see: :ref:`custom_templates`.
 
 For a list of preferred template paths this tag, see: :ref:`custom_templates_section_menu`.
 
+-----
 
 ``sub_menu_template``
 ~~~~~~~~~~~~~~~~~~~~~
@@ -453,6 +481,7 @@ For more information about overriding templates, see: :ref:`custom_templates`.
 
 For a list of preferred template paths this tag, see: :ref:`custom_templates_section_menu`.
 
+-----
 
 ``use_absolute_page_urls``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -468,6 +497,7 @@ By default, relative page URLs are used for the ``href`` attribute on page links
     .. NOTE:
         Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
 
+-----
 
 .. _children_menu:
 
@@ -493,6 +523,7 @@ Example usage
 Supported arguments
 -------------------
 
+-----
 
 ``parent_page``
 ~~~~~~~~~~~~~~~
@@ -505,6 +536,7 @@ No         A ``Page`` object    ``None``
 
 Allows you to specify a page to output children for. If no alternate page is specified, the tag will automatically use ``self`` from the context to render children pages for the current/active page. 
 
+-----
 
 ``max_levels``
 ~~~~~~~~~~~~~~
@@ -519,6 +551,7 @@ Allows you to specify how many levels of pages should be rendered. For example, 
 
 The default value can be changed by utilising the :ref:`DEFAULT_CHILDREN_MENU_MAX_LEVELS` setting.
 
+-----
 
 ``use_specific``
 ~~~~~~~~~~~~~~~~
@@ -535,6 +568,7 @@ For more information and examples, see: :ref:`specific_pages_tag_args`.
 
 The default value can be altered by adding a :ref:`DEFAULT_CHILDREN_MENU_USE_SPECIFIC` setting to your project's settings.
 
+-----
 
 ``apply_active_classes``
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -549,6 +583,7 @@ Unlike ``main_menu`` and `section_menu``, ``children_menu`` will NOT attempt to 
 
 You can change the CSS class strings used to indicate 'active' and 'ancestor' statuses by utilising the :ref:`ACTIVE_CLASS` and :ref:`ACTIVE_ANCESTOR_CLASS` settings.
 
+-----
 
 ``allow_repeating_parents``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -561,6 +596,7 @@ No         ``bool``             ``True``
 
 Repetition-related settings on your pages are respected by default, but you can add ``allow_repeating_parents=False`` to ignore them, and not repeat any pages in sub-menus when rendering. Please note that using this option will only have an effect if ``use_specific`` has a value of ``1`` or higher.
 
+-----
 
 ``template``
 ~~~~~~~~~~~~
@@ -577,6 +613,7 @@ For more information about overriding templates, see: :ref:`custom_templates`
 
 For a list of preferred template paths this tag, see: :ref:`custom_templates_children_menu`
 
+-----
 
 ``sub_menu_template``
 ~~~~~~~~~~~~~~~~~~~~~
@@ -593,6 +630,7 @@ For more information about overriding templates, see: :ref:`custom_templates`
 
 For a list of preferred template paths this tag, see: :ref:`custom_templates_children_menu`
 
+-----
 
 ``use_absolute_page_urls``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -609,6 +647,7 @@ By default, relative page URLs are used for the ``href`` attribute on page links
         Using absolute URLs will have a negative impact on performance,
         especially if you're using a Wagtail version prior to 1.11.
 
+-----
 
 .. _sub_menu:
 
@@ -642,6 +681,7 @@ Example usage
 Supported arguments
 -------------------
 
+-----
 
 ``menuitem_or_page``
 ~~~~~~~~~~~~~~~~~~~~
@@ -655,6 +695,7 @@ Required?  Expected value type                   Default value
 When iterating through a list of ``menu_items`` within a menu template, the current 
 item must be passed to ``{% sub_menu %}`` so that it knows which page to render a sub-menu for. You don't need to include the ``menuitem_or_page`` key if supplying the value as the first argument to the tag (you can just do ``{% sub_menu item %}``).
 
+-----
 
 ``stop_at_this_level``
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -667,6 +708,7 @@ No         ``bool``             ``None`` (inherit from original tag)
 
 The ``sub_menu`` tag will automatically figure out whether further levels should be rendered or not by comparing the ``max_levels`` value from the original menu tag with the current level being rendered. However, you can override that behaviour by adding either ``stop_at_this_level=True`` or ``stop_at_this_level=False`` to the tag in a custom menu template.
 
+-----
 
 ``apply_active_classes``
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -679,6 +721,7 @@ No         ``bool``             ``None`` (inherit from original tag)
 
 Allows you to override the value set by the original tag by adding an alternative value to the ``{% sub_menu %}`` tag in a custom menu template.
 
+-----
 
 ``allow_repeating_parents``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -691,6 +734,7 @@ No         ``bool``             ``None`` (inherit from original tag)
 
 Allows you to override the value set by the original tag by adding an alternative value to the ``{% sub_menu %}`` tag in a custom menu template.
 
+-----
 
 ``template``
 ~~~~~~~~~~~~
@@ -705,6 +749,7 @@ Allows you to override the template set by the original menu tag (``sub_menu_tem
 
 For more information about overriding templates, see: :ref:`custom_templates`
 
+-----
 
 ``use_specific``
 ~~~~~~~~~~~~~~~~
@@ -719,6 +764,7 @@ Allows you to override the value set on the original tag by adding an alternativ
 
 For more information and examples, see: :ref:`specific_pages_tag_args`.
 
+-----
 
 ``use_absolute_page_urls``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -732,3 +778,5 @@ No         ``bool``             ``None`` (inherit from original tag)
 Allows you to override the value set on the original tag by explicitly adding ``use_absolute_page_urls=True`` or ``use_absolute_page_urls=False`` to a ``{% sub_menu %}`` tag in a custom menu template. 
 
 If ``True``, absolute page URLs will be used for the ``href`` attributes on page links instead of relative URLs.
+
+-----
