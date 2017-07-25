@@ -24,6 +24,8 @@ What does it do?
 
 To find out more about what wagtailmenus does and why, check out the `Overview and key concepts <http://wagtailmenus.readthedocs.io/en/latest/overview.html>`_ section of the documentation.
 
+.. image:: https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/docs/source/_static/images/repeating-item.png
+
 
 How do I use it?
 ================
