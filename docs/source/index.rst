@@ -7,7 +7,10 @@ wagtailmenus is an open-source extension for `Wagtail CMS
 
 The current version is compatible with Wagtail 1.5 to 1.11 and Python 2.7, 3.3, 3.4, 3.5 and 3.6.
 
-To find out more about what wagtailmenus does and why, see: :doc:`overview`
+To find out more about what wagtailmenus does and why, see :doc:`overview`
+
+To view the code, open an issue, or submit a pull request, view the `wagtailmenus project on github <https://github.com/rkhleics/wagtailmenus>`_. 
+
 
 Below are some useful links to help you get you started:
 
