@@ -33,7 +33,7 @@ By default, wagtailmenus adds some additional styles to improve the readability 
 
 Default value: `'list-ol'`
 
-Use this to change the icon used to represent `FlatMenu` in the Wagtail admin area.
+Use this to change the icon used to represent 'Flat menus' in the Wagtail CMS.
 
 
 .. _FLAT_MENUS_HANDLE_CHOICES:
@@ -64,12 +64,12 @@ For example, if your project uses an 'info' menu in the header, a 'footer' menu 
 
 Default value: ``'list-ol'``
 
-Use this to change the icon used to represent `MainMenu` in the Wagtail admin area.
+Use this to change the icon used to represent 'Main menus' in the Wagtail CMS.
 
 
----------------------------------------------
-Default template and template finder settings
----------------------------------------------
+----------------------------------------------
+Default templates and template finder settings
+----------------------------------------------
 
 
 .. _DEFAULT_CHILDREN_MENU_TEMPLATE:
@@ -132,28 +132,9 @@ Default value: ``False``
 If you have a multi-site project where each site may require it's own set of menu templates, you can change this setting to ``True`` to have wagtailmenus automatically look in additional site-specific locations when finding templates for rendering. 
 
 
------------------------------------------------
-Other rendering options and tag default setting
------------------------------------------------
-
-.. _ACTIVE_CLASS:
-
-``WAGTAILMENUS_ACTIVE_CLASS``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Default value: ``'active'``
-
-The class added to menu items for the currently active page (when using a menu template with ``apply_active_classes=True``)
-
-
-.. _ACTIVE_ANCESTOR_CLASS:
-
-``WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Default value: ``'ancestor'``
-
-The class added to any menu items for pages that are ancestors of the currently active page (when using a menu template with ``apply_active_classes=True``)
+------------------------------
+Default tag behaviour settings
+------------------------------
 
 
 .. _FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS:
@@ -207,7 +188,7 @@ Controls how 'specific' pages objects are fetched and used during rendering of t
 
 If you'd like to use custom page fields in your children menus (e.g. translated field values or image fields) or if your page models override ``get_url_parts()``, ``relative_url()`` or other ``Page`` methods involved in URL generation, you'll likely want to update this. 
 
-To find out more about what values are supported and the effect they have, see: ~~:ref:`specific_pages`
+To find out more about what values are supported and the effect they have, see: :ref:`specific_pages`
 
 
 .. _DEFAULT_SECTION_MENU_USE_SPECIFIC:
@@ -221,7 +202,7 @@ Controls how 'specific' pages objects are fetched and used during rendering of t
 
 If you'd like to use custom page fields in your section menus (e.g. translated field values, images, or other fields / methods) or if your page models override ``get_url_parts()``, ``relative_url()`` or other ``Page`` methods involved in URL generation, you'll likely want to update this. 
 
-To find out more about what values are supported and the effect they have, see: ~~:ref:`specific_pages`
+To find out more about what values are supported and the effect they have, see: :ref:`specific_pages`
 
 
 --------------------------------------
@@ -238,7 +219,7 @@ Default value: ``'wagtailmenus.models.menus.ChildrenMenu'``
 
 Use this to specify a custom menu class to be used by wagtailmenus' ``children_menu`` tag. The value should be the import path of your custom class as a string, e.g. ``'mysite.appname.models.CustomClass'``. 
 
-For more details see: ~~:ref:`custom_childrenmenu_class`
+For more details see: :ref:`custom_childrenmenu_class`
 
 
 .. _FLAT_MENU_MODEL:
@@ -250,7 +231,7 @@ Default value: ``'wagtailmenus.FlatMenu'``
 
 Use this to specify a custom model to use for flat menus instead of the default. The model should be a subclass of ``wagtailmenus.AbstractFlatMenu``. 
 
-For more details see: ~~:ref:`custom_flat_menu_models`
+For more details see: :ref:`custom_flat_menu_models`
 
 
 .. _FLAT_MENU_ITEMS_RELATED_NAME:
@@ -262,7 +243,7 @@ Default value: ``'menu_items'``
 
 Use this to specify the 'related name' that should be used to access menu items from flat menu instances. Used to replace the default `FlatMenuItem` model with a custom one.
 
-For more details see: ~~:ref:`custom_flat_menu_models`
+For more details see: :ref:`custom_flat_menu_models`
 
 
 .. _MAIN_MENU_MODEL:
@@ -274,7 +255,7 @@ Default value: ``'wagtailmenus.MainMenu'``
 
 Use this to specify an alternative model to use for main menus. The model should be a subclass of ``wagtailmenus.AbstractMainMenu``.
 
-For more details see: ~~:ref:`custom_main_menu_models`
+For more details see: :ref:`custom_main_menu_models`
 
 
 .. _MAIN_MENU_ITEMS_RELATED_NAME:
@@ -286,7 +267,7 @@ Default value: ``'menu_items'``
 
 Use this to specify the 'related name' that should be used to access menu items from main menu instances. Used to replace the default ``MainMenuItem`` model with a custom one. 
 
-For more details see: ~~:ref:`custom_main_menu_models`
+For more details see: :ref:`custom_main_menu_models`
 
 
 .. _SECTION_MENU_CLASS_PATH:
@@ -298,12 +279,31 @@ Default value: ``'wagtailmenus.models.menus.SectionMenu'``
 
 Use this to specify a custom class to be used by wagtailmenus' ``section_menu`` tag. The value should be the import path of your custom class as a string, e.g. ``'mysite.appname.models.CustomClass'``. 
 
-For more details see: ~~:ref:`custom_sectionmenu_class_`
+For more details see: :ref:`custom_sectionmenu_class_`
 
 
 ----------------------
 Miscellaneous settings
 ----------------------
+
+.. _ACTIVE_CLASS:
+
+``WAGTAILMENUS_ACTIVE_CLASS``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Default value: ``'active'``
+
+The class added to menu items for the currently active page (when using a menu template with ``apply_active_classes=True``)
+
+
+.. _ACTIVE_ANCESTOR_CLASS:
+
+``WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Default value: ``'ancestor'``
+
+The class added to any menu items for pages that are ancestors of the currently active page (when using a menu template with ``apply_active_classes=True``)
 
 
 .. _DEFAULT_PAGE_FIELD_FOR_MENU_ITEM_TEXT:
@@ -316,7 +316,7 @@ Default value: ``'title'``
 When preparing menu items for rendering, wagtailmenus looks for a field, attribute or property method on each page with this name to set a ``text`` attribute value, which is used in menu templates as the label for each item. The ``title`` field is used by default.
 
 .. NOTE::
-    wagtailmenus will only be able to access custom page fields or methods if 'specific' pages are being used (See ~~:ref:`specific_pages`). If no attribute can be found matching the specified name, wagtailmenus will silently fall back to using the page's ``title`` field value.
+    wagtailmenus will only be able to access custom page fields or methods if 'specific' pages are being used (See :ref:`specific_pages`). If no attribute can be found matching the specified name, wagtailmenus will silently fall back to using the page's ``title`` field value.
 
 
 .. _SECTION_ROOT_DEPTH:
