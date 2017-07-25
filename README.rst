@@ -18,13 +18,12 @@ wagtailmenus is an extension for Torchbox's `Wagtail CMS <https://github.com/tor
 
 The current version is compatible with Wagtail 1.5 to 1.11 and Python 2.7, 3.3, 3.4, 3.5 and 3.6.
 
+.. image:: https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/docs/source/_static/images/repeating-item.png
 
 What does it do?
 ================
 
 To find out more about what wagtailmenus does and why, check out the `Overview and key concepts <http://wagtailmenus.readthedocs.io/en/latest/overview.html>`_ section of the documentation.
-
-.. image:: https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/docs/source/_static/images/repeating-item.png
 
 
 How do I use it?
