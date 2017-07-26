@@ -9,6 +9,7 @@ Using your own menu templates
     :local:
     :depth: 2
 
+-----
 
 Writing custom menu templates
 =============================
@@ -95,6 +96,7 @@ Attributes added to each item in ``menu_items``
     A boolean indicating whether the menu item has children that should be
     output as a sub-menu.
 
+-----
 
 Getting wagtailmenus to use your custom menu templates
 ======================================================

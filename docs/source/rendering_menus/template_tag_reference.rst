@@ -31,10 +31,8 @@ Example usage
 Supported arguments
 -------------------
 
------
-
-``show_multiple_levels``
-~~~~~~~~~~~~~~~~~~~~~~~~
+show_multiple_levels
+~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -46,8 +44,8 @@ Adding ``show_multiple_levels=False`` to the tag in your template is essentially
 
 -----
 
-``max_levels``
-~~~~~~~~~~~~~~
+max_levels
+~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -59,8 +57,8 @@ Provide an integer value to override the ``max_levels`` field value defined on y
 
 -----
 
-``use_specific``
-~~~~~~~~~~~~~~~~
+use_specific
+~~~~~~~~~~~~
 
 =========  ==========================================   =============
 Required?  Expected value type                          Default value
@@ -72,8 +70,8 @@ Provide a value to override the ``use_specific`` field value defined on your mai
 
 -----
 
-``allow_repeating_parents``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+allow_repeating_parents
+~~~~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -85,8 +83,8 @@ Item repetition settings set on each page are respected by default, but you can 
 
 -----
 
-``apply_active_classes``
-~~~~~~~~~~~~~~~~~~~~~~~~
+apply_active_classes
+~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -100,8 +98,8 @@ You can change the CSS class strings used to indicate 'active' and 'ancestor' st
 
 -----
 
-``template``
-~~~~~~~~~~~~
+template
+~~~~~~~~
 
 =========  =======================  =============
 Required?  Expected value type      Default value
@@ -117,8 +115,8 @@ For a list of preferred template paths this tag, see: :ref:`custom_templates_mai
 
 -----
 
-``sub_menu_template``
-~~~~~~~~~~~~~~~~~~~~~
+sub_menu_template
+~~~~~~~~~~~~~~~~~
 
 =========  =======================  =============
 Required?  Expected value type      Default value
@@ -134,8 +132,8 @@ For a list of preferred template paths this tag, see: :ref:`custom_templates_mai
 
 -----
 
-``use_absolute_page_urls``
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+use_absolute_page_urls
+~~~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -150,6 +148,7 @@ By default, relative page URLs are used for the ``href`` attribute on page links
         Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
 
 -----
+
 .. _flat_menu:
 
 The ``flat_menu`` tag
@@ -173,10 +172,8 @@ Example usage
 Supported arguments
 -------------------
 
------
-
-``handle``
-~~~~~~~~~~
+handle
+~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -189,8 +186,8 @@ The unique handle for the flat menu you want to render, e.g. ``'info'``,
 
 -----
 
-``show_menu_heading``
-~~~~~~~~~~~~~~~~~~~~~
+show_menu_heading
+~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -202,8 +199,8 @@ Passed through to the template used for rendering, where it can be used to condi
 
 -----
 
-``show_multiple_levels``
-~~~~~~~~~~~~~~~~~~~~~~~~
+show_multiple_levels
+~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -215,8 +212,8 @@ Flat menus are designed for outputting simple, flat lists of links. But, you can
 
 -----
 
-``max_levels``
-~~~~~~~~~~~~~~
+max_levels
+~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -228,8 +225,8 @@ Provide an integer value to override the ``max_levels`` field value defined on y
 
 -----
 
-``use_specific``
-~~~~~~~~~~~~~~~~
+use_specific
+~~~~~~~~~~~~
 
 =========  ==========================================  =============
 Required?  Expected value type                         Default value
@@ -243,8 +240,8 @@ For more information and examples, see: :ref:`specific_pages_tag_args`.
 
 -----
 
-``apply_active_classes``
-~~~~~~~~~~~~~~~~~~~~~~~~
+apply_active_classes
+~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -258,8 +255,8 @@ You can change the CSS class strings used to indicate 'active' and 'ancestor' st
 
 -----
 
-``allow_repeating_parents``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+allow_repeating_parents
+~~~~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -271,8 +268,8 @@ Repetition-related settings on your pages are respected by default, but you can 
 
 -----
 
-``fall_back_to_default_site_menus``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fall_back_to_default_site_menus
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -286,8 +283,8 @@ The default value can be changed to ``True`` by utilising the :ref:`FLAT_MENUS_F
 
 -----
 
-``template``
-~~~~~~~~~~~~
+template
+~~~~~~~~
 
 =========  =======================  =============
 Required?  Expected value type      Default value
@@ -303,8 +300,8 @@ For a list of preferred template paths this tag, see: :ref:`custom_templates_fla
 
 -----
 
-``sub_menu_template``
-~~~~~~~~~~~~~~~~~~~~~
+sub_menu_template
+~~~~~~~~~~~~~~~~~
 
 =========  =======================  =============
 Required?  Expected value type      Default value
@@ -320,8 +317,8 @@ For a list of preferred template paths this tag, see: :ref:`custom_templates_fla
 
 -----
 
-``use_absolute_page_urls``
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+use_absolute_page_urls
+~~~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -361,10 +358,8 @@ Example usage
 Supported arguments
 -------------------
 
------
-
-``show_section_root``
-~~~~~~~~~~~~~~~~~~~~~
+show_section_root
+~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -376,8 +371,8 @@ Passed through to the template used for rendering, where it can be used to condi
 
 -----
 
-``max_levels``
-~~~~~~~~~~~~~~
+max_levels
+~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -391,8 +386,8 @@ The default value can be changed by utilising the :ref:`DEFAULT_SECTION_MENU_MAX
 
 -----
 
-``use_specific``
-~~~~~~~~~~~~~~~~
+use_specific
+~~~~~~~~~~~~
 
 =========  ==========================================  =============
 Required?  Expected value type                         Default value
@@ -408,8 +403,8 @@ The default value can be altered by utilising the :ref:`DEFAULT_SECTION_MENU_USE
 
 -----
 
-``show_multiple_levels``
-~~~~~~~~~~~~~~~~~~~~~~~~
+show_multiple_levels
+~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -421,8 +416,8 @@ Adding ``show_multiple_levels=False`` to the tag in your template essentially ov
 
 -----
 
-``apply_active_classes``
-~~~~~~~~~~~~~~~~~~~~~~~~
+apply_active_classes
+~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -436,8 +431,8 @@ You can change the CSS class strings used to indicate 'active' and 'ancestor' st
 
 -----
 
-``allow_repeating_parents``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+allow_repeating_parents
+~~~~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -449,8 +444,8 @@ Repetition-related settings on your pages are respected by default, but you can 
 
 -----
 
-``template``
-~~~~~~~~~~~~
+template
+~~~~~~~~
 
 =========  =======================  =============
 Required?  Expected value type      Default value
@@ -466,8 +461,8 @@ For a list of preferred template paths this tag, see: :ref:`custom_templates_sec
 
 -----
 
-``sub_menu_template``
-~~~~~~~~~~~~~~~~~~~~~
+sub_menu_template
+~~~~~~~~~~~~~~~~~
 
 =========  =======================  =============
 Required?  Expected value type      Default value
@@ -483,8 +478,8 @@ For a list of preferred template paths this tag, see: :ref:`custom_templates_sec
 
 -----
 
-``use_absolute_page_urls``
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+use_absolute_page_urls
+~~~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -523,10 +518,8 @@ Example usage
 Supported arguments
 -------------------
 
------
-
-``parent_page``
-~~~~~~~~~~~~~~~
+parent_page
+~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -538,8 +531,8 @@ Allows you to specify a page to output children for. If no alternate page is spe
 
 -----
 
-``max_levels``
-~~~~~~~~~~~~~~
+max_levels
+~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -553,8 +546,8 @@ The default value can be changed by utilising the :ref:`DEFAULT_CHILDREN_MENU_MA
 
 -----
 
-``use_specific``
-~~~~~~~~~~~~~~~~
+use_specific
+~~~~~~~~~~~~
 
 =========  ==========================================  =============
 Required?  Expected value type                         Default value
@@ -570,8 +563,8 @@ The default value can be altered by adding a :ref:`DEFAULT_CHILDREN_MENU_USE_SPE
 
 -----
 
-``apply_active_classes``
-~~~~~~~~~~~~~~~~~~~~~~~~
+apply_active_classes
+~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -585,8 +578,8 @@ You can change the CSS class strings used to indicate 'active' and 'ancestor' st
 
 -----
 
-``allow_repeating_parents``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+allow_repeating_parents
+~~~~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -598,8 +591,8 @@ Repetition-related settings on your pages are respected by default, but you can 
 
 -----
 
-``template``
-~~~~~~~~~~~~
+template
+~~~~~~~~
 
 =========  =======================  =============
 Required?  Expected value type      Default value
@@ -615,8 +608,8 @@ For a list of preferred template paths this tag, see: :ref:`custom_templates_chi
 
 -----
 
-``sub_menu_template``
-~~~~~~~~~~~~~~~~~~~~~
+sub_menu_template
+~~~~~~~~~~~~~~~~~
 
 =========  =======================  =============
 Required?  Expected value type      Default value
@@ -632,8 +625,8 @@ For a list of preferred template paths this tag, see: :ref:`custom_templates_chi
 
 -----
 
-``use_absolute_page_urls``
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+use_absolute_page_urls
+~~~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -681,10 +674,8 @@ Example usage
 Supported arguments
 -------------------
 
------
-
-``menuitem_or_page``
-~~~~~~~~~~~~~~~~~~~~
+menuitem_or_page
+~~~~~~~~~~~~~~~~
 
 =========  ====================================  ====================================
 Required?  Expected value type                   Default value
@@ -697,8 +688,8 @@ item must be passed to ``{% sub_menu %}`` so that it knows which page to render 
 
 -----
 
-``stop_at_this_level``
-~~~~~~~~~~~~~~~~~~~~~~
+stop_at_this_level
+~~~~~~~~~~~~~~~~~~
 
 =========  ===================  ====================================
 Required?  Expected value type  Default value
@@ -710,8 +701,8 @@ The ``sub_menu`` tag will automatically figure out whether further levels should
 
 -----
 
-``apply_active_classes``
-~~~~~~~~~~~~~~~~~~~~~~~~
+apply_active_classes
+~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  ====================================
 Required?  Expected value type  Default value
@@ -723,8 +714,8 @@ Allows you to override the value set by the original tag by adding an alternativ
 
 -----
 
-``allow_repeating_parents``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+allow_repeating_parents
+~~~~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  ====================================
 Required?  Expected value type  Default value
@@ -736,8 +727,8 @@ Allows you to override the value set by the original tag by adding an alternativ
 
 -----
 
-``template``
-~~~~~~~~~~~~
+template
+~~~~~~~~
 
 =========  =======================  =============
 Required?  Expected value type      Default value
@@ -751,8 +742,8 @@ For more information about overriding templates, see: :ref:`custom_templates`
 
 -----
 
-``use_specific``
-~~~~~~~~~~~~~~~~
+use_specific
+~~~~~~~~~~~~
 
 =========  ==========================================  =============
 Required?  Expected value type                         Default value
@@ -766,8 +757,8 @@ For more information and examples, see: :ref:`specific_pages_tag_args`.
 
 -----
 
-``use_absolute_page_urls``
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+use_absolute_page_urls
+~~~~~~~~~~~~~~~~~~~~~~
 
 =========  ===================  ====================================
 Required?  Expected value type  Default value
