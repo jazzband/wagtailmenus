@@ -6,13 +6,25 @@ from django.test import TestCase
 from django.core.exceptions import ValidationError
 
 from wagtail.wagtailcore.models import Page, Site
-from wagtailmenus.models import MainMenu, MainMenuItem, FlatMenu
+from wagtailmenus.models import MainMenu, MainMenuItem, FlatMenu, FlatMenuItem
 from wagtailmenus.tests.models import LinkPage, NoAbsoluteUrlsPage
 from wagtailmenus.utils.deprecation import RemovedInWagtailMenus26Warning
 
 
 class TestModels(TestCase):
     fixtures = ['test.json']
+
+    def text_mainmenuitem_meta_settings(self):
+        opts = MainMenuItem._meta
+        self.assertEqual(opts.verbose_name, 'menu item')
+        self.assertEqual(opts.verbose_name_plural, 'menu items')
+        self.assertEqual(opts.ordering, ('sort_order',))
+
+    def text_flatmenuitem_meta_settings(self):
+        opts = FlatMenuItem._meta
+        self.assertEqual(opts.verbose_name, 'menu item')
+        self.assertEqual(opts.verbose_name_plural, 'menu items')
+        self.assertEqual(opts.ordering, ('sort_order',))
 
     def test_mainmenuitem_clean_missing_link_text(self):
         menu = MainMenu.objects.get(pk=1)

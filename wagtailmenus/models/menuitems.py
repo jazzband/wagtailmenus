@@ -79,6 +79,7 @@ class AbstractMenuItem(models.Model, MenuItem):
         abstract = True
         verbose_name = _("menu item")
         verbose_name_plural = _("menu items")
+        ordering = ('sort_order',)
 
     @property
     def menu_text(self):
@@ -151,9 +152,8 @@ class AbstractMainMenuItem(Orderable, AbstractMenuItem):
         )
     )
 
-    class Meta:
+    class Meta(AbstractMenuItem.Meta):
         abstract = True
-        ordering = ('sort_order',)
 
 
 class AbstractFlatMenuItem(Orderable, AbstractMenuItem):
@@ -168,9 +168,8 @@ class AbstractFlatMenuItem(Orderable, AbstractMenuItem):
         )
     )
 
-    class Meta:
+    class Meta(AbstractMenuItem.Meta):
         abstract = True
-        ordering = ('sort_order',)
 
 
 #########################################################
