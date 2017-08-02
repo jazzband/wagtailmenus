@@ -82,7 +82,11 @@ class AbstractMenuItem(models.Model, MenuItem):
 
     @property
     def menu_text(self):
-        return self.link_text or getattr(
+        if self.link_text:
+            return self.link_text
+        if not self.link_page:
+            return ''
+        return getattr(
             self.link_page,
             app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
             self.link_page.title
