@@ -16,6 +16,7 @@ Changelog
   README.rst which will render better on PyPi. The documentation is kindly 
   hosted by readthedocs.org and can be found at 
   http://wagtailmenus.readthedocs.io/
+* Added Chinese translations, kindly submitted by 汇民 王 (levinewong)
 * Added the 'use_absolute_page_urls' argument to all template tags. When a 
   value equating to `True` is provided, the menu will be rendered using the 
   'full URL' for each page (including the protocol/domain derived from the 
