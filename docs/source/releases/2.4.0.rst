@@ -1,9 +1,6 @@
-=================================
-Wagtailmenus 2.4.0a release notes
-=================================
-
-.. NOTE::
-    This version is still in development
+================================
+Wagtailmenus 2.4.0 release notes
+================================
 
 .. contents::
     :local:
@@ -16,7 +13,8 @@ What's new?
 Check out the new documentation!
 --------------------------------
 
-It's been on the cards for a long time, and I finally got around to making it happen!
+It's been a long wait, but I finally got around to making it happen. Wagtailmenus now has
+easily navigatable and searchable documentation, kindly hosted by readthedocs.org. Find it at http://wagtailmenus.readthedocs.io/
 
 
 New ``get_text_for_repeated_menu_item()`` method on ``MenuPageMixin`` and ``MenuPage`` models
@@ -37,6 +35,16 @@ The new parameter allows you to render menus that use 'absolute' URLs
 for pages (including the protocol/domain derived from the relevant 
 ``wagtailcore.models.Site`` object), instead of the 'relative' URLs used by
 default.
+
+
+Other minor changes
+===================
+
+*   Adjusted Meta classes on menu item models so that common behaviour is
+    defined once in AbastractMenuItem.Meta.
+*   Refactored the AbstractMenuItem's `menu_text` property method to improve
+    code readability, and better handle instances where neither link_text or 
+    link_page are set.
 
 
 Upgrade considerations
