@@ -97,8 +97,8 @@ msgid ""
 "Provide the text to use for a custom URL, or set on an internal page link to"
 " use instead of the page's title."
 msgstr ""
-"Especifique o texto ou o link para uma página interna para ser usado em uma "
-"URL personalizada, ao invés do título da página."
+"Especifique o texto a ser utilizado para uma URL personalizada, ou selecione"
+" um link para uma página interna ao invés do título da página."
 
 #: wagtailmenus/models/menuitems.py:80
 msgid "menu item"
@@ -211,9 +211,10 @@ msgid ""
 "can be overidden by supplying a different <code>max_levels</code> value to "
 "the <code>{% flat_menu %}</code> tag in your templates."
 msgstr ""
-"O nível máximo de submenus para mostrar ao renderizar o template. O valor "
-"pode ser substituído preenchendo uma valor diverente em "
-"<code>max_levels</code> com a tag <code>{% main_menu %}</code> no template"
+"O nível máximo de submenus para mostrar ao renderizar esse menu. O valor "
+"pode ser substituído preenchendo uma valor diferente em "
+"<code>max_levels</code> com a tag <code>{% flat_menu %}</code> em seus "
+"templates."
 
 #: wagtailmenus/models/menus.py:344
 msgid ""
@@ -291,8 +292,7 @@ msgstr ""
 
 #: wagtailmenus/models/pages.py:209
 msgid "A link page cannot link to another link page"
-msgstr ""
-"Uma página de ligação não pode fazer link para outra página de ligação"
+msgstr "Uma página link não pode fazer link para outra página link"
 
 #: wagtailmenus/models/pages.py:299
 #, python-format
