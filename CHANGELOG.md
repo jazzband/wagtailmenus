@@ -1,9 +1,21 @@
 Changelog
 =========
 
-2.4.0 (XX.XX.XXX) IN DEVELOPMENT
--------------------------------- 
+2.X.X (XX.XX.XXXX) IN DEVELOPMENT
+--------------------------------- 
 
+2.4.0 (04.08.2017)
+------------------ 
+
+* Adjusted Meta classes on menu item models so that common behaviour is defined
+  once in AbastractMenuItem.Meta.
+* Refactored the AbstractMenuItem's `menu_text` property method to improve code
+  readability, and better handle instances where neither link_text or link_page
+  are set.
+* Replaced overly long README.md with brand new documentation and a new 
+  README.rst which will render better on PyPi. The documentation is kindly 
+  hosted by readthedocs.org and can be found at 
+  http://wagtailmenus.readthedocs.io/
 * Added the 'use_absolute_page_urls' argument to all template tags. When a 
   value equating to `True` is provided, the menu will be rendered using the 
   'full URL' for each page (including the protocol/domain derived from the 
@@ -12,7 +24,7 @@ Changelog
 
 
 2.3.2 (21.07.2017)
--------------------------------- 
+------------------ 
 
 * Fixed a bug that would result in {% sub_menu %} being called recursively (
   until raising a "maximum recursion depth exceeded" exception) if a 
@@ -21,7 +33,7 @@ Changelog
 
 
 2.3.1 (01.07.2017)
--------------------------------- 
+------------------ 
 
 * Code example formatting fixes, and better use of headings in README.md.
 * Added 'on_delete=models.CASCADE' to all relationship fields on models where
@@ -32,7 +44,7 @@ Changelog
 
 
 2.3.0 (21.06.2017)
--------------------------------- 
+------------------
 
 * Added an 'AbstractLinkPage' model to wagtailmenus.models that can be easily
   sub-classed and used in projects to create 'link pages' that act in a similar
@@ -67,7 +79,7 @@ Changelog
 
 
 2.2.3 (21.07.2017)
--------------------------------- 
+------------------
 
 * Fixed a bug that would result in {% sub_menu %} being called recursively (
   until raising a "maximum recursion depth exceeded" exception) if a 
@@ -76,7 +88,7 @@ Changelog
 
 
 2.2.2 (27.03.2017)
--------------------------------- 
+------------------
 
 * Got project set up in Transifex.
 * Updated translatable strings throughout the project to use named variable
@@ -87,7 +99,7 @@ Changelog
 
 
 2.2.1 (06.03.2017)
--------------------------------- 
+------------------
 
 * Updated travis/tox test settings to test against Wagtail 1.9 & Django 1.10.
 * Removed a couple of less useful travis/tox environment tests to help with
@@ -102,7 +114,7 @@ Changelog
 
 
 2.2.0 (20.02.2017)
--------------------------------- 
+------------------
 
 * Utilise Django's 'django.template.loader.select_template()' method
   to provide a more intuitive way for developers to override templates for
@@ -121,7 +133,7 @@ Changelog
 
 
 2.1.4 (21.07.2017)
--------------------------------- 
+------------------
 
 * Fixed a bug that would result in {% sub_menu %} being called recursively (
   until raising a "maximum recursion depth exceeded" exception) if a 
@@ -130,7 +142,7 @@ Changelog
 
 
 2.1.3 (20.01.2017)
--------------------------------- 
+------------------
 
 * Fixed a bug in the `section_menu` tag when attempting to apply the correct
   active class to `section_root` when the `modify_submenu_items()` method has 
@@ -139,7 +151,7 @@ Changelog
 
 
 2.1.2 (07.01.2017)
--------------------------------- 
+------------------
 
 * Fixed a bug preventing reordered menu items from retaining their new order 
   after saving. The Meta class on the new abstract models had knocked out the
@@ -147,13 +159,13 @@ Changelog
 
 
 2.1.1 (02.01.2017)
--------------------------------- 
+------------------ 
 
 * Fixed import error on pip install from version 2.1.0 (Adriaan Tijsseling)
 
 
 2.1.0 (28.12.2016)
--------------------------------- 
+------------------
 
 * Added official support for wagtail v1.8.
 * Turned `wagtailmenus.app_settings` into a real settings module.
@@ -171,19 +183,19 @@ Changelog
 
 
 2.0.3 (08.12.2016)
--------------------------------- 
+------------------
 
 Fixed migration related issue raised by @urlsangel.
 
 
 2.0.2 (08.12.2016)
--------------------------------- 
+------------------ 
 
 This release is broken and shouldn't be used. Skip to v2.0.3 instead.
 
 
 2.0.1 (22.11.2016)
--------------------------------- 
+------------------
 
 Bug fix for `main_menu` template tag.
 
