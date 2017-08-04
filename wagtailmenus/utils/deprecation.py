@@ -1,16 +1,16 @@
 from __future__ import absolute_import, unicode_literals
 
 
-class RemovedInWagtailMenus24Warning(DeprecationWarning):
+class RemovedInWagtailMenus25Warning(DeprecationWarning):
     pass
 
 
-removed_in_next_version_warning = RemovedInWagtailMenus24Warning
-
-
-class RemovedInWagtailMenus25Warning(PendingDeprecationWarning):
-    pass
+removed_in_next_version_warning = RemovedInWagtailMenus25Warning
 
 
 class RemovedInWagtailMenus26Warning(PendingDeprecationWarning):
+    pass
+
+
+class RemovedInWagtailMenus27Warning(PendingDeprecationWarning):
     pass
