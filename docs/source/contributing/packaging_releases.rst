@@ -29,8 +29,8 @@ Follow the steps outlined below to prep changes in your fork:
 4.  Make sure ``CHANGELOG.md`` is updated with details of any changes since
     the last release.
 
-5.  Make sure the release notes for the new version in have been created /
-    updated in ``docs/source/releases/`` and is referenced in 
+5.  Make sure the release notes for the new version have been created /
+    updated in ``docs/source/releases/`` and are referenced in 
     ``docs/source/releases/index.rst``.
 
 6.  If releasing a 'final' version, following an 'alpha' or 'beta' release, 
