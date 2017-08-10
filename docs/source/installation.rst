@@ -1,7 +1,7 @@
 .. _installing_wagtailmenus:
 
 =========================
-Installating wagtailmenus
+Installing wagtailmenus
 =========================
 
 1.  Install the package using pip: 
