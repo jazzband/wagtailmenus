@@ -6,7 +6,7 @@ from django.template import Library
 from wagtail.wagtailcore.models import Page
 
 from wagtailmenus import app_settings
-from wagtailmenus.utils.deprecation import RemovedInWagtailMenus25Warning, RemovedInWagtailMenus26Warning
+from wagtailmenus.utils.deprecation import RemovedInWagtailMenus26Warning
 from wagtailmenus.utils.inspection import accepts_kwarg
 from wagtailmenus.utils.misc import (
     get_attrs_from_context, validate_supplied_values
@@ -166,7 +166,8 @@ def flat_menu(
 def get_sub_menu_items_for_page(
     request, page, current_site, current_page, ancestor_ids, menu_instance,
     use_specific, apply_active_classes, allow_repeating_parents,
-    current_level=1, max_levels=2, original_menu_tag='', use_absolute_page_urls=False,
+    current_level=1, max_levels=2, original_menu_tag='',
+    use_absolute_page_urls=False,
 ):
     # The menu items will be the children of the provided `page`
     children_pages = menu_instance.get_children_for_page(page)
@@ -213,26 +214,17 @@ def get_sub_menu_items_for_page(
             'apply_active_classes': apply_active_classes,
             'original_menu_tag': original_menu_tag,
             'menu_instance': menu_instance,
+            'request': request,
         }
-        if accepts_kwarg(page.modify_submenu_items, 'request'):
-            method_kwargs['request'] = request
-        else:
-            warning_msg = (
-                "The 'modify_submenu_items' method on '%s' should be "
-                "updated to accept a 'request' keyword argument. View the "
-                "2.3 release notes for more info: https://github.com/rkhleics/"
-                "wagtailmenus/releases/tag/v.2.3.0" % page.__class__.__name__,
-            )
-            warnings.warn(warning_msg, RemovedInWagtailMenus25Warning)
-
         if accepts_kwarg(page.modify_submenu_items, 'use_absolute_page_urls'):
             method_kwargs['use_absolute_page_urls'] = use_absolute_page_urls
         else:
             warning_msg = (
                 "The 'modify_submenu_items' method on '%s' should be "
-                "updated to accept a 'use_absolute_page_urls' keyword argument. View the "
-                "2.4 release notes for more info: https://github.com/rkhleics/"
-                "wagtailmenus/releases/tag/v.2.4.0" % page.__class__.__name__,
+                "updated to accept a 'use_absolute_page_urls' keyword "
+                "argument. View the 2.4 release notes for more info: "
+                "https://github.com/rkhleics/wagtailmenus/releases/tag/v.2.4.0"
+                % page.__class__.__name__,
             )
             warnings.warn(warning_msg, RemovedInWagtailMenus26Warning)
 
@@ -504,7 +496,8 @@ def children_menu(
 def prime_menu_items(
     request, menu_items, current_site, current_page, current_page_ancestor_ids,
     use_specific, original_menu_tag, menu_instance, check_for_children=False,
-    allow_repeating_parents=True, apply_active_classes=True, use_absolute_page_urls=False,
+    allow_repeating_parents=True, apply_active_classes=True,
+    use_absolute_page_urls=False,
 ):
     """
     Prepare a list of `MenuItem` or `Page` objects for rendering to a menu
@@ -587,21 +580,8 @@ def prime_menu_items(
                         'allow_repeating_parents': allow_repeating_parents,
                         'original_menu_tag': original_menu_tag,
                         'menu_instance': menu_instance,
+                        'request': request,
                     }
-                    if accepts_kwarg(page.has_submenu_items, 'request'):
-                        method_kwargs['request'] = request
-                    else:
-                        warning_msg = (
-                            "The 'has_submenu_items' method on '%s' should be "
-                            "updated to accept a 'request' keyword "
-                            "argument. View the 2.3 release notes for more "
-                            "info: https://github.com/rkhleics/wagtailmenus/"
-                            "releases/tag/v.2.3.0" % page.__class__.__name__
-                        )
-                        warnings.warn(
-                            warning_msg, RemovedInWagtailMenus25Warning
-                        )
-
                     # Call `has_submenu_items` using the above kwargs dict
                     has_children_in_menu = page.has_submenu_items(
                         **method_kwargs)

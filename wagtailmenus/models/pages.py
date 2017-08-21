@@ -12,9 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from wagtail.wagtailcore.models import Page
 
 from wagtailmenus.utils.inspection import accepts_kwarg
-from wagtailmenus.utils.deprecation import (
-    RemovedInWagtailMenus25Warning, RemovedInWagtailMenus26Warning
-)
+from wagtailmenus.utils.deprecation import RemovedInWagtailMenus26Warning
 from .. import app_settings
 from ..forms import LinkPageAdminForm
 from ..panels import menupage_settings_panels, linkpage_edit_handler
@@ -68,19 +66,8 @@ class MenuPageMixin(models.Model):
                 'current_site': current_site,
                 'apply_active_classes': apply_active_classes,
                 'original_menu_tag': original_menu_tag,
+                'request': request,
             }
-            if accepts_kwarg(self.get_repeated_menu_item, 'request'):
-                kwargs['request'] = request
-            else:
-                msg = (
-                    "The 'get_repeated_menu_item' method on '%s' should be "
-                    "updated to accept a 'request' keyword argument. View the "
-                    "2.3 release notes for more info: https://github.com/"
-                    "rkhleics/wagtailmenus/releases/tag/v.2.3.0" %
-                    self.__class__.__name__
-                )
-                warnings.warn(msg, RemovedInWagtailMenus25Warning)
-
             if accepts_kwarg(
                 self.get_repeated_menu_item, 'use_absolute_page_urls'
             ):

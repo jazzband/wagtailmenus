@@ -48,7 +48,7 @@ As well as giving you control over your 'main menu', wagtailmenus allows you to 
 Don't hard-code another menu again! CMS-managed menus allow you to make those 'emergency changes' and 'last-minute tweaks' without having to touch a single line of code.
 
 .. NOTE::
-    Despite the name, 'flat menus' can be configured to render as a multi-level menus if you need them to.
+    Despite the name, 'flat menus' can be configured to render as multi-level menus if you need them to.
 
 
 Suitable for single-site or multi-site projects
