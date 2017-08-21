@@ -1,0 +1,22 @@
+=================================
+Wagtailmenus 2.5.0a release notes
+=================================
+
+.. NOTE::
+    This version is still under development
+
+.. contents::
+    :local:
+    :depth: 2
+
+
+What's new?
+===========
+
+
+Other minor changes
+===================
+
+
+Upgrade considerations
+======================
