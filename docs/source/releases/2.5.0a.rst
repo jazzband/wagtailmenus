@@ -14,9 +14,81 @@ What's new?
 ===========
 
 
+Overriding 'get_base_page_queryset()' now effects top-level menu items too 
+--------------------------------------------------------------------------
+
+Previously, if you overrode get_base_page_queryset() on a custom main menu or flat menu model, the page-tree driven part of the menu (anything below the top-level) would respect that, but top-level menu items linking to pages excluded by get_base_page_queryset() would still be rendered.
+
+Now, 'top_level_items' has been refactored to call get_base_page_queryset() to filter down and return page data for items at the top level too, so developers can always expect changes to get_base_page_queryset() to be reflected throughout entire menus.
+
+
+'MenuItemManager.for_display()' now returns all items, regardless of the status of linked pages
+-----------------------------------------------------------------------------------------------
+
+When sourcing data for a main or flat menu, it doesn't make sense to apply two sets of filters relating to pages status/visibility, so 'for_display' now simply returns ALL menu items defined for a menu, and any unsuitable page links are filtered out in a menu instances 'top_level_items' by calling upon 'get_base_page_queryset'.
+
+
 Other minor changes
 ===================
 
 
 Upgrade considerations
 ======================
+
+
+If you're overriding 'get_base_menuitem_queryset()' or calling it from elsewhere
+--------------------------------------------------------------------------------
+
+By default, the queryset returned by 'get_base_menuitem_queryset' on menu instances will now return ALL menu items defined for that menu, regardless of the status / visibility of any linked pages. 
+
+Previously, the result was filtered to only include pages with 'live' status, and with a True 'show_in_menus' value.
+
+If you're calling 'get_base_menuitem_queryset' anywhere in your codebase, and are relying on the original method to return the same value as it did before, you will need to apply the additional filters to the queryset, like so:
+
+
+.. code-block:: python
+    
+    from django.db.models import Q
+
+    ...
+
+    menu_item_qs = menu.get_base_menuitem_queryset()
+    menu_item_qs = menu_item_qs.filter(
+        Q(link_page__isnull=True) |
+        Q(link_page__live=True) &
+        Q(link_page__expired=False) &
+        Q(link_page__show_in_menus=True)
+    )
+
+
+If you're overriding 'MenuItemManager.for_display()'
+----------------------------------------------------
+
+If you are subclasssing ``MenuItemManger`` to create managers for your custom menu item models, and are relying on the original 'for_display' method to filter out certain links based on linked page's status/visibility, you may wish to revise your code to filter out the pages as before. However, you may find that you don't need to worry about this, as the 'get_base_page_queryset' method on menu instances should filter out the same pages when page data is fetched to attach to menu items.
+
+However, if you really do need 'for_display()' to return the same results as it did before, you should update the 'for_display' method on your custom manager class to apply additional filters, like so:
+
+
+.. code-block:: python
+    
+    from django.db.models import Q
+    from wagtailmenus.managers import MenuItemManager
+
+    ...
+
+    class CustomMenuItemManager(MenuItemManager):
+
+        def for_display(self):
+            qs = super(CustomMenuItemManager, self).for_display()
+            qs = qs.filter(
+                Q(link_page__isnull=True) |
+                Q(link_page__live=True) &
+                Q(link_page__expired=False) &
+                Q(link_page__show_in_menus=True)
+            )
+            # Now apply any custom filters
+            ...
+            # Return queryset
+            return qs
+
+
