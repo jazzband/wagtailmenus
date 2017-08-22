@@ -156,7 +156,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         abstract = True
 
     def get_base_menuitem_queryset(self):
-        return self.get_menu_items_manager().all()
+        return self.get_menu_items_manager().for_display()
 
     @cached_property
     def top_level_items(self):
