@@ -73,8 +73,6 @@ class AbstractMenuItem(models.Model, MenuItem):
         ),
     )
 
-    objects = MenuItemManager()
-
     class Meta:
         abstract = True
         verbose_name = _("menu item")
