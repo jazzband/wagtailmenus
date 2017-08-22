@@ -156,27 +156,43 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         abstract = True
 
     def get_base_menuitem_queryset(self):
-        return self.get_menu_items_manager().for_display()
+        return self.get_menu_items_manager().all()
 
     @cached_property
     def top_level_items(self):
         """Return a list of menu items with link_page objects supplemented with
         'specific' pages where appropriate."""
-        items_qs = self.get_base_menuitem_queryset()
-        if self.use_specific < app_settings.USE_SPECIFIC_TOP_LEVEL:
-            return items_qs.all()
+        menu_items = self.get_base_menuitem_queryset()
 
-        """
-        The menu is being generated with a specificity level of TOP_LEVEL
-        or ALWAYS, which means we need to replace 'link_page' values on
-        MenuItem objects with their 'specific' equivalents.
-        """
-        updated_items = []
-        for item in items_qs.all():
-            if item.link_page_id:
-                item.link_page = item.link_page.specific
-            updated_items.append(item)
-        return updated_items
+        # Identify which pages to fetch for the top level items. We use
+        # 'get_base_page_queryset' here, so that if that's being overridden
+        # or modified by hooks, any pages being excluded there are also
+        # excluded at the top level
+        top_level_pages = self.get_base_page_queryset().filter(
+            id__in=menu_items.values_list('link_page_id', flat=True)
+        ).all()
+        if self.use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL:
+            """
+            The menu is being generated with a specificity level of TOP_LEVEL
+            or ALWAYS, so we use PageQuerySet.specific() to fetch specific
+            page instances as efficiently as possible
+            """
+            top_level_pages = top_level_pages.specific()
+
+        # Evaluate the above queryset to a dictionary, using the IDs as keys
+        pages_dict = {p.id: p for p in top_level_pages}
+
+        # Now build a list to return
+        menu_item_list = []
+        for item in menu_items:
+            if item.link_page_id and item.link_page_id in pages_dict.keys():
+                # Only return menu items for pages where the page was included
+                # in the 'get_base_page_queryset' result
+                item.link_page = pages_dict.get(item.link_page_id)
+                menu_item_list.append(item)
+            else:
+                menu_item_list.append(item)
+        return menu_item_list
 
     @cached_property
     def pages_for_display(self):
