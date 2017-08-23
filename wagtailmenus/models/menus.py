@@ -170,7 +170,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         # excluded at the top level
         top_level_pages = self.get_base_page_queryset().filter(
             id__in=menu_items.values_list('link_page_id', flat=True)
-        ).all()
+        )
         if self.use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL:
             """
             The menu is being generated with a specificity level of TOP_LEVEL
@@ -185,12 +185,13 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         # Now build a list to return
         menu_item_list = []
         for item in menu_items:
-            if item.link_page_id and item.link_page_id in pages_dict.keys():
+            if not item.link_page_id:
+                menu_item_list.append(item)
+                continue  # skip to next
+            if item.link_page_id in pages_dict.keys():
                 # Only return menu items for pages where the page was included
                 # in the 'get_base_page_queryset' result
                 item.link_page = pages_dict.get(item.link_page_id)
-                menu_item_list.append(item)
-            else:
                 menu_item_list.append(item)
         return menu_item_list
 
