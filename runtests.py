@@ -42,10 +42,7 @@ def runtests():
         pass
 
     argv = [sys.argv[0], 'test']
-    try:
-        execute_from_command_line(argv)
-    except:
-        pass
-
+    return execute_from_command_line(argv)
+    
 if __name__ == '__main__':
-    runtests()
+    sys.exit(runtests())
