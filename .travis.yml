@@ -25,7 +25,7 @@ matrix:
     python: 3.6 
 
 install:
-- pip install codecov tox==2.6.0
+- pip install tox codecov
 
 script:
 - tox
