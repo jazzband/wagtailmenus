@@ -170,20 +170,20 @@ class NoAbsoluteUrlsPage(MenuPage):
     def modify_submenu_items(
         self, menu_items, current_page, current_ancestor_ids,
         current_site, allow_repeating_parents, apply_active_classes,
-        original_menu_tag, menu_instance=None,
+        original_menu_tag, menu_instance=None, request=None
     ):
         return super(NoAbsoluteUrlsPage, self).modify_submenu_items(
             menu_items, current_page, current_ancestor_ids,
             current_site, allow_repeating_parents, apply_active_classes,
-            original_menu_tag, menu_instance)
+            original_menu_tag, menu_instance, request)
 
     def get_repeated_menu_item(
         self, current_page, current_site, apply_active_classes,
-        original_menu_tag,
+        original_menu_tag, request
     ):
         return super(NoAbsoluteUrlsPage, self).get_repeated_menu_item(
             current_page, current_site, apply_active_classes,
-            original_menu_tag,
+            original_menu_tag, request
         )
 
 
