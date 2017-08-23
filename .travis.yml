@@ -1,7 +1,7 @@
 language: python
 cache: pip
 dist: trusty
-sudo: required
+sudo: false
 
 matrix:
   include:
@@ -25,10 +25,10 @@ matrix:
     python: 3.6 
 
 install:
-- pip install tox codecov
+  pip install tox codecov
 
 script:
-- tox
+  tox
 
 after_success: 
-- codecov
+  codecov

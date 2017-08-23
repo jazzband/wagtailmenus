@@ -1447,7 +1447,7 @@ class TestTemplateTags(TestCase):
             <a href="/superheroes/" class="ancestor section_root top-level">Superheroes</a>
             <ul>
                 <li class=" low-level">
-                    <a href="/superheroes/marvel-comics/">Marvel Comics</a>
+                    <a href="/superheroes/marvel-comics/">MARVEL Comics</a>
                     <ul class="sub-menu" data-level="2">
                         <li class=" low-level"><a href="/superheroes/marvel-comics/iron-man/">Iron Man</a></li>
                         <li class=" low-level"><a href="/superheroes/marvel-comics/spiderman/">Spiderman</a></li>
