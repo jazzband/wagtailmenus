@@ -49,22 +49,35 @@ def main_menu(
     if use_specific is not None:
         menu.set_use_specific(use_specific)
 
-    menu_items = prime_menu_items(
-        menu_items=menu.top_level_items,
-        request=request,
-        parent_page=None,
-        original_menu_tag='main_menu',
-        menu_instance=menu,
-        current_level=1,
-        max_levels=menu.max_levels,
-        current_site=site,
-        current_page=current_page,
-        current_ancestor_ids=ancestor_ids,
-        use_specific=menu.use_specific,
-        allow_repeating_parents=allow_repeating_parents,
-        apply_active_classes=apply_active_classes,
-        use_absolute_page_urls=use_absolute_page_urls,
-    )
+    # Define common kwargs for calls to 'prime_menu_items' and any methods
+    # using the 'menus_modify_menu_items' hook
+    kwargs = {
+        'request': request,
+        'parent_page': None,
+        'original_menu_tag': 'main_menu',
+        'menu_instance': menu,
+        'current_level': 1,
+        'max_levels': menu.max_levels,
+        'current_site': site,
+        'current_page': current_page,
+        'current_ancestor_ids': ancestor_ids,
+        'use_specific': menu.use_specific,
+        'allow_repeating_parents': allow_repeating_parents,
+        'apply_active_classes': apply_active_classes,
+        'use_absolute_page_urls': use_absolute_page_urls,
+    }
+
+    # allow hooks to modify menu items before priming
+    menu_items = menu.top_level_items
+    for hook in hooks.get_hooks('menus_modify_raw_menu_items'):
+        menu_items = hook(menu_items, **kwargs)
+
+    # prime menu items
+    menu_items = prime_menu_items(menu_items, **kwargs)
+
+    # allow hooks to modify 'primed' menu items
+    for hook in hooks.get_hooks('menus_modify_primed_menu_items'):
+        menu_items = hook(menu_items, **kwargs)
 
     # Identify templates for rendering
     template_names = get_template_names('main', request, template)
@@ -128,22 +141,35 @@ def flat_menu(
     if use_specific is not None:
         menu.set_use_specific(use_specific)
 
-    menu_items = prime_menu_items(
-        menu_items=menu.top_level_items,
-        request=request,
-        parent_page=None,
-        original_menu_tag='flat_menu',
-        menu_instance=menu,
-        current_level=1,
-        max_levels=menu.max_levels,
-        current_site=site,
-        current_page=current_page,
-        current_ancestor_ids=ancestor_ids,
-        use_specific=menu.use_specific,
-        allow_repeating_parents=allow_repeating_parents,
-        apply_active_classes=apply_active_classes,
-        use_absolute_page_urls=use_absolute_page_urls,
-    )
+    # Define common kwargs for calls to 'prime_menu_items' and any methods
+    # using the 'menus_modify_menu_items' hook
+    kwargs = {
+        'request': request,
+        'parent_page': None,
+        'original_menu_tag': 'flat_menu',
+        'menu_instance': menu,
+        'current_level': 1,
+        'max_levels': menu.max_levels,
+        'current_site': site,
+        'current_page': current_page,
+        'current_ancestor_ids': ancestor_ids,
+        'use_specific': menu.use_specific,
+        'allow_repeating_parents': allow_repeating_parents,
+        'apply_active_classes': apply_active_classes,
+        'use_absolute_page_urls': use_absolute_page_urls,
+    }
+
+    # allow hooks to modify menu items before priming
+    menu_items = menu.top_level_items
+    for hook in hooks.get_hooks('menus_modify_raw_menu_items'):
+        menu_items = hook(menu_items, **kwargs)
+
+    # prime menu items
+    menu_items = prime_menu_items(menu_items, **kwargs)
+
+    # allow hooks to modify 'primed' menu items
+    for hook in hooks.get_hooks('menus_modify_primed_menu_items'):
+        menu_items = hook(menu_items, **kwargs)
 
     template_names = menu.get_template_names(request, template)
     t = context.template.engine.select_template(template_names)
@@ -182,31 +208,8 @@ def get_sub_menu_items_for_page(
     # The menu items will be the children of the provided `page`
     children_pages = menu_instance.get_children_for_page(page)
 
-    # Call `prime_menu_items` to prepare the children pages for output. This
-    # will add `href`, `text`, `active_class` and `has_children_in_menu`
-    # attributes to each item, to use in menu templates.
-    menu_items = prime_menu_items(
-        menu_items=children_pages,
-        request=request,
-        parent_page=page,
-        original_menu_tag=original_menu_tag,
-        menu_instance=menu_instance,
-        current_level=current_level,
-        max_levels=max_levels,
-        current_site=current_site,
-        current_page=current_page,
-        current_ancestor_ids=current_ancestor_ids,
-        use_specific=use_specific,
-        allow_repeating_parents=allow_repeating_parents,
-        apply_active_classes=apply_active_classes,
-        use_absolute_page_urls=use_absolute_page_urls,
-    )
-
-    """
-    If `page` has a `modify_submenu_items` method, send the primed
-    menu_items list to that for further modification (e.g. adding a copy of
-    `page` as the first item, using fields from `MenuPage`)
-    """
+    # If we're going to fetch a specific instance, do it now so that the
+    # specific page can be passed elsewhere
     if (
         use_specific and (
             hasattr(page, 'modify_submenu_items') or
@@ -216,21 +219,46 @@ def get_sub_menu_items_for_page(
         if type(page) is Page:
             page = page.specific
 
-        # Create dict of kwargs to send to `modify_submenu_items`
-        method_kwargs = {
-            'menu_items': menu_items,
-            'current_page': current_page,
-            'current_ancestor_ids': current_ancestor_ids,
-            'current_site': current_site,
-            'allow_repeating_parents': allow_repeating_parents,
-            'apply_active_classes': apply_active_classes,
-            'original_menu_tag': original_menu_tag,
-            'menu_instance': menu_instance,
-            'request': request,
-        }
-        if accepts_kwarg(page.modify_submenu_items, 'use_absolute_page_urls'):
-            method_kwargs['use_absolute_page_urls'] = use_absolute_page_urls
-        else:
+    # Define common kwargs for calls to 'prime_menu_items', methods using the
+    # 'menus_modify_menu_items' hook, or page's 'modify_sub_menu_items' method
+    kwargs = {
+        'request': request,
+        'original_menu_tag': original_menu_tag,
+        'menu_instance': menu_instance,
+        'current_site': current_site,
+        'current_page': current_page,
+        'current_ancestor_ids': current_ancestor_ids,
+        'allow_repeating_parents': allow_repeating_parents,
+        'apply_active_classes': apply_active_classes,
+        'use_absolute_page_urls': use_absolute_page_urls,
+    }
+    # additional kwargs, not needed for 'modify_sub_menu_items'
+    kwargs_extra = {
+        'parent_page': page,
+        'current_level': current_level,
+        'max_levels': max_levels,
+        'use_specific': use_specific,
+    }
+    kwargs_extra.update(kwargs)
+
+    # allow hooks to modify menu items before priming
+    menu_items = list(children_pages)
+    for hook in hooks.get_hooks('menus_modify_raw_menu_items'):
+        menu_items = hook(menu_items, **kwargs_extra)
+
+    # prime the menu items
+    menu_items = prime_menu_items(menu_items, **kwargs_extra)
+
+    # If `page` has a `modify_submenu_items` method, send the primed
+    # menu_items list to that for further modification
+    if use_specific and hasattr(page, 'modify_submenu_items'):
+
+        # Backwards compatibility for 'modify_submenu_items' methods that
+        # don't accept a 'use_absolute_page_urls' kwarg
+        if not accepts_kwarg(
+            page.modify_submenu_items, 'use_absolute_page_urls'
+        ):
+            kwargs.pop('use_absolute_page_urls')
             warning_msg = (
                 "The 'modify_submenu_items' method on '%s' should be "
                 "updated to accept a 'use_absolute_page_urls' keyword "
@@ -241,7 +269,11 @@ def get_sub_menu_items_for_page(
             warnings.warn(warning_msg, RemovedInWagtailMenus26Warning)
 
         # Call `modify_submenu_items` using the above kwargs dict
-        menu_items = page.modify_submenu_items(**method_kwargs)
+        menu_items = page.modify_submenu_items(menu_items, **kwargs)
+
+    # allow hooks to modify the final menu items list
+    for hook in hooks.get_hooks('menus_modify_primed_menu_items'):
+        menu_items = hook(menu_items, **kwargs_extra)
 
     return page, menu_items
 
@@ -658,24 +690,5 @@ def prime_menu_items(
             url = item.relative_url(current_site)
         setattr(item, 'href', url)
         primed_menu_items.append(item)
-
-    # allow hooks to modify the menu_items list further
-    for hook in hooks.get_hooks('menus_modify_menu_items'):
-        primed_menu_items = hook(
-            primed_menu_items,
-            request=request,
-            parent_page=parent_page,
-            original_menu_tag=original_menu_tag,
-            current_level=current_level,
-            max_levels=max_levels,
-            stop_at_this_level=stop_at_this_level,
-            menu_instance=menu_instance,
-            current_site=current_site,
-            current_page=current_page,
-            use_specific=use_specific,
-            apply_active_classes=apply_active_classes,
-            allow_repeating_parents=allow_repeating_parents,
-            use_absolute_page_urls=use_absolute_page_urls,
-        )
 
     return primed_menu_items
