@@ -688,19 +688,6 @@ item must be passed to ``{% sub_menu %}`` so that it knows which page to render 
 
 -----
 
-stop_at_this_level
-~~~~~~~~~~~~~~~~~~
-
-=========  ===================  ====================================
-Required?  Expected value type  Default value
-=========  ===================  ====================================
-No         ``bool``             ``None`` (inherit from original tag)
-=========  ===================  ====================================
-
-The ``sub_menu`` tag will automatically figure out whether further levels should be rendered or not by comparing the ``max_levels`` value from the original menu tag with the current level being rendered. However, you can override that behaviour by adding either ``stop_at_this_level=True`` or ``stop_at_this_level=False`` to the tag in a custom menu template.
-
------
-
 apply_active_classes
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -769,5 +756,3 @@ No         ``bool``             ``None`` (inherit from original tag)
 Allows you to override the value set on the original tag by explicitly adding ``use_absolute_page_urls=True`` or ``use_absolute_page_urls=False`` to a ``{% sub_menu %}`` tag in a custom menu template. 
 
 If ``True``, absolute page URLs will be used for the ``href`` attributes on page links instead of relative URLs.
-
------
