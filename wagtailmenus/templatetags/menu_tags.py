@@ -3,6 +3,7 @@ import warnings
 
 from copy import copy
 from django.template import Library
+from wagtail.wagtailcore import hooks
 from wagtail.wagtailcore.models import Page
 
 from wagtailmenus import app_settings
@@ -657,5 +658,24 @@ def prime_menu_items(
             url = item.relative_url(current_site)
         setattr(item, 'href', url)
         primed_menu_items.append(item)
+
+    # allow hooks to modify the menu_items list further
+    for hook in hooks.get_hooks('menus_modify_menu_items'):
+        primed_menu_items = hook(
+            primed_menu_items,
+            request=request,
+            parent_page=parent_page,
+            original_menu_tag=original_menu_tag,
+            current_level=current_level,
+            max_levels=max_levels,
+            stop_at_this_level=stop_at_this_level,
+            menu_instance=menu_instance,
+            current_site=current_site,
+            current_page=current_page,
+            use_specific=use_specific,
+            apply_active_classes=apply_active_classes,
+            allow_repeating_parents=allow_repeating_parents,
+            use_absolute_page_urls=use_absolute_page_urls,
+        )
 
     return primed_menu_items
