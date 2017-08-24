@@ -688,19 +688,6 @@ item must be passed to ``{% sub_menu %}`` so that it knows which page to render 
 
 -----
 
-stop_at_this_level
-~~~~~~~~~~~~~~~~~~
-
-=========  ===================  ====================================
-Required?  Expected value type  Default value
-=========  ===================  ====================================
-No         ``bool``             ``None`` (inherit from original tag)
-=========  ===================  ====================================
-
-The ``sub_menu`` tag will automatically figure out whether further levels should be rendered or not by comparing the ``max_levels`` value from the original menu tag with the current level being rendered. However, you can override that behaviour by adding either ``stop_at_this_level=True`` or ``stop_at_this_level=False`` to the tag in a custom menu template.
-
------
-
 apply_active_classes
 ~~~~~~~~~~~~~~~~~~~~
 

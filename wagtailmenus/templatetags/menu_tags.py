@@ -6,7 +6,8 @@ from django.template import Library
 from wagtail.wagtailcore.models import Page
 
 from wagtailmenus import app_settings
-from wagtailmenus.utils.deprecation import RemovedInWagtailMenus26Warning
+from wagtailmenus.utils.deprecation import (
+    RemovedInWagtailMenus26Warning, RemovedInWagtailMenus27Warning)
 from wagtailmenus.utils.inspection import accepts_kwarg
 from wagtailmenus.utils.misc import (
     get_attrs_from_context, validate_supplied_values
@@ -256,6 +257,15 @@ def sub_menu(
     """
     validate_supplied_values('sub_menu', use_specific=use_specific,
                              menuitem_or_page=menuitem_or_page)
+
+    if stop_at_this_level is not None:
+        warning_msg = (
+            "The 'stop_at_this_level' argument for 'sub_menu' no longer "
+            "has any effect on output and is deprecated. View the 2.5 release "
+            "notes for more info: "
+            "http://wagtailmenus.readthedocs.io/en/stable/releases/2.5.0.html"
+        )
+        warnings.warn(warning_msg, RemovedInWagtailMenus27Warning)
 
     # Variabalise relevant attributes from context
     request, site, current_page, root, ancestor_ids = get_attrs_from_context(
