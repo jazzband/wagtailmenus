@@ -1,8 +1,34 @@
 Changelog
 =========
 
-2.X.X (XX.XX.XXXX) IN DEVELOPMENT
---------------------------------- 
+2.5.0a (XX.XX.XXXX) IN DEVELOPMENT
+---------------------------------- 
+
+* Fixed an issue with runtests.py that was causing tox builds in Travis CI
+  to report as successful, even when tests were failing. Contributed by
+  Oliver Bestwalter (obestwalter).
+* Updated signature of `menu_tags.get_sub_menu_items_for_page()` to improve
+  code readability and improve consistency.
+    * Renamed `ancestor_ids` to `current_ancestor_ids`
+    * `original_menu_tag`, `current_level`, and `max_levels` are now required
+    * Arguments order also revised
+* Updated signature of `menu_tags.prime_menu_items()` to improve code
+  readability and consistency, and to support additional arguments required
+  for new hooks functionality.
+    * Renamed `current_page_ancestor_ids` to `current_ancestor_ids`
+    * Added new `parent_page`, `current_level`, and `max_levels` arguments (
+      which are all required)
+    * Removed the `check_for_children` argument, in favour of using
+      'current_level' and 'max_levels'.
+    * Arguments order also revised
+* All calls to `prime_menu_items` are made with arguments in the same order.
+* All calls to `get_sub_menu_items_for_page` are made with arguments in the
+  same order.
+* The `stop_at_this_level` argument for the `sub_menu` tag has been
+  officially deprecated and the feature removed from documentation. It hasn't 
+  worked for a few versions and nobody has mentioned it, so this is the first
+  step to removing it completely.
+
 
 2.4.0 (04.08.2017)
 ------------------ 
