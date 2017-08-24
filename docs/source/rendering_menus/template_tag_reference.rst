@@ -756,5 +756,3 @@ No         ``bool``             ``None`` (inherit from original tag)
 Allows you to override the value set on the original tag by explicitly adding ``use_absolute_page_urls=True`` or ``use_absolute_page_urls=False`` to a ``{% sub_menu %}`` tag in a custom menu template. 
 
 If ``True``, absolute page URLs will be used for the ``href`` attributes on page links instead of relative URLs.
-
------
