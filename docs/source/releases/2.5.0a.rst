@@ -57,6 +57,7 @@ Bug fixes & minor changes
 *   Made the logic in 'pages_for_display' easier to override on custom menu
     classes by breaking it out into a separate 'get_pages_for_display()'
     method (that isn't decorated with ``cached_property``).
+*   Added support for Wagtail 1.12
 
 
 Upgrade considerations
