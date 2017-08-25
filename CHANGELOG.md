@@ -35,6 +35,7 @@ Changelog
   querysets and manipulation of menu items during rendering. For more
   information and examples, see the 'Hooks' section of the documentation:
   http://wagtailmenus.readthedocs.io/en/latest/advanced_topics/hooks.html
+* Added support for Wagtail 1.12.
 
 
 2.4.0 (04.08.2017)
