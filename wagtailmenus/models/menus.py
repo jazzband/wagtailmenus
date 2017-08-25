@@ -131,10 +131,9 @@ class MenuFromRootPage(Menu):
         self.use_specific = use_specific
         super(MenuFromRootPage, self).__init__()
 
-    @cached_property
-    def pages_for_display(self):
-        """Returns a list of pages for rendering all levels of the menu. All
-        pages must be live, not expired, and set to show in menus."""
+    def get_pages_for_display(self):
+        """Return all pages needed for rendering all sub-levels for the current
+        menu"""
         pages = self.get_base_page_queryset().filter(
             depth__gt=self.root_page.depth,
             depth__lte=self.root_page.depth + self.max_levels,
@@ -146,6 +145,10 @@ class MenuFromRootPage(Menu):
             return pages.specific()
 
         return pages
+
+    @cached_property
+    def pages_for_display(self):
+        return self.get_pages_for_display()
 
     def get_children_for_page(self, page):
         """Return a list of relevant child pages for a given page."""
@@ -215,25 +218,22 @@ class MenuWithMenuItems(ClusterableModel, Menu):
                 menu_item_list.append(item)
         return menu_item_list
 
-    @cached_property
-    def pages_for_display(self):
-        """Return a list of pages for rendering the entire menu (excluding
-        those chosen as menu items). All pages must be live, not expired, and
-        set to show in menus."""
+    def get_pages_for_display(self):
+        """Return all pages needed for rendering all sub-levels for the current
+        menu"""
 
-        # Build a queryset to get pages for all levels
+        # Start with an empty queryset, and expand as needed
         all_pages = Page.objects.none()
 
         if self.max_levels == 1:
-            # If no additional menus are needed, return an empty queryset
+            # If no additional sub-levels are needed, return empty queryset
             return all_pages
 
         for item in self.top_level_items:
 
             if item.link_page_id:
-                # If necessary, fetch a 'branch' of suitable descendants for
-                # this menu item and add to the full queryset
-                page_path = item.link_page.path
+                # Fetch a 'branch' of suitable descendants for this item and
+                # add to 'all_pages'
                 page_depth = item.link_page.depth
                 if(
                     item.allow_subnav and
@@ -242,9 +242,9 @@ class MenuWithMenuItems(ClusterableModel, Menu):
                     all_pages = all_pages | Page.objects.filter(
                         depth__gt=page_depth,
                         depth__lt=page_depth + self.max_levels,
-                        path__startswith=page_path)
+                        path__startswith=item.link_page.path)
 
-        # Filter the queryset to include only the pages we need for display
+        # Filter the entire queryset to include only pages suitable for display
         all_pages = all_pages & self.get_base_page_queryset()
 
         # Return 'specific' page instances if required
@@ -252,6 +252,10 @@ class MenuWithMenuItems(ClusterableModel, Menu):
             return all_pages.specific()
 
         return all_pages
+
+    @cached_property
+    def pages_for_display(self):
+        return self.get_pages_for_display()
 
 
 # ########################################################

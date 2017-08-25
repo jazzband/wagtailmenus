@@ -21,13 +21,16 @@ Changelog
     * Removed the `check_for_children` argument, in favour of using
       'current_level' and 'max_levels'.
     * Arguments order also revised
-* All calls to `prime_menu_items` are made with arguments in the same order.
-* All calls to `get_sub_menu_items_for_page` are made with arguments in the
-  same order.
 * The `stop_at_this_level` argument for the `sub_menu` tag has been
   officially deprecated and the feature removed from documentation. It hasn't 
   worked for a few versions and nobody has mentioned it, so this is the first
   step to removing it completely.
+* Reduce code bloat in various methods in `menu_tags.py` by defining common
+  dictionaries of keyword arguments that can be easily passed to different
+  methods.
+* Made the logic in 'pages_for_display' easier to override on custom menu
+  classes by breaking it out into a separate 'get_pages_for_display()' method
+  (that isn't decorated with `cached_property`).
 
 
 2.4.0 (04.08.2017)
