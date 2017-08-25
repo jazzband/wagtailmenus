@@ -31,6 +31,10 @@ Changelog
 * Made the logic in 'pages_for_display' easier to override on custom menu
   classes by breaking it out into a separate 'get_pages_for_display()' method
   (that isn't decorated with `cached_property`).
+* Added support for several 'hooks', allowing for easier customisation of base
+  querysets and manipulation of menu items during rendering. For more
+  information and examples, see the 'Hooks' section of the documentation:
+  http://wagtailmenus.readthedocs.io/en/latest/advanced_topics/hooks.html
 
 
 2.4.0 (04.08.2017)
