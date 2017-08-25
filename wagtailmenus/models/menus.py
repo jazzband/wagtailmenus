@@ -8,11 +8,10 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-
 from modelcluster.models import ClusterableModel
-
 from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, MultiFieldPanel, InlinePanel)
+from wagtail.wagtailcore import hooks
 from wagtail.wagtailcore.models import Page
 
 from .. import app_settings
@@ -29,7 +28,9 @@ class Menu(object):
     max_levels = 1
     use_specific = app_settings.USE_SPECIFIC_AUTO
     pages_for_display = None
+    root_page = None  # Not relevant for all menu classes
     request = None
+    menu_type = ''  # provided to hook methods
 
     def clear_page_cache(self):
         try:
@@ -41,9 +42,24 @@ class Menu(object):
         except AttributeError:
             pass
 
+    def get_common_hook_kwargs(self):
+        return {
+            'request': self.request,
+            'menu_type': self.menu_type,
+            'max_levels': self.max_levels,
+            'use_specific': self.use_specific,
+            'menu_instance': self,
+        }
+
     def get_base_page_queryset(self):
-        return Page.objects.filter(live=True, expired=False,
-                                   show_in_menus=True)
+        qs = Page.objects.filter(
+            live=True, expired=False, show_in_menus=True)
+        # allow hooks to modify the queryset
+        for hook in hooks.get_hooks('menus_modify_base_page_queryset'):
+            kwargs = self.get_common_hook_kwargs()
+            kwargs['root_page'] = self.root_page
+            qs = hook(qs, **kwargs)
+        return qs
 
     def set_max_levels(self, max_levels):
         if self.max_levels != max_levels:
@@ -115,10 +131,9 @@ class MenuFromRootPage(Menu):
         self.use_specific = use_specific
         super(MenuFromRootPage, self).__init__()
 
-    @cached_property
-    def pages_for_display(self):
-        """Returns a list of pages for rendering all levels of the menu. All
-        pages must be live, not expired, and set to show in menus."""
+    def get_pages_for_display(self):
+        """Return all pages needed for rendering all sub-levels for the current
+        menu"""
         pages = self.get_base_page_queryset().filter(
             depth__gt=self.root_page.depth,
             depth__lte=self.root_page.depth + self.max_levels,
@@ -131,6 +146,10 @@ class MenuFromRootPage(Menu):
 
         return pages
 
+    @cached_property
+    def pages_for_display(self):
+        return self.get_pages_for_display()
+
     def get_children_for_page(self, page):
         """Return a list of relevant child pages for a given page."""
         if self.max_levels == 1:
@@ -141,11 +160,11 @@ class MenuFromRootPage(Menu):
 
 
 class SectionMenu(MenuFromRootPage):
-    pass
+    menu_type = 'section_menu'  # provided to hook methods
 
 
 class ChildrenMenu(MenuFromRootPage):
-    pass
+    menu_type = 'children_menu'  # provided to hook methods
 
 
 class MenuWithMenuItems(ClusterableModel, Menu):
@@ -156,7 +175,11 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         abstract = True
 
     def get_base_menuitem_queryset(self):
-        return self.get_menu_items_manager().for_display()
+        qs = self.get_menu_items_manager().for_display()
+        # allow hooks to modify the queryset
+        for hook in hooks.get_hooks('menus_modify_base_menuitem_queryset'):
+            qs = hook(qs, **self.get_common_hook_kwargs())
+        return qs
 
     @cached_property
     def top_level_items(self):
@@ -195,25 +218,22 @@ class MenuWithMenuItems(ClusterableModel, Menu):
                 menu_item_list.append(item)
         return menu_item_list
 
-    @cached_property
-    def pages_for_display(self):
-        """Return a list of pages for rendering the entire menu (excluding
-        those chosen as menu items). All pages must be live, not expired, and
-        set to show in menus."""
+    def get_pages_for_display(self):
+        """Return all pages needed for rendering all sub-levels for the current
+        menu"""
 
-        # Build a queryset to get pages for all levels
+        # Start with an empty queryset, and expand as needed
         all_pages = Page.objects.none()
 
         if self.max_levels == 1:
-            # If no additional menus are needed, return an empty queryset
+            # If no additional sub-levels are needed, return empty queryset
             return all_pages
 
         for item in self.top_level_items:
 
             if item.link_page_id:
-                # If necessary, fetch a 'branch' of suitable descendants for
-                # this menu item and add to the full queryset
-                page_path = item.link_page.path
+                # Fetch a 'branch' of suitable descendants for this item and
+                # add to 'all_pages'
                 page_depth = item.link_page.depth
                 if(
                     item.allow_subnav and
@@ -222,9 +242,9 @@ class MenuWithMenuItems(ClusterableModel, Menu):
                     all_pages = all_pages | Page.objects.filter(
                         depth__gt=page_depth,
                         depth__lt=page_depth + self.max_levels,
-                        path__startswith=page_path)
+                        path__startswith=item.link_page.path)
 
-        # Filter the queryset to include only the pages we need for display
+        # Filter the entire queryset to include only pages suitable for display
         all_pages = all_pages & self.get_base_page_queryset()
 
         # Return 'specific' page instances if required
@@ -233,6 +253,10 @@ class MenuWithMenuItems(ClusterableModel, Menu):
 
         return all_pages
 
+    @cached_property
+    def pages_for_display(self):
+        return self.get_pages_for_display()
+
 
 # ########################################################
 # Abstract models
@@ -240,6 +264,8 @@ class MenuWithMenuItems(ClusterableModel, Menu):
 
 @python_2_unicode_compatible
 class AbstractMainMenu(MenuWithMenuItems):
+    menu_type = 'main_menu'  # provided to hook methods
+
     site = models.OneToOneField(
         'wagtailcore.Site',
         verbose_name=_('site'),
@@ -316,6 +342,8 @@ class AbstractMainMenu(MenuWithMenuItems):
 
 @python_2_unicode_compatible
 class AbstractFlatMenu(MenuWithMenuItems):
+    menu_type = 'flat_menu'  # provided to hook methods
+
     site = models.ForeignKey(
         'wagtailcore.Site',
         verbose_name=_('site'),

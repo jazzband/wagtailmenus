@@ -14,6 +14,14 @@ What's new?
 ===========
 
 
+Hooks added to give developers more options for manipulating menus 
+------------------------------------------------------------------
+
+While wagtailmenus has long supported the use of custom classes for most things (allowing developers to override methods as they see fit), for a long time, I've felt that it should be easier to override some core/shared behaviour without the technical overhead of having to create and maintain multiple custom models and classes. So, wagtailmenus now supports several 'hooks', which allow you to do just that.
+
+They use the hooks mechanism from Wagtail, so you may already be familiar with the concept. For more information and examples, see the new :ref:`hooks` section of the documentation.
+
+
 Overriding 'get_base_page_queryset()' now effects top-level menu items too 
 --------------------------------------------------------------------------
 
@@ -39,13 +47,16 @@ Bug fixes & minor changes
 *   Updated signature of ``menu_tags.prime_menu_items()`` to improve code
     readability and consistency, and to support additional arguments required
     for new hooks functionality (see below for more details).
-*   All calls to ``prime_menu_items`` are made with arguments in the same order.
-*   All calls to ``get_sub_menu_items_for_page`` are made with arguments in the
-    same order.
 *   The ``stop_at_this_level`` argument for the ``sub_menu`` tag has been
     officially deprecated and the feature removed from documentation. It hasn't 
     worked for a few versions and nobody has mentioned it, so this is the first
     step to removing it completely.
+*   Reduced code bloat in various methods in ``menu_tags.py`` by defining
+    common dictionaries of keyword arguments that can be easily passed to
+    different methods.
+*   Made the logic in 'pages_for_display' easier to override on custom menu
+    classes by breaking it out into a separate 'get_pages_for_display()'
+    method (that isn't decorated with ``cached_property``).
 
 
 Upgrade considerations
@@ -133,7 +144,7 @@ This method is only intended for use by the other methods in ``menu_tags.py``, a
 
 The following arguments are now required instead of optional:
 
-* ``original_menu_tag``: The name of the tag that was called to initiate rendering of the menu that is currently being rendered. For example, if you're using the ``main_menu`` tag to render a multi-level menu, even though ``sub_menu`` may be called to render subsequent additional levels, 'original_menu_tag' should retain the value ``'main_menu'``
+* ``original_menu_tag``: The name of the tag that was called to initiate rendering of the menu that is currently being rendered. For example, if you're using the ``main_menu`` tag to render a multi-level menu, even though ``sub_menu`` may be called to render subsequent additional levels, 'original_menu_tag' should retain the value ``'main_menu'``.
 * ``current_level``: An integer indicating the 'level' or 'depth' that is currently being rendered in the process of rendering a multi-level menu.
 * ``max_levels``: An integer indicatiing the maxiumum number of levels that should be rendered for the current menu.
 
