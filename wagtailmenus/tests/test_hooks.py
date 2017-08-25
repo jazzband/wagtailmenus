@@ -97,8 +97,7 @@ class TestHooks(TestCase):
         # NOTE: Positional args used to ensure supplied args remain consistent
         @hooks.register('menus_modify_base_page_queryset')
         def modify_page_queryset(
-            queryset, request, menu_type, root_page, max_levels, use_specific,
-            menu_instance
+            queryset, request, menu_type, root_page, max_levels, use_specific, menu_instance
         ):
             """
             Nullify page queryset for 'flat menus'. Should result in only
@@ -139,8 +138,7 @@ class TestHooks(TestCase):
         # NOTE: Positional args used to ensure supplied args remain consistent
         @hooks.register('menus_modify_base_menuitem_queryset')
         def modify_menuitem_queryset(
-            queryset, request, menu_type, root_page, max_levels, use_specific,
-            menu_instance
+            queryset, request, menu_type, max_levels, use_specific, menu_instance
         ):
             """
             Nullify menu items completely for all 'flat menus'. Should result

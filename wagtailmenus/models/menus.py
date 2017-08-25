@@ -42,11 +42,10 @@ class Menu(object):
         except AttributeError:
             pass
 
-    def get_default_hook_kwargs(self):
+    def get_common_hook_kwargs(self):
         return {
             'request': self.request,
             'menu_type': self.menu_type,
-            'root_page': self.root_page,
             'max_levels': self.max_levels,
             'use_specific': self.use_specific,
             'menu_instance': self,
@@ -57,7 +56,9 @@ class Menu(object):
             live=True, expired=False, show_in_menus=True)
         # allow hooks to modify the queryset
         for hook in hooks.get_hooks('menus_modify_base_page_queryset'):
-            qs = hook(qs, **self.get_default_hook_kwargs())
+            kwargs = self.get_common_hook_kwargs()
+            kwargs['root_page'] = self.root_page
+            qs = hook(qs, **kwargs)
         return qs
 
     def set_max_levels(self, max_levels):
@@ -110,11 +111,7 @@ class Menu(object):
 
     def get_children_for_page(self, page):
         """Return a list of relevant child pages for a given page."""
-        children = self.page_children_dict.get(page.path, [])
-        # allow hooks to modify the list of children
-        for hook in hooks.get_hooks('menus_modify_children_for_page'):
-            children = hook(children, page, **self.get_default_hook_kwargs())
-        return children
+        return self.page_children_dict.get(page.path, [])
 
     def page_has_children(self, page):
         """Return a boolean indicating whether a given page has any relevant
@@ -178,7 +175,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         qs = self.get_menu_items_manager().for_display()
         # allow hooks to modify the queryset
         for hook in hooks.get_hooks('menus_modify_base_menuitem_queryset'):
-            qs = hook(qs, **self.get_default_hook_kwargs())
+            qs = hook(qs, **self.get_common_hook_kwargs())
         return qs
 
     @cached_property
