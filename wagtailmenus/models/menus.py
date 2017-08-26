@@ -257,6 +257,20 @@ class MenuWithMenuItems(ClusterableModel, Menu):
     def pages_for_display(self):
         return self.get_pages_for_display()
 
+    def add_menu_items_for_pages(self, pagequeryset=None, allow_subnav=True):
+        """Add menu items to this menu, linking to each page in `pagequeryset`
+        (which should be a PageQuerySet instance)"""
+        item_manager = self.get_menu_items_manager()
+        item_class = item_manager.model
+        item_list = []
+        i = item_manager.count()
+        for p in pagequeryset.all():
+            item_list.append(item_class(
+                menu=self, link_page=p, sort_order=i, allow_subnav=allow_subnav
+            ))
+            i += 1
+        item_manager.bulk_create(item_list)
+
 
 # ########################################################
 # Abstract models
@@ -304,7 +318,7 @@ class AbstractMainMenu(MenuWithMenuItems):
 
     @classmethod
     def get_for_site(cls, site):
-        """Get a mainmenu instance for the site."""
+        """Return the 'main menu' instance for the provided site"""
         instance, created = cls.objects.get_or_create(site=site)
         return instance
 
