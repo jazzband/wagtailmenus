@@ -1,9 +1,9 @@
 
 .. _hooks:
 
-=====
-Hooks
-=====
+===============================
+Using hooks to manipulate menus
+===============================
 
 On loading, Wagtail will search for any app with the file ``wagtail_hooks.py`` and execute the contents. This provides a way to register your own functions to execute at certain points in Wagtail's execution, such as when a ``Page`` object is saved or when the main menu is constructed.
 
@@ -35,18 +35,18 @@ Wagtailmenus utilises this same 'hooks' mechanism to allow you make modification
 Hooks for modifying data used in menus
 ======================================
 
-Menu classes are responsible for fetching all of the data needed for rendering a menu and providing it to template tags as and when it is needed. 
+Menu classes are responsible for fetching all of the data needed for rendering a menu, and feeding it back to the various template tags as and when that data is needed. 
 
-If you need to override a lot of behaviour, and you're comfortable with the idea of subclassing the existing classes and models to override the necessary methods, you might want to look at :ref:`custom_menu_classes`. But, if all you want to do is change the result of ``get_base_page_queryset()`` or ``get_base_menuitem_queryset()`` (say, to limit the links that appear based on the current user), you may find it quicker & easier to use the following hooks instead.
+If you need to override a lot of behaviour on menu classes, and you're comfortable with the idea of subclassing the existing classes and models to override the necessary methods, you might want to look at :ref:`custom_menu_classes`. But, if all you want to do is change the result of ``get_base_page_queryset()`` or ``get_base_menuitem_queryset()`` (say, to limit the links that appear based on the currently logged-in user's permissions), you may find it quicker & easier to use the following hooks instead.
 
 .. _menus_modify_base_page_queryset:
 
 menus_modify_base_page_queryset
 -------------------------------
 
-Whenever a menu needs page data (whether it be for pages selected as menu items for menu in the CMS, or for something entirely page-tree powered), it calls the ``get_base_page_queryset()`` method first to get a 'base' queryset of pages, then applies additional ``filter()`` and ``exclude()`` statements to filter the result down further, depending on what is needed.
+Whenever a menu needs ``Page`` data (whether it be for pages selected as menu items in the CMS, or for something entirely page-tree powered), it calls the ``get_base_page_queryset()`` method to get a 'base' queryset to work from, then applies additional ``filter()`` and ``exclude()`` statements to filter the result down further.
 
-By default, ``get_base_page_queryset()`` applies a few simple filters to prevent certain pages appearing:
+By default, ``get_base_page_queryset()`` applies a few simple filters to prevent certain pages appearing in your menus:
 
 
 .. code-block:: python
@@ -67,8 +67,7 @@ However, if you'd like to filter this result down further, you can do so using s
 
     @hooks.register('menus_modify_base_page_queryset')
     def make_some_changes(
-        queryset, request, menu_type, root_page, max_levels, use_specific,
-        menu_instance, **kwargs
+        queryset, request, menu_type, root_page, menu_instance, **kwargs
     ):
         """
         Ensure only pages 'owned' by the currently logged in user are included
@@ -108,9 +107,9 @@ Or, if you only wanted to change the queryset for a menu of a specific type, you
 menus_modify_base_menuitem_queryset
 -----------------------------------
 
-When rendering a main or flat menu, the top-level items are defined in the CMS, so the menu must fetch that data first, before it can work out whatever additional data is required for rendering.
+When rendering a main or flat menu, top-level items are defined in the CMS, so the menu must fetch that data first, before it can work out whatever additional data is required for rendering.
 
-By default, ``get_base_menuitem_queryset()`` simply returns all of the menu items that were defined in the CMS. Any page data is then fetched separately (using ``get_base_page_queryset()``), and the two results are combined to ensure that only links to appropriate pages are included.
+By default, ``get_base_menuitem_queryset()`` simply returns all of the menu items that were defined in the CMS. Any page data is then fetched separately (using ``get_base_page_queryset()``), and the two results are combined to ensure that only links to appropriate pages are included in the menu being rendered.
 
 However, if you'd only like to include a subset of the CMS-defined menu item, or make any further modifications, you can do so using something like the following:
 
@@ -170,12 +169,12 @@ These changes would be applied to all menu types that use menu items to define t
 Argument reference
 ------------------
 
-In the above examples, ``**kwargs`` is used in hook method signatures to make them *accepting* of other keyword arguments, without having to declare every single argument that should be passed in. Defining hook methods in this way also helps to *future-proof* them, allowing them to accept any new arguments that may be added in future versions of wagtailmenus.
+In the above examples, ``**kwargs`` is used in hook method signatures to make them *accepting* of other keyword arguments, without having to declare every single argument that should be passed in. Using this approach helps keep code tidier, and also makes it more 'future-proof', since the methods will automatically accept any new arguments that may be added by wagtailmenus in future releases.
 
 Below is a full list of arguments passed that are passed to the above hooks and what they mean:
 
 ``queryset``
-    Th Django ``QuerySet`` instance to be modified. For the 'menus_modify_base_page_queryset' hook, this will be a queryset of ``Page`` objects. For the 'menus_modify_base_menuitem_queryset' hook, this will be a queryset of ``MainMenuItem`` or ``FlatMenuItem`` objects (unless you've implemented your own custom menu item models), depending on the type of menu being rendered.
+    The Django ``QuerySet`` instance to be modified. For the 'menus_modify_base_page_queryset' hook, this will be a queryset of ``Page`` objects. For the 'menus_modify_base_menuitem_queryset' hook, this will be a queryset of ``MainMenuItem`` or ``FlatMenuItem`` objects, depending on the type of menu being rendered (or custom menu item models, if you've implemented thrm)
 
 ``request``
     The ``HttpRequest`` object that the menu is currently being rendered for
@@ -292,7 +291,7 @@ This hook allows you to modify the list of items *just before it is passed to a 
 Argument reference
 ------------------
 
-In the above examples, ``**kwargs`` is used in hook method signatures to make them *accepting* of other keyword arguments, without having to declare every single argument that should be passed in. Defining hook methods in this way also helps to *future-proof* them, allowing them to accept any new arguments that may be added in future versions of wagtailmenus.
+InIn the above examples, ``**kwargs`` is used in hook method signatures to make them *accepting* of other keyword arguments, without having to declare every single argument that should be passed in. Using this approach helps keep code tidier, and also makes it more 'future-proof', since the methods will automatically accept any new arguments that may be added by wagtailmenus in future releases.
 
 Below is a full list of arguments passed that are passed to the above hooks, and what they mean:
 
