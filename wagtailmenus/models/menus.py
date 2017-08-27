@@ -97,8 +97,9 @@ class Menu(object):
 
     @property
     def pages_for_display(self):
-        raise NotImplementedError("Subclasses of `Menu` must define their own "
-                                  "'pages_for_display' method")
+        raise NotImplementedError(
+            "Subclasses of 'Menu' must define their own 'pages_for_display' "
+            "method")
 
     @cached_property
     def page_children_dict(self):
@@ -256,6 +257,11 @@ class MenuWithMenuItems(ClusterableModel, Menu):
     @cached_property
     def pages_for_display(self):
         return self.get_pages_for_display()
+
+    def get_menu_items_manager(self):
+        raise NotImplementedError(
+            "Subclasses of 'MenuWithMenuItems' must define their own "
+            "'get_menu_items_manager' method")
 
     def add_menu_items_for_pages(self, pagequeryset=None, allow_subnav=True):
         """Add menu items to this menu, linking to each page in `pagequeryset`
