@@ -33,5 +33,5 @@ class Command(BaseCommand):
                 menu.add_menu_items_for_pages(
                     site.root_page.get_descendants(
                         inclusive=options['add-home-links']
-                    ).filter(depth__lte=3)
+                    ).filter(depth__lte=site.root_page.depth + 1)
                 )
