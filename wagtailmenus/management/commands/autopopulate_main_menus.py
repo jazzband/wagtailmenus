@@ -22,7 +22,7 @@ class Command(BaseCommand):
             '--add-home-links',
             action='store_true',
             dest='add-home-links',
-            default=True,
+            default=False,
             help="Add menu items for 'home' pages",
         )
 

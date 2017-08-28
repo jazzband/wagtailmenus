@@ -16,18 +16,6 @@ class TestAutoPopulateMainMenus(TestCase):
         self.model = app_settings.MAIN_MENU_MODEL_CLASS
         self.model.objects.all().delete()
 
-    def test_with_home_links(self):
-        call_command('autopopulate_main_menus')
-        site = Site.objects.all().first()
-        menu = self.model.get_for_site(site)
-        menu_items = menu.get_menu_items_manager()
-
-        # Confirm that there are menu items
-        self.assertTrue(menu_items.count())
-
-        # Confirm that the first item is a home page link
-        self.assertTrue(menu_items.first().menu_text == 'Home')
-
     def test_without_home_links(self):
         call_command('autopopulate_main_menus', add_home_links=False)
         site = Site.objects.all().first()
@@ -39,3 +27,15 @@ class TestAutoPopulateMainMenus(TestCase):
 
         # Confirm that the first item is NOT a home page link
         self.assertFalse(menu_items.first().menu_text == 'Home')
+
+    def test_with_home_links(self):
+        call_command('autopopulate_main_menus', add_home_links=True)
+        site = Site.objects.all().first()
+        menu = self.model.get_for_site(site)
+        menu_items = menu.get_menu_items_manager()
+
+        # Confirm that there are menu items
+        self.assertTrue(menu_items.count())
+
+        # Confirm that the first item is a home page link
+        self.assertTrue(menu_items.first().menu_text == 'Home')
