@@ -1,8 +1,7 @@
 from __future__ import unicode_literals
 import warnings
 
-from copy import copy
-from django.template import Library
+from django.template import Context, Library
 from wagtail.wagtailcore import hooks
 from wagtail.wagtailcore.models import Page
 
@@ -86,8 +85,9 @@ def main_menu(
                                                      sub_menu_template)
     submenu_t = context.template.engine.select_template(sub_template_names)
 
-    c = copy(context)
-    c.update({
+    # Prepare context data and render to template
+    context_data = context.flatten()
+    context_data.update({
         'menu_items': menu_items,
         'main_menu': menu,
         'use_specific': menu.use_specific,
@@ -102,7 +102,7 @@ def main_menu(
         'current_ancestor_ids': ancestor_ids,
         'use_absolute_page_urls': use_absolute_page_urls,
     })
-    return t.render(c)
+    return t.render(Context(context_data))
 
 
 @register.simple_tag(takes_context=True)
@@ -171,6 +171,7 @@ def flat_menu(
     for hook in hooks.get_hooks('menus_modify_primed_menu_items'):
         menu_items = hook(menu_items, **kwargs)
 
+    # Identify templates for rendering
     template_names = menu.get_template_names(request, template)
     t = context.template.engine.select_template(template_names)
 
@@ -178,8 +179,9 @@ def flat_menu(
                                                           sub_menu_template)
     submenu_t = context.template.engine.select_template(sub_template_names)
 
-    c = copy(context)
-    c.update({
+    # Prepare context data and render to template
+    context_data = context.flatten()
+    context_data.update({
         'menu_items': menu_items,
         'matched_menu': menu,
         'menu_handle': handle,
@@ -196,7 +198,7 @@ def flat_menu(
         'current_ancestor_ids': ancestor_ids,
         'use_absolute_page_urls': use_absolute_page_urls,
     })
-    return t.render(c)
+    return t.render(Context(context_data))
 
 
 def get_sub_menu_items_for_page(
@@ -357,9 +359,12 @@ def sub_menu(
         use_absolute_page_urls=use_absolute_page_urls,
     )
 
-    # Prepare context and render
-    context = copy(context)
-    context.update({
+    # Identify template for rendering
+    t = context.template.engine.get_template(template)
+
+    # Prepare context data and render to template
+    context_data = context.flatten()
+    context_data.update({
         'parent_page': parent_page,
         'menu_items': menu_items,
         'apply_active_classes': apply_active_classes,
@@ -370,8 +375,7 @@ def sub_menu(
         'original_menu_tag': original_menu_tag,
         'use_absolute_page_urls': use_absolute_page_urls,
     })
-    t = context.template.engine.get_template(template)
-    return t.render(context)
+    return t.render(Context(context_data))
 
 
 @register.simple_tag(takes_context=True)
@@ -455,9 +459,9 @@ def section_menu(
                                                      sub_menu_template)
     submenu_t = context.template.engine.select_template(sub_template_names)
 
-    # Prepare context and render
-    c = copy(context)
-    c.update({
+    # Prepare context data and render to template
+    context_data = context.flatten()
+    context_data.update({
         'section_root': section_root,
         'menu_instance': menu_instance,
         'menu_items': menu_items,
@@ -473,7 +477,7 @@ def section_menu(
         'use_specific': use_specific,
         'use_absolute_page_urls': use_absolute_page_urls,
     })
-    return t.render(c)
+    return t.render(Context(context_data))
 
 
 @register.simple_tag(takes_context=True)
@@ -527,9 +531,9 @@ def children_menu(
                                                      sub_menu_template)
     submenu_t = context.template.engine.select_template(sub_template_names)
 
-    # Prepare context and render
-    c = copy(context)
-    c.update({
+    # Prepare context data and render to template
+    context_data = context.flatten()
+    context_data.update({
         'parent_page': parent_page,
         'menu_instance': menu_instance,
         'menu_items': menu_items,
@@ -543,7 +547,7 @@ def children_menu(
         'use_specific': use_specific,
         'use_absolute_page_urls': use_absolute_page_urls,
     })
-    return t.render(c)
+    return t.render(Context(context_data))
 
 
 def prime_menu_items(
