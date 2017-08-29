@@ -4,6 +4,13 @@ Changelog
 2.5.0a (XX.XX.XXXX) IN DEVELOPMENT
 ---------------------------------- 
 
+
+* Added a 'add_menu_items_for_pages()' method to the `MenuWithMenuItems` model,
+  which adds menu item to a menu object, linking to any pages passed in as a `PageQuerySet`.
+* Added the 'autopopulate_main_menus' command, that can be run as part of the 
+  installation process to help populate main menus based on the 'home' and 
+  'section root' pages for each site.
+* Added support for Wagtail 1.12.
 * Fixed an issue with runtests.py that was causing tox builds in Travis CI
   to report as successful, even when tests were failing. Contributed by
   Oliver Bestwalter (obestwalter).
@@ -35,7 +42,7 @@ Changelog
   querysets and manipulation of menu items during rendering. For more
   information and examples, see the 'Hooks' section of the documentation:
   http://wagtailmenus.readthedocs.io/en/latest/advanced_topics/hooks.html
-* Added support for Wagtail 1.12.
+
 
 
 2.4.0 (04.08.2017)
