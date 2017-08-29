@@ -27,9 +27,11 @@ New 'autopopulate_main_menus' command added
 
 The 'autopopulate_main_menus' command has been introduced to help developers integrate wagtailmenus into an existing project, by removing some of the effort that is often needed to populating main menu for each project from scratch. It's been introduced as an extra (optional) step to the instruction in: :ref:`installing_wagtailmenus`.
 
+Utilises the new ``add_menu_items_for_pages()`` method, mentioned below.
 
-New 'add_menu_items_for_pages()' method added to main and flat menus
---------------------------------------------------------------------
+
+New 'add_menu_items_for_pages()' method added for main & flat menus
+-------------------------------------------------------------------
 
 For each page in the provided ``PageQuerySet`` a menu item will be added to the menu, linking to that page. The method has was added to the ``MenuWithMenuItems`` model class, which is subclassed by ``AbstractMainMenu`` and ``AbstractFlatMenu``, which means you should be able to use it on custom menu model objects, as well as object using the default models.
 
