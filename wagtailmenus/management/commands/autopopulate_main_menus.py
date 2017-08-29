@@ -32,6 +32,6 @@ class Command(BaseCommand):
             if not menu.get_menu_items_manager().exists():
                 menu.add_menu_items_for_pages(
                     site.root_page.get_descendants(
-                        inclusive=options['add-home-links']
+                        inclusive=bool(options['add-home-links'])
                     ).filter(depth__lte=site.root_page.depth + 1)
                 )
