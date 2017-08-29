@@ -25,7 +25,7 @@ They use the hooks mechanism from Wagtail, so you may already be familiar with t
 New 'autopopulate_main_menus' command added
 -------------------------------------------
 
-The 'autopopulate_main_menus' command has been introduced to help developers integrate wagtailmenus into an existing project, by removing some of the effort that is often needed to populating main menu for each project from scratch. It's been introduced as an extra (optional) step to the instruction in: :ref:`_installing_wagtailmenus`.
+The 'autopopulate_main_menus' command has been introduced to help developers integrate wagtailmenus into an existing project, by removing some of the effort that is often needed to populating main menu for each project from scratch. It's been introduced as an extra (optional) step to the instruction in: :ref:`installing_wagtailmenus`.
 
 
 New 'add_menu_items_for_pages()' method added to main and flat menus
