@@ -19,7 +19,21 @@ Hooks added to give developers more options for manipulating menus
 
 While wagtailmenus has long supported the use of custom classes for most things (allowing developers to override methods as they see fit), for a long time, I've felt that it should be easier to override some core/shared behaviour without the technical overhead of having to create and maintain multiple custom models and classes. So, wagtailmenus now supports several 'hooks', which allow you to do just that.
 
-They use the hooks mechanism from Wagtail, so you may already be familiar with the concept. For more information and examples, see the new :ref:`hooks` section of the documentation.
+They use the hooks mechanism from Wagtail, so you may already be familiar with the concept. For more information and examples, see the new section of the documentation: :ref:`hooks`.
+
+
+New 'autopopulate_main_menus' command added
+-------------------------------------------
+
+The 'autopopulate_main_menus' command has been introduced to help developers integrate wagtailmenus into an existing project, by removing some of the effort that is often needed to populating main menu for each project from scratch. It's been introduced as an extra (optional) step to the instruction in: :ref:`installing_wagtailmenus`.
+
+Utilises the new ``add_menu_items_for_pages()`` method, mentioned below.
+
+
+New 'add_menu_items_for_pages()' method added for main & flat menus
+-------------------------------------------------------------------
+
+For each page in the provided ``PageQuerySet`` a menu item will be added to the menu, linking to that page. The method has was added to the ``MenuWithMenuItems`` model class, which is subclassed by ``AbstractMainMenu`` and ``AbstractFlatMenu``, which means you should be able to use it on custom menu model objects, as well as object using the default models.
 
 
 Overriding 'get_base_page_queryset()' now effects top-level menu items too 
@@ -36,7 +50,7 @@ Now, 'top_level_items' has been refactored to call get_base_page_queryset() to f
 When sourcing data for a main or flat menu, it doesn't make sense to apply two sets of filters relating to pages status/visibility, so 'for_display' now simply returns ALL menu items defined for a menu, and any unsuitable page links are filtered out in a menu instances 'top_level_items' by calling upon 'get_base_page_queryset'.
 
 
-Bug fixes & minor changes 
+Minor changes & bug fixes 
 =========================
 
 *   Fixed an issue with runtests.py that was causing tox builds in Travis CI

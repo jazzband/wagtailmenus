@@ -56,3 +56,64 @@ Installing wagtailmenus
     .. code-block:: console
 
         python manage.py migrate wagtailmenus
+
+5.  **This step is optional**. If you're adding wagtailmenus to an existing
+    project, and the tree for each site follows a structure similar to the
+    example below, you may find it useful to run the 'autopopulate_main_menus' 
+    command to populate main menus for your site(s).
+    
+    However, this will only yield useful results if the 'root page' you've
+    set for your site(s) is what you consider to be the 'Home' page, and the
+    pages directly below that are the pages you'd like to link to in your main
+    menu.
+
+    For example, if your page structure looked like the following:
+
+    ::
+        Home (Set as 'root page' for the site)     
+        ├── About us
+        ├── What we do
+        ├── Careers
+        |   ├── Vacancy one
+        |   └── Vacancy two
+        ├── News & events
+        |   ├── News
+        |   └── Events
+        └── Contact us
+
+    Running the command from the console:
+
+    .. code-block:: console
+
+        python manage.py autopopulate_main_menus
+
+    Would create a main menu with the following items:
+
+    * About us
+    * What we do
+    * Careers
+    * News & events
+    * Contact us
+
+    If you'd like wagtailmenus to also include a link to the 'home page', you
+    can use the '--add-home-links' option, like so:
+
+    .. code-block:: console
+
+        python manage.py autopopulate_main_menus --add-home-links=True
+
+    This would create a main menu with the following items:
+
+    * Home
+    * About us
+    * What we do
+    * Careers
+    * News & events
+    * Contact us
+
+    .. NOTE ::
+        The 'autopopulate_main_menus' command is meant as 'run once' command to
+        help you get started, and will only affect menus that do not already
+        have any menu items defined. Running it more than once won't have any
+        effect, even if you make changes to your page tree before running it
+        again.

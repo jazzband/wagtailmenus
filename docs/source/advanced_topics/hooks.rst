@@ -67,7 +67,7 @@ However, if you'd like to filter this result down further, you can do so using s
 
     @hooks.register('menus_modify_base_page_queryset')
     def make_some_changes(
-        queryset, request, menu_type, root_page, menu_instance, **kwargs
+        queryset, request, menu_type, root_page, menu_instance, **kwargs
     ):
         """
         Ensure only pages 'owned' by the currently logged in user are included
@@ -128,7 +128,7 @@ However, if you'd only like to include a subset of the CMS-defined menu item, or
     ):
         """
         If the request is from a specific site, and the current user is
-        authenticated, don't show links to some custom custom URLs
+        authenticated, don't show links to some custom URLs
         """
         if(
             request.site.hostname.startswith('intranet.') and 
@@ -152,7 +152,7 @@ These changes would be applied to all menu types that use menu items to define t
         """
         When generating a flat menu with the 'action-links' handle, and the
         request is for a specific site, and the current user is authenticated,
-        don't show links to some custom custom URLs
+        don't show links to some custom URLs
         """
         if(
             menu_type == 'flat_menu' and 

@@ -157,6 +157,37 @@ class TestModels(TestCase):
             for p in menu.pages_for_display:
                 assert type(p) is not Page
 
+    def test_add_menu_items_for_pages(self):
+        menu = MainMenu.objects.get(pk=1)
+        # The current number of menu items is 6
+        self.assertEqual(menu.get_menu_items_manager().count(), 6)
+
+        # 'Superheroes' has 2 children: 'D.C. Comics' & 'Marvel Comics'
+        superheroes_page = Page.objects.get(title="Superheroes")
+        children_of_superheroes = superheroes_page.get_children()
+        self.assertEqual(children_of_superheroes.count(), 2)
+
+        # Use 'add_menu_items_for_pages' to add pages for the above pages
+        menu.add_menu_items_for_pages(children_of_superheroes)
+
+        # The number of menu items should now be 8
+        self.assertEqual(menu.get_menu_items_manager().count(), 8)
+
+        # Evaluate menu items to a list
+        menu_items = list(menu.get_menu_items_manager().all())
+
+        # The last item should be a link to the 'D.C. Comics' page, and the
+        # sort_order on the item should be 7
+        dc_item = menu_items.pop()
+        self.assertEqual(dc_item.link_page.title, 'D.C. Comics')
+        self.assertEqual(dc_item.sort_order, 7)
+
+        # The '2nd to last' item should be a link to the 'Marvel Comics' page,
+        # and the sort_order on the item should be 6
+        marvel_item = menu_items.pop()
+        self.assertEqual(marvel_item.link_page.title, 'Marvel Comics')
+        self.assertEqual(marvel_item.sort_order, 6)
+
 
 class TestLinkPage(TestCase):
     fixtures = ['test.json']
@@ -234,7 +265,8 @@ class TestLinkPage(TestCase):
         url_link_html = (
             '<li class="google external"><a href="https://www.google.co.uk?somevar=value">Do a google search</a></li>'
         )
-        # When the target page is live, both the 'Spiderman' and 'Google' link should appear 
+        # When the target page is live, both the 'Spiderman' and 'Google' link
+        # should appear
         response = self.client.get('/')
         self.assertContains(response, page_link_html, html=True)
         self.assertContains(response, url_link_html, html=True)
