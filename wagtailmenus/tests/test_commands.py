@@ -23,10 +23,15 @@ class TestAutoPopulateMainMenus(TestCase):
         menu_items = menu.get_menu_items_manager()
 
         # Confirm that there are menu items
-        self.assertTrue(menu_items.count())
+        self.assertTrue(menu_items.count() == 5)
 
         # Confirm that the first item is NOT a home page link
         self.assertFalse(menu_items.first().menu_text == 'Home')
+
+        # Call the command again to confirm that the already populated
+        # menu doesn't gain any more items
+        call_command('autopopulate_main_menus', add_home_links=False)
+        self.assertTrue(menu_items.count() == 5)
 
     def test_with_home_links(self):
         call_command('autopopulate_main_menus', add_home_links=True)
@@ -35,7 +40,12 @@ class TestAutoPopulateMainMenus(TestCase):
         menu_items = menu.get_menu_items_manager()
 
         # Confirm that there are menu items
-        self.assertTrue(menu_items.count())
+        self.assertTrue(menu_items.count() == 6)
 
         # Confirm that the first item is a home page link
         self.assertTrue(menu_items.first().menu_text == 'Home')
+
+        # Call the command again to confirm that the already populated
+        # menu doesn't gain any more items
+        call_command('autopopulate_main_menus', add_home_links=True)
+        self.assertTrue(menu_items.count() == 6)
