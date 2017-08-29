@@ -1,9 +1,9 @@
 
 .. _hooks:
 
-===============================
-Using hooks to manipulate menus
-===============================
+===========================
+Using hooks to modify menus
+===========================
 
 On loading, Wagtail will search for any app with the file ``wagtail_hooks.py`` and execute the contents. This provides a way to register your own functions to execute at certain points in Wagtail's execution, such as when a ``Page`` object is saved or when the main menu is constructed.
 
@@ -37,14 +37,14 @@ Hooks for modifying data used in menus
 
 Menu classes are responsible for fetching all of the data needed for rendering a menu, and feeding it back to the various template tags as and when that data is needed. 
 
-If you need to override a lot of behaviour on menu classes, and you're comfortable with the idea of subclassing the existing classes and models to override the necessary methods, you might want to look at :ref:`custom_menu_classes`. But, if all you want to do is change the result of ``get_base_page_queryset()`` or ``get_base_menuitem_queryset()`` (say, to limit the links that appear based on the currently logged-in user's permissions), you may find it quicker & easier to use the following hooks instead.
+If you need to override a lot of menu class behaviour, and you're comfortable with the idea of subclassing the existing classes and models to override the necessary methods, you might want to look at :ref:`custom_menu_classes`. But, if all you want to do is change the result of ``get_base_page_queryset()`` or ``get_base_menuitem_queryset()`` (say, to limit the links that appear based on the permissions of the currently logged-in user), you may find it quicker & easier to use the following hooks instead.
 
 .. _menus_modify_base_page_queryset:
 
 menus_modify_base_page_queryset
 -------------------------------
 
-Whenever a menu needs ``Page`` data (whether it be for pages selected as menu items in the CMS, or for something entirely page-tree powered), it calls the ``get_base_page_queryset()`` method to get a 'base' queryset to work from, then applies additional ``filter()`` and ``exclude()`` statements to filter the result down further.
+Whenever a menu needs ``Page`` data (whether it be for pages selected as menu items in the CMS, or for something entirely page-tree powered), the menu's ``get_base_page_queryset()`` method is always called to get a 'base' queryset to work from, before applying any additional ``filter()`` and ``exclude()`` statements.
 
 By default, ``get_base_page_queryset()`` applies a few simple filters to prevent certain pages appearing in your menus:
 
@@ -70,7 +70,8 @@ However, if you'd like to filter this result down further, you can do so using s
         queryset, request, menu_type, root_page, menu_instance, **kwargs
     ):
         """
-        Ensure only pages 'owned' by the currently logged in user are included
+        Ensure only pages 'owned' by the currently logged in user are included.
+        NOTE: MUST ALWAYS RETURN A QUERYSET
         """
         if not request.user.is_authenticated():
             return queryset.none()
@@ -92,7 +93,8 @@ Or, if you only wanted to change the queryset for a menu of a specific type, you
     ):
         """
         Ensure only pages 'owned' by the currently logged in user are included,
-        but only for 'main' or 'flat' menus
+        but only for 'main' or 'flat' menus.
+        NOTE: MUST ALWAYS RETURN A QUERYSET
         """
         if menu_type in ('main_menu', 'flat_menu'):
             if not request.user.is_authenticated():
@@ -128,7 +130,8 @@ However, if you'd only like to include a subset of the CMS-defined menu item, or
     ):
         """
         If the request is from a specific site, and the current user is
-        authenticated, don't show links to some custom URLs
+        authenticated, don't show links to some custom URLs.
+        NOTE: MUST ALWAYS RETURN A QUERYSET
         """
         if(
             request.site.hostname.startswith('intranet.') and 
@@ -152,7 +155,8 @@ These changes would be applied to all menu types that use menu items to define t
         """
         When generating a flat menu with the 'action-links' handle, and the
         request is for a specific site, and the current user is authenticated,
-        don't show links to some custom URLs
+        don't show links to some custom URLs.
+        NOTE: MUST ALWAYS RETURN A QUERYSET
         """
         if(
             menu_type == 'flat_menu' and 
@@ -240,7 +244,7 @@ This hook allows you to modify the list of items *as soon as it is fetched* from
                 menu_items.append(menu_items[0])
             except KeyError:
                 pass
-        return menu_items
+        return menu_items  # always return a list
 
 
 The modified list of menu items will then continue to be processed as normal, being passed to `prime_menu_items` for priming, and then on to the parent page's 'modify_submenu_items()' for further modification.
@@ -283,7 +287,7 @@ This hook allows you to modify the list of items *just before it is passed to a 
                 'text': 'VISIT RKH.CO.UK',
                 'active_class': 'external',
             })
-        return menu_items
+        return menu_items  # always return a list
 
 
 .. _arg_reference_tag_hooks:
