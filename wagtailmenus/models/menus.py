@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 import warnings
 
 from collections import defaultdict, namedtuple
+from types import GeneratorType
 
 from django.db import models
 from django.core.exceptions import ImproperlyConfigured, ValidationError
@@ -324,9 +325,12 @@ class Menu(object):
 
         # Prime and modify the menu items accordingly
         items = self.modify_menu_items(self.prime_menu_items(items))
+        if isinstance(items, GeneratorType):
+            items = list(items)
 
         # Allow hooks to modify the primed/modified list
-        for hook in hooks.get_hooks('menus_modify_primed_menu_items'):
+        hook_methods = hooks.get_hooks('menus_modify_primed_menu_items')
+        for hook in hook_methods:
             items = hook(items, **hook_kwargs)
         return items
 
@@ -351,7 +355,6 @@ class Menu(object):
         ancestor_css_class = app_settings.ACTIVE_ANCESTOR_CLASS
 
         stop_at_this_level = (cvals.current_level >= self.max_levels)
-        primed_menu_items = []
 
         for item in menu_items:
 
@@ -383,7 +386,7 @@ class Menu(object):
                     else:
                         url = item.relative_url(current_site, self.request)
                     setattr(item, 'href', url)
-                    primed_menu_items.append(item)
+                    yield item
                 continue
 
             else:
@@ -483,9 +486,7 @@ class Menu(object):
                 # attribute
                 url = item.relative_url(current_site)
             setattr(item, 'href', url)
-            primed_menu_items.append(item)
-
-        return primed_menu_items
+            yield item
 
     def get_template(self):
         e = self._contextual_vals.template_engine
@@ -678,7 +679,7 @@ class MenuFromRootPage(MultiLevelMenu):
             warnings.warn(warning_msg, RemovedInWagtailMenus26Warning)
 
         # Call `modify_submenu_items` using the above kwargs dict
-        return root.modify_submenu_items(menu_items, **kwargs)
+        return root.modify_submenu_items(list(menu_items), **kwargs)
 
 
 class SectionMenu(MenuFromRootPage):
@@ -797,11 +798,9 @@ class MenuWithMenuItems(ClusterableModel, MultiLevelMenu):
     def get_base_menuitem_queryset(self):
         qs = self.get_menu_items_manager().for_display()
         # allow hooks to modify the queryset
-        hook_methods = hooks.get_hooks('menus_modify_base_menuitem_queryset')
-        if hook_methods:
-            hook_kwargs = self.get_common_hook_kwargs()
         for hook in hooks.get_hooks('menus_modify_base_menuitem_queryset'):
-            qs = hook(qs, **hook_kwargs)
+            common_kwargs = self.get_common_hook_kwargs()
+            qs = hook(qs, **common_kwargs)
         return qs
 
     @cached_property
