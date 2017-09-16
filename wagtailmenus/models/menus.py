@@ -50,7 +50,6 @@ class Menu(object):
     pages_for_display = None
     root_page = None  # Not relevant for all menu classes
     request = None
-    menu_type = ''  # provided to hook methods
     menu_short_name = ''  # used to find templates
     menu_instance_context_name = 'menu'
     sub_menu_class = None
@@ -694,9 +693,8 @@ class MenuFromRootPage(MultiLevelMenu):
 
 
 class SectionMenu(MenuFromRootPage):
-    menu_type = 'section_menu'  # provided to hook methods
     menu_short_name = 'section'  # used to find templates
-    menu_instance_context_name = menu_type
+    menu_instance_context_name = 'section_menu'
 
     @classmethod
     def identify_parent_page_from_vals(cls, contextual_vals, option_vals):
@@ -770,10 +768,9 @@ class SectionMenu(MenuFromRootPage):
 
 
 class ChildrenMenu(MenuFromRootPage):
-    menu_type = 'children_menu'  # provided to hook methods
     menu_short_name = 'children'  # used to find templates
+    menu_instance_context_name = 'children_menu'
     root_page_context_name = 'parent_page'
-    menu_instance_context_name = menu_type
 
     @classmethod
     def get_least_specific_template_name(cls):
@@ -933,9 +930,8 @@ class MenuWithMenuItems(ClusterableModel, MultiLevelMenu):
 
 @python_2_unicode_compatible
 class AbstractMainMenu(MenuWithMenuItems):
-    menu_type = 'main_menu'  # provided to hook methods
     menu_short_name = 'main'  # used to find templates
-    menu_instance_context_name = menu_type
+    menu_instance_context_name = 'main_menu'
 
     site = models.OneToOneField(
         'wagtailcore.Site',
@@ -1024,9 +1020,8 @@ class AbstractMainMenu(MenuWithMenuItems):
 
 @python_2_unicode_compatible
 class AbstractFlatMenu(MenuWithMenuItems):
-    menu_type = 'flat_menu'  # provided to hook methods
     menu_short_name = 'flat'  # used to find templates
-    menu_instance_context_name = 'matched_menu'
+    menu_instance_context_name = 'flat_menu'
 
     site = models.ForeignKey(
         'wagtailcore.Site',
@@ -1157,6 +1152,8 @@ class AbstractFlatMenu(MenuWithMenuItems):
             'menu_heading': self.get_heading(),
             'menu_handle': self.handle,
             'show_menu_heading': self._option_vals.extra['show_menu_heading'],
+            # The below is added for backwards compatibility
+            'matched_menu': self,
         }
         data.update(kwargs)
         return super(AbstractFlatMenu, self).get_context_data(**data)
