@@ -32,19 +32,19 @@ Wagtailmenus utilises this same 'hooks' mechanism to allow you make modification
     :depth: 2
 
 
-Hooks for modifying data used in menus
-======================================
+Hooks for modifying QuerySets
+=============================
 
-Menu classes are responsible for fetching all of the data needed for rendering a menu, and feeding it back to the various template tags as and when that data is needed. 
+When a menu instance is gathering the data it needs to render itself, it typically uses one or more QuerySets to fetch ``Page`` and ``MenuItem`` data from the database. These hooks allow you to modify those QuerySets before they are evaluated, allowing you to efficiently control menu contents.
 
-If you need to override a lot of menu class behaviour, and you're comfortable with the idea of subclassing the existing classes and models to override the necessary methods, you might want to look at :ref:`custom_menu_classes`. But, if all you want to do is change the result of ``get_base_page_queryset()`` or ``get_base_menuitem_queryset()`` (say, to limit the links that appear based on the permissions of the currently logged-in user), you may find it quicker & easier to use the following hooks instead.
+If you need to override a lot of menu class behaviour, and you're comfortable with the idea of subclassing the existing classes and models to override the necessary methods, you might want to look at :ref:`custom_menu_classes`. But, if all you want to do is change the result of a menu's ``get_base_page_queryset()`` or ``get_base_menuitem_queryset()`` (say, to limit the links that appear based on the permissions of the currently logged-in user), you may find it quicker & easier to use the following hooks instead.
 
 .. _menus_modify_base_page_queryset:
 
 menus_modify_base_page_queryset
 -------------------------------
 
-Whenever a menu needs ``Page`` data (whether it be for pages selected as menu items in the CMS, or for something entirely page-tree powered), the menu's ``get_base_page_queryset()`` method is always called to get a 'base' queryset to work from, before applying any additional ``filter()`` and ``exclude()`` statements.
+Whenever a menu needs ``Page`` data, the menu's ``get_base_page_queryset()`` method is called to get a 'base' queryset, which then has additional ``filter()`` and ``exclude()`` statements added to it as required.
 
 By default, ``get_base_page_queryset()`` applies a few simple filters to prevent certain pages appearing in your menus:
 
@@ -58,7 +58,7 @@ However, if you'd like to filter this result down further, you can do so using s
 
 
 .. NOTE::
-    The below examples only show a subset of the arguments that are passed to methods using the 'menus_modify_base_page_queryset' hook. For a full list of the arguments supplied, see :ref:`arg_reference_menu_hooks` below.
+    The below example shows only a subset of the arguments that are passed to methods using this hook. For a full list of the arguments supplied, see the :ref:`hooks_argument_reference` below.
 
 
 .. code-block:: python
@@ -67,7 +67,8 @@ However, if you'd like to filter this result down further, you can do so using s
 
     @hooks.register('menus_modify_base_page_queryset')
     def make_some_changes(
-        queryset, request, menu_type, root_page, menu_instance, **kwargs
+        queryset, request, menu_instance, original_menu_tag, current_site,
+        **kwargs
     ):
         """
         Ensure only pages 'owned' by the currently logged in user are included.
@@ -89,7 +90,8 @@ Or, if you only wanted to change the queryset for a menu of a specific type, you
 
     @hooks.register('menus_modify_base_page_queryset')
     def make_some_changes(
-        queryset, request, menu_type, root_page, menu_instance, **kwargs
+        queryset, request, menu_instance, original_menu_tag, current_site,
+        **kwargs
     ):
         """
         Ensure only pages 'owned' by the currently logged in user are included,
@@ -117,7 +119,7 @@ However, if you'd only like to include a subset of the CMS-defined menu item, or
 
 
 .. NOTE::
-    The below examples only show a subset of the arguments that are passed to methods using the 'menus_modify_base_menuitem_queryset' hook. For a full list of the arguments supplied, see :ref:`arg_reference_menu_hooks` below.
+    The below example shows only a subset of the arguments that are passed to methods using this hook. For a full list of the arguments supplied, see the :ref:`hooks_argument_reference` below.
 
 
 .. code-block:: python
@@ -126,7 +128,8 @@ However, if you'd only like to include a subset of the CMS-defined menu item, or
 
     @hooks.register('menus_modify_base_menuitem_queryset')
     def make_some_changes(
-        queryset, request, menu_type, menu_instance, **kwargs
+        queryset, request, menu_instance, original_menu_tag, current_site,
+        **kwargs
     ):
         """
         If the request is from a specific site, and the current user is
@@ -134,7 +137,7 @@ However, if you'd only like to include a subset of the CMS-defined menu item, or
         NOTE: MUST ALWAYS RETURN A QUERYSET
         """
         if(
-            request.site.hostname.startswith('intranet.') and 
+            current_site.hostname.startswith('intranet.') and 
             request.user.is_authenticated()
         ):
             queryset = queryset.exclude(handle__contains="visiting-only")
@@ -150,7 +153,8 @@ These changes would be applied to all menu types that use menu items to define t
 
     @hooks.register('menus_modify_base_menuitem_queryset')
     def make_some_changes(
-        queryset, request, menu_type, menu_instance, **kwargs
+        queryset, request, menu_instance, original_menu_tag, current_site,
+        **kwargs
     ):
         """
         When generating a flat menu with the 'action-links' handle, and the
@@ -159,50 +163,19 @@ These changes would be applied to all menu types that use menu items to define t
         NOTE: MUST ALWAYS RETURN A QUERYSET
         """
         if(
-            menu_type == 'flat_menu' and 
+            original_menu_tag == 'flat_menu' and 
             menu_instance.handle == 'action-links' and
-            request.site.hostname.startswith('intranet.') and 
+            current_site.hostname.startswith('intranet.') and 
             request.user.is_authenticated()
         ):
             queryset = queryset.exclude(handle__contains="visiting-only")
         return queryset  # always return a queryset
 
 
-.. _arg_reference_menu_hooks:
+Hooks for modifying menu items
+==============================
 
-Argument reference
-------------------
-
-In the above examples, ``**kwargs`` is used in hook method signatures to make them *accepting* of other keyword arguments, without having to declare every single argument that should be passed in. Using this approach helps keep code tidier, and also makes it more 'future-proof', since the methods will automatically accept any new arguments that may be added by wagtailmenus in future releases.
-
-Below is a full list of arguments passed that are passed to the above hooks and what they mean:
-
-``queryset``
-    The Django ``QuerySet`` instance to be modified. For the 'menus_modify_base_page_queryset' hook, this will be a queryset of ``Page`` objects. For the 'menus_modify_base_menuitem_queryset' hook, this will be a queryset of ``MainMenuItem`` or ``FlatMenuItem`` objects, depending on the type of menu being rendered (or custom menu item models, if you've implemented thrm)
-
-``request``
-    The ``HttpRequest`` object that the menu is currently being rendered for
-
-``menu_type``
-    A string value indicating the 'type' of menu currently being rendered. Should be one of: ``'main_menu'``, ``'flat_menu'``, ``'section_menu'`` or ``'children_menu'``. Comparable to the ``original_menu_tag`` values supplied to other hooks.
-
-``root_page``
-    Supplied to the :ref:`menus_modify_base_page_queryset` hook only. A value will only be provided if the hook is being called from an instance of ``ChildrenMenu`` or ``SecionMenu``, where the contents of the menu is based entirely around a specific page, and it's position in the page tree. For an instance of ChildrenMenu, ``root_page`` will be generally be the page the ``{% children_menu %}`` tag is being rendered on. For an instance of SectionMenu, ``root_page`` will indicate the 'section root' page for the page being rendered (Usually the 'ancestor' page directly below the 'Home page' for the current site).
-
-``menu_instance``
-    The menu instance that is supplying the data required to generate the current menu. This could be an instance of a model class, like ``MainMenu`` or ``FlatMenu``, or a standard python class like ``ChildrenMenu`` or ``SectionMenu``.
-
-``max_levels``
-    An integer value indicatiing the maxiumum number of levels that should be rendered for the current menu. This will either have been specified by the developer using the ``max_levels`` argument of a menu tag, or might have been set in the CMS for a specific ``MainMenu`` or ``FlatMenu`` instance. 
-
-``use_specific``
-    An integer value indicating the preferred policy for using ``PageQuerySet.specific()`` and ``Page.specific`` in rendering the current menu. For more information see: :ref:`specific_pages_tag_args`.
-
-
-Hooks for modifying menu items before rendering
-===============================================
-
-While the above tags are focussed on sourcing data required for a menu, the following hooks are called from within the various menu tags, as they prepare menu items for rendering.
+While the above tags are concerned with modifying the data used in a menu, the following hooks are called later on in the rendering process, and allow you to modify the list of ``MenuItem`` or ``Page`` objects before they are sent to a template to be rendered.
 
 There are two hooks you can use to modify menu items, which are called at different stages of preparation.
 
@@ -212,13 +185,10 @@ There are two hooks you can use to modify menu items, which are called at differ
 menus_modify_raw_menu_items
 ---------------------------
 
-Whichever menu tag is being used, and whatever the current level being rendered, the tag starts by querying a Menu instance to fetch the items that need to be included as menu items for the current level.
-
-This hook allows you to modify the list of items *as soon as it is fetched* from the menu class, **before** 'priming' (which sets 'href', 'text', 'active_class' and 'has_children_in_menu' attributes on each item), and **before** being sent to any 'modify_submenu_items()' methods for further modification (see :ref:`manipulating_submenu_items`).
-
+This hook allows you to modify the list **before** it is 'primed' (a process that sets 'href', 'text', 'active_class' and 'has_children_in_menu' attributes on each item), and **before** being sent to a parent page's 'modify_submenu_items()' method for further modification (see :ref:`manipulating_submenu_items`).
 
 .. NOTE::
-    The below example only shows a subset of the arguments that are passed to methods using the 'menus_modify_raw_menu_items' hook. For a full list of the arguments supplied, see :ref:`arg_reference_tag_hooks` below.
+    The below example shows only a subset of the arguments that are passed to methods using this hook. For a full list of the arguments supplied, see the :ref:`hooks_argument_reference` below.
 
 
 .. code-block:: python
@@ -247,7 +217,7 @@ This hook allows you to modify the list of items *as soon as it is fetched* from
         return menu_items  # always return a list
 
 
-The modified list of menu items will then continue to be processed as normal, being passed to `prime_menu_items` for priming, and then on to the parent page's 'modify_submenu_items()' for further modification.
+The modified list of menu items will then continue to be processed as normal, being passed to the menu's 'prime_menu_items()' method for priming, and then on to the parent page's 'modify_submenu_items()' for further modification.
 
 
 .. _menus_modify_primed_menu_items:
@@ -255,10 +225,10 @@ The modified list of menu items will then continue to be processed as normal, be
 menus_modify_primed_menu_items
 ------------------------------
 
-This hook allows you to modify the list of items *just before it is passed to a template for rendering*. So, **after** 'priming' (sets 'href', 'text', 'active_class' and 'has_children_in_menu' attributes on each item), and **after** any 'modify_submenu_items()' methods have made their modifications (see :ref:`manipulating_submenu_items`).
+This hook allows you to modify the list of items **after** they have been 'primed' and the modified by a parent page's 'modify_submenu_items()' methods (see :ref:`manipulating_submenu_items`).
 
 .. NOTE::
-    The below example only shows a subset of the arguments that are passed to methods using the 'menus_modify_primed_menu_items' hook. For a full list of the arguments supplied, see :ref:`arg_reference_tag_hooks` below.
+    The below example shows only a subset of the arguments that are passed to methods using this hook. For a full list of the arguments supplied, see the :ref:`hooks_argument_reference` below.
 
 
 .. code-block:: python
@@ -290,28 +260,34 @@ This hook allows you to modify the list of items *just before it is passed to a 
         return menu_items  # always return a list
 
 
-.. _arg_reference_tag_hooks:
+.. _hooks_argument_reference:
 
 Argument reference
-------------------
+==================
 
-InIn the above examples, ``**kwargs`` is used in hook method signatures to make them *accepting* of other keyword arguments, without having to declare every single argument that should be passed in. Using this approach helps keep code tidier, and also makes it more 'future-proof', since the methods will automatically accept any new arguments that may be added by wagtailmenus in future releases.
+In the above examples, ``**kwargs`` is used in hook method signatures to make them *accepting* of other keyword arguments, without having to declare every single argument that should be passed in. Using this approach helps create leaner, tidier code, and also makes it more 'future-proof', since the methods will automatically accept any new arguments that may be added by wagtailmenus in future releases.
 
-Below is a full list of arguments passed that are passed to the above hooks, and what they mean:
-
-``menu_items``
-    The list of menu items to be modified. 
+Below is a full list of the additional arguments that are passed to methods using the above hooks:
 
 ``request``
-    The ``HttpRequest`` object that the menu is currently being rendered for.
+    The ``HttpRequest`` instance that the menu is currently being rendered for.
+
+``parent_context``
+    The ``Context`` instance that the menu is being rendered from.
 
 ``parent_page``
     If the menu being rendered is showing 'children' of a specific page, this will be the ``Page`` instance who's children pages are being displayed. The value might also be ``None`` if no parent page is involved. For example, if rendering the top level items of a main or flat menu.
 
+``menu_tag``
+    The name of the tag that was called to render the current part of the menu. If rendering the first level of a menu, this will have the same value as ``original_menu_tag``. If not, it will have the value `'sub_menu'` (unless you're using custom tags that pass a different 'tag_name' value to the menu classe's 'render_from_tag' method)
+
 ``original_menu_tag``
-    The name of the tag that was called to initiate rendering of the menu that is currently being rendered. For example, if you're using the ``main_menu`` tag to render a multi-level menu, even though ``sub_menu`` may be called to render subsequent additional levels, 'original_menu_tag' should retain the value ``'main_menu'``. Should be one of: ``'main_menu'``, ``'flat_menu'``, ``'section_menu'`` or ``'children_menu'``. Comparable to the ``menu_type`` values supplied to other hooks.
+    The name of the tag that was called to initiate rendering of the menu that is currently being rendered. For example, if you're using the ``main_menu`` tag to render a multi-level main menu, even though ``sub_menu`` may be called to render subsequent additional levels, 'original_menu_tag' should retain the value ``'main_menu'``. Should be one of: ``'main_menu'``, ``'flat_menu'``, ``'section_menu'`` or ``'children_menu'``. Comparable to the ``menu_type`` values supplied to other hooks.
 
 ``menu_instance``
+    The menu instance that is supplying the data required to generate the current menu. This could be an instance of a model class, like ``MainMenu`` or ``FlatMenu``, or a standard python class like ``ChildrenMenu`` or ``SectionMenu``.
+
+``original_menu_instance``
     The menu instance that is supplying the data required to generate the current menu. This could be an instance of a model class, like ``MainMenu`` or ``FlatMenu``, or a standard python class like ``ChildrenMenu`` or ``SectionMenu``.
 
 ``current_level``
@@ -324,10 +300,30 @@ Below is a full list of arguments passed that are passed to the above hooks, and
     A Wagtail ``Site`` instance, indicating the site that the current request is for (usually also available as ``request.site``)
 
 ``current_page``
-    A Wagtail ``Page`` instance, indicating what wagtailmenus beleives to be the page that is currently being viewed / requested by a user. This might be ``None`` if you're using standard additional views to provide functionality at urls that don't map to a ``Page`` in Wagtail.
+    A Wagtail ``Page`` instance, indicating what wagtailmenus beleives to be the page that is currently being viewed / requested by a user. This might be ``None`` if you're using additional views in your project to provide functionality at URLs that don't map to a ``Page`` in Wagtail.
 
-``current_ancestor_ids``
+``current_page_ancestor_ids``
     A list of ids of ``Page`` instances that are an 'ancestor' of ``current_page``.
+
+``current_section_root_page``
+    If ``current_page`` has a value, this will be the top-most ancestor of that page, from just below the site's root page. For example, if your page tree looked like the following:
+
+    ::
+        Home (Set as 'root page' for the site)     
+        ├── About us
+        ├── What we do
+        ├── Careers
+        |   ├── Vacancy one
+        |   └── Vacancy two
+        ├── News & events
+        |   ├── News
+        |   |   ├── Article one
+        |   |   └── Article two
+        |   └── Events
+        └── Contact us
+
+    if the current page was 'Vacancy one', the section root page would be 
+    'Careers'. Or, if the current page was 'Article one', the section root page would be  'News & events'.
 
 ``use_specific``
     An integer value indicating the preferred policy for using ``PageQuerySet.specific()`` and ``Page.specific`` in rendering the current menu. For more information see: :ref:`specific_pages`.
