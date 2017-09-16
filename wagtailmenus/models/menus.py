@@ -315,25 +315,6 @@ class Menu(object):
             items = hook(items, **hook_kwargs)
         return items
 
-    def get_menu_item_modify_hook_kwargs(self):
-        cvals = self._contextual_vals
-        opts = self._option_vals
-        return {
-            'menu_instance': self,
-            'request': self.request,
-            'parent_page': self.root_page,
-            'current_site': cvals.current_site,
-            'original_menu_tag': cvals.original_menu_tag,
-            'current_page': cvals.current_page,
-            'current_page_ancestor_ids': cvals.current_page_ancestor_ids,
-            'current_level': cvals.current_level,
-            'max_levels': self.max_levels,
-            'use_specific': self.max_levels,
-            'apply_active_classes': opts.apply_active_classes,
-            'allow_repeating_parents': opts.allow_repeating_parents,
-            'use_absolute_page_urls': opts.use_absolute_page_urls,
-        }
-
     def get_top_level_items(self):
         raise NotImplementedError("Subclasses of 'Menu' must define their own "
                                   "'get_top_level_items' method")
