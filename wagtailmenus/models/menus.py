@@ -315,16 +315,9 @@ class Menu(object):
             items = hook(items, **hook_kwargs)
         return items
 
-    def get_top_level_items(self):
-        raise NotImplementedError("Subclasses of 'Menu' must define their own "
-                                  "'get_top_level_items' method")
-
-    @cached_property
-    def top_level_items(self):
-        return self.get_top_level_items()
-
     def get_raw_menu_items(self):
-        return self.top_level_items
+        raise NotImplementedError("Subclasses of 'Menu' must define their own "
+                                  "'get_raw_menu_items' method")
 
     def modify_menu_items(self, menu_items):
         return menu_items
@@ -626,7 +619,7 @@ class MenuFromRootPage(MultiLevelMenu):
             return self.pages_for_display
         return super(MenuFromRootPage, self).get_children_for_page(page)
 
-    def get_top_level_items(self):
+    def get_raw_menu_items(self):
         return list(self.get_children_for_page(self.root_page))
 
     def get_context_data(self, **kwargs):
@@ -894,6 +887,9 @@ class MenuWithMenuItems(ClusterableModel, MultiLevelMenu):
         }
         data.update(kwargs)
         return super(MenuWithMenuItems, self).get_context_data(**data)
+
+    def get_raw_menu_items(self):
+        return self.top_level_items
 
     def prepare_to_render(self, request, contextual_vals, option_vals):
         if option_vals.max_levels is not None:
