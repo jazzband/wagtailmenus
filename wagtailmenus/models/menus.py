@@ -806,6 +806,9 @@ class MenuWithMenuItems(ClusterableModel, MultiLevelMenu):
 
     @cached_property
     def top_level_items(self):
+        return self.get_top_level_items()
+
+    def get_top_level_items(self):
         """Return a list of menu items with link_page objects supplemented with
         'specific' pages where appropriate."""
         menu_items = self.get_base_menuitem_queryset()
