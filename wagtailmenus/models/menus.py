@@ -301,16 +301,31 @@ class Menu(object):
             'current_ancestor_ids': data['current_page_ancestor_ids'],
         })
         if 'menu_items' not in kwargs:
-            data['menu_items'] = self.get_primed_menu_items()
+            data['menu_items'] = self.get_menu_items_for_rendering()
         data.update(kwargs)
         return data
 
-    def get_primed_menu_items(self):
+    def get_menu_items_for_rendering(self):
+        """
+        Return a list of 'menu items' to be included in the context for
+        rendering the current level of the menu.
+
+        The responsibility for sourcing, priming, and modifying menu items is
+        split between 3 methods: ``get_raw_menu_items()``,
+        ``prime_menu_items()`` and ``modify_menu_items()`` (respectively).
+        """
+
         items = self.get_raw_menu_items()
         hook_kwargs = self.get_common_hook_kwargs()
+
+        # Allow hooks to modify the raw list
         for hook in hooks.get_hooks('menus_modify_raw_menu_items'):
             items = hook(items, **hook_kwargs)
+
+        # Prime and modify the menu items accordingly
         items = self.modify_menu_items(self.prime_menu_items(items))
+
+        # Allow hooks to modify the primed/modified list
         for hook in hooks.get_hooks('menus_modify_primed_menu_items'):
             items = hook(items, **hook_kwargs)
         return items
