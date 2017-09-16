@@ -778,10 +778,9 @@ class ChildrenMenu(MenuFromRootPage):
 
 
 class SubMenu(MenuFromRootPage):
-    menu_type = 'sub_menu'  # provided to hook methods
     menu_short_name = 'sub'  # used to find templates
+    menu_instance_context_name = 'sub_menu'
     root_page_context_name = 'parent_page'
-    menu_instance_context_name = menu_type
 
     def prepare_to_render(self, request, contextual_vals, option_vals):
         super(SubMenu, self).prepare_to_render(
