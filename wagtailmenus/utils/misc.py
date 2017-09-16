@@ -1,5 +1,8 @@
+import warnings
+
 from wagtail.wagtailcore.models import Page, Site
-from wagtailmenus.models.menuitems import MenuItem
+from ..models.menuitems import MenuItem
+from .deprecation import RemovedInWagtailMenus27Warning
 
 
 def get_attrs_from_context(context):
@@ -7,6 +10,13 @@ def get_attrs_from_context(context):
     Gets a bunch of useful things from the context/request and returns them as
     a tuple for use in most menu tags.
     """
+    warning_msg = (
+        "The 'get_attrs_from_context' method in wagtailmenus.utils.misc is "
+        "no longer used by menu tags and is deprecated. View the 2.5 release "
+        "notes for more info: "
+        "http://wagtailmenus.readthedocs.io/en/stable/releases/2.5.0.html"
+    )
+    warnings.warn(warning_msg, RemovedInWagtailMenus27Warning)
     request = context.get('request')
     site = get_site_from_request(request)
     wagtailmenus_vals = context.get('wagtailmenus_vals')

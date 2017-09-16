@@ -1,8 +1,18 @@
-from .misc import get_site_from_request
+import warnings
+
 from wagtailmenus import app_settings
+from .deprecation import RemovedInWagtailMenus27Warning
+from .misc import get_site_from_request
 
 
 def get_template_names(menu_tag, request, override):
+    warning_msg = (
+        "The 'get_template_names' method in wagtailmenus.utils.template is "
+        "deprecated in favour of using the 'get_template_names' defined on "
+        "each Menu class. View the 2.5 release notes for more info: "
+        "http://wagtailmenus.readthedocs.io/en/stable/releases/2.5.0.html"
+    )
+    warnings.warn(warning_msg, RemovedInWagtailMenus27Warning)
     if override:
         return [override]
     template_names = []
@@ -24,6 +34,14 @@ def get_template_names(menu_tag, request, override):
 
 
 def get_sub_menu_template_names(menu_tag, request, override):
+    warning_msg = (
+        "The 'get_sub_menu_template_names' method in wagtailmenus.utils."
+        "template is deprecated in favour of using the "
+        "'get_sub_menu_template_names' method defined on each Menu class. "
+        "View the 2.5 release notes for more info: "
+        "http://wagtailmenus.readthedocs.io/en/stable/releases/2.5.0.html"
+    )
+    warnings.warn(warning_msg, RemovedInWagtailMenus27Warning)
     if override:
         return [override]
     template_names = []
