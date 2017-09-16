@@ -719,7 +719,7 @@ class SectionMenu(MenuFromRootPage):
         data = super(SectionMenu, self).get_context_data()
         data['show_section_root'] = opt_vals.extra['show_section_root']
 
-        if 'section_root' not in kwargs and data['show_section_root']:
+        if 'section_root' not in kwargs:
             section_root.text = getattr(
                 section_root, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
                 section_root.title
