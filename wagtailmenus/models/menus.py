@@ -218,16 +218,16 @@ class Menu(object):
             self.use_specific = use_specific
 
     def get_common_hook_kwargs(self, **kwargs):
-        opts = self._option_vals
+        opt_vals = self._option_vals
         hook_kwargs = self._contextual_vals._asdict()
         hook_kwargs.update({
             'menu_instance': self,
             'parent_page': self.root_page,
             'max_levels': self.max_levels,
             'use_specific': self.max_levels,
-            'apply_active_classes': opts.apply_active_classes,
-            'allow_repeating_parents': opts.allow_repeating_parents,
-            'use_absolute_page_urls': opts.use_absolute_page_urls,
+            'apply_active_classes': opt_vals.apply_active_classes,
+            'allow_repeating_parents': opt_vals.allow_repeating_parents,
+            'use_absolute_page_urls': opt_vals.use_absolute_page_urls,
         })
         hook_kwargs.pop('template_engine')
         if hook_kwargs['original_menu_instance'] is None:
@@ -283,16 +283,16 @@ class Menu(object):
         return page.path in self.page_children_dict
 
     def get_context_data(self, **kwargs):
-        opts = self._option_vals
         ctv_vals = self._contextual_vals
+        opt_vals = self._option_vals
 
         data = ctv_vals.parent_context.flatten()
         data.update(ctv_vals._asdict())
         data.update({
             'sub_menu_class': self.get_sub_menu_class(),
-            'apply_active_classes': opts.apply_active_classes,
-            'allow_repeating_parents': opts.allow_repeating_parents,
-            'use_absolute_page_urls': opts.use_absolute_page_urls,
+            'apply_active_classes': opt_vals.apply_active_classes,
+            'allow_repeating_parents': opt_vals.allow_repeating_parents,
+            'use_absolute_page_urls': opt_vals.use_absolute_page_urls,
             'max_levels': self.max_levels,
             'use_specific': self.use_specific,
             'menu_instance': self,
@@ -315,7 +315,6 @@ class Menu(object):
         split between 3 methods: ``get_raw_menu_items()``,
         ``prime_menu_items()`` and ``modify_menu_items()`` (respectively).
         """
-
         items = self.get_raw_menu_items()
         hook_kwargs = self.get_common_hook_kwargs()
 
@@ -346,15 +345,15 @@ class Menu(object):
         Prepare a list of `MenuItem` or `Page` objects for rendering to a menu
         template.
         """
-        cvals = self._contextual_vals
-        current_site = cvals.current_site
-        current_page = cvals.current_page
-        opts = self._option_vals
-
+        ctx_vals = self._contextual_vals
+        opt_vals = self._option_vals
+        current_site = ctx_vals.current_site
+        current_page = ctx_vals.current_page
+        apply_active_classes = opt_vals.apply_active_classes
+        allow_repeating_parents = opt_vals.allow_repeating_parents
         active_css_class = app_settings.ACTIVE_CLASS
         ancestor_css_class = app_settings.ACTIVE_ANCESTOR_CLASS
-
-        stop_at_this_level = (cvals.current_level >= self.max_levels)
+        stop_at_this_level = (ctx_vals.current_level >= self.max_levels)
 
         for item in menu_items:
 
@@ -377,7 +376,7 @@ class Menu(object):
                 if item.show_in_menus_custom(
                     current_site,
                     self,
-                    cvals.original_menu_tag
+                    ctx_vals.original_menu_tag
                 ):
                     setattr(item, 'active_class', item.extra_classes)
                     setattr(item, 'text', item.menu_text(self.request))
@@ -430,9 +429,9 @@ class Menu(object):
                         has_children_in_menu = page.has_submenu_items(
                             menu_instance=self,
                             request=self.request,
-                            allow_repeating_parents=opts.allow_repeating_parents,
-                            current_page=cvals.current_page,
-                            original_menu_tag=cvals.original_menu_tag,
+                            allow_repeating_parents=allow_repeating_parents,
+                            current_page=ctx_vals.current_page,
+                            original_menu_tag=ctx_vals.original_menu_tag,
                         )
 
                     else:
@@ -440,14 +439,14 @@ class Menu(object):
 
                 setattr(item, 'has_children_in_menu', has_children_in_menu)
 
-                if opts.apply_active_classes:
+                if apply_active_classes:
                     active_class = ''
                     if(current_page and page.pk == current_page.pk):
                         # This is the current page, so the menu item should
                         # probably have the 'active' class
                         active_class = active_css_class
                         if (
-                            opts.allow_repeating_parents and
+                            allow_repeating_parents and
                             self.use_specific and
                             has_children_in_menu
                         ):
@@ -455,7 +454,7 @@ class Menu(object):
                                 page = page.specific
                             if getattr(page, 'repeat_in_subnav', False):
                                 active_class = ancestor_css_class
-                    elif page.pk in cvals.current_page_ancestor_ids:
+                    elif page.pk in ctx_vals.current_page_ancestor_ids:
                         active_class = ancestor_css_class
                     setattr(item, 'active_class', active_class)
 
@@ -465,7 +464,7 @@ class Menu(object):
                 'active' if the URL matches the request path.
                 """
                 request_path = self.request.path
-                if opts.apply_active_classes and item.link_url == request_path:
+                if apply_active_classes and item.link_url == request_path:
                     setattr(item, 'active_class', app_settings.ACTIVE_CLASS)
 
             # In case the specific page was fetched during the above operations
@@ -473,7 +472,7 @@ class Menu(object):
             if menuitem and page:
                 menuitem.link_page = page
 
-            if opts.use_absolute_page_urls:
+            if opt_vals.use_absolute_page_urls:
                 # Pages only have `get_full_url` from Wagtail 1.11 onwards
                 if hasattr(item, 'get_full_url'):
                     url = item.get_full_url(request=self.request)
@@ -644,24 +643,26 @@ class MenuFromRootPage(MultiLevelMenu):
         return super(MenuFromRootPage, self).get_context_data(**data)
 
     def modify_menu_items(self, menu_items):
-        # If root_page has a `modify_submenu_items` method, send menu_items
-        # list to that method for further modification
+        """
+        If the menu's root_page has a ``modify_submenu_items`` method, send
+        ``menu_items`` to that method for further modification.
+        """
         root = self.root_page
         if not self.use_specific or not hasattr(root, 'modify_submenu_items'):
             return menu_items
 
-        cvals = self._contextual_vals
-        opts = self._option_vals
+        ctx_vals = self._contextual_vals
+        opt_vals = self._option_vals
         kwargs = {
             'request': self.request,
             'menu_instance': self,
-            'original_menu_tag': cvals.original_menu_tag,
-            'current_site': cvals.current_site,
-            'current_page': cvals.current_page,
-            'current_ancestor_ids': cvals.current_page_ancestor_ids,
-            'allow_repeating_parents': opts.allow_repeating_parents,
-            'apply_active_classes': opts.apply_active_classes,
-            'use_absolute_page_urls': opts.use_absolute_page_urls,
+            'original_menu_tag': ctx_vals.original_menu_tag,
+            'current_site': ctx_vals.current_site,
+            'current_page': ctx_vals.current_page,
+            'current_ancestor_ids': ctx_vals.current_page_ancestor_ids,
+            'allow_repeating_parents': opt_vals.allow_repeating_parents,
+            'apply_active_classes': opt_vals.apply_active_classes,
+            'use_absolute_page_urls': opt_vals.use_absolute_page_urls,
         }
         # Backwards compatibility for 'modify_submenu_items' methods that
         # don't accept a 'use_absolute_page_urls' kwarg
@@ -708,30 +709,31 @@ class SectionMenu(MenuFromRootPage):
             self.root_page = self.root_page.specific
 
     def get_context_data(self, **kwargs):
+        ctx_vals = self._contextual_vals
+        opt_vals = self._option_vals
         section_root = self.root_page
-        cvals = self._contextual_vals
-        current_page = cvals.current_page
+        current_page = ctx_vals.current_page
         active_css_class = app_settings.ACTIVE_CLASS
         ancestor_css_class = app_settings.ACTIVE_ANCESTOR_CLASS
-        opts = self._option_vals
+
         data = super(SectionMenu, self).get_context_data()
-        data['show_section_root'] = opts.extra['show_section_root']
+        data['show_section_root'] = opt_vals.extra['show_section_root']
 
         if 'section_root' not in kwargs and data['show_section_root']:
             section_root.text = getattr(
                 section_root, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
                 section_root.title
             )
-            if opts.use_absolute_page_urls:
+            if opt_vals.use_absolute_page_urls:
                 if hasattr(section_root, 'get_full_url'):
                     url = section_root.get_full_url(request=self.request)
                 else:
                     url = section_root.full_url
             else:
-                url = section_root.relative_url(cvals.current_site)
+                url = section_root.relative_url(ctx_vals.current_site)
             section_root.href = url
 
-            if opts.apply_active_classes:
+            if opt_vals.apply_active_classes:
                 active_class = ancestor_css_class
                 if current_page and section_root.pk == current_page.pk:
                     # `section_root` is the current page, so should probably
@@ -741,7 +743,7 @@ class SectionMenu(MenuFromRootPage):
                     # Unless there's a 'repeated item' in menu_items that
                     # already has the 'active' class
                     if(
-                        opts.allow_repeating_parents and self.use_specific
+                        opt_vals.allow_repeating_parents and self.use_specific
                     ):
                         for item in menu_items:
                             css_class = getattr(item, 'active_class', '')
