@@ -4,6 +4,14 @@ Changelog
 2.X.X (XX.XX.XXXX) IN DEVELOPMENT
 --------------------------------- 
 
+
+2.4.1 (16.09.2017)
+------------------ 
+
+* Added a missing migration to account for Meta class changes on MainMenuItem
+  and FlatMenuItem models
+
+
 2.4.0 (04.08.2017)
 ------------------ 
 
