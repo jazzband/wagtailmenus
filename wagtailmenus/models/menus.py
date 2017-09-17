@@ -692,38 +692,43 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, PageModifiesMenuItemsMixin,
         return self.let_page_modify_menu_items(self.root_page, menu_items)
 
 
-class SubMenu(PageModifiesMenuItemsMixin, MenuFromRootPage):
+class SubMenu(PageModifiesMenuItemsMixin, Menu):
     menu_short_name = 'sub'  # used to find templates
     menu_instance_context_name = 'sub_menu'
-    root_page_context_name = 'parent_page'
 
     @classmethod
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
         return cls(
-            root_page=option_vals.parent_page,
+            original_menu=contextual_vals.original_menu_instance,
+            parent_page=option_vals.parent_page,
             max_levels=option_vals.max_levels,
             use_specific=option_vals.use_specific
         )
 
-    def prepare_to_render(self, request, contextual_vals, option_vals):
-        super(SubMenu, self).prepare_to_render(
-            request, contextual_vals, option_vals)
-        self.original_menu = option_vals.extra['original_menu']
+    def __init__(self, original_menu, parent_page, max_levels, use_specific):
+        self.original_menu = original_menu
+        self.page_children_dict = original_menu.page_children_dict
+        self.parent_page = parent_page
+        self.max_levels = max_levels
+        self.use_specific = use_specific
 
     def get_raw_menu_items(self):
-        if self.original_menu:
-            return self.original_menu.get_children_for_page(self.root_page)
-        return self.get_children_for_page(self.root_page)
+        return self.original_menu.get_children_for_page(self.parent_page)
 
     def modify_menu_items(self, menu_items):
         if not self.use_specific:
             return menu_items
-        return self.let_page_modify_menu_items(self.root_page, menu_items)
+        return self.let_page_modify_menu_items(self.parent_page, menu_items)
 
     def get_template(self):
         if self._option_vals.template_name:
             return super(SubMenu, self).get_template()
         return self.original_menu.sub_menu_template
+
+    def get_context_data(self, **kwargs):
+        data = {'parent_page': self.parent_page}
+        data.update(kwargs)
+        return super(SubMenu, self).get_context_data(**data)
 
 
 class MenuWithMenuItems(ClusterableModel, Menu):

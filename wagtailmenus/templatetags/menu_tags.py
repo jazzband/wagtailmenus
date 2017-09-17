@@ -174,13 +174,11 @@ def sub_menu(
     else:
         parent_page = menuitem_or_page.link_page
 
-    original_menu = context.get('original_menu_instance')
     menu_class = context.get('sub_menu_class') or SubMenu
 
     return menu_class.render_from_tag(
         tag_name='sub_menu',
         context=context,
-        original_menu=original_menu,
         parent_page=parent_page,
         max_levels=max_levels,
         use_specific=use_specific,
