@@ -587,19 +587,6 @@ class MenuFromRootPage(MultiLevelMenu):
     root_page = None
     root_page_context_name = 'root_page'
 
-    @classmethod
-    def get_instance_for_rendering(cls, contextual_vals, option_vals):
-        parent_page = cls.identify_parent_page_from_vals(
-            contextual_vals, option_vals)
-        return cls(
-            parent_page, option_vals.max_levels, option_vals.use_specific)
-
-    @classmethod
-    def identify_parent_page_from_vals(cls, contextual_vals, option_vals):
-        parent_context = contextual_vals.parent_context
-        return option_vals.parent_page or parent_context.get('self') or \
-            parent_context.get(PAGE_TEMPLATE_VAR)
-
     def __init__(self, root_page, max_levels, use_specific):
         self.root_page = root_page
         self.max_levels = max_levels
@@ -688,6 +675,14 @@ class SectionMenu(MenuFromRootPage):
     menu_instance_context_name = 'section_menu'
 
     @classmethod
+    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+        return cls(
+            root_page=contextual_vals.current_section_root_page,
+            max_levels=option_vals.max_levels,
+            use_specific=option_vals.use_specific
+        )
+
+    @classmethod
     def identify_parent_page_from_vals(cls, contextual_vals, option_vals):
         return contextual_vals.current_section_root_page
 
@@ -765,6 +760,17 @@ class ChildrenMenu(MenuFromRootPage):
     root_page_context_name = 'parent_page'
 
     @classmethod
+    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+        parent_ctx = contextual_vals.parent_context
+        parent = option_vals.parent_page or parent_ctx.get('self') or \
+            parent_ctx.get(PAGE_TEMPLATE_VAR)
+        return cls(
+            root_page=parent,
+            max_levels=option_vals.max_levels,
+            use_specific=option_vals.use_specific
+        )
+
+    @classmethod
     def get_least_specific_template_name(cls):
         return app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE
 
@@ -773,6 +779,14 @@ class SubMenu(MenuFromRootPage):
     menu_short_name = 'sub'  # used to find templates
     menu_instance_context_name = 'sub_menu'
     root_page_context_name = 'parent_page'
+
+    @classmethod
+    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+        return cls(
+            root_page=option_vals.parent_page,
+            max_levels=option_vals.max_levels,
+            use_specific=option_vals.use_specific
+        )
 
     def prepare_to_render(self, request, contextual_vals, option_vals):
         super(SubMenu, self).prepare_to_render(
