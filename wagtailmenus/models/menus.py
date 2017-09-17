@@ -232,6 +232,10 @@ class Menu(object):
         hook_kwargs.update(kwargs)
         return hook_kwargs
 
+    @cached_property
+    def common_hook_kwargs(self):
+        return self.get_common_hook_kwargs()
+
     def set_request(self, request):
         """
         Set `self.request` to the supplied HttpRequest, so that developers can
@@ -242,11 +246,8 @@ class Menu(object):
     def get_base_page_queryset(self):
         qs = Page.objects.filter(live=True, expired=False, show_in_menus=True)
         # allow hooks to modify the queryset
-        hook_methods = hooks.get_hooks('menus_modify_base_page_queryset')
-        if hook_methods:
-            hook_kwargs = self.get_common_hook_kwargs()
-            for hook in hook_methods:
-                qs = hook(qs, **hook_kwargs)
+        for hook in hooks.get_hooks('menus_modify_base_page_queryset'):
+            qs = hook(qs, **self.common_hook_kwargs)
         return qs
 
     def get_pages_for_display(self):
@@ -315,11 +316,10 @@ class Menu(object):
         ``prime_menu_items()`` and ``modify_menu_items()`` (respectively).
         """
         items = self.get_raw_menu_items()
-        hook_kwargs = self.get_common_hook_kwargs()
 
         # Allow hooks to modify the raw list
         for hook in hooks.get_hooks('menus_modify_raw_menu_items'):
-            items = hook(items, **hook_kwargs)
+            items = hook(items, **self.common_hook_kwargs)
 
         # Prime and modify the menu items accordingly
         items = self.modify_menu_items(self.prime_menu_items(items))
@@ -329,7 +329,7 @@ class Menu(object):
         # Allow hooks to modify the primed/modified list
         hook_methods = hooks.get_hooks('menus_modify_primed_menu_items')
         for hook in hook_methods:
-            items = hook(items, **hook_kwargs)
+            items = hook(items, **self.common_hook_kwargs)
         return items
 
     def get_raw_menu_items(self):
@@ -752,8 +752,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         qs = self.get_menu_items_manager().for_display()
         # allow hooks to modify the queryset
         for hook in hooks.get_hooks('menus_modify_base_menuitem_queryset'):
-            common_kwargs = self.get_common_hook_kwargs()
-            qs = hook(qs, **common_kwargs)
+            qs = hook(qs, **self.common_hook_kwargs)
         return qs
 
     def get_top_level_items(self):
