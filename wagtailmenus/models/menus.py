@@ -47,7 +47,6 @@ class Menu(object):
     max_levels = 1
     use_specific = app_settings.USE_SPECIFIC_AUTO
     pages_for_display = None
-    root_page = None  # Not relevant for all menu classes
     request = None
     menu_short_name = ''  # used to find templates
     menu_instance_context_name = 'menu'
@@ -125,7 +124,7 @@ class Menu(object):
             options.pop('apply_active_classes'),
             options.pop('allow_repeating_parents'),
             options.pop('use_absolute_page_urls'),
-            options.pop('parent_page', None),  # for MenuFromRootPage
+            options.pop('parent_page', None),
             options.pop('handle', None),  # for AbstractFlatMenu
             options.pop('template_name', ''),
             options.pop('sub_menu_template_name', ''),
@@ -220,7 +219,7 @@ class Menu(object):
         hook_kwargs = self._contextual_vals._asdict()
         hook_kwargs.update({
             'menu_instance': self,
-            'parent_page': self.root_page,
+            'parent_page': None,
             'max_levels': self.max_levels,
             'use_specific': self.max_levels,
             'apply_active_classes': opt_vals.apply_active_classes,
@@ -569,6 +568,12 @@ class MenuFromRootPage(Menu):
     def get_raw_menu_items(self):
         return list(self.get_children_for_page(self.root_page))
 
+    def get_common_hook_kwargs(self, **kwargs):
+        hook_kwargs = {'parent_page': self.root_page}
+        hook_kwargs.update(kwargs)
+        return super(MenuFromRootPage, self).get_common_hook_kwargs(
+            **hook_kwargs)
+
     def get_context_data(self, **kwargs):
         data = {self.root_page_context_name: self.root_page}
         data.update(**kwargs)
@@ -724,6 +729,11 @@ class SubMenu(PageModifiesMenuItemsMixin, Menu):
         if self._option_vals.template_name:
             return super(SubMenu, self).get_template()
         return self.original_menu.sub_menu_template
+
+    def get_common_hook_kwargs(self, **kwargs):
+        hook_kwargs = {'parent_page': self.parent_page}
+        hook_kwargs.update(kwargs)
+        return super(SubMenu, self).get_common_hook_kwargs(**hook_kwargs)
 
     def get_context_data(self, **kwargs):
         data = {'parent_page': self.parent_page}
