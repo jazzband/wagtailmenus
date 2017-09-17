@@ -575,7 +575,7 @@ class MultiLevelMenu(Menu):
         """
         data = {}
         if self._contextual_vals.current_level == 1 and self.max_levels > 1:
-                data['sub_menu_template'] = self.sub_menu_template.name
+            data['sub_menu_template'] = self.sub_menu_template.name
         data.update(kwargs)
         return super(MultiLevelMenu, self).get_context_data(**data)
 
