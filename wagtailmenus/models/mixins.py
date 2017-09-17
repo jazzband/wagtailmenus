@@ -10,7 +10,31 @@ from ..utils.deprecation import RemovedInWagtailMenus26Warning
 from ..utils.inspection import accepts_kwarg
 
 
-class PageModifiesMenuItemsMixin(object):
+class DescendentPageMenuItemsMixin(object):
+
+    def get_descendent_menu_pages(self, page):
+        """Return all pages needed for rendering all sub-levels for the current
+        menu"""
+        pages = self.get_base_page_queryset().filter(
+            depth__gt=page.depth,
+            depth__lte=page.depth + self.max_levels,
+            path__startswith=page.path,
+        )
+
+        # Return 'specific' page instances if required
+        if(self.use_specific == app_settings.USE_SPECIFIC_ALWAYS):
+            return pages.specific()
+
+        return pages
+
+    def get_children_for_page(self, page):
+        """Return a list of relevant child pages for a given page."""
+        if self.max_levels == 1:
+            # If there's only a single level of pages to display, skip the
+            # dict creation / lookup and just return the QuerySet result
+            return self.pages_for_display
+        return super(DescendentPageMenuItemsMixin, self).get_children_for_page(
+            page)
 
     def let_page_modify_menu_items(self, page, menu_items):
         """
@@ -50,7 +74,7 @@ class PageModifiesMenuItemsMixin(object):
                 "https://github.com/rkhleics/wagtailmenus/releases/tag/v.2.4.0"
                 % page.__class__.__name__,
             )
-            warnings.warn(warning_msg, RemovedInWagtailMenus26Warning)
+            warnings.warn(warning_msg, category=RemovedInWagtailMenus26Warning)
 
         # Call `modify_submenu_items` using the above kwargs dict
         if isinstance(menu_items, GeneratorType):

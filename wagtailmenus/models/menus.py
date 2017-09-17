@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+import warnings
 from collections import defaultdict, namedtuple
 from types import GeneratorType
 
@@ -14,13 +15,14 @@ from modelcluster.models import ClusterableModel
 from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, MultiFieldPanel, InlinePanel)
 from wagtail.wagtailcore import hooks
-from wagtail.wagtailcore.models import Page, PAGE_TEMPLATE_VAR
+from wagtail.wagtailcore.models import Page
 
 from .. import app_settings
 from ..forms import FlatMenuAdminForm
 from ..utils.misc import get_site_from_request
+from ..utils.deprecation import RemovedInWagtailMenus27Warning
 from .menuitems import MenuItem
-from .mixins import DefinesSubMenuTemplatesMixin, PageModifiesMenuItemsMixin
+from .mixins import DescendentPageMenuItemsMixin, DefinesSubMenuTemplatesMixin
 from .pages import AbstractLinkPage
 
 
@@ -526,26 +528,23 @@ class Menu(object):
 
 
 class MenuFromRootPage(Menu):
-    """A 'menu' that is instantiated with a 'root page', and whose 'menu items'
-    consist solely of ancestors of that page."""
-
     root_page = None
-    root_page_context_name = 'root_page'
 
     def __init__(self, root_page, max_levels, use_specific):
+        warnings.warn(
+            "The MenuFromRootPage class has been deprecated in favour of "
+            "using the DescendentPageMenuItemsMixin for built-in menus",
+            category=RemovedInWagtailMenus27Warning
+        )
         self.root_page = root_page
         self.max_levels = max_levels
         self.use_specific = use_specific
         super(MenuFromRootPage, self).__init__()
 
-    def render_to_template(self):
-        if not self.root_page:
-            return ''
-        return super(MenuFromRootPage, self).render_to_template()
-
-    def get_pages_for_display(self):
-        """Return all pages needed for rendering all sub-levels for the current
-        menu"""
+    @cached_property
+    def pages_for_display(self):
+        """Returns a list of pages for rendering all levels of the menu. All
+        pages must be live, not expired, and set to show in menus."""
         pages = self.get_base_page_queryset().filter(
             depth__gt=self.root_page.depth,
             depth__lte=self.root_page.depth + self.max_levels,
@@ -553,7 +552,7 @@ class MenuFromRootPage(Menu):
         )
 
         # Return 'specific' page instances if required
-        if(self.use_specific == app_settings.USE_SPECIFIC_ALWAYS):
+        if self.use_specific == app_settings.USE_SPECIFIC_ALWAYS:
             return pages.specific()
 
         return pages
@@ -566,23 +565,9 @@ class MenuFromRootPage(Menu):
             return self.pages_for_display
         return super(MenuFromRootPage, self).get_children_for_page(page)
 
-    def get_raw_menu_items(self):
-        return list(self.get_children_for_page(self.root_page))
 
-    def get_common_hook_kwargs(self, **kwargs):
-        hook_kwargs = {'parent_page': self.root_page}
-        hook_kwargs.update(kwargs)
-        return super(MenuFromRootPage, self).get_common_hook_kwargs(
-            **hook_kwargs)
-
-    def get_context_data(self, **kwargs):
-        data = {self.root_page_context_name: self.root_page}
-        data.update(**kwargs)
-        return super(MenuFromRootPage, self).get_context_data(**data)
-
-
-class SectionMenu(DefinesSubMenuTemplatesMixin, PageModifiesMenuItemsMixin,
-                  MenuFromRootPage):
+class SectionMenu(DescendentPageMenuItemsMixin, DefinesSubMenuTemplatesMixin,
+                  Menu):
     menu_short_name = 'section'  # used to find templates
     menu_instance_context_name = 'section_menu'
 
@@ -595,12 +580,14 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, PageModifiesMenuItemsMixin,
         )
 
     @classmethod
-    def identify_parent_page_from_vals(cls, contextual_vals, option_vals):
-        return contextual_vals.current_section_root_page
-
-    @classmethod
     def get_least_specific_template_name(cls):
         return app_settings.DEFAULT_SECTION_MENU_TEMPLATE
+
+    def __init__(self, root_page, max_levels, use_specific):
+        self.root_page = root_page
+        self.max_levels = max_levels
+        self.use_specific = use_specific
+        super(SectionMenu, self).__init__()
 
     def prepare_to_render(self, request, contextual_vals, option_vals):
         super(SectionMenu, self).prepare_to_render(
@@ -615,10 +602,27 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, PageModifiesMenuItemsMixin,
         ):
             self.root_page = self.root_page.specific
 
+    def render_to_template(self):
+        if not self.root_page:
+            return ''
+        return super(SectionMenu, self).render_to_template()
+
+    def get_pages_for_display(self):
+        """Return all of the pages needed to render this menu"""
+        return self.get_descendent_menu_pages(self.root_page)
+
+    def get_raw_menu_items(self):
+        return list(self.get_children_for_page(self.root_page))
+
     def modify_menu_items(self, menu_items):
         if not self.use_specific:
             return menu_items
         return self.let_page_modify_menu_items(self.root_page, menu_items)
+
+    def get_common_hook_kwargs(self, **kwargs):
+        hook_kwargs = {'parent_page': self.root_page}
+        hook_kwargs.update(kwargs)
+        return super(SectionMenu, self).get_common_hook_kwargs(**hook_kwargs)
 
     def get_context_data(self, **kwargs):
         ctx_vals = self._contextual_vals
@@ -628,6 +632,8 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, PageModifiesMenuItemsMixin,
         active_css_class = app_settings.ACTIVE_CLASS
         ancestor_css_class = app_settings.ACTIVE_ANCESTOR_CLASS
 
+        # We use a different pattern for overriding 'get_context_data' here,
+        # because we need access to data['menu_items'] below
         data = super(SectionMenu, self).get_context_data()
         data['show_section_root'] = opt_vals.extra['show_section_root']
 
@@ -671,34 +677,94 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, PageModifiesMenuItemsMixin,
         return data
 
 
-class ChildrenMenu(DefinesSubMenuTemplatesMixin, PageModifiesMenuItemsMixin,
-                   MenuFromRootPage):
+class ChildrenMenu(DescendentPageMenuItemsMixin, DefinesSubMenuTemplatesMixin,
+                   Menu):
     menu_short_name = 'children'  # used to find templates
     menu_instance_context_name = 'children_menu'
-    root_page_context_name = 'parent_page'
 
     @classmethod
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
-        parent_ctx = contextual_vals.parent_context
-        parent = option_vals.parent_page or parent_ctx.get('self') or \
-            parent_ctx.get(PAGE_TEMPLATE_VAR)
+        parent_page = option_vals.parent_page or contextual_vals.current_page
+        if not parent_page:
+            return
         return cls(
-            root_page=parent,
             max_levels=option_vals.max_levels,
-            use_specific=option_vals.use_specific
+            use_specific=option_vals.use_specific,
+            parent_page=parent_page,
         )
 
     @classmethod
     def get_least_specific_template_name(cls):
         return app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE
 
+    def __init__(self, parent_page=None, max_levels=None, use_specific=None,
+                 root_page=None):
+        if root_page:
+            warnings.warn(
+                "The 'root_page' argument is deprecated for ChildrenMenu's "
+                "__init__() method. Please use 'parent_page' instead",
+                category=RemovedInWagtailMenus27Warning
+            )
+        if parent_page is None and root_page is None:
+            raise TypeError(
+                "'parent_page' must be provided when creating an instance of "
+                "ChildrenMenu, and must not be None")
+        if max_levels is None:
+            raise TypeError(
+                "'max_levels' must be provided when creating a ChildrenMenu "
+                "instance, and must not be None")
+        if use_specific is None:
+            raise TypeError(
+                "'use_specific' must be provided when creating a ChildrenMenu "
+                "instance, and must not be None")
+        self.parent_page = parent_page or root_page
+        self.max_levels = max_levels
+        self.use_specific = use_specific
+        super(ChildrenMenu, self).__init__()
+
+    @property
+    def root_page(self):
+        warnings.warn(
+            "The 'root_page' attribute is deprecated for ChildrenMenu. "
+            "Please use the 'parent_page' attribute instead",
+            category=RemovedInWagtailMenus27Warning
+        )
+        return self.parent_page
+
+    @root_page.setter
+    def root_page(self, value):
+        warnings.warn(
+            "The 'root_page' attribute is deprecated for ChildrenMenu. "
+            "Please use the 'parent_page' attribute instead",
+            category=RemovedInWagtailMenus27Warning
+        )
+        self.parent_page = value
+
+    def get_pages_for_display(self):
+        """Return all pages needed for rendering all sub-levels for the current
+        menu"""
+        return self.get_descendent_menu_pages(self.parent_page)
+
+    def get_raw_menu_items(self):
+        return list(self.get_children_for_page(self.parent_page))
+
     def modify_menu_items(self, menu_items):
         if not self.use_specific:
             return menu_items
-        return self.let_page_modify_menu_items(self.root_page, menu_items)
+        return self.let_page_modify_menu_items(self.parent_page, menu_items)
+
+    def get_common_hook_kwargs(self, **kwargs):
+        hook_kwargs = {'parent_page': self.parent_page}
+        hook_kwargs.update(kwargs)
+        return super(ChildrenMenu, self).get_common_hook_kwargs(**hook_kwargs)
+
+    def get_context_data(self, **kwargs):
+        data = {'parent_page': self.parent_page}
+        data.update(kwargs)
+        return super(ChildrenMenu, self).get_context_data(**data)
 
 
-class SubMenu(PageModifiesMenuItemsMixin, Menu):
+class SubMenu(DescendentPageMenuItemsMixin, Menu):
     menu_short_name = 'sub'  # used to find templates
     menu_instance_context_name = 'sub_menu'
 
