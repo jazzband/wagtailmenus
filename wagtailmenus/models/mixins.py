@@ -61,11 +61,11 @@ class PageModifiesMenuItemsMixin(object):
 class DefinesSubMenuTemplatesMixin(object):
 
     def get_sub_menu_template(self):
-        e = self._contextual_vals.template_engine
+        engine = self.get_template_engine()
         specified = self._option_vals.sub_menu_template_name
         if specified:
-            return e.get_template(specified)
-        return e.select_template(self.get_sub_menu_template_names())
+            return engine.get_template(specified)
+        return engine.select_template(self.get_sub_menu_template_names())
 
     @cached_property
     def sub_menu_template(self):

@@ -27,7 +27,7 @@ from .pages import AbstractLinkPage
 ContextualVals = namedtuple('ContextualVals', (
     'parent_context', 'request', 'current_site', 'current_level',
     'menu_tag', 'original_menu_tag', 'original_menu_instance', 'current_page',
-    'current_section_root_page', 'current_page_ancestor_ids', 'template_engine'
+    'current_section_root_page', 'current_page_ancestor_ids'
 ))
 
 OptionVals = namedtuple('OptionVals', (
@@ -98,7 +98,6 @@ class Menu(object):
             context_processor_vals.get('current_page'),
             context_processor_vals.get('section_root'),
             context_processor_vals.get('current_page_ancestor_ids', ()),
-            context.template.engine,
         )
 
     @classmethod
@@ -226,7 +225,6 @@ class Menu(object):
             'allow_repeating_parents': opt_vals.allow_repeating_parents,
             'use_absolute_page_urls': opt_vals.use_absolute_page_urls,
         })
-        hook_kwargs.pop('template_engine')
         if hook_kwargs['original_menu_instance'] is None:
             hook_kwargs['original_menu_instance'] = self
         hook_kwargs.update(kwargs)
@@ -486,14 +484,17 @@ class Menu(object):
             setattr(item, 'href', url)
             yield item
 
+    def get_template_engine(self):
+        return self._contextual_vals.parent_context.template.engine
+
     def get_template(self):
-        e = self._contextual_vals.template_engine
+        engine = self.get_template_engine()
         specified = self._option_vals.template_name
         if specified:
-            return e.get_template(specified)
+            return engine.get_template(specified)
         if hasattr(self, 'template_name'):
-            return e.get_template(self.template_name)
-        return e.select_template(self.get_template_names())
+            return engine.get_template(self.template_name)
+        return engine.select_template(self.get_template_names())
 
     def get_template_names(self):
         """Return a list (or tuple) of template names to search for when
