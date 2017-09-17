@@ -301,6 +301,8 @@ class Menu(object):
             'section_root': data['current_section_root_page'],
             'current_ancestor_ids': data['current_page_ancestor_ids'],
         })
+        if not ctx_vals.original_menu_instance and ctx_vals.current_level == 1:
+            data['original_menu_instance'] = self
         if 'menu_items' not in kwargs:
             data['menu_items'] = self.get_menu_items_for_rendering()
         data.update(kwargs)
@@ -572,9 +574,7 @@ class MultiLevelMenu(Menu):
         once.
         """
         data = {}
-        if self._contextual_vals.current_level == 1:
-            data['original_menu_instance'] = self
-            if self.max_levels > 1:
+        if self._contextual_vals.current_level == 1 and self.max_levels > 1:
                 data['sub_menu_template'] = self.sub_menu_template.name
         data.update(kwargs)
         return super(MultiLevelMenu, self).get_context_data(**data)
