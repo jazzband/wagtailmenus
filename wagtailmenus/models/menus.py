@@ -1,5 +1,4 @@
 from __future__ import absolute_import, unicode_literals
-import warnings
 
 from collections import defaultdict, namedtuple
 from types import GeneratorType
@@ -19,10 +18,9 @@ from wagtail.wagtailcore.models import Page, PAGE_TEMPLATE_VAR
 
 from .. import app_settings
 from ..forms import FlatMenuAdminForm
-from ..utils.deprecation import RemovedInWagtailMenus26Warning
-from ..utils.inspection import accepts_kwarg
 from ..utils.misc import get_site_from_request
 from .menuitems import MenuItem
+from .mixins import DefinesSubMenuTemplatesMixin, PageModifiesMenuItemsMixin
 from .pages import AbstractLinkPage
 
 
@@ -527,60 +525,7 @@ class Menu(object):
         return
 
 
-class MultiLevelMenu(Menu):
-
-    def get_sub_menu_template(self):
-        e = self._contextual_vals.template_engine
-        specified = self._option_vals.sub_menu_template_name
-        if specified:
-            return e.get_template(specified)
-        return e.select_template(self.get_sub_menu_template_names())
-
-    @cached_property
-    def sub_menu_template(self):
-        return self.get_sub_menu_template()
-
-    def get_sub_menu_template_names(self):
-        """Return a list of template paths/names to search when
-        rendering a sub menu for an instance of this class. The list should be
-        ordered with most specific names first, since the first template found
-        to exist will be used for rendering"""
-        current_site = self._contextual_vals.current_site
-        template_names = []
-        menu_str = self.menu_short_name
-        if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and current_site:
-            hostname = current_site.hostname
-            template_names.extend([
-                "menus/%s/%s/sub_menu.html" % (hostname, menu_str),
-                "menus/%s/%s_sub_menu.html" % (hostname, menu_str),
-                "menus/%s/sub_menu.html" % hostname,
-            ])
-        template_names.extend([
-            "menus/%s/sub_menu.html" % menu_str,
-            "menus/%s_sub_menu.html" % menu_str,
-            app_settings.DEFAULT_SUB_MENU_TEMPLATE,
-        ])
-        return template_names
-
-    def get_context_data(self, **kwargs):
-        """
-        First-level MultiLevelMenus always add themselves to the context as
-        'original_menu_instance', which will stay present in the context
-        throughout the process of rendering multiple levels. This is important,
-        as it allow sub menus to access the page data that was prefetched when
-        the original menu was created. If there's a possibility that sub menus
-        might be neded, the template used to render those sub menus is also
-        prefetched and added to the context, so that it only needs to happen
-        once.
-        """
-        data = {}
-        if self._contextual_vals.current_level == 1 and self.max_levels > 1:
-            data['sub_menu_template'] = self.sub_menu_template.name
-        data.update(kwargs)
-        return super(MultiLevelMenu, self).get_context_data(**data)
-
-
-class MenuFromRootPage(MultiLevelMenu):
+class MenuFromRootPage(Menu):
     """A 'menu' that is instantiated with a 'root page', and whose 'menu items'
     consist solely of ancestors of that page."""
 
@@ -629,48 +574,9 @@ class MenuFromRootPage(MultiLevelMenu):
         data.update(**kwargs)
         return super(MenuFromRootPage, self).get_context_data(**data)
 
-    def modify_menu_items(self, menu_items):
-        """
-        If the menu's root_page has a ``modify_submenu_items`` method, send
-        ``menu_items`` to that method for further modification.
-        """
-        root = self.root_page
-        if not self.use_specific or not hasattr(root, 'modify_submenu_items'):
-            return menu_items
 
-        ctx_vals = self._contextual_vals
-        opt_vals = self._option_vals
-        kwargs = {
-            'request': self.request,
-            'menu_instance': self,
-            'original_menu_tag': ctx_vals.original_menu_tag,
-            'current_site': ctx_vals.current_site,
-            'current_page': ctx_vals.current_page,
-            'current_ancestor_ids': ctx_vals.current_page_ancestor_ids,
-            'allow_repeating_parents': opt_vals.allow_repeating_parents,
-            'apply_active_classes': opt_vals.apply_active_classes,
-            'use_absolute_page_urls': opt_vals.use_absolute_page_urls,
-        }
-        # Backwards compatibility for 'modify_submenu_items' methods that
-        # don't accept a 'use_absolute_page_urls' kwarg
-        if not accepts_kwarg(
-            root.modify_submenu_items, 'use_absolute_page_urls'
-        ):
-            kwargs.pop('use_absolute_page_urls')
-            warning_msg = (
-                "The 'modify_submenu_items' method on '%s' should be "
-                "updated to accept a 'use_absolute_page_urls' keyword "
-                "argument. View the 2.4 release notes for more info: "
-                "https://github.com/rkhleics/wagtailmenus/releases/tag/v.2.4.0"
-                % root.__class__.__name__,
-            )
-            warnings.warn(warning_msg, RemovedInWagtailMenus26Warning)
-
-        # Call `modify_submenu_items` using the above kwargs dict
-        return root.modify_submenu_items(list(menu_items), **kwargs)
-
-
-class SectionMenu(MenuFromRootPage):
+class SectionMenu(DefinesSubMenuTemplatesMixin, PageModifiesMenuItemsMixin,
+                  MenuFromRootPage):
     menu_short_name = 'section'  # used to find templates
     menu_instance_context_name = 'section_menu'
 
@@ -702,6 +608,11 @@ class SectionMenu(MenuFromRootPage):
             self.use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL
         ):
             self.root_page = self.root_page.specific
+
+    def modify_menu_items(self, menu_items):
+        if not self.use_specific:
+            return menu_items
+        return self.let_page_modify_menu_items(self.root_page, menu_items)
 
     def get_context_data(self, **kwargs):
         ctx_vals = self._contextual_vals
@@ -754,7 +665,8 @@ class SectionMenu(MenuFromRootPage):
         return data
 
 
-class ChildrenMenu(MenuFromRootPage):
+class ChildrenMenu(DefinesSubMenuTemplatesMixin, PageModifiesMenuItemsMixin,
+                   MenuFromRootPage):
     menu_short_name = 'children'  # used to find templates
     menu_instance_context_name = 'children_menu'
     root_page_context_name = 'parent_page'
@@ -774,8 +686,13 @@ class ChildrenMenu(MenuFromRootPage):
     def get_least_specific_template_name(cls):
         return app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE
 
+    def modify_menu_items(self, menu_items):
+        if not self.use_specific:
+            return menu_items
+        return self.let_page_modify_menu_items(self.root_page, menu_items)
 
-class SubMenu(MenuFromRootPage):
+
+class SubMenu(PageModifiesMenuItemsMixin, MenuFromRootPage):
     menu_short_name = 'sub'  # used to find templates
     menu_instance_context_name = 'sub_menu'
     root_page_context_name = 'parent_page'
@@ -793,18 +710,23 @@ class SubMenu(MenuFromRootPage):
             request, contextual_vals, option_vals)
         self.original_menu = option_vals.extra['original_menu']
 
-    def get_template(self):
-        if self._option_vals.template_name:
-            return super(SubMenu, self).get_template()
-        return self.original_menu.sub_menu_template
-
     def get_raw_menu_items(self):
         if self.original_menu:
             return self.original_menu.get_children_for_page(self.root_page)
         return self.get_children_for_page(self.root_page)
 
+    def modify_menu_items(self, menu_items):
+        if not self.use_specific:
+            return menu_items
+        return self.let_page_modify_menu_items(self.root_page, menu_items)
 
-class MenuWithMenuItems(ClusterableModel, MultiLevelMenu):
+    def get_template(self):
+        if self._option_vals.template_name:
+            return super(SubMenu, self).get_template()
+        return self.original_menu.sub_menu_template
+
+
+class MenuWithMenuItems(ClusterableModel, Menu):
     """A base model class for menus who's 'menu_items' are defined by
     a set of 'menu item' model instances."""
 
@@ -818,10 +740,6 @@ class MenuWithMenuItems(ClusterableModel, MultiLevelMenu):
             common_kwargs = self.get_common_hook_kwargs()
             qs = hook(qs, **common_kwargs)
         return qs
-
-    @cached_property
-    def top_level_items(self):
-        return self.get_top_level_items()
 
     def get_top_level_items(self):
         """Return a list of menu items with link_page objects supplemented with
@@ -858,6 +776,10 @@ class MenuWithMenuItems(ClusterableModel, MultiLevelMenu):
                 item.link_page = pages_dict.get(item.link_page_id)
                 menu_item_list.append(item)
         return menu_item_list
+
+    @cached_property
+    def top_level_items(self):
+        return self.get_top_level_items()
 
     def get_pages_for_display(self):
         """Return all pages needed for rendering all sub-levels for the current
@@ -913,17 +835,6 @@ class MenuWithMenuItems(ClusterableModel, MultiLevelMenu):
             i += 1
         item_manager.bulk_create(item_list)
 
-    def get_context_data(self, **kwargs):
-        data = {
-            'max_levels': self.max_levels,
-            'use_specific': self.use_specific,
-        }
-        data.update(kwargs)
-        return super(MenuWithMenuItems, self).get_context_data(**data)
-
-    def get_raw_menu_items(self):
-        return self.top_level_items
-
     def prepare_to_render(self, request, contextual_vals, option_vals):
         if option_vals.max_levels is not None:
             self.set_max_levels(option_vals.max_levels)
@@ -932,13 +843,24 @@ class MenuWithMenuItems(ClusterableModel, MultiLevelMenu):
         super(MenuWithMenuItems, self).prepare_to_render(
             request, contextual_vals, option_vals)
 
+    def get_raw_menu_items(self):
+        return self.top_level_items
+
+    def get_context_data(self, **kwargs):
+        data = {
+            'max_levels': self.max_levels,
+            'use_specific': self.use_specific,
+        }
+        data.update(kwargs)
+        return super(MenuWithMenuItems, self).get_context_data(**data)
+
 
 # ########################################################
 # Abstract models
 # ########################################################
 
 @python_2_unicode_compatible
-class AbstractMainMenu(MenuWithMenuItems):
+class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_short_name = 'main'  # used to find templates
     menu_instance_context_name = 'main_menu'
 
@@ -1028,7 +950,7 @@ class AbstractMainMenu(MenuWithMenuItems):
 
 
 @python_2_unicode_compatible
-class AbstractFlatMenu(MenuWithMenuItems):
+class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_short_name = 'flat'  # used to find templates
     menu_instance_context_name = 'flat_menu'
 
