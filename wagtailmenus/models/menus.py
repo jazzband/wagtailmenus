@@ -283,11 +283,11 @@ class Menu(object):
         return page.path in self.page_children_dict
 
     def get_context_data(self, **kwargs):
-        ctv_vals = self._contextual_vals
+        ctx_vals = self._contextual_vals
         opt_vals = self._option_vals
 
-        data = ctv_vals.parent_context.flatten()
-        data.update(ctv_vals._asdict())
+        data = ctx_vals.parent_context.flatten()
+        data.update(ctx_vals._asdict())
         data.update({
             'sub_menu_class': self.get_sub_menu_class(),
             'apply_active_classes': opt_vals.apply_active_classes,
