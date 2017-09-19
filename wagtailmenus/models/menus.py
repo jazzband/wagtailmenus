@@ -28,8 +28,9 @@ from .pages import AbstractLinkPage
 
 ContextualVals = namedtuple('ContextualVals', (
     'parent_context', 'request', 'current_site', 'current_level',
-    'menu_tag', 'original_menu_tag', 'original_menu_instance', 'current_page',
-    'current_section_root_page', 'current_page_ancestor_ids'
+    'menu_tag', 'original_menu_tag', 'original_menu_instance',
+    'parent_menu_instance', 'current_page', 'current_section_root_page',
+    'current_page_ancestor_ids'
 ))
 
 OptionVals = namedtuple('OptionVals', (
@@ -98,6 +99,7 @@ class Menu(object):
             context.get('menu_tag', tag_name),
             context.get('original_menu_tag', tag_name),
             context.get('original_menu_instance'),
+            context.get('menu_instance'),
             context_processor_vals.get('current_page'),
             context_processor_vals.get('section_root'),
             context_processor_vals.get('current_page_ancestor_ids', ()),
