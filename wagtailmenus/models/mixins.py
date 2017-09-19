@@ -83,12 +83,15 @@ class DescendentPageMenuItemsMixin(object):
 
 
 class DefinesSubMenuTemplatesMixin(object):
+    sub_menu_template_name = None  # set to use a specific default template
 
     def get_sub_menu_template(self):
         engine = self.get_template_engine()
         specified = self._option_vals.sub_menu_template_name
         if specified:
             return engine.get_template(specified)
+        if self.sub_menu_template_name:
+            return engine.get_template(self.sub_menu_template_name)
         return engine.select_template(self.get_sub_menu_template_names())
 
     @cached_property

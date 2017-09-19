@@ -44,12 +44,13 @@ OptionVals = namedtuple('OptionVals', (
 # ########################################################
 
 class Menu(object):
-    """A base class that all other 'menu' classes should inherit from."""
+    """A base class that all other menu classes should inherit from."""
 
     max_levels = 1
     use_specific = app_settings.USE_SPECIFIC_AUTO
     pages_for_display = None
     request = None
+    template_name = None  # set to use a specific default template
     menu_short_name = ''  # used to find templates
     menu_instance_context_name = 'menu'
     sub_menu_class = None
