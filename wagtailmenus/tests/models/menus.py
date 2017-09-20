@@ -10,7 +10,7 @@ from .utils import TranslatedField
 
 
 class CustomChildrenMenu(ChildrenMenu):
-    pass
+    template_name = "menus/custom_children_menu.html"
 
 
 class CustomSectionMenu(SectionMenu):
@@ -18,7 +18,7 @@ class CustomSectionMenu(SectionMenu):
 
 
 class OldStyleChildrenMenu(MenuFromRootPage):
-    template_name = "menus/old_style_children_menu.html"
+    pass
 
 
 class MultilingualMenuItem(models.Model):

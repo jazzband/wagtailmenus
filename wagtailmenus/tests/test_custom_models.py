@@ -397,6 +397,11 @@ class TestCustomMenuModels(TestCase):
         from wagtailmenus.tests.models import CustomChildrenMenu
         self.assertEqual(app_settings.CHILDREN_MENU_CLASS, CustomChildrenMenu)
 
+        # check that template specified with the classes 'template_name'
+        # attribute is the one that gets picked up
+        response = self.client.get('/about-us/')
+        self.assertTemplateUsed(response, "menus/custom_children_menu.html")
+
     @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomSectionMenu', )
     def test_section_menu_override(self):
         from wagtailmenus import app_settings
