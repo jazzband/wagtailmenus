@@ -195,8 +195,9 @@ def get_sub_menu_items_for_page(
     use_absolute_page_urls=False,
 ):
     warning_msg = (
-        "The 'get_sub_menu_items_for_page' method in menu_tags is deprecated "
-        "in favour of rendering behaviour being built into Menu classes"
+        "The 'get_sub_menu_items_for_page' method in templatetags.menu_tags "
+        "is deprecated in favour of rendering behaviour being built into Menu "
+        "classes"
     )
     warnings.warn(warning_msg, RemovedInWagtailMenus27Warning)
 
@@ -276,8 +277,9 @@ def prime_menu_items(
     template.
     """
     warning_msg = (
-        "The 'prime_menu_items' method in menu_tags is deprecated in favour "
-        "of rendering behaviour being built into Menu classes"
+        "The 'prime_menu_items' method in templatetags.menu_tags is "
+        "deprecated in favour of rendering behaviour being built into Menu "
+        "classes"
     )
     warnings.warn(warning_msg, RemovedInWagtailMenus27Warning)
 
