@@ -1,85 +1,8 @@
 from __future__ import absolute_import, unicode_literals
 
-import warnings
-from types import GeneratorType
-
 from django.utils.functional import cached_property
 
 from .. import app_settings
-from ..utils.deprecation import RemovedInWagtailMenus26Warning
-from ..utils.inspection import accepts_kwarg
-
-
-class DescendentPageMenuItemsMixin(object):
-
-    def get_descendent_menu_pages(self, page):
-        """Return all pages needed for rendering all sub-levels for the current
-        menu"""
-        pages = self.get_base_page_queryset().filter(
-            depth__gt=page.depth,
-            depth__lte=page.depth + self.max_levels,
-            path__startswith=page.path,
-        )
-
-        # Return 'specific' page instances if required
-        if(self.use_specific == app_settings.USE_SPECIFIC_ALWAYS):
-            return pages.specific()
-
-        return pages
-
-    def get_children_for_page(self, page):
-        """Return a list of relevant child pages for a given page."""
-        if self.max_levels == 1:
-            # If there's only a single level of pages to display, skip the
-            # dict creation / lookup and just return the QuerySet result
-            return self.pages_for_display
-        return super(DescendentPageMenuItemsMixin, self).get_children_for_page(
-            page)
-
-    def let_page_modify_menu_items(self, page, menu_items):
-        """
-        If the menu has menu items that can be modified by a parent or root
-        page's ``modify_submenu_items`` method, send the ``menu_items`` to that
-        method for further modification and return them. The menu class is
-        responsible for ensuring the this method is only called when it should
-        be, and that the page is 'specific' already (if not, the method will
-        have no effect).
-        """
-        if not hasattr(page, 'modify_submenu_items'):
-            return menu_items
-
-        ctx_vals = self._contextual_vals
-        opt_vals = self._option_vals
-        kwargs = {
-            'request': self.request,
-            'menu_instance': self,
-            'original_menu_tag': ctx_vals.original_menu_tag,
-            'current_site': ctx_vals.current_site,
-            'current_page': ctx_vals.current_page,
-            'current_ancestor_ids': ctx_vals.current_page_ancestor_ids,
-            'allow_repeating_parents': opt_vals.allow_repeating_parents,
-            'apply_active_classes': opt_vals.apply_active_classes,
-            'use_absolute_page_urls': opt_vals.use_absolute_page_urls,
-        }
-        # Backwards compatibility for 'modify_submenu_items' methods that
-        # don't accept a 'use_absolute_page_urls' kwarg
-        if not accepts_kwarg(
-            page.modify_submenu_items, 'use_absolute_page_urls'
-        ):
-            kwargs.pop('use_absolute_page_urls')
-            warning_msg = (
-                "The 'modify_submenu_items' method on '%s' should be "
-                "updated to accept a 'use_absolute_page_urls' keyword "
-                "argument. View the 2.4 release notes for more info: "
-                "https://github.com/rkhleics/wagtailmenus/releases/tag/v.2.4.0"
-                % page.__class__.__name__,
-            )
-            warnings.warn(warning_msg, category=RemovedInWagtailMenus26Warning)
-
-        # Call `modify_submenu_items` using the above kwargs dict
-        if isinstance(menu_items, GeneratorType):
-            menu_items = list(menu_items)
-        return page.modify_submenu_items(menu_items, **kwargs)
 
 
 class DefinesSubMenuTemplatesMixin(object):
@@ -122,9 +45,10 @@ class DefinesSubMenuTemplatesMixin(object):
 
     def get_context_data(self, **kwargs):
         """
-        If there's a possibility that sub menus might be neded, prefetch the
-        template to be used for render them and add it to the context, so that
-        it only needs to happen once.
+        Include the name of the sub-menu template in the context. This is
+        purely for backwards compatibility. Any sub menus rendered as part of
+        this menu will call `sub_menu_template` on the original menu instance
+        to get an actual `Template`
         """
         data = {}
         if self._contextual_vals.current_level == 1 and self.max_levels > 1:

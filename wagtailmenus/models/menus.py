@@ -19,10 +19,12 @@ from wagtail.wagtailcore.models import Page
 
 from .. import app_settings
 from ..forms import FlatMenuAdminForm
+from ..utils.deprecation import (
+    RemovedInWagtailMenus26Warning, RemovedInWagtailMenus27Warning)
+from ..utils.inspection import accepts_kwarg
 from ..utils.misc import get_site_from_request
-from ..utils.deprecation import RemovedInWagtailMenus27Warning
 from .menuitems import MenuItem
-from .mixins import DescendentPageMenuItemsMixin, DefinesSubMenuTemplatesMixin
+from .mixins import DefinesSubMenuTemplatesMixin
 from .pages import AbstractLinkPage
 
 
@@ -532,13 +534,122 @@ class Menu(object):
         return
 
 
-class MenuFromRootPage(Menu):
+class MenuFromPage(Menu):
+    """
+    A menu class who's menu items are (by default) just descendant pages of a
+    specific page. The 'parent page' from which the menu items descend might be
+    supplied as an option value to the tag, or the menu class might identify it
+    from values present in the parent context. However identified, the page
+    will be used to figure out which pages to prefetch, and will also be given
+    the opportunity to modify the first level items before they are sent to
+    a template for rendering.
+    """
+
+    def get_parent_page_for_menu_items(self):
+        """
+        Returns the 'parent page' from which all of menu items for this menu
+        descend. Override this method to change which page is used.
+        """
+        raise NotImplementedError(
+            "Subclasses of 'MenuFromPage' must define a "
+            "'get_parent_page_for_menu_items()' method")
+
+    @cached_property
+    def parent_page_for_menu_items(self):
+        """
+        In case the 'get_parent_page_for_menu_items()' method is resource
+        intensive, this decorated method is used so that the 'parent page' only
+        needs to be fetched once
+        """
+        return self.get_parent_page_for_menu_items()
+
+    def get_pages_for_display(self):
+        """Return all pages needed for rendering all sub-levels for the current
+        menu"""
+        parent_page = self.parent_page_for_menu_items
+        pages = self.get_base_page_queryset().filter(
+            depth__gt=parent_page.depth,
+            depth__lte=parent_page.depth + self.max_levels,
+            path__startswith=parent_page.path,
+        )
+        # Return 'specific' page instances if required
+        if(self.use_specific == app_settings.USE_SPECIFIC_ALWAYS):
+            return pages.specific()
+        return pages
+
+    def get_children_for_page(self, page):
+        """Return a list of relevant child pages for a given page"""
+        if self.max_levels == 1:
+            # If there's only a single level of pages to display, skip the
+            # dict creation / lookup and just return the QuerySet result
+            return self.pages_for_display
+        return super(MenuFromPage, self).get_children_for_page(page)
+
+    def get_raw_menu_items(self):
+        parent_page = self.parent_page_for_menu_items
+        return list(self.get_children_for_page(parent_page))
+
+    def modify_menu_items(self, menu_items):
+        if not self.use_specific:
+            return menu_items
+        """
+        If the menu has menu items that can be modified by a parent or root
+        page's ``modify_submenu_items`` method, send them to that
+        method for further modification and return them. The menu class is
+        responsible for ensuring the page is 'specific' already if it needs
+        to be. (A vanilla Page object will not have a 'modify_submenu_items'
+        method, so no changes will be made).
+        """
+        parent_page = self.parent_page_for_menu_items
+        if not hasattr(parent_page, 'modify_submenu_items'):
+            return menu_items
+
+        ctx_vals = self._contextual_vals
+        opt_vals = self._option_vals
+        kwargs = {
+            'request': self.request,
+            'menu_instance': self,
+            'original_menu_tag': ctx_vals.original_menu_tag,
+            'current_site': ctx_vals.current_site,
+            'current_page': ctx_vals.current_page,
+            'current_ancestor_ids': ctx_vals.current_page_ancestor_ids,
+            'allow_repeating_parents': opt_vals.allow_repeating_parents,
+            'apply_active_classes': opt_vals.apply_active_classes,
+            'use_absolute_page_urls': opt_vals.use_absolute_page_urls,
+        }
+        # Backwards compatibility for 'modify_submenu_items' methods that
+        # don't accept a 'use_absolute_page_urls' kwarg
+        if not accepts_kwarg(
+            parent_page.modify_submenu_items, 'use_absolute_page_urls'
+        ):
+            kwargs.pop('use_absolute_page_urls')
+            warning_msg = (
+                "The 'modify_submenu_items' method on '%s' should be "
+                "updated to accept a 'use_absolute_page_urls' keyword "
+                "argument. View the 2.4 release notes for more info: "
+                "https://github.com/rkhleics/wagtailmenus/releases/tag/v.2.4.0"
+                % parent_page.__class__.__name__,
+            )
+            warnings.warn(warning_msg, category=RemovedInWagtailMenus26Warning)
+
+        # Call `modify_submenu_items` using the above kwargs dict
+        if isinstance(menu_items, GeneratorType):
+            menu_items = list(menu_items)
+        return parent_page.modify_submenu_items(menu_items, **kwargs)
+
+    def get_common_hook_kwargs(self, **kwargs):
+        hook_kwargs = {'parent_page': self.parent_page_for_menu_items}
+        hook_kwargs.update(kwargs)
+        return super(MenuFromPage, self).get_common_hook_kwargs(**hook_kwargs)
+
+
+class MenuFromRootPage(MenuFromPage):
     root_page = None
 
     def __init__(self, root_page, max_levels, use_specific):
         warnings.warn(
             "The MenuFromRootPage class has been deprecated in favour of "
-            "using the DescendentPageMenuItemsMixin for built-in menus",
+            "using MenuFromPage",
             category=RemovedInWagtailMenus27Warning
         )
         self.root_page = root_page
@@ -546,33 +657,11 @@ class MenuFromRootPage(Menu):
         self.use_specific = use_specific
         super(MenuFromRootPage, self).__init__()
 
-    @cached_property
-    def pages_for_display(self):
-        """Returns a list of pages for rendering all levels of the menu. All
-        pages must be live, not expired, and set to show in menus."""
-        pages = self.get_base_page_queryset().filter(
-            depth__gt=self.root_page.depth,
-            depth__lte=self.root_page.depth + self.max_levels,
-            path__startswith=self.root_page.path,
-        )
-
-        # Return 'specific' page instances if required
-        if self.use_specific == app_settings.USE_SPECIFIC_ALWAYS:
-            return pages.specific()
-
-        return pages
-
-    def get_children_for_page(self, page):
-        """Return a list of relevant child pages for a given page."""
-        if self.max_levels == 1:
-            # If there's only a single level of pages to display, skip the
-            # dict creation / lookup and just return the QuerySet result
-            return self.pages_for_display
-        return super(MenuFromRootPage, self).get_children_for_page(page)
+    def get_menu_items_parent_page(self):
+        return self.root_page
 
 
-class SectionMenu(DescendentPageMenuItemsMixin, DefinesSubMenuTemplatesMixin,
-                  Menu):
+class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     menu_short_name = 'section'  # used to find templates
     menu_instance_context_name = 'section_menu'
 
@@ -607,27 +696,13 @@ class SectionMenu(DescendentPageMenuItemsMixin, DefinesSubMenuTemplatesMixin,
         ):
             self.root_page = self.root_page.specific
 
+    def get_parent_page_for_menu_items(self):
+        return self.root_page
+
     def render_to_template(self):
         if not self.root_page:
             return ''
         return super(SectionMenu, self).render_to_template()
-
-    def get_pages_for_display(self):
-        """Return all of the pages needed to render this menu"""
-        return self.get_descendent_menu_pages(self.root_page)
-
-    def get_raw_menu_items(self):
-        return list(self.get_children_for_page(self.root_page))
-
-    def modify_menu_items(self, menu_items):
-        if not self.use_specific:
-            return menu_items
-        return self.let_page_modify_menu_items(self.root_page, menu_items)
-
-    def get_common_hook_kwargs(self, **kwargs):
-        hook_kwargs = {'parent_page': self.root_page}
-        hook_kwargs.update(kwargs)
-        return super(SectionMenu, self).get_common_hook_kwargs(**hook_kwargs)
 
     def get_context_data(self, **kwargs):
         ctx_vals = self._contextual_vals
@@ -682,8 +757,7 @@ class SectionMenu(DescendentPageMenuItemsMixin, DefinesSubMenuTemplatesMixin,
         return data
 
 
-class ChildrenMenu(DescendentPageMenuItemsMixin, DefinesSubMenuTemplatesMixin,
-                   Menu):
+class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     menu_short_name = 'children'  # used to find templates
     menu_instance_context_name = 'children_menu'
 
@@ -745,23 +819,8 @@ class ChildrenMenu(DescendentPageMenuItemsMixin, DefinesSubMenuTemplatesMixin,
         )
         self.parent_page = value
 
-    def get_pages_for_display(self):
-        """Return all pages needed for rendering all sub-levels for the current
-        menu"""
-        return self.get_descendent_menu_pages(self.parent_page)
-
-    def get_raw_menu_items(self):
-        return list(self.get_children_for_page(self.parent_page))
-
-    def modify_menu_items(self, menu_items):
-        if not self.use_specific:
-            return menu_items
-        return self.let_page_modify_menu_items(self.parent_page, menu_items)
-
-    def get_common_hook_kwargs(self, **kwargs):
-        hook_kwargs = {'parent_page': self.parent_page}
-        hook_kwargs.update(kwargs)
-        return super(ChildrenMenu, self).get_common_hook_kwargs(**hook_kwargs)
+    def get_parent_page_for_menu_items(self):
+        return self.parent_page
 
     def get_context_data(self, **kwargs):
         data = {'parent_page': self.parent_page}
@@ -769,7 +828,7 @@ class ChildrenMenu(DescendentPageMenuItemsMixin, DefinesSubMenuTemplatesMixin,
         return super(ChildrenMenu, self).get_context_data(**data)
 
 
-class SubMenu(DescendentPageMenuItemsMixin, Menu):
+class SubMenu(MenuFromPage):
     menu_short_name = 'sub'  # used to find templates
     menu_instance_context_name = 'sub_menu'
 
@@ -789,23 +848,19 @@ class SubMenu(DescendentPageMenuItemsMixin, Menu):
         self.max_levels = max_levels
         self.use_specific = use_specific
 
+    def get_parent_page_for_menu_items(self):
+        return self.parent_page
+
     def get_raw_menu_items(self):
+        """Overrides the 'MenuFromPage' version, because sub menus are powered
+        by page data, which is prefetched by the the original menu instance.
+        """
         return self.original_menu.get_children_for_page(self.parent_page)
 
-    def modify_menu_items(self, menu_items):
-        if not self.use_specific:
-            return menu_items
-        return self.let_page_modify_menu_items(self.parent_page, menu_items)
-
     def get_template(self):
-        if self._option_vals.template_name:
+        if self._option_vals.template_name or self.template_name:
             return super(SubMenu, self).get_template()
         return self.original_menu.sub_menu_template
-
-    def get_common_hook_kwargs(self, **kwargs):
-        hook_kwargs = {'parent_page': self.parent_page}
-        hook_kwargs.update(kwargs)
-        return super(SubMenu, self).get_common_hook_kwargs(**hook_kwargs)
 
     def get_context_data(self, **kwargs):
         data = {'parent_page': self.parent_page}
