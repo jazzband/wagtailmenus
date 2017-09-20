@@ -11,10 +11,8 @@ def get_attrs_from_context(context):
     a tuple for use in most menu tags.
     """
     warning_msg = (
-        "The 'get_attrs_from_context' method in wagtailmenus.utils.misc is "
-        "no longer used by menu tags and is deprecated. View the 2.5 release "
-        "notes for more info: "
-        "http://wagtailmenus.readthedocs.io/en/stable/releases/2.5.0.html"
+        "The 'get_attrs_from_context' method has been deprecated in favour of "
+        "building this behaviour into the base Menu class"
     )
     warnings.warn(warning_msg, RemovedInWagtailMenus27Warning)
     request = context.get('request')
