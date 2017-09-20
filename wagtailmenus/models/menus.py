@@ -550,8 +550,8 @@ class MenuFromPage(Menu):
     supplied as an option value to the tag, or the menu class might identify it
     from values present in the parent context. However identified, the page
     will be used to figure out which pages to prefetch, and will also be given
-    the opportunity to modify the first level items before they are sent to
-    a template for rendering.
+    the opportunity to modify the first level of items before they are sent to
+    a template for rendering (if it has a 'modify_submenu_items()' method).
     """
 
     def get_parent_page_for_menu_items(self):
