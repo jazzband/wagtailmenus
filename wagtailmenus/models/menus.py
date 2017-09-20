@@ -599,18 +599,22 @@ class MenuFromPage(Menu):
         return list(self.get_children_for_page(parent_page))
 
     def modify_menu_items(self, menu_items):
-        if not self.use_specific:
-            return menu_items
         """
-        If the menu has menu items that can be modified by a parent or root
-        page's ``modify_submenu_items`` method, send them to that
-        method for further modification and return them. The menu class is
-        responsible for ensuring the page is 'specific' already if it needs
-        to be. (A vanilla Page object will not have a 'modify_submenu_items'
-        method, so no changes will be made).
+        If the 'use_specific' value on the menu instance indicates that the
+        behaviour is desired, and the 'parent page' has a
+        'modify_submenu_items()' method, send the menu items to that for
+        further modification and return the modified result.
+
+        The supplied ``menu_items`` might be a GeneratorType instance returned
+        by 'prime_menu_items()' or a list.
+
+        Subclasses of ``MenuFromPage`` are responsible for ensuring the page is
+        'specific' by this point if it needs to be. (The 'modify_submenu_items'
+        method will not be present on a vanilla ``Page`` instances).
         """
         parent_page = self.parent_page_for_menu_items
-        if not hasattr(parent_page, 'modify_submenu_items'):
+        modifier_method = getattr(parent_page, 'modify_submenu_items', None)
+        if not self.use_specific or not modifier_method:
             return menu_items
 
         ctx_vals = self._contextual_vals
@@ -628,9 +632,7 @@ class MenuFromPage(Menu):
         }
         # Backwards compatibility for 'modify_submenu_items' methods that
         # don't accept a 'use_absolute_page_urls' kwarg
-        if not accepts_kwarg(
-            parent_page.modify_submenu_items, 'use_absolute_page_urls'
-        ):
+        if not accepts_kwarg(modifier_method, 'use_absolute_page_urls'):
             kwargs.pop('use_absolute_page_urls')
             warning_msg = (
                 "The 'modify_submenu_items' method on '%s' should be "
@@ -641,10 +643,10 @@ class MenuFromPage(Menu):
             )
             warnings.warn(warning_msg, category=RemovedInWagtailMenus26Warning)
 
-        # Call `modify_submenu_items` using the above kwargs dict
         if isinstance(menu_items, GeneratorType):
+            # 'modify_submenu_items' methods expect 'menu_items' to be a list
             menu_items = list(menu_items)
-        return parent_page.modify_submenu_items(menu_items, **kwargs)
+        return modifier_method(menu_items, **kwargs)
 
     def get_common_hook_kwargs(self, **kwargs):
         hook_kwargs = {'parent_page': self.parent_page_for_menu_items}
