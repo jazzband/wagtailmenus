@@ -215,7 +215,7 @@ class TestChildrenMenu(TestCase):
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter('always', RemovedInWagtailMenus27Warning)
             menu = ChildrenMenu(root_page=page, max_levels=1, use_specific=1)
-            self.assertTrue(menu)
+            self.assertEqual(menu.parent_page, page)
             warning_messages = set(str(warning.message) for warning in w)
             self.assertTrue(
                 "The 'root_page' argument is deprecated for ChildrenMenu's "
