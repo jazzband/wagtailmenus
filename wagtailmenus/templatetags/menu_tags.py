@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 import warnings
 
 from django.template import Library
-from wagtail.wagtailcore import hooks
 from wagtail.wagtailcore.models import Page
 
 from wagtailmenus import app_settings
@@ -190,10 +189,10 @@ def sub_menu(
 
 
 def get_sub_menu_items_for_page(
-    page, request, original_menu_tag, menu_instance, current_level, max_levels,
-    current_site, current_page, current_ancestor_ids, use_specific,
-    allow_repeating_parents=True, apply_active_classes=True,
-    use_absolute_page_urls=False
+    request, page, current_site, current_page, ancestor_ids, menu_instance,
+    use_specific, apply_active_classes, allow_repeating_parents,
+    current_level=1, max_levels=2, original_menu_tag='',
+    use_absolute_page_urls=False,
 ):
     warning_msg = (
         "The 'get_sub_menu_items_for_page' method in menu_tags is deprecated "
@@ -206,8 +205,29 @@ def get_sub_menu_items_for_page(
     # The menu items will be the children of the provided `page`
     children_pages = menu_instance.get_children_for_page(page)
 
-    # If we're going to fetch a specific instance, do it now so that the
-    # specific page can be passed elsewhere
+    # Call `prime_menu_items` to prepare the children pages for output. This
+    # will add `href`, `text`, `active_class` and `has_children_in_menu`
+    # attributes to each item, to use in menu templates.
+    menu_items = prime_menu_items(
+        request=request,
+        menu_items=children_pages,
+        current_site=current_site,
+        current_page=current_page,
+        current_page_ancestor_ids=ancestor_ids,
+        use_specific=use_specific,
+        original_menu_tag=original_menu_tag,
+        menu_instance=menu_instance,
+        check_for_children=current_level < max_levels,
+        allow_repeating_parents=allow_repeating_parents,
+        apply_active_classes=apply_active_classes,
+        use_absolute_page_urls=use_absolute_page_urls,
+    )
+
+    """
+    If `page` has a `modify_submenu_items` method, send the primed
+    menu_items list to that for further modification (e.g. adding a copy of
+    `page` as the first item, using fields from `MenuPage`)
+    """
     if (
         use_specific and (
             hasattr(page, 'modify_submenu_items') or
@@ -217,46 +237,21 @@ def get_sub_menu_items_for_page(
         if type(page) is Page:
             page = page.specific
 
-    # Define common kwargs for calls to 'prime_menu_items', methods using the
-    # 'menus_modify_menu_items' hook, or page's 'modify_sub_menu_items' method
-    kwargs = {
-        'request': request,
-        'original_menu_tag': original_menu_tag,
-        'menu_instance': menu_instance,
-        'current_site': current_site,
-        'current_page': current_page,
-        'current_ancestor_ids': current_ancestor_ids,
-        'allow_repeating_parents': allow_repeating_parents,
-        'apply_active_classes': apply_active_classes,
-        'use_absolute_page_urls': use_absolute_page_urls,
-    }
-    # additional kwargs, not needed for 'modify_sub_menu_items'
-    kwargs_extra = {
-        'parent_page': page,
-        'current_level': current_level,
-        'max_levels': max_levels,
-        'use_specific': use_specific,
-    }
-    kwargs_extra.update(kwargs)
-
-    # allow hooks to modify menu items before priming
-    menu_items = list(children_pages)
-    for hook in hooks.get_hooks('menus_modify_raw_menu_items'):
-        menu_items = hook(menu_items, **kwargs_extra)
-
-    # prime the menu items
-    menu_items = prime_menu_items(menu_items, **kwargs_extra)
-
-    # If `page` has a `modify_submenu_items` method, send the primed
-    # menu_items list to that for further modification
-    if use_specific and hasattr(page, 'modify_submenu_items'):
-
-        # Backwards compatibility for 'modify_submenu_items' methods that
-        # don't accept a 'use_absolute_page_urls' kwarg
-        if not accepts_kwarg(
-            page.modify_submenu_items, 'use_absolute_page_urls'
-        ):
-            kwargs.pop('use_absolute_page_urls')
+        # Create dict of kwargs to send to `modify_submenu_items`
+        method_kwargs = {
+            'menu_items': menu_items,
+            'current_page': current_page,
+            'current_ancestor_ids': ancestor_ids,
+            'current_site': current_site,
+            'allow_repeating_parents': allow_repeating_parents,
+            'apply_active_classes': apply_active_classes,
+            'original_menu_tag': original_menu_tag,
+            'menu_instance': menu_instance,
+            'request': request,
+        }
+        if accepts_kwarg(page.modify_submenu_items, 'use_absolute_page_urls'):
+            method_kwargs['use_absolute_page_urls'] = use_absolute_page_urls
+        else:
             warning_msg = (
                 "The 'modify_submenu_items' method on '%s' should be "
                 "updated to accept a 'use_absolute_page_urls' keyword "
@@ -267,20 +262,16 @@ def get_sub_menu_items_for_page(
             warnings.warn(warning_msg, RemovedInWagtailMenus26Warning)
 
         # Call `modify_submenu_items` using the above kwargs dict
-        menu_items = page.modify_submenu_items(menu_items, **kwargs)
-
-    # allow hooks to modify the final menu items list
-    for hook in hooks.get_hooks('menus_modify_primed_menu_items'):
-        menu_items = hook(menu_items, **kwargs_extra)
+        menu_items = page.modify_submenu_items(**method_kwargs)
 
     return page, menu_items
 
 
 def prime_menu_items(
-    menu_items, request, parent_page, original_menu_tag, current_level,
-    max_levels, menu_instance, current_site, current_page,
-    current_ancestor_ids, use_specific, allow_repeating_parents=True,
-    apply_active_classes=True, use_absolute_page_urls=False,
+    request, menu_items, current_site, current_page, current_page_ancestor_ids,
+    use_specific, original_menu_tag, menu_instance, check_for_children=False,
+    allow_repeating_parents=True, apply_active_classes=True,
+    use_absolute_page_urls=False,
 ):
     """
     Prepare a list of `MenuItem` or `Page` objects for rendering to a menu
@@ -294,7 +285,6 @@ def prime_menu_items(
     )
     warnings.warn(warning_msg, RemovedInWagtailMenus27Warning)
 
-    stop_at_this_level = (current_level >= max_levels)
     primed_menu_items = []
 
     for item in menu_items:
@@ -347,7 +337,7 @@ def prime_menu_items(
             """
             has_children_in_menu = False
             if (
-                not stop_at_this_level and
+                check_for_children and
                 page.depth >= app_settings.SECTION_ROOT_DEPTH and
                 (menuitem is None or menuitem.allow_subnav)
             ):
@@ -397,7 +387,7 @@ def prime_menu_items(
                             page = page.specific
                         if getattr(page, 'repeat_in_subnav', False):
                             active_class = app_settings.ACTIVE_ANCESTOR_CLASS
-                elif page.pk in current_ancestor_ids:
+                elif page.pk in current_page_ancestor_ids:
                     active_class = app_settings.ACTIVE_ANCESTOR_CLASS
                 setattr(item, 'active_class', active_class)
 
