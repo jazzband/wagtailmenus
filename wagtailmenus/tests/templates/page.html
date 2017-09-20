@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load menu_tags %}
+{% load menu_tags custom_menu_tags %}
 
 {% block content %}
 	<div class="row">
@@ -16,6 +16,12 @@
 			<h4>Children Menu (max_levels=3)</h4>
 			<div id="children-menu-three-levels">
 				{% children_menu max_levels=3 allow_repeating_parents=False %}
+			</div>
+
+			<h4>Custom Old-Style Children Menu</h4>
+			<p>Using the 'custom_children_menu' tag fashioned after the v2.4 <code>children_tag</code>, but using a custom <code>OldStyleChildrenMenu</code> menu class, based on the now deprecated <code>MenuFromRootPage</code></p>
+			<div id="children-menu-three-levels">
+				{% custom_children_menu max_levels=2 %}
 			</div>
 
             <h4>Children Menu (use_absolute_page_urls=True)</h4>
