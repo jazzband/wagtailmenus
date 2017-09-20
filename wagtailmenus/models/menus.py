@@ -114,11 +114,10 @@ class Menu(object):
         method and returns them in a structure that can be conveniently
         referenced throughout the process of rendering.
 
-        Any additionaly options needed for custom menu classes implementations
-        should be available as a dictionary using the 'extra' key name. For
-        example, when rendering a flat menu, the
-        'fall_back_to_default_site_menus' option passed to the tag is available
-        as:
+        Any additional options supplied by custom menu tags will be available
+        as a dictionary using the 'extra' key name. For example, when rendering
+        a flat menu, the 'fall_back_to_default_site_menus' option passed to the
+        tag is available as:
 
         .. code-block:: python
 
@@ -141,11 +140,10 @@ class Menu(object):
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
         """
         Called by the class's ``render_from_tag()`` method to get or create a
-        relevant instance to use for rendering using the available data. For
-        model-based menu classes like ``AbstractMainMenu`` and
-        ``AbstractFlatMenu``, this will involve fetching the correct object
-        from the database. For others, a new instance should be created and
-        returned.
+        relevant instance to use for rendering. For model-based menu classes
+        like ``AbstractMainMenu`` and ``AbstractFlatMenu``, this will involve
+        fetching the relevant object from the database. For others, a new
+        instance should be created and returned.
         """
         raise NotImplementedError(
             "Subclasses of 'Menu' must define their own "
@@ -244,7 +242,7 @@ class Menu(object):
     def set_request(self, request):
         """
         Set `self.request` to the supplied HttpRequest, so that developers can
-        make use of it in subclasses
+        make use of it
         """
         self.request = request
 
@@ -317,8 +315,8 @@ class Menu(object):
         rendering the current level of the menu.
 
         The responsibility for sourcing, priming, and modifying menu items is
-        split between 3 methods: ``get_raw_menu_items()``,
-        ``prime_menu_items()`` and ``modify_menu_items()`` (respectively).
+        split between three methods: ``get_raw_menu_items()``,
+        ``prime_menu_items()`` and ``modify_menu_items()``, respectively.
         """
         items = self.get_raw_menu_items()
 
@@ -338,16 +336,18 @@ class Menu(object):
         return items
 
     def get_raw_menu_items(self):
+        """
+        Returns a python list of ``Page`` on ``MenuItem`` objects that will
+        serve as the basis of the menu items for current level.
+        """
         raise NotImplementedError("Subclasses of 'Menu' must define their own "
                                   "'get_raw_menu_items' method")
 
-    def modify_menu_items(self, menu_items):
-        return menu_items
-
     def prime_menu_items(self, menu_items):
         """
-        Prepare a list of `MenuItem` or `Page` objects for rendering to a menu
-        template.
+        A generator method that takes a list of ``MenuItem`` or ``Page``
+        objects and sets a number of additional attributes on each item to
+        aid in menu template writing.
         """
         ctx_vals = self._contextual_vals
         opt_vals = self._option_vals
@@ -490,6 +490,13 @@ class Menu(object):
                 url = item.relative_url(current_site)
             setattr(item, 'href', url)
             yield item
+
+    def modify_menu_items(self, menu_items):
+        """
+        Returns a python list of objects that will form the basis of the
+        menu items for current level.
+        """
+        return menu_items
 
     def get_template_engine(self):
         return self._contextual_vals.parent_context.template.engine
