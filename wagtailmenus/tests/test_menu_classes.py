@@ -13,13 +13,13 @@ from wagtailmenus.utils.deprecation import RemovedInWagtailMenus27Warning
 class TestMenuClasses(TestCase):
     fixtures = ['test.json']
 
-    def text_mainmenuitem_meta_settings(self):
+    def test_mainmenuitem_meta_settings(self):
         opts = MainMenuItem._meta
         self.assertEqual(opts.verbose_name, 'menu item')
         self.assertEqual(opts.verbose_name_plural, 'menu items')
         self.assertEqual(opts.ordering, ('sort_order',))
 
-    def text_flatmenuitem_meta_settings(self):
+    def test_flatmenuitem_meta_settings(self):
         opts = FlatMenuItem._meta
         self.assertEqual(opts.verbose_name, 'menu item')
         self.assertEqual(opts.verbose_name_plural, 'menu items')
