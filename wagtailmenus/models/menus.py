@@ -668,7 +668,7 @@ class MenuFromRootPage(MenuFromPage):
         self.use_specific = use_specific
         super(MenuFromRootPage, self).__init__()
 
-    def get_menu_items_parent_page(self):
+    def get_parent_page_for_menu_items(self):
         return self.root_page
 
 
