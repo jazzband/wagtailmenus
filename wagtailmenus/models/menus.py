@@ -497,7 +497,9 @@ class Menu(object):
         specified = self._option_vals.template_name
         if specified:
             return engine.get_template(specified)
-        if hasattr(self, 'template_name'):
+        if self.template_name:
+            # Developers can set 'template_name' as a class attribute to have
+            # custom menus use specific templates
             return engine.get_template(self.template_name)
         return engine.select_template(self.get_template_names())
 
