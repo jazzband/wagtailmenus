@@ -18,7 +18,7 @@ class CustomSectionMenu(SectionMenu):
 
 
 class OldStyleChildrenMenu(MenuFromRootPage):
-    pass
+    template_name = "menus/old_style_children_menu.html"
 
 
 class MultilingualMenuItem(models.Model):
