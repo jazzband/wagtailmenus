@@ -30,9 +30,8 @@ from .pages import AbstractLinkPage
 
 ContextualVals = namedtuple('ContextualVals', (
     'parent_context', 'request', 'current_site', 'current_level',
-    'menu_tag', 'original_menu_tag', 'original_menu_instance',
-    'parent_menu_instance', 'current_page', 'current_section_root_page',
-    'current_page_ancestor_ids'
+    'menu_tag', 'original_menu_tag', 'original_menu_instance', 'current_page',
+    'current_section_root_page', 'current_page_ancestor_ids'
 ))
 
 OptionVals = namedtuple('OptionVals', (
@@ -47,31 +46,35 @@ OptionVals = namedtuple('OptionVals', (
 # ########################################################
 
 class Menu(object):
-    """A base class that all other menu classes should inherit from."""
-
-    max_levels = 1
-    use_specific = app_settings.USE_SPECIFIC_AUTO
-    pages_for_display = None
+    """The base class that which all other menu classes should inherit from"""
     request = None
-    template_name = None  # set to use a specific default template
-    menu_short_name = ''  # used to find templates
+    menu_short_name = ''  # used by 'get_template_names()'
+    template_name = None
     menu_instance_context_name = 'menu'
     sub_menu_class = None
+
+    # These are defaults and should always be overriden for individual
+    # instances by model field values, of by setting alternative values
+    # at initialisation
+    max_levels = 1
+    use_specific = app_settings.USE_SPECIFIC_AUTO
 
     @classmethod
     def render_from_tag(cls, tag_name, context, **options):
         """
-        A template tag should call this method to render menus.
-        The ``Context`` instance and other data provided are used to get or
-        create a relevant menu instance, prepare it, then render it to a
-        an appropriate template.
+        A template tag should call this method to render a menu.
+        The ``Context`` instance and option values provided are used to get or
+        create a relevant menu instance, prepare it, then render it and it's
+        menu items to an appropriate template.
 
-        It shouldn't be neccessary to override this method, as there
-        are more specific methods for overriding the certain behaviour at
-        different stages of rendering, such as:
+        It shouldn't be neccessary to override this method, as any new option
+        values will be available as a dict in `opt_vals.extra`, and there are
+        more specific methods for overriding certain behaviour at different
+        stages of rendering, such as:
 
             * get_instance_for_rendering() (class method)
             * prepare_to_render()
+            * get_context_data()
             * render_to_template()
         """
         ctx_vals = cls.get_contextual_vals_from_context(tag_name, context)
@@ -101,7 +104,6 @@ class Menu(object):
             context.get('menu_tag', tag_name),
             context.get('original_menu_tag', tag_name),
             context.get('original_menu_instance'),
-            context.get('menu_instance'),
             context_processor_vals.get('current_page'),
             context_processor_vals.get('section_root'),
             context_processor_vals.get('current_page_ancestor_ids', ()),

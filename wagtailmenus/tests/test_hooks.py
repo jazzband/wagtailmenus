@@ -14,11 +14,11 @@ class TestHooks(TestCase):
         @hooks.register('menus_modify_primed_menu_items')
         def modify_menu_items(
             menu_items, request, parent_context, parent_page, menu_instance,
-            original_menu_instance, parent_menu_instance, menu_tag,
-            original_menu_tag, current_level, max_levels, use_specific,
-            current_site, current_page, current_section_root_page,
-            current_page_ancestor_ids, apply_active_classes,
-            allow_repeating_parents, use_absolute_page_urls
+            original_menu_instance, menu_tag, original_menu_tag, current_level,
+            max_levels, use_specific, current_site, current_page,
+            current_section_root_page, current_page_ancestor_ids,
+            apply_active_classes, allow_repeating_parents,
+            use_absolute_page_urls
         ):
             if original_menu_tag == 'main_menu' and current_level == 1:
                 menu_items.append({
@@ -49,11 +49,11 @@ class TestHooks(TestCase):
         @hooks.register('menus_modify_raw_menu_items')
         def modify_menu_items(
             menu_items, request, parent_context, parent_page, menu_instance,
-            original_menu_instance, parent_menu_instance, menu_tag,
-            original_menu_tag, current_level, max_levels, use_specific,
-            current_site, current_page, current_section_root_page,
-            current_page_ancestor_ids, apply_active_classes,
-            allow_repeating_parents, use_absolute_page_urls
+            original_menu_instance, menu_tag, original_menu_tag, current_level,
+            max_levels, use_specific, current_site, current_page, 
+            current_section_root_page, current_page_ancestor_ids,
+            apply_active_classes, allow_repeating_parents,
+            use_absolute_page_urls
         ):
             if original_menu_tag == 'section_menu' and current_level == 1:
                 """
@@ -102,11 +102,11 @@ class TestHooks(TestCase):
         @hooks.register('menus_modify_base_page_queryset')
         def modify_page_queryset(
             queryset, request, parent_context, parent_page, menu_instance,
-            original_menu_instance, parent_menu_instance, menu_tag,
-            original_menu_tag, current_level, max_levels, use_specific,
-            current_site, current_page, current_section_root_page,
-            current_page_ancestor_ids, apply_active_classes,
-            allow_repeating_parents, use_absolute_page_urls
+            original_menu_instance, menu_tag, original_menu_tag, current_level,
+            max_levels, use_specific, current_site, current_page,
+            current_section_root_page, current_page_ancestor_ids,
+            apply_active_classes, allow_repeating_parents,
+            use_absolute_page_urls
         ):
             """
             Nullify page queryset for 'flat menus'. Should result in only
@@ -148,11 +148,11 @@ class TestHooks(TestCase):
         @hooks.register('menus_modify_base_menuitem_queryset')
         def modify_menuitem_queryset(
             queryset, request, parent_context, parent_page, menu_instance,
-            original_menu_instance, parent_menu_instance, menu_tag,
-            original_menu_tag, current_level, max_levels, use_specific,
-            current_site, current_page, current_section_root_page,
-            current_page_ancestor_ids, apply_active_classes,
-            allow_repeating_parents, use_absolute_page_urls
+            original_menu_instance, menu_tag, original_menu_tag, current_level,
+            max_levels, use_specific, current_site, current_page,
+            current_section_root_page, current_page_ancestor_ids,
+            apply_active_classes, allow_repeating_parents,
+            use_absolute_page_urls
         ):
             """
             Nullify menu items completely for all 'flat menus'. Should result
