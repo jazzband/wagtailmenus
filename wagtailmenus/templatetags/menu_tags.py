@@ -196,9 +196,7 @@ def get_sub_menu_items_for_page(
 ):
     warning_msg = (
         "The 'get_sub_menu_items_for_page' method in menu_tags is deprecated "
-        "in favour of rendering behaviour being implemented into menu "
-        "classes. Read the 2.5 release notes for more info: "
-        "http://wagtailmenus.readthedocs.io/en/stable/releases/2.5.0.html"
+        "in favour of rendering behaviour being built into Menu classes"
     )
     warnings.warn(warning_msg, RemovedInWagtailMenus27Warning)
 
@@ -279,9 +277,7 @@ def prime_menu_items(
     """
     warning_msg = (
         "The 'prime_menu_items' method in menu_tags is deprecated in favour "
-        "of rendering behaviour being implemented into menu classes. Read the "
-        "2.5 release notes for more info: "
-        "http://wagtailmenus.readthedocs.io/en/stable/releases/2.5.0.html"
+        "of rendering behaviour being built into Menu classes"
     )
     warnings.warn(warning_msg, RemovedInWagtailMenus27Warning)
 

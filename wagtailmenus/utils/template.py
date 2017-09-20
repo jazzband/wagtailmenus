@@ -9,7 +9,7 @@ def get_template_names(menu_tag, request, override):
     warning_msg = (
         "The 'get_template_names' method wagtailmenus.utils.template has been "
         "deprecated in favour of building this behaviour into the base Menu "
-        "classe"
+        "class"
     )
     warnings.warn(warning_msg, RemovedInWagtailMenus27Warning)
     if override:
