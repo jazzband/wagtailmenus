@@ -219,7 +219,7 @@ class TestTemplateTags(TestCase):
             <ul class="nav navbar-nav">
                 <li class="active">
                     <a href="http://www.wagtailmenus.co.uk:8000/">Home</a>
-                </li>       
+                </li>
                 <li class=" dropdown top-level">
                     <a href="http://www.wagtailmenus.co.uk:8000/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
@@ -235,8 +235,8 @@ class TestTemplateTags(TestCase):
                         <li class="">
                             <a href="http://www.wagtailmenus.co.uk:8000/about-us/mission-and-values/">Our mission and values</a>
                         </li>
-                    </ul>  
-                </li>       
+                    </ul>
+                </li>
                 <li class=" dropdown top-level">
                     <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
@@ -250,10 +250,10 @@ class TestTemplateTags(TestCase):
                             <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/press/">In the press</a>
                         </li>
                     </ul>
-                </li>       
+                </li>
                 <li class="">
                     <a href="http://google.co.uk">Google</a>
-                </li>       
+                </li>
                 <li class=" dropdown">
                     <a href="http://www.wagtailmenus.co.uk:8000/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
@@ -263,12 +263,11 @@ class TestTemplateTags(TestCase):
                         <li class="call">
                             <a href="/contact-us/#call">Speak to someone</a>
                         </li>
-                    
                         <li class="map">
                             <a href="/contact-us/#map">Map &amp; directions</a>
                         </li>
                     </ul>
-                </li>       
+                </li>
             </ul>
         </div>
         """
@@ -477,7 +476,7 @@ class TestTemplateTags(TestCase):
                 <ul class="nav navbar-nav">
                     <li class="active">
                         <a href="http://www.wagtailmenus.co.uk:8000/">Home</a>
-                    </li>       
+                    </li>
                     <li class=" dropdown top-level">
                         <a href="http://www.wagtailmenus.co.uk:8000/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                         <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
@@ -493,8 +492,8 @@ class TestTemplateTags(TestCase):
                             <li class="">
                                 <a href="http://www.wagtailmenus.co.uk:8000/about-us/mission-and-values/">Our mission and values</a>
                             </li>
-                        </ul>  
-                    </li>       
+                        </ul>
+                    </li>
                     <li class=" dropdown top-level">
                         <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                         <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
@@ -508,10 +507,10 @@ class TestTemplateTags(TestCase):
                                 <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/press/">In the press</a>
                             </li>
                         </ul>
-                    </li>       
+                    </li>
                     <li class="">
                         <a href="http://google.co.uk">Google</a>
-                    </li>       
+                    </li>
                     <li class=" dropdown">
                         <a href="http://www.wagtailmenus.co.uk:8000/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
                         <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
@@ -521,12 +520,11 @@ class TestTemplateTags(TestCase):
                             <li class="call">
                                 <a href="/contact-us/#call">Speak to someone</a>
                             </li>
-    
                             <li class="map">
                                 <a href="/contact-us/#map">Map &amp; directions</a>
                             </li>
                         </ul>
-                    </li>       
+                    </li>
                 </ul>
             </div>
         """
