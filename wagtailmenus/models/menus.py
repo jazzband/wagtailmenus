@@ -699,10 +699,8 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
             request, contextual_vals, option_vals)
 
         if self.use_specific and type(self.root_page) is Page and (
-            contextual_vals.current_level == 1 and
             hasattr(self.root_page.specific_class, 'modify_submenu_items')
         ) or (
-            contextual_vals.current_level == 1 and
             self.use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL
         ):
             self.root_page = self.root_page.specific
