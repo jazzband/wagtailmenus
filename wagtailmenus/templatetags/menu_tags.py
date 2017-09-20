@@ -185,7 +185,7 @@ def sub_menu(
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
         use_absolute_page_urls=use_absolute_page_urls,
-        template_name=template,
+        template_name=template or context.get('sub_menu_template'),
     )
 
 
