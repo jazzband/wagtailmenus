@@ -7,6 +7,7 @@ from wagtail.wagtailcore import urls as wagtail_urls
 urlpatterns = [
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^custom-url/$', TemplateView.as_view(template_name='page.html')),
+    url(r'^custom-menu-tag-test/$', TemplateView.as_view(template_name='custom_menu_tag_page.html')),
     url(r'^superheroes/marvel-comics/custom-man/about/$',
         TemplateView.as_view(template_name='page.html')),
     url(r'^about-us/meet-the-team/staff-member-one/$',

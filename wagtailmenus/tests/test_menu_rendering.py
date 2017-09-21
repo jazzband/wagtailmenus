@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from django.test import TestCase, override_settings
 
 from wagtail.wagtailcore.models import Site
+from wagtailmenus.errors import SubMenuUsageError
 from wagtailmenus.models import MainMenu, FlatMenu
 from wagtailmenus.templatetags.menu_tags import validate_supplied_values
 from bs4 import BeautifulSoup
@@ -78,6 +79,10 @@ class TestTemplateTags(TestCase):
         """
         response = self.client.get('/about-us/')
         self.assertEqual(response.status_code, 200)
+
+    def test_sub_menu_usage_error_raised(self):
+        with self.assertRaises(SubMenuUsageError):
+            self.client.get('/custom-menu-tag-test/')
 
     def test_meet_the_team(self):
         """
