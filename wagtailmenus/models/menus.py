@@ -292,7 +292,6 @@ class Menu(object):
         data = ctx_vals.parent_context.flatten()
         data.update(ctx_vals._asdict())
         data.update({
-            'sub_menu_class': self.get_sub_menu_class(),
             'apply_active_classes': opt_vals.apply_active_classes,
             'allow_repeating_parents': opt_vals.allow_repeating_parents,
             'use_absolute_page_urls': opt_vals.use_absolute_page_urls,
