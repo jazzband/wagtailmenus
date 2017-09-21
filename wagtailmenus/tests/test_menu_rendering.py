@@ -69,10 +69,15 @@ class TestTemplateTags(TestCase):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True,)
     def test_about_us(self):
         """
         Test that 'About us' page (based on `MenuPage`), with
         `repeat_in_subnav=True`, renders without errors.
+
+        The `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` setting is also
+        applied to increase coverage in get_template() and
+        get_sub_menu_template() methods.
         """
         response = self.client.get('/about-us/')
         self.assertEqual(response.status_code, 200)
