@@ -4,7 +4,24 @@ Changelog
 2.5.0a (XX.XX.XXXX) IN DEVELOPMENT
 ---------------------------------- 
 
-
+* Added rendering logic to Menu classes and refactored all existing template
+  tags to make use of it (massively reducing code duplication in menu_tags.py).
+* Added support for several 'hooks', allowing for easier customisation of base
+  querysets and manipulation of menu items during rendering. For more
+  information and examples, see the 'Hooks' section of the documentation:
+  http://wagtailmenus.readthedocs.io/en/latest/advanced_topics/hooks.html
+* Updated the 'sub_menu' tag to raise an error if used in a way that isn't
+  supported. 
+* Deprecated `get_sub_menu_items_for_page` and `prime_menu_items` methods from
+  `wagtailmenus.templatetags.menu_tags` (logic moved to menu classes).
+* Deprecated `get_template` and `get_sub_menu_template_names` methods from
+  `wagtailmenus.utils.template` (logic moved to menu classes).
+* Deprecated `get_attrs_from_context` method from `wagtailmenus.utils.misc`
+  (logic moved to menu classes).
+* Deprecated the `MenuFromRootPage` class from `wagtailmenus.models.menus` in
+  favour of using a new `MenuFromPage` class that fits better with how it's
+  used in menu classes.
+* Minor tidying / renaming of tests.
 * Added a 'add_menu_items_for_pages()' method to the `MenuWithMenuItems` model,
   which adds menu item to a menu object, linking to any pages passed in as a `PageQuerySet`.
 * Added the 'autopopulate_main_menus' command, that can be run as part of the 
@@ -25,11 +42,6 @@ Changelog
 * Made the logic in menu classes 'top_level_items' method easier to override
   by moving it out into a separate 'get_top_level_items()' method, which the
   original (@cached_property decorated) method calls. 
-* Added support for several 'hooks', allowing for easier customisation of base
-  querysets and manipulation of menu items during rendering. For more
-  information and examples, see the 'Hooks' section of the documentation:
-  http://wagtailmenus.readthedocs.io/en/latest/advanced_topics/hooks.html
-
 
 
 2.4.0 (04.08.2017)
