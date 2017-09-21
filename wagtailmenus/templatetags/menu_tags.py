@@ -5,6 +5,7 @@ from django.template import Library
 from wagtail.wagtailcore.models import Page
 
 from wagtailmenus import app_settings
+from ..errors import SubMenuUsageError
 from ..models import AbstractLinkPage, MenuItem, SubMenu
 from ..utils.deprecation import (
     RemovedInWagtailMenus26Warning, RemovedInWagtailMenus27Warning)
@@ -173,7 +174,11 @@ def sub_menu(
     else:
         parent_page = menuitem_or_page.link_page
 
-    menu_class = context.get('sub_menu_class') or SubMenu
+    original_menu = context.get('original_menu_instance')
+    if not original_menu:
+        raise SubMenuUsageError()
+
+    menu_class = original_menu.get_sub_menu_class() or SubMenu
 
     return menu_class.render_from_tag(
         tag_name='sub_menu',
@@ -184,7 +189,7 @@ def sub_menu(
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
         use_absolute_page_urls=use_absolute_page_urls,
-        template_name=template or context.get('sub_menu_template'),
+        template_name=template,
     )
 
 

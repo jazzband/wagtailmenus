@@ -842,48 +842,6 @@ class SubMenu(MenuFromPage):
     menu_instance_context_name = 'sub_menu'
 
     @classmethod
-    def get_contextual_vals_from_context(cls, tag_name, context):
-        """
-        This override is only needed temporarily for the purpose of backwards
-        compatibility. New menu instances will always add themselves as
-        'original_menu_instance' to the context when rendering, but older
-        custom tag implementations might not be doing that, but developers
-        might still be relying on the 'sub_menu' to work as it did previously.
-        """
-        context_processor_vals = context.get('wagtailmenus_vals', {})
-        original_menu_tag = context.get('original_menu_tag', tag_name)
-        original_menu = context.get('original_menu_instance')
-        if not original_menu:
-            warnings.warn(
-                "It looks as though you're using the 'sub_menu' tag in a "
-                "template where 'original_menu_instance' isn't present in "
-                "the context. If you've implemented your own custom menu tags "
-                "please ensure the original menu instance is added as "
-                "'original_menu_instance' to the context",
-                category=RemovedInWagtailMenus27Warning
-            )
-            # Search for fixed keys that were used in 2.4
-            if original_menu_tag == 'main_menu':
-                original_menu = context.get('main_menu')
-            elif original_menu_tag == 'flat_menu':
-                original_menu = context.get('matched_menu')
-            else:
-                original_menu = context.get('menu_instance')
-
-        return ContextualVals(
-            context,
-            context['request'],
-            get_site_from_request(context['request']),
-            context.get('current_level', 0) + 1,
-            context.get('menu_tag', tag_name),
-            original_menu_tag,
-            original_menu,
-            context_processor_vals.get('current_page'),
-            context_processor_vals.get('section_root'),
-            context_processor_vals.get('current_page_ancestor_ids', ()),
-        )
-
-    @classmethod
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
         return cls(
             original_menu=contextual_vals.original_menu_instance,
