@@ -34,9 +34,7 @@ def custom_children_menu(
 
     # Use current page as parent_page if no value supplied
     if parent_page is None:
-        parent_page = context.get('self')
-    if not parent_page:
-        return ''
+        parent_page = current_page or site.root_page
 
     # Create a menu instance that can fetch all pages at once and return
     # for subpages for each branch as they are needed
