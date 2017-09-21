@@ -10,11 +10,11 @@ from .utils import TranslatedField
 
 
 class CustomChildrenMenu(ChildrenMenu):
-    template_name = "menus/custom_children_menu.html"
+    template_name = "menus/custom-overrides/children.html"
 
 
 class CustomSectionMenu(SectionMenu):
-    pass
+    sub_menu_template_name = "menus/custom-overrides/section-sub.html"
 
 
 class OldStyleChildrenMenu(MenuFromRootPage):
