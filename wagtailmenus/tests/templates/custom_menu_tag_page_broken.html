@@ -1,0 +1,7 @@
+{% extends 'custom_menu_tag_page.html' %}
+{% load custom_menu_tags %}
+
+{% block custom_tag_block %}
+	<p>The following will raise a 'SubMenuUsageError' because the custom tag doesn't do some of the things required for 'sub_menu' to work</p>
+	{% custom_children_menu max_levels=2 %}
+{% endblock %}
