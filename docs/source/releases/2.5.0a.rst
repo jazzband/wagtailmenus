@@ -13,6 +13,11 @@ Wagtailmenus 2.5.0a release notes
 What's new?
 ===========
 
+Menus are now rendered using logic added to the menu classes themselves
+-----------------------------------------------------------------------
+
+TBC
+
 
 Hooks added to give developers more options for manipulating menus 
 ------------------------------------------------------------------
@@ -33,7 +38,7 @@ Utilises the new ``add_menu_items_for_pages()`` method, mentioned below.
 New 'add_menu_items_for_pages()' method added for main & flat menus
 -------------------------------------------------------------------
 
-For each page in the provided ``PageQuerySet`` a menu item will be added to the menu, linking to that page. The method has was added to the ``MenuWithMenuItems`` model class, which is subclassed by ``AbstractMainMenu`` and ``AbstractFlatMenu``, which means you should be able to use it on custom menu model objects, as well as object using the default models.
+For each page in the provided ``PageQuerySet`` a menu item will be added to the menu, linking to that page. The method has was added to the ``MenuWithMenuItems`` model class, which is subclassed by ``AbstractMainMenu`` and ``AbstractFlatMenu``, so you should be able to use it on custom menu model objects, as well as objects using the default models.
 
 
 Overriding 'get_base_page_queryset()' now effects top-level menu items too 
@@ -56,18 +61,10 @@ Minor changes & bug fixes
 *   Fixed an issue with runtests.py that was causing tox builds in Travis CI
     to report as successful, even when tests were failing. Contributed by
     Oliver Bestwalter (obestwalter).
-*   Updated signature of ``menu_tags.get_sub_menu_items_for_page()`` to improve
-    code readability (see below for more details).
-*   Updated signature of ``menu_tags.prime_menu_items()`` to improve code
-    readability and consistency, and to support additional arguments required
-    for new hooks functionality (see below for more details).
 *   The ``stop_at_this_level`` argument for the ``sub_menu`` tag has been
     officially deprecated and the feature removed from documentation. It hasn't 
     worked for a few versions and nobody has mentioned it, so this is the first
     step to removing it completely.
-*   Reduced code bloat in various methods in ``menu_tags.py`` by defining
-    common dictionaries of keyword arguments that can be easily passed to
-    different methods.
 *   Made the logic in 'pages_for_display' easier to override on custom menu
     classes by breaking it out into a separate 'get_pages_for_display()'
     method (that isn't decorated with ``cached_property``).
@@ -78,14 +75,20 @@ Upgrade considerations
 ======================
 
 
-If you're overriding 'get_base_menuitem_queryset()' or calling it from elsewhere
---------------------------------------------------------------------------------
+The ChildrenMenu's 'root_page' attribute is deprectated in favour of 'parent_page'
+----------------------------------------------------------------------------------
+
+TBC
+
+
+'MenuWithMenuItems.get_base_menuitem_queryset()' no longer filters the queryset
+-------------------------------------------------------------------------------
 
 By default, the queryset returned by 'get_base_menuitem_queryset' on menu instances will now return ALL menu items defined for that menu, regardless of the status / visibility of any linked pages. 
 
 Previously, the result was filtered to only include pages with 'live' status, and with a True 'show_in_menus' value.
 
-If you're calling 'get_base_menuitem_queryset' anywhere in your codebase, and are relying on the original method to return the same value as it did before, you will need to apply the additional filters to the queryset, like so:
+If you're calling 'get_base_menuitem_queryset' anywhere in your project, and are relying on the original method to return the same value as it did before, you will need to apply the additional filters to the queryset, like so:
 
 
 .. code-block:: python
@@ -103,12 +106,10 @@ If you're calling 'get_base_menuitem_queryset' anywhere in your codebase, and ar
     )
 
 
-If you're overriding 'MenuItemManager.for_display()'
-----------------------------------------------------
+'MenuItemManager.for_display()' no longer filters the queryset
+--------------------------------------------------------------
 
-If you are subclasssing ``MenuItemManger`` to create managers for your custom menu item models, and are relying on the original 'for_display' method to filter out certain links based on linked page's status/visibility, you may wish to revise your code to filter out the pages as before. However, you may find that you don't need to worry about this, as the 'get_base_page_queryset' method on menu instances should filter out the same pages when page data is fetched to attach to menu items.
-
-However, if you really do need 'for_display()' to return the same results as it did before, you should update the 'for_display' method on your custom manager class to apply additional filters, like so:
+If you are subclasssing ``MenuItemManger`` to create managers for your custom menu item models, and are relying on the original 'for_display' method to filter out links based on their linked page's status/visibility, you may wish to revise your code to filter out the pages as before, like so:
 
 
 .. code-block:: python
@@ -134,35 +135,46 @@ However, if you really do need 'for_display()' to return the same results as it 
             return qs
 
 
-If you're calling ``menu_tags.prime_menu_items()`` directly anywhere 
---------------------------------------------------------------------
+The ``sub_menu`` tag will raise an error if used in a non-menu template
+-----------------------------------------------------------------------
 
-This method is only intended for use by the other methods in ``menu_tags.py``, and shouldn't be used elsewhere. But, if you are calling it directly, it's likely that you will have to update your code to match the methods updated signature.
+Despite the docs always having stated that the 'sub_menu' tag is only intended for use in menu templates for other types of menu; Up until now, it has functioned similarly to the 'children_menu' tag if used in a regular Django template. But, if you try to call 'sub_menu' from anything other than a menu template now, a ``SubMenuUsageError`` error will now be raised.
 
-The method now accepts three new required arguments:
-
-* ``parent_page``: If the calling tag is rendering a sub-menu for children of a given page, you should pass that page object here. Pass ``None`` if no parent page is involved (for example, if rendering the top level of a main or flat menu, where the menu items are defined on each menu)
-* ``current_level``: An integer indicating the 'level' or 'depth' that is currently being rendered in the process of rendering a multi-level menu.
-* ``max_levels``: An integer indicatiing the maxiumum number of levels that should be rendered for the current menu.
-
-The ``check_for_children`` argument is no longer accepted.
-
-The ``current_page_ancestor_ids`` argument has been renamed to ``curren_ancestor_ids``.
-
-The position of arguments has changed considerably too. If calling the method using positional arguments, you should examine the code to ensure you're passing arguments in the correct order.
+I highly doubt this will trip anybody up, but sorry if it does. Recent versions of Django seem to swallow deprecation warnings when they occur in the course of rendering a template tag, so even if there were a deprecation period for this, the warnings probably wouldn't have been seen by anyone.
 
 
-If you're calling ``menu_tags.get_sub_menu_items_for_page()`` directly anywhere
--------------------------------------------------------------------------------
+``wagtailmenus.models.menus.MenuFromRootPage`` is deprecated
+------------------------------------------------------------
 
-This method is only intended for use by the other methods in ``menu_tags.py``, and shouldn't be used elsewhere. But, if you are calling it directly, it's likely that you will have to update your code to match the methods updated signature.
+With ``ChildrenMenu`` being refactored to use 'parent_page' as an attribute instead of 'root_page', and the new ``SubMenu`` menu class taking a similar approach, the ``MenuFromRootPage`` name only seems relevent to ``SectionMenu``, so it has been deprecated in favour of using a more generically-named ``MenuFromPage`` class, which is subclassed by all three.
 
-The following arguments are now required instead of optional:
 
-* ``original_menu_tag``: The name of the tag that was called to initiate rendering of the menu that is currently being rendered. For example, if you're using the ``main_menu`` tag to render a multi-level menu, even though ``sub_menu`` may be called to render subsequent additional levels, 'original_menu_tag' should retain the value ``'main_menu'``.
-* ``current_level``: An integer indicating the 'level' or 'depth' that is currently being rendered in the process of rendering a multi-level menu.
-* ``max_levels``: An integer indicatiing the maxiumum number of levels that should be rendered for the current menu.
+``wagtailmenus.menu_tags.prime_menu_items()`` is deprecated
+-----------------------------------------------------------
 
-The ``ancestor_ids`` argument has been renamed to ``curren_ancestor_ids``.
+The method has been superseded by new logic added to the ``Menu`` class.
 
-The position of arguments has changed considerably too. If calling the method using positional arguments, you should examine the code to ensure you're passing arguments in the correct order.
+
+``wagtailmenus.menu_tags.get_sub_menu_items_for_page()`` is deprecated
+----------------------------------------------------------------------
+
+The method has been superseded by new logic added to the ``Menu`` class.
+
+
+``wagtailmenus.utils.misc.get_attrs_from_context()`` is deprecated
+------------------------------------------------------------------
+
+The method has been superseded by new logic added to the ``Menu`` class.
+
+
+``wagtailmenus.utils.template.get_template_names()`` is deprecated
+------------------------------------------------------------------
+
+The method has been superseded by new logic added to the ``Menu`` class.
+
+
+``wagtailmenus.utils.template.get_sub_menu_template_names()`` is deprecated
+---------------------------------------------------------------------------
+
+The method has been superseded by new logic added to the ``Menu`` class.
+
