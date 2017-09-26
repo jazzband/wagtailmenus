@@ -29,7 +29,6 @@ def main_menu(
         max_levels = 1
 
     return app_settings.MAIN_MENU_MODEL_CLASS.render_from_tag(
-        tag_name='main_menu',
         context=context,
         max_levels=max_levels,
         use_specific=use_specific,
@@ -57,7 +56,6 @@ def flat_menu(
         max_levels = 1
 
     return app_settings.FLAT_MENU_MODEL_CLASS.render_from_tag(
-        tag_name='flat_menu',
         context=context,
         handle=handle,
         fall_back_to_default_site_menus=fall_back_to_default_site_menus,
@@ -90,7 +88,6 @@ def section_menu(
         max_levels = 1
 
     return app_settings.SECTION_MENU_CLASS.render_from_tag(
-        tag_name='section_menu',
         context=context,
         max_levels=max_levels,
         use_specific=use_specific,
@@ -117,7 +114,6 @@ def children_menu(
         parent_page=parent_page)
 
     return app_settings.CHILDREN_MENU_CLASS.render_from_tag(
-        tag_name='children_menu',
         context=context,
         parent_page=parent_page,
         max_levels=max_levels,
@@ -181,7 +177,6 @@ def sub_menu(
     menu_class = original_menu.get_sub_menu_class() or SubMenu
 
     return menu_class.render_from_tag(
-        tag_name='sub_menu',
         context=context,
         parent_page=parent_page,
         max_levels=max_levels,

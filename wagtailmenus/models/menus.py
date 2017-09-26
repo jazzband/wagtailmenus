@@ -30,7 +30,7 @@ from .pages import AbstractLinkPage
 
 ContextualVals = namedtuple('ContextualVals', (
     'parent_context', 'request', 'current_site', 'current_level',
-    'menu_tag', 'original_menu_tag', 'original_menu_instance', 'current_page',
+    'original_menu_tag', 'original_menu_instance', 'current_page',
     'current_section_root_page', 'current_page_ancestor_ids'
 ))
 
@@ -49,6 +49,7 @@ class Menu(object):
     """The base class that which all other menu classes should inherit from"""
     request = None
     menu_short_name = ''  # used by 'get_template_names()'
+    related_templatetag_name = ''
     template_name = None
     menu_instance_context_name = 'menu'
     sub_menu_class = None
@@ -60,7 +61,7 @@ class Menu(object):
     use_specific = app_settings.USE_SPECIFIC_AUTO
 
     @classmethod
-    def render_from_tag(cls, tag_name, context, **options):
+    def render_from_tag(cls, context, **options):
         """
         A template tag should call this method to render a menu.
         The ``Context`` instance and option values provided are used to get or
@@ -77,7 +78,7 @@ class Menu(object):
             * get_context_data()
             * render_to_template()
         """
-        ctx_vals = cls.get_contextual_vals_from_context(tag_name, context)
+        ctx_vals = cls.get_contextual_vals_from_context(context)
         opt_vals = cls.get_option_vals_from_options(**options)
         instance = cls.get_instance_for_rendering(ctx_vals, opt_vals)
         if not instance:
@@ -88,7 +89,7 @@ class Menu(object):
         return instance.render_to_template()
 
     @classmethod
-    def get_contextual_vals_from_context(cls, tag_name, context):
+    def get_contextual_vals_from_context(cls, context):
         """
         Gathers all of the 'contextual' data needed to render a menu instance
         and returns it in a structure that can be conveniently referenced
@@ -101,8 +102,7 @@ class Menu(object):
             context['request'],
             get_site_from_request(context['request']),
             context.get('current_level', 0) + 1,
-            context.get('menu_tag', tag_name),
-            context.get('original_menu_tag', tag_name),
+            context.get('original_menu_tag', cls.related_templatetag_name),
             context.get('original_menu_instance'),
             context_processor_vals.get('current_page'),
             context_processor_vals.get('section_root'),
@@ -221,10 +221,15 @@ class Menu(object):
             self.use_specific = use_specific
 
     def get_common_hook_kwargs(self, **kwargs):
+        """
+        Returns a dictionary of common values to be passed as keyword
+        arguments to methods registered as 'hooks'.
+        """
         opt_vals = self._option_vals
         hook_kwargs = self._contextual_vals._asdict()
         hook_kwargs.update({
             'menu_instance': self,
+            'menu_tag': self.related_templatetag_name,
             'parent_page': None,
             'max_levels': self.max_levels,
             'use_specific': self.max_levels,
@@ -674,6 +679,7 @@ class MenuFromRootPage(MenuFromPage):
 class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     menu_short_name = 'section'  # used to find templates
     menu_instance_context_name = 'section_menu'
+    related_templatetag_name = 'section_menu'
 
     @classmethod
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
@@ -768,6 +774,7 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
 class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     menu_short_name = 'children'  # used to find templates
     menu_instance_context_name = 'children_menu'
+    related_templatetag_name = 'children_menu'
 
     @classmethod
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
@@ -839,6 +846,7 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
 class SubMenu(MenuFromPage):
     menu_short_name = 'sub'  # used to find templates
     menu_instance_context_name = 'sub_menu'
+    related_templatetag_name = 'sub_menu'
 
     @classmethod
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
@@ -1012,6 +1020,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
 class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_short_name = 'main'  # used to find templates
     menu_instance_context_name = 'main_menu'
+    related_templatetag_name = 'main_menu'
 
     site = models.OneToOneField(
         'wagtailcore.Site',
@@ -1102,6 +1111,7 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
 class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_short_name = 'flat'  # used to find templates
     menu_instance_context_name = 'flat_menu'
+    related_templatetag_name = 'flat_menu'
 
     site = models.ForeignKey(
         'wagtailcore.Site',
