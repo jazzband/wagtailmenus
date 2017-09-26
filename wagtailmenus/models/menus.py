@@ -151,9 +151,12 @@ class Menu(object):
             "Subclasses of 'Menu' must define their own "
             "'get_instance_for_rendering' method")
 
-    @classmethod
-    def get_sub_menu_class(cls):
-        return cls.sub_menu_class or SubMenu
+    def get_sub_menu_class(self):
+        """
+        Called by the 'sub_menu' tag to identify which menu class to use for
+        rendering when 'self' is the original menu instance.
+        """
+        return self.sub_menu_class or SubMenu
 
     def prepare_to_render(self, request, contextual_vals, option_vals):
         """
