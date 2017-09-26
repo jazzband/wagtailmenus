@@ -176,7 +176,7 @@ class Menu(object):
 
     def render_to_template(self):
         """
-        Render the current menu instance to a template to return a string
+        Render the current menu instance to a template and return a string
         """
         context_data = self.get_context_data()
         template = self.get_template()
@@ -291,9 +291,12 @@ class Menu(object):
         return page.path in self.page_children_dict
 
     def get_context_data(self, **kwargs):
+        """
+        Return a dictionary containing all of the values needed to render the
+        menu instance to a template, including values that might be used by
+        the 'sub_menu' tag to render any additional levels."""
         ctx_vals = self._contextual_vals
         opt_vals = self._option_vals
-
         data = ctx_vals.parent_context.flatten()
         data.update(ctx_vals._asdict())
         data.update({
@@ -352,8 +355,8 @@ class Menu(object):
     def prime_menu_items(self, menu_items):
         """
         A generator method that takes a list of ``MenuItem`` or ``Page``
-        objects and sets a number of additional attributes on each item to
-        aid in menu template writing.
+        objects and sets a number of additional attributes on each item that
+        are useful in menu templates.
         """
         ctx_vals = self._contextual_vals
         opt_vals = self._option_vals
@@ -378,9 +381,8 @@ class Menu(object):
                 setattr(item, 'text', item.menu_text)
 
             elif issubclass(item.specific_class, AbstractLinkPage):
-                """
-                Special treatment for link pages
-                """
+                # Special treatment for link pages
+
                 if type(item) is Page:
                     item = item.specific
                 if item.show_in_menus_custom(
@@ -399,9 +401,8 @@ class Menu(object):
                 continue
 
             else:
-                """
-                `menu_items` is a list of `Page` objects
-                """
+                # `menu_items` is a list of `Page` objects
+
                 page = item
                 menuitem = None
                 text = getattr(
@@ -522,7 +523,7 @@ class Menu(object):
         """Return a list (or tuple) of template names to search for when
         rendering an instance of this class. The list should be ordered
         with most specific names first, since the first template found to
-        exist will be used for rendering"""
+        exist will be used for rendering."""
         site = self._contextual_vals.current_site
         template_names = []
         menu_str = self.menu_short_name
@@ -543,7 +544,7 @@ class Menu(object):
         """Return a template name to be added to the end of the list returned
         by 'get_template_names'. This is defined as a separate method because
         template lists tend to follow a similar pattern, except the last
-        item, which typically comes from a setting"""
+        item, which typically comes from an overridable setting."""
         return
 
 
@@ -703,10 +704,11 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         super(SectionMenu, self).prepare_to_render(
             request, contextual_vals, option_vals)
 
+        # Replace self.root_page with it's 'specific' equivalent if it looks
+        # like it'll help with modifying menu items or aid consistency
         if self.use_specific and type(self.root_page) is Page and (
+            self.use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL or
             hasattr(self.root_page.specific_class, 'modify_submenu_items')
-        ) or (
-            self.use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL
         ):
             self.root_page = self.root_page.specific
 
@@ -738,21 +740,21 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
             )
             if opt_vals.use_absolute_page_urls:
                 if hasattr(section_root, 'get_full_url'):
-                    url = section_root.get_full_url(request=self.request)
+                    href = section_root.get_full_url(request=self.request)
                 else:
-                    url = section_root.full_url
+                    href = section_root.full_url
             else:
-                url = section_root.relative_url(ctx_vals.current_site)
-            section_root.href = url
+                href = section_root.relative_url(ctx_vals.current_site)
+            section_root.href = href
 
             if opt_vals.apply_active_classes:
                 active_class = ancestor_css_class
                 if current_page and section_root.pk == current_page.pk:
                     # `section_root` is the current page, so should probably
-                    # have the 'active' class
+                    # have the 'active' class...
                     active_class = active_css_class
                     menu_items = data['menu_items']
-                    # Unless there's a 'repeated item' in menu_items that
+                    # ...unless there's a 'repeated item' in menu_items that
                     # already has the 'active' class
                     if(
                         opt_vals.allow_repeating_parents and self.use_specific
