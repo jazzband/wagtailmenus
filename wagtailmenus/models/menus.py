@@ -686,6 +686,8 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
 
     @classmethod
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
+        if not contextual_vals.current_section_root_page:
+            return
         return cls(
             root_page=contextual_vals.current_section_root_page,
             max_levels=option_vals.max_levels,
@@ -716,11 +718,6 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
 
     def get_parent_page_for_menu_items(self):
         return self.root_page
-
-    def render_to_template(self):
-        if not self.root_page:
-            return ''
-        return super(SectionMenu, self).render_to_template()
 
     def get_context_data(self, **kwargs):
         ctx_vals = self._contextual_vals
