@@ -85,7 +85,6 @@ class Menu(object):
             return ''
 
         instance.prepare_to_render(context['request'], ctx_vals, opt_vals)
-        instance.set_request(context['request'])
         return instance.render_to_template()
 
     @classmethod
