@@ -102,7 +102,7 @@ Upgrade considerations
 The ChildrenMenu's 'root_page' attribute is deprectated in favour of 'parent_page'
 ----------------------------------------------------------------------------------
 
-In previous versions, the ChildrenMenu and SectionMenu classes both extended the same ``MenuFromRootPage`` class, which takes ``root_page`` as an argument for initialisation, then stores a reference to that page using an attribute of the same name. 
+In previous versions, the ChildrenMenu and SectionMenu classes both extended the same ``MenuFromRootPage`` class, which takes ``root_page`` as an init argument, then stores a reference to that page using an attribute of the same name. 
 
 The ChildrenMenu class has now been updated to use ``parent_page`` as an init argument and attribute name instead, which feels like a much better fit. This same terminology has also been adopted for the SubMenu class too. 
 
