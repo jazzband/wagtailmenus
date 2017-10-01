@@ -13,10 +13,37 @@ Wagtailmenus 2.5.0a release notes
 What's new?
 ===========
 
-Menus are now rendered using logic added to the menu classes themselves
------------------------------------------------------------------------
+New class-based rendering logic for Menus
+-----------------------------------------
 
-TBC
+This version of wagtailmenus sees quite a large refactor in an attempt to address a large amount of repetition and inconsistency in tempate tag code, and to also break the process of rendering menus down into more clearly defined steps that can be overridden individually where needed.
+
+While the existing template tags remain, and are still the intended method for initiating rendering of menus from templates, their responsibilities have diminished somewhat. They are now only really responsible for performing basic validation on the option values passed to them - everything else is handled by the relevant Menu class.
+
+The base ``Menu`` class defines the default 'rendering' logic and establishes a pattern of behaviour for the other classes to follow. Then, the more specific classes simply override the methods they need to produce the same results as before.
+
+Below is an outline of the new process, once the menu tag has prepared it's option values and is ready to hand things over to the menu class:
+
+1. The menu class's ``render_from_tag()`` method is called. It takes the current context, as well as any 'option values' passed to / prepared by the template tag.
+
+2. ``render_from_tag()`` calls the class's ``get_contextual_vals_from_context()`` method, which analyses the current context and creates an ``ContextualVals`` instance, which will serve as a convenient (read-only) reference for 'contextual' data throughout the rest of the process.
+
+3. ``render_from_tag()`` calls the class's ``get_option_vals_from_options()`` method, which analyses the provided option values and creates a ``OptionVals`` instance, which will serve as a convenient (read-only) reference for 'option' data throughout the rest of the process. The most common attributes are accessible directly (e.g. ``opt_vals.max_levels`` and ``opt_vals.template_name``), but some menu-specific options, or any additional values passed to the tag, will be stored as a dictionary, available as ``opt_vals.extra``.
+
+4. ``render_from_tag()`` calls the class's ``get_instance_for_rendering()`` method, which takes the prepared ``ContextualVals`` and ``OptionVals`` instances, and uses them to get or create and return a relevant instance to use for rendering.
+
+5. In order for the menu instance to handle the rest of the rendering process, it needs to be able to access the ``ContextualVals`` and ``OptionVals`` instances that have already been prepared, so those values are passed to the instance's ``prepare_to_render()`` method, where references to them are saved on the instance as private attributes.
+
+6. With access to everything it needs, the instance's ``render_to_template()`` method is called. This in turn calls two more instance methods.
+
+7. The ``get_context_data()`` method creates and returns a dictionary of values that need to be available in the template. This includes obvious things such as the list of ``menu_items`` for the current level, and other not-so-obvious things, which are intended to be picked up by the ``sub_menu`` tag (if it's being used in the template to render additional levels).
+
+8. The ``get_template()`` method indentifies and returns an appropriate ``Template`` instance that can be used for rendering.
+
+9. With the data and template gathered, ``render_to_template()`` then converts the data into a ``Context`` object and sends it to the template's ``render()`` method, creating a string representation of the menu, which is sent back for inclusion in the original template.
+
+
+In order to gather and prepare all of the data needed for rendering, ``get_context_data()`` calls upon quite a few other methods. But, for the sake of keeping this explaination digestible, I won't go into detail about that here. Feel free to take a look through the code though, if you'd like to know more.
 
 
 Hooks added to give developers more options for manipulating menus 
