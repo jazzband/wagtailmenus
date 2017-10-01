@@ -13,7 +13,7 @@ Wagtailmenus 2.5.0a release notes
 What's new?
 ===========
 
-New class-based rendering logic for Menus
+Class-based rendering behaviour for menus
 -----------------------------------------
 
 This version of wagtailmenus sees quite a large refactor in an attempt to address a large amount of repetition and inconsistency in tempate tag code, and to also break the process of rendering menus down into more clearly defined steps that can be overridden individually where needed.
@@ -41,7 +41,6 @@ Below is an outline of the new process, once the menu tag has prepared it's opti
 8. The ``get_template()`` method indentifies and returns an appropriate ``Template`` instance that can be used for rendering.
 
 9. With the data and template gathered, ``render_to_template()`` then converts the data into a ``Context`` object and sends it to the template's ``render()`` method, creating a string representation of the menu, which is sent back for inclusion in the original template.
-
 
 In order to gather and prepare all of the data needed for rendering, ``get_context_data()`` calls upon quite a few other methods. But, for the sake of keeping this explaination digestible, I won't go into detail about that here. Feel free to take a look through the code though, if you'd like to know more.
 
