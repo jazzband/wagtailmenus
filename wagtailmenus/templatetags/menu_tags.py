@@ -20,7 +20,7 @@ register = Library()
 def main_menu(
     context, max_levels=None, use_specific=None, apply_active_classes=True,
     allow_repeating_parents=True, show_multiple_levels=True,
-    template='', sub_menu_template='', use_absolute_page_urls=False,
+    template='', sub_menu_template='', use_absolute_page_urls=False, **kwargs
 ):
     validate_supplied_values('main_menu', max_levels=max_levels,
                              use_specific=use_specific)
@@ -37,6 +37,7 @@ def main_menu(
         use_absolute_page_urls=use_absolute_page_urls,
         template_name=template,
         sub_menu_template_name=sub_menu_template,
+        **kwargs
     )
 
 
@@ -47,7 +48,7 @@ def flat_menu(
     allow_repeating_parents=True, show_multiple_levels=True,
     template='', sub_menu_template='',
     fall_back_to_default_site_menus=flat_menus_fbtdsm,
-    use_absolute_page_urls=False,
+    use_absolute_page_urls=False, **kwargs
 ):
     validate_supplied_values('flat_menu', max_levels=max_levels,
                              use_specific=use_specific)
@@ -67,6 +68,7 @@ def flat_menu(
         template_name=template,
         sub_menu_template_name=sub_menu_template,
         show_menu_heading=show_menu_heading,
+        **kwargs
     )
 
 
@@ -77,7 +79,7 @@ def section_menu(
     max_levels=app_settings.DEFAULT_SECTION_MENU_MAX_LEVELS,
     template='', sub_menu_template='',
     use_specific=app_settings.DEFAULT_SECTION_MENU_USE_SPECIFIC,
-    use_absolute_page_urls=False,
+    use_absolute_page_urls=False, **kwargs
 ):
     """Render a section menu for the current section."""
 
@@ -97,6 +99,7 @@ def section_menu(
         template_name=template,
         sub_menu_template_name=sub_menu_template,
         show_section_root=show_section_root,
+        **kwargs
     )
 
 
@@ -107,7 +110,7 @@ def children_menu(
     max_levels=app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS,
     template='', sub_menu_template='',
     use_specific=app_settings.DEFAULT_CHILDREN_MENU_USE_SPECIFIC,
-    use_absolute_page_urls=False,
+    use_absolute_page_urls=False, **kwargs
 ):
     validate_supplied_values(
         'children_menu', max_levels=max_levels, use_specific=use_specific,
@@ -123,6 +126,7 @@ def children_menu(
         use_absolute_page_urls=use_absolute_page_urls,
         template_name=template,
         sub_menu_template_name=sub_menu_template,
+        **kwargs
     )
 
 
@@ -130,7 +134,7 @@ def children_menu(
 def sub_menu(
     context, menuitem_or_page, stop_at_this_level=None, use_specific=None,
     allow_repeating_parents=None, apply_active_classes=None, template='',
-    use_absolute_page_urls=None,
+    use_absolute_page_urls=None, **kwargs
 ):
     """
     Retrieve the children pages for the `menuitem_or_page` provided, turn them
@@ -185,6 +189,7 @@ def sub_menu(
         allow_repeating_parents=allow_repeating_parents,
         use_absolute_page_urls=use_absolute_page_urls,
         template_name=template,
+        **kwargs
     )
 
 
