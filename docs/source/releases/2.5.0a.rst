@@ -36,13 +36,11 @@ Below is an outline of the new process, once the menu tag has prepared it's opti
 
 6. With access to everything it needs, the instance's ``render_to_template()`` method is called. This in turn calls two more instance methods.
 
-7. The ``get_context_data()`` method creates and returns a dictionary of values that need to be available in the template. This includes obvious things such as the list of ``menu_items`` for the current level, and other not-so-obvious things, which are intended to be picked up by the ``sub_menu`` tag (if it's being used in the template to render additional levels).
+7. The ``get_context_data()`` method creates and returns a dictionary of values that need to be available in the template. This includes obvious things such as a list of ``menu_items`` for the current level, and other not-so-obvious things, which are intended to be picked up by the ``sub_menu`` tag (if it's being used in the template to render additional levels). The menu items are provided by the ``get_menu_items_for_rendering()`` method, which in turn splits responsibility for sourcing, priming, and modifying menu items between three other methods: ``get_raw_menu_items()``, ``prime_menu_items()`` and ``modify_menu_items()``, respectively.
 
 8. The ``get_template()`` method indentifies and returns an appropriate ``Template`` instance that can be used for rendering.
 
 9. With the data and template gathered, ``render_to_template()`` then converts the data into a ``Context`` object and sends it to the template's ``render()`` method, creating a string representation of the menu, which is sent back for inclusion in the original template.
-
-In order to gather and prepare all of the data needed for rendering, ``get_context_data()`` calls upon quite a few other methods. But, for the sake of keeping this explaination digestible, I won't go into detail about that here. Feel free to take a look through the code though, if you'd like to know more.
 
 
 Hooks added to give developers more options for manipulating menus 
