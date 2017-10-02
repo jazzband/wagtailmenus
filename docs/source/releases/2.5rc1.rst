@@ -1,9 +1,9 @@
 =================================
-Wagtailmenus 2.5.0a release notes
+Wagtailmenus 2.5rc1 release notes
 =================================
 
 .. NOTE::
-    This version is still under development
+    This is a release candidate version. Please report any bugs or issues to the tracker at https://github.com/rkhleics/wagtailmenus/issues
 
 .. contents::
     :local:
