@@ -26,9 +26,9 @@ Below is an outline of the new process, once the menu tag has prepared it's opti
 
 1. The menu class's ``render_from_tag()`` method is called. It takes the current context, as well as any 'option values' passed to / prepared by the template tag.
 
-2. ``render_from_tag()`` calls the class's ``get_contextual_vals_from_context()`` method, which analyses the current context and creates an ``ContextualVals`` instance, which will serve as a convenient (read-only) reference for 'contextual' data throughout the rest of the process.
+2. ``render_from_tag()`` calls the class's ``get_contextual_vals_from_context()`` method, which analyses the current context and returns a ``ContextualVals`` instance, which will serve as a convenient (read-only) reference for 'contextual' data throughout the rest of the process.
 
-3. ``render_from_tag()`` calls the class's ``get_option_vals_from_options()`` method, which analyses the provided option values and creates a ``OptionVals`` instance, which will serve as a convenient (read-only) reference for 'option' data throughout the rest of the process. The most common attributes are accessible directly (e.g. ``opt_vals.max_levels`` and ``opt_vals.template_name``), but some menu-specific options, or any additional values passed to the tag, will be stored as a dictionary, available as ``opt_vals.extra``.
+3. ``render_from_tag()`` calls the class's ``get_option_vals_from_options()`` method, which analyses the provided option values and returns an ``OptionVals`` instance, which will serve as a convenient (read-only) reference for 'option' data throughout the rest of the process. The most common attributes are accessible directly (e.g. ``opt_vals.max_levels`` and ``opt_vals.template_name``), but some menu-specific options, or any additional values passed to the tag, will be stored as a dictionary, available as ``opt_vals.extra``.
 
 4. ``render_from_tag()`` calls the class's ``get_instance_for_rendering()`` method, which takes the prepared ``ContextualVals`` and ``OptionVals`` instances, and uses them to get or create and return a relevant instance to use for rendering.
 
