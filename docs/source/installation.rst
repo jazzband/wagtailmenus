@@ -69,7 +69,7 @@ Installing wagtailmenus
 
     For example, if your page structure looked like the following:
 
-    .. code-block::
+    .. code-block:: none
     
         Home (Set as 'root page' for the site)     
         ├── About us
