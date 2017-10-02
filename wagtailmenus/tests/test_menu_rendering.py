@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from django.test import TestCase, override_settings
 
 from wagtail.wagtailcore.models import Site
+from wagtailmenus.errors import SubMenuUsageError
 from wagtailmenus.models import MainMenu, FlatMenu
 from wagtailmenus.templatetags.menu_tags import validate_supplied_values
 from bs4 import BeautifulSoup
@@ -68,13 +69,38 @@ class TestTemplateTags(TestCase):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True,)
     def test_about_us(self):
         """
         Test that 'About us' page (based on `MenuPage`), with
         `repeat_in_subnav=True`, renders without errors.
+
+        The `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` setting is also
+        applied to increase coverage in get_template() and
+        get_sub_menu_template() methods.
         """
         response = self.client.get('/about-us/')
         self.assertEqual(response.status_code, 200)
+
+    @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True,)
+    def test_custom_menu_tag_raises_submenuusageerror(self):
+        """
+        The template for the following urls uses a custom template tag
+        fashioned after the v2.4 'children_menu' tag but uses a custom menu
+        class, based on the now deprecated MenuFromRootPage.
+
+        The `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` setting is also
+        applied to increase coverage in utils.misc.template.
+        """
+
+        # As long as max_levels is one, this should work fine
+        response = self.client.get('/custom-menu-tag-fine/')
+        self.assertEqual(response.status_code, 200)
+
+        # When max_levels is more than one, the {% sub_menu %} tag should
+        # raise an error
+        with self.assertRaises(SubMenuUsageError):
+            self.client.get('/custom-menu-tag-broken/')
 
     def test_meet_the_team(self):
         """
@@ -219,7 +245,7 @@ class TestTemplateTags(TestCase):
             <ul class="nav navbar-nav">
                 <li class="active">
                     <a href="http://www.wagtailmenus.co.uk:8000/">Home</a>
-                </li>       
+                </li>
                 <li class=" dropdown top-level">
                     <a href="http://www.wagtailmenus.co.uk:8000/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
@@ -235,8 +261,8 @@ class TestTemplateTags(TestCase):
                         <li class="">
                             <a href="http://www.wagtailmenus.co.uk:8000/about-us/mission-and-values/">Our mission and values</a>
                         </li>
-                    </ul>  
-                </li>       
+                    </ul>
+                </li>
                 <li class=" dropdown top-level">
                     <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
@@ -250,10 +276,10 @@ class TestTemplateTags(TestCase):
                             <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/press/">In the press</a>
                         </li>
                     </ul>
-                </li>       
+                </li>
                 <li class="">
                     <a href="http://google.co.uk">Google</a>
-                </li>       
+                </li>
                 <li class=" dropdown">
                     <a href="http://www.wagtailmenus.co.uk:8000/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
@@ -263,12 +289,11 @@ class TestTemplateTags(TestCase):
                         <li class="call">
                             <a href="/contact-us/#call">Speak to someone</a>
                         </li>
-                    
                         <li class="map">
                             <a href="/contact-us/#map">Map &amp; directions</a>
                         </li>
                     </ul>
-                </li>       
+                </li>
             </ul>
         </div>
         """
@@ -477,7 +502,7 @@ class TestTemplateTags(TestCase):
                 <ul class="nav navbar-nav">
                     <li class="active">
                         <a href="http://www.wagtailmenus.co.uk:8000/">Home</a>
-                    </li>       
+                    </li>
                     <li class=" dropdown top-level">
                         <a href="http://www.wagtailmenus.co.uk:8000/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                         <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
@@ -493,8 +518,8 @@ class TestTemplateTags(TestCase):
                             <li class="">
                                 <a href="http://www.wagtailmenus.co.uk:8000/about-us/mission-and-values/">Our mission and values</a>
                             </li>
-                        </ul>  
-                    </li>       
+                        </ul>
+                    </li>
                     <li class=" dropdown top-level">
                         <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                         <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
@@ -508,10 +533,10 @@ class TestTemplateTags(TestCase):
                                 <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/press/">In the press</a>
                             </li>
                         </ul>
-                    </li>       
+                    </li>
                     <li class="">
                         <a href="http://google.co.uk">Google</a>
-                    </li>       
+                    </li>
                     <li class=" dropdown">
                         <a href="http://www.wagtailmenus.co.uk:8000/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
                         <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
@@ -521,12 +546,11 @@ class TestTemplateTags(TestCase):
                             <li class="call">
                                 <a href="/contact-us/#call">Speak to someone</a>
                             </li>
-    
                             <li class="map">
                                 <a href="/contact-us/#map">Map &amp; directions</a>
                             </li>
                         </ul>
-                    </li>       
+                    </li>
                 </ul>
             </div>
         """

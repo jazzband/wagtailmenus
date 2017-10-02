@@ -1,0 +1,20 @@
+{% load custom_menu_tags %}
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Wagtailmenus Test</title>
+    </head>
+    <body>
+    	<h1>Custom old-style 'children_menu' rendering test</h1>
+
+		<p>The 'custom_children_menu' tag is fashioned after the v2.4 <code>children_tag</code>, but using a custom <code>OldStyleChildrenMenu</code> menu class, based on the now deprecated <code>MenuFromRootPage</code></p>
+
+		{% block custom_tag_block %}
+			<p>The following should render fine, because with only a single level, the 'sub_menu' tag won't be called:</p>
+			{% custom_children_menu max_levels=1 %}
+		{% endblock %}
+    </body>
+ </html>

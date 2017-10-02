@@ -4,45 +4,44 @@ Changelog
 2.5.0a (XX.XX.XXXX) IN DEVELOPMENT
 ---------------------------------- 
 
-
+* Added rendering logic to Menu classes and refactored all existing template
+  tags to make use of it (massively reducing code duplication in menu_tags.py).
+* Added support for several 'hooks', allowing for easier customisation of base
+  querysets and manipulation of menu items during rendering. For more
+  information and examples, see the 'Hooks' section of the documentation:
+  http://wagtailmenus.readthedocs.io/en/latest/advanced_topics/hooks.html
+* Updated the 'sub_menu' tag to raise an error if used in a way that isn't
+  supported. 
+* Deprecated `get_sub_menu_items_for_page` and `prime_menu_items` methods from
+  `wagtailmenus.templatetags.menu_tags` (logic moved to menu classes).
+* Deprecated `get_template` and `get_sub_menu_template_names` methods from
+  `wagtailmenus.utils.template` (logic moved to menu classes).
+* Deprecated `get_attrs_from_context` method from `wagtailmenus.utils.misc`
+  (logic moved to menu classes).
+* Deprecated the `MenuFromRootPage` class from `wagtailmenus.models.menus` in
+  favour of using a new `MenuFromPage` class that fits better with how it's
+  used in menu classes.
+* Minor tidying / renaming of tests.
 * Added a 'add_menu_items_for_pages()' method to the `MenuWithMenuItems` model,
   which adds menu item to a menu object, linking to any pages passed in as a `PageQuerySet`.
 * Added the 'autopopulate_main_menus' command, that can be run as part of the 
   installation process to help populate main menus based on the 'home' and 
   'section root' pages for each site.
-* Added support for Wagtail 1.12.
 * Fixed an issue with runtests.py that was causing tox builds in Travis CI
   to report as successful, even when tests were failing. Contributed by
   Oliver Bestwalter (obestwalter).
-* Updated signature of `menu_tags.get_sub_menu_items_for_page()` to improve
-  code readability and improve consistency.
-    * Renamed `ancestor_ids` to `current_ancestor_ids`
-    * `original_menu_tag`, `current_level`, and `max_levels` are now required
-    * Arguments order also revised
-* Updated signature of `menu_tags.prime_menu_items()` to improve code
-  readability and consistency, and to support additional arguments required
-  for new hooks functionality.
-    * Renamed `current_page_ancestor_ids` to `current_ancestor_ids`
-    * Added new `parent_page`, `current_level`, and `max_levels` arguments (
-      which are all required)
-    * Removed the `check_for_children` argument, in favour of using
-      'current_level' and 'max_levels'.
-    * Arguments order also revised
-* The `stop_at_this_level` argument for the `sub_menu` tag has been
-  officially deprecated and the feature removed from documentation. It hasn't 
-  worked for a few versions and nobody has mentioned it, so this is the first
-  step to removing it completely.
-* Reduce code bloat in various methods in `menu_tags.py` by defining common
-  dictionaries of keyword arguments that can be easily passed to different
-  methods.
-* Made the logic in 'pages_for_display' easier to override on custom menu
-  classes by breaking it out into a separate 'get_pages_for_display()' method
-  (that isn't decorated with `cached_property`).
-* Added support for several 'hooks', allowing for easier customisation of base
-  querysets and manipulation of menu items during rendering. For more
-  information and examples, see the 'Hooks' section of the documentation:
-  http://wagtailmenus.readthedocs.io/en/latest/advanced_topics/hooks.html
-
+* Deprecated the `stop_at_this_level` argument for the `sub_menu` tag, which
+  hasn't worked for a few versions.
+* Added support for Wagtail 1.12.
+* Made the logic in menu classes 'page_children_dict' method easier to override
+  by moving it out into a separate 'get_page_children_dict()' method, which the
+  original (@cached_property decorated) method calls.
+* Made the logic in menu classes 'pages_for_display' method easier to override
+  by moving it out into a separate 'get_pages_for_display()' method, which the
+  original (@cached_property decorated) method calls. 
+* Made the logic in menu classes 'top_level_items' method easier to override
+  by moving it out into a separate 'get_top_level_items()' method, which the
+  original (@cached_property decorated) method calls. 
 
 
 2.4.0 (04.08.2017)

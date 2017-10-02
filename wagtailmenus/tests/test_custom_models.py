@@ -1,17 +1,21 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
+import warnings
+
 from bs4 import BeautifulSoup
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase, override_settings
 
+from wagtail.wagtailcore.models import Site
 from wagtailmenus import get_main_menu_model, get_flat_menu_model
 from wagtailmenus.models import MainMenu, FlatMenu
 from wagtailmenus.tests.models import (
-    MainMenuCustomMenuItem, FlatMenuCustomMenuItem,
+    MainMenuCustomMenuItem, FlatMenuCustomMenuItem, NoAbsoluteUrlsPage,
     CustomMainMenu, CustomMainMenuItem, CustomFlatMenu, CustomFlatMenuItem
 )
+from wagtailmenus.utils.deprecation import RemovedInWagtailMenus26Warning
 
 
 @override_settings(
@@ -393,11 +397,21 @@ class TestCustomMenuModels(TestCase):
         from wagtailmenus.tests.models import CustomChildrenMenu
         self.assertEqual(app_settings.CHILDREN_MENU_CLASS, CustomChildrenMenu)
 
+        # check that template specified with the classes 'template_name'
+        # attribute is the one that gets picked up
+        response = self.client.get('/about-us/')
+        self.assertTemplateUsed(response, "menus/custom-overrides/children.html")
+
     @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomSectionMenu', )
     def test_section_menu_override(self):
         from wagtailmenus import app_settings
         from wagtailmenus.tests.models import CustomSectionMenu
         self.assertEqual(app_settings.SECTION_MENU_CLASS, CustomSectionMenu)
+
+        # check that template specified with the classes
+        # 'sub_menu_template_name' attribute gets picked up
+        response = self.client.get('/about-us/')
+        self.assertTemplateUsed(response, "menus/custom-overrides/section-sub.html")
 
 
 class TestInvalidCustomMenuModels(TestCase):
@@ -476,3 +490,29 @@ class TestInvalidCustomMenuModels(TestCase):
         )):
             from wagtailmenus import app_settings
             app_settings.SECTION_MENU_CLASS
+
+
+class TestNoAbsoluteUrlsPage(TestCase):
+
+    def setUp(self):
+        self.site = Site.objects.select_related('root_page').get(is_default_site=True)
+        self.no_absolute_urls_page = NoAbsoluteUrlsPage(
+            title='Compatibility Test Page',
+        )
+        self.site.root_page.add_child(instance=self.no_absolute_urls_page)
+
+    def test_raises_deprecation_warning(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always', RemovedInWagtailMenus26Warning)
+            self.client.get(self.no_absolute_urls_page.relative_url(self.site))
+            self.assertNotEqual(len(w), 0)
+            warning_messages = set(str(warning.message) for warning in w)
+            # Make sure our expected warning was logged
+            self.assertTrue(
+                any(
+                    "'modify_submenu_items' method on 'NoAbsoluteUrlsPage' "
+                    "should be updated to accept a 'use_absolute_page_urls' "
+                    "keyword" in msg
+                    for msg in warning_messages
+                )
+            )
