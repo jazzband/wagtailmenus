@@ -279,7 +279,7 @@ Default value: ``'wagtailmenus.models.menus.SectionMenu'``
 
 Use this to specify a custom class to be used by wagtailmenus' ``section_menu`` tag. The value should be the import path of your custom class as a string, e.g. ``'mysite.appname.models.CustomClass'``. 
 
-For more details see: :ref:`custom_sectionmenu_class_`
+For more details see: :ref:`custom_sectionmenu_class`
 
 
 ----------------------
