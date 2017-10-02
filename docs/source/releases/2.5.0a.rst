@@ -32,7 +32,7 @@ Below is an outline of the new process, once the menu tag has prepared it's opti
 
 4. ``render_from_tag()`` calls the class's ``get_instance_for_rendering()`` method, which takes the prepared ``ContextualVals`` and ``OptionVals`` instances, and uses them to get or create and return a relevant instance to use for rendering.
 
-5. In order for the menu instance to handle the rest of the rendering process, it needs to be able to access the ``ContextualVals`` and ``OptionVals`` instances that have already been prepared, so those values are passed to the instance's ``prepare_to_render()`` method, where references to them are saved on the instance as private attributes.
+5. In order for the menu instance to handle the rest of the rendering process, it needs to be able to access the ``ContextualVals`` and ``OptionVals`` instances that have already been prepared, so those values are passed to the instance's ``prepare_to_render()`` method, where references to them are saved on the instance as private attributes; ``self._contextual_vals`` and `self._option_vals`.
 
 6. With access to everything it needs, the instance's ``render_to_template()`` method is called. This in turn calls two more instance methods.
 
