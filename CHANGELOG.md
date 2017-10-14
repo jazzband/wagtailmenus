@@ -1,8 +1,12 @@
 Changelog
 =========
 
-2.5.0a (XX.XX.XXXX) IN DEVELOPMENT
----------------------------------- 
+2.X.X (XX.XX.XXXX) IN DEVELOPMENT
+--------------------------------- 
+
+
+2.5.0 (14.10.2017)
+------------------ 
 
 * Added rendering logic to Menu classes and refactored all existing template
   tags to make use of it (massively reducing code duplication in menu_tags.py).
