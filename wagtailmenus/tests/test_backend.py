@@ -168,11 +168,15 @@ class TestSuperUser(TransactionTestCase):
 
     @override_settings(WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES=False,)
     def test_mainmenu_edit(self):
-        response = self.client.get(
-            '/admin/wagtailmenus/mainmenu/edit/1/')
+        response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
         # Test 'get_error_message' method on view for additional coverage
         view = response.context['view']
         self.assertTrue(view.get_error_message())
+
+    @override_settings(WAGTAILMENUS_ADMIN_USE_CONDENSEDINLINEPANEL=True)
+    def test_mainmenu_edit_condensedinlinepanel(self):
+        response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
+        self.assertEqual(response.status_code, 200)
 
     def test_mainmenu_edit_multisite(self):
         Site.objects.create(
@@ -237,10 +241,18 @@ class TestSuperUser(TransactionTestCase):
             '/admin/wagtailmenus/flatmenu/edit/1/')
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(WAGTAILMENUS_ADMIN_USE_CONDENSEDINLINEPANEL=True)
+    def test_flatmenu_edit_condensedinlinepanel(self):
+        response = self.client.get(
+            '/admin/wagtailmenus/flatmenu/edit/1/')
+        self.assertEqual(response.status_code, 200)
+
     def test_flatmenu_copy(self):
         response = self.client.get(
             '/admin/wagtailmenus/flatmenu/copy/1/')
         self.assertEqual(response.status_code, 200)
+
+
 
 
 class TestNonSuperUser(TransactionTestCase):

@@ -12,6 +12,7 @@ DATABASES = {
 
 INSTALLED_APPS += (
     'wagtailmenus.tests',
+    'condensedinlinepanel',
 )
 
 ROOT_URLCONF = 'wagtailmenus.tests.urls'

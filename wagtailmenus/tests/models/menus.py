@@ -86,7 +86,7 @@ class FlatMenuCustomMenuItem(MultilingualMenuItem, AbstractFlatMenuItem):
 
 
 class CustomMainMenu(AbstractMainMenu):
-    pass
+    panels = AbstractMainMenu.content_panels + AbstractMainMenu.settings_panels
 
 
 class CustomFlatMenu(AbstractFlatMenu):
@@ -104,7 +104,7 @@ class CustomFlatMenu(AbstractFlatMenu):
         'heading', 'heading_de', 'heading_fr'
     )
 
-    panels = (
+    content_panels = (
         MultiFieldPanel(
             heading="Settings",
             children=(
@@ -122,8 +122,7 @@ class CustomFlatMenu(AbstractFlatMenu):
             ),
             classname='collapsible'
         ),
-        AbstractFlatMenu.panels[1],
-        AbstractFlatMenu.panels[2],
+        AbstractFlatMenu.content_panels[1],
     )
 
 

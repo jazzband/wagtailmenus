@@ -12,13 +12,14 @@ from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
-from wagtail.wagtailadmin.edit_handlers import (
-    FieldPanel, MultiFieldPanel, InlinePanel)
+
 from wagtail.wagtailcore import hooks
 from wagtail.wagtailcore.models import Page
 
 from .. import app_settings
 from ..forms import FlatMenuAdminForm
+from ..panels import (
+    main_menu_content_panels, flat_menu_content_panels, menu_settings_panels)
 from ..utils.deprecation import (
     RemovedInWagtailMenus26Warning, RemovedInWagtailMenus27Warning)
 from ..utils.inspection import accepts_kwarg
@@ -1012,6 +1013,8 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         data.update(kwargs)
         return super(MenuWithMenuItems, self).get_context_data(**data)
 
+    settings_panels = menu_settings_panels
+
 
 # ########################################################
 # Abstract models
@@ -1022,6 +1025,7 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_short_name = 'main'  # used to find templates
     menu_instance_context_name = 'main_menu'
     related_templatetag_name = 'main_menu'
+    content_panels = main_menu_content_panels
 
     site = models.OneToOneField(
         'wagtailcore.Site',
@@ -1096,23 +1100,14 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
                 )
             )
 
-    panels = (
-        InlinePanel(
-            app_settings.MAIN_MENU_ITEMS_RELATED_NAME, label=_("menu items")
-        ),
-        MultiFieldPanel(
-            heading=_("Advanced settings"),
-            children=(FieldPanel('max_levels'), FieldPanel('use_specific')),
-            classname="collapsible collapsed",
-        ),
-    )
-
 
 @python_2_unicode_compatible
 class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_short_name = 'flat'  # used to find templates
     menu_instance_context_name = 'flat_menu'
     related_templatetag_name = 'flat_menu'
+    base_form_class = FlatMenuAdminForm
+    content_panels = flat_menu_content_panels
 
     site = models.ForeignKey(
         'wagtailcore.Site',
@@ -1162,8 +1157,6 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
             "{% flat_menu %}</code> tag in your templates."
         ))
     )
-
-    base_form_class = FlatMenuAdminForm
 
     class Meta:
         abstract = True
@@ -1303,26 +1296,6 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
             app_settings.DEFAULT_SUB_MENU_TEMPLATE,
         ])
         return template_names
-
-    panels = (
-        MultiFieldPanel(
-            heading=_("Settings"),
-            children=(
-                FieldPanel('title'),
-                FieldPanel('site'),
-                FieldPanel('handle'),
-                FieldPanel('heading'),
-            )
-        ),
-        InlinePanel(
-            app_settings.FLAT_MENU_ITEMS_RELATED_NAME, label=_("menu items")
-        ),
-        MultiFieldPanel(
-            heading=_("Advanced settings"),
-            children=(FieldPanel('max_levels'), FieldPanel('use_specific')),
-            classname="collapsible collapsed",
-        ),
-    )
 
 
 # ########################################################

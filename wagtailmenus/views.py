@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+import warnings
 from copy import copy
 
 from django import forms
@@ -10,12 +11,14 @@ from django.utils.text import capfirst
 from django.utils.translation import ugettext as _
 
 from wagtail.wagtailadmin import messages
+from wagtail.wagtailadmin.edit_handlers import ObjectList, TabbedInterface
 from wagtail.wagtailcore.models import Site
 
 from wagtail.contrib.modeladmin.views import (
-    WMABaseView, EditView, ModelFormView)
+    WMABaseView, CreateView, EditView, ModelFormView)
 
 from . import app_settings
+from .utils.deprecation import RemovedInWagtailMenus28Warning
 
 
 class SiteSwitchForm(forms.Form):
@@ -43,7 +46,30 @@ class MainMenuIndexView(WMABaseView):
             self.model_admin.url_helper.get_action_url('edit', site.pk))
 
 
-class MainMenuEditView(ModelFormView):
+class MenuTabbedInterfaceMixin(object):
+
+    def get_edit_handler_class(self):
+        if hasattr(self.model, 'edit_handler'):
+            edit_handler = self.model.edit_handler
+        elif getattr(self.model, 'panels', None):
+            warning_msg = (
+                "The 'panels' attribute is deprecated for custom menu models. "
+                "To customise the admin interface, use the 'content_panels' "
+                "and 'settings_panels' attributes to update panels for the "
+                "'Content' and 'Settings' tabs independently."
+            )
+            warnings.warn(warning_msg, RemovedInWagtailMenus28Warning)
+            edit_handler = ObjectList(self.model.panels)
+        else:
+            edit_handler = TabbedInterface([
+                ObjectList(self.model.content_panels, heading=_("Content")),
+                ObjectList(self.model.settings_panels, heading=_("Settings"),
+                           classname="settings"),
+            ])
+        return edit_handler.bind_to_model(self.model)
+
+
+class MainMenuEditView(MenuTabbedInterfaceMixin, ModelFormView):
     page_title = _('Editing')
     instance_pk = None
     instance = None
@@ -109,7 +135,15 @@ class MainMenuEditView(ModelFormView):
         return ['wagtailmenus/mainmenu_edit.html']
 
 
-class FlatMenuCopyView(EditView):
+class FlatMenuCreateView(MenuTabbedInterfaceMixin, CreateView):
+    pass
+
+
+class FlatMenuEditView(MenuTabbedInterfaceMixin, EditView):
+    pass
+
+
+class FlatMenuCopyView(FlatMenuEditView):
     page_title = _('Copying')
 
     @property
