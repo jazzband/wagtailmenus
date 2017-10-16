@@ -243,7 +243,7 @@ class TestCustomMenuModels(TestCase):
         )
 
     def test_main_menu_edit_works(self):
-        response = self.client.get('/admin/test/custommainmenu/edit/1/')
+        response = self.client.get('/admin/tests/custommainmenu/edit/1/')
         self.assertEqual(response.status_code, 200)
 
     def test_flat_menu_models_correct(self):
