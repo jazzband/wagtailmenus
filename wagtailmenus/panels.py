@@ -16,7 +16,7 @@ from . import app_settings
 # ########################################################
 inlinepanel_class = InlinePanel
 inlinepanel_kwargs = dict(label=_('menu items'))
-if 'condensedinlinepanel' in settings.INSTALLED_APPS:
+if app_settings.ADMIN_USE_CONDENSEDINLINEPANEL:
     import condensedinlinepanel
     if LooseVersion(condensedinlinepanel.__version__) >= LooseVersion('0.3'):
         from condensedinlinepanel.edit_handlers import CondensedInlinePanel

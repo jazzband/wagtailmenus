@@ -133,7 +133,8 @@ class LinkPageCMSTest(WebTest):
         self.assertContains(response, 'This page redirects to: https://www.rkh.co.uk#testing')
 
     def test_view_draft_linkpage_to_page(self):
-        # First, lets update the example LinkPage to link to a page instead of a custom URL
+        # First, lets update the example LinkPage to link to a page instead of
+        # a custom URL
         link_page = LinkPage.objects.get(id=self.link_page_id)
         link_page.link_url = ''
         link_page.link_page_id = self.parent_page_id
@@ -174,6 +175,7 @@ class TestSuperUser(TransactionTestCase):
         self.assertTrue(view.get_error_message())
 
     @modify_settings(INSTALLED_APPS={'append': 'condensedinlinepanel'})
+    @override_settings(WAGTAILMENUS_ADMIN_USE_CONDENSEDINLINEPANEL=True,)
     def test_mainmenu_edit_condensedinlinepanel(self):
         response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
         self.assertEqual(response.status_code, 200)
@@ -251,8 +253,6 @@ class TestSuperUser(TransactionTestCase):
         response = self.client.get(
             '/admin/wagtailmenus/flatmenu/copy/1/')
         self.assertEqual(response.status_code, 200)
-
-
 
 
 class TestNonSuperUser(TransactionTestCase):
