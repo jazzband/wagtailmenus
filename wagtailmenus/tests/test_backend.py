@@ -7,8 +7,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.test import TransactionTestCase, override_settings, modify_settings
 from django_webtest import WebTest
 
+from wagtail.wagtailadmin.edit_handlers import ObjectList
 from wagtail.wagtailcore.models import Page, Site
-from wagtailmenus import get_flat_menu_model
+from wagtailmenus import get_flat_menu_model, get_main_menu_model
 
 from wagtailmenus.tests.models import LinkPage
 
@@ -173,6 +174,18 @@ class TestSuperUser(TransactionTestCase):
         # Test 'get_error_message' method on view for additional coverage
         view = response.context['view']
         self.assertTrue(view.get_error_message())
+
+        menu_model = get_main_menu_model()
+
+        # Set 'panels' attribute on menu model to increase coverage for
+        # MenuTabbedInterfaceMixin.get_edit_handler_class()
+        menu_model.panels = menu_model.content_panels
+        response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
+
+        # Set 'edit_handler' attribute on menu model to increase coverage for
+        # MenuTabbedInterfaceMixin.get_edit_handler_class()
+        menu_model.edit_handler = ObjectList(menu_model.content_panels)
+        response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
 
     @modify_settings(INSTALLED_APPS={'append': 'condensedinlinepanel'})
     @override_settings(WAGTAILMENUS_ADMIN_USE_CONDENSEDINLINEPANEL=True,)
