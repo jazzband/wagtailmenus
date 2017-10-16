@@ -4,7 +4,7 @@ from __future__ import absolute_import, unicode_literals
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
-from django.test import TransactionTestCase, override_settings
+from django.test import TransactionTestCase, override_settings, modify_settings
 from django_webtest import WebTest
 
 from wagtail.wagtailcore.models import Page, Site
@@ -173,7 +173,7 @@ class TestSuperUser(TransactionTestCase):
         view = response.context['view']
         self.assertTrue(view.get_error_message())
 
-    @override_settings(WAGTAILMENUS_ADMIN_USE_CONDENSEDINLINEPANEL=True)
+    @modify_settings(INSTALLED_APPS={'append': 'condensedinlinepanel'})
     def test_mainmenu_edit_condensedinlinepanel(self):
         response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
         self.assertEqual(response.status_code, 200)
@@ -241,7 +241,7 @@ class TestSuperUser(TransactionTestCase):
             '/admin/wagtailmenus/flatmenu/edit/1/')
         self.assertEqual(response.status_code, 200)
 
-    @override_settings(WAGTAILMENUS_ADMIN_USE_CONDENSEDINLINEPANEL=True)
+    @modify_settings(INSTALLED_APPS={'append': 'condensedinlinepanel'})
     def test_flatmenu_edit_condensedinlinepanel(self):
         response = self.client.get(
             '/admin/wagtailmenus/flatmenu/edit/1/')

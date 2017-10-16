@@ -81,10 +81,6 @@ class AppSettings(object):
         return self._setting('FLATMENU_MENU_ICON', 'list-ol')
 
     @property
-    def ADMIN_USE_CONDENSEDINLINEPANEL(self):
-        return self._setting('ADMIN_USE_CONDENSEDINLINEPANEL', False)
-
-    @property
     def SITE_SPECIFIC_TEMPLATE_DIRS(self):
         return self._setting('SITE_SPECIFIC_TEMPLATE_DIRS', False)
 

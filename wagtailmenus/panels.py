@@ -1,5 +1,9 @@
 from __future__ import absolute_import, unicode_literals
+from distutils.version import LooseVersion
+
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+
 from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, PageChooserPanel,
     ObjectList, TabbedInterface)
@@ -10,20 +14,19 @@ from . import app_settings
 # ########################################################
 # For menu models
 # ########################################################
+inlinepanel_class = InlinePanel
+inlinepanel_kwargs = dict(label=_('menu items'))
+if 'condensedinlinepanel' in settings.INSTALLED_APPS:
+    import condensedinlinepanel
+    if LooseVersion(condensedinlinepanel.__version__) >= LooseVersion('0.3'):
+        from condensedinlinepanel.edit_handlers import CondensedInlinePanel
+        inlinepanel_class = CondensedInlinePanel
+        inlinepanel_kwargs = dict(
+            heading=_('Menu items'),
+            label=("Add new item"),
+            new_card_header_text=_("New item"),
+        )
 
-if app_settings.ADMIN_USE_CONDENSEDINLINEPANEL:
-    from condensedinlinepanel.edit_handlers import CondensedInlinePanel
-    inlinepanel_class = CondensedInlinePanel
-    inlinepanel_kwargs = dict(
-        heading=_('Menu items'),
-        label=("Add new item"),
-        new_card_header_text=_("New item"),
-    )
-else:
-    inlinepanel_class = InlinePanel
-    inlinepanel_kwargs = dict(
-        label=_('menu items')
-    )
 
 main_menu_content_panels = [
     inlinepanel_class(
