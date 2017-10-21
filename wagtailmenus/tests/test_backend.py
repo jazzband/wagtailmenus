@@ -7,9 +7,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.test import TransactionTestCase, override_settings, modify_settings
 from django_webtest import WebTest
 
-from wagtail.wagtailadmin.edit_handlers import ObjectList
+from wagtail.wagtailadmin.edit_handlers import ObjectList, InlinePanel
 from wagtail.wagtailcore.models import Page, Site
 from wagtailmenus import get_flat_menu_model, get_main_menu_model
+from wagtailmenus.panels import (
+    FlatMenuItemsInlinePanel, MainMenuItemsInlinePanel)
 
 from wagtailmenus.tests.models import LinkPage
 
@@ -187,11 +189,15 @@ class TestSuperUser(TransactionTestCase):
         menu_model.edit_handler = ObjectList(menu_model.content_panels)
         response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
 
+    def test_not_condensedinlinepanel(self):
+        self.assertTrue(isinstance(FlatMenuItemsInlinePanel(), InlinePanel))
+        self.assertTrue(isinstance(MainMenuItemsInlinePanel(), InlinePanel))
+
     @modify_settings(INSTALLED_APPS={'append': 'condensedinlinepanel'})
-    @override_settings(WAGTAILMENUS_ADMIN_USE_CONDENSEDINLINEPANEL=True,)
-    def test_mainmenu_edit_condensedinlinepanel(self):
-        response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
-        self.assertEqual(response.status_code, 200)
+    def test_condensedinlinepanel(self):
+        from condensedinlinepanel.edit_handlers import CondensedInlinePanel
+        self.assertTrue(isinstance(FlatMenuItemsInlinePanel(), CondensedInlinePanel))
+        self.assertTrue(isinstance(MainMenuItemsInlinePanel(), CondensedInlinePanel))
 
     def test_mainmenu_edit_multisite(self):
         Site.objects.create(
@@ -252,12 +258,6 @@ class TestSuperUser(TransactionTestCase):
 
     @override_settings(WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES=False,)
     def test_flatmenu_edit(self):
-        response = self.client.get(
-            '/admin/wagtailmenus/flatmenu/edit/1/')
-        self.assertEqual(response.status_code, 200)
-
-    @modify_settings(INSTALLED_APPS={'append': 'condensedinlinepanel'})
-    def test_flatmenu_edit_condensedinlinepanel(self):
         response = self.client.get(
             '/admin/wagtailmenus/flatmenu/edit/1/')
         self.assertEqual(response.status_code, 200)
