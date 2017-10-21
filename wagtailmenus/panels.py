@@ -2,7 +2,6 @@ from __future__ import absolute_import, unicode_literals
 from distutils.version import LooseVersion
 
 from django.conf import settings
-from django.utils.functional import SimpleLazyObject
 from django.utils.translation import ugettext_lazy as _
 
 from wagtail.wagtailadmin.edit_handlers import (
@@ -17,55 +16,49 @@ from . import app_settings
 # ########################################################
 def _define_inlinepanel(relation_name, **kwargs):
     klass = InlinePanel
-    panel_kwargs = dict(
-        label=_('menu items')
-    )
+    defaults = {'label': _('menu items')}
     if 'condensedinlinepanel' in settings.INSTALLED_APPS:
         import condensedinlinepanel
         from condensedinlinepanel.edit_handlers import CondensedInlinePanel
         if LooseVersion(condensedinlinepanel.__version__) >= LooseVersion('0.3'):
             klass = CondensedInlinePanel
-            panel_kwargs = dict(
-                heading=_('Menu items'),
-                label=("Add new item"),
-                new_card_header_text=_("New item"),
-            )
-    panel_kwargs.update(kwargs)
-    return klass(relation_name, **panel_kwargs)
+            defaults = {
+                'heading': _('Menu items'),
+                'label': _("Add new item"),
+                'new_card_header_text': _("New item"),
+            }
+    defaults.update(kwargs)
+    return klass(relation_name, **defaults)
 
 
 def FlatMenuItemsInlinePanel(**kwargs):  # noqa
     """
-    If ``collapsedinlinepanel`` is installed a `CondensedInlinePanel` will be
-    used, otherwise Wagtail's built-in `InlinePanel` will be used.
-    Use in panel definitions like so:
+    Returns either a ``InlinePanel`` or ``CondensedInlinePanel`` instance (
+    depending on whether a sufficient version of `condensedinlinepanel` is
+    installed) for editing menu items for a flat menu.
 
-    panels = [
-        FieldPanel('title'),
-        FlatMenuItemsInlinePanel(),
-    ]
+    Use in panel definitions like any standard panel class. Any supplied kwargs
+    will be passed on as kwargs to the target class's __init__ method.
     """
     return _define_inlinepanel(
-        rel_name=app_settings.FLAT_MENU_ITEMS_RELATED_NAME, **kwargs)
+        relation_name=app_settings.FLAT_MENU_ITEMS_RELATED_NAME, **kwargs)
 
 
 def MainMenuItemsInlinePanel(**kwargs):  # noqa
     """
-    Returns a ``InlinePanel`` instance for editing menu items for a main menu.
-    If ``collapsedinlinepanel`` is installed a ``CondensedInlinePanel``
-    instance will be returned instead. Use in panel definitions like so:
+    Returns either a ``InlinePanel`` or ``CondensedInlinePanel`` instance (
+    depending on whether a sufficient version of `condensedinlinepanel` is
+    installed) for editing menu items for a main menu.
 
-    panels = [
-        FieldPanel('title'),
-        MainMenuItemsInlinePanel(),
-    ]
+    Use in panel definitions like any standard panel class. Any supplied kwargs
+    will be passed on as kwargs to the target class's __init__ method.
     """
     return _define_inlinepanel(
-        rel_name=app_settings.MAIN_MENU_ITEMS_RELATED_NAME, **kwargs)
+        relation_name=app_settings.MAIN_MENU_ITEMS_RELATED_NAME, **kwargs)
 
 
 main_menu_content_panels = [
-    SimpleLazyObject(MainMenuItemsInlinePanel),
+    MainMenuItemsInlinePanel(),
 ]
 
 flat_menu_content_panels = [
@@ -79,7 +72,7 @@ flat_menu_content_panels = [
         ),
         classname="collapsible"
     ),
-    SimpleLazyObject(FlatMenuItemsInlinePanel),
+    FlatMenuItemsInlinePanel(),
 ]
 
 menu_settings_panels = [
