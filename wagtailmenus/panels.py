@@ -14,6 +14,7 @@ from . import app_settings
 # ########################################################
 # For menu models
 # ########################################################
+
 def _define_inlinepanel(relation_name, **kwargs):
     klass = InlinePanel
     defaults = {'label': _('menu items')}
@@ -57,11 +58,11 @@ def MainMenuItemsInlinePanel(**kwargs):  # noqa
         relation_name=app_settings.MAIN_MENU_ITEMS_RELATED_NAME, **kwargs)
 
 
-main_menu_content_panels = [
+main_menu_content_panels = (
     MainMenuItemsInlinePanel(),
-]
+)
 
-flat_menu_content_panels = [
+flat_menu_content_panels = (
     MultiFieldPanel(
         heading=_("Menu details"),
         children=(
@@ -73,18 +74,48 @@ flat_menu_content_panels = [
         classname="collapsible"
     ),
     FlatMenuItemsInlinePanel(),
-]
+)
 
-menu_settings_panels = [
+menu_settings_panels = (
     MultiFieldPanel(
         heading=_('Rendering setings'),
         children=(
             FieldPanel('max_levels'),
             FieldPanel('use_specific')
         ),
-        classname="collapsible"
     ),
-]
+)
+
+# ##########################################################
+# Deprecated panel layouts (to be removed in v2.8)
+# ##########################################################
+
+main_menu_panels = (
+    MainMenuItemsInlinePanel(),
+    MultiFieldPanel(
+        heading=_("Advanced settings"),
+        children=(FieldPanel('max_levels'), FieldPanel('use_specific')),
+        classname="collapsible collapsed",
+    ),
+)
+
+flat_menu_panels = (
+    MultiFieldPanel(
+        heading=_("Settings"),
+        children=(
+            FieldPanel('title'),
+            FieldPanel('site'),
+            FieldPanel('handle'),
+            FieldPanel('heading'),
+        )
+    ),
+    FlatMenuItemsInlinePanel(),
+    MultiFieldPanel(
+        heading=_("Advanced settings"),
+        children=(FieldPanel('max_levels'), FieldPanel('use_specific')),
+        classname="collapsible collapsed",
+    ),
+)
 
 
 # ########################################################

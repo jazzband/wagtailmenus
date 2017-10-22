@@ -19,7 +19,8 @@ from wagtail.wagtailcore.models import Page
 from .. import app_settings
 from ..forms import FlatMenuAdminForm
 from ..panels import (
-    main_menu_content_panels, flat_menu_content_panels, menu_settings_panels)
+    main_menu_content_panels, flat_menu_content_panels, menu_settings_panels,
+    main_menu_panels, flat_menu_panels)
 from ..utils.deprecation import (
     RemovedInWagtailMenus26Warning, RemovedInWagtailMenus27Warning)
 from ..utils.inspection import accepts_kwarg
@@ -1026,6 +1027,7 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_instance_context_name = 'main_menu'
     related_templatetag_name = 'main_menu'
     content_panels = main_menu_content_panels
+    panels = main_menu_panels  # to be removed in v2.8
 
     site = models.OneToOneField(
         'wagtailcore.Site',
@@ -1108,6 +1110,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     related_templatetag_name = 'flat_menu'
     base_form_class = FlatMenuAdminForm
     content_panels = flat_menu_content_panels
+    panels = flat_menu_panels  # to be removed in v2.8
 
     site = models.ForeignKey(
         'wagtailcore.Site',

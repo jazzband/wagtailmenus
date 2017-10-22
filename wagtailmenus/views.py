@@ -49,14 +49,21 @@ class MainMenuIndexView(WMABaseView):
 class MenuTabbedInterfaceMixin(object):
 
     def get_edit_handler_class(self):
+        from .models import AbstractMainMenu, AbstractFlatMenu
         if hasattr(self.model, 'edit_handler'):
             edit_handler = self.model.edit_handler
-        elif getattr(self.model, 'panels', None):
+        elif ((
+            issubclass(self.model, AbstractMainMenu) and
+            self.model.panels is not AbstractMainMenu.panels
+        ) or (
+            issubclass(self.model, AbstractFlatMenu) and
+            self.model.panels is not AbstractFlatMenu.panels
+        )):
             warning_msg = (
                 "The 'panels' attribute is deprecated for custom menu models. "
-                "To customise the admin interface, use the 'content_panels' "
-                "and 'settings_panels' attributes to update panels for the "
-                "'Content' and 'Settings' tabs independently."
+                "To customise the admin interface for menu models, use the "
+                "'content_panels' and 'settings_panels' attributes to update "
+                "panels for the 'Content' and 'Settings' tabs independently."
             )
             warnings.warn(warning_msg, RemovedInWagtailMenus28Warning)
             edit_handler = ObjectList(self.model.panels)
