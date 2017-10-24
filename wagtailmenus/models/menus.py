@@ -7,8 +7,9 @@ from types import GeneratorType
 from django.db import models
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.template import Context
+from django.utils import six
 from django.utils.encoding import python_2_unicode_compatible
-from django.utils.functional import cached_property
+from django.utils.functional import cached_property, lazy
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
@@ -26,6 +27,9 @@ from ..utils.misc import get_site_from_request
 from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
 from .pages import AbstractLinkPage
+
+
+mark_safe_lazy = lazy(mark_safe, six.text_type)
 
 
 ContextualVals = namedtuple('ContextualVals', (
@@ -1035,7 +1039,7 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         verbose_name=_('maximum levels'),
         choices=app_settings.MAX_LEVELS_CHOICES,
         default=2,
-        help_text=mark_safe(_(
+        help_text=mark_safe_lazy(_(
             "The maximum number of levels to display when rendering this "
             "menu. The value can be overidden by supplying a different "
             "<code>max_levels</code> value to the <code>{% main_menu %}"
@@ -1046,7 +1050,7 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         verbose_name=_('specific page usage'),
         choices=app_settings.USE_SPECIFIC_CHOICES,
         default=app_settings.USE_SPECIFIC_AUTO,
-        help_text=mark_safe(_(
+        help_text=mark_safe_lazy(_(
             "Controls how 'specific' pages objects are fetched and used when "
             "rendering this menu. This value can be overidden by supplying a "
             "different <code>use_specific</code> value to the <code>"
@@ -1144,7 +1148,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         verbose_name=_('maximum levels'),
         choices=app_settings.MAX_LEVELS_CHOICES,
         default=1,
-        help_text=mark_safe(_(
+        help_text=mark_safe_lazy(_(
             "The maximum number of levels to display when rendering this "
             "menu. The value can be overidden by supplying a different "
             "<code>max_levels</code> value to the <code>{% flat_menu %}"
@@ -1155,7 +1159,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         verbose_name=_('specific page usage'),
         choices=app_settings.USE_SPECIFIC_CHOICES,
         default=app_settings.USE_SPECIFIC_AUTO,
-        help_text=mark_safe(_(
+        help_text=mark_safe_lazy(_(
             "Controls how 'specific' pages objects are fetched and used when "
             "rendering this menu. This value can be overidden by supplying a "
             "different <code>use_specific</code> value to the <code>"
