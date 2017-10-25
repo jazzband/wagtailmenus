@@ -44,7 +44,6 @@ setup(
     zip_safe=False,
     classifiers=[
         "Environment :: Web Environment",
-        "Framework :: Django",
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
         'Programming Language :: Python :: 2',
