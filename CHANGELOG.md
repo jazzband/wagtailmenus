@@ -1,8 +1,12 @@
 Changelog
 =========
 
-2.X.X (XX.XX.XXXX) IN DEVELOPMENT
---------------------------------- 
+2.4.2 (27.10.2017)
+------------------ 
+
+* Fixed a bug that was causing Django to create new migrations for wagtailmenus
+  after  changing Django's LANGUAGE_CODE setting for a project. Thanks to
+  @philippbosch from A Color Bright for the fix.
 
 
 2.4.1 (16.09.2017)
