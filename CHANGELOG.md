@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.4.2 (27.10.2017)
+2.4.3 (27.10.2017)
 ------------------ 
 
 * Fixed a bug that was causing Django to create new migrations for wagtailmenus

@@ -4,8 +4,9 @@ from collections import defaultdict
 
 from django.db import models
 from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.utils import six
 from django.utils.encoding import python_2_unicode_compatible
-from django.utils.functional import cached_property
+from django.utils.functional import cached_property, lazy
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -17,6 +18,8 @@ from wagtail.wagtailcore.models import Page
 
 from .. import app_settings
 from ..forms import FlatMenuAdminForm
+
+mark_safe_lazy = lazy(mark_safe, six.text_type)
 
 
 # ########################################################
@@ -235,7 +238,7 @@ class AbstractMainMenu(MenuWithMenuItems):
         verbose_name=_('maximum levels'),
         choices=app_settings.MAX_LEVELS_CHOICES,
         default=2,
-        help_text=mark_safe(_(
+        help_text=mark_safe_lazy(_(
             "The maximum number of levels to display when rendering this "
             "menu. The value can be overidden by supplying a different "
             "<code>max_levels</code> value to the <code>{% main_menu %}"
@@ -246,7 +249,7 @@ class AbstractMainMenu(MenuWithMenuItems):
         verbose_name=_('specific page usage'),
         choices=app_settings.USE_SPECIFIC_CHOICES,
         default=app_settings.USE_SPECIFIC_AUTO,
-        help_text=mark_safe(_(
+        help_text=mark_safe_lazy(_(
             "Controls how 'specific' pages objects are fetched and used when "
             "rendering this menu. This value can be overidden by supplying a "
             "different <code>use_specific</code> value to the <code>"
@@ -329,7 +332,7 @@ class AbstractFlatMenu(MenuWithMenuItems):
         verbose_name=_('maximum levels'),
         choices=app_settings.MAX_LEVELS_CHOICES,
         default=1,
-        help_text=mark_safe(_(
+        help_text=mark_safe_lazy(_(
             "The maximum number of levels to display when rendering this "
             "menu. The value can be overidden by supplying a different "
             "<code>max_levels</code> value to the <code>{% flat_menu %}"
@@ -340,7 +343,7 @@ class AbstractFlatMenu(MenuWithMenuItems):
         verbose_name=_('specific page usage'),
         choices=app_settings.USE_SPECIFIC_CHOICES,
         default=app_settings.USE_SPECIFIC_AUTO,
-        help_text=mark_safe(_(
+        help_text=mark_safe_lazy(_(
             "Controls how 'specific' pages objects are fetched and used when "
             "rendering this menu. This value can be overidden by supplying a "
             "different <code>use_specific</code> value to the <code>"
