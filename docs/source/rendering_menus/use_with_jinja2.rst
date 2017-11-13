@@ -16,7 +16,7 @@ If your project uses `Jinja2 <http://jinja.pocoo.org>`_ for template, the templa
     + manage.py
 
 
-Here is how to make wagtailmenus work with Jinja2:
+Here is how to make *wagtailmenus* work with Jinja2:
 
 1. Create *jinja.py* file:
 
@@ -81,6 +81,8 @@ Here in my example, I use `django-jinja <https://github.com/niwinz/django-jinja>
 
     WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE = 'menus/main_menu.jinja'
     WAGTAILMENUS_DEFAULT_SUB_MENU_TEMPLATE = 'menus/sub_menu.jinja'
+
+You can copy original template of *wagtailmenus*, written in Django template syntax, and convert it to Jinja2.
 
 
 4. In your template content, insert menu like this:
