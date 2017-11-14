@@ -1,5 +1,4 @@
 from __future__ import absolute_import, unicode_literals
-from distutils.version import LooseVersion
 
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
@@ -16,20 +15,21 @@ from . import app_settings
 # ########################################################
 
 def _define_inlinepanel(relation_name, **kwargs):
-    klass = InlinePanel
+    panel_class = InlinePanel
     defaults = {'label': _('menu items')}
-    if 'condensedinlinepanel' in settings.INSTALLED_APPS:
-        import condensedinlinepanel
+    if(
+        'condensedinlinepanel' in settings.INSTALLED_APPS and
+        app_settings.USE_CONDENSEDINLINEPANEL
+    ):
         from condensedinlinepanel.edit_handlers import CondensedInlinePanel
-        if LooseVersion(condensedinlinepanel.__version__) >= LooseVersion('0.3'):
-            klass = CondensedInlinePanel
-            defaults = {
-                'heading': _('Menu items'),
-                'label': _("Add new item"),
-                'new_card_header_text': _("New item"),
-            }
+        panel_class = CondensedInlinePanel
+        defaults = {
+            'heading': _('Menu items'),
+            'label': _("Add new item"),
+            'new_card_header_text': _("New item"),
+        }
     defaults.update(kwargs)
-    return klass(relation_name, **defaults)
+    return panel_class(relation_name, **defaults)
 
 
 def FlatMenuItemsInlinePanel(**kwargs):  # noqa
