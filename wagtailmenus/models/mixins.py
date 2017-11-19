@@ -1,7 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.utils.functional import cached_property
-from django.template.loader import get_template, select_template
 
 from .. import app_settings
 
@@ -10,12 +9,13 @@ class DefinesSubMenuTemplatesMixin(object):
     sub_menu_template_name = None  # set to use a specific default template
 
     def get_sub_menu_template(self):
+        engine = self.get_template_engine()
         specified = self._option_vals.sub_menu_template_name
         if specified:
-            return get_template(specified)
+            return engine.get_template(specified)
         if self.sub_menu_template_name:
-            return get_template(self.sub_menu_template_name)
-        return select_template(self.get_sub_menu_template_names())
+            return engine.get_template(self.sub_menu_template_name)
+        return engine.select_template(self.get_sub_menu_template_names())
 
     @cached_property
     def sub_menu_template(self):
@@ -52,7 +52,7 @@ class DefinesSubMenuTemplatesMixin(object):
         """
         data = {}
         if self._contextual_vals.current_level == 1 and self.max_levels > 1:
-            data['sub_menu_template'] = self.sub_menu_template.template.name
+            data['sub_menu_template'] = self.sub_menu_template.name
         data.update(kwargs)
         return super(DefinesSubMenuTemplatesMixin, self).get_context_data(
             **data)

@@ -6,7 +6,7 @@ from types import GeneratorType
 
 from django.db import models
 from django.core.exceptions import ImproperlyConfigured, ValidationError
-from django.template.loader import get_template, select_template
+from django.template import Context
 from django.utils import six
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import cached_property, lazy
@@ -186,8 +186,8 @@ class Menu(object):
         """
         context_data = self.get_context_data()
         template = self.get_template()
-        context_data['current_template'] = template.template.name
-        return template.render(context_data)
+        context_data['current_template'] = template.name
+        return template.render(Context(context_data))
 
     def clear_page_cache(self):
         try:
@@ -303,11 +303,7 @@ class Menu(object):
         the 'sub_menu' tag to render any additional levels."""
         ctx_vals = self._contextual_vals
         opt_vals = self._option_vals
-        try:
-            data = ctx_vals.parent_context.flatten()
-        except AttributeError:
-            # Jinja2 Context
-            data = ctx_vals.parent_context.get_all()
+        data = ctx_vals.parent_context.flatten()
         data.update(ctx_vals._asdict())
         data.update({
             'apply_active_classes': opt_vals.apply_active_classes,
@@ -515,19 +511,19 @@ class Menu(object):
         """
         return menu_items
 
+    def get_template_engine(self):
+        return self._contextual_vals.parent_context.template.engine
+
     def get_template(self):
-        """
-        In Django template backend case, returns the
-        ``django.template.backends.django.Template`` instance.
-        """
+        engine = self.get_template_engine()
         specified = self._option_vals.template_name
         if specified:
-            return get_template(specified)
+            return engine.get_template(specified)
         if self.template_name:
             # Developers can set 'template_name' as a class attribute to have
             # custom menus use specific templates
-            return get_template(self.template_name)
-        return select_template(self.get_template_names())
+            return engine.get_template(self.template_name)
+        return engine.select_template(self.get_template_names())
 
     def get_template_names(self):
         """Return a list (or tuple) of template names to search for when
