@@ -1,6 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-import warnings
 from copy import copy
 
 from django import forms
@@ -18,7 +17,6 @@ from wagtail.contrib.modeladmin.views import (
     WMABaseView, CreateView, EditView, ModelFormView)
 
 from . import app_settings
-from .utils.deprecation import RemovedInWagtailMenus28Warning
 
 
 class SiteSwitchForm(forms.Form):
@@ -59,13 +57,6 @@ class MenuTabbedInterfaceMixin(object):
             issubclass(self.model, AbstractFlatMenu) and
             self.model.panels is not AbstractFlatMenu.panels
         )):
-            warning_msg = (
-                "The 'panels' attribute is deprecated for custom menu models. "
-                "To customise the admin interface for menu models, use the "
-                "'content_panels' and 'settings_panels' attributes to update "
-                "panels for the 'Content' and 'Settings' tabs independently."
-            )
-            warnings.warn(warning_msg, RemovedInWagtailMenus28Warning)
             edit_handler = ObjectList(self.model.panels)
         else:
             edit_handler = TabbedInterface([
