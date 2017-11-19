@@ -14,11 +14,11 @@ What's new?
 New tabbed interface for menu editing
 -------------------------------------
 
-In an effort to improve the menu editing UI, Wagtail's tabbed interface is now used to split a menu's fields into two tabs: **Content** and **Settings**, with the latter including panels for the ``max_levels`` and ``use_specific`` fields (which were previously tucked away at the bottom of the page), and the former including the rest.
+In an effort to improve the menu editing UI, Wagtail's ``TabbedInterface`` is now used to split a menu's fields into two tabs for editig: **Content** and **Settings**; with the latter including panels for the ``max_levels`` and ``use_specific`` fields (which were previously tucked away at the bottom of the edit page), and the former for everything else.
 
-Two new attributes, ``content_panels`` and ``settings_panels`` have also been added to ``AbstractMainMenu`` and ``AbstractFlatMenu`` to allow the panels for each tab to be controlled independently.
+Two new attributes, ``content_panels`` and ``settings_panels`` have also been added to ``AbstractMainMenu`` and ``AbstractFlatMenu`` to allow the panels for each tab to be updated independently.
 
-If for any reason you don't wish to use the tabbed interface for editing custom menu models, the ``panels`` attribute is still supported, and will result in all fields appearing in a single list (as before). However, the ``panels`` attribute currently present on the ``AbstractFlatMenu`` and ``AbstractMainMenu`` models is now deprecated and will be removed in the future (see below for more info).
+If for any reason you don't wish to use the tabbed interface for editing custom menu models, the ``panels`` attribute is still supported, and will setting that will result in all fields appearing in a single list (as before). However, the ``panels`` attribute currently present on the ``AbstractFlatMenu`` and ``AbstractMainMenu`` models is now deprecated and will be removed in the future releases (see below for more info).
 
 
 Built-in compatibility with ``wagtail-condensedinlinepanel``
@@ -26,8 +26,55 @@ Built-in compatibility with ``wagtail-condensedinlinepanel``
 
 In an effort to improve the menu editing UI, wagtailmenus now has baked-in compatibility with ``wagtail-condensedinlinepanel``. As long as a compatible version (at least `0.3`) of the app is installed, wagtailmenus will automatically use ``CondensedInlinePanel`` instead of Wagtail's built-in ``InlinePanel`` for listing menu items, giving menu editors some excellent additional features, including drag-and-drop reordering and the ability to add a new item into any position.
 
-See the updated installation docs to find out more:
-http://wagtailmenus.readthedocs.io/en/stable/installation.html
+If you have custom Menu models in your project that use the ``panels`` attribute to customise arrangement of fields in the editing UI, you might need to change the your panel list slightly in order to see the improved menu items list after installing. Where you might currently have something like:
+
+.. code:: python
+
+    class CustomMainMenu(AbstractMainMenu):
+        ...
+
+        panels = (
+            ...
+            InlinePanel('custom_menu_items'),
+            ..
+        )
+
+
+    class CustomFlatMenu(AbstractFlatMenu):
+        ...
+
+        panels = (
+            ...
+            InlinePanel('custom_menu_items'),
+            ..
+        )
+
+You should import ``MainMenuItemsInlinePanel`` and ``FlatMenuItemsInlinePanel`` from ``wagtailmenus.panels`` and use them instead like so:
+
+
+.. code:: python
+
+    from wagtailmenus.panels import FlatMenuItemsInlinePanel, MainMenuItemsInlinePanel
+
+
+    class CustomMainMenu(AbstractMainMenu):
+        ...
+
+        panels = (
+            ...
+            MainMenuItemsInlinePanel(),  # no need to pass any arguments!
+            ..
+        )
+
+
+    class CustomFlatMenu(AbstractFlatMenu):
+        ...
+
+        panels = (
+            ...
+            FlatMenuItemsInlinePanel(),  # no need to pass any arguments!
+            ..
+        )
 
 
 Minor changes & bug fixes 
