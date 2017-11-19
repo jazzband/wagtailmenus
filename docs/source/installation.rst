@@ -123,7 +123,7 @@ Installing wagtailmenus
 Installing ``wagtail-condensedinlinepanel``
 ===========================================
 
-Although doing so is entirely optional, for an all-round better menu editing experience, we recommend using wagtailmenus together with `wagtail-condensedinlinepanel <https://github.com/wagtail/wagtail-condensedinlinepanel>`_ (version 0.4 or above). 
+Although doing so is entirely optional, for an all-round better menu editing experience, we recommend using wagtailmenus together with `wagtail-condensedinlinepanel <https://github.com/wagtail/wagtail-condensedinlinepanel>`_ (version ``0.3`` or above). 
 
 ``wagtail-condensedinlinepanel`` offers a React-powered alternative to Wagtail's built-in ``InlinePanel`` with some great extra features that make it perfect for managing menu items; including drag-and-drop reordering and the ability to add new items at any position. 
 
