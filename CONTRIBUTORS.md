@@ -11,11 +11,12 @@
 * Trent Holiday (trumpet2012)
 * Tom Dyson (tomdyson)
 * Oliver Bestwalter (obestwalter)
+* Nguyễn Hồng Quân (hongquan)
 
 
 ## Translators
 
-* François GUÉRIN (frague59) 
+* François GUÉRIN (frague59)
 * Claudio Marinozzi (pyMan)
 * Pierre Geier (bloodywing)
 * Max Kurama (MaxKurama)
