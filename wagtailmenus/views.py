@@ -10,10 +10,11 @@ from django.utils.text import capfirst
 from django.utils.translation import ugettext as _
 
 from wagtail.wagtailadmin import messages
+from wagtail.wagtailadmin.edit_handlers import ObjectList, TabbedInterface
 from wagtail.wagtailcore.models import Site
 
 from wagtail.contrib.modeladmin.views import (
-    WMABaseView, EditView, ModelFormView)
+    WMABaseView, CreateView, EditView, ModelFormView)
 
 from . import app_settings
 
@@ -43,7 +44,30 @@ class MainMenuIndexView(WMABaseView):
             self.model_admin.url_helper.get_action_url('edit', site.pk))
 
 
-class MainMenuEditView(ModelFormView):
+class MenuTabbedInterfaceMixin(object):
+
+    def get_edit_handler_class(self):
+        from .models import AbstractMainMenu, AbstractFlatMenu
+        if hasattr(self.model, 'edit_handler'):
+            edit_handler = self.model.edit_handler
+        elif ((
+            issubclass(self.model, AbstractMainMenu) and
+            self.model.panels is not AbstractMainMenu.panels
+        ) or (
+            issubclass(self.model, AbstractFlatMenu) and
+            self.model.panels is not AbstractFlatMenu.panels
+        )):
+            edit_handler = ObjectList(self.model.panels)
+        else:
+            edit_handler = TabbedInterface([
+                ObjectList(self.model.content_panels, heading=_("Content")),
+                ObjectList(self.model.settings_panels, heading=_("Settings"),
+                           classname="settings"),
+            ])
+        return edit_handler.bind_to_model(self.model)
+
+
+class MainMenuEditView(MenuTabbedInterfaceMixin, ModelFormView):
     page_title = _('Editing')
     instance_pk = None
     instance = None
@@ -109,7 +133,15 @@ class MainMenuEditView(ModelFormView):
         return ['wagtailmenus/mainmenu_edit.html']
 
 
-class FlatMenuCopyView(EditView):
+class FlatMenuCreateView(MenuTabbedInterfaceMixin, CreateView):
+    pass
+
+
+class FlatMenuEditView(MenuTabbedInterfaceMixin, EditView):
+    pass
+
+
+class FlatMenuCopyView(FlatMenuEditView):
     page_title = _('Copying')
 
     @property

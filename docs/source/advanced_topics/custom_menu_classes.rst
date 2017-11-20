@@ -111,6 +111,7 @@ If you also need to override the ``MainMenu`` model, that's possible too. But, b
         from django.db import models
         from django.utils import translation
         from django.utils.translation import ugettext_lazy as _
+        from django.utils import timezone
         from modelcluster.fields import ParentalKey
         from wagtail.wagtailadmin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel
         from wagtailmenus import app_settings
@@ -118,17 +119,36 @@ If you also need to override the ``MainMenu`` model, that's possible too. But, b
 
 
         class LimitedMainMenu(AbstractMainMenu):
+            limit_from = models.TimeField()
+            limit_to = models.TimeField()
 
             def get_base_page_queryset(self):
                 """
-                Only surface pages that are owned by the logged in user
+                If the current time is between 'limit_from' and 'limit_to',
+                only surface pages that are owned by the logged in user
                 """
-                if self.request.user:
+                if(
+                    self.request.user and
+                    self.limit_from < timezone.now() < self.limit_to
+                ):
 
                     return self.request.user.owned_pages.filter(
                         live=True, expired=False, show_in_menus=True
                     )
                 return Page.objects.none()
+
+            # Like pages, panels for menus are split into multiple tabs.
+            # To update the panels in the 'Content' tab, override 'content_panels'
+            # To update the panels in the 'Settings' tab, override 'settings_panels'
+            settings_panels = AbstractMainMenu.setting_panels += (
+                MultiFieldPanel(
+                    heading=_('Time limit settings'),
+                    children=(
+                        FieldPanel('limit_from'),
+                        FieldPanel('limit_to'),
+                    ),
+                ),
+            )
 
         class CustomMainMenuItem(AbstractMainMenuItem):
             """A minimal custom menu item model to be used by `LimitedMainMenu`.
@@ -271,6 +291,7 @@ If you also need to override the ``FlatMenu`` model, that's possible too. But, b
         from modelcluster.fields import ParentalKey
         from wagtail.wagtailadmin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel
         from wagtailmenus import app_settings
+        from wagtailmenus.panels import FlatMenuItemsInlinePanel
         from wagtailmenus.models import AbstractFlatMenu, AbstractFlatMenuItem
 
 
@@ -307,7 +328,10 @@ If you also need to override the ``FlatMenu`` model, that's possible too. But, b
             )
             translated_heading = TranslatedField('heading', 'heading_de', 'heading_fr')
 
-            panels = (
+            # Like pages, panels for menus are split into multiple tabs.
+            # To update the panels in the 'Content' tab, override 'content_panels'
+            # To update the panels in the 'Settings' tab, override 'settings_panels'
+            content_panels = (
                 MultiFieldPanel(
                     heading=_("Settings"),
                     children=(
@@ -325,8 +349,7 @@ If you also need to override the ``FlatMenu`` model, that's possible too. But, b
                     ),
                     classname='collapsible'
                 ),
-                AbstractFlatMenu.panels[1],
-                AbstractFlatMenu.panels[2],
+                FlatMenuItemsInlinePanel(),
             )
 
         class TranslatedFlatMenuItem(AbstractFlatMenuItem):

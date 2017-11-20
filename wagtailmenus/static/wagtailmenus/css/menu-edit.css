@@ -2,6 +2,10 @@
     padding-right: 3.5%;
 }
 
+.condensed-inline-panel__form {
+    padding-right: 1.5em;
+}
+
 @media screen and (min-width: 50em) {
 
     label {
@@ -40,7 +44,6 @@
     .multiple .field-content {
         width: 72.6%
     }
-
 }
 
 @media screen and (min-width: 60em) {
@@ -51,5 +54,9 @@
 
     .multiple .field-content {
         width: 76.6%
+    }
+
+    .condensed-inline-panel__form {
+        padding-right: 0;
     }
 }

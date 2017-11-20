@@ -10,7 +10,8 @@ from wagtail.contrib.modeladmin.helpers import ButtonHelper
 from wagtail.wagtailcore import hooks
 
 from . import app_settings, get_main_menu_model, get_flat_menu_model
-from .views import MainMenuIndexView, MainMenuEditView, FlatMenuCopyView
+from .views import (MainMenuIndexView, MainMenuEditView, FlatMenuCreateView,
+                    FlatMenuEditView, FlatMenuCopyView)
 
 
 class MainMenuAdmin(ModelAdmin):
@@ -72,6 +73,8 @@ class FlatMenuAdmin(ModelAdmin):
     menu_icon = app_settings.FLATMENU_MENU_ICON
     button_helper_class = FlatMenuButtonHelper
     ordering = ('-site__is_default_site', 'site__hostname', 'handle')
+    create_view_class = FlatMenuCreateView
+    edit_view_class = FlatMenuEditView
     add_to_settings_menu = True
 
     def get_form_view_extra_css(self):

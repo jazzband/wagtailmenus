@@ -4,11 +4,14 @@ from __future__ import absolute_import, unicode_literals
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
-from django.test import TransactionTestCase, override_settings
+from django.test import TransactionTestCase, override_settings, modify_settings
 from django_webtest import WebTest
 
+from wagtail.wagtailadmin.edit_handlers import ObjectList, InlinePanel
 from wagtail.wagtailcore.models import Page, Site
-from wagtailmenus import get_flat_menu_model
+from wagtailmenus import get_flat_menu_model, get_main_menu_model
+from wagtailmenus.panels import (
+    FlatMenuItemsInlinePanel, MainMenuItemsInlinePanel)
 
 from wagtailmenus.tests.models import LinkPage
 
@@ -133,7 +136,8 @@ class LinkPageCMSTest(WebTest):
         self.assertContains(response, 'This page redirects to: https://www.rkh.co.uk#testing')
 
     def test_view_draft_linkpage_to_page(self):
-        # First, lets update the example LinkPage to link to a page instead of a custom URL
+        # First, lets update the example LinkPage to link to a page instead of
+        # a custom URL
         link_page = LinkPage.objects.get(id=self.link_page_id)
         link_page.link_url = ''
         link_page.link_page_id = self.parent_page_id
@@ -168,11 +172,32 @@ class TestSuperUser(TransactionTestCase):
 
     @override_settings(WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES=False,)
     def test_mainmenu_edit(self):
-        response = self.client.get(
-            '/admin/wagtailmenus/mainmenu/edit/1/')
+        response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
         # Test 'get_error_message' method on view for additional coverage
         view = response.context['view']
         self.assertTrue(view.get_error_message())
+
+        menu_model = get_main_menu_model()
+
+        # Set 'panels' attribute on menu model to increase coverage for
+        # MenuTabbedInterfaceMixin.get_edit_handler_class()
+        menu_model.panels = menu_model.content_panels
+        response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
+
+        # Set 'edit_handler' attribute on menu model to increase coverage for
+        # MenuTabbedInterfaceMixin.get_edit_handler_class()
+        menu_model.edit_handler = ObjectList(menu_model.content_panels)
+        response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
+
+    def test_not_condensedinlinepanel(self):
+        self.assertTrue(isinstance(FlatMenuItemsInlinePanel(), InlinePanel))
+        self.assertTrue(isinstance(MainMenuItemsInlinePanel(), InlinePanel))
+
+    @modify_settings(INSTALLED_APPS={'append': 'condensedinlinepanel'})
+    def test_condensedinlinepanel(self):
+        from condensedinlinepanel.edit_handlers import CondensedInlinePanel
+        self.assertTrue(isinstance(FlatMenuItemsInlinePanel(), CondensedInlinePanel))
+        self.assertTrue(isinstance(MainMenuItemsInlinePanel(), CondensedInlinePanel))
 
     def test_mainmenu_edit_multisite(self):
         Site.objects.create(
