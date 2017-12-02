@@ -204,6 +204,11 @@ class AppSettings(object):
     def SECTION_MENU_CLASS(self):
         return self.class_from_path_setting('SECTION_MENU_CLASS_PATH')
 
+    # TODO: To be removed in v2.8.0
+    @property
+    def USE_BACKEND_SPECIFIC_TEMPLATES(self):
+        return self._setting('USE_BACKEND_SPECIFIC_TEMPLATES', False)
+
 
 import sys  # noqa
 

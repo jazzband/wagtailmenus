@@ -6,6 +6,7 @@ from types import GeneratorType
 
 from django.db import models
 from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.template import Context
 from django.template.loader import get_template, select_template
 from django.utils import six
 from django.utils.encoding import python_2_unicode_compatible
@@ -23,7 +24,8 @@ from ..panels import (
     main_menu_content_panels, flat_menu_content_panels, menu_settings_panels,
     main_menu_panels, flat_menu_panels)
 from ..utils.deprecation import (
-    RemovedInWagtailMenus26Warning, RemovedInWagtailMenus27Warning)
+    RemovedInWagtailMenus26Warning, RemovedInWagtailMenus27Warning,
+    RemovedInWagtailMenus28Warning)
 from ..utils.inspection import accepts_kwarg
 from ..utils.misc import get_site_from_request
 from .menuitems import MenuItem
@@ -45,6 +47,20 @@ OptionVals = namedtuple('OptionVals', (
     'allow_repeating_parents', 'use_absolute_page_urls', 'parent_page',
     'handle', 'template_name', 'sub_menu_template_name', 'extra'
 ))
+
+# TODO: To be removed in v.2.8.0
+USE_BACKEND_SPECIFIC_TEMPLATES = app_settings.USE_BACKEND_SPECIFIC_TEMPLATES
+if not USE_BACKEND_SPECIFIC_TEMPLATES:
+    warning_msg = (
+        "You're currently using wagtailmenus in a mode that uses "
+        "django.template.Template instances for rendering. This option "
+        "will be removed in v2.8 in favour of using backend-specific "
+        "templates. You switch to using the new behaviour now by adding "
+        "'WAGTAILMENUS_USE_BACKEND_SPECIFIC_TEMPLATES = True' to your project "
+        "settings. View the 2.6 release notes to find out more: "
+        "https://github.com/rkhleics/wagtailmenus/releases/tag/v.2.6.0"
+    )
+    warnings.warn(warning_msg, category=RemovedInWagtailMenus28Warning)
 
 
 # ########################################################
@@ -188,6 +204,12 @@ class Menu(object):
         """
         context_data = self.get_context_data()
         template = self.get_template()
+
+        # TODO: To be removed in v2.8.0
+        if not USE_BACKEND_SPECIFIC_TEMPLATES:
+            context_data['current_template'] = template.name
+            return template.render(Context(context_data))
+
         context_data['current_template'] = template.template.name
         return template.render(context_data)
 
@@ -278,8 +300,10 @@ class Menu(object):
         return self.get_pages_for_display()
 
     def get_page_children_dict(self, page_qs=None):
-        """Returns a dictionary of lists, where the keys are 'path' values for
-        pages, and the value is a list of children pages for that page."""
+        """
+        Returns a dictionary of lists, where the keys are 'path' values for
+        pages, and the value is a list of children pages for that page.
+        """
         children_dict = defaultdict(list)
         for page in page_qs or self.pages_for_display:
             children_dict[page.path[:-page.steplen]].append(page)
@@ -294,15 +318,18 @@ class Menu(object):
         return self.page_children_dict.get(page.path, [])
 
     def page_has_children(self, page):
-        """Return a boolean indicating whether a given page has any relevant
-        child pages."""
+        """
+        Return a boolean indicating whether a given page has any relevant
+        child pages.
+        """
         return page.path in self.page_children_dict
 
     def get_context_data(self, **kwargs):
         """
         Return a dictionary containing all of the values needed to render the
         menu instance to a template, including values that might be used by
-        the 'sub_menu' tag to render any additional levels."""
+        the 'sub_menu' tag to render any additional levels.
+        """
         ctx_vals = self._contextual_vals
         opt_vals = self._option_vals
         try:
@@ -517,18 +544,30 @@ class Menu(object):
         """
         return menu_items
 
+    def get_template_engine(self):
+        if USE_BACKEND_SPECIFIC_TEMPLATES:
+            warning_msg = (
+                "The 'get_template_engine' method is deprecated in favour of "
+                "using Django's generic 'get_template' and 'select_template' "
+                "methods. View the 2.6 release notes for more info: "
+                "https://github.com/rkhleics/wagtailmenus/releases/tag/v.2.6.0"
+            )
+            warnings.warn(warning_msg, category=RemovedInWagtailMenus28Warning)
+        return self._contextual_vals.parent_context.template.engine
+
     def get_template(self):
-        """
-        In Django template backend case, returns the
-        ``django.template.backends.django.Template`` instance.
-        """
-        specified = self._option_vals.template_name
-        if specified:
-            return get_template(specified)
-        if self.template_name:
-            # Developers can set 'template_name' as a class attribute to have
-            # custom menus use specific templates
-            return get_template(self.template_name)
+        template_name = self._option_vals.template_name or self.template_name
+
+        # TODO: To be removed in v2.8.0
+        if not USE_BACKEND_SPECIFIC_TEMPLATES:
+            engine = self.get_template_engine()
+            if template_name:
+                return engine.get_template(template_name)
+            return engine.select_template(self.get_template_names())
+
+        if template_name:
+            return get_template(template_name)
+
         return select_template(self.get_template_names())
 
     def get_template_names(self):
