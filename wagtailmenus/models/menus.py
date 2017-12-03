@@ -49,8 +49,7 @@ OptionVals = namedtuple('OptionVals', (
 ))
 
 # TODO: To be removed in v.2.8.0
-USE_BACKEND_SPECIFIC_TEMPLATES = app_settings.USE_BACKEND_SPECIFIC_TEMPLATES
-if not USE_BACKEND_SPECIFIC_TEMPLATES:
+if not app_settings.USE_BACKEND_SPECIFIC_TEMPLATES:
     warning_msg = (
         "You're currently using wagtailmenus in a mode that uses "
         "django.template.Template instances for rendering. This option "
@@ -206,7 +205,7 @@ class Menu(object):
         template = self.get_template()
 
         # TODO: To be removed in v2.8.0
-        if not USE_BACKEND_SPECIFIC_TEMPLATES:
+        if not app_settings.USE_BACKEND_SPECIFIC_TEMPLATES:
             context_data['current_template'] = template.name
             return template.render(Context(context_data))
 
@@ -545,12 +544,12 @@ class Menu(object):
         return menu_items
 
     def get_template_engine(self):
-        if USE_BACKEND_SPECIFIC_TEMPLATES:
+        if app_settings.USE_BACKEND_SPECIFIC_TEMPLATES:
             warning_msg = (
                 "The 'get_template_engine' method is deprecated in favour of "
                 "using Django's generic 'get_template' and 'select_template' "
-                "methods. View the 2.6 release notes for more info: "
-                "https://github.com/rkhleics/wagtailmenus/releases/tag/v.2.6.0"
+                "methods. See the 2.6 release notes for more info: "
+                "https://github.com/rkhleics/wagtailmenus/releases/tag/v2.6.0"
             )
             warnings.warn(warning_msg, category=RemovedInWagtailMenus28Warning)
         return self._contextual_vals.parent_context.template.engine
@@ -559,7 +558,7 @@ class Menu(object):
         template_name = self._option_vals.template_name or self.template_name
 
         # TODO: To be removed in v2.8.0
-        if not USE_BACKEND_SPECIFIC_TEMPLATES:
+        if not app_settings.USE_BACKEND_SPECIFIC_TEMPLATES:
             engine = self.get_template_engine()
             if template_name:
                 return engine.get_template(template_name)
