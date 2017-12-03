@@ -1,7 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.test import TestCase, override_settings
-
 from wagtail.wagtailcore.models import Site
 from wagtailmenus.errors import SubMenuUsageError
 from wagtailmenus.models import MainMenu, FlatMenu
@@ -1488,3 +1487,8 @@ class TestTemplateTags(TestCase):
         </div>
         """
         self.assertHTMLEqual(section_menu_html, expected_section_menu_html)
+
+
+@override_settings(WAGTAILMENUS_USE_BACKEND_SPECIFIC_TEMPLATES=True)
+class TestRenderingWithBackendSpecificTemplates(TestTemplateTags):
+    pass

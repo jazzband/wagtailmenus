@@ -48,18 +48,21 @@ OptionVals = namedtuple('OptionVals', (
     'handle', 'template_name', 'sub_menu_template_name', 'extra'
 ))
 
+
 # TODO: To be removed in v.2.8.0
+TEMPLATES_WARNING = (
+    "Wagtailmenus currently uses django.template.Template instances for "
+    "rendering by default. This will change in 2.8 in favour of always using "
+    "backend-specific template instances (allowing wagtailmenus to be used "
+    "with template backends other than Django's default). In most cases, this "
+    "change will require no action at all. If you'd like to check, you can "
+    "enable the new behaviour by adding "
+    "'WAGTAILMENUS_USE_BACKEND_SPECIFIC_TEMPLATES = True' to your project's "
+    "settings. See the 2.6 release notes for more info: "
+    "https://github.com/rkhleics/wagtailmenus/releases/tag/v.2.6.0"
+)
 if not app_settings.USE_BACKEND_SPECIFIC_TEMPLATES:
-    warning_msg = (
-        "You're currently using wagtailmenus in a mode that uses "
-        "django.template.Template instances for rendering. This option "
-        "will be removed in v2.8 in favour of using backend-specific "
-        "templates. You switch to using the new behaviour now by adding "
-        "'WAGTAILMENUS_USE_BACKEND_SPECIFIC_TEMPLATES = True' to your project "
-        "settings. View the 2.6 release notes to find out more: "
-        "https://github.com/rkhleics/wagtailmenus/releases/tag/v.2.6.0"
-    )
-    warnings.warn(warning_msg, category=RemovedInWagtailMenus28Warning)
+    warnings.warn(TEMPLATES_WARNING, category=RemovedInWagtailMenus28Warning)
 
 
 # ########################################################
