@@ -7,10 +7,9 @@ from wagtail.wagtailcore.models import Page
 from wagtailmenus import app_settings
 from ..errors import SubMenuUsageError
 from ..models import AbstractLinkPage, MenuItem, SubMenu
-from ..utils.deprecation import (
-    RemovedInWagtailMenus26Warning, RemovedInWagtailMenus27Warning)
+from ..utils.deprecation import RemovedInWagtailMenus27Warning
 from ..utils.misc import validate_supplied_values
-from wagtailmenus.utils.inspection import accepts_kwarg
+
 flat_menus_fbtdsm = app_settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS
 
 register = Library()
@@ -241,32 +240,19 @@ def get_sub_menu_items_for_page(
         if type(page) is Page:
             page = page.specific
 
-        # Create dict of kwargs to send to `modify_submenu_items`
-        method_kwargs = {
-            'menu_items': menu_items,
-            'current_page': current_page,
-            'current_ancestor_ids': ancestor_ids,
-            'current_site': current_site,
-            'allow_repeating_parents': allow_repeating_parents,
-            'apply_active_classes': apply_active_classes,
-            'original_menu_tag': original_menu_tag,
-            'menu_instance': menu_instance,
-            'request': request,
-        }
-        if accepts_kwarg(page.modify_submenu_items, 'use_absolute_page_urls'):
-            method_kwargs['use_absolute_page_urls'] = use_absolute_page_urls
-        else:
-            warning_msg = (
-                "The 'modify_submenu_items' method on '%s' should be "
-                "updated to accept a 'use_absolute_page_urls' keyword "
-                "argument. View the 2.4 release notes for more info: "
-                "https://github.com/rkhleics/wagtailmenus/releases/tag/v.2.4.0"
-                % page.__class__.__name__,
-            )
-            warnings.warn(warning_msg, RemovedInWagtailMenus26Warning)
-
         # Call `modify_submenu_items` using the above kwargs dict
-        menu_items = page.modify_submenu_items(**method_kwargs)
+        menu_items = page.modify_submenu_items(
+            menu_items=menu_items,
+            current_page=current_page,
+            current_ancestor_ids=ancestor_ids,
+            current_site=current_site,
+            allow_repeating_parents=allow_repeating_parents,
+            apply_active_classes=apply_active_classes,
+            original_menu_tag=original_menu_tag,
+            menu_instance=menu_instance,
+            use_absolute_page_urls=use_absolute_page_urls,
+            request=request,
+        )
 
     return page, menu_items
 

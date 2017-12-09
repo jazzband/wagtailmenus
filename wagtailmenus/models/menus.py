@@ -24,9 +24,7 @@ from ..panels import (
     main_menu_content_panels, flat_menu_content_panels, menu_settings_panels,
     main_menu_panels, flat_menu_panels)
 from ..utils.deprecation import (
-    RemovedInWagtailMenus26Warning, RemovedInWagtailMenus27Warning,
-    RemovedInWagtailMenus28Warning)
-from ..utils.inspection import accepts_kwarg
+    RemovedInWagtailMenus27Warning, RemovedInWagtailMenus28Warning)
 from ..utils.misc import get_site_from_request
 from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
@@ -685,19 +683,6 @@ class MenuFromPage(Menu):
             'apply_active_classes': opt_vals.apply_active_classes,
             'use_absolute_page_urls': opt_vals.use_absolute_page_urls,
         }
-        # Backwards compatibility for 'modify_submenu_items' methods that
-        # don't accept a 'use_absolute_page_urls' kwarg
-        if not accepts_kwarg(modifier_method, 'use_absolute_page_urls'):
-            kwargs.pop('use_absolute_page_urls')
-            warning_msg = (
-                "The 'modify_submenu_items' method on '%s' should be "
-                "updated to accept a 'use_absolute_page_urls' keyword "
-                "argument. View the 2.4 release notes for more info: "
-                "https://github.com/rkhleics/wagtailmenus/releases/tag/v.2.4.0"
-                % parent_page.__class__.__name__,
-            )
-            warnings.warn(warning_msg, category=RemovedInWagtailMenus26Warning)
-
         if isinstance(menu_items, GeneratorType):
             # 'modify_submenu_items' methods expect 'menu_items' to be a list
             menu_items = list(menu_items)
