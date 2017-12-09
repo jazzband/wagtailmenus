@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-import warnings
-
 from bs4 import BeautifulSoup
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ImproperlyConfigured
@@ -15,7 +13,6 @@ from wagtailmenus.tests.models import (
     MainMenuCustomMenuItem, FlatMenuCustomMenuItem, NoAbsoluteUrlsPage,
     CustomMainMenu, CustomMainMenuItem, CustomFlatMenu, CustomFlatMenuItem
 )
-from wagtailmenus.utils.deprecation import RemovedInWagtailMenus26Warning
 
 
 @override_settings(
@@ -500,19 +497,3 @@ class TestNoAbsoluteUrlsPage(TestCase):
             title='Compatibility Test Page',
         )
         self.site.root_page.add_child(instance=self.no_absolute_urls_page)
-
-    def test_raises_deprecation_warning(self):
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter('always', RemovedInWagtailMenus26Warning)
-            self.client.get(self.no_absolute_urls_page.relative_url(self.site))
-            self.assertNotEqual(len(w), 0)
-            warning_messages = set(str(warning.message) for warning in w)
-            # Make sure our expected warning was logged
-            self.assertTrue(
-                any(
-                    "'modify_submenu_items' method on 'NoAbsoluteUrlsPage' "
-                    "should be updated to accept a 'use_absolute_page_urls' "
-                    "keyword" in msg
-                    for msg in warning_messages
-                )
-            )
