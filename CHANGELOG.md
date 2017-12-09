@@ -1,8 +1,14 @@
 Changelog
 =========
 
-2.X.X (XX.XX.XXXX) IN DEVELOPMENT
+2.6.0 (XX.XX.XXXX) IN DEVELOPMENT
 --------------------------------- 
+
+* Improve compatibility with alternative template backends such as `jinja2`.
+  Implementation by @hongquan.
+* Added compatibility with `wagtail-condensedinlinepanel`.
+* Updated the menu CMS editing UI to split rendering setting field out into 
+  their own tab.
 
 
 2.5.1 (27.10.2017)
