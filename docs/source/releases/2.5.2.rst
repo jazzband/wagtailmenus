@@ -1,0 +1,5 @@
+================================
+Wagtailmenus 2.5.2 release notes
+================================
+
+There are no changes in this release
