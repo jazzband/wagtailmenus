@@ -9,6 +9,7 @@ Changelog
 * Added compatibility with `wagtail-condensedinlinepanel`.
 * Updated the menu CMS editing UI to split rendering setting field out into 
   their own tab.
+* Updated tests to test compatibility with Wagtail 1.13.
 
 
 2.5.1 (27.10.2017)

@@ -95,13 +95,11 @@ You should import ``MainMenuItemsInlinePanel`` and ``FlatMenuItemsInlinePanel`` 
 Minor changes & bug fixes 
 =========================
 
-
-N/A
+- Updated tests to test compatibility with Wagtail 1.13.
 
 
 Deprecations
 ============
-
 
 ``Menu.get_template_engine()``
 ------------------------------

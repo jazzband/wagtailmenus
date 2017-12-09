@@ -24,6 +24,8 @@ matrix:
   - env: TOXENV=py36-dj111-wt111
     python: 3.6 
   - env: TOXENV=py36-dj111-wt112
+    python: 3.6
+  - env: TOXENV=py36-dj111-wt113
     python: 3.6 
 
 install:
