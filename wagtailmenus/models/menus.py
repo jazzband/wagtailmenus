@@ -53,13 +53,11 @@ OptionVals = namedtuple('OptionVals', (
 TEMPLATES_WARNING = (
     "Wagtailmenus currently uses django.template.Template instances for "
     "rendering by default. This will change in 2.8 in favour of always using "
-    "backend-specific template instances (allowing wagtailmenus to be used "
-    "with template backends other than Django's default). In most cases, this "
-    "change will require no action at all. If you'd like to check, you can "
-    "enable the new behaviour by adding "
-    "'WAGTAILMENUS_USE_BACKEND_SPECIFIC_TEMPLATES = True' to your project's "
-    "settings. See the 2.6 release notes for more info: "
-    "https://github.com/rkhleics/wagtailmenus/releases/tag/v.2.6.0"
+    "backend-specific template instances. You can use thie new behaviour "
+    "right now by adding 'WAGTAILMENUS_USE_BACKEND_SPECIFIC_TEMPLATES = True' "
+    "to your project's settings (which will also silence this warning). See "
+    "the 2.6 release notes for more info: "
+    "http://wagtailmenus.readthedocs.io/en/stable/releases/2.6.0.html"
 )
 if not app_settings.USE_BACKEND_SPECIFIC_TEMPLATES:
     warnings.warn(TEMPLATES_WARNING, category=RemovedInWagtailMenus28Warning)
@@ -547,14 +545,13 @@ class Menu(object):
         return menu_items
 
     def get_template_engine(self):
-        if app_settings.USE_BACKEND_SPECIFIC_TEMPLATES:
-            warning_msg = (
-                "The 'get_template_engine' method is deprecated in favour of "
-                "using Django's generic 'get_template' and 'select_template' "
-                "methods. See the 2.6 release notes for more info: "
-                "https://github.com/rkhleics/wagtailmenus/releases/tag/v2.6.0"
-            )
-            warnings.warn(warning_msg, category=RemovedInWagtailMenus28Warning)
+        warning_msg = (
+            "The get_template_engine() method is deprecated in favour of "
+            "using Django's generic 'get_template' and 'select_template' "
+            "methods. See the 2.6 release notes for more info: "
+            "http://wagtailmenus.readthedocs.io/en/stable/releases/2.6.0.html"
+        )
+        warnings.warn(warning_msg, category=RemovedInWagtailMenus28Warning)
         return self._contextual_vals.parent_context.template.engine
 
     def get_template(self):
