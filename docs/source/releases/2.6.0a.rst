@@ -15,6 +15,10 @@ Wagtailmenus 2.6.0a release notes
 
     Wagtailmenus 2.6 will be the last LTS release to support Python 2.
 
+.. NOTE ::
+
+    Wagtailmenus 2.6 will be the last LTS release to support Wagtail versions 1.5 to 1.9.
+
 
 What's new?
 ===========
