@@ -7,6 +7,19 @@ Wagtailmenus 2.6.0a release notes
     :depth: 1
 
 
+.. NOTE ::
+    
+    Wagtailmenus 2.6 is designated a Long Term Support (LTS) release. Long Term Support releases will continue to receive maintenance updates as necessary to address security and data-loss related issues, up until the next LTS release (for at least 8 months). 
+
+.. NOTE ::
+
+    Wagtailmenus 2.6 will be the last LTS release to support Python 2.
+
+.. NOTE ::
+
+    Wagtailmenus 2.6 will be the last LTS release to support Wagtail versions 1.5 to 1.9.
+
+
 What's new?
 ===========
 
