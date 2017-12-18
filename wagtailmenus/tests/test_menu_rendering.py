@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 from django.test import TestCase, override_settings
 from wagtail.wagtailcore.models import Site
 from wagtailmenus.errors import SubMenuUsageError

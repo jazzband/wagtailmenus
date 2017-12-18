@@ -1,12 +1,10 @@
-from __future__ import absolute_import, unicode_literals
-
 from django.utils.functional import cached_property
 from django.template.loader import get_template, select_template
 
 from .. import app_settings
 
 
-class DefinesSubMenuTemplatesMixin(object):
+class DefinesSubMenuTemplatesMixin:
     sub_menu_template_name = None  # set to use a specific default template
 
     def get_sub_menu_template(self):
@@ -66,5 +64,4 @@ class DefinesSubMenuTemplatesMixin(object):
             else:
                 data['sub_menu_template'] = t.template.name
         data.update(kwargs)
-        return super(DefinesSubMenuTemplatesMixin, self).get_context_data(
-            **data)
+        return super().get_context_data(**data)

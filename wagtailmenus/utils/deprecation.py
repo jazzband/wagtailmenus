@@ -1,6 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
-
 class RemovedInWagtailMenus27Warning(DeprecationWarning):
     pass
 

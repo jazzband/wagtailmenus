@@ -1,8 +1,5 @@
-from __future__ import absolute_import, unicode_literals
-
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from modelcluster.fields import ParentalKey
@@ -18,7 +15,7 @@ from ..managers import MenuItemManager
 # Base classes
 #########################################################
 
-class MenuItem(object):
+class MenuItem:
     """A base class that all other 'menu item' classes should inherit from."""
     allow_subnav = False
 
@@ -27,7 +24,6 @@ class MenuItem(object):
 # Abstract models
 #########################################################
 
-@python_2_unicode_compatible
 class AbstractMenuItem(models.Model, MenuItem):
     """A model class that defines a base set of fields and methods for all
     'menu item' models."""
@@ -125,7 +121,7 @@ class AbstractMenuItem(models.Model, MenuItem):
         if self.link_url and not self.link_text:
             msg = _("This field is required when linking to a custom URL")
             raise ValidationError({'link_text': msg})
-        super(AbstractMenuItem, self).clean(*args, **kwargs)
+        super().clean(*args, **kwargs)
 
     def __str__(self):
         return self.menu_text

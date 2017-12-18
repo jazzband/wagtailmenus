@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 import warnings
 from collections import defaultdict, namedtuple
 from types import GeneratorType
@@ -9,7 +7,6 @@ from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.template import Context
 from django.template.loader import get_template, select_template
 from django.utils import six
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import cached_property, lazy
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
@@ -65,7 +62,7 @@ if not app_settings.USE_BACKEND_SPECIFIC_TEMPLATES:
 # Base classes
 # ########################################################
 
-class Menu(object):
+class Menu:
     """The base class that which all other menu classes should inherit from"""
     request = None
     menu_short_name = ''  # used by 'get_template_names()'
@@ -645,7 +642,7 @@ class MenuFromPage(Menu):
             # If there's only a single level of pages to display, skip the
             # dict creation / lookup and just return the QuerySet result
             return self.pages_for_display
-        return super(MenuFromPage, self).get_children_for_page(page)
+        return super().get_children_for_page(page)
 
     def get_raw_menu_items(self):
         parent_page = self.parent_page_for_menu_items
@@ -691,7 +688,7 @@ class MenuFromPage(Menu):
     def get_common_hook_kwargs(self, **kwargs):
         hook_kwargs = {'parent_page': self.parent_page_for_menu_items}
         hook_kwargs.update(kwargs)
-        return super(MenuFromPage, self).get_common_hook_kwargs(**hook_kwargs)
+        return super().get_common_hook_kwargs(**hook_kwargs)
 
 
 class MenuFromRootPage(MenuFromPage):
@@ -706,7 +703,7 @@ class MenuFromRootPage(MenuFromPage):
         self.root_page = root_page
         self.max_levels = max_levels
         self.use_specific = use_specific
-        super(MenuFromRootPage, self).__init__()
+        super().__init__()
 
     def get_parent_page_for_menu_items(self):
         return self.root_page
@@ -735,11 +732,10 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         self.root_page = root_page
         self.max_levels = max_levels
         self.use_specific = use_specific
-        super(SectionMenu, self).__init__()
+        super().__init__()
 
     def prepare_to_render(self, request, contextual_vals, option_vals):
-        super(SectionMenu, self).prepare_to_render(
-            request, contextual_vals, option_vals)
+        super().prepare_to_render(request, contextual_vals, option_vals)
 
         # Replace self.root_page with it's 'specific' equivalent if it looks
         # like it'll help with modifying menu items or aid consistency
@@ -762,7 +758,7 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
 
         # We use a different pattern for overriding 'get_context_data' here,
         # because we need access to data['menu_items'] below
-        data = super(SectionMenu, self).get_context_data()
+        data = super().get_context_data()
         data['show_section_root'] = opt_vals.extra['show_section_root']
 
         if 'section_root' not in kwargs:
@@ -848,7 +844,7 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         self.parent_page = parent_page or root_page
         self.max_levels = max_levels
         self.use_specific = use_specific
-        super(ChildrenMenu, self).__init__()
+        super().__init__()
 
     @property
     def root_page(self):
@@ -874,7 +870,7 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     def get_context_data(self, **kwargs):
         data = {'parent_page': self.parent_page}
         data.update(kwargs)
-        return super(ChildrenMenu, self).get_context_data(**data)
+        return super().get_context_data(**data)
 
 
 class SubMenu(MenuFromPage):
@@ -909,13 +905,13 @@ class SubMenu(MenuFromPage):
 
     def get_template(self):
         if self._option_vals.template_name or self.template_name:
-            return super(SubMenu, self).get_template()
+            return super().get_template()
         return self.original_menu.sub_menu_template
 
     def get_context_data(self, **kwargs):
         data = {'parent_page': self.parent_page}
         data.update(kwargs)
-        return super(SubMenu, self).get_context_data(**data)
+        return super().get_context_data(**data)
 
 
 class MenuWithMenuItems(ClusterableModel, Menu):
@@ -1031,8 +1027,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
             self.set_max_levels(option_vals.max_levels)
         if option_vals.use_specific is not None:
             self.set_use_specific(option_vals.use_specific)
-        super(MenuWithMenuItems, self).prepare_to_render(
-            request, contextual_vals, option_vals)
+        super().prepare_to_render(request, contextual_vals, option_vals)
 
     def get_raw_menu_items(self):
         return self.top_level_items
@@ -1043,7 +1038,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
             'use_specific': self.use_specific,
         }
         data.update(kwargs)
-        return super(MenuWithMenuItems, self).get_context_data(**data)
+        return super().get_context_data(**data)
 
     settings_panels = menu_settings_panels
 
@@ -1052,7 +1047,6 @@ class MenuWithMenuItems(ClusterableModel, Menu):
 # Abstract models
 # ########################################################
 
-@python_2_unicode_compatible
 class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_short_name = 'main'  # used to find templates
     menu_instance_context_name = 'main_menu'
@@ -1134,7 +1128,6 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
             )
 
 
-@python_2_unicode_compatible
 class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_short_name = 'flat'  # used to find templates
     menu_instance_context_name = 'flat_menu'
@@ -1245,7 +1238,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
                 'site': [msg],
                 'handle': [msg],
             })
-        super(AbstractFlatMenu, self).clean(*args, **kwargs)
+        super().clean(*args, **kwargs)
 
     def get_menu_items_manager(self):
         try:
@@ -1274,7 +1267,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
             'matched_menu': self,
         }
         data.update(kwargs)
-        return super(AbstractFlatMenu, self).get_context_data(**data)
+        return super().get_context_data(**data)
 
     def get_template_names(self):
         """Returns a list of template names to search for when rendering a

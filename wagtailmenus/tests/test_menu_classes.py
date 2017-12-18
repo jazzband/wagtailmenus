@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 import warnings
 
 from django.test import TestCase

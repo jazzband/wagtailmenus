@@ -45,7 +45,7 @@ class MultilingualMenuPage(MenuPage):
         current_site, allow_repeating_parents, apply_active_classes,
         original_menu_tag, menu_instance, request, use_absolute_page_urls
     ):
-        return super(MultilingualMenuPage, self).modify_submenu_items(
+        return super().modify_submenu_items(
             menu_items, current_page, current_ancestor_ids,
             current_site, allow_repeating_parents, apply_active_classes,
             original_menu_tag, menu_instance, request, use_absolute_page_urls)
@@ -54,7 +54,7 @@ class MultilingualMenuPage(MenuPage):
         self, current_page, allow_repeating_parents, original_menu_tag,
         menu_instance, request
     ):
-        return super(MultilingualMenuPage, self).has_submenu_items(
+        return super().has_submenu_items(
             current_page, allow_repeating_parents, original_menu_tag,
             menu_instance, request)
 
@@ -62,7 +62,7 @@ class MultilingualMenuPage(MenuPage):
         self, current_page, current_site, apply_active_classes,
         original_menu_tag, request, use_absolute_page_urls
     ):
-        item = super(MultilingualMenuPage, self).get_repeated_menu_item(
+        item = super().get_repeated_menu_item(
             current_page, current_site, apply_active_classes,
             original_menu_tag, request, use_absolute_page_urls)
         item.text = self.translated_repeated_item_text or self.translated_title
@@ -113,7 +113,7 @@ class ContactPage(MenuPage):
         current_site, allow_repeating_parents, apply_active_classes,
         original_menu_tag, menu_instance=None, request=None, use_absolute_page_urls=False
     ):
-        menu_items = super(ContactPage, self).modify_submenu_items(
+        menu_items = super().modify_submenu_items(
             menu_items, current_page, current_ancestor_ids,
             current_site, allow_repeating_parents, apply_active_classes,
             original_menu_tag, menu_instance, use_absolute_page_urls=use_absolute_page_urls)
@@ -154,7 +154,7 @@ class ContactPage(MenuPage):
         """
         if original_menu_tag == 'main_menu':
             return True
-        return super(ContactPage, self).has_submenu_items(
+        return super().has_submenu_items(
             current_page, allow_repeating_parents, original_menu_tag,
             menu_instance, request)
 
@@ -172,7 +172,7 @@ class NoAbsoluteUrlsPage(MenuPage):
         current_site, allow_repeating_parents, apply_active_classes,
         original_menu_tag, menu_instance=None, request=None
     ):
-        return super(NoAbsoluteUrlsPage, self).modify_submenu_items(
+        return super().modify_submenu_items(
             menu_items, current_page, current_ancestor_ids,
             current_site, allow_repeating_parents, apply_active_classes,
             original_menu_tag, menu_instance, request)
@@ -181,7 +181,7 @@ class NoAbsoluteUrlsPage(MenuPage):
         self, current_page, current_site, apply_active_classes,
         original_menu_tag, request
     ):
-        return super(NoAbsoluteUrlsPage, self).get_repeated_menu_item(
+        return super().get_repeated_menu_item(
             current_page, current_site, apply_active_classes,
             original_menu_tag, request
         )
