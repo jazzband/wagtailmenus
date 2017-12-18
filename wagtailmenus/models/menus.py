@@ -51,7 +51,7 @@ OptionVals = namedtuple('OptionVals', (
 TEMPLATES_WARNING = (
     "Wagtailmenus currently uses django.template.Template instances for "
     "rendering by default. This will change in 2.8 in favour of always using "
-    "backend-specific template instances. You can use thie new behaviour "
+    "backend-specific template instances. You can use this new behaviour "
     "right now by adding 'WAGTAILMENUS_USE_BACKEND_SPECIFIC_TEMPLATES = True' "
     "to your project's settings (which will also silence this warning). See "
     "the 2.6 release notes for more info: "
