@@ -21,7 +21,7 @@ testing_extras = [
 ]
 
 documentation_extras = [
-    'pyenchant==1.6.6',
+    'pyenchant>=2.0',
     'sphinxcontrib-spelling>=2.3.0',
     'Sphinx>=1.3.1',
     'sphinx-autobuild>=0.5.2',

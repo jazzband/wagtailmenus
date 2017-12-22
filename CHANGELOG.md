@@ -1,8 +1,12 @@
 Changelog
 =========
 
-2.6.0 (XX.XX.XXXX) IN DEVELOPMENT
+2.X.X (XX.XX.XXXX) IN DEVELOPMENT
 --------------------------------- 
+
+
+2.6.0 (22.12.2017)
+------------------ 
 
 * Improve compatibility with alternative template backends such as `jinja2`.
   Implementation by @hongquan.
