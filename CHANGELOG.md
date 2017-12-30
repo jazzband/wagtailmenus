@@ -1,8 +1,10 @@
 Changelog
 =========
 
-2.X.X (XX.XX.XXXX) IN DEVELOPMENT
---------------------------------- 
+2.7.0a (XX.XX.XXXX) IN DEVELOPMENT
+----------------------------------
+
+TBA
 
 
 2.6.0 (22.12.2017)
