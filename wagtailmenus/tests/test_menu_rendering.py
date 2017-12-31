@@ -81,26 +81,6 @@ class TestTemplateTags(TestCase):
         response = self.client.get('/about-us/')
         self.assertEqual(response.status_code, 200)
 
-    @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True,)
-    def test_custom_menu_tag_raises_submenuusageerror(self):
-        """
-        The template for the following urls uses a custom template tag
-        fashioned after the v2.4 'children_menu' tag but uses a custom menu
-        class, based on the now deprecated MenuFromRootPage.
-
-        The `WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS` setting is also
-        applied to increase coverage in utils.misc.template.
-        """
-
-        # As long as max_levels is one, this should work fine
-        response = self.client.get('/custom-menu-tag-fine/')
-        self.assertEqual(response.status_code, 200)
-
-        # When max_levels is more than one, the {% sub_menu %} tag should
-        # raise an error
-        with self.assertRaises(SubMenuUsageError):
-            self.client.get('/custom-menu-tag-broken/')
-
     def test_meet_the_team(self):
         """
         Test that 'Meet the team' page (based on `Page`), and within a

@@ -3,7 +3,7 @@ from modelcluster.fields import ParentalKey
 from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, MultiFieldPanel, PageChooserPanel)
 from wagtailmenus.models import (
-    MenuFromRootPage, SectionMenu, ChildrenMenu, AbstractMainMenu,
+    SectionMenu, ChildrenMenu, AbstractMainMenu,
     AbstractMainMenuItem, AbstractFlatMenu, AbstractFlatMenuItem)
 
 from .utils import TranslatedField
@@ -15,10 +15,6 @@ class CustomChildrenMenu(ChildrenMenu):
 
 class CustomSectionMenu(SectionMenu):
     sub_menu_template_name = "menus/custom-overrides/section-sub.html"
-
-
-class OldStyleChildrenMenu(MenuFromRootPage):
-    pass
 
 
 class MultilingualMenuItem(models.Model):

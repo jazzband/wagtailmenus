@@ -1,14 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 
-import warnings
-
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
 from wagtail.wagtailcore.models import Page
 from wagtailmenus.models import (
     ChildrenMenu, MainMenu, MainMenuItem, FlatMenu, FlatMenuItem)
-from wagtailmenus.utils.deprecation import RemovedInWagtailMenus27Warning
 
 
 class TestMenuClasses(TestCase):
@@ -198,10 +195,6 @@ class TestChildrenMenu(TestCase):
     def test_init_required_vals(self):
         page = Page.objects.get(url_path='/home/about-us/')
 
-        msg_extract = "'parent_page' must be provided when creating"
-        with self.assertRaisesRegexp(TypeError, msg_extract):
-            ChildrenMenu(max_levels=1, use_specific=1)
-
         msg_extract = "'max_levels' must be provided when creating"
         with self.assertRaisesRegexp(TypeError, msg_extract):
             ChildrenMenu(page, use_specific=1)
@@ -209,45 +202,3 @@ class TestChildrenMenu(TestCase):
         msg_extract = "'use_specific' must be provided when creating"
         with self.assertRaisesRegexp(TypeError, msg_extract):
             ChildrenMenu(page, max_levels=1)
-
-    def test_init_with_root_page(self):
-        page = Page.objects.get(url_path='/home/about-us/')
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter('always', RemovedInWagtailMenus27Warning)
-            menu = ChildrenMenu(root_page=page, max_levels=1, use_specific=1)
-            self.assertEqual(menu.parent_page, page)
-            warning_messages = set(str(warning.message) for warning in w)
-            self.assertTrue(
-                "The 'root_page' argument is deprecated for ChildrenMenu's "
-                "__init__() method. Please use 'parent_page' instead"
-                in warning_messages
-            )
-
-    def test_root_page_get(self):
-        page = Page.objects.get(url_path='/home/about-us/')
-        children_menu = ChildrenMenu(page, 1, 1)
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter('always', RemovedInWagtailMenus27Warning)
-            root_page = children_menu.root_page
-            self.assertEqual(root_page, page)
-            warning_messages = set(str(warning.message) for warning in w)
-            self.assertTrue(
-                "The 'root_page' attribute is deprecated for ChildrenMenu. "
-                "Please use the 'parent_page' attribute instead"
-                in warning_messages
-            )
-
-    def test_root_page_set(self):
-        page = Page.objects.get(url_path='/home/about-us/')
-        another_page = Page.objects.get(url_path='/home/superheroes/')
-        children_menu = ChildrenMenu(page, 1, 1)
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter('always', RemovedInWagtailMenus27Warning)
-            children_menu.root_page = another_page
-            self.assertEqual(children_menu.parent_page, another_page)
-            warning_messages = set(str(warning.message) for warning in w)
-            self.assertTrue(
-                "The 'root_page' attribute is deprecated for ChildrenMenu. "
-                "Please use the 'parent_page' attribute instead"
-                in warning_messages
-            )
