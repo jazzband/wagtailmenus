@@ -60,6 +60,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     ],
+    python_requires='>=3.4,<3.8',
     install_requires=[
         "wagtail>=1.10",
     ],
