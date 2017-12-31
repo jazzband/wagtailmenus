@@ -1468,6 +1468,14 @@ class TestTemplateTags(TestCase):
         """
         self.assertHTMLEqual(section_menu_html, expected_section_menu_html)
 
+    def test_sub_menu_tag_usage_in_non_menu_template_raises_submenuusageerror(self):
+        """
+        The 'sub_menu' tag should raise an error if used directly (not from
+        within another menu template)
+        """
+        with self.assertRaises(SubMenuUsageError):
+            self.client.get('/sub_menu-tag-used-directly/')
+
 
 @override_settings(WAGTAILMENUS_USE_BACKEND_SPECIFIC_TEMPLATES=True)
 class TestRenderingWithBackendSpecificTemplates(TestTemplateTags):
