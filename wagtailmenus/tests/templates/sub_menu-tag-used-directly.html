@@ -1,0 +1,5 @@
+{% load menu_tags %}
+
+The following will raise a 'SubMenuUsageError' because the sub_menu tag should only be used in menu templates, not directly.
+
+{% sub_menu request.site.root_page max_levels=2 %}

@@ -23,8 +23,7 @@ from ..forms import FlatMenuAdminForm
 from ..panels import (
     main_menu_content_panels, flat_menu_content_panels, menu_settings_panels,
     main_menu_panels, flat_menu_panels)
-from ..utils.deprecation import (
-    RemovedInWagtailMenus27Warning, RemovedInWagtailMenus28Warning)
+from ..utils.deprecation import RemovedInWagtailMenus28Warning
 from ..utils.misc import get_site_from_request
 from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
@@ -694,24 +693,6 @@ class MenuFromPage(Menu):
         return super(MenuFromPage, self).get_common_hook_kwargs(**hook_kwargs)
 
 
-class MenuFromRootPage(MenuFromPage):
-    root_page = None
-
-    def __init__(self, root_page, max_levels, use_specific):
-        warnings.warn(
-            "The MenuFromRootPage class has been deprecated in favour of "
-            "using MenuFromPage",
-            category=RemovedInWagtailMenus27Warning
-        )
-        self.root_page = root_page
-        self.max_levels = max_levels
-        self.use_specific = use_specific
-        super(MenuFromRootPage, self).__init__()
-
-    def get_parent_page_for_menu_items(self):
-        return self.root_page
-
-
 class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     menu_short_name = 'section'  # used to find templates
     menu_instance_context_name = 'section_menu'
@@ -825,18 +806,7 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     def get_least_specific_template_name(cls):
         return app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE
 
-    def __init__(self, parent_page=None, max_levels=None, use_specific=None,
-                 root_page=None):
-        if root_page:
-            warnings.warn(
-                "The 'root_page' argument is deprecated for ChildrenMenu's "
-                "__init__() method. Please use 'parent_page' instead",
-                category=RemovedInWagtailMenus27Warning
-            )
-        if parent_page is None and root_page is None:
-            raise TypeError(
-                "'parent_page' must be provided when creating an instance of "
-                "ChildrenMenu, and must not be None")
+    def __init__(self, parent_page, max_levels=None, use_specific=None):
         if max_levels is None:
             raise TypeError(
                 "'max_levels' must be provided when creating a ChildrenMenu "
@@ -845,28 +815,10 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
             raise TypeError(
                 "'use_specific' must be provided when creating a ChildrenMenu "
                 "instance, and must not be None")
-        self.parent_page = parent_page or root_page
+        self.parent_page = parent_page
         self.max_levels = max_levels
         self.use_specific = use_specific
         super(ChildrenMenu, self).__init__()
-
-    @property
-    def root_page(self):
-        warnings.warn(
-            "The 'root_page' attribute is deprecated for ChildrenMenu. "
-            "Please use the 'parent_page' attribute instead",
-            category=RemovedInWagtailMenus27Warning
-        )
-        return self.parent_page
-
-    @root_page.setter
-    def root_page(self, value):
-        warnings.warn(
-            "The 'root_page' attribute is deprecated for ChildrenMenu. "
-            "Please use the 'parent_page' attribute instead",
-            category=RemovedInWagtailMenus27Warning
-        )
-        self.parent_page = value
 
     def get_parent_page_for_menu_items(self):
         return self.parent_page
