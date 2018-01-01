@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 from django.test import TestCase
 from django.core.management import call_command
 from wagtail.wagtailcore.models import Site
@@ -11,7 +9,7 @@ class TestAutoPopulateMainMenus(TestCase):
     fixtures = ['test.json']
 
     def setUp(self):
-        super(TestAutoPopulateMainMenus, self).setUp()
+        super().setUp()
         # Delete any existing main menus and their items
         self.model = app_settings.MAIN_MENU_MODEL_CLASS
         self.model.objects.all().delete()

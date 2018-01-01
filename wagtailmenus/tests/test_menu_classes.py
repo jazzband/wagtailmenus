@@ -196,9 +196,9 @@ class TestChildrenMenu(TestCase):
         page = Page.objects.get(url_path='/home/about-us/')
 
         msg_extract = "'max_levels' must be provided when creating"
-        with self.assertRaisesRegexp(TypeError, msg_extract):
+        with self.assertRaisesRegex(TypeError, msg_extract):
             ChildrenMenu(page, use_specific=1)
 
         msg_extract = "'use_specific' must be provided when creating"
-        with self.assertRaisesRegexp(TypeError, msg_extract):
+        with self.assertRaisesRegex(TypeError, msg_extract):
             ChildrenMenu(page, max_levels=1)
