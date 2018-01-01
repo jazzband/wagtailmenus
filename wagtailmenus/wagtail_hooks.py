@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.conf.urls import url
 from django.contrib.admin.utils import quote
 from django.utils.safestring import mark_safe
@@ -58,7 +56,7 @@ class FlatMenuButtonHelper(ButtonHelper):
         ph = self.permission_helper
         usr = self.request.user
         pk = quote(getattr(obj, self.opts.pk.attname))
-        btns = super(FlatMenuButtonHelper, self).get_buttons_for_obj(
+        btns = super().get_buttons_for_obj(
             obj, exclude, classnames_add, classnames_exclude)
         if('copy' not in exclude and ph.user_can_create(usr)):
             btns.append(
@@ -87,7 +85,7 @@ class FlatMenuAdmin(ModelAdmin):
         return FlatMenuCopyView.as_view(**kwargs)(request)
 
     def get_admin_urls_for_registration(self):
-        urls = super(FlatMenuAdmin, self).get_admin_urls_for_registration()
+        urls = super().get_admin_urls_for_registration()
         urls += (
             url(self.url_helper.get_action_url_pattern('copy'),
                 self.copy_view,

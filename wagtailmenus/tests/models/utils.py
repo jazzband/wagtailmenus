@@ -1,7 +1,7 @@
 from django.utils import translation
 
 
-class TranslatedField(object):
+class TranslatedField:
     def __init__(self, en_field, de_field, fr_field):
         self.en_field = en_field
         self.de_field = de_field

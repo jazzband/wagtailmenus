@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 from copy import copy
 
 from django import forms
@@ -29,7 +27,7 @@ class SiteSwitchForm(forms.Form):
 
     def __init__(self, current_site, url_helper, **kwargs):
         initial = {'site': url_helper.get_action_url('edit', current_site.pk)}
-        super(SiteSwitchForm, self).__init__(initial=initial, **kwargs)
+        super().__init__(initial=initial, **kwargs)
         sites = []
         for site in Site.objects.all():
             sites.append((url_helper.get_action_url('edit', site.pk), site))
@@ -44,7 +42,7 @@ class MainMenuIndexView(WMABaseView):
             self.model_admin.url_helper.get_action_url('edit', site.pk))
 
 
-class MenuTabbedInterfaceMixin(object):
+class MenuTabbedInterfaceMixin:
 
     def get_edit_handler_class(self):
         from .models import AbstractMainMenu, AbstractFlatMenu
@@ -73,7 +71,7 @@ class MainMenuEditView(MenuTabbedInterfaceMixin, ModelFormView):
     instance = None
 
     def __init__(self, model_admin, instance_pk):
-        super(MainMenuEditView, self).__init__(model_admin)
+        super().__init__(model_admin)
         self.instance_pk = unquote(instance_pk)
         self.pk_safe = quote(self.instance_pk)
         self.site = get_object_or_404(Site, id=self.instance_pk)
@@ -82,7 +80,7 @@ class MainMenuEditView(MenuTabbedInterfaceMixin, ModelFormView):
 
     @property
     def media(self):
-        media = super(MainMenuEditView, self).media
+        media = super().media
         if self.site_switcher:
             media += self.site_switcher.media
         return media
@@ -111,10 +109,10 @@ class MainMenuEditView(MenuTabbedInterfaceMixin, ModelFormView):
             if site_from_get and site_from_get != self.instance_pk:
                 return redirect(
                     url_helper.get_action_url('edit', site_from_get))
-        return super(MainMenuEditView, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super(MainMenuEditView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context.update({
             'site': self.site,
             'site_switcher': self.site_switcher,
@@ -157,7 +155,7 @@ class FlatMenuCopyView(FlatMenuEditView):
         return self.permission_helper.user_can_create(user)
 
     def get_form_kwargs(self):
-        kwargs = super(FlatMenuCopyView, self).get_form_kwargs()
+        kwargs = super().get_form_kwargs()
         """
         When the form is posted, don't pass an instance to the form. It should
         create a new one out of the posted data. We also need to nullify any

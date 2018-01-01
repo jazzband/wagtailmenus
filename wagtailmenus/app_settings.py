@@ -1,7 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 
 
-class AppSettings(object):
+class AppSettings:
     """Props to django-allauth for the inspiration"""
 
     USE_SPECIFIC_OFF = 0
