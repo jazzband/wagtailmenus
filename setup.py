@@ -18,7 +18,6 @@ testing_extras = [
     'beautifulsoup4>=4.4.1,<4.5.02',
     'coverage>=3.7.0',
     'wagtail-condensedinlinepanel==0.3',
-    'djangorestframework==3.7.3',
 ]
 
 documentation_extras = [
