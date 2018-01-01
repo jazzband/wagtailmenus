@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from wagtailmenus.utils.version import get_version, get_stable_branch_name
 
 # major.minor.patch.release.number

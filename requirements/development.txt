@@ -1,5 +1,6 @@
-wagtail>=1.11,<1.12
-beautifulsoup4>=4.4.1,<4.5.0
+wagtail>=1.13,<2.0
+html5lib>=1.0,<1.1
+beautifulsoup4>=4.6,<4.7
 django-debug-toolbar
 django-extensions
 ipdb

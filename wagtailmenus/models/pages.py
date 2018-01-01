@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 from copy import copy
 
 from django.core.exceptions import ValidationError
@@ -183,7 +181,7 @@ class AbstractLinkPage(Page):
     def __init__(self, *args, **kwargs):
         # Set `show_in_menus` to True by default, but leave as False if
         # it has been set
-        super(AbstractLinkPage, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if not self.pk:
             self.show_in_menus = True
 
@@ -209,7 +207,7 @@ class AbstractLinkPage(Page):
         if self.link_url and self.link_page:
             msg = _("Linking to both a page and custom URL is not permitted")
             raise ValidationError({'link_url': msg, 'link_page': msg})
-        super(AbstractLinkPage, self).clean(*args, **kwargs)
+        super().clean(*args, **kwargs)
 
     def link_page_is_suitable_for_display(
         self, request=None, current_site=None, menu_instance=None,

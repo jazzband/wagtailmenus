@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
@@ -188,17 +186,14 @@ class TestMenuClasses(TestCase):
 
 class TestChildrenMenu(TestCase):
     fixtures = ['test.json']
-
-    """A test case for testing deprecated behaviour on the ChildrenMenu class
-    introduced in v2.5
-    """
+    """Testing of ChildrenMenu.__init__() argument validation"""
     def test_init_required_vals(self):
         page = Page.objects.get(url_path='/home/about-us/')
 
         msg_extract = "'max_levels' must be provided when creating"
-        with self.assertRaisesRegexp(TypeError, msg_extract):
+        with self.assertRaisesRegex(TypeError, msg_extract):
             ChildrenMenu(page, use_specific=1)
 
         msg_extract = "'use_specific' must be provided when creating"
-        with self.assertRaisesRegexp(TypeError, msg_extract):
+        with self.assertRaisesRegex(TypeError, msg_extract):
             ChildrenMenu(page, max_levels=1)
