@@ -22,7 +22,12 @@ TBA
 Minor changes & bug fixes 
 =========================
 
-TBA
+Various 'Python 3 only' code optimisations:
+
+- Removed __future__ unicode handling imports throughout.
+- Replaced 'old style' class definitions with 'new style' ones.
+- Simplified super() syntax throughout to the cleaner Python 3 implementation.
+- Fixed deprecation warnings pertaining to use of ``TestCase.assertRaisesRegexp``.
 
 
 Deprecations
@@ -34,11 +39,15 @@ TBA
 Upgrade considerations
 ======================
 
+- This version is compatible with Python 3.4 or later only.
+- This version is compatible with Wagtail 1.10 or later only.
+- This version is compatible with Django 1.8 or later only.
+
 Following the standard deprecation period, the following classes, methods and
 behaviour has been removed:
 
 -   The ``wagtailmenus.models.menus.MenuFromRootPage`` class was removed.
--   The __init__() method of ``wagtailmenus.models.menus.ChildrenMenu`` no
+-   The ``__init__()`` method of ``wagtailmenus.models.menus.ChildrenMenu`` no
     longer accepts a **root_page** keyword argument. The parent page should be
     passed using the **parent_page** keyword instead.
 -   The **root_page** attribute has been removed from the 
