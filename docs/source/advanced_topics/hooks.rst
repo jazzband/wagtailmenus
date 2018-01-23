@@ -309,6 +309,7 @@ Below is a full list of the additional arguments that are passed to methods usin
     If ``current_page`` has a value, this will be the top-most ancestor of that page, from just below the site's root page. For example, if your page tree looked like the following:
 
     .. code-block:: none
+    
         Home (Set as 'root page' for the site)     
         ├── About us
         ├── What we do
