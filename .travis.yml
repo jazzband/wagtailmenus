@@ -17,6 +17,10 @@ matrix:
     python: 3.6
   - env: TOXENV=py36-dj111-wt113
     python: 3.6
+  - env: TOXENV=py36-dj111-wt2
+    python: 3.6
+  - env: TOXENV=py36-dj2-wt2
+    python: 3.6
 
 install:
 - pip install tox codecov
