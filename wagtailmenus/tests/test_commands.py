@@ -1,6 +1,11 @@
 from django.test import TestCase
 from django.core.management import call_command
-from wagtail.wagtailcore.models import Site
+from wagtail import VERSION as WAGTAIL_VERSION
+if WAGTAIL_VERSION >= (2, 0):
+    from wagtail.core.models import Site
+else:
+    # < Wagtail 2.0
+    from wagtail.wagtailcore.models import Site
 
 from wagtailmenus import app_settings
 

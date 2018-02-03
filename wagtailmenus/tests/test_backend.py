@@ -3,9 +3,14 @@ from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.test import TransactionTestCase, override_settings, modify_settings
 from django_webtest import WebTest
+from wagtail import VERSION as WAGTAIL_VERSION
+if WAGTAIL_VERSION >= (2, 0):
+    from wagtail.admin.edit_handlers import ObjectList, InlinePanel
+    from wagtail.core.models import Page, Site
+else:
+    from wagtail.wagtailadmin.edit_handlers import ObjectList, InlinePanel
+    from wagtail.wagtailcore.models import Page, Site
 
-from wagtail.wagtailadmin.edit_handlers import ObjectList, InlinePanel
-from wagtail.wagtailcore.models import Page, Site
 from wagtailmenus import get_flat_menu_model, get_main_menu_model
 from wagtailmenus.panels import (
     FlatMenuItemsInlinePanel, MainMenuItemsInlinePanel)

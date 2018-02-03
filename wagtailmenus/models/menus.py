@@ -11,9 +11,13 @@ from django.utils.functional import cached_property, lazy
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
-
-from wagtail.wagtailcore import hooks
-from wagtail.wagtailcore.models import Page
+from wagtail import VERSION as WAGTAIL_VERSION
+if WAGTAIL_VERSION >= (2, 0):
+    from wagtail.core import hooks
+    from wagtail.core.models import Page, Site
+else:
+    from wagtail.wagtailcore import hooks
+    from wagtail.wagtailcore.models import Page, Site
 
 from .. import app_settings
 from ..forms import FlatMenuAdminForm

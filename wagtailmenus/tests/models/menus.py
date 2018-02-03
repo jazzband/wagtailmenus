@@ -1,7 +1,12 @@
 from django.db import models
 from modelcluster.fields import ParentalKey
-from wagtail.wagtailadmin.edit_handlers import (
-    FieldPanel, MultiFieldPanel, PageChooserPanel)
+from wagtail import VERSION as WAGTAIL_VERSION
+if WAGTAIL_VERSION >= (2, 0):
+    from wagtail.admin.edit_handlers import (
+        FieldPanel, MultiFieldPanel, PageChooserPanel)
+else:
+    from wagtail.wagtailadmin.edit_handlers import (
+        FieldPanel, MultiFieldPanel, PageChooserPanel)
 from wagtailmenus.models import (
     SectionMenu, ChildrenMenu, AbstractMainMenu,
     AbstractMainMenuItem, AbstractFlatMenu, AbstractFlatMenuItem)
