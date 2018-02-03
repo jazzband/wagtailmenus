@@ -122,7 +122,6 @@ if DJANGO_VERSION >= (2, 0):
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
 )
 
 WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES = (
