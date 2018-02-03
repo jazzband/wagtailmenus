@@ -191,22 +191,9 @@ class TestSuperUser(TransactionTestCase):
         menu_model.edit_handler = ObjectList(menu_model.content_panels)
         response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
 
-    def test_not_condensedinlinepanel(self):
-        self.assertTrue(isinstance(FlatMenuItemsInlinePanel(), InlinePanel))
-        self.assertTrue(isinstance(MainMenuItemsInlinePanel(), InlinePanel))
-
-    @modify_settings(INSTALLED_APPS={'append': 'condensedinlinepanel'})
-    def test_condensedinlinepanel(self):
-        from condensedinlinepanel.edit_handlers import CondensedInlinePanel
-        self.assertTrue(isinstance(FlatMenuItemsInlinePanel(), CondensedInlinePanel))
-        self.assertTrue(isinstance(MainMenuItemsInlinePanel(), CondensedInlinePanel))
-
     def test_mainmenu_edit_multisite(self):
         Site.objects.create(
-            hostname='test2.com', port=80, root_page_id=2,
-            is_default_site=0, site_name="Test site 2")
-        Site.objects.create(
-            hostname='test3.com', port=80, root_page_id=3,
+            id=3, hostname='test3.com', port=80, root_page_id=2,
             is_default_site=0, site_name="Test site 3")
 
         response = self.client.get(
@@ -268,6 +255,21 @@ class TestSuperUser(TransactionTestCase):
         response = self.client.get(
             '/admin/wagtailmenus/flatmenu/copy/1/')
         self.assertEqual(response.status_code, 200)
+
+    def test_panels_are_not_condensedinlinepanels(self):
+        self.assertTrue(isinstance(FlatMenuItemsInlinePanel(), InlinePanel))
+        self.assertTrue(isinstance(MainMenuItemsInlinePanel(), InlinePanel))
+
+    """
+    TODO: Uncomment once wagtail-condensedinlinepanel releases a Wagtail 2.0
+    compatible version
+
+    @modify_settings(INSTALLED_APPS={'append': 'condensedinlinepanel'})
+    def test_panels_are_condensedinlinepanels(self):
+        from condensedinlinepanel.edit_handlers import CondensedInlinePanel
+        self.assertTrue(isinstance(FlatMenuItemsInlinePanel(), CondensedInlinePanel))
+        self.assertTrue(isinstance(MainMenuItemsInlinePanel(), CondensedInlinePanel))
+    """
 
 
 class TestNonSuperUser(TransactionTestCase):
