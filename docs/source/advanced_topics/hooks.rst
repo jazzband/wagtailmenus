@@ -195,7 +195,7 @@ This hook allows you to modify the list **before** it is 'primed' (a process tha
 
     from wagtail.wagtailcore import hooks
 
-    @hooks.register('menus_modify_base_menuitem_queryset')
+    @hooks.register('menus_modify_raw_menu_items')
     def make_some_changes(
         menu_items, request, parent_page, original_menu_tag, menu_instance,
         current_level, **kwargs
@@ -308,7 +308,8 @@ Below is a full list of the additional arguments that are passed to methods usin
 ``current_section_root_page``
     If ``current_page`` has a value, this will be the top-most ancestor of that page, from just below the site's root page. For example, if your page tree looked like the following:
 
-    ::
+    .. code-block:: none
+    
         Home (Set as 'root page' for the site)     
         ├── About us
         ├── What we do

@@ -5,8 +5,26 @@ Changelog
 ----------------------------------
 
 * Added support for Wagtail 2.0 and Django 2.0
+* Dropped support for Python 2 and 3.3.
 * Dropped support for Wagtail versions 1.8 to 1.9
 * Dropped support for Django versions 1.5 to 1.9
+* Made numerous 'Python 3 only' optimisations to code.
+* The `wagtailmenus.models.menus.MenuFromRootPage` class was removed.
+* The `__init__()` method of `wagtailmenus.models.menus.ChildrenMenu` no
+  longer accepts a **root_page** keyword argument. The parent page should be
+  passed using the **parent_page** keyword instead.
+* The *root_page* attribute has been removed from the
+  `wagtailmenus.models.menus.ChildrenMenu` class. Use the *parent_page* 
+  attribute instead.
+* The `sub_menu` template tag no longer accepts a *stop_at_this_level*
+  keyword argument.
+* The `get_sub_menu_items_for_page()` and `prime_menu_items()` methods
+  have been removed from `wagtailmenus.templatetags.menu_tags`.
+* The `get_attrs_from_context()` method has been removed from 
+  `wagtailmenus.utils.misc`.
+* The `get_template_names()` and `get_sub_menu_template_names()` methods
+  have been removed from `wagtailmenus.utils.template` and the redundant
+  `wagtailmenus.utils.template` module removed.
 
 
 2.6.0 (22.12.2017)
