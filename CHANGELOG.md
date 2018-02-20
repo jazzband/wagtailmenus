@@ -4,7 +4,9 @@ Changelog
 2.7.0a (XX.XX.XXXX) IN DEVELOPMENT
 ----------------------------------
 
-TBA
+* Added support for Wagtail 2.0 and Django 2.0
+* Dropped support for Wagtail versions 1.8 to 1.9
+* Dropped support for Django versions 1.5 to 1.9
 
 
 2.6.0 (22.12.2017)

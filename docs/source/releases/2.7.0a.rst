@@ -16,23 +16,18 @@ Wagtailmenus 2.7 (alpha) release notes
 What's new?
 ===========
 
-TBA
-
-
-Minor changes & bug fixes 
-=========================
-
-TBA
-
-
-Deprecations
-============
-
-TBA
+- Added support for Wagtail 2.0 and Django 2.0
+- Dropped support for Wagtail versions 1.8 to 1.9
+- Dropped support for Django versions 1.5 to 1.9
 
 
 Upgrade considerations
 ======================
+
+- Wagtailmenus now only officially supports Wagtail and Django versions from
+  1.10 to 2.0. If you're using anything earlier than that, you should consider
+  updating your project. If upgrading Wagtail or Django isn't an option, you 
+  should stick with wagtailmenus 2.6 for now, which is a LTS release.
 
 Following the standard deprecation period, the following classes, methods and
 behaviour has been removed:
