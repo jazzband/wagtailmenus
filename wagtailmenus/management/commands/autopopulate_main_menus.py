@@ -1,8 +1,12 @@
 import logging
 
 from django.core.management.base import BaseCommand
+from wagtail import VERSION as WAGTAIL_VERSION
+if WAGTAIL_VERSION >= (2, 0):
+    from wagtail.core.models import Site
+else:
+    from wagtail.wagtailcore.models import Site
 
-from wagtail.wagtailcore.models import Site
 from wagtailmenus import app_settings
 
 logger = logging.getLogger(__name__)

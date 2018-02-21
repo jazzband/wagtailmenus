@@ -5,8 +5,11 @@ from django.db import models
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
-
-from wagtail.wagtailcore.models import Page
+from wagtail import VERSION as WAGTAIL_VERSION
+if WAGTAIL_VERSION >= (2, 0):
+    from wagtail.core.models import Page
+else:
+    from wagtail.wagtailcore.models import Page
 
 from .. import app_settings
 from ..forms import LinkPageAdminForm

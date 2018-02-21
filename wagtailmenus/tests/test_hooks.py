@@ -1,8 +1,12 @@
 from __future__ import absolute_import, unicode_literals
 
-from django.test import TestCase
-from wagtail.wagtailcore import hooks
 from bs4 import BeautifulSoup
+from django.test import TestCase
+from wagtail import VERSION as WAGTAIL_VERSION
+if WAGTAIL_VERSION >= (2, 0):
+    from wagtail.core import hooks
+else:
+    from wagtail.wagtailcore import hooks
 
 
 class TestHooks(TestCase):
@@ -50,7 +54,7 @@ class TestHooks(TestCase):
         def modify_menu_items(
             menu_items, request, parent_context, parent_page, menu_instance,
             original_menu_instance, menu_tag, original_menu_tag, current_level,
-            max_levels, use_specific, current_site, current_page, 
+            max_levels, use_specific, current_site, current_page,
             current_section_root_page, current_page_ancestor_ids,
             apply_active_classes, allow_repeating_parents,
             use_absolute_page_urls

@@ -6,11 +6,15 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.text import capfirst
 from django.utils.translation import ugettext as _
-
-from wagtail.wagtailadmin import messages
-from wagtail.wagtailadmin.edit_handlers import ObjectList, TabbedInterface
-from wagtail.wagtailcore.models import Site
-
+from wagtail import VERSION as WAGTAIL_VERSION
+if WAGTAIL_VERSION >= (2, 0):
+    from wagtail.admin import messages
+    from wagtail.admin.edit_handlers import ObjectList, TabbedInterface
+    from wagtail.core.models import Site
+else:
+    from wagtail.wagtailadmin import messages
+    from wagtail.wagtailadmin.edit_handlers import ObjectList, TabbedInterface
+    from wagtail.wagtailcore.models import Site
 from wagtail.contrib.modeladmin.views import (
     WMABaseView, CreateView, EditView, ModelFormView)
 

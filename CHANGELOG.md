@@ -4,9 +4,10 @@ Changelog
 2.7.0a (XX.XX.XXXX) IN DEVELOPMENT
 ----------------------------------
 
+* Added support for Wagtail 2.0 and Django 2.0
 * Dropped support for Python 2 and 3.3.
-* Dropped support for Wagtail 1.9 and below.
-* Dropped support for Django 1.7 and below.
+* Dropped support for Wagtail versions 1.8 to 1.9
+* Dropped support for Django versions 1.5 to 1.9
 * Made numerous 'Python 3 only' optimisations to code.
 * The `wagtailmenus.models.menus.MenuFromRootPage` class was removed.
 * The `__init__()` method of `wagtailmenus.models.menus.ChildrenMenu` no

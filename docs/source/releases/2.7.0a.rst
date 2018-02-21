@@ -16,7 +16,10 @@ Wagtailmenus 2.7 (alpha) release notes
 What's new?
 ===========
 
-TBA
+- Added support for Wagtail 2.0 and Django 2.0
+- Dropped support for Wagtail versions 1.8 to 1.9
+- Dropped support for Django versions 1.5 to 1.10
+- Dropped support for Python 2 and 3.3
 
 
 Minor changes & bug fixes 
@@ -30,18 +33,14 @@ Various 'Python 3 only' code optimisations:
 - Fixed deprecation warnings pertaining to use of ``TestCase.assertRaisesRegexp``.
 
 
-Deprecations
-============
-
-TBA
-
-
 Upgrade considerations
 ======================
 
-- This version is compatible with Python 3.4 or later only.
-- This version is compatible with Wagtail 1.10 or later only.
-- This version is compatible with Django 1.8 or later only.
+- This version only officially supports Wagtail and Django versions from
+  1.10 to 2.0. If you're using anything earlier than that, you should consider
+  updating your project. If upgrading Wagtail or Django isn't an option, it might be 
+  best to stick with wagtailmenus 2.6 for now (which is a LTS release).
+- This version also drops support for anything earlier than Python 3.4.
 
 Following the standard deprecation period, the following classes, methods and
 behaviour has been removed:

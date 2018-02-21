@@ -1,11 +1,14 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from modelcluster.fields import ParentalKey
-
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, PageChooserPanel
-from wagtail.wagtailcore.models import Orderable
+from wagtail import VERSION as WAGTAIL_VERSION
+if WAGTAIL_VERSION >= (2, 0):
+    from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
+    from wagtail.core.models import Page, Orderable
+else:
+    from wagtail.wagtailadmin.edit_handlers import FieldPanel, PageChooserPanel
+    from wagtail.wagtailcore.models import Page, Orderable
 
 from .. import app_settings
 from ..managers import MenuItemManager
@@ -28,7 +31,7 @@ class AbstractMenuItem(models.Model, MenuItem):
     """A model class that defines a base set of fields and methods for all
     'menu item' models."""
     link_page = models.ForeignKey(
-        'wagtailcore.Page',
+        Page,
         verbose_name=_('link to an internal page'),
         blank=True,
         null=True,

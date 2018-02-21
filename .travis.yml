@@ -5,17 +5,17 @@ sudo: required
 
 matrix:
   include: 
-  - env: TOXENV=py34-dj18-wt110
+  - env: TOXENV=py34-dj110-wt110
     python: 3.4 
-  - env: TOXENV=py35-dj18-wt110
+  - env: TOXENV=py35-dj110-wt111
     python: 3.5 
-  - env: TOXENV=py36-dj18-wt110
-    python: 3.6 
-  - env: TOXENV=py36-dj19-wt111
-    python: 3.6 
   - env: TOXENV=py36-dj110-wt112
     python: 3.6
   - env: TOXENV=py36-dj111-wt113
+    python: 3.6
+  - env: TOXENV=py36-dj111-wt2
+    python: 3.6
+  - env: TOXENV=py36-dj2-wt2
     python: 3.6
 
 install:

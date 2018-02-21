@@ -2,10 +2,13 @@ from django.conf.urls import url
 from django.contrib.admin.utils import quote
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-
+from wagtail import VERSION as WAGTAIL_VERSION
+if WAGTAIL_VERSION >= (2, 0):
+    from wagtail.core import hooks
+else:
+    from wagtail.wagtailcore import hooks
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.contrib.modeladmin.helpers import ButtonHelper
-from wagtail.wagtailcore import hooks
 
 from . import app_settings, get_main_menu_model, get_flat_menu_model
 from .views import (MainMenuIndexView, MainMenuEditView, FlatMenuCreateView,
