@@ -14,7 +14,9 @@ class FlatMenuAdminForm(WagtailAdminModelForm):
         super().__init__(*args, **kwargs)
         if app_settings.FLAT_MENUS_HANDLE_CHOICES:
             self.fields['handle'] = forms.ChoiceField(
-                choices=app_settings.FLAT_MENUS_HANDLE_CHOICES)
+                label=self.fields['handle'].label,
+                choices=app_settings.FLAT_MENUS_HANDLE_CHOICES
+            )
 
 
 class LinkPageAdminForm(WagtailAdminPageForm):
