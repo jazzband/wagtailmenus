@@ -1,12 +1,6 @@
-======================================
-Wagtailmenus 2.7 (alpha) release notes
-======================================
-
-.. NOTE ::
-    
-    Wagtailmenus 2.7 is in the alpha stage of development. Any changes
-    detailed below are subject to change before the final 2.7 release.
-
+==============================
+Wagtailmenus 2.7 release notes
+==============================
 
 .. contents::
     :local:
