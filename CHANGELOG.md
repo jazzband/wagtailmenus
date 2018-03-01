@@ -1,8 +1,14 @@
 Changelog
 =========
 
-2.7.0a (XX.XX.XXXX) IN DEVELOPMENT
+2.X.X (XX.XX.XXXX) IN DEVELOPMENT
 ----------------------------------
+
+TBA
+
+
+2.7.0 (01.03.2018)
+------------------
 
 * Added support for Wagtail 2.0 and Django 2.0
 * Dropped support for Python 2 and 3.3.
@@ -25,6 +31,9 @@ Changelog
 * The `get_template_names()` and `get_sub_menu_template_names()` methods
   have been removed from `wagtailmenus.utils.template` and the redundant
   `wagtailmenus.utils.template` module removed.
+* Fixed an issue that was preventing translated field label text appearing for
+  the `handle` field when using the `FLAT_MENUS_HANDLE_CHOICES` setting
+  (Contributed by @jeromelebleu)
 
 
 2.6.0 (22.12.2017)

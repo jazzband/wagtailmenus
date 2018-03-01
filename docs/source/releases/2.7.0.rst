@@ -31,6 +31,7 @@ Various 'Python 3 only' code optimisations:
 - Replaced 'old style' class definitions with 'new style' ones.
 - Simplified super() syntax throughout to the cleaner Python 3 implementation.
 - Fixed deprecation warnings pertaining to use of ``TestCase.assertRaisesRegexp``.
+- Fixed an issue that was preventing translated field label text appearing for the ``handle`` field when using the ``FLAT_MENUS_HANDLE_CHOICES`` setting (Contributed by @jeromelebleu)
 
 
 Upgrade considerations
