@@ -12,6 +12,7 @@
 * Tom Dyson (tomdyson)
 * Oliver Bestwalter (obestwalter)
 * Nguyễn Hồng Quân (hongquan)
+* jeromelebleu
 
 
 ## Translators
