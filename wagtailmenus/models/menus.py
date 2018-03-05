@@ -1,4 +1,3 @@
-import warnings
 from collections import defaultdict, namedtuple
 from types import GeneratorType
 
@@ -14,17 +13,16 @@ from modelcluster.models import ClusterableModel
 from wagtail import VERSION as WAGTAIL_VERSION
 if WAGTAIL_VERSION >= (2, 0):
     from wagtail.core import hooks
-    from wagtail.core.models import Page, Site
+    from wagtail.core.models import Page
 else:
     from wagtail.wagtailcore import hooks
-    from wagtail.wagtailcore.models import Page, Site
+    from wagtail.wagtailcore.models import Page
 
 from .. import app_settings
 from ..forms import FlatMenuAdminForm
 from ..panels import (
     main_menu_content_panels, flat_menu_content_panels, menu_settings_panels,
     main_menu_panels, flat_menu_panels)
-from ..utils.deprecation import RemovedInWagtailMenus28Warning
 from ..utils.misc import get_site_from_request
 from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
@@ -45,20 +43,6 @@ OptionVals = namedtuple('OptionVals', (
     'allow_repeating_parents', 'use_absolute_page_urls', 'parent_page',
     'handle', 'template_name', 'sub_menu_template_name', 'extra'
 ))
-
-
-# TODO: To be removed in v.2.8.0
-TEMPLATES_WARNING = (
-    "Wagtailmenus currently uses django.template.Template instances for "
-    "rendering by default. This will change in 2.8 in favour of always using "
-    "backend-specific template instances. You can use this new behaviour "
-    "right now by adding 'WAGTAILMENUS_USE_BACKEND_SPECIFIC_TEMPLATES = True' "
-    "to your project's settings (which will also silence this warning). See "
-    "the 2.6 release notes for more info: "
-    "http://wagtailmenus.readthedocs.io/en/stable/releases/2.6.0.html"
-)
-if not app_settings.USE_BACKEND_SPECIFIC_TEMPLATES:
-    warnings.warn(TEMPLATES_WARNING, category=RemovedInWagtailMenus28Warning)
 
 
 # ########################################################
@@ -202,11 +186,6 @@ class Menu:
         """
         context_data = self.get_context_data()
         template = self.get_template()
-
-        # TODO: To be removed in v2.8.0
-        if not app_settings.USE_BACKEND_SPECIFIC_TEMPLATES:
-            context_data['current_template'] = template.name
-            return template.render(Context(context_data))
 
         context_data['current_template'] = template.template.name
         return template.render(context_data)
@@ -542,25 +521,8 @@ class Menu:
         """
         return menu_items
 
-    def get_template_engine(self):
-        warning_msg = (
-            "The get_template_engine() method is deprecated in favour of "
-            "using Django's generic 'get_template' and 'select_template' "
-            "methods. See the 2.6 release notes for more info: "
-            "http://wagtailmenus.readthedocs.io/en/stable/releases/2.6.0.html"
-        )
-        warnings.warn(warning_msg, category=RemovedInWagtailMenus28Warning)
-        return self._contextual_vals.parent_context.template.engine
-
     def get_template(self):
         template_name = self._option_vals.template_name or self.template_name
-
-        # TODO: To be removed in v2.8.0
-        if not app_settings.USE_BACKEND_SPECIFIC_TEMPLATES:
-            engine = self.get_template_engine()
-            if template_name:
-                return engine.get_template(template_name)
-            return engine.select_template(self.get_template_names())
 
         if template_name:
             return get_template(template_name)
