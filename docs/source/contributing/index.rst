@@ -133,7 +133,7 @@ Testing in a single environment is a quick and easy way to identify obvious issu
 
     tox
 
-You might find it easier to set up a Travis CI service integration for your fork in GitHub (look under the "Settings" tab for your forked wagtailmenus project in GitHub's web interface), and have Travis CI run tests whenever you commit changes. The test configuration files already present in the project should work for your fork too, making it a cinch to set up.
+You might find it easier to set up a Travis CI service integration for your fork in GitHub (look under **Settings > Apps and integrations** in GitHub's web interface for your fork), and have Travis CI run tests whenever you commit changes. The test configuration files already present in the project should work for your fork too, making it a cinch to set up.
 
 
 Other topics
