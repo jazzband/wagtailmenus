@@ -308,23 +308,20 @@ Below is a full list of the additional arguments that are passed to methods usin
 ``current_section_root_page``
     If ``current_page`` has a value, this will be the top-most ancestor of that page, from just below the site's root page. For example, if your page tree looked like the following:
 
-    .. code-block:: none
-    
-        Home (Set as 'root page' for the site)     
-        ├── About us
-        ├── What we do
-        ├── Careers
-        |   ├── Vacancy one
-        |   └── Vacancy two
-        ├── News & events
-        |   ├── News
-        |   |   ├── Article one
-        |   |   └── Article two
-        |   └── Events
-        └── Contact us
+    Home (Set as 'root page' for the site)  
+    ├── About us  
+    ├── What we do  
+    ├── Careers  
+    |   ├── Vacancy one  
+    |   └── Vacancy two  
+    ├── News & events  
+    |   ├── News  
+    |   |   ├── Article one  
+    |   |   └── Article two  
+    |   └── Events  
+    └── Contact us
 
-    if the current page was 'Vacancy one', the section root page would be 
-    'Careers'. Or, if the current page was 'Article one', the section root page would be  'News & events'.
+    If the current page was 'Vacancy one', the section root page would be 'Careers'. Or, if the current page was 'Article one', the section root page would be 'News & events'.
 
 ``use_specific``
     An integer value indicating the preferred policy for using ``PageQuerySet.specific()`` and ``Page.specific`` in rendering the current menu. For more information see: :ref:`specific_pages`.
