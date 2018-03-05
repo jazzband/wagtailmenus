@@ -1,3 +1,4 @@
+from urllib.parse import urlparse
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -125,6 +126,25 @@ class AbstractMenuItem(models.Model, MenuItem):
             msg = _("This field is required when linking to a custom URL")
             raise ValidationError({'link_text': msg})
         super().clean(*args, **kwargs)
+
+    def get_active_class_for_request(self, request=None):
+        # Returns the 'active_class' for a custom link item.
+        active_class = None
+        request_path = request.path
+        if app_settings.CUSTOM_URL_SMART_ACTIVE_CLASSES:
+            # new behaviour
+            parsed_url = urlparse(self.link_url)
+            if not parsed_url.netloc:
+                # do nothing if the custom link URL has a domain
+                if request_path == parsed_url.path:
+                    active_class = app_settings.ACTIVE_CLASS
+                elif request_path.startswith(parsed_url.path):
+                    active_class = app_settings.ACTIVE_ANCESTOR_CLASS
+
+        elif self.link_url == request_path:
+            # previous behaviour
+            active_class = app_settings.ACTIVE_CLASS
+        return active_class
 
     def __str__(self):
         return self.menu_text
