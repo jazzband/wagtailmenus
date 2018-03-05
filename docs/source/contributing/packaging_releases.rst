@@ -112,7 +112,7 @@ When satisfied with the PR for prepping the files:
     
     .. code-block:: console
 
-         find . -name *.po -execdir msgfmt django.po -o django.mo \;
+         find . -name \*.po -execdir msgfmt django.po -o django.mo \;
 
 7.  Commit and push all changes so far:
     
