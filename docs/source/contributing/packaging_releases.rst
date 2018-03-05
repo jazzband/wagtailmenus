@@ -108,11 +108,11 @@ When satisfied with the PR for prepping the files:
         rm -r wagtailmenus/locale/en_GB/
         git add *.po
 
-6.  For each language, convert .po files to .mo by running:
+6.  Convert the .po files to .mo for each language by running:
     
     .. code-block:: console
 
-        msgfmt --check-format -o wagtailmenus/locale/lang/LC_MESSAGES/django.mo wagtailmenus/locale/lang/LC_MESSAGES/django.po
+         find . -name *.po -execdir msgfmt django.po -o django.mo \;
 
 7.  Commit and push all changes so far:
     
