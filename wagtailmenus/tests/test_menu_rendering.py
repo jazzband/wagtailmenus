@@ -912,6 +912,76 @@ class TestTemplateTags(TestCase):
 
     @override_settings(WAGTAILMENUS_CUSTOM_URL_SMART_ACTIVE_CLASSES=True)
     def test_smart_custom_links_output(self):
+        response = self.client.get('/about-us/meet-the-team/custom-url/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='main-menu-two-levels').decode()
+        expected_menu_html = """
+        <div id="main-menu-two-levels">
+            <ul class="nav navbar-nav">
+                <li class="">
+                    <a href="/">Home</a>
+                </li>
+                <li class="ancestor dropdown top-level">
+                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
+                        <li class=" top-level">
+                            <a href="/about-us/">Section home</a>
+                        </li>
+                        <li class="ancestor low-level">
+                            <a href="/about-us/meet-the-team/">Meet the team</a>
+                        </li>
+                        <li class=" low-level">
+                            <a href="/about-us/our-heritage/">Our heritage</a>
+                        </li>
+                        <li class=" low-level">
+                            <a href="/about-us/mission-and-values/">Our mission and values</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class=" dropdown top-level">
+                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
+                        <li class=" low-level">
+                            <a href="/news-and-events/latest-news/">Latest news</a>
+                        </li>
+                        <li class=" low-level">
+                            <a href="/news-and-events/upcoming-events/">Upcoming events</a>
+                        </li>
+                        <li class=" low-level">
+                            <a href="/news-and-events/press/">In the press</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="">
+                    <a href="http://google.co.uk">Google</a>
+                </li>
+                <li class=" dropdown">
+                    <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
+                        <li class="support">
+                            <a href="/contact-us/#support">Get support</a>
+                        </li>
+                        <li class="call">
+                            <a href="/contact-us/#call">Speak to someone</a>
+                        </li>
+                        <li class="map">
+                            <a href="/contact-us/#map">Map &amp; directions</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
         response = self.client.get('/about-us/meet-the-team/custom-url/child-page/')
         soup = BeautifulSoup(response.content, 'html5lib')
 

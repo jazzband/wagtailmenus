@@ -129,7 +129,7 @@ class AbstractMenuItem(models.Model, MenuItem):
 
     def get_active_class_for_request(self, request=None):
         # Returns the 'active_class' for a custom link item.
-        active_class = None
+        active_class = ''
         request_path = request.path
         if app_settings.CUSTOM_URL_SMART_ACTIVE_CLASSES:
             # new behaviour
