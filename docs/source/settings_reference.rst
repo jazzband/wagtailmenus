@@ -327,3 +327,12 @@ When preparing menu items for rendering, wagtailmenus looks for a field, attribu
 Default value: ``3``
 
 Use this to specify the 'depth' value of a project's 'section root' pages. For most Wagtail projects, this should be ``3`` (Root page depth = ``1``, Home page depth = ``2``), but it may well differ, depending on the needs of the project.
+
+.. _CUSTOM_URL_SMART_ACTIVE_CLASSES
+
+``WAGTAILMENUS_CUSTOM_URL_SMART_ACTIVE_CLASSES``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Default value: ``False``
+
+Set this to ``True`` if a ``custom_link`` path should be assumed to be an ancestor of the current page if it matches the beginning of the current url path. Apply ``WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS`` if applicable.

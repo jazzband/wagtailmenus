@@ -128,4 +128,5 @@ WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES = (
     ('contact', 'contact'),
     ('footer', 'footer'),
     ('header-secondary', 'header-secondary'),
+    ('custom-links', 'custom-links'),
 )

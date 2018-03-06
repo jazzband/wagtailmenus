@@ -204,6 +204,10 @@ class AppSettings:
     def SECTION_MENU_CLASS(self):
         return self.class_from_path_setting('SECTION_MENU_CLASS_PATH')
 
+    @property
+    def CUSTOM_URL_SMART_ACTIVE_CLASSES(self):
+        return self._setting('CUSTOM_URL_SMART_ACTIVE_CLASSES', False)
+
     # TODO: To be removed in v2.8.0
     @property
     def USE_BACKEND_SPECIFIC_TEMPLATES(self):

@@ -510,10 +510,15 @@ class Menu:
                 """
                 This is a `MenuItem` for a custom URL. It can be classed as
                 'active' if the URL matches the request path.
+                If `apps_settings.CUSTOM_URL_SMART_ACTIVE_CLASSES == True`,
+                it may also be classed as 'ancestor' if the current URL is a
+                'child' of the custom link URL.
                 """
-                request_path = self.request.path
-                if apply_active_classes and item.link_url == request_path:
-                    setattr(item, 'active_class', app_settings.ACTIVE_CLASS)
+                if apply_active_classes:
+                    request = self.request
+                    active_class = item.get_active_class_for_request(request)
+                    if active_class:
+                        setattr(item, 'active_class', active_class)
 
             # In case the specific page was fetched during the above operations
             # We'll set `MenuItem.link_page` to that specific page.

@@ -96,6 +96,8 @@ The tag will attempt to add 'active' and 'ancestor' CSS classes to the menu item
 
 You can change the CSS class strings used to indicate 'active' and 'ancestor' statuses by utilising the :ref:`ACTIVE_CLASS` and :ref:`ACTIVE_ANCESTOR_CLASS` settings.
 
+By default, custom links will perform a strict comparison of the ``custom_link`` path and the current path. In this case a ``custom_link`` will never render as an 'ancestor' of a url. You can override this behavior by setting :ref:``CUSTOM_URL_SMART_ACTIVE_CLASSES`` to ``True``.
+
 -----
 
 template
@@ -252,6 +254,8 @@ No         ``bool``             ``False``
 Unlike ``main_menu`` and ``section_menu``, ``flat_menu`` will NOT attempt to add ``'active'`` and ``'ancestor'`` classes to the menu items by default, as this is often not useful. You can override this by adding ``apply_active_classes=true`` to the tag in your template.
 
 You can change the CSS class strings used to indicate 'active' and 'ancestor' statuses by utilising the :ref:`ACTIVE_CLASS` and :ref:`ACTIVE_ANCESTOR_CLASS` settings.
+
+By default, custom links will perform a strict comparison of the ``custom_link`` path and the current path. In this case a ``custom_link`` will never render as an 'ancestor' of a url. You can override this behavior by setting :ref:``CUSTOM_URL_SMART_ACTIVE_CLASSES`` to ``True``.
 
 -----
 
@@ -429,6 +433,8 @@ The tag will add 'active' and 'ancestor' classes to the menu items where applica
 
 You can change the CSS class strings used to indicate 'active' and 'ancestor' statuses by utilising the :ref:`ACTIVE_CLASS` and :ref:`ACTIVE_ANCESTOR_CLASS` settings.
 
+By default, custom links will perform a strict comparison of the ``custom_link`` path and the current path. In this case a ``custom_link`` will never render as an 'ancestor' of a url. You can override this behavior by setting :ref:``CUSTOM_URL_SMART_ACTIVE_CLASSES`` to ``True``.
+
 -----
 
 allow_repeating_parents
@@ -575,6 +581,8 @@ No         ``bool``             ``False``
 Unlike ``main_menu`` and `section_menu``, ``children_menu`` will NOT attempt to add ``'active'`` and ``'ancestor'`` classes to the menu items by default, as this is often not useful. You can override this by adding ``apply_active_classes=true`` to the tag in your template.
 
 You can change the CSS class strings used to indicate 'active' and 'ancestor' statuses by utilising the :ref:`ACTIVE_CLASS` and :ref:`ACTIVE_ANCESTOR_CLASS` settings.
+
+By default, custom links will perform a strict comparison of the ``custom_link`` path and the current path. In this case a ``custom_link`` will never render as an 'ancestor' of a url. You can override this behavior by setting :ref:``CUSTOM_URL_SMART_ACTIVE_CLASSES`` to ``True``.
 
 -----
 
