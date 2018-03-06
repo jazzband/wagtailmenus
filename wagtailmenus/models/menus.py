@@ -3,7 +3,6 @@ from types import GeneratorType
 
 from django.db import models
 from django.core.exceptions import ImproperlyConfigured, ValidationError
-from django.template import Context
 from django.template.loader import get_template, select_template
 from django.utils import six
 from django.utils.functional import cached_property, lazy
@@ -21,8 +20,7 @@ else:
 from .. import app_settings
 from ..forms import FlatMenuAdminForm
 from ..panels import (
-    main_menu_content_panels, flat_menu_content_panels, menu_settings_panels,
-    main_menu_panels, flat_menu_panels)
+    main_menu_content_panels, flat_menu_content_panels, menu_settings_panels)
 from ..utils.misc import get_site_from_request
 from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
@@ -970,7 +968,6 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_instance_context_name = 'main_menu'
     related_templatetag_name = 'main_menu'
     content_panels = main_menu_content_panels
-    panels = main_menu_panels  # to be removed in v2.8
 
     site = models.OneToOneField(
         'wagtailcore.Site',
@@ -1052,7 +1049,6 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     related_templatetag_name = 'flat_menu'
     base_form_class = FlatMenuAdminForm
     content_panels = flat_menu_content_panels
-    panels = flat_menu_panels  # to be removed in v2.8
 
     site = models.ForeignKey(
         'wagtailcore.Site',

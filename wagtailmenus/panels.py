@@ -92,37 +92,6 @@ menu_settings_panels = (
     ),
 )
 
-# ##########################################################
-# Deprecated panel layouts (to be removed in v2.8)
-# ##########################################################
-
-main_menu_panels = (
-    MainMenuItemsInlinePanel(),
-    MultiFieldPanel(
-        heading=_("Advanced settings"),
-        children=(FieldPanel('max_levels'), FieldPanel('use_specific')),
-        classname="collapsible collapsed",
-    ),
-)
-
-flat_menu_panels = (
-    MultiFieldPanel(
-        heading=_("Settings"),
-        children=(
-            FieldPanel('title'),
-            FieldPanel('site'),
-            FieldPanel('handle'),
-            FieldPanel('heading'),
-        )
-    ),
-    FlatMenuItemsInlinePanel(),
-    MultiFieldPanel(
-        heading=_("Advanced settings"),
-        children=(FieldPanel('max_levels'), FieldPanel('use_specific')),
-        classname="collapsible collapsed",
-    ),
-)
-
 
 # ########################################################
 # For AbstractLinkPage
