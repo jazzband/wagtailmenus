@@ -7,6 +7,16 @@ Changelog
 TBA
 
 
+2.7.1 (07.03.2018)
+------------------
+
+* Fixed a bug in MenuTabbedInterfaceMixin preventing `content_panels` and `settings_panels` being picked up in the editing UI when using Wagtail 2.0.
+* Remove the 'alpha' notice and title notation from the 2.7.0 release notes.
+* Added a badge to README.rst to indicate the documentation build status.
+* Added a missing 'migrate' step to the **Developing locally** instructions in the contribution guidelines.
+* Updated the code block in the **.po to .mo** conversion step in the packaging guidelines to the `find` command with `execdir`.
+
+
 2.7.0 (01.03.2018)
 ------------------
 
