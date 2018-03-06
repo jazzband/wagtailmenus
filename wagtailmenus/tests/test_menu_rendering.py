@@ -910,6 +910,111 @@ class TestTemplateTags(TestCase):
         """
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
+    @override_settings(WAGTAILMENUS_CUSTOM_URL_SMART_ACTIVE_CLASSES=True)
+    def test_smart_custom_links_output(self):
+        response = self.client.get('/about-us/meet-the-team/custom-url/child-page/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='nav-footer').decode()
+        expected_menu_html = """
+        <div id="nav-footer">
+            <div class="flat-menu footer with_heading">
+                <h4>Important links</h4>
+                <ul>
+                    <li class="">
+                        <a href="/legal/accessibility/">Accessibility</a>
+                    </li>
+                    <li class="">
+                        <a href="/legal/privacy-policy/">Privacy policy</a>
+                    </li>
+                    <li class="">
+                        <a href="/legal/terms-and-conditions/">Terms and conditions</a>
+                    </li>
+                    <li class="ancestor">
+                        <a href="/about-us/meet-the-team/custom-url/">Meet the team's pets</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+        
+        response = self.client.get('/people/#user1')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='custom-links').decode()
+        expected_menu_html = """
+        <div id="custom-links">
+            <div class="flat-menu custom-links with_heading">
+                <h4>Custom Links</h4>
+                <ul>
+                    <li class="active">
+                        <a href="/people/#user1">User Directory (hash fragment)</a>
+                    </li>
+                    <li class="active">
+                        <a href="/people/?u=user1">User Directory (query param)</a>
+                    </li>
+                    <li class="">
+                        <a href="https://example.com/some-page">External link with path</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+        
+        response = self.client.get('/people/?u=user1')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='custom-links').decode()
+        expected_menu_html = """
+        <div id="custom-links">
+            <div class="flat-menu custom-links with_heading">
+                <h4>Custom Links</h4>
+                <ul>
+                    <li class="active">
+                        <a href="/people/#user1">User Directory (hash fragment)</a>
+                    </li>
+                    <li class="active">
+                        <a href="/people/?u=user1">User Directory (query param)</a>
+                    </li>
+                    <li class="">
+                        <a href="https://example.com/some-page">External link with path</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+        
+        response = self.client.get('/some-page/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='custom-links').decode()
+        expected_menu_html = """
+        <div id="custom-links">
+            <div class="flat-menu custom-links with_heading">
+                <h4>Custom Links</h4>
+                <ul>
+                    <li class="">
+                        <a href="/people/#user1">User Directory (hash fragment)</a>
+                    </li>
+                    <li class="">
+                        <a href="/people/?u=user1">User Directory (query param)</a>
+                    </li>
+                    <li class="">
+                        <a href="https://example.com/some-page">External link with path</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
     def test_custom_page_menu_output(self):
         response = self.client.get('/custom-url/')
         soup = BeautifulSoup(response.content, 'html5lib')

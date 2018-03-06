@@ -34,9 +34,9 @@ class CMSUsecaseTests(WebTest):
             is_staff=True, is_superuser=True)
 
     def test_copy_footer_menu(self):
-        # First check that there are 3 menus
+        # First check that there are 4 menus
         response = self.app.get(self.base_flatmenu_admin_url, user='test1')
-        assert len(response.context['object_list']) == 3
+        assert len(response.context['object_list']) == 4
 
         site_one = Site.objects.get(id=1)
         site_two = Site.objects.get(id=2)
@@ -51,7 +51,7 @@ class CMSUsecaseTests(WebTest):
         form['site'] = site_two.pk
         response = form.submit().follow()
 
-        assert len(response.context['object_list']) == 4
+        assert len(response.context['object_list']) == 5
         assert '<div class="changelist-filter col3">' in response
 
         # Let's just compare the two menu with the old one
