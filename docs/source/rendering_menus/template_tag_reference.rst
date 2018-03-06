@@ -433,8 +433,6 @@ The tag will add 'active' and 'ancestor' classes to the menu items where applica
 
 You can change the CSS class strings used to indicate 'active' and 'ancestor' statuses by utilising the :ref:`ACTIVE_CLASS` and :ref:`ACTIVE_ANCESTOR_CLASS` settings.
 
-By default, custom links will perform a strict comparison of the ``custom_link`` path and the current path. In this case a ``custom_link`` will never render as an 'ancestor' of a url. You can override this behavior by setting :ref:``CUSTOM_URL_SMART_ACTIVE_CLASSES`` to ``True``.
-
 -----
 
 allow_repeating_parents
