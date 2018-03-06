@@ -22,7 +22,7 @@ TBA
 Minor changes & bug fixes 
 =========================
 
-- Fixed a bug that was preventing ``content_panels`` and ``settings_panels`` being respected in the menu editing UI for main and flat menus.
+TBA
 
 
 Deprecations
