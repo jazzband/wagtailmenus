@@ -48,7 +48,7 @@ class MainMenuIndexView(WMABaseView):
 
 class MenuTabbedInterfaceMixin:
 
-    def get_edit_handler_class(self):
+    def get_edit_handler(self):
         from .models import AbstractMainMenu, AbstractFlatMenu
         if hasattr(self.model, 'edit_handler'):
             edit_handler = self.model.edit_handler
@@ -67,6 +67,10 @@ class MenuTabbedInterfaceMixin:
                            classname="settings"),
             ])
         return edit_handler.bind_to_model(self.model)
+
+    def get_edit_handler_class(self):
+        # For wagtail < 2.0
+        return self.get_edit_handler()
 
 
 class MainMenuEditView(MenuTabbedInterfaceMixin, ModelFormView):
