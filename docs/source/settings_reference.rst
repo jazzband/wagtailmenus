@@ -335,4 +335,4 @@ Use this to specify the 'depth' value of a project's 'section root' pages. For m
 
 Default value: ``False``
 
-Set this to ``True`` if a ``custom_link`` path should be assumed to be an ancestor of the current page if it matches the beginning of the current url path. Apply ``WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS`` if applicable.
+Set this to ``True`` if a ``custom_link`` path should be assumed to be an ancestor of the current page if it matches the beginning of the current url path (applies ``WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS`` if applicable).
