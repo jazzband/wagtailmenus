@@ -508,11 +508,11 @@ class Menu:
 
             elif page is None:
                 """
-                This is a `MenuItem` for a custom URL. It can be classed as
-                'active' if the URL matches the request path.
-                If `apps_settings.CUSTOM_URL_SMART_ACTIVE_CLASSES == True`,
-                it may also be classed as 'ancestor' if the current URL is a
-                'child' of the custom link URL.
+                This is a `MenuItem` for a custom URL. If can be classed as
+                'active' if the URL matches the path of the current request,
+                or (if `apps_settings.CUSTOM_URL_SMART_ACTIVE_CLASSES == True`)
+                as the 'ancestor of the current page' if that looks to be the
+                case.
                 """
                 if apply_active_classes:
                     active_class = item.get_active_class_for_request(self.request)

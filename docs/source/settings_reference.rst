@@ -335,4 +335,4 @@ Use this to specify the 'depth' value of a project's 'section root' pages. For m
 
 Default value: ``False``
 
-Set this to ``True`` if a ``custom_link`` path should be assumed to be an ancestor of the current page if it matches the beginning of the current url path (applies ``WAGTAILMENUS_ACTIVE_ANCESTOR_CLASS`` if applicable).
+By default, menu items linking to custom URLs are attributed with the 'active' class only if their ``link_url`` value matches the path of the current request _exactly_. Setting this to `True` in your project's settings will enable a smarter approach to active class attribution for custom URLs, where only the 'path' part of the ``link_url`` value is used to determine what active class should be used. The new approach will also attribute the  'ancestor'  class to menu items if the ``link_url`` looks like an ancestor of the current request URL.

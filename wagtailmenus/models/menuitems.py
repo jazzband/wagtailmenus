@@ -132,16 +132,16 @@ class AbstractMenuItem(models.Model, MenuItem):
         if app_settings.CUSTOM_URL_SMART_ACTIVE_CLASSES:
             # new behaviour
             parsed_url = urlparse(self.link_url)
-            if not parsed_url.netloc:
-                # do nothing if the custom link URL has a domain
-                if request.path == parsed_url.path:
-                    return app_settings.ACTIVE_CLASS
-                elif (
-                    request.path.startswith(parsed_url.path) and
-                    parsed_url.path != '/'
-                ):
-                    return app_settings.ACTIVE_ANCESTOR_CLASS
-        elif self.link_url == request.path:
+            if parsed_url.netloc:
+                return ''
+            if request.path == parsed_url.path:
+                return app_settings.ACTIVE_CLASS
+            if (
+                request.path.startswith(parsed_url.path) and
+                parsed_url.path != '/'
+            ):
+                return app_settings.ACTIVE_ANCESTOR_CLASS
+        if self.link_url == request.path:
             # previous behaviour
             return app_settings.ACTIVE_CLASS
         return ''
