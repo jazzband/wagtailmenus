@@ -139,7 +139,10 @@ class AbstractMenuItem(models.Model, MenuItem):
                 pass
             elif request_path == parsed_url.path:
                 active_class = app_settings.ACTIVE_CLASS
-            elif request_path.startswith(parsed_url.path):
+            elif (
+                parsed_url.path != '/' and
+                request_path.startswith(parsed_url.path)
+            ):
                 active_class = app_settings.ACTIVE_ANCESTOR_CLASS
 
         elif self.link_url == request_path:

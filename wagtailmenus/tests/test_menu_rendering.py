@@ -1020,6 +1020,9 @@ class TestTemplateTags(TestCase):
             <div class="flat-menu custom-links with_heading">
                 <h4>Custom Links</h4>
                 <ul>
+                    <li class="">
+                        <a href="/">Custom Home Link</a>
+                    </li>
                     <li class="active">
                         <a href="/people/#user1">User Directory (hash fragment)</a>
                     </li>
@@ -1045,6 +1048,9 @@ class TestTemplateTags(TestCase):
             <div class="flat-menu custom-links with_heading">
                 <h4>Custom Links</h4>
                 <ul>
+                    <li class="">
+                        <a href="/">Custom Home Link</a>
+                    </li>                
                     <li class="active">
                         <a href="/people/#user1">User Directory (hash fragment)</a>
                     </li>
@@ -1070,6 +1076,9 @@ class TestTemplateTags(TestCase):
             <div class="flat-menu custom-links with_heading">
                 <h4>Custom Links</h4>
                 <ul>
+                    <li class="">
+                        <a href="/">Custom Home Link</a>
+                    </li>                
                     <li class="active">
                         <a href="/people/#user1">User Directory (hash fragment)</a>
                     </li>
@@ -1095,6 +1104,37 @@ class TestTemplateTags(TestCase):
             <div class="flat-menu custom-links with_heading">
                 <h4>Custom Links</h4>
                 <ul>
+                    <li class="">
+                        <a href="/">Custom Home Link</a>
+                    </li>                
+                    <li class="">
+                        <a href="/people/#user1">User Directory (hash fragment)</a>
+                    </li>
+                    <li class="">
+                        <a href="/people/?u=user1">User Directory (query param)</a>
+                    </li>
+                    <li class="">
+                        <a href="https://example.com/some-page">External link with path</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)
+
+        response = self.client.get('/?q=someparam')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='custom-links').decode()
+        expected_menu_html = """
+        <div id="custom-links">
+            <div class="flat-menu custom-links with_heading">
+                <h4>Custom Links</h4>
+                <ul>
+                    <li class="active">
+                        <a href="/">Custom Home Link</a>
+                    </li>                
                     <li class="">
                         <a href="/people/#user1">User Directory (hash fragment)</a>
                     </li>
