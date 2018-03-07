@@ -77,26 +77,32 @@ If you'd like a runnable Django project to help with development of wagtailmenus
     .. code-block:: console
 
         cp manage.py.example manage.py
+        
+5.  Run the migrate command to set up the database tables:
 
-5.  To load some test data into the database, run:  
+    .. code-block:: console
+
+        python manage.py migrate
+
+6.  To load some test data into the database, run:  
 
     .. code-block:: console
 
         python manage.py loaddata wagtailmenus/tests/fixtures/test.json
 
-6.  Create a new superuser so that you can log into the CMS:  
+7.  Create a new superuser that you can use to access the CMS:  
 
     .. code-block:: console
 
         python manage.py createsuperuser
 
-7.  Run the project using the standard Django command: 
+8.  Run the project using the standard Django command: 
     
     .. code-block:: console
 
         python manage.py runserver
 
-Your local copies of ``settings/development.py`` and ``manage.py`` should be ignored by git when you push any changes, as will anything you add to the ``wagtailmenus/development/`` directory.
+Your local copies of ``settings/development.py`` and ``manage.py`` will be ignored by git when you push any changes, as will anything you add to the ``wagtailmenus/development/`` directory.
 
 
 Testing locally
@@ -126,6 +132,8 @@ Testing in a single environment is a quick and easy way to identify obvious issu
 .. code-block:: console
 
     tox
+
+You might find it easier to set up a Travis CI service integration for your fork in GitHub (look under **Settings > Apps and integrations** in GitHub's web interface for your fork), and have Travis CI run tests whenever you commit changes. The test configuration files already present in the project should work for your fork too, making it a cinch to set up.
 
 
 Other topics

@@ -1,14 +1,19 @@
 .. image:: https://travis-ci.org/rkhleics/wagtailmenus.svg?branch=master
-        :alt: Build Status
-        :target: https://travis-ci.org/rkhleics/wagtailmenus
+    :alt: Build Status
+    :target: https://travis-ci.org/rkhleics/wagtailmenus
 
 .. image:: https://img.shields.io/pypi/v/wagtailmenus.svg
-        :alt: PyPi Version
-        :target: https://pypi.python.org/pypi/wagtailmenus
+    :alt: PyPi Version
+    :target: https://pypi.python.org/pypi/wagtailmenus
 
 .. image:: https://codecov.io/gh/rkhleics/wagtailmenus/branch/master/graph/badge.svg
-        :alt: Code coverage
-        :target: https://codecov.io/gh/rkhleics/wagtailmenus
+    :alt: Code coverage
+    :target: https://codecov.io/gh/rkhleics/wagtailmenus
+        
+.. image:: https://readthedocs.org/projects/wagtailmenus/badge/?version=stable
+    :alt: Documentation Status
+    :target: http://wagtailmenus.readthedocs.io/en/stable/?badge=stable
+    
 
 ============
 wagtailmenus

@@ -12,7 +12,7 @@
 * Tom Dyson (tomdyson)
 * Oliver Bestwalter (obestwalter)
 * Nguyễn Hồng Quân (hongquan)
-* jeromelebleu
+* Jérôme Lebleu (jeromelebleu)
 * Joshua C. Jackson (inostia)
 
 
@@ -26,4 +26,7 @@
 * Alex (einsfr)
 * Marcos Amorim (mamorim)
 * 汇民 王 (levinewong)
+* alyoung
+* Clarice Bianchini (claricebbcosta)
+* Jérôme Lebleu (jeromelebleu)
 
