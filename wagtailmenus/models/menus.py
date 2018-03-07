@@ -515,10 +515,8 @@ class Menu:
                 'child' of the custom link URL.
                 """
                 if apply_active_classes:
-                    request = self.request
-                    active_class = item.get_active_class_for_request(request)
-                    if active_class:
-                        setattr(item, 'active_class', active_class)
+                    active_class = item.get_active_class_for_request(self.request)
+                    setattr(item, 'active_class', active_class)
 
             # In case the specific page was fetched during the above operations
             # We'll set `MenuItem.link_page` to that specific page.
