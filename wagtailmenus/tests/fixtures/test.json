@@ -234,18 +234,6 @@
     }
 },
 {
-    "model": "wagtailmenus.flatmenu",
-    "pk": 4,
-    "fields": {
-        "site": 1,
-        "title": "Custom Links",
-        "handle": "custom-links",
-        "heading": "Custom Links",
-        "max_levels": 1,
-        "use_specific": 1
-    }
-},
-{
     "model": "wagtailmenus.flatmenuitem",
     "pk": 9,
     "fields": {
@@ -281,62 +269,6 @@
         "url_append": "",
         "allow_subnav": false,
         "menu": 3
-    }
-},
-{
-    "model": "wagtailmenus.flatmenuitem",
-    "pk": 15,
-    "fields": {
-        "sort_order": 1,
-        "link_page": null,
-        "link_url": "/people/",
-        "url_append": "#user1",
-        "handle": "",
-        "link_text": "User Directory (hash fragment)",
-        "allow_subnav": false,
-        "menu": 4
-    }
-},
-{
-    "model": "wagtailmenus.flatmenuitem",
-    "pk": 16,
-    "fields": {
-        "sort_order": 2,
-        "link_page": null,
-        "link_url": "/people/",
-        "url_append": "?u=user1",
-        "handle": "",
-        "link_text": "User Directory (query param)",
-        "allow_subnav": false,
-        "menu": 4
-    }
-},
-{
-    "model": "wagtailmenus.flatmenuitem",
-    "pk": 17,
-    "fields": {
-        "sort_order": 3,
-        "link_page": null,
-        "link_url": "https://example.com/some-page",
-        "url_append": "",
-        "handle": "",
-        "link_text": "External link with path",
-        "allow_subnav": false,
-        "menu": 4
-    }
-},
-{
-    "model": "wagtailmenus.flatmenuitem",
-    "pk": 18,
-    "fields": {
-        "sort_order": 0,
-        "link_page": null,
-        "link_url": "/",
-        "url_append": "",
-        "handle": "",
-        "link_text": "Custom Home Link",
-        "allow_subnav": false,
-        "menu": 4
     }
 },
 {

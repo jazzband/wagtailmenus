@@ -20,12 +20,6 @@ urlpatterns = [
         TemplateView.as_view(template_name='page.html')),
     url(r'^about-us/meet-the-team/custom-url/$',
         TemplateView.as_view(template_name='page.html')),
-    url(r'^about-us/meet-the-team/custom-url/child-page/$',
-        TemplateView.as_view(template_name='page.html')),
-    url(r'^people/$',
-        TemplateView.as_view(template_name='page.html')),
-    url(r'^some-page/$',
-        TemplateView.as_view(template_name='page.html')),
     url(r'^news-and-events/$',
         TemplateView.as_view(template_name='page.html')),
     # Hijacking the iron-man page to render a different template, that tests
