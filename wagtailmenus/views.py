@@ -49,16 +49,9 @@ class MainMenuIndexView(WMABaseView):
 class MenuTabbedInterfaceMixin:
 
     def get_edit_handler(self):
-        from .models import AbstractMainMenu, AbstractFlatMenu
         if hasattr(self.model, 'edit_handler'):
             edit_handler = self.model.edit_handler
-        elif ((
-            issubclass(self.model, AbstractMainMenu) and
-            self.model.panels is not AbstractMainMenu.panels
-        ) or (
-            issubclass(self.model, AbstractFlatMenu) and
-            self.model.panels is not AbstractFlatMenu.panels
-        )):
+        elif hasattr(self.model, 'panels'):
             edit_handler = ObjectList(self.model.panels)
         else:
             edit_handler = TabbedInterface([

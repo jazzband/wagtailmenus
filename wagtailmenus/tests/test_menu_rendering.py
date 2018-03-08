@@ -1478,8 +1478,3 @@ class TestTemplateTags(TestCase):
         """
         with self.assertRaises(SubMenuUsageError):
             self.client.get('/sub_menu-tag-used-directly/')
-
-
-@override_settings(WAGTAILMENUS_USE_BACKEND_SPECIFIC_TEMPLATES=True)
-class TestRenderingWithBackendSpecificTemplates(TestTemplateTags):
-    pass

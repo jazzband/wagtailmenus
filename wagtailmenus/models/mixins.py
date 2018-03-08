@@ -11,13 +11,6 @@ class DefinesSubMenuTemplatesMixin:
         template_name = self._option_vals.sub_menu_template_name or \
             self.sub_menu_template_name
 
-        # TODO: To be removed in v2.8.0
-        if not app_settings.USE_BACKEND_SPECIFIC_TEMPLATES:
-            engine = self.get_template_engine()
-            if template_name:
-                return engine.get_template(template_name)
-            return engine.select_template(self.get_sub_menu_template_names())
-
         if template_name:
             return get_template(template_name)
         return select_template(self.get_sub_menu_template_names())
@@ -57,11 +50,6 @@ class DefinesSubMenuTemplatesMixin:
         """
         data = {}
         if self._contextual_vals.current_level == 1 and self.max_levels > 1:
-            # TODO: Below conditional to be removed in v2.8.0
-            t = self.sub_menu_template
-            if not app_settings.USE_BACKEND_SPECIFIC_TEMPLATES:
-                data['sub_menu_template'] = t.name
-            else:
-                data['sub_menu_template'] = t.template.name
+            data['sub_menu_template'] = self.sub_menu_template.template.name
         data.update(kwargs)
         return super().get_context_data(**data)

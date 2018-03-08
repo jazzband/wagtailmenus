@@ -34,4 +34,10 @@ TBA
 Upgrade considerations
 ======================
 
-TBA
+Following the standard deprecation period, the following classes, methods and
+behaviour has been removed:
+
+-   Wagtailmenus now unconditionally uses backend-specific templates for rendering, and the ``WAGTAILMENUS_USE_BACKEND_SPECIFIC_TEMPLATES`` setting is ignored completely. See the 2.6 release notes for more info: http://wagtailmenus.readthedocs.io/en/stable/releases/2.6.0.html#improved-compatibility-with-alternative-template-backends. 
+-   The ``get_template_engine()`` method has been removed from ``wagtailmenus.models.menus.Menu``.
+-   The ``panels`` attribute has been removed from the``AbstractMainMenu`` and ``AbstractFlatMenu`` models, as have the ``main_menu_panels`` and ``flat_menu_panels`` panel definition values from ``wagtailmenus.panels``.
+

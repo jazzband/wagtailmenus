@@ -208,11 +208,6 @@ class AppSettings:
     def CUSTOM_URL_SMART_ACTIVE_CLASSES(self):
         return self._setting('CUSTOM_URL_SMART_ACTIVE_CLASSES', False)
 
-    # TODO: To be removed in v2.8.0
-    @property
-    def USE_BACKEND_SPECIFIC_TEMPLATES(self):
-        return self._setting('USE_BACKEND_SPECIFIC_TEMPLATES', False)
-
 
 import sys  # noqa
 
