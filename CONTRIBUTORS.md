@@ -13,6 +13,7 @@
 * Oliver Bestwalter (obestwalter)
 * Nguyễn Hồng Quân (hongquan)
 * Jérôme Lebleu (jeromelebleu)
+* Joshua C. Jackson (inostia)
 
 
 ## Translators
