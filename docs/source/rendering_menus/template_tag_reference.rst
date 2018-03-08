@@ -96,6 +96,8 @@ The tag will attempt to add 'active' and 'ancestor' CSS classes to the menu item
 
 You can change the CSS class strings used to indicate 'active' and 'ancestor' statuses by utilising the :ref:`ACTIVE_CLASS` and :ref:`ACTIVE_ANCESTOR_CLASS` settings.
 
+By default, menu items linking to custom URLs will also be attributed with the 'active' class if their ``link_url`` value matches the path of the current request _exactly_. However, there is now an alternative solution available, which you can enable by setting :ref:``CUSTOM_URL_SMART_ACTIVE_CLASSES`` to ``True`` in your project's settings.
+
 -----
 
 template
@@ -252,6 +254,8 @@ No         ``bool``             ``False``
 Unlike ``main_menu`` and ``section_menu``, ``flat_menu`` will NOT attempt to add ``'active'`` and ``'ancestor'`` classes to the menu items by default, as this is often not useful. You can override this by adding ``apply_active_classes=true`` to the tag in your template.
 
 You can change the CSS class strings used to indicate 'active' and 'ancestor' statuses by utilising the :ref:`ACTIVE_CLASS` and :ref:`ACTIVE_ANCESTOR_CLASS` settings.
+
+By default, menu items linking to custom URLs will also be attributed with the 'active' class if their ``link_url`` value matches the path of the current request _exactly_. However, there is now an alternative solution available, which you can enable by setting :ref:``CUSTOM_URL_SMART_ACTIVE_CLASSES`` to ``True`` in your project's settings.
 
 -----
 
@@ -575,6 +579,8 @@ No         ``bool``             ``False``
 Unlike ``main_menu`` and `section_menu``, ``children_menu`` will NOT attempt to add ``'active'`` and ``'ancestor'`` classes to the menu items by default, as this is often not useful. You can override this by adding ``apply_active_classes=true`` to the tag in your template.
 
 You can change the CSS class strings used to indicate 'active' and 'ancestor' statuses by utilising the :ref:`ACTIVE_CLASS` and :ref:`ACTIVE_ANCESTOR_CLASS` settings.
+
+By default, menu items linking to custom URLs will also be attributed with the 'active' class if their ``link_url`` value matches the path of the current request _exactly_. However, there is now an alternative solution available, which you can enable by setting :ref:``CUSTOM_URL_SMART_ACTIVE_CLASSES`` to ``True`` in your project's settings.
 
 -----
 
