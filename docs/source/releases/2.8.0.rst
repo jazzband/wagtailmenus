@@ -16,7 +16,16 @@ Wagtailmenus 2.8 (alpha) release notes
 What's new?
 ===========
 
-TBA
+Smarter 'active class' attribution for menu items that link to custom URLs 
+--------------------------------------------------------------------------
+
+By default, menu items linking to custom URLs are currently only attributed with the 'active' class if their ``link_url`` value matches the path of the current request **exactly**, producing unexpected results when GET parameters or fragments are added to the end of a ``link_url`` value.
+
+A new and improved approach to active class attribution for custom URL links has now been implemented (by Joshua C. Jackson and Andy Babic), which you can enable by adding ``WAGTAILMENUS_CUSTOM_URL_SMART_ACTIVE_CLASSES = True`` to your project's settings.
+
+With the new approach, only the 'path' part of the ``link_url`` value is used for comparision with ``request.path``, which produces far more consistent results. The new approach also allows the 'ancestor' class to be attributed to menu items where the ``link_url`` looks like an ancestor of the current request URL. For example, if a menu item's ``link_url`` value is ``'/news/'``, and the request path is ``'/news/boring-news-article/'``, then the menu item will be attributed with the 'ancestor' class.
+
+The previous behaviour is now deprecated in favour of this new approach, and will be removed in version 2.10, with the new approach becoming the default (and only) option.
 
 
 Minor changes & bug fixes 
@@ -28,7 +37,7 @@ TBA
 Deprecations
 ============
 
-TBA
+- The current 'active class' attribution behaviour for menu items linking to custom URLs is deprecated (see above for details). Add ``WAGTAILMENUS_CUSTOM_URL_SMART_ACTIVE_CLASSES = True`` to your project's settings to enable the new and improved behaviour and silence the deprecation warning.
 
 
 Upgrade considerations
