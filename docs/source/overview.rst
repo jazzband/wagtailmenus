@@ -31,7 +31,7 @@ You can also define additional values to be added to a page's URL, letting you j
 Multi-level menus generated from your existing page tree
 ========================================================
 
-We firmly beleive that your page tree is the best place to define the structure, and the 'natural order' of pages within your site. Wagtailmenus only allows you to define the top-level items for each menu, because offering anything more would inevitably lead to site managers redefining parts of the page tree in multiple places, doomed to become outdated as the original tree changes over time.
+We firmly believe that your page tree is the best place to define the structure, and the 'natural order' of pages within your site. Wagtailmenus only allows you to define the top-level items for each menu, because offering anything more would inevitably lead to site managers redefining parts of the page tree in multiple places, doomed to become outdated as the original tree changes over time.
 
 To generate multi-level menus, wagtailmenus takes the top-level items you define for each menu and automatically combines it with your page tree, efficiently identifying ancestors for each selected pages and outputting them as sub-menus following the same structure and order.
 
