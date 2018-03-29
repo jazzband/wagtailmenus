@@ -31,7 +31,9 @@ Follow the steps outlined below to prep changes in your fork:
 
 5.  Make sure the release notes for the new version have been created /
     updated in ``docs/source/releases/`` and are referenced in 
-    ``docs/source/releases/index.rst``.
+    ``docs/source/releases/index.rst``. Be sure to remove the '(alpha)' or 
+    '(beta)' from the heading in the latest release notes, as well as the
+    'Wagtailmenus X.X is in the alpha stage of development' just below.
 
 6.  If releasing a 'final' version, following an 'alpha' or 'beta' release, 
     ensure the ``a`` or ``b`` is removed from the file name for the release, 
