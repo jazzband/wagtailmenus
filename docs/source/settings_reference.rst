@@ -31,7 +31,7 @@ By default, wagtailmenus adds some additional styles to improve the readability 
 ``WAGTAILMENUS_FLATMENU_MENU_ICON``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Default value: `'list-ol'`
+Default value: ``'list-ol'``
 
 Use this to change the icon used to represent 'Flat menus' in the Wagtail CMS.
 
@@ -328,7 +328,7 @@ Default value: ``3``
 
 Use this to specify the 'depth' value of a project's 'section root' pages. For most Wagtail projects, this should be ``3`` (Root page depth = ``1``, Home page depth = ``2``), but it may well differ, depending on the needs of the project.
 
-.. _CUSTOM_URL_SMART_ACTIVE_CLASSES
+.. _CUSTOM_URL_SMART_ACTIVE_CLASSES:
 
 ``WAGTAILMENUS_CUSTOM_URL_SMART_ACTIVE_CLASSES``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

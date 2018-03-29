@@ -306,20 +306,20 @@ Below is a full list of the additional arguments that are passed to methods usin
     A list of ids of ``Page`` instances that are an 'ancestor' of ``current_page``.
 
 ``current_section_root_page``
-    If ``current_page`` has a value, this will be the top-most ancestor of that page, from just below the site's root page. For example, if your page tree looked like the following:
+    If ``current_page`` has a value, this will be the top-most ancestor of that page, from just below the site's root page. For example, if your page tree looked like the following::
 
-    Home (Set as 'root page' for the site)  
-    ├── About us  
-    ├── What we do  
-    ├── Careers  
-    |   ├── Vacancy one  
-    |   └── Vacancy two  
-    ├── News & events  
-    |   ├── News  
-    |   |   ├── Article one  
-    |   |   └── Article two  
-    |   └── Events  
-    └── Contact us
+        Home (Set as 'root page' for the site)
+        ├── About us
+        ├── What we do
+        ├── Careers
+        |   ├── Vacancy one
+        |   └── Vacancy two
+        ├── News & events
+        |   ├── News
+        |   |   ├── Article one
+        |   |   └── Article two
+        |   └── Events
+        └── Contact us
 
     If the current page was 'Vacancy one', the section root page would be 'Careers'. Or, if the current page was 'Article one', the section root page would be 'News & events'.
 
