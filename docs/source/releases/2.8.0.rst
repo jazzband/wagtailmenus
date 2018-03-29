@@ -31,7 +31,7 @@ The previous behaviour is now deprecated in favour of this new approach, and wil
 Minor changes & bug fixes 
 =========================
 
-TBA
+- Various documentation spelling/formatting corrections (thanks to Sergey Fedoseev and Pierre Manceaux).
 
 
 Deprecations
