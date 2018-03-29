@@ -17,7 +17,7 @@ By default, menu items linking to custom URLs are currently only attributed with
 
 A new and improved approach to active class attribution for custom URL links has now been implemented (by Joshua C. Jackson and Andy Babic), which you can enable by adding ``WAGTAILMENUS_CUSTOM_URL_SMART_ACTIVE_CLASSES = True`` to your project's settings.
 
-With the new approach, only the 'path' part of the ``link_url`` value is used for comparision with ``request.path``, which produces far more consistent results. The new approach also allows the 'ancestor' class to be attributed to menu items where the ``link_url`` looks like an ancestor of the current request URL. For example, if a menu item's ``link_url`` value is ``'/news/'``, and the request path is ``'/news/boring-news-article/'``, then the menu item will be attributed with the 'ancestor' class.
+With the new approach, only the 'path' part of the ``link_url`` value is used for comparison with ``request.path``, which produces far more consistent results. The new approach also allows the 'ancestor' class to be attributed to menu items where the ``link_url`` looks like an ancestor of the current request URL. For example, if a menu item's ``link_url`` value is ``'/news/'``, and the request path is ``'/news/boring-news-article/'``, then the menu item will be attributed with the 'ancestor' class.
 
 The previous behaviour is now deprecated in favour of this new approach, and will be removed in version 2.10, with the new approach becoming the default (and only) option.
 
@@ -38,7 +38,7 @@ Upgrade considerations
 ======================
 
 Following the standard deprecation period, the following classes, methods and
-behaviour has been removed:
+behaviour have been removed:
 
 -   Wagtailmenus now unconditionally uses backend-specific templates for rendering, and the ``WAGTAILMENUS_USE_BACKEND_SPECIFIC_TEMPLATES`` setting is ignored completely. See the 2.6 release notes for more info: http://wagtailmenus.readthedocs.io/en/stable/releases/2.6.0.html#improved-compatibility-with-alternative-template-backends. 
 -   The ``get_template_engine()`` method has been removed from ``wagtailmenus.models.menus.Menu``.
