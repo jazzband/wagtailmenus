@@ -1,12 +1,6 @@
-======================================
-Wagtailmenus 2.8 (alpha) release notes
-======================================
-
-.. NOTE ::
-    
-    Wagtailmenus 2.8 is in the alpha stage of development. Any changes
-    detailed below are subject to change before the final 2.8 release.
-
+==============================
+Wagtailmenus 2.8 release notes
+==============================
 
 .. contents::
     :local:
@@ -31,7 +25,7 @@ The previous behaviour is now deprecated in favour of this new approach, and wil
 Minor changes & bug fixes 
 =========================
 
-TBA
+- Various documentation spelling/formatting corrections (thanks to Sergey Fedoseev and Pierre Manceaux).
 
 
 Deprecations

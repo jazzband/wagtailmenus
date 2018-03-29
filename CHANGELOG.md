@@ -7,6 +7,18 @@ Changelog
 TBA
 
 
+2.8.0 (29.03.2018)
+------------------
+
+* Added improved active class attribution behaviour for menu items that link to custom URLs (Enabled using the `WAGTAILMENUS_CUSTOM_URL_SMART_ACTIVE_CLASSES` setting).
+* Deprecated the existing active class attribution behaviour in favour of the above.
+* Backend-specific template instances are now always used for rendering.
+* Removed `get_template_engine()` method from `wagtailmenus.models.menus.Menu`
+* Removed `panels` attributes from the `AbstractMainMenu` and `AbstractFlatMenu` models
+* Removed `main_menu_panels` and `flat_menu_panels` from `wagtailmenus.panels`.
+* Various documentation spelling/formatting corrections (thanks to Sergey Fedoseev and Pierre Manceaux).
+
+
 2.7.1 (07.03.2018)
 ------------------
 
