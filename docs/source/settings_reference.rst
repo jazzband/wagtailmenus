@@ -31,7 +31,7 @@ By default, wagtailmenus adds some additional styles to improve the readability 
 ``WAGTAILMENUS_FLATMENU_MENU_ICON``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Default value: `'list-ol'`
+Default value: ``'list-ol'``
 
 Use this to change the icon used to represent 'Flat menus' in the Wagtail CMS.
 
