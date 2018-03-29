@@ -14,6 +14,8 @@
 * Nguyễn Hồng Quân (hongquan)
 * Jérôme Lebleu (jeromelebleu)
 * Joshua C. Jackson (inostia)
+* Sergey Fedoseev (sir-sigurd)
+* Pierre Manceaux (pierremanceaux)
 
 
 ## Translators
