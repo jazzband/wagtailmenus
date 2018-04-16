@@ -208,6 +208,13 @@ class AppSettings:
     def CUSTOM_URL_SMART_ACTIVE_CLASSES(self):
         return self._setting('CUSTOM_URL_SMART_ACTIVE_CLASSES', False)
 
+    @property
+    def MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN(self):
+        return self._setting('MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN', True)
+
+    @property
+    def FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN(self):
+        return self._setting('FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN', True)
 
 import sys  # noqa
 
