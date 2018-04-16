@@ -26,7 +26,7 @@ class AppSettings:
         self._prefix = prefix
         self._settings = settings
 
-    def _setting(self, name, default):
+    def _setting(self, name, default=None):
         return getattr(self._settings, self._prefix + name, default)
 
     def class_from_path_setting(self, path_setting_name):
@@ -109,10 +109,18 @@ class AppSettings:
         )
 
     @property
+    def DEFAULT_MAIN_MENU_SUB_MENU_TEMPLATES(self):
+        return self._setting('DEFAULT_MAIN_MENU_SUB_MENU_TEMPLATES')
+
+    @property
     def DEFAULT_FLAT_MENU_TEMPLATE(self):
         return self._setting(
             'DEFAULT_FLAT_MENU_TEMPLATE', 'menus/flat_menu.html'
         )
+
+    @property
+    def DEFAULT_FLAT_MENU_SUB_MENU_TEMPLATES(self):
+        return self._setting('DEFAULT_FLAT_MENU_SUB_MENU_TEMPLATES')
 
     @property
     def DEFAULT_SECTION_MENU_TEMPLATE(self):
@@ -121,10 +129,18 @@ class AppSettings:
         )
 
     @property
+    def DEFAULT_SECTION_MENU_SUB_MENU_TEMPLATES(self):
+        return self._setting('DEFAULT_SECTION_MENU_SUB_MENU_TEMPLATES')
+
+    @property
     def DEFAULT_CHILDREN_MENU_TEMPLATE(self):
         return self._setting(
             'DEFAULT_CHILDREN_MENU_TEMPLATE', 'menus/children_menu.html'
         )
+
+    @property
+    def DEFAULT_CHILDREN_MENU_SUB_MENU_TEMPLATES(self):
+        return self._setting('DEFAULT_CHILDREN_MENU_SUB_MENU_TEMPLATES')
 
     @property
     def DEFAULT_SUB_MENU_TEMPLATE(self):
@@ -154,7 +170,7 @@ class AppSettings:
 
     @property
     def FLAT_MENUS_HANDLE_CHOICES(self):
-        return self._setting('FLAT_MENUS_HANDLE_CHOICES', None)
+        return self._setting('FLAT_MENUS_HANDLE_CHOICES')
 
     @property
     def PAGE_FIELD_FOR_MENU_ITEM_TEXT(self):
