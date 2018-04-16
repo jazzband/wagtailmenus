@@ -54,7 +54,8 @@ ContextualVals = namedtuple('ContextualVals', (
 OptionVals = namedtuple('OptionVals', (
     'max_levels', 'use_specific', 'apply_active_classes',
     'allow_repeating_parents', 'use_absolute_page_urls', 'parent_page',
-    'handle', 'template_name', 'sub_menu_template_name', 'extra'
+    'handle', 'template_name', 'sub_menu_template_name',
+    'sub_menu_template_names', 'extra'
 ))
 
 
@@ -151,6 +152,7 @@ class Menu:
             options.pop('handle', None),  # for AbstractFlatMenu
             options.pop('template_name', ''),
             options.pop('sub_menu_template_name', ''),
+            options.pop('sub_menu_template_names', None),
             options  # anything left over will be stored as 'extra'
         )
 
@@ -573,6 +575,10 @@ class Menu:
         item, which typically comes from an overridable setting."""
         return
 
+    @classmethod
+    def get_sub_menu_template_names_from_setting(cls):
+        return None
+
 
 class MenuFromPage(Menu):
     """
@@ -691,6 +697,10 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     def get_least_specific_template_name(cls):
         return app_settings.DEFAULT_SECTION_MENU_TEMPLATE
 
+    @classmethod
+    def get_sub_menu_template_names_from_setting(cls):
+        return app_settings.DEFAULT_SECTION_MENU_SUB_MENU_TEMPLATES
+
     def __init__(self, root_page, max_levels, use_specific):
         self.root_page = root_page
         self.max_levels = max_levels
@@ -784,6 +794,10 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     def get_least_specific_template_name(cls):
         return app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE
 
+    @classmethod
+    def get_sub_menu_template_names_from_setting(cls):
+        return app_settings.DEFAULT_CHILDREN_MENU_SUB_MENU_TEMPLATES
+
     def __init__(self, parent_page, max_levels=None, use_specific=None):
         if max_levels is None:
             raise TypeError(
@@ -840,7 +854,9 @@ class SubMenu(MenuFromPage):
     def get_template(self):
         if self._option_vals.template_name or self.template_name:
             return super().get_template()
-        return self.original_menu.sub_menu_template
+        return self.original_menu.get_sub_menu_template(
+            level=self._contextual_vals.current_level
+        )
 
     def get_context_data(self, **kwargs):
         data = {'parent_page': self.parent_page}
@@ -1040,6 +1056,10 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     def get_least_specific_template_name(cls):
         return app_settings.DEFAULT_MAIN_MENU_TEMPLATE
 
+    @classmethod
+    def get_sub_menu_template_names_from_setting(cls):
+        return app_settings.DEFAULT_MAIN_MENU_SUB_MENU_TEMPLATES
+
     def __str__(self):
         return _('Main menu for %(site_name)s') % {
             'site_name': self.site.site_name or self.site
@@ -1152,6 +1172,19 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     def get_least_specific_template_name(cls):
         return app_settings.DEFAULT_FLAT_MENU_TEMPLATE
 
+    def get_sub_menu_template_names_from_setting(self):
+        templates = app_settings.DEFAULT_FLAT_MENU_SUB_MENU_TEMPLATES
+        # This setting can be a list or tuple like for other menu types, or a
+        # dictionary keyed by 'handle', allowing developers to specify
+        # different sub_menu templates for each variation of flat menu
+        if isinstance(templates, dict):
+            if self.handle in templates:
+                return templates[self.handle]
+            if 'default' in templates:
+                return templates['default']
+            return ()
+        return templates
+
     def __str__(self):
         return '%s (%s)' % (self.title, self.handle)
 
@@ -1205,23 +1238,24 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         """Returns a list of template names to search for when rendering a
         a specific flat menu object (making use of self.handle)"""
         site = self._contextual_vals.current_site
+        handle = self.handle
         template_names = []
         if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
-            hn = site.hostname
+            hostname = site.hostname
             template_names.extend([
-                "menus/%s/flat/%s/menu.html" % (hn, self.handle),
-                "menus/%s/flat/%s.html" % (hn, self.handle),
-                "menus/%s/%s/menu.html" % (hn, self.handle),
-                "menus/%s/%s.html" % (hn, self.handle),
-                "menus/%s/flat/menu.html" % hn,
-                "menus/%s/flat/default.html" % hn,
-                "menus/%s/flat_menu.html" % hn,
+                "menus/%s/flat/%s/menu.html" % (hostname, handle),
+                "menus/%s/flat/%s.html" % (hostname, handle),
+                "menus/%s/%s/menu.html" % (hostname, handle),
+                "menus/%s/%s.html" % (hostname, handle),
+                "menus/%s/flat/menu.html" % hostname,
+                "menus/%s/flat/default.html" % hostname,
+                "menus/%s/flat_menu.html" % hostname,
             ])
         template_names.extend([
-            "menus/flat/%s/menu.html" % self.handle,
-            "menus/flat/%s.html" % self.handle,
-            "menus/%s/menu.html" % self.handle,
-            "menus/%s.html" % self.handle,
+            "menus/flat/%s/menu.html" % handle,
+            "menus/flat/%s.html" % handle,
+            "menus/%s/menu.html" % handle,
+            "menus/%s.html" % handle,
             "menus/flat/default.html",
             "menus/flat/menu.html",
         ])
@@ -1235,22 +1269,31 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         a sub menu for a specific flat menu object (making use of self.handle)
         """
         site = self._contextual_vals.current_site
+        level = self._contextual_vals.current_level
+        handle = self.handle
         template_names = []
         if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
-            hn = site.hostname
+            hostname = site.hostname
             template_names.extend([
-                "menus/%s/flat/%s/sub_menu.html" % (hn, self.handle),
-                "menus/%s/flat/%s_sub_menu.html" % (hn, self.handle),
-                "menus/%s/%s/sub_menu.html" % (hn, self.handle),
-                "menus/%s/%s_sub_menu.html" % (hn, self.handle),
-                "menus/%s/flat/sub_menu.html" % hn,
-                "menus/%s/sub_menu.html" % hn,
+                "menus/%s/flat/%s/sub_menu_level_%s.html" % (hostname, handle, level),
+                "menus/%s/flat/%s_sub_menu_level_%s.html" % (hostname, handle, level),
+                "menus/%s/flat/%s/sub_menu.html" % (hostname, handle),
+                "menus/%s/flat/%s_sub_menu.html" % (hostname, handle),
+                "menus/%s/%s/sub_menu.html" % (hostname, handle),
+                "menus/%s/%s_sub_menu.html" % (hostname, handle),
+                "menus/%s/flat/sub_menu.html" % hostname,
+                "menus/%s/sub_menu.html" % hostname,
             ])
         template_names.extend([
-            "menus/flat/%s/sub_menu.html" % self.handle,
-            "menus/flat/%s_sub_menu.html" % self.handle,
-            "menus/%s/sub_menu.html" % self.handle,
-            "menus/%s_sub_menu.html" % self.handle,
+            "menus/flat/%s/sub_menu_level_%s.html" % (handle, level),
+            "menus/flat/%s_sub_menu_level_%s.html" % (handle, level),
+            "menus/%s/sub_menu_level_%s.html" % (handle, level),
+            "menus/%s_sub_menu_level_%s.html" % (handle, level),
+            "menus/flat/%s/sub_menu.html" % handle,
+            "menus/flat/%s_sub_menu.html" % handle,
+            "menus/%s/sub_menu.html" % handle,
+            "menus/%s_sub_menu.html" % handle,
+            "menus/flat/sub_menu_level_%s.html" % level,
             "menus/flat/sub_menu.html",
             app_settings.DEFAULT_SUB_MENU_TEMPLATE,
         ])
