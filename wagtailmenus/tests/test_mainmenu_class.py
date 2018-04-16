@@ -1,71 +1,20 @@
-from __future__ import absolute_import, unicode_literals
+from django.test import TestCase, override_settings
 
-from django.test import TestCase
-from django.core.exceptions import ValidationError
-from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core.models import Page
-else:
-    from wagtail.wagtailcore.models import Page
+from wagtailmenus.models import MainMenu
+from wagtailmenus.tests import utils
 
-from wagtailmenus.models import (
-    ChildrenMenu, MainMenu, MainMenuItem, FlatMenu, FlatMenuItem)
+Page = utils.get_page_model()
 
 
-class TestMenuClasses(TestCase):
+class TestMainMenuClass(TestCase):
     fixtures = ['test.json']
 
-    def test_mainmenuitem_meta_settings(self):
-        opts = MainMenuItem._meta
-        self.assertEqual(opts.verbose_name, 'menu item')
-        self.assertEqual(opts.verbose_name_plural, 'menu items')
-        self.assertEqual(opts.ordering, ('sort_order',))
+    def get_random_menu_instance_with_opt_vals_set(self):
+        obj = MainMenu.objects.order_by('?').first()
+        obj._option_vals = utils.make_optionvals_instance()
+        return obj
 
-    def test_flatmenuitem_meta_settings(self):
-        opts = FlatMenuItem._meta
-        self.assertEqual(opts.verbose_name, 'menu item')
-        self.assertEqual(opts.verbose_name_plural, 'menu items')
-        self.assertEqual(opts.ordering, ('sort_order',))
-
-    def test_mainmenuitem_clean_missing_link_text(self):
-        menu = MainMenu.objects.get(pk=1)
-        new_item = MainMenuItem(menu=menu, link_url='test/')
-        self.assertRaisesMessage(
-            ValidationError,
-            "This field is required when linking to a custom URL",
-            new_item.clean)
-
-    def test_mainmenuitem_clean_missing_link_url(self):
-        menu = MainMenu.objects.get(pk=1)
-        new_item = MainMenuItem(menu=menu)
-        self.assertRaisesMessage(
-            ValidationError,
-            "Please choose an internal page or provide a custom URL",
-            new_item.clean)
-
-    def test_mainmenuitem_clean_link_url_and_link_page(self):
-        menu = MainMenu.objects.get(pk=1)
-        new_item = MainMenuItem(
-            menu=menu,
-            link_text='Test',
-            link_url='test/',
-            link_page=Page.objects.get(pk=6))
-        self.assertRaisesMessage(
-            ValidationError,
-            "Linking to both a page and custom URL is not permitted",
-            new_item.clean)
-
-    def test_mainmenuitem_str(self):
-        menu = MainMenu.objects.get(pk=1)
-        item_1 = menu.menu_items.first()
-        self.assertEqual(item_1.__str__(), 'Home')
-
-    def test_flatmenuitem_str(self):
-        menu = FlatMenu.objects.get(handle='contact')
-        item_1 = menu.menu_items.first()
-        self.assertEqual(item_1.__str__(), 'Call us')
-
-    def test_mainmenu_top_level_items(self):
+    def test_top_level_items(self):
         menu = MainMenu.objects.get(pk=1)
         # This menu has a `use_specific` value of 1 (AUTO)
         self.assertEqual(menu.use_specific, 1)
@@ -99,7 +48,7 @@ class TestMenuClasses(TestCase):
             for item in menu.top_level_items:
                 assert item.link_page is None or type(item.link_page) is not Page
 
-    def test_mainmenu_pages_for_display(self):
+    def test_pages_for_display(self):
         menu = MainMenu.objects.get(pk=1)
         # This menu has a `use_specific` value of 1 (AUTO)
         self.assertEqual(menu.use_specific, 1)
