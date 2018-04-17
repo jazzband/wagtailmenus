@@ -18,6 +18,7 @@ testing_extras = [
     'beautifulsoup4>=4.4.1,<4.5.02',
     'coverage>=3.7.0',
     'wagtail-condensedinlinepanel==0.3',
+    'mock>=2.0.0'
 ]
 
 documentation_extras = [
