@@ -5,3 +5,4 @@ django-debug-toolbar
 django-extensions
 ipdb
 werkzeug
+mock
