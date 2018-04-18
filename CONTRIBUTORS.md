@@ -16,6 +16,7 @@
 * Joshua C. Jackson (inostia)
 * Sergey Fedoseev (sir-sigurd)
 * Pierre Manceaux (pierremanceaux)
+* Michael van de Waeter (mvdwaeter)
 
 
 ## Translators
