@@ -1,22 +1,29 @@
+from importlib import reload
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
-from django.test import TransactionTestCase, override_settings, modify_settings
+from django.test import (
+    TestCase, TransactionTestCase, modify_settings, override_settings
+)
+from mock import call, patch
+
 from django_webtest import WebTest
 from wagtail import VERSION as WAGTAIL_VERSION
+from wagtailmenus import (
+    get_flat_menu_model, get_main_menu_model, wagtail_hooks
+)
+from wagtailmenus.panels import (
+    FlatMenuItemsInlinePanel, MainMenuItemsInlinePanel
+)
+from wagtailmenus.tests.models import LinkPage
+
 if WAGTAIL_VERSION >= (2, 0):
     from wagtail.admin.edit_handlers import ObjectList, InlinePanel
     from wagtail.core.models import Page, Site
 else:
     from wagtail.wagtailadmin.edit_handlers import ObjectList, InlinePanel
     from wagtail.wagtailcore.models import Page, Site
-
-from wagtailmenus import get_flat_menu_model, get_main_menu_model
-from wagtailmenus.panels import (
-    FlatMenuItemsInlinePanel, MainMenuItemsInlinePanel)
-
-from wagtailmenus.tests.models import LinkPage
-
 
 FlatMenu = get_flat_menu_model()
 
@@ -288,3 +295,57 @@ class TestNonSuperUser(TransactionTestCase):
     def test_mainmenu_edit_denied(self):
         response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
         self.assertEqual(response.status_code, 403)
+
+
+class TestDisablingMenusInWagtailCMS(TestCase):
+    """
+    Tests if modeladmin is registered based on settings.
+    """
+    @override_settings(
+        WAGTAILMENUS_MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN=True,
+        WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN=True,
+    )
+    @patch('wagtail.contrib.modeladmin.options.modeladmin_register')
+    def test_enabled_both_menus(self, mock_modeladmin_register):
+        """
+        Enabling both wagtailmenus should register both modeladmins.
+        """
+        reload(wagtail_hooks)
+        self.assertIn(
+            call(wagtail_hooks.MainMenuAdmin),
+            mock_modeladmin_register.mock_calls)
+        self.assertIn(
+            call(wagtail_hooks.FlatMenuAdmin),
+            mock_modeladmin_register.mock_calls)
+
+    @override_settings(
+        WAGTAILMENUS_MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN=False,
+    )
+    @patch('wagtail.contrib.modeladmin.options.modeladmin_register')
+    def test_disable_main_menus(self, mock_modeladmin_register):
+        """
+        Disabling the 'Main menu' via setting should prevent registering the
+        MainMenuAdmin.
+        """
+        reload(wagtail_hooks)
+        self.assertNotIn(
+            call(wagtail_hooks.MainMenuAdmin),
+            mock_modeladmin_register.mock_calls)
+        mock_modeladmin_register.assert_called_once_with(
+            wagtail_hooks.FlatMenuAdmin)
+
+    @override_settings(
+        WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN=False,
+    )
+    @patch('wagtail.contrib.modeladmin.options.modeladmin_register')
+    def test_disable_flat_menus(self, mock_modeladmin_register):
+        """
+        Disabling the 'Flat menu' via setting should prevent registering the
+        FlatMenuAdmin.
+        """
+        reload(wagtail_hooks)
+        self.assertNotIn(
+            call(wagtail_hooks.FlatMenuAdmin),
+            mock_modeladmin_register.mock_calls)
+        mock_modeladmin_register.assert_called_once_with(
+            wagtail_hooks.MainMenuAdmin)

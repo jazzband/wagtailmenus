@@ -38,7 +38,9 @@ class MainMenuAdmin(ModelAdmin):
                 name=self.url_helper.get_action_url_name('edit')),
         )
 
-modeladmin_register(MainMenuAdmin)
+
+if app_settings.MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN:
+    modeladmin_register(MainMenuAdmin)
 
 
 class FlatMenuButtonHelper(ButtonHelper):
@@ -119,7 +121,8 @@ class FlatMenuAdmin(ModelAdmin):
     items.short_description = _('no. of items')
 
 
-modeladmin_register(FlatMenuAdmin)
+if app_settings.FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN:
+    modeladmin_register(FlatMenuAdmin)
 
 
 @hooks.register('before_serve_page')
