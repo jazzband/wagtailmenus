@@ -6,7 +6,9 @@ from wagtailmenus.tests import utils
 Page = utils.get_page_model()
 
 
-class TestMainMenuClass(TestCase):
+class MainMenuTestCase(TestCase):
+    """A base TestCase class for testing MainMenu model class methods"""
+
     fixtures = ['test.json']
 
     def get_random_menu_instance_with_opt_vals_set(self):
@@ -14,7 +16,14 @@ class TestMainMenuClass(TestCase):
         obj._option_vals = utils.make_optionvals_instance()
         return obj
 
-    def test_top_level_items(self):
+
+class TestTopLevelItems(MainMenuTestCase):
+
+    # ------------------------------------------------------------------------
+    # MainMenu.top_level_items()
+    # ------------------------------------------------------------------------
+
+    def test_setting_and_clearing_of_cache_values(self):
         menu = MainMenu.objects.get(pk=1)
         # This menu has a `use_specific` value of 1 (AUTO)
         self.assertEqual(menu.use_specific, 1)
@@ -48,7 +57,14 @@ class TestMainMenuClass(TestCase):
             for item in menu.top_level_items:
                 assert item.link_page is None or type(item.link_page) is not Page
 
-    def test_pages_for_display(self):
+
+class TestPagesForDisplay(MainMenuTestCase):
+
+    # ------------------------------------------------------------------------
+    # MainMenu.pages_for_display()
+    # ------------------------------------------------------------------------
+
+    def test_setting_and_clearing_of_cache_values(self):
         menu = MainMenu.objects.get(pk=1)
         # This menu has a `use_specific` value of 1 (AUTO)
         self.assertEqual(menu.use_specific, 1)
@@ -107,6 +123,13 @@ class TestMainMenuClass(TestCase):
             for p in menu.pages_for_display:
                 assert type(p) is not Page
 
+
+class TestAddMenuItemsForPages(MainMenuTestCase):
+
+    # ------------------------------------------------------------------------
+    # MainMenu.add_menu_items_for_pages()
+    # ------------------------------------------------------------------------
+
     def test_add_menu_items_for_pages(self):
         menu = MainMenu.objects.get(pk=1)
         # The current number of menu items is 6
@@ -138,11 +161,15 @@ class TestMainMenuClass(TestCase):
         self.assertEqual(marvel_item.link_page.title, 'Marvel Comics')
         self.assertEqual(marvel_item.sort_order, 6)
 
+
+class TestGetSubMenuTemplateNamesFromSetting(MainMenuTestCase):
+
     # ------------------------------------------------------------------------
-    # get_sub_menu_template_names()
+    # MainMenu.get_sub_menu_template_names()
+    # (inherited from mixins.DefinesSubMenuTemplatesMixin)
     # ------------------------------------------------------------------------
 
-    def test_get_sub_menu_template_names_from_setting_returns_none_if_setting_not_set(self):
+    def test_return_value_is_none_if_setting_not_set(self):
         self.assertEqual(
             MainMenu.get_sub_menu_template_names_from_setting(), None
         )
@@ -150,17 +177,21 @@ class TestMainMenuClass(TestCase):
     @override_settings(
         WAGTAILMENUS_DEFAULT_MAIN_MENU_SUB_MENU_TEMPLATES=utils.SUB_MENU_TEMPLATE_LIST
     )
-    def test_get_sub_menu_template_names_from_setting_returns_setting_value_when_set(self):
+    def test_setting_value_returned_if_set(self):
         self.assertEqual(
             MainMenu.get_sub_menu_template_names_from_setting(),
             utils.SUB_MENU_TEMPLATE_LIST
         )
 
+
+class TestGetSpecifiedSubMenuTemplateName(MainMenuTestCase):
+
     # ------------------------------------------------------------------------
-    # get_specified_sub_menu_template_name()
+    # MainMenu._get_specified_sub_menu_template_name()
+    # (inherited from mixins.DefinesSubMenuTemplatesMixin)
     # ------------------------------------------------------------------------
 
-    def test_get_specified_sub_menu_template_name_returns_none_if_no_templates_specified(self):
+    def test_returns_none_if_no_templates_specified(self):
         menu = self.get_random_menu_instance_with_opt_vals_set()
         self.assertEqual(
             menu._get_specified_sub_menu_template_name(level=2), None
@@ -175,7 +206,7 @@ class TestMainMenuClass(TestCase):
     @override_settings(
         WAGTAILMENUS_DEFAULT_MAIN_MENU_SUB_MENU_TEMPLATES=utils.SUB_MENU_TEMPLATE_LIST
     )
-    def test_get_specified_sub_menu_template_name_returns_ideal_template_if_setting_defined(self):
+    def test_returns_ideal_template_if_setting_defined(self):
         menu = self.get_random_menu_instance_with_opt_vals_set()
         self.assertEqual(
             menu._get_specified_sub_menu_template_name(level=2),
@@ -189,7 +220,7 @@ class TestMainMenuClass(TestCase):
     @override_settings(
         WAGTAILMENUS_DEFAULT_MAIN_MENU_SUB_MENU_TEMPLATES=utils.SINGLE_ITEM_SUB_MENU_TEMPLATE_LIST
     )
-    def test_get_specified_sub_menu_template_name_returns_last_template_when_no_template_specified_for_level(self):
+    def test_returns_last_template_when_no_template_specified_for_level(self):
         menu = self.get_random_menu_instance_with_opt_vals_set()
         self.assertEqual(
             menu._get_specified_sub_menu_template_name(level=2),
@@ -203,7 +234,7 @@ class TestMainMenuClass(TestCase):
     @override_settings(
         WAGTAILMENUS_DEFAULT_MAIN_MENU_SUB_MENU_TEMPLATES=utils.SINGLE_ITEM_SUB_MENU_TEMPLATE_LIST
     )
-    def test_get_specified_sub_menu_template_name_value_preference_order(self):
+    def test_preference_order_of_specified_values(self):
         menu = MainMenu.objects.all().first()
         menu._option_vals = utils.make_optionvals_instance(
             sub_menu_template_name='single_template_as_option.html',
@@ -259,11 +290,15 @@ class TestMainMenuClass(TestCase):
             utils.SINGLE_ITEM_SUB_MENU_TEMPLATE_LIST[0]
         )
 
+
+class TestGetSubMenuTemplateNamesMethod(MainMenuTestCase):
+
     # ------------------------------------------------------------------------
-    # get_sub_menu_template_names()
+    # MainMenu.get_sub_menu_template_names()
+    # (inherited from mixins.DefinesSubMenuTemplatesMixin)
     # ------------------------------------------------------------------------
 
-    def test_get_sub_menu_template_names_does_not_include_site_specific_templates_by_default(self):
+    def test_site_specific_templates_not_returned_by_default(self):
         menu = MainMenu.objects.all().first()
         menu._contextual_vals = utils.make_contextualvals_instance(
             current_site=menu.site
@@ -274,18 +309,18 @@ class TestMainMenuClass(TestCase):
             self.assertFalse(menu.site.hostname in val)
 
     @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True)
-    def test_get_sub_menu_template_names_includes_site_specific_templates_if_setting_is_true_and_current_site_is_in_contextual_vals(self):
+    def test_specific_templates_returned_if_setting_is_true_and_current_site_is_in_contextual_vals(self):
         menu = MainMenu.objects.all().first()
         menu._contextual_vals = utils.make_contextualvals_instance(
             current_site=menu.site
         )
         result = menu.get_sub_menu_template_names()
-        self.assertEqual(len(result), 9)
+        self.assertEqual(len(result), 10)
         for val in result[:4]:
             self.assertTrue(menu.site.hostname in val)
 
     @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True)
-    def test_get_sub_menu_template_names_does_not_include_site_specific_templates_if_current_site_not_in_contextual_vals(self):
+    def test_specific_templates_not_returned_if_current_site_not_in_contextual_vals(self):
         menu = MainMenu.objects.all().first()
         menu._contextual_vals = utils.make_contextualvals_instance(
             current_site=None
@@ -295,38 +330,41 @@ class TestMainMenuClass(TestCase):
         for val in result:
             self.assertTrue(menu.site.hostname not in val)
 
+
+class TestGetTemplateNames(MainMenuTestCase):
+
     # ------------------------------------------------------------------------
-    # get_template_names()
+    # MainMenu.get_template_names() (inherited from menus.Menu)
     # ------------------------------------------------------------------------
 
-    def test_get_template_names_does_not_include_site_specific_templates_by_default(self):
-        menu = MainMenu.objects.all().first()
-        menu._contextual_vals = utils.make_contextualvals_instance(
-            url='/', current_site=menu.site
-        )
-        result = menu.get_template_names()
-        self.assertEqual(len(result), 2)
-        for val in result:
-            self.assertFalse(menu.site.hostname in val)
-
-    @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True)
-    def test_get_template_names_includes_site_specific_templates_if_setting_is_true_and_current_site_is_in_contextual_vals(self):
+    def test_site_specific_templates_not_returned_by_default(self):
         menu = MainMenu.objects.all().first()
         menu._contextual_vals = utils.make_contextualvals_instance(
             url='/', current_site=menu.site
         )
         result = menu.get_template_names()
         self.assertEqual(len(result), 4)
+        for val in result:
+            self.assertFalse(menu.site.hostname in val)
+
+    @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True)
+    def test_site_specific_templates_returned_if_setting_is_true_and_current_site_is_in_contextual_vals(self):
+        menu = MainMenu.objects.all().first()
+        menu._contextual_vals = utils.make_contextualvals_instance(
+            url='/', current_site=menu.site
+        )
+        result = menu.get_template_names()
+        self.assertEqual(len(result), 8)
         for val in result[:2]:
             self.assertTrue(menu.site.hostname in val)
 
     @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True)
-    def test_get_template_names_does_not_include_site_specific_templates_if_current_site_not_in_contextual_vals(self):
+    def test_specific_templates_not_returned_if_current_site_not_in_contextual_vals(self):
         menu = MainMenu.objects.all().first()
         menu._contextual_vals = utils.make_contextualvals_instance(
             url='/', current_site=None
         )
         result = menu.get_template_names()
-        self.assertEqual(len(result), 2)
+        self.assertEqual(len(result), 4)
         for val in result:
             self.assertTrue(menu.site.hostname not in val)

@@ -17,8 +17,8 @@ TEMPLATE_LISTS_DICT_WITH_DEFAULT = dict(TEMPLATE_LISTS_DICT_WITHOUT_DEFAULT)
 TEMPLATE_LISTS_DICT_WITH_DEFAULT['default'] = TEMPLATE_LIST_DEFAULT
 
 
-
-class TestFlatMenuClass(TestCase):
+class FlatMenuTestCase(TestCase):
+    """A base TestCase class for testing FlatMenu model class methods"""
 
     def setUp(self):
         self.site = Site.objects.get()
@@ -36,11 +36,14 @@ class TestFlatMenuClass(TestCase):
         for menu in self.menus:
             menu._option_vals = utils.make_optionvals_instance()
 
+
+class TestGetSubMenuTemplateNamesFromSettingMethod(FlatMenuTestCase):
+
     # ------------------------------------------------------------------------
-    # get_sub_menu_template_names_from_setting()
+    # FlatMenu.get_sub_menu_template_names_from_setting()
     # ------------------------------------------------------------------------
 
-    def test_get_sub_menu_template_names_from_setting_returns_none_if_setting_not_set(self):
+    def test_none_returned_if_setting_not_set(self):
         for menu in self.menus:
             self.assertEqual(
                 menu.get_sub_menu_template_names_from_setting(), None
@@ -49,7 +52,7 @@ class TestFlatMenuClass(TestCase):
     @override_settings(
         WAGTAILMENUS_DEFAULT_FLAT_MENU_SUB_MENU_TEMPLATES=TEMPLATE_LIST_DEFAULT
     )
-    def test_get_sub_menu_template_names_from_setting_returns_same_value_for_all_menus_when_setting_is_list(self):
+    def test_same_list_returned_when_the_setting_value_is_as_single_list(self):
         for menu in self.menus:
             self.assertEqual(
                 menu.get_sub_menu_template_names_from_setting(), TEMPLATE_LIST_DEFAULT
@@ -58,19 +61,19 @@ class TestFlatMenuClass(TestCase):
     @override_settings(
         WAGTAILMENUS_DEFAULT_FLAT_MENU_SUB_MENU_TEMPLATES=TEMPLATE_LISTS_DICT_WITH_DEFAULT
     )
-    def test_get_sub_menu_template_names_from_setting_returns_expected_templates_when_menu_handle_key_is_present(self):
+    def test_handle_specific_list_returned_when_menu_handle_key_is_present(self):
         menu = self.menus[0]
-        self.assertEqual(TEMPLATE_LISTS_DICT_WITH_DEFAULT[menu.handle], TEMPLATE_LIST_TEST_1)
+        self.assertIn(menu.handle, TEMPLATE_LISTS_DICT_WITH_DEFAULT.keys())
         self.assertEqual(menu.get_sub_menu_template_names_from_setting(), TEMPLATE_LIST_TEST_1)
 
         menu = self.menus[1]
-        self.assertEqual(TEMPLATE_LISTS_DICT_WITH_DEFAULT[menu.handle], TEMPLATE_LIST_TEST_2)
+        self.assertIn(menu.handle, TEMPLATE_LISTS_DICT_WITH_DEFAULT.keys())
         self.assertEqual(menu.get_sub_menu_template_names_from_setting(), TEMPLATE_LIST_TEST_2)
 
     @override_settings(
         WAGTAILMENUS_DEFAULT_FLAT_MENU_SUB_MENU_TEMPLATES=TEMPLATE_LISTS_DICT_WITH_DEFAULT
     )
-    def test_get_sub_menu_template_names_from_setting_returns_default_list_if_menu_handle_key_not_present(self):
+    def test_default_list_returned_if_menu_handle_key_not_present(self):
         menu = self.menus[2]
         self.assertNotIn(menu.handle, TEMPLATE_LISTS_DICT_WITH_DEFAULT)
         self.assertEqual(TEMPLATE_LISTS_DICT_WITH_DEFAULT['default'], TEMPLATE_LIST_DEFAULT)
@@ -79,17 +82,20 @@ class TestFlatMenuClass(TestCase):
     @override_settings(
         WAGTAILMENUS_DEFAULT_FLAT_MENU_SUB_MENU_TEMPLATES=TEMPLATE_LISTS_DICT_WITHOUT_DEFAULT
     )
-    def test_get_sub_menu_template_names_from_setting_returns_none_if_neither_menu_handle_or_default_keys_are_present(self):
+    def test_none_returned_if_neither_menu_handle_or_default_keys_are_present(self):
         menu = self.menus[2]
         self.assertNotIn(menu.handle, TEMPLATE_LISTS_DICT_WITHOUT_DEFAULT)
         self.assertNotIn('default', TEMPLATE_LISTS_DICT_WITHOUT_DEFAULT)
         self.assertEqual(menu.get_sub_menu_template_names_from_setting(), None)
 
+
+class TestGetSubMenuTemplateNamesMethod(FlatMenuTestCase):
+
     # ------------------------------------------------------------------------
-    # get_sub_menu_template_names()
+    # FlatMenu.get_sub_menu_template_names()
     # ------------------------------------------------------------------------
 
-    def test_get_sub_menu_template_names_does_not_include_site_specific_templates_by_default(self):
+    def test_site_specific_templates_not_returned_by_default(self):
         menu = self.menus[0]
         menu._contextual_vals = utils.make_contextualvals_instance(
             current_site=self.site
@@ -100,18 +106,18 @@ class TestFlatMenuClass(TestCase):
             self.assertFalse(self.site.hostname in val)
 
     @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True)
-    def test_get_sub_menu_template_names_includes_site_specific_templates_if_setting_is_true_and_current_site_is_in_contextual_vals(self):
+    def test_site_specific_templates_returned_if_setting_is_true_and_current_site_is_in_contextual_vals(self):
         menu = self.menus[0]
         menu._contextual_vals = utils.make_contextualvals_instance(
             current_site=self.site
         )
         result = menu.get_sub_menu_template_names()
-        self.assertEqual(len(result), 19)
+        self.assertEqual(len(result), 22)
         for val in result[:8]:
             self.assertTrue(self.site.hostname in val)
 
     @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True)
-    def test_get_sub_menu_template_names_does_not_include_site_specific_templates_if_current_site_not_in_contextual_vals(self):
+    def test_site_specific_templates_not_returned_if_current_site_not_in_contextual_vals(self):
         menu = self.menus[0]
         menu._contextual_vals = utils.make_contextualvals_instance(
             current_site=None
@@ -121,38 +127,41 @@ class TestFlatMenuClass(TestCase):
         for val in result:
             self.assertTrue(self.site.hostname not in val)
 
+
+class TestGetTemplateNamesMethod(FlatMenuTestCase):
+
     # ------------------------------------------------------------------------
-    # get_template_names()
+    # FlatMenu.get_template_names()
     # ------------------------------------------------------------------------
 
-    def test_get_template_names_does_not_include_site_specific_templates_by_default(self):
+    def test_site_specific_templates_not_returned_by_default(self):
         menu = self.menus[0]
         menu._contextual_vals = utils.make_contextualvals_instance(
             current_site=self.site
         )
         result = menu.get_template_names()
-        self.assertEqual(len(result), 7)
+        self.assertEqual(len(result), 11)
         for val in result:
             self.assertFalse(self.site.hostname in val)
 
     @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True)
-    def test_get_template_names_includes_site_specific_templates_if_setting_is_true_and_current_site_is_in_contextual_vals(self):
+    def test_site_specific_templates_returned_if_setting_is_true_and_current_site_is_in_contextual_vals(self):
         menu = self.menus[0]
         menu._contextual_vals = utils.make_contextualvals_instance(
             current_site=self.site
         )
         result = menu.get_template_names()
-        self.assertEqual(len(result), 14)
+        self.assertEqual(len(result), 22)
         for val in result[:7]:
             self.assertTrue(self.site.hostname in val)
 
     @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True)
-    def test_get_template_names_does_not_include_site_specific_templates_if_current_site_not_in_contextual_vals(self):
+    def test_site_specific_templates_not_returned_if_current_site_not_in_contextual_vals(self):
         menu = self.menus[0]
         menu._contextual_vals = utils.make_contextualvals_instance(
             current_site=None
         )
         result = menu.get_template_names()
-        self.assertEqual(len(result), 7)
+        self.assertEqual(len(result), 11)
         for val in result:
             self.assertTrue(self.site.hostname not in val)
