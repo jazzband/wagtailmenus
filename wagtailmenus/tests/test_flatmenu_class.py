@@ -136,7 +136,7 @@ class TestGetTemplateNamesMethod(FlatMenuTestCase):
     # FlatMenu.get_template_names()
     # ------------------------------------------------------------------------
 
-    expected_default_result_length = 9
+    expected_default_result_length = 10
 
     def test_site_specific_templates_not_returned_by_default(self):
         menu = self.menus[0]
