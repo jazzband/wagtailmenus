@@ -162,28 +162,6 @@ class TestAddMenuItemsForPages(MainMenuTestCase):
         self.assertEqual(marvel_item.sort_order, 6)
 
 
-class TestGetSubMenuTemplateNamesFromSetting(MainMenuTestCase):
-
-    # ------------------------------------------------------------------------
-    # MainMenu.get_sub_menu_template_names()
-    # (inherited from mixins.DefinesSubMenuTemplatesMixin)
-    # ------------------------------------------------------------------------
-
-    def test_return_value_is_none_if_setting_not_set(self):
-        self.assertEqual(
-            MainMenu.get_sub_menu_template_names_from_setting(), None
-        )
-
-    @override_settings(
-        WAGTAILMENUS_DEFAULT_MAIN_MENU_SUB_MENU_TEMPLATES=utils.SUB_MENU_TEMPLATE_LIST
-    )
-    def test_setting_value_returned_if_set(self):
-        self.assertEqual(
-            MainMenu.get_sub_menu_template_names_from_setting(),
-            utils.SUB_MENU_TEMPLATE_LIST
-        )
-
-
 class TestGetSpecifiedSubMenuTemplateName(MainMenuTestCase):
 
     # ------------------------------------------------------------------------
@@ -203,37 +181,20 @@ class TestGetSpecifiedSubMenuTemplateName(MainMenuTestCase):
             menu._get_specified_sub_menu_template_name(level=4), None
         )
 
-    @override_settings(
-        WAGTAILMENUS_DEFAULT_MAIN_MENU_SUB_MENU_TEMPLATES=utils.SUB_MENU_TEMPLATE_LIST
-    )
-    def test_returns_ideal_template_if_setting_defined(self):
-        menu = self.get_random_menu_instance_with_opt_vals_set()
-        self.assertEqual(
-            menu._get_specified_sub_menu_template_name(level=2),
-            utils.SUB_MENU_TEMPLATE_LIST[0]
-        )
-        self.assertEqual(
-            menu._get_specified_sub_menu_template_name(level=3),
-            utils.SUB_MENU_TEMPLATE_LIST[1]
-        )
-
-    @override_settings(
-        WAGTAILMENUS_DEFAULT_MAIN_MENU_SUB_MENU_TEMPLATES=utils.SINGLE_ITEM_SUB_MENU_TEMPLATE_LIST
-    )
     def test_returns_last_template_when_no_template_specified_for_level(self):
-        menu = self.get_random_menu_instance_with_opt_vals_set()
+        menu = MainMenu.objects.all().first()
+        menu._option_vals = utils.make_optionvals_instance(
+            sub_menu_template_names=('single_template.html',)
+        )
         self.assertEqual(
             menu._get_specified_sub_menu_template_name(level=2),
-            utils.SUB_MENU_TEMPLATE_LIST[0]
+            'single_template.html'
         )
         self.assertEqual(
             menu._get_specified_sub_menu_template_name(level=3),
-            utils.SUB_MENU_TEMPLATE_LIST[0]
+            'single_template.html'
         )
 
-    @override_settings(
-        WAGTAILMENUS_DEFAULT_MAIN_MENU_SUB_MENU_TEMPLATES=utils.SINGLE_ITEM_SUB_MENU_TEMPLATE_LIST
-    )
     def test_preference_order_of_specified_values(self):
         menu = MainMenu.objects.all().first()
         menu._option_vals = utils.make_optionvals_instance(
@@ -252,7 +213,7 @@ class TestGetSpecifiedSubMenuTemplateName(MainMenuTestCase):
         )
 
         # If only 'sub_menu_template_names' is specified as an option value,
-        # the, that will be preferred
+        # that will be preferred
         menu._option_vals = utils.make_optionvals_instance(
             sub_menu_template_name=None,
             sub_menu_template_names=('option_one.html', 'option_two.html')
@@ -279,15 +240,6 @@ class TestGetSpecifiedSubMenuTemplateName(MainMenuTestCase):
         self.assertEqual(
             menu._get_specified_sub_menu_template_name(level=4),
             menu.sub_menu_template_names[1]
-        )
-
-        # If the 'sub_menu_template_names' attribute is None, the method
-        # will then return a value from the DEFAULT_MAIN_MENU_SUB_MENU_TEMPLATES
-        # setting
-        menu.sub_menu_template_names = None
-        self.assertEqual(
-            menu._get_specified_sub_menu_template_name(level=4),
-            utils.SINGLE_ITEM_SUB_MENU_TEMPLATE_LIST[0]
         )
 
 

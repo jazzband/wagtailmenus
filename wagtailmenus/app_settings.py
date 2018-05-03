@@ -109,18 +109,10 @@ class AppSettings:
         )
 
     @property
-    def DEFAULT_MAIN_MENU_SUB_MENU_TEMPLATES(self):
-        return self._setting('DEFAULT_MAIN_MENU_SUB_MENU_TEMPLATES')
-
-    @property
     def DEFAULT_FLAT_MENU_TEMPLATE(self):
         return self._setting(
             'DEFAULT_FLAT_MENU_TEMPLATE', 'menus/flat_menu.html'
         )
-
-    @property
-    def DEFAULT_FLAT_MENU_SUB_MENU_TEMPLATES(self):
-        return self._setting('DEFAULT_FLAT_MENU_SUB_MENU_TEMPLATES')
 
     @property
     def DEFAULT_SECTION_MENU_TEMPLATE(self):
@@ -129,18 +121,10 @@ class AppSettings:
         )
 
     @property
-    def DEFAULT_SECTION_MENU_SUB_MENU_TEMPLATES(self):
-        return self._setting('DEFAULT_SECTION_MENU_SUB_MENU_TEMPLATES')
-
-    @property
     def DEFAULT_CHILDREN_MENU_TEMPLATE(self):
         return self._setting(
             'DEFAULT_CHILDREN_MENU_TEMPLATE', 'menus/children_menu.html'
         )
-
-    @property
-    def DEFAULT_CHILDREN_MENU_SUB_MENU_TEMPLATES(self):
-        return self._setting('DEFAULT_CHILDREN_MENU_SUB_MENU_TEMPLATES')
 
     @property
     def DEFAULT_SUB_MENU_TEMPLATE(self):

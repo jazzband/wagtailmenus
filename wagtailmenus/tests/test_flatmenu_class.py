@@ -6,16 +6,6 @@ from wagtailmenus.tests import utils
 Page = utils.get_page_model()
 Site = utils.get_site_model()
 
-TEMPLATE_LIST_DEFAULT = ('default_1.html', 'default_2.html')
-TEMPLATE_LIST_TEST_1 = ('test-1a.html', 'test-1b.html')
-TEMPLATE_LIST_TEST_2 = ('test-2a.html', 'test-2b.html')
-TEMPLATE_LISTS_DICT_WITHOUT_DEFAULT = {
-    'test-1': TEMPLATE_LIST_TEST_1,
-    'test-2': TEMPLATE_LIST_TEST_2,
-}
-TEMPLATE_LISTS_DICT_WITH_DEFAULT = dict(TEMPLATE_LISTS_DICT_WITHOUT_DEFAULT)
-TEMPLATE_LISTS_DICT_WITH_DEFAULT['default'] = TEMPLATE_LIST_DEFAULT
-
 
 class FlatMenuTestCase(TestCase):
     """A base TestCase class for testing FlatMenu model class methods"""
@@ -35,58 +25,6 @@ class FlatMenuTestCase(TestCase):
         )
         for menu in self.menus:
             menu._option_vals = utils.make_optionvals_instance()
-
-
-class TestGetSubMenuTemplateNamesFromSetting(FlatMenuTestCase):
-
-    # ------------------------------------------------------------------------
-    # FlatMenu.get_sub_menu_template_names_from_setting()
-    # ------------------------------------------------------------------------
-
-    def test_none_returned_if_setting_not_set(self):
-        for menu in self.menus:
-            self.assertEqual(
-                menu.get_sub_menu_template_names_from_setting(), None
-            )
-
-    @override_settings(
-        WAGTAILMENUS_DEFAULT_FLAT_MENU_SUB_MENU_TEMPLATES=TEMPLATE_LIST_DEFAULT
-    )
-    def test_same_list_returned_when_the_setting_value_is_as_single_list(self):
-        for menu in self.menus:
-            self.assertEqual(
-                menu.get_sub_menu_template_names_from_setting(), TEMPLATE_LIST_DEFAULT
-            )
-
-    @override_settings(
-        WAGTAILMENUS_DEFAULT_FLAT_MENU_SUB_MENU_TEMPLATES=TEMPLATE_LISTS_DICT_WITH_DEFAULT
-    )
-    def test_handle_specific_list_returned_when_menu_handle_key_is_present(self):
-        menu = self.menus[0]
-        self.assertIn(menu.handle, TEMPLATE_LISTS_DICT_WITH_DEFAULT.keys())
-        self.assertEqual(menu.get_sub_menu_template_names_from_setting(), TEMPLATE_LIST_TEST_1)
-
-        menu = self.menus[1]
-        self.assertIn(menu.handle, TEMPLATE_LISTS_DICT_WITH_DEFAULT.keys())
-        self.assertEqual(menu.get_sub_menu_template_names_from_setting(), TEMPLATE_LIST_TEST_2)
-
-    @override_settings(
-        WAGTAILMENUS_DEFAULT_FLAT_MENU_SUB_MENU_TEMPLATES=TEMPLATE_LISTS_DICT_WITH_DEFAULT
-    )
-    def test_default_list_returned_if_menu_handle_key_not_present(self):
-        menu = self.menus[2]
-        self.assertNotIn(menu.handle, TEMPLATE_LISTS_DICT_WITH_DEFAULT)
-        self.assertEqual(TEMPLATE_LISTS_DICT_WITH_DEFAULT['default'], TEMPLATE_LIST_DEFAULT)
-        self.assertEqual(menu.get_sub_menu_template_names_from_setting(), TEMPLATE_LIST_DEFAULT)
-
-    @override_settings(
-        WAGTAILMENUS_DEFAULT_FLAT_MENU_SUB_MENU_TEMPLATES=TEMPLATE_LISTS_DICT_WITHOUT_DEFAULT
-    )
-    def test_none_returned_if_neither_menu_handle_or_default_keys_are_present(self):
-        menu = self.menus[2]
-        self.assertNotIn(menu.handle, TEMPLATE_LISTS_DICT_WITHOUT_DEFAULT)
-        self.assertNotIn('default', TEMPLATE_LISTS_DICT_WITHOUT_DEFAULT)
-        self.assertEqual(menu.get_sub_menu_template_names_from_setting(), None)
 
 
 class TestGetSubMenuTemplateNames(FlatMenuTestCase):

@@ -1,4 +1,4 @@
-from django.test import TestCase, override_settings
+from django.test import TestCase
 
 from wagtailmenus.models import ChildrenMenu
 from wagtailmenus.tests import utils
@@ -17,17 +17,3 @@ class TestChildrenMenuClass(TestCase):
         msg_extract = "'use_specific' must be provided when creating"
         with self.assertRaisesRegex(TypeError, msg_extract):
             ChildrenMenu(Page(), max_levels=1)
-
-    def test_get_sub_menu_template_names_from_setting_returns_none_if_setting_not_set(self):
-        self.assertEqual(
-            ChildrenMenu.get_sub_menu_template_names_from_setting(), None
-        )
-
-    @override_settings(
-        WAGTAILMENUS_DEFAULT_CHILDREN_MENU_SUB_MENU_TEMPLATES=utils.SUB_MENU_TEMPLATE_LIST
-    )
-    def test_get_sub_menu_template_names_from_setting_returns_setting_value_when_set(self):
-        self.assertEqual(
-            ChildrenMenu.get_sub_menu_template_names_from_setting(),
-            utils.SUB_MENU_TEMPLATE_LIST
-        )

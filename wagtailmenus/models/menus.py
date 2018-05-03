@@ -579,10 +579,6 @@ class Menu:
         item, which typically comes from an overridable setting."""
         return
 
-    @classmethod
-    def get_sub_menu_template_names_from_setting(cls):
-        return None
-
 
 class MenuFromPage(Menu):
     """
@@ -701,10 +697,6 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     def get_least_specific_template_name(cls):
         return app_settings.DEFAULT_SECTION_MENU_TEMPLATE
 
-    @classmethod
-    def get_sub_menu_template_names_from_setting(cls):
-        return app_settings.DEFAULT_SECTION_MENU_SUB_MENU_TEMPLATES
-
     def __init__(self, root_page, max_levels, use_specific):
         self.root_page = root_page
         self.max_levels = max_levels
@@ -797,10 +789,6 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     @classmethod
     def get_least_specific_template_name(cls):
         return app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE
-
-    @classmethod
-    def get_sub_menu_template_names_from_setting(cls):
-        return app_settings.DEFAULT_CHILDREN_MENU_SUB_MENU_TEMPLATES
 
     def __init__(self, parent_page, max_levels=None, use_specific=None):
         if max_levels is None:
@@ -1060,10 +1048,6 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     def get_least_specific_template_name(cls):
         return app_settings.DEFAULT_MAIN_MENU_TEMPLATE
 
-    @classmethod
-    def get_sub_menu_template_names_from_setting(cls):
-        return app_settings.DEFAULT_MAIN_MENU_SUB_MENU_TEMPLATES
-
     def __str__(self):
         return _('Main menu for %(site_name)s') % {
             'site_name': self.site.site_name or self.site
@@ -1260,17 +1244,6 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         if lstn:
             template_names.append(lstn)
         return template_names
-
-    def get_sub_menu_template_names_from_setting(self):
-        templates = app_settings.DEFAULT_FLAT_MENU_SUB_MENU_TEMPLATES
-        # This setting can be a list or tuple like for other menu types, or a
-        # dictionary keyed by 'handle', allowing developers to specify
-        # different sub_menu templates for each variation of flat menu
-        if isinstance(templates, dict):
-            if self.handle in templates:
-                return templates[self.handle]
-            return templates.get('default')
-        return templates
 
     def get_sub_menu_template_names(self):
         """Returns a list of template names to search for when rendering a

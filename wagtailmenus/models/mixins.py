@@ -33,8 +33,6 @@ class DefinesSubMenuTemplatesMixin:
             set)
         4.  The most suitable template from a list of templates set as the
             ``sub_menu_template_names`` attribute on the menu class (if set)
-        5.  The most suitable template from a list of templates returned by
-            self.get_sub_menu_template_names_from_setting()
 
         Parameters
         ----------
@@ -55,9 +53,7 @@ class DefinesSubMenuTemplatesMixin:
                 self._option_vals.sub_menu_template_names, ideal_index) or \
             self.sub_menu_template_name or \
             get_item_by_index_or_last_item(
-                self.sub_menu_template_names, ideal_index) or \
-            get_item_by_index_or_last_item(
-                self.get_sub_menu_template_names_from_setting(), ideal_index)
+                self.sub_menu_template_names, ideal_index)
 
     def get_sub_menu_template(self, level=2):
         if not hasattr(self, '_sub_menu_template_cache'):
