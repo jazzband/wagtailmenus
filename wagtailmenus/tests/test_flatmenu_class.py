@@ -37,7 +37,7 @@ class FlatMenuTestCase(TestCase):
             menu._option_vals = utils.make_optionvals_instance()
 
 
-class TestGetSubMenuTemplateNamesFromSettingMethod(FlatMenuTestCase):
+class TestGetSubMenuTemplateNamesFromSetting(FlatMenuTestCase):
 
     # ------------------------------------------------------------------------
     # FlatMenu.get_sub_menu_template_names_from_setting()
@@ -89,7 +89,7 @@ class TestGetSubMenuTemplateNamesFromSettingMethod(FlatMenuTestCase):
         self.assertEqual(menu.get_sub_menu_template_names_from_setting(), None)
 
 
-class TestGetSubMenuTemplateNamesMethod(FlatMenuTestCase):
+class TestGetSubMenuTemplateNames(FlatMenuTestCase):
 
     # ------------------------------------------------------------------------
     # FlatMenu.get_sub_menu_template_names()
