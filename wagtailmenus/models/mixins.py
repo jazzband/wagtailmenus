@@ -92,14 +92,12 @@ class DefinesSubMenuTemplatesMixin:
                 "menus/%s/%s/level_%s.html" % (hostname, menu_name, level),
                 "menus/%s/%s/sub_menu.html" % (hostname, menu_name),
                 "menus/%s/%s_sub_menu.html" % (hostname, menu_name),
-                "menus/%s/level_%s.html" % (hostname, level),
                 "menus/%s/sub_menu.html" % hostname,
             ])
         template_names.extend([
             "menus/%s/level_%s.html" % (menu_name, level),
             "menus/%s/sub_menu.html" % menu_name,
             "menus/%s_sub_menu.html" % menu_name,
-            "menus/level_%s.html" % level,
             app_settings.DEFAULT_SUB_MENU_TEMPLATE,
         ])
         return template_names
