@@ -560,13 +560,11 @@ class Menu:
             template_names.extend([
                 "menus/%s/%s/level_1.html" % (hostname, menu_str),
                 "menus/%s/%s/menu.html" % (hostname, menu_str),
-                "menus/%s/%s_menu_level_1.html" % (hostname, menu_str),
                 "menus/%s/%s_menu.html" % (hostname, menu_str),
             ])
         template_names.extend([
             "menus/%s/level_1.html" % menu_str,
             "menus/%s/menu.html" % menu_str,
-            "menus/%s_menu_level_1.html" % menu_str,
         ])
         lstn = self.get_least_specific_template_name()
         if lstn:
@@ -1236,27 +1234,23 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
             hostname = site.hostname
             template_names.extend([
-                "menus/%s/flat/%s/menu.html" % (hostname, handle),
                 "menus/%s/flat/%s/level_1.html" % (hostname, handle),
+                "menus/%s/flat/%s/menu.html" % (hostname, handle),
                 "menus/%s/flat/%s.html" % (hostname, handle),
-                "menus/%s/flat/%s_level_1.html" % (hostname, handle),
-                "menus/%s/%s/menu.html" % (hostname, handle),
                 "menus/%s/%s/level_1.html" % (hostname, handle),
+                "menus/%s/%s/menu.html" % (hostname, handle),
                 "menus/%s/%s.html" % (hostname, handle),
-                "menus/%s/%s_level_1.html" % (hostname, handle),
                 "menus/%s/flat/menu.html" % hostname,
                 "menus/%s/flat/default.html" % hostname,
                 "menus/%s/flat_menu.html" % hostname,
             ])
         template_names.extend([
-            "menus/flat/%s/menu.html" % handle,
             "menus/flat/%s/level_1.html" % handle,
+            "menus/flat/%s/menu.html" % handle,
             "menus/flat/%s.html" % handle,
-            "menus/flat/%s_level_1.html" % handle,
-            "menus/%s/menu.html" % handle,
             "menus/%s/level_1.html" % handle,
+            "menus/%s/menu.html" % handle,
             "menus/%s.html" % handle,
-            "menus/%s_level_1.html" % handle,
             "menus/flat/default.html",
             "menus/flat/menu.html",
         ])
@@ -1289,11 +1283,9 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
             template_names.extend([
                 "menus/%s/flat/%s/level_%s.html" % (hostname, handle, level),
                 "menus/%s/flat/%s/sub_menu.html" % (hostname, handle),
-                "menus/%s/flat/%s_level_%s.html" % (hostname, handle, level),
                 "menus/%s/flat/%s_sub_menu.html" % (hostname, handle),
                 "menus/%s/%s/level_%s.html" % (hostname, handle, level),
                 "menus/%s/%s/sub_menu.html" % (hostname, handle),
-                "menus/%s/%s_level_%s.html" % (hostname, handle, level),
                 "menus/%s/%s_sub_menu.html" % (hostname, handle),
                 "menus/%s/flat/level_%s.html" % (hostname, level),
                 "menus/%s/flat/sub_menu.html" % hostname,
@@ -1302,11 +1294,9 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         template_names.extend([
             "menus/flat/%s/level_%s.html" % (handle, level),
             "menus/flat/%s/sub_menu.html" % handle,
-            "menus/flat/%s_level_%s.html" % (handle, level),
             "menus/flat/%s_sub_menu.html" % handle,
             "menus/%s/level_%s.html" % (handle, level),
             "menus/%s/sub_menu.html" % handle,
-            "menus/%s_level_%s.html" % (handle, level),
             "menus/%s_sub_menu.html" % handle,
             "menus/flat/level_%s.html" % level,
             "menus/flat/sub_menu.html",
