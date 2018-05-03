@@ -134,6 +134,30 @@ For a list of preferred template paths this tag, see: :ref:`custom_templates_mai
 
 -----
 
+sub_menu_templates
+~~~~~~~~~~~~~~~~~~
+
+=========  ========================================  =============
+Required?  Expected value type                       Default value
+=========  ========================================  =============
+No         Comma separated template paths (``str``)  ``''``
+=========  ========================================  =============
+
+Allows you to specify multiple templates to use for rendering different levels of sub menu. In the following example, ``"level_1.html"`` would be used to render the first level of the menu, then subsequent calls to ``{% sub_menu %}`` would use ``"level_2.html"`` to render any 2nd level menu items, or ``"level_3.html"`` for and 3rd level (or greater) menu items.
+
+.. code-block:: html
+    
+    {% main_menu max_levels=3 template="level_1.html" sub_menu_templates="level_2.html, level_3.html" %}
+    ...
+
+If not provided, wagtailmenus will attempt to find suitable sub menu templates automatically.
+
+For more information about overriding templates, see: :ref:`custom_templates`.
+
+For a list of preferred template paths for this tag, see: :ref:`custom_templates_main_menu`.
+
+-----
+
 use_absolute_page_urls
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -321,6 +345,30 @@ For a list of preferred template paths this tag, see: :ref:`custom_templates_fla
 
 -----
 
+sub_menu_templates
+~~~~~~~~~~~~~~~~~~
+
+=========  ========================================  =============
+Required?  Expected value type                       Default value
+=========  ========================================  =============
+No         Comma separated template paths (``str``)  ``''``
+=========  ========================================  =============
+
+Allows you to specify multiple templates to use for rendering different levels of sub menu. In the following example, ``"level_1.html"`` would be used to render the first level of the menu, then subsequent calls to ``{% sub_menu %}`` would use ``"level_2.html"`` to render any 2nd level menu items, or ``"level_3.html"`` for and 3rd level (or greater) menu items.
+
+.. code-block:: html
+    
+    {% flat_menu 'info' template="level_1.html" sub_menu_templates="level_2.html, level_3.html" %}
+    ...
+
+If not provided, wagtailmenus will attempt to find suitable sub menu templates automatically.
+
+For more information about overriding templates, see: :ref:`custom_templates`.
+
+For a list of preferred template paths for this tag, see: :ref:`custom_templates_flat_menu`.
+
+-----
+
 use_absolute_page_urls
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -482,6 +530,30 @@ For a list of preferred template paths this tag, see: :ref:`custom_templates_sec
 
 -----
 
+sub_menu_templates
+~~~~~~~~~~~~~~~~~~
+
+=========  ========================================  =============
+Required?  Expected value type                       Default value
+=========  ========================================  =============
+No         Comma separated template paths (``str``)  ``''``
+=========  ========================================  =============
+
+Allows you to specify multiple templates to use for rendering different levels of sub menu. In the following example, ``"level_1.html"`` would be used to render the first level of the menu, then subsequent calls to ``{% sub_menu %}`` would use ``"level_2.html"`` to render any 2nd level menu items, or ``"level_3.html"`` for and 3rd level (or greater) menu items.
+
+.. code-block:: html
+    
+    {% section_menu max_levels=3 template="level_1.html" sub_menu_templates="level_2.html, level_3.html" %}
+    ...
+
+If not provided, wagtailmenus will attempt to find suitable sub menu templates automatically.
+
+For more information about overriding templates, see: :ref:`custom_templates`.
+
+For a list of preferred template paths for this tag, see: :ref:`custom_templates_section_menu`.
+
+-----
+
 use_absolute_page_urls
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -628,6 +700,30 @@ Lets you specify a template to be used for rendering sub menus. All subsequent c
 For more information about overriding templates, see: :ref:`custom_templates`
 
 For a list of preferred template paths this tag, see: :ref:`custom_templates_children_menu`
+
+-----
+
+sub_menu_templates
+~~~~~~~~~~~~~~~~~~
+
+=========  ========================================  =============
+Required?  Expected value type                       Default value
+=========  ========================================  =============
+No         Comma separated template paths (``str``)  ``''``
+=========  ========================================  =============
+
+Allows you to specify multiple templates to use for rendering different levels of sub menu. In the following example, ``"level_1.html"`` would be used to render the first level of the menu, then subsequent calls to ``{% sub_menu %}`` would use ``"level_2.html"`` to render any 2nd level menu items, or ``"level_3.html"`` for and 3rd level (or greater) menu items.
+
+.. code-block:: html
+    
+    {% children_menu max_levels=3 template="level_1.html" sub_menu_templates="level_2.html, level_3.html" %}
+    ...
+
+If not provided, wagtailmenus will attempt to find suitable sub menu templates automatically.
+
+For more information about overriding templates, see: :ref:`custom_templates`.
+
+For a list of preferred template paths for this tag, see: :ref:`custom_templates_children_menu`.
 
 -----
 

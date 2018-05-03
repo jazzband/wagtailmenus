@@ -109,15 +109,7 @@ Using preferred paths and names for your templates
 
 This is the easiest (and recommended) approach for getting wagtailmenus to use your custom menu templates for rendering.
 
-When use don't use ``template`` or ``sub_menu_template`` arguments to explicitly specify templates for each tag, wagtailmenus looks in a list of gradually less specific paths for templates to use. If you're familiar with Django, you'll probably already be familiar with this approach. Essentially, you can override existing menu templates or add custom ones simply by putting them at a preferred location within your project.
-
-If you have multi-site project, and want to be able to use different templates for some or all of those sites, wagtailmenus can be configured to look for additional 'site specific' paths for each template. To enable this feature, you need to add the following to your project's settings:
-
-.. code-block:: python
-
-    WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS = True
-
-With this set, tags will look for a ``request`` value in the context, and try to identify the current site being viewed by looking for a ``site`` attribute on ``request`` (which is set by ``wagtail.wagtailcore.middleware.SiteMiddleware``). It then uses the ``domain`` field from that ``Site`` object to look for templates with that domain name included.
+When you don't use ``template``, ``sub_menu_template``, or ``sub_menu_templates`` arguments to explicitly specify templates for each tag, wagtailmenus looks in a list of gradually less specific paths for templates to use. If you're familiar with Django, you'll probably already be familiar with this approach. Essentially, you can override existing menu templates or add custom ones simply by putting them at a preferred location within your project.
 
 The following sections outline the preferred path locations for each tag, in the order that they are searched (most specific first).
 
@@ -136,19 +128,39 @@ Preferred template paths for ``{% main_menu %}``
 
 **For the menu itself:**
 
+- ``"menus/{{ request.site.domain }}/main/level_1.html"`` *
 - ``"menus/{{ request.site.domain }}/main/menu.html"`` *
 - ``"menus/{{ request.site.domain }}/main_menu.html"`` *
+- ``"menus/main/level_1.html"``
 - ``"menus/main/menu.html"``
 - ``"menus/main_menu.html"``
 
 **For any sub-menus:**
 
+- ``"menus/{{ request.site.domain }}/level_{{ current_level }}.html"`` *
 - ``"menus/{{ request.site.domain }}/sub_menu.html"`` *
 - ``"menus/{{ request.site.domain }}/main_sub_menu.html"`` *
 - ``"menus/{{ request.site.domain }}/sub_menu.html"`` *
+- ``"menus/main/level_{{ current_level }}.html"``
 - ``"menus/main/sub_menu.html"``
 - ``"menus/main_sub_menu.html"``
 - ``"menus/sub_menu.html"``
+
+**Examples**
+
+If your project needs a multi-level main menu that displays three levels of links, your templates directory might look like this:
+::
+
+    templates
+    └── menus
+        └── main
+            ├── level_1.html  # Used by the {% main_menu %} tag for the 1st level
+            ├── level_2.html  # Used by the {% sub_menu %} tag for the 2nd level
+            └── level_3.html  # Used by the {% sub_menu %} tag for the 3rd level
+
+.. TIP::
+    
+    Even if the various menus in your project share a lot of common templates between them, you might to still consider following this level-specific pattern, even if some of the templates simply use ``{% extends %}`` or ``{% include %}`` to include a common template. It'll make it much easier to identify later which menu templates are being used by which menus.
 
 
 .. _custom_templates_flat_menu:
@@ -163,35 +175,85 @@ For flat menus, the tag also uses the `handle` field of the specific menu being 
 
 **For the menu itself:**
 
+- ``"menus/{{ request.site.domain }}/flat/{{ menu.handle }}/level_1.html"`` *
 - ``"menus/{{ request.site.domain }}/flat/{{ menu.handle }}/menu.html"`` *
 - ``"menus/{{ request.site.domain }}/flat/{{ menu.handle }}.html"`` *
+- ``"menus/{{ request.site.domain }}/{{ menu.handle }}/level_1.html"`` *
 - ``"menus/{{ request.site.domain }}/{{ menu.handle }}/menu.html"`` *
 - ``"menus/{{ request.site.domain }}/{{ menu.handle }}.html"`` *
 - ``"menus/{{ request.site.domain }}/flat/menu.html"`` *
 - ``"menus/{{ request.site.domain }}/flat/default.html"`` *
 - ``"menus/{{ request.site.domain }}/flat_menu.html"`` *
+- ``"menus/flat/{{ menu.handle }}/level_1.html"``
 - ``"menus/flat/{{ menu.handle }}/menu.html"``
 - ``"menus/flat/{{ menu.handle }}.html"``
+- ``"menus/{{ menu.handle }}/level_1.html"``
 - ``"menus/{{ menu.handle }}/menu.html"``
 - ``"menus/{{ menu.handle }}.html"``
+- ``"menus/flat/level_1.html"``
 - ``"menus/flat/default.html"``
 - ``"menus/flat/menu.html"``
 - ``"menus/flat_menu.html"``
 
 **For any sub-menus:**
 
+- ``"menus/{{ request.site.domain }}/flat/{{ menu.handle }}/level_{{ current_level }}.html"`` *
 - ``"menus/{{ request.site.domain }}/flat/{{ menu.handle }}/sub_menu.html"`` *
 - ``"menus/{{ request.site.domain }}/flat/{{ menu.handle }}_sub_menu.html"`` *
+- ``"menus/{{ request.site.domain }}/{{ menu.handle }}/level_{{ current_level }}.html"`` *
 - ``"menus/{{ request.site.domain }}/{{ menu.handle }}/sub_menu.html"`` *
 - ``"menus/{{ request.site.domain }}/{{ menu.handle }}_sub_menu.html"`` *
+- ``"menus/{{ request.site.domain }}/flat/level_{{ current_level }}.html"`` *
 - ``"menus/{{ request.site.domain }}/flat/sub_menu.html"`` *
 - ``"menus/{{ request.site.domain }}/sub_menu.html"`` *
+- ``"menus/flat/{{ menu.handle }}/level_{{ current_level }}.html"``
 - ``"menus/flat/{{ menu.handle }}/sub_menu.html"``
 - ``"menus/flat/{{ menu.handle }}_sub_menu.html"``
+- ``"menus/{{ menu.handle }}/level_{{ current_level }}.html"``
 - ``"menus/{{ menu.handle }}/sub_menu.html"``
 - ``"menus/{{ menu.handle }}_sub_menu.html"``
+- ``"menus/flat/level_{{ current_level }}.html"``
 - ``"menus/flat/sub_menu.html"``
 - ``"menus/sub_menu.html"``
+
+**Examples**
+
+If your project needed a flat menu with the handle ``info``, which is designed to display two levels of links, your templates directory might look like this:
+::
+
+    templates
+    └── menus
+        └── info
+            ├── level_1.html  # Used by the {% flat_menu %} tag for the 1st level
+            └── level_2.html  # Used by the {% sub_menu %} tag for the 2nd level
+
+
+Or, if the ``info`` menu only needed to show a single level of links, you might structure things more simply, like so:
+::
+
+    templates
+    └── menus
+        └── info.html
+
+.. TIP::
+    
+    If your menu is currently single-level only, but might grow in future to include more levels, you might find it easier to embrace level-specific template names now rather than later. So, in the above example, that would mean renaming ``templates/menus/info.html`` to ``templates/menus/info/level_1.html``.  
+
+
+Or, if your project needs multiple flat menus with different ``handle`` values, but you are happy for them to share the same templates, you might structure things like so:
+
+::
+
+    templates
+    └── menus
+        └── flat
+            ├── level_1.html  # Used by the {% flat_menu %} tag for the 1st level
+            ├── level_2.html  # Used by the {% sub_menu %} tag for the 2nd level
+            └── level_3.html  # Used by the {% sub_menu %} tag for the 3rd level
+
+.. NOTE::
+    
+    In this example, the ``level_2.html`` and ``level_3.html`` templates would only ever be used when needed to render a menu with that many levels, which you can control on a per-menu basis, or using ``max_levels`` template tag option. For single-level menus, only ``level_1.html`` would be used.
 
 
 .. _custom_templates_section_menu:
@@ -204,19 +266,43 @@ Preferred template paths for ``{% section_menu %}``
 
 **For the menu itself:**
 
+- ``"menus/{{ request.site.domain }}/section/level_1.html"`` *
 - ``"menus/{{ request.site.domain }}/section/menu.html"`` *
 - ``"menus/{{ request.site.domain }}/section_menu.html"`` *
+- ``"menus/section/level_1.html"``
 - ``"menus/section/menu.html"``
 - ``"menus/section_menu.html"``
 
 **For any sub-menus:**
 
+- ``"menus/{{ request.site.domain }}/section/level_{{ current_level }}.html"`` *
 - ``"menus/{{ request.site.domain }}/section/sub_menu.html"`` *
 - ``"menus/{{ request.site.domain }}/section_sub_menu.html"`` *
 - ``"menus/{{ request.site.domain }}/sub_menu.html"`` *
+- ``"menus/section/level_{{ current_level }}.html"``
 - ``"menus/section/sub_menu.html"``
 - ``"menus/section_sub_menu.html"``
 - ``"menus/sub_menu.html"``
+
+**Examples**
+
+If your project needs a multi-level section menu, displaying three levels of links, your templates directory might look something like this:
+::
+
+    templates
+    └── menus
+        └── section
+            ├── level_1.html  # Used by the {% section_menu %} tag for the 1st level
+            ├── level_2.html  # Used by the {% sub_menu %} tag for the 2nd level
+            └── level_3.html  # Used by the {% sub_menu %} tag for the 3rd level
+
+
+Or, if your section menu only needs to surface the first of level of pages within a section, you might structure things more simply, like so:
+::
+
+    templates
+    └── menus
+        └── section_menu.html
 
 
 .. _custom_templates_children_menu:
@@ -229,19 +315,42 @@ Preferred template paths for ``{% children_menu %}``
 
 **For the menu itself:**
 
+- ``"menus/{{ request.site.domain }}/children/level_1.html"`` *
 - ``"menus/{{ request.site.domain }}/children/menu.html"`` *
 - ``"menus/{{ request.site.domain }}/children_menu.html"`` *
+- ``"menus/children/level_1.html"``
 - ``"menus/children/menu.html"``
 - ``"menus/children_menu.html"``
 
 **For any sub-menus:**
 
+- ``"menus/{{ request.site.domain }}/children/level_{{ current_level }}.html"`` *
 - ``"menus/{{ request.site.domain }}/children/sub_menu.html"`` *
 - ``"menus/{{ request.site.domain }}/children_sub_menu.html"`` *
 - ``"menus/{{ request.site.domain }}/sub_menu.html"`` *
+- ``"menus/children/level_{{ current_level }}.html"``
 - ``"menus/children/sub_menu.html"``
 - ``"menus/children_sub_menu.html"``
 - ``"menus/sub_menu.html"``
+
+**Examples**
+
+If your project needs multi-level children menus, displaying two levels of links, your templates directory might look something like this:
+::
+
+    templates
+    └── menus
+        └── children
+            ├── level_1.html  # Used by the {% section_menu %} tag for the 1st level
+            └── level_2.html  # Used by the {% sub_menu %} tag for the 2nd level 
+
+
+Or, if you only need single-level children menus, you might structure things more simply, like so:
+::
+
+    templates
+    └── menus
+        └── children_menu.html
 
 
 .. _custom_templates_specify:
@@ -249,25 +358,45 @@ Preferred template paths for ``{% children_menu %}``
 Specifying menu templates using template tag parameters
 -------------------------------------------------------
 
-All template tags included in wagtailmenus support ``template`` and ``sub_menu_template`` arguments to allow you to explicitly override the templates used during rendering. 
+All template tags included in wagtailmenus support ``template``, ``sub_menu_template`` and ``sub_menu_templates`` arguments to allow you to explicitly override the templates used during rendering. 
 
 For example, if you had created the following templates in your project's root 'templates' directory:
 
 - ``"templates/custom_menus/main_menu.html"``
-- ``"templates/custom_menus/main_menu_sub_menu.html"``
+- ``"templates/custom_menus/main_menu_sub.html"``
+- ``"templates/custom_menus/main_menu_sub_level_2.html"``
 
 You could make :ref:`main_menu` use those templates for rendering by specifying them in your template, like so:
 
 .. code-block:: html
 
-    {% main_menu max_levels=2 template="custom_menus/main_menu.html" sub_menu_template="templates/custom_menus/main_menu_sub_menu.html" %}
+    {% main_menu max_levels=3 template="custom_menus/main_menu.html" sub_menu_templates="custom_menus/main_menu_sub.html, custom_menus/main_menu_sub_level_2.html" %}
 
-Or you could just override one or the other (you don't have to override both). e.g:
+Or, if you only wanted to use a single template for sub menus, you could specify that template like so:
+
+.. code-block:: html
+    
+    {# A 'sub_menu_templates' value without commas is recognised as a single template #}
+    {% main_menu max_levels=3 template="custom_menus/main_menu.html" sub_menu_templates="custom_menus/main_menu_sub.html" %}
+
+    {# You can also use the 'sub_menu_template' (no plural) option, which is slightly more verbose #}
+    {% main_menu max_levels=3 template="custom_menus/main_menu.html" sub_menu_template="custom_menus/main_menu_sub.html" %}
+
+Or you could just override one or the other, like so:
 
 .. code-block:: html
 
-    {# Just override the template for the top-level #}
-    {% main_menu max_levels=2 template="custom_menus/main_menu.html" %}
+    {# Just override the top-level template #}
+    {% main_menu max_levels=3 template="custom_menus/main_menu.html" %}
 
-    {# Just override the template used for sub-menus #}
-    {% main_menu max_levels=2 sub_menu_template="custom_menus/main_menu.html" %}
+    {# Just override the sub menu templates #}
+    {% main_menu max_levels=3 sub_menu_templates="custom_menus/main_menu_sub.html, custom_menus/main_menu_sub_level_2.html" %}
+
+    {# Just override the sub menu templates with a single template #}
+    {% main_menu max_levels=3 sub_menu_template="custom_menus/main_menu_sub.html" %}
+
+
+.. _custom_templates_specify_settings:
+
+Specifying menu templates with project settings
+-----------------------------------------------
