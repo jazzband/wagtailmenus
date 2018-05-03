@@ -32,7 +32,7 @@ class TestGetSubMenuTemplateNames(
     Tests ChildrenMenu.get_sub_menu_template_names() using common test cases
     from base.GetTemplateNamesMethodTestCase
     """
-    expected_default_result_length = 5
+    expected_default_result_length = 4
 
 
 class TestGetTemplateNames(

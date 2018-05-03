@@ -9,7 +9,7 @@ class GetSubMenuTemplateNamesMethodTestCase(TestCase):
     get_sub_menu_template_names() method.
     """
 
-    expected_default_result_length = 4
+    expected_default_result_length = None
 
     def get_test_menu_instance(self):
         # Must be overridden to supply a menu instance of the right type
