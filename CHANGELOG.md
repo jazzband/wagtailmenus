@@ -1,10 +1,18 @@
 Changelog
 =========
 
+
 2.X.X (XX.XX.XXXX) IN DEVELOPMENT
 ----------------------------------
 
 TBA
+
+
+2.9.0a (XX.XX.XXXX) IN DEVELOPMENT
+----------------------------------
+
+* Added `WAGTAILMENUS_MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN` setting to the 'Main menu' menu item and underlying management functionality to be removed from the Wagtail admin area (thanks to Michael van de Waeter).
+* Added `WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN` setting to the 'Flat menus' menu item and underlying management functionality to be removed from the Wagtail admin area (thanks to Michael van de Waeter).
 
 
 2.8.0 (29.03.2018)

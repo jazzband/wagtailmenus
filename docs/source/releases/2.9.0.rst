@@ -16,7 +16,19 @@ Wagtailmenus 2.9 (alpha) release notes
 What's new?
 ===========
 
-TBA
+
+Disable 'Main menu' or 'Flat menu' management options in the Wagtail admin area
+---------------------------------------------------------=---------------------
+
+Implmented by Michael van de Waeter (mvdwaeter).
+
+Projects come in all shapes and sizes, and not all call for both types of menu. So, to reduce potential confusion for users in the CMS, you can now hide either (or both) the 'Flat menus' and 'Main menu' items from the 'Settings' menu in the admin area (and disables the underlying CMS functionality for each).
+
+See the settings documentation for more information:
+
+:ref:`WAGTAILMENUS_MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN`
+
+:ref:`WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN` 
 
 
 Minor changes & bug fixes 
