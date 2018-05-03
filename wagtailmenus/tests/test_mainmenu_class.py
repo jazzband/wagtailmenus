@@ -1,7 +1,7 @@
-from django.test import TestCase, override_settings
+from django.test import TestCase
 
 from wagtailmenus.models import MainMenu
-from wagtailmenus.tests import utils
+from wagtailmenus.tests import base, utils
 
 Page = utils.get_page_model()
 
@@ -15,6 +15,9 @@ class MainMenuTestCase(TestCase):
         obj = MainMenu.objects.order_by('?').first()
         obj._option_vals = utils.make_optionvals_instance()
         return obj
+
+    def get_test_menu_instance(self):
+        return MainMenu.objects.first()
 
 
 class TestTopLevelItems(MainMenuTestCase):
@@ -243,84 +246,21 @@ class TestGetSpecifiedSubMenuTemplateName(MainMenuTestCase):
         )
 
 
-class TestGetSubMenuTemplateNamesMethod(MainMenuTestCase):
-
-    # ------------------------------------------------------------------------
-    # MainMenu.get_sub_menu_template_names()
-    # (inherited from mixins.DefinesSubMenuTemplatesMixin)
-    # ------------------------------------------------------------------------
-
-    expected_default_result_length = 4
-
-    def test_site_specific_templates_not_returned_by_default(self):
-        menu = MainMenu.objects.all().first()
-        menu._contextual_vals = utils.make_contextualvals_instance(
-            current_site=menu.site
-        )
-        result = menu.get_sub_menu_template_names()
-        self.assertEqual(len(result), self.expected_default_result_length)
-        for val in result:
-            self.assertFalse(menu.site.hostname in val)
-
-    @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True)
-    def test_specific_templates_returned_if_setting_is_true_and_current_site_is_in_contextual_vals(self):
-        menu = MainMenu.objects.all().first()
-        menu._contextual_vals = utils.make_contextualvals_instance(
-            current_site=menu.site
-        )
-        result = menu.get_sub_menu_template_names()
-        self.assertGreater(len(result), self.expected_default_result_length)
-        for val in result[:2]:
-            self.assertTrue(menu.site.hostname in val)
-
-    @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True)
-    def test_specific_templates_not_returned_if_current_site_not_in_contextual_vals(self):
-        menu = MainMenu.objects.all().first()
-        menu._contextual_vals = utils.make_contextualvals_instance(
-            current_site=None
-        )
-        result = menu.get_sub_menu_template_names()
-        self.assertEqual(len(result), self.expected_default_result_length)
-        for val in result:
-            self.assertTrue(menu.site.hostname not in val)
+class TestGetSubMenuTemplateNames(
+    MainMenuTestCase, base.GetSubMenuTemplateNamesMethodTestCase
+):
+    """
+    Tests MainMenu.get_sub_menu_template_names() using common test cases
+    from base.GetTemplateNamesMethodTestCase
+    """
+    expected_default_result_length = 5
 
 
-class TestGetTemplateNames(MainMenuTestCase):
-
-    # ------------------------------------------------------------------------
-    # MainMenu.get_template_names() (inherited from menus.Menu)
-    # ------------------------------------------------------------------------
-
+class TestGetTemplateNames(
+    MainMenuTestCase, base.GetTemplateNamesMethodTestCase
+):
+    """
+    Tests MainMenu.get_template_names() using common test cases from
+    base.GetTemplateNamesMethodTestCase
+    """
     expected_default_result_length = 3
-
-    def test_site_specific_templates_not_returned_by_default(self):
-        menu = MainMenu.objects.all().first()
-        menu._contextual_vals = utils.make_contextualvals_instance(
-            url='/', current_site=menu.site
-        )
-        result = menu.get_template_names()
-        self.assertEqual(len(result), self.expected_default_result_length)
-        for val in result:
-            self.assertFalse(menu.site.hostname in val)
-
-    @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True)
-    def test_site_specific_templates_returned_if_setting_is_true_and_current_site_is_in_contextual_vals(self):
-        menu = MainMenu.objects.all().first()
-        menu._contextual_vals = utils.make_contextualvals_instance(
-            url='/', current_site=menu.site
-        )
-        result = menu.get_template_names()
-        self.assertGreater(len(result), self.expected_default_result_length)
-        for val in result[:2]:
-            self.assertTrue(menu.site.hostname in val)
-
-    @override_settings(WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS=True)
-    def test_specific_templates_not_returned_if_current_site_not_in_contextual_vals(self):
-        menu = MainMenu.objects.all().first()
-        menu._contextual_vals = utils.make_contextualvals_instance(
-            url='/', current_site=None
-        )
-        result = menu.get_template_names()
-        self.assertEqual(len(result), self.expected_default_result_length)
-        for val in result:
-            self.assertTrue(menu.site.hostname not in val)
