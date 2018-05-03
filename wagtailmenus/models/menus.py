@@ -11,12 +11,6 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
 from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core import hooks
-    from wagtail.core.models import Page
-else:
-    from wagtail.wagtailcore import hooks
-    from wagtail.wagtailcore.models import Page
 
 from .. import app_settings
 from ..forms import FlatMenuAdminForm
@@ -27,6 +21,13 @@ from ..utils.misc import get_site_from_request
 from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
 from .pages import AbstractLinkPage
+
+if WAGTAIL_VERSION >= (2, 0):
+    from wagtail.core import hooks
+    from wagtail.core.models import Page
+else:
+    from wagtail.wagtailcore import hooks
+    from wagtail.wagtailcore.models import Page
 
 
 mark_safe_lazy = lazy(mark_safe, six.text_type)
@@ -509,7 +510,8 @@ class Menu:
                 case.
                 """
                 if apply_active_classes:
-                    active_class = item.get_active_class_for_request(self.request)
+                    active_class = item.get_active_class_for_request(
+                        self.request)
                     setattr(item, 'active_class', active_class)
 
             # In case the specific page was fetched during the above operations
