@@ -109,9 +109,9 @@ Using preferred paths and names for your templates
 
 This is the easiest (and recommended) approach for getting wagtailmenus to use your custom menu templates for rendering.
 
-When you don't use ``template``, ``sub_menu_template``, or ``sub_menu_templates`` arguments to explicitly specify templates for each tag, wagtailmenus looks in a list of gradually less specific paths for templates to use. If you're familiar with Django, you'll probably already be familiar with this approach. Essentially, you can override existing menu templates or add custom ones simply by putting them at a preferred location within your project.
+When you don't use ``template``, ``sub_menu_template``, or ``sub_menu_templates`` arguments to explicitly specify templates for each tag, wagtailmenus looks in a list of gradually less specific paths until it finds an appropriate template to use. If you're familiar with Django, you'll probably already be familiar with this concept. Essentially, you override the default menu templates by simply putting your custom templates in a preferred location within your project.
 
-The following sections outline the preferred path locations for each tag, in the order that they are searched (most specific first).
+The following sections outline the preferred template paths for each tag, in the order that they are searched for (most specific first).
 
 .. contents::
     :local:
@@ -148,7 +148,7 @@ Preferred template paths for ``{% main_menu %}``
 
 **Examples**
 
-If your project needs a multi-level main menu that displays three levels of links, your templates directory might look like this:
+For a multi-level main menu that displays three levels of links, your templates directory might look like this:
 ::
 
     templates
@@ -160,7 +160,7 @@ If your project needs a multi-level main menu that displays three levels of link
 
 .. TIP::
     
-    Even if the various menus in your project share a lot of common templates between them, you might to still consider following this level-specific pattern, even if some of the templates simply use ``{% extends %}`` or ``{% include %}`` to include a common template. It'll make it much easier to identify later which menu templates are being used by which menus.
+    Even if the various menus in your project share a lot of common templates between them, you might to still consider following this level-specific pattern of template definition, even if some of the templates simply use ``{% extends %}`` or ``{% include %}`` to include a common template. It'll make it much easier to identify which menu templates are being used by which menus at a later time.
 
 
 .. _custom_templates_flat_menu:
@@ -218,7 +218,7 @@ For flat menus, the tag also uses the `handle` field of the specific menu being 
 
 **Examples**
 
-If your project needed a flat menu with the handle ``info``, which is designed to display two levels of links, your templates directory might look like this:
+If your project had a flat menu with the handle ``info``, that was designed to display two levels of links, your templates directory might look like this:
 ::
 
     templates
@@ -228,7 +228,7 @@ If your project needed a flat menu with the handle ``info``, which is designed t
             └── level_2.html  # Used by the {% sub_menu %} tag for the 2nd level
 
 
-Or, if the ``info`` menu only needed to show a single level of links, you might structure things more simply, like so:
+Or, if the ``info`` menu only needed to show a single level of links, you might prefer to keep things simple, like so:
 ::
 
     templates
@@ -253,7 +253,7 @@ Or, if your project needs multiple flat menus with different ``handle`` values, 
 
 .. NOTE::
     
-    In this example, the ``level_2.html`` and ``level_3.html`` templates would only ever be used when needed to render a menu with that many levels, which you can control on a per-menu basis, or using ``max_levels`` template tag option. For single-level menus, only ``level_1.html`` would be used.
+    In this example, the ``level_2.html`` and ``level_3.html`` templates would only ever be used when needed. You can control how many levels are rendered on a per-menu basis, or by using the ``max_levels`` template tag argument.
 
 
 .. _custom_templates_section_menu:
