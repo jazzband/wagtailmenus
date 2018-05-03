@@ -352,7 +352,7 @@ Use this to specify the 'depth' value of a project's 'section root' pages. For m
 .. _CUSTOM_URL_SMART_ACTIVE_CLASSES:
 
 ``WAGTAILMENUS_CUSTOM_URL_SMART_ACTIVE_CLASSES``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Default value: ``False``
 
