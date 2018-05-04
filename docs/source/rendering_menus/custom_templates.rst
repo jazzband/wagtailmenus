@@ -280,41 +280,41 @@ For rendering a ``contact`` menu, the following templates would be used:
 The above structure would work, but it's not ideal. Imagine if a new front-end developer joined the team, and had no experience with wagtailmenus, or even if you came back to the project after not working with wagtailmenus for a while - It wouldn't be so easy to figure out which templates were being used by each menu. A better approach might be to do something like this:
 ::
 
-templates
-    └── menus
-        └── flat
-            |   # Still used by default (e.g. for menus with different handles)
-            ├── level_1.html 
-            ├── level_2.html 
-            ├── level_3.html 
-            ├── info
-            |   |   # This location is preferred when rendering an 'info' menu
-            |   ├── level_1.html  # {% extends 'menus/flat/level_1.html' %}
-            |   └── level_2.html  # Our custom template from before
-            └── contact
-                |   # This location is preferred when rendering a 'contact' menu
-                ├── level_1.html  # Our custom template from before
-                └── level_2.html  # {% extends 'menus/flat/level_2.html' %}
+    templates
+        └── menus
+            └── flat
+                |   # Still used by default (e.g. for menus with different handles)
+                ├── level_1.html 
+                ├── level_2.html 
+                ├── level_3.html 
+                ├── info
+                |   |   # This location is preferred when rendering an 'info' menu
+                |   ├── level_1.html  # {% extends 'menus/flat/level_1.html' %}
+                |   └── level_2.html  # Our custom template from before
+                └── contact
+                    |   # This location is preferred when rendering a 'contact' menu
+                    ├── level_1.html  # Our custom template from before
+                    └── level_2.html  # {% extends 'menus/flat/level_2.html' %}
 
 
 That's better, but you might even like to make the ``info`` and ``contact`` templates even easier to find, by moving those folders out to the root ``menus`` folder.
 ::
 
-templates
-    └── menus
-        ├── flat
-        |   |   # Still used by default (e.g. for menus with different handles)
-        |   ├── level_1.html 
-        |   ├── level_2.html 
-        |   └── level_3.html 
-        ├── info
-        |   |   # This location is still preferred when rendering an 'info' menu
-        |   ├── level_1.html  # {% includes 'menus/flat/level_1.html' %}
-        |   └── level_2.html  # Our custom template from before
-        └── contact
-            |   # This location is still preferred when rendering a 'contact' menu
-            ├── level_1.html  # Our custom template from before
-            └── level_2.html  # {% includes 'menus/flat/level_2.html' %}
+    templates
+        └── menus
+            ├── flat
+            |   |   # Still used by default (e.g. for menus with different handles)
+            |   ├── level_1.html 
+            |   ├── level_2.html 
+            |   └── level_3.html 
+            ├── info
+            |   |   # This location is still preferred when rendering an 'info' menu
+            |   ├── level_1.html  # {% includes 'menus/flat/level_1.html' %}
+            |   └── level_2.html  # Our custom template from before
+            └── contact
+                |   # This location is still preferred when rendering a 'contact' menu
+                ├── level_1.html  # Our custom template from before
+                └── level_2.html  # {% includes 'menus/flat/level_2.html' %}
 
 
 The templates in the ``info`` and ``contact`` folders will still be preferred over the ones in ``flat``, because the folder names are more specific.
