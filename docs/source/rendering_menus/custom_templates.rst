@@ -405,7 +405,7 @@ If your project needs multi-level children menus, displaying two levels of links
     templates
     └── menus
         └── children
-            ├── level_1.html  # Used by the {% section_menu %} tag for the 1st level
+            ├── level_1.html  # Used by the {% children_menu %} tag for the 1st level
             └── level_2.html  # Used by the {% sub_menu %} tag for the 2nd level 
 
 
