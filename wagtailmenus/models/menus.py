@@ -11,12 +11,6 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
 from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core import hooks
-    from wagtail.core.models import Page
-else:
-    from wagtail.wagtailcore import hooks
-    from wagtail.wagtailcore.models import Page
 
 from .. import app_settings
 from ..forms import FlatMenuAdminForm
@@ -27,6 +21,13 @@ from ..utils.misc import get_site_from_request
 from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
 from .pages import AbstractLinkPage
+
+if WAGTAIL_VERSION >= (2, 0):
+    from wagtail.core import hooks
+    from wagtail.core.models import Page
+else:
+    from wagtail.wagtailcore import hooks
+    from wagtail.wagtailcore.models import Page
 
 
 mark_safe_lazy = lazy(mark_safe, six.text_type)
@@ -54,7 +55,8 @@ ContextualVals = namedtuple('ContextualVals', (
 OptionVals = namedtuple('OptionVals', (
     'max_levels', 'use_specific', 'apply_active_classes',
     'allow_repeating_parents', 'use_absolute_page_urls', 'parent_page',
-    'handle', 'template_name', 'sub_menu_template_name', 'extra'
+    'handle', 'template_name', 'sub_menu_template_name',
+    'sub_menu_template_names', 'extra'
 ))
 
 
@@ -151,6 +153,7 @@ class Menu:
             options.pop('handle', None),  # for AbstractFlatMenu
             options.pop('template_name', ''),
             options.pop('sub_menu_template_name', ''),
+            options.pop('sub_menu_template_names', None),
             options  # anything left over will be stored as 'extra'
         )
 
@@ -507,7 +510,8 @@ class Menu:
                 case.
                 """
                 if apply_active_classes:
-                    active_class = item.get_active_class_for_request(self.request)
+                    active_class = item.get_active_class_for_request(
+                        self.request)
                     setattr(item, 'active_class', active_class)
 
             # In case the specific page was fetched during the above operations
@@ -556,10 +560,14 @@ class Menu:
         if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
             hostname = site.hostname
             template_names.extend([
+                "menus/%s/%s/level_1.html" % (hostname, menu_str),
                 "menus/%s/%s/menu.html" % (hostname, menu_str),
                 "menus/%s/%s_menu.html" % (hostname, menu_str),
             ])
-        template_names.append("menus/%s/menu.html" % menu_str)
+        template_names.extend([
+            "menus/%s/level_1.html" % menu_str,
+            "menus/%s/menu.html" % menu_str,
+        ])
         lstn = self.get_least_specific_template_name()
         if lstn:
             template_names.append(lstn)
@@ -840,7 +848,9 @@ class SubMenu(MenuFromPage):
     def get_template(self):
         if self._option_vals.template_name or self.template_name:
             return super().get_template()
-        return self.original_menu.sub_menu_template
+        return self.original_menu.get_sub_menu_template(
+            level=self._contextual_vals.current_level
+        )
 
     def get_context_data(self, **kwargs):
         data = {'parent_page': self.parent_page}
@@ -1205,23 +1215,30 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         """Returns a list of template names to search for when rendering a
         a specific flat menu object (making use of self.handle)"""
         site = self._contextual_vals.current_site
+        handle = self.handle
         template_names = []
         if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
-            hn = site.hostname
+            hostname = site.hostname
             template_names.extend([
-                "menus/%s/flat/%s/menu.html" % (hn, self.handle),
-                "menus/%s/flat/%s.html" % (hn, self.handle),
-                "menus/%s/%s/menu.html" % (hn, self.handle),
-                "menus/%s/%s.html" % (hn, self.handle),
-                "menus/%s/flat/menu.html" % hn,
-                "menus/%s/flat/default.html" % hn,
-                "menus/%s/flat_menu.html" % hn,
+                "menus/%s/flat/%s/level_1.html" % (hostname, handle),
+                "menus/%s/flat/%s/menu.html" % (hostname, handle),
+                "menus/%s/flat/%s.html" % (hostname, handle),
+                "menus/%s/%s/level_1.html" % (hostname, handle),
+                "menus/%s/%s/menu.html" % (hostname, handle),
+                "menus/%s/%s.html" % (hostname, handle),
+                "menus/%s/flat/level_1.html" % hostname,
+                "menus/%s/flat/default.html" % hostname,
+                "menus/%s/flat/menu.html" % hostname,
+                "menus/%s/flat_menu.html" % hostname,
             ])
         template_names.extend([
-            "menus/flat/%s/menu.html" % self.handle,
-            "menus/flat/%s.html" % self.handle,
-            "menus/%s/menu.html" % self.handle,
-            "menus/%s.html" % self.handle,
+            "menus/flat/%s/level_1.html" % handle,
+            "menus/flat/%s/menu.html" % handle,
+            "menus/flat/%s.html" % handle,
+            "menus/%s/level_1.html" % handle,
+            "menus/%s/menu.html" % handle,
+            "menus/%s.html" % handle,
+            "menus/flat/level_1.html",
             "menus/flat/default.html",
             "menus/flat/menu.html",
         ])
@@ -1235,22 +1252,30 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         a sub menu for a specific flat menu object (making use of self.handle)
         """
         site = self._contextual_vals.current_site
+        level = self._contextual_vals.current_level
+        handle = self.handle
         template_names = []
         if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
-            hn = site.hostname
+            hostname = site.hostname
             template_names.extend([
-                "menus/%s/flat/%s/sub_menu.html" % (hn, self.handle),
-                "menus/%s/flat/%s_sub_menu.html" % (hn, self.handle),
-                "menus/%s/%s/sub_menu.html" % (hn, self.handle),
-                "menus/%s/%s_sub_menu.html" % (hn, self.handle),
-                "menus/%s/flat/sub_menu.html" % hn,
-                "menus/%s/sub_menu.html" % hn,
+                "menus/%s/flat/%s/level_%s.html" % (hostname, handle, level),
+                "menus/%s/flat/%s/sub_menu.html" % (hostname, handle),
+                "menus/%s/flat/%s_sub_menu.html" % (hostname, handle),
+                "menus/%s/%s/level_%s.html" % (hostname, handle, level),
+                "menus/%s/%s/sub_menu.html" % (hostname, handle),
+                "menus/%s/%s_sub_menu.html" % (hostname, handle),
+                "menus/%s/flat/level_%s.html" % (hostname, level),
+                "menus/%s/flat/sub_menu.html" % hostname,
+                "menus/%s/sub_menu.html" % hostname,
             ])
         template_names.extend([
-            "menus/flat/%s/sub_menu.html" % self.handle,
-            "menus/flat/%s_sub_menu.html" % self.handle,
-            "menus/%s/sub_menu.html" % self.handle,
-            "menus/%s_sub_menu.html" % self.handle,
+            "menus/flat/%s/level_%s.html" % (handle, level),
+            "menus/flat/%s/sub_menu.html" % handle,
+            "menus/flat/%s_sub_menu.html" % handle,
+            "menus/%s/level_%s.html" % (handle, level),
+            "menus/%s/sub_menu.html" % handle,
+            "menus/%s_sub_menu.html" % handle,
+            "menus/flat/level_%s.html" % level,
             "menus/flat/sub_menu.html",
             app_settings.DEFAULT_SUB_MENU_TEMPLATE,
         ])

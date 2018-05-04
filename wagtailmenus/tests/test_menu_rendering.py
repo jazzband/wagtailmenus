@@ -10,7 +10,6 @@ from wagtailmenus.models import MainMenu, FlatMenu
 from wagtailmenus.templatetags.menu_tags import validate_supplied_values
 
 
-
 class TestTemplateTags(TestCase):
     fixtures = ['test.json']
     maxDiff = None
@@ -1478,3 +1477,55 @@ class TestTemplateTags(TestCase):
         """
         with self.assertRaises(SubMenuUsageError):
             self.client.get('/sub_menu-tag-used-directly/')
+
+    def test_main_menu_with_sub_menu_templates(self):
+        """
+        Test '{% main_menu %}' output for 'Home' page when 'sub_menu_templates'
+        is used to specify different templates for each level
+        """
+        response = self.client.get('/')
+        soup = BeautifulSoup(response.content, 'html5lib')
+
+        # Assertions to compare rendered HTML against expected HTML
+        menu_html = soup.find(id='main-menu-sub-menu-templates').decode()
+        expected_menu_html = """
+        <div id="main-menu-sub-menu-templates">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">Home</a></li>
+                <li class=" dropdown top-level">
+                    <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
+                    <ul class="sub-menu-level-2" data-level="2">
+                        <li class=" top-level"><a href="/about-us/">Section home</a></li>
+                        <li class="">
+                            <a href="/about-us/meet-the-team/">Meet the team</a>
+                            <ul class="sub-menu-level-3" data-level="3">
+                                <li class=""><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
+                                <li class=""><a href="/about-us/meet-the-team/staff-member-two/">Staff member two</a></li>
+                                <li class=""><a href="/about-us/meet-the-team/staff-member-three/">Staff member three</a></li>
+                            </ul>
+                        </li>
+                        <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
+                        <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
+                    </ul>
+                </li>
+                <li class=" dropdown top-level">
+                    <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
+                    <ul class="sub-menu-level-2" data-level="2">
+                        <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
+                        <li class=""><a href="/news-and-events/upcoming-events/">Upcoming events</a></li>
+                        <li class=""><a href="/news-and-events/press/">In the press</a></li>
+                    </ul>
+                </li>
+                <li class=""><a href="http://google.co.uk">Google</a></li>
+                <li class=" dropdown">
+                    <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
+                    <ul class="sub-menu-level-2" data-level="2">
+                        <li class="support"><a href="/contact-us/#support">Get support</a></li>
+                        <li class="call"><a href="/contact-us/#call">Speak to someone</a></li>
+                        <li class="map"><a href="/contact-us/#map">Map &amp; directions</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        """
+        self.assertHTMLEqual(menu_html, expected_menu_html)

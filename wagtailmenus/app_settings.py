@@ -26,7 +26,7 @@ class AppSettings:
         self._prefix = prefix
         self._settings = settings
 
-    def _setting(self, name, default):
+    def _setting(self, name, default=None):
         return getattr(self._settings, self._prefix + name, default)
 
     def class_from_path_setting(self, path_setting_name):
@@ -154,7 +154,7 @@ class AppSettings:
 
     @property
     def FLAT_MENUS_HANDLE_CHOICES(self):
-        return self._setting('FLAT_MENUS_HANDLE_CHOICES', None)
+        return self._setting('FLAT_MENUS_HANDLE_CHOICES')
 
     @property
     def PAGE_FIELD_FOR_MENU_ITEM_TEXT(self):

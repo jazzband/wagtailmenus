@@ -149,7 +149,15 @@ The name of the template used for rendering by the ``{% sub_menu %}`` tag when n
 
 Default value: ``False``
 
-If you have a multi-site project where each site may require it's own set of menu templates, you can change this setting to ``True`` to have wagtailmenus automatically look in additional site-specific locations when finding templates for rendering. 
+If you have a multi-site project, and want to be able to use different templates for some or all of those sites, wagtailmenus can be configured to look for additional 'site specific' paths for each template. To enable this feature, you add the following to your project's settings:
+
+.. code-block:: python
+
+    WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS = True
+
+With this set, menu tags will attempt to identify the relevant ``wagtail.core.models.Site`` instance for the current ``request``. Wagtailmenus will then look for template names with the ``domain`` value of that ``Site`` object in their path.
+
+For more information about where wagtailmenus looks for templates, see: :ref:`custom_templates_auto`
 
 
 ------------------------------

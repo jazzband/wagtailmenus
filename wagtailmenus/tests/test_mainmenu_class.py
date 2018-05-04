@@ -1,71 +1,32 @@
-from __future__ import absolute_import, unicode_literals
-
 from django.test import TestCase
-from django.core.exceptions import ValidationError
-from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core.models import Page
-else:
-    from wagtail.wagtailcore.models import Page
 
-from wagtailmenus.models import (
-    ChildrenMenu, MainMenu, MainMenuItem, FlatMenu, FlatMenuItem)
+from wagtailmenus.models import MainMenu
+from wagtailmenus.tests import base, utils
+
+Page = utils.get_page_model()
 
 
-class TestMenuClasses(TestCase):
+class MainMenuTestCase(TestCase):
+    """A base TestCase class for testing MainMenu model class methods"""
+
     fixtures = ['test.json']
 
-    def test_mainmenuitem_meta_settings(self):
-        opts = MainMenuItem._meta
-        self.assertEqual(opts.verbose_name, 'menu item')
-        self.assertEqual(opts.verbose_name_plural, 'menu items')
-        self.assertEqual(opts.ordering, ('sort_order',))
+    def get_random_menu_instance_with_opt_vals_set(self):
+        obj = MainMenu.objects.order_by('?').first()
+        obj._option_vals = utils.make_optionvals_instance()
+        return obj
 
-    def test_flatmenuitem_meta_settings(self):
-        opts = FlatMenuItem._meta
-        self.assertEqual(opts.verbose_name, 'menu item')
-        self.assertEqual(opts.verbose_name_plural, 'menu items')
-        self.assertEqual(opts.ordering, ('sort_order',))
+    def get_test_menu_instance(self):
+        return MainMenu.objects.first()
 
-    def test_mainmenuitem_clean_missing_link_text(self):
-        menu = MainMenu.objects.get(pk=1)
-        new_item = MainMenuItem(menu=menu, link_url='test/')
-        self.assertRaisesMessage(
-            ValidationError,
-            "This field is required when linking to a custom URL",
-            new_item.clean)
 
-    def test_mainmenuitem_clean_missing_link_url(self):
-        menu = MainMenu.objects.get(pk=1)
-        new_item = MainMenuItem(menu=menu)
-        self.assertRaisesMessage(
-            ValidationError,
-            "Please choose an internal page or provide a custom URL",
-            new_item.clean)
+class TestTopLevelItems(MainMenuTestCase):
 
-    def test_mainmenuitem_clean_link_url_and_link_page(self):
-        menu = MainMenu.objects.get(pk=1)
-        new_item = MainMenuItem(
-            menu=menu,
-            link_text='Test',
-            link_url='test/',
-            link_page=Page.objects.get(pk=6))
-        self.assertRaisesMessage(
-            ValidationError,
-            "Linking to both a page and custom URL is not permitted",
-            new_item.clean)
+    # ------------------------------------------------------------------------
+    # MainMenu.top_level_items()
+    # ------------------------------------------------------------------------
 
-    def test_mainmenuitem_str(self):
-        menu = MainMenu.objects.get(pk=1)
-        item_1 = menu.menu_items.first()
-        self.assertEqual(item_1.__str__(), 'Home')
-
-    def test_flatmenuitem_str(self):
-        menu = FlatMenu.objects.get(handle='contact')
-        item_1 = menu.menu_items.first()
-        self.assertEqual(item_1.__str__(), 'Call us')
-
-    def test_mainmenu_top_level_items(self):
+    def test_setting_and_clearing_of_cache_values(self):
         menu = MainMenu.objects.get(pk=1)
         # This menu has a `use_specific` value of 1 (AUTO)
         self.assertEqual(menu.use_specific, 1)
@@ -99,7 +60,14 @@ class TestMenuClasses(TestCase):
             for item in menu.top_level_items:
                 assert item.link_page is None or type(item.link_page) is not Page
 
-    def test_mainmenu_pages_for_display(self):
+
+class TestPagesForDisplay(MainMenuTestCase):
+
+    # ------------------------------------------------------------------------
+    # MainMenu.pages_for_display()
+    # ------------------------------------------------------------------------
+
+    def test_setting_and_clearing_of_cache_values(self):
         menu = MainMenu.objects.get(pk=1)
         # This menu has a `use_specific` value of 1 (AUTO)
         self.assertEqual(menu.use_specific, 1)
@@ -158,6 +126,13 @@ class TestMenuClasses(TestCase):
             for p in menu.pages_for_display:
                 assert type(p) is not Page
 
+
+class TestAddMenuItemsForPages(MainMenuTestCase):
+
+    # ------------------------------------------------------------------------
+    # MainMenu.add_menu_items_for_pages()
+    # ------------------------------------------------------------------------
+
     def test_add_menu_items_for_pages(self):
         menu = MainMenu.objects.get(pk=1)
         # The current number of menu items is 6
@@ -190,19 +165,102 @@ class TestMenuClasses(TestCase):
         self.assertEqual(marvel_item.sort_order, 6)
 
 
-class TestChildrenMenu(TestCase):
-    fixtures = ['test.json']
+class TestGetSpecifiedSubMenuTemplateName(MainMenuTestCase):
 
-    """A test case for testing deprecated behaviour on the ChildrenMenu class
-    introduced in v2.5
+    # ------------------------------------------------------------------------
+    # MainMenu._get_specified_sub_menu_template_name()
+    # (inherited from mixins.DefinesSubMenuTemplatesMixin)
+    # ------------------------------------------------------------------------
+
+    def test_returns_none_if_no_templates_specified(self):
+        menu = self.get_random_menu_instance_with_opt_vals_set()
+        self.assertEqual(
+            menu._get_specified_sub_menu_template_name(level=2), None
+        )
+        self.assertEqual(
+            menu._get_specified_sub_menu_template_name(level=3), None
+        )
+        self.assertEqual(
+            menu._get_specified_sub_menu_template_name(level=4), None
+        )
+
+    def test_returns_last_template_when_no_template_specified_for_level(self):
+        menu = MainMenu.objects.all().first()
+        menu._option_vals = utils.make_optionvals_instance(
+            sub_menu_template_names=('single_template.html',)
+        )
+        self.assertEqual(
+            menu._get_specified_sub_menu_template_name(level=2),
+            'single_template.html'
+        )
+        self.assertEqual(
+            menu._get_specified_sub_menu_template_name(level=3),
+            'single_template.html'
+        )
+
+    def test_preference_order_of_specified_values(self):
+        menu = MainMenu.objects.all().first()
+        menu._option_vals = utils.make_optionvals_instance(
+            sub_menu_template_name='single_template_as_option.html',
+            sub_menu_template_names=('option_one.html', 'option_two.html')
+        )
+        menu.sub_menu_template_name = 'single_template_as_attr.html'
+        menu.sub_menu_template_names = utils.SUB_MENU_TEMPLATE_LIST
+
+        # While both 'sub_menu_template_name' and 'sub_menu_template_names' are
+        # specified as option values, the 'sub_menu_template_name' value will
+        # be preferred
+        self.assertEqual(
+            menu._get_specified_sub_menu_template_name(level=4),
+            'single_template_as_option.html'
+        )
+
+        # If only 'sub_menu_template_names' is specified as an option value,
+        # that will be preferred
+        menu._option_vals = utils.make_optionvals_instance(
+            sub_menu_template_name=None,
+            sub_menu_template_names=('option_one.html', 'option_two.html')
+        )
+        self.assertEqual(
+            menu._get_specified_sub_menu_template_name(level=4),
+            'option_two.html',
+        )
+
+        # If no templates have been specified via options, the
+        # 'sub_menu_template_name' attribute is preferred
+        menu._option_vals = utils.make_optionvals_instance(
+            sub_menu_template_name=None,
+            sub_menu_template_names=None
+        )
+        self.assertEqual(
+            menu._get_specified_sub_menu_template_name(level=4),
+            'single_template_as_attr.html'
+        )
+
+        # If the 'sub_menu_template_name' attribute is None, the method
+        # should prefer the 'sub_menu_template_names' attribute
+        menu.sub_menu_template_name = None
+        self.assertEqual(
+            menu._get_specified_sub_menu_template_name(level=4),
+            menu.sub_menu_template_names[1]
+        )
+
+
+class TestGetSubMenuTemplateNames(
+    MainMenuTestCase, base.GetSubMenuTemplateNamesMethodTestCase
+):
     """
-    def test_init_required_vals(self):
-        page = Page.objects.get(url_path='/home/about-us/')
+    Tests MainMenu.get_sub_menu_template_names() using common test cases
+    from base.GetTemplateNamesMethodTestCase
+    """
+    expected_default_result_length = 4
 
-        msg_extract = "'max_levels' must be provided when creating"
-        with self.assertRaisesRegex(TypeError, msg_extract):
-            ChildrenMenu(page, use_specific=1)
 
-        msg_extract = "'use_specific' must be provided when creating"
-        with self.assertRaisesRegex(TypeError, msg_extract):
-            ChildrenMenu(page, max_levels=1)
+class TestGetTemplateNames(
+    MainMenuTestCase, base.GetTemplateNamesMethodTestCase
+):
+    """
+    Tests MainMenu.get_template_names() using common test cases from
+    base.GetTemplateNamesMethodTestCase
+    """
+    expected_default_result_length = 3

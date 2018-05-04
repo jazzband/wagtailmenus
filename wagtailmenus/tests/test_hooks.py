@@ -42,10 +42,10 @@ class TestHooks(TestCase):
         # on `modify_menu_items` above, there will be an error
         self.assertEqual(response.status_code, 200)
 
-        # There are 4 main menus being output, and because our hook only adds
+        # There are 5 main menus being output, and because our hook only adds
         # the additional item to the first level of each of those, the
-        # 'VISIT RKH.CO.UK' text should appear exactly 4 times
-        self.assertContains(response, 'VISIT RKH.CO.UK', 4)
+        # 'VISIT RKH.CO.UK' text should appear exactly 5 times
+        self.assertContains(response, 'VISIT RKH.CO.UK', 5)
 
     def test_menus_modify_raw_menu_items(self):
 
