@@ -181,19 +181,20 @@ For flat menus, the tag also uses the `handle` field of the specific menu being 
 4. ``"menus/{{ current_site.domain }}/{{ menu.handle }}/level_1.html"`` *
 5. ``"menus/{{ current_site.domain }}/{{ menu.handle }}/menu.html"`` *
 6. ``"menus/{{ current_site.domain }}/{{ menu.handle }}.html"`` *
-7. ``"menus/{{ current_site.domain }}/flat/menu.html"`` *
+7. ``"menus/{{ current_site.domain }}/flat/level_1.html"`` *
 8. ``"menus/{{ current_site.domain }}/flat/default.html"`` *
-9. ``"menus/{{ current_site.domain }}/flat_menu.html"`` *
-10. ``"menus/flat/{{ menu.handle }}/level_1.html"``
-11. ``"menus/flat/{{ menu.handle }}/menu.html"``
-12. ``"menus/flat/{{ menu.handle }}.html"``
-13. ``"menus/{{ menu.handle }}/level_1.html"``
-14. ``"menus/{{ menu.handle }}/menu.html"``
-15. ``"menus/{{ menu.handle }}.html"``
-16. ``"menus/flat/level_1.html"``
-17. ``"menus/flat/default.html"``
-18. ``"menus/flat/menu.html"``
-19. ``"menus/flat_menu.html"``
+9. ``"menus/{{ current_site.domain }}/flat/menu.html"`` *
+10. ``"menus/{{ current_site.domain }}/flat_menu.html"`` *
+11. ``"menus/flat/{{ menu.handle }}/level_1.html"``
+12. ``"menus/flat/{{ menu.handle }}/menu.html"``
+13. ``"menus/flat/{{ menu.handle }}.html"``
+14. ``"menus/{{ menu.handle }}/level_1.html"``
+15. ``"menus/{{ menu.handle }}/menu.html"``
+16. ``"menus/{{ menu.handle }}.html"``
+17. ``"menus/flat/level_1.html"``
+18. ``"menus/flat/default.html"``
+19. ``"menus/flat/menu.html"``
+20. ``"menus/flat_menu.html"``
 
 **For any sub-menus:**
 
