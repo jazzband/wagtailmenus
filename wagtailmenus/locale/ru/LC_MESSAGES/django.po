@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-29 15:52+0100\n"
+"POT-Creation-Date: 2018-05-06 11:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Alex, 2017\n"
 "Language-Team: Russian (https://www.transifex.com/rkhleics/teams/73023/ru/)\n"
@@ -77,8 +77,8 @@ msgstr ""
 "Это поле можно использовать для добавления к указанному выше URL "
 "идентификатор #hash или строку запроса ?param=..."
 
-#: wagtailmenus/models/menuitems.py:57 wagtailmenus/models/menus.py:1084
-#: wagtailmenus/wagtail_hooks.py:111
+#: wagtailmenus/models/menuitems.py:57 wagtailmenus/models/menus.py:1094
+#: wagtailmenus/wagtail_hooks.py:113
 msgid "handle"
 msgstr "псевдоним"
 
@@ -136,15 +136,15 @@ msgstr ""
 "ЗАМЕТКА: Подменю может не отображаться даже если это поле отмечено. Это "
 "будет зависеть от используемого проектом шаблона."
 
-#: wagtailmenus/models/menus.py:992 wagtailmenus/models/menus.py:1073
+#: wagtailmenus/models/menus.py:1002 wagtailmenus/models/menus.py:1083
 msgid "site"
 msgstr "сайт"
 
-#: wagtailmenus/models/menus.py:999 wagtailmenus/models/menus.py:1098
+#: wagtailmenus/models/menus.py:1009 wagtailmenus/models/menus.py:1108
 msgid "maximum levels"
 msgstr "Максимальное количество уровней"
 
-#: wagtailmenus/models/menus.py:1003
+#: wagtailmenus/models/menus.py:1013
 msgid ""
 "The maximum number of levels to display when rendering this menu. The value "
 "can be overidden by supplying a different <code>max_levels</code> value to "
@@ -154,11 +154,11 @@ msgstr ""
 "быть переопределено при передаче иного значения параметра "
 "<code>max_levels</code> тэгу <code>{% main_menu %}</code> в шаблоне."
 
-#: wagtailmenus/models/menus.py:1010 wagtailmenus/models/menus.py:1109
+#: wagtailmenus/models/menus.py:1020 wagtailmenus/models/menus.py:1119
 msgid "specific page usage"
 msgstr "использование конкретных страниц"
 
-#: wagtailmenus/models/menus.py:1014
+#: wagtailmenus/models/menus.py:1024
 msgid ""
 "Controls how 'specific' pages objects are fetched and used when rendering "
 "this menu. This value can be overidden by supplying a different "
@@ -170,24 +170,24 @@ msgstr ""
 "передаче иного значения параметра <code>use_specific</code> тэгу <code>{% "
 "main_menu %}</code> в шаблоне."
 
-#: wagtailmenus/models/menus.py:1023 wagtailmenus/models/menus.py:1024
+#: wagtailmenus/models/menus.py:1033 wagtailmenus/models/menus.py:1034
 msgid "main menu"
 msgstr "главное меню"
 
-#: wagtailmenus/models/menus.py:1044
+#: wagtailmenus/models/menus.py:1054
 #, python-format
 msgid "Main menu for %(site_name)s"
 msgstr "Главное меню для %(site_name)s"
 
-#: wagtailmenus/models/menus.py:1079
+#: wagtailmenus/models/menus.py:1089
 msgid "title"
 msgstr "название"
 
-#: wagtailmenus/models/menus.py:1081
+#: wagtailmenus/models/menus.py:1091
 msgid "For internal reference only."
 msgstr "Только для внутреннего использования."
 
-#: wagtailmenus/models/menus.py:1087
+#: wagtailmenus/models/menus.py:1097
 msgid ""
 "Used to reference this menu in templates etc. Must be unique for the "
 "selected site."
@@ -195,15 +195,15 @@ msgstr ""
 "Используется для обозначения этого меню в шаблонах и т.п. Должен быть "
 "уникальным для выбранного сайта."
 
-#: wagtailmenus/models/menus.py:1092
+#: wagtailmenus/models/menus.py:1102
 msgid "heading"
 msgstr "заголовок меню"
 
-#: wagtailmenus/models/menus.py:1095
+#: wagtailmenus/models/menus.py:1105
 msgid "If supplied, appears above the menu when rendered."
 msgstr "Если предоставлен, то будет появляться над меню при его отображении."
 
-#: wagtailmenus/models/menus.py:1102
+#: wagtailmenus/models/menus.py:1112
 msgid ""
 "The maximum number of levels to display when rendering this menu. The value "
 "can be overidden by supplying a different <code>max_levels</code> value to "
@@ -213,7 +213,7 @@ msgstr ""
 "быть переопределено при передаче иного значения параметра "
 "<code>max_levels</code> тэгу <code>{% flat_menu %}</code> в шаблоне."
 
-#: wagtailmenus/models/menus.py:1113
+#: wagtailmenus/models/menus.py:1123
 msgid ""
 "Controls how 'specific' pages objects are fetched and used when rendering "
 "this menu. This value can be overidden by supplying a different "
@@ -225,15 +225,15 @@ msgstr ""
 "передаче иного значения параметра <code>use_specific</code> тэгу <code>{% "
 "flat_menu %}</code> в шаблоне."
 
-#: wagtailmenus/models/menus.py:1123
+#: wagtailmenus/models/menus.py:1133
 msgid "flat menu"
 msgstr "плоское меню"
 
-#: wagtailmenus/models/menus.py:1124
+#: wagtailmenus/models/menus.py:1134
 msgid "flat menus"
 msgstr "плоские меню"
 
-#: wagtailmenus/models/menus.py:1167
+#: wagtailmenus/models/menus.py:1177
 msgid ""
 "Site and handle must create a unique combination. A menu already exists with"
 " these same two values."
@@ -294,23 +294,23 @@ msgstr "Эта страница перенаправляет на %(url)s"
 
 #: wagtailmenus/panels.py:33
 msgid "Menu items"
-msgstr ""
+msgstr "Элементы меню"
 
 #: wagtailmenus/panels.py:34
 msgid "Add new item"
-msgstr ""
+msgstr "Добавить новый элемент"
 
 #: wagtailmenus/panels.py:35
 msgid "New item"
-msgstr ""
+msgstr "Новый элемент"
 
 #: wagtailmenus/panels.py:73
 msgid "Menu details"
-msgstr ""
+msgstr "Подробности о меню"
 
 #: wagtailmenus/panels.py:87
 msgid "Rendering setings"
-msgstr ""
+msgstr "Настройки отображения"
 
 #: wagtailmenus/panels.py:111 wagtailmenus/panels.py:145
 #: wagtailmenus/views.py:59
@@ -331,7 +331,7 @@ msgstr "Сохранить"
 
 #: wagtailmenus/views.py:58
 msgid "Content"
-msgstr ""
+msgstr "Содержимое"
 
 #: wagtailmenus/views.py:70
 msgid "Editing"
@@ -368,19 +368,19 @@ msgstr "Создано плоское меню '{instance}'."
 msgid "Main menu"
 msgstr "Главное меню"
 
-#: wagtailmenus/wagtail_hooks.py:50
+#: wagtailmenus/wagtail_hooks.py:52
 msgid "Copy"
 msgstr "Копировать"
 
-#: wagtailmenus/wagtail_hooks.py:52
+#: wagtailmenus/wagtail_hooks.py:54
 #, python-format
 msgid "Copy this %(model_name)s"
 msgstr "Копировать %(model_name)s"
 
-#: wagtailmenus/wagtail_hooks.py:73
+#: wagtailmenus/wagtail_hooks.py:75
 msgid "Flat menus"
 msgstr "Плоские меню"
 
-#: wagtailmenus/wagtail_hooks.py:119
+#: wagtailmenus/wagtail_hooks.py:121
 msgid "no. of items"
 msgstr "Кол-во элементов"

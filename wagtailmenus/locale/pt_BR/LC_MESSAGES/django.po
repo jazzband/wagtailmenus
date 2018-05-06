@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-29 15:52+0100\n"
+"POT-Creation-Date: 2018-05-06 11:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Andy Babic, 2017\n"
+"Last-Translator: Clarice Bianchini Barreto da Costa <claricebbcosta@gmail.com>, 2018\n"
 "Language-Team: Portuguese (Brazil) (https://www.transifex.com/rkhleics/teams/73023/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -75,8 +75,8 @@ msgstr ""
 "Use esse campo opcionalmente para adicionar um #hash querystring à URL da "
 "página"
 
-#: wagtailmenus/models/menuitems.py:57 wagtailmenus/models/menus.py:1084
-#: wagtailmenus/wagtail_hooks.py:111
+#: wagtailmenus/models/menuitems.py:57 wagtailmenus/models/menus.py:1094
+#: wagtailmenus/wagtail_hooks.py:113
 msgid "handle"
 msgstr "handle"
 
@@ -133,15 +133,15 @@ msgstr ""
 "ATENÇÃO: O sub-menu pode não ser exibido, mesmo que esteja marcado. Isso "
 "depende de estar implementado no template do projeto."
 
-#: wagtailmenus/models/menus.py:992 wagtailmenus/models/menus.py:1073
+#: wagtailmenus/models/menus.py:1002 wagtailmenus/models/menus.py:1083
 msgid "site"
 msgstr "site"
 
-#: wagtailmenus/models/menus.py:999 wagtailmenus/models/menus.py:1098
+#: wagtailmenus/models/menus.py:1009 wagtailmenus/models/menus.py:1108
 msgid "maximum levels"
 msgstr "nivel máximo"
 
-#: wagtailmenus/models/menus.py:1003
+#: wagtailmenus/models/menus.py:1013
 msgid ""
 "The maximum number of levels to display when rendering this menu. The value "
 "can be overidden by supplying a different <code>max_levels</code> value to "
@@ -151,11 +151,11 @@ msgstr ""
 " ser substituído fornecendo um valor diferente em <code>max_levels</code> "
 "para a tag <code>{% main_menu %}</code> em seus templates."
 
-#: wagtailmenus/models/menus.py:1010 wagtailmenus/models/menus.py:1109
+#: wagtailmenus/models/menus.py:1020 wagtailmenus/models/menus.py:1119
 msgid "specific page usage"
 msgstr "uso de páginas específicas"
 
-#: wagtailmenus/models/menus.py:1014
+#: wagtailmenus/models/menus.py:1024
 msgid ""
 "Controls how 'specific' pages objects are fetched and used when rendering "
 "this menu. This value can be overidden by supplying a different "
@@ -167,24 +167,24 @@ msgstr ""
 "diferente em <code>use_specific</code> para a tag <code>{% main_menu "
 "%}</code> em seus templates."
 
-#: wagtailmenus/models/menus.py:1023 wagtailmenus/models/menus.py:1024
+#: wagtailmenus/models/menus.py:1033 wagtailmenus/models/menus.py:1034
 msgid "main menu"
 msgstr "menu principal"
 
-#: wagtailmenus/models/menus.py:1044
+#: wagtailmenus/models/menus.py:1054
 #, python-format
 msgid "Main menu for %(site_name)s"
 msgstr "Menu principal para %(site_name)s"
 
-#: wagtailmenus/models/menus.py:1079
+#: wagtailmenus/models/menus.py:1089
 msgid "title"
 msgstr "título"
 
-#: wagtailmenus/models/menus.py:1081
+#: wagtailmenus/models/menus.py:1091
 msgid "For internal reference only."
 msgstr "Apenas para referência interna."
 
-#: wagtailmenus/models/menus.py:1087
+#: wagtailmenus/models/menus.py:1097
 msgid ""
 "Used to reference this menu in templates etc. Must be unique for the "
 "selected site."
@@ -192,15 +192,15 @@ msgstr ""
 "Utilizado para referenciar esse menu nos templates. Deve ser único para cada"
 " site."
 
-#: wagtailmenus/models/menus.py:1092
+#: wagtailmenus/models/menus.py:1102
 msgid "heading"
 msgstr "cabeçalho"
 
-#: wagtailmenus/models/menus.py:1095
+#: wagtailmenus/models/menus.py:1105
 msgid "If supplied, appears above the menu when rendered."
 msgstr "Se for preenchido, aparecerá acima do menu quando renderizado."
 
-#: wagtailmenus/models/menus.py:1102
+#: wagtailmenus/models/menus.py:1112
 msgid ""
 "The maximum number of levels to display when rendering this menu. The value "
 "can be overidden by supplying a different <code>max_levels</code> value to "
@@ -211,7 +211,7 @@ msgstr ""
 "<code>max_levels</code> com a tag <code>{% flat_menu %}</code> em seus "
 "templates."
 
-#: wagtailmenus/models/menus.py:1113
+#: wagtailmenus/models/menus.py:1123
 msgid ""
 "Controls how 'specific' pages objects are fetched and used when rendering "
 "this menu. This value can be overidden by supplying a different "
@@ -223,15 +223,15 @@ msgstr ""
 "diferente em <code>use_specific</code> para a tag <code>{% main_menu "
 "%}</code> em seus templates."
 
-#: wagtailmenus/models/menus.py:1123
+#: wagtailmenus/models/menus.py:1133
 msgid "flat menu"
 msgstr "menu simples"
 
-#: wagtailmenus/models/menus.py:1124
+#: wagtailmenus/models/menus.py:1134
 msgid "flat menus"
 msgstr "menus simples"
 
-#: wagtailmenus/models/menus.py:1167
+#: wagtailmenus/models/menus.py:1177
 msgid ""
 "Site and handle must create a unique combination. A menu already exists with"
 " these same two values."
@@ -295,15 +295,15 @@ msgstr ""
 
 #: wagtailmenus/panels.py:34
 msgid "Add new item"
-msgstr ""
+msgstr "Adicionar um novo item"
 
 #: wagtailmenus/panels.py:35
 msgid "New item"
-msgstr ""
+msgstr "Novo item"
 
 #: wagtailmenus/panels.py:73
 msgid "Menu details"
-msgstr ""
+msgstr "Detalhes do menu"
 
 #: wagtailmenus/panels.py:87
 msgid "Rendering setings"
@@ -328,7 +328,7 @@ msgstr "Salvar"
 
 #: wagtailmenus/views.py:58
 msgid "Content"
-msgstr ""
+msgstr "Conteúdo"
 
 #: wagtailmenus/views.py:70
 msgid "Editing"
@@ -365,19 +365,19 @@ msgstr "Menu simples '{instance}' criado."
 msgid "Main menu"
 msgstr "Menu principal"
 
-#: wagtailmenus/wagtail_hooks.py:50
+#: wagtailmenus/wagtail_hooks.py:52
 msgid "Copy"
 msgstr "Copiar"
 
-#: wagtailmenus/wagtail_hooks.py:52
+#: wagtailmenus/wagtail_hooks.py:54
 #, python-format
 msgid "Copy this %(model_name)s"
 msgstr "Copiar este %(model_name)s"
 
-#: wagtailmenus/wagtail_hooks.py:73
+#: wagtailmenus/wagtail_hooks.py:75
 msgid "Flat menus"
 msgstr "Menus simples"
 
-#: wagtailmenus/wagtail_hooks.py:119
+#: wagtailmenus/wagtail_hooks.py:121
 msgid "no. of items"
 msgstr "nº de items"
