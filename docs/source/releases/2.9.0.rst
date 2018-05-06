@@ -44,7 +44,7 @@ For example, if you had a template (e.g ``abc.html``) that you'd like to use for
     {% section_menu max_levels=3 sub_menu_templates="path/abc.html, path/level_3.html" %}
 
 
-See the updated doumentation form more information:
+See the updated documentation form more information:
 
 :ref:`template_tag_reference`
 
