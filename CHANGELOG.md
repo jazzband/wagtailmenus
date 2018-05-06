@@ -8,7 +8,7 @@ Changelog
 TBA
 
 
-2.9.0 (04.05.2018)
+2.9.0 (06.05.2018)
 ------------------
 
 * Added `WAGTAILMENUS_MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN` setting to the 'Main menu' menu item and underlying management functionality to be removed from the Wagtail admin area (thanks to Michael van de Waeter).
