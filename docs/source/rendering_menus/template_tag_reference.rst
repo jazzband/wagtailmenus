@@ -1,3 +1,5 @@
+.. _template_tag_reference:
+
 =======================
 Template tags reference
 =======================
