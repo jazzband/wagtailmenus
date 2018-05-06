@@ -1,11 +1,6 @@
-======================================
-Wagtailmenus 2.9 (alpha) release notes
-======================================
-
-.. NOTE ::
-    
-    Wagtailmenus 2.9 is in the alpha stage of development. Any changes
-    detailed below are subject to change before the final 2.9 release.
+==============================
+Wagtailmenus 2.9 release notes
+==============================
 
 
 .. contents::
@@ -15,6 +10,43 @@ Wagtailmenus 2.9 (alpha) release notes
 
 What's new?
 ===========
+
+
+Menu tags will now automatically identify level-specific templates
+------------------------------------------------------------------
+
+To make it easier to define templates for menus with three or more levels, each menu class has been updated to look for and use level-specific templates in your template directory. For example, for a main menu with three levels, you could arrange your templates like so:
+::
+
+    templates
+    └── menus
+        └── main
+            ├── level_1.html
+            ├── level_2.html
+            └── level_3.html
+
+With this the arrangement, the ``{% main_menu %}`` tag would find and use ``level_1.html`` to render the first level of menu items, then any calls made to ``{% sub_menu %}`` from within that template would use ``level_2.html``, then any further calls to ``{% sub_menu %}`` from that template would use ``level_3.html``. 
+
+See the updated documentation for more information and examples:
+
+:ref:`custom_templates_auto`
+
+
+New 'sub_menu_templates' menu tag option allows you to specify templates for multiple levels
+---------------------------------------------------------------------------------------------
+
+To complement the new level-specific template functionality, a new ``sub_menu_templates`` option has been added to the ``main_menu``, ``flat_menu``, ``section_menu`` and ``children_menu`` tags  to allow you to specify multiple templates to use at different levels.
+
+For example, if you had a template (e.g ``abc.html``) that you'd like to use for the 2nd level of a section menu, and another (e.g. ``xyz.html``) that you'd like to use for the 3rd, you could specify that by doing the following:
+
+.. code-block:: html
+    
+    {% section_menu max_levels=3 sub_menu_templates="path/abc.html, path/level_3.html" %}
+
+
+See the updated doumentation form more information:
+
+:ref:`template_tag_reference`
 
 
 Disable 'Main menu' or 'Flat menu' management options in the Wagtail admin area
@@ -28,22 +60,4 @@ See the settings documentation for more information:
 
 :ref:`WAGTAILMENUS_MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN`
 
-:ref:`WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN` 
-
-
-Minor changes & bug fixes 
-=========================
-
-TBA
-
-
-Deprecations
-============
-
-TBA
-
-
-Upgrade considerations
-======================
-
-TBA
+:ref:`WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN`
