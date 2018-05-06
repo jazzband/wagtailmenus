@@ -50,7 +50,7 @@ See the updated documentation form more information:
 
 
 Disable 'Main menu' or 'Flat menu' management options in the Wagtail admin area
----------------------------------------------------------=---------------------
+-------------------------------------------------------------------------------
 
 Implmented by Michael van de Waeter (mvdwaeter).
 
