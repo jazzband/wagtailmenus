@@ -8,11 +8,13 @@ Changelog
 TBA
 
 
-2.9.0a (XX.XX.XXXX) IN DEVELOPMENT
-----------------------------------
+2.9.0 (04.05.2018)
+------------------
 
 * Added `WAGTAILMENUS_MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN` setting to the 'Main menu' menu item and underlying management functionality to be removed from the Wagtail admin area (thanks to Michael van de Waeter).
 * Added `WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN` setting to the 'Flat menus' menu item and underlying management functionality to be removed from the Wagtail admin area (thanks to Michael van de Waeter).
+* Added the 'sub_menu_templates' option to menu tags to allow sub menu templates to be specified for each level.
+* Updated 'get_template_names()' and 'get_sub_menu_template_names()' methods for each class to search for template paths including the level currently being rendered, allowing developers to define level-specific templates in their templates directory, and have wagtailmenus find and use them automatically.
 
 
 2.8.0 (29.03.2018)
