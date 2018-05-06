@@ -137,12 +137,12 @@ When satisfied with the PR for prepping the files:
         python setup.py sdist
         python setup.py bdist_wheel --universal
 
-10. Install twine (if not already installed) and upload to the new distribution
+10. Update twine to the latest version and upload to the new distribution
     files to the PyPi test environment.
     
     .. code-block:: console
         
-        pip install twine
+        pip install twine --U
         twine upload dist/* -r pypitest
 
 11. Test that the new test distribution installs okay:
@@ -150,7 +150,7 @@ When satisfied with the PR for prepping the files:
     .. code-block:: console
 
         mktmpenv
-        pip install -i https://testpypi.python.org/pypi wagtailmenus
+        pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple wagtailmenus
         deactivate
 
 12. If all okay, push distribution files to the live PyPi:
