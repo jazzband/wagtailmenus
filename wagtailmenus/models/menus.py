@@ -2,7 +2,7 @@ import warnings
 from collections import defaultdict, namedtuple
 from types import GeneratorType
 
-from django.db import models
+from django.db import models, Q
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.template.loader import get_template, select_template
 from django.utils import six
@@ -1151,15 +1151,21 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     def get_for_site(cls, handle, site, fall_back_to_default_site_menus=False):
         """Get a FlatMenu instance with a matching `handle` for the `site`
         provided - or for the 'default' site if not found."""
-        menu = cls.objects.filter(handle__exact=handle, site=site).first()
-        if(
-            menu is None and fall_back_to_default_site_menus and
-            not site.is_default_site
-        ):
-            return cls.objects.filter(
-                handle__exact=handle, site__is_default_site=True
-            ).first()
-        return menu
+        queryset = cls.objects.filter(handle__exact=handle)
+        if fall_back_to_default_site_menus:
+            queryset = queryset.filter(
+                Q(site=site) | Q(site__is_default_site=True)
+            )
+        else:
+            queryset = queryset.filter(site=site)
+
+        default_site_menu = None
+        for obj in queryset:
+            if obj.site == site:
+                return obj
+            if fall_back_to_default_site_menus:
+                default_site_menu = obj
+        return default_site_menu
 
     @classmethod
     def get_least_specific_template_name(cls):
