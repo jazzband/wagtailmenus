@@ -861,9 +861,14 @@ class SubMenu(MenuFromPage):
 class MenuWithMenuItems(ClusterableModel, Menu):
     """A base model class for menus who's 'menu_items' are defined by
     a set of 'menu item' model instances."""
+    menu_items_relation_setting_name = None
 
     class Meta:
         abstract = True
+
+    @classmethod
+    def _get_menu_items_related_name(cls):
+        return getattr(app_settings, cls.menu_items_relation_setting_name)
 
     def get_base_menuitem_queryset(self):
         qs = self.get_menu_items_manager().for_display()
@@ -871,6 +876,22 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         for hook in hooks.get_hooks('menus_modify_base_menuitem_queryset'):
             qs = hook(qs, **self.common_hook_kwargs)
         return qs
+
+    def get_menu_items_manager(self):
+        relationship_name = self._get_menu_items_related_name()
+        try:
+            return getattr(self, relationship_name)
+        except AttributeError:
+            raise ImproperlyConfigured(
+                "'%s' isn't a valid relationship name for accessing menu "
+                "items from %s. Check that your `%s` setting matches the "
+                "`related_name` used on your MenuItem model's `ParentalKey` "
+                "field." % (
+                    relationship_name,
+                    self.__class__.__name__,
+                    self.menu_items_relation_setting_name
+                )
+            )
 
     def get_top_level_items(self):
         """Return a list of menu items with link_page objects supplemented with
@@ -882,7 +903,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         # or modified by hooks, any pages being excluded there are also
         # excluded at the top level
         top_level_pages = self.get_base_page_queryset().filter(
-            id__in=menu_items.values_list('link_page_id', flat=True)
+            id__in=(obj.link_page_id for obj in menu_items)
         )
         if self.use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL:
             """
@@ -947,11 +968,6 @@ class MenuWithMenuItems(ClusterableModel, Menu):
 
         return all_pages
 
-    def get_menu_items_manager(self):
-        raise NotImplementedError(
-            "Subclasses of 'MenuWithMenuItems' must define their own "
-            "'get_menu_items_manager' method")
-
     def add_menu_items_for_pages(self, pagequeryset=None, allow_subnav=True):
         """Add menu items to this menu, linking to each page in `pagequeryset`
         (which should be a PageQuerySet instance)"""
@@ -996,6 +1012,7 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_instance_context_name = 'main_menu'
     related_templatetag_name = 'main_menu'
     content_panels = main_menu_content_panels
+    menu_items_relation_setting_name = 'MAIN_MENU_ITEMS_RELATED_NAME'
 
     site = models.OneToOneField(
         'wagtailcore.Site',
@@ -1055,21 +1072,6 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
             'site_name': self.site.site_name or self.site
         }
 
-    def get_menu_items_manager(self):
-        try:
-            return getattr(self, app_settings.MAIN_MENU_ITEMS_RELATED_NAME)
-        except AttributeError:
-            raise ImproperlyConfigured(
-                "'%s' isn't a valid relationship name for accessing menu "
-                "items from %s. Check that your "
-                "`WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME` setting matches "
-                "the `related_name` used on your MenuItem model's "
-                "`ParentalKey` field." % (
-                    app_settings.MAIN_MENU_ITEMS_RELATED_NAME,
-                    self.__class__.__name__
-                )
-            )
-
 
 class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_short_name = 'flat'  # used to find templates
@@ -1077,6 +1079,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     related_templatetag_name = 'flat_menu'
     base_form_class = FlatMenuAdminForm
     content_panels = flat_menu_content_panels
+    menu_items_relation_setting_name = 'FLAT_MENU_ITEMS_RELATED_NAME'
 
     site = models.ForeignKey(
         'wagtailcore.Site',
@@ -1181,21 +1184,6 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
                 'handle': [msg],
             })
         super().clean(*args, **kwargs)
-
-    def get_menu_items_manager(self):
-        try:
-            return getattr(self, app_settings.FLAT_MENU_ITEMS_RELATED_NAME)
-        except AttributeError:
-            raise ImproperlyConfigured(
-                "'%s' isn't a valid relationship name for accessing menu "
-                "items from %s. Check that your "
-                "`WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME` setting matches "
-                "the `related_name` used on your MenuItem model's "
-                "`ParentalKey` field." % (
-                    app_settings.FLAT_MENU_ITEMS_RELATED_NAME,
-                    self.__class__.__name__
-                )
-            )
 
     def get_heading(self):
         return self.heading
