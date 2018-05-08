@@ -898,23 +898,26 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         'specific' pages where appropriate."""
         menu_items = self.get_base_menuitem_queryset()
 
-        # Identify which pages to fetch for the top level items. We use
-        # 'get_base_page_queryset' here, so that if that's being overridden
-        # or modified by hooks, any pages being excluded there are also
-        # excluded at the top level
-        top_level_pages = self.get_base_page_queryset().filter(
-            id__in=(obj.link_page_id for obj in menu_items)
-        )
-        if self.use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL:
-            """
-            The menu is being generated with a specificity level of TOP_LEVEL
-            or ALWAYS, so we use PageQuerySet.specific() to fetch specific
-            page instances as efficiently as possible
-            """
-            top_level_pages = top_level_pages.specific()
+        # Identify which pages to fetch for the top level items
+        page_ids = tuple(obj.link_page_id for obj in menu_items)
+        page_dict = {}
+        if page_ids:
+            # We use 'get_base_page_queryset' here, because if hooks are being
+            # used to modify page querysets, that should affect the top level
+            # items also
+            top_level_pages = self.get_base_page_queryset().filter(
+                id__in=(obj.link_page_id for obj in menu_items)
+            )
+            if self.use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL:
+                """
+                The menu is being generated with a specificity level of
+                TOP_LEVEL or ALWAYS, so we use PageQuerySet.specific() to fetch
+                specific page instances as efficiently as possible
+                """
+                top_level_pages = top_level_pages.specific()
 
-        # Evaluate the above queryset to a dictionary, using the IDs as keys
-        pages_dict = {p.id: p for p in top_level_pages}
+            # Evaluate the above queryset to a dictionary, using IDs as keys
+            page_dict = {p.id: p for p in top_level_pages}
 
         # Now build a list to return
         menu_item_list = []
@@ -922,10 +925,10 @@ class MenuWithMenuItems(ClusterableModel, Menu):
             if not item.link_page_id:
                 menu_item_list.append(item)
                 continue  # skip to next
-            if item.link_page_id in pages_dict.keys():
+            if item.link_page_id in page_dict.keys():
                 # Only return menu items for pages where the page was included
                 # in the 'get_base_page_queryset' result
-                item.link_page = pages_dict.get(item.link_page_id)
+                item.link_page = page_dict.get(item.link_page_id)
                 menu_item_list.append(item)
         return menu_item_list
 
