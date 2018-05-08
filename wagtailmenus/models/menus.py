@@ -2,7 +2,7 @@ import warnings
 from collections import defaultdict, namedtuple
 from types import GeneratorType
 
-from django.db import models, Q
+from django.db import models
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.template.loader import get_template, select_template
 from django.utils import six
@@ -1154,7 +1154,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         queryset = cls.objects.filter(handle__exact=handle)
         if fall_back_to_default_site_menus:
             queryset = queryset.filter(
-                Q(site=site) | Q(site__is_default_site=True)
+                models.Q(site=site) | models.Q(site__is_default_site=True)
             )
         else:
             queryset = queryset.filter(site=site)
