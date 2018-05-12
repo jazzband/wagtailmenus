@@ -899,14 +899,16 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         menu_items = self.get_base_menuitem_queryset()
 
         # Identify which pages to fetch for the top level items
-        page_ids = tuple(obj.link_page_id for obj in menu_items)
+        page_ids = tuple(
+            obj.link_page_id for obj in menu_items if obj.link_page_id
+        )
         page_dict = {}
         if page_ids:
             # We use 'get_base_page_queryset' here, because if hooks are being
             # used to modify page querysets, that should affect the top level
             # items also
             top_level_pages = self.get_base_page_queryset().filter(
-                id__in=(obj.link_page_id for obj in menu_items)
+                id__in=page_ids
             )
             if self.use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL:
                 """
