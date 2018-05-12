@@ -1,15 +1,13 @@
 from importlib import reload
+from unittest.mock import call, patch
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
-from django.test import (
-    TestCase, TransactionTestCase, modify_settings, override_settings
-)
-from mock import call, patch
-
+from django.test import TestCase, TransactionTestCase, override_settings
 from django_webtest import WebTest
 from wagtail import VERSION as WAGTAIL_VERSION
+
 from wagtailmenus import (
     get_flat_menu_model, get_main_menu_model, wagtail_hooks
 )
