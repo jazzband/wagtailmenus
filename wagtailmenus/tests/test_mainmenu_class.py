@@ -61,7 +61,7 @@ class TestTopLevelItems(MainMenuTestCase):
             for item in menu.top_level_items:
                 assert item.link_page is None or type(item.link_page) is not Page
 
-    def test_method_makes_only_one_query_when_no_menu_items_link_to_pages(self):
+    def test_method_initiates_one_query_when_no_menu_items_link_to_pages(self):
         # First, let's replace any menu items that link to pages with links
         # to custom urls
         for i, item in enumerate(
@@ -76,8 +76,8 @@ class TestTopLevelItems(MainMenuTestCase):
         with self.assertNumQueries(1):
             menu.get_top_level_items()
 
-    def test_method_makes_only_two_queries_when_basic_page_data_is_required(self):
-        menu = MainMenu.objects.get(pk=1)
+    def test_method_initiates_two_queries_when_vanilla_page_data_is_required(self, menu_obj=None):
+        menu = menu_obj or MainMenu.objects.get(pk=1)
         menu.use_specific = app_settings.USE_SPECIFIC_AUTO
         with self.assertNumQueries(2):
             menu.get_top_level_items()
