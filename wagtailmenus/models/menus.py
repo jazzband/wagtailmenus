@@ -3,6 +3,7 @@ from collections import defaultdict, namedtuple
 from types import GeneratorType
 
 from django.db import models
+from django.db.models import BooleanField, Case, Q, When
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.template.loader import get_template, select_template
 from django.utils import six
@@ -1153,31 +1154,22 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
             return
 
     @classmethod
-    def get_default_site_id(cls):
-        try:
-            return Site.objects.values('id').get(is_default_site=True)['id']
-        except Site.DoesNotExist:
-            pass
-
-    @classmethod
     def get_for_site(cls, handle, site, fall_back_to_default_site_menus=False):
-        """Get a FlatMenu instance with a matching `handle` for the `site`
-        provided - or for the 'default' site if not found."""
-        site_query = models.Q(site_id=site.id)
-        if(fall_back_to_default_site_menus and not site.is_default_site):
-            default_site_id = cls.get_default_site_id()
-            if default_site_id:
-                site_query |= models.Q(site_id=default_site_id)
+        """Return a FlatMenu instance with a matching ``handle`` for the
+        provided ``site``, or for the default site (if suitable). If no
+        match is found, returns None."""
+        queryset = cls.objects.filter(handle__exact=handle)
 
-        queryset = cls.objects.filter(handle__exact=handle).filter(site_query)
+        site_q = Q(site=site)
+        if fall_back_to_default_site_menus:
+            site_q |= Q(site__is_default_site=True)
+        queryset = queryset.filter(site_q)
 
-        default_site_menu = None
-        for obj in queryset:
-            if obj.site_id == site.id:
-                return obj
-            if fall_back_to_default_site_menus:
-                default_site_menu = obj
-        return default_site_menu
+        # return the best match or None
+        return queryset.annotate(matched_provided_site=Case(
+            When(site_id=site.id, then=1), default=0,
+            output_field=BooleanField()
+        )).order_by('-matched_provided_site').first()
 
     @classmethod
     def get_least_specific_template_name(cls):
