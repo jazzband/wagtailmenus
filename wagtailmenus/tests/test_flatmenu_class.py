@@ -47,7 +47,7 @@ class TestGetForSite(FlatMenuTestCase):
     def test_returns_none_if_no_match_for_supplied_site_and_fall_back_to_default_site_menus_is_false(self):
         test_handle = 'test-1'
 
-        FlatMenu.objects.get(site=self.not_default_site, handle=test_handle).delete()
+        FlatMenu.objects.filter(site=self.not_default_site, handle=test_handle).delete()
 
         with self.assertNumQueries(1):
             result = FlatMenu.get_for_site(
@@ -60,7 +60,7 @@ class TestGetForSite(FlatMenuTestCase):
     def test_returns_menu_for_default_site_if_no_match_for_supplied_site_and_fall_back_to_default_site_menus_is_true(self):
         test_handle = 'test-1'
 
-        FlatMenu.objects.get(site=self.not_default_site, handle=test_handle).delete()
+        FlatMenu.objects.filter(site=self.not_default_site, handle=test_handle).delete()
 
         expected_result = FlatMenu.objects.get(
             site=self.default_site, handle=test_handle)
