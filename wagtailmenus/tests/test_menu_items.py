@@ -104,8 +104,7 @@ class TestFlatMenuItemGeneralMethods(MenuItemModelTestMixin, TestCase):
 
 class TestMenuItemsForRequest(TestCase):
     """
-    Tests active classes rendered for menu items where
-    `WAGTAILMENUS_CUSTOM_URL_SMART_ACTIVE_CLASSES == False`
+    Tests active classes rendered for menu items
     """
     def setUp(self):
         self.rf = RequestFactory()
@@ -117,21 +116,6 @@ class TestMenuItemsForRequest(TestCase):
 
         active_class = menu_item.get_active_class_for_request(request)
         self.assertEqual(active_class, app_settings.ACTIVE_CLASS)
-
-    def test_menu_item_with_query_params(self):
-        menu_item = AbstractMenuItem()
-        menu_item.link_url = '/some-page/?some_param=foo'
-        request = self.rf.get('/some-page/')
-
-        active_class = menu_item.get_active_class_for_request(request)
-        self.assertEqual(active_class, '')
-
-
-@override_settings(WAGTAILMENUS_CUSTOM_URL_SMART_ACTIVE_CLASSES=True)
-class TestMenuItemsForRequestWithSmartClasses(TestCase):
-
-    def setUp(self):
-        self.rf = RequestFactory()
 
     def test_menu_item_with_query_params(self):
         menu_item = AbstractMenuItem()

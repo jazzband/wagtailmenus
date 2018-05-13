@@ -205,10 +205,6 @@ class AppSettings:
         return self.class_from_path_setting('SECTION_MENU_CLASS_PATH')
 
     @property
-    def CUSTOM_URL_SMART_ACTIVE_CLASSES(self):
-        return self._setting('CUSTOM_URL_SMART_ACTIVE_CLASSES', False)
-
-    @property
     def MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN(self):
         return self._setting('MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN', True)
 

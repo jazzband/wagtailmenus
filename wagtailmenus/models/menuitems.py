@@ -128,22 +128,20 @@ class AbstractMenuItem(models.Model, MenuItem):
         super().clean(*args, **kwargs)
 
     def get_active_class_for_request(self, request=None):
-        # Returns the 'active_class' for a custom link item.
-        if app_settings.CUSTOM_URL_SMART_ACTIVE_CLASSES:
-            # new behaviour
-            parsed_url = urlparse(self.link_url)
-            if parsed_url.netloc:
-                return ''
-            if request.path == parsed_url.path:
-                return app_settings.ACTIVE_CLASS
-            if (
-                request.path.startswith(parsed_url.path) and
-                parsed_url.path != '/'
-            ):
-                return app_settings.ACTIVE_ANCESTOR_CLASS
-        if self.link_url == request.path:
-            # previous behaviour
+        """
+        Return the most appropriate 'active_class' for this menu item (only
+        used when 'link_url' is used instead of 'link_page').
+        """
+        parsed_url = urlparse(self.link_url)
+        if parsed_url.netloc:
+            return ''
+        if request.path == parsed_url.path:
             return app_settings.ACTIVE_CLASS
+        if (
+            request.path.startswith(parsed_url.path) and
+            parsed_url.path != '/'
+        ):
+            return app_settings.ACTIVE_ANCESTOR_CLASS
         return ''
 
     def __str__(self):
