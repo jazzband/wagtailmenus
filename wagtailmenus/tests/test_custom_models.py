@@ -421,9 +421,7 @@ class TestInvalidCustomMenuModels(TestCase):
     def test_invalid_main_menu_items_related_name(self):
         with self.assertRaisesMessage(ImproperlyConfigured, (
             "'invalid_related_name' isn't a valid relationship name for "
-            "accessing menu items from MainMenu. Check that your "
-            "`WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME` setting matches the "
-            "`related_name` used on your MenuItem model's `ParentalKey` field."
+            "accessing menu items from MainMenu."
         )):
             menu = get_main_menu_model().objects.get(id=1)
             menu.get_menu_items_manager()
@@ -432,9 +430,7 @@ class TestInvalidCustomMenuModels(TestCase):
     def test_invalid_flat_menu_items_related_name(self):
         with self.assertRaisesMessage(ImproperlyConfigured, (
             "'invalid_related_name' isn't a valid relationship name for "
-            "accessing menu items from FlatMenu. Check that your "
-            "`WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME` setting matches the "
-            "`related_name` used on your MenuItem model's `ParentalKey` field."
+            "accessing menu items from FlatMenu."
         )):
             menu = get_flat_menu_model().objects.get(id=1)
             menu.get_menu_items_manager()

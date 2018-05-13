@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+from wagtailmenus import app_settings
 from wagtailmenus.models import MainMenu
 from wagtailmenus.tests import base, utils
 
@@ -31,7 +32,7 @@ class TestTopLevelItems(MainMenuTestCase):
         # This menu has a `use_specific` value of 1 (AUTO)
         self.assertEqual(menu.use_specific, 1)
 
-        # So, the top-level items it return should all just be custom links
+        # So, the top-level items it returns should all just be custom links
         # or have a `link_page` that is just a vanilla Page object.
         for item in menu.top_level_items:
             self.assertTrue(item.link_page is None or type(item.link_page) is Page)
@@ -59,6 +60,27 @@ class TestTopLevelItems(MainMenuTestCase):
         with self.assertNumQueries(0):
             for item in menu.top_level_items:
                 assert item.link_page is None or type(item.link_page) is not Page
+
+    def test_method_initiates_one_query_when_no_menu_items_link_to_pages(self):
+        # First, let's replace any menu items that link to pages with links
+        # to custom urls
+        for i, item in enumerate(
+            MainMenu.objects.get(pk=1).get_menu_items_manager().all()
+        ):
+            if item.link_page_id:
+                item.link_page = None
+                item.link_url = '/test/{}/'.format(i)
+                item.save()
+
+        menu = MainMenu.objects.get(pk=1)
+        with self.assertNumQueries(1):
+            menu.get_top_level_items()
+
+    def test_method_initiates_two_queries_when_vanilla_page_data_is_required(self, menu_obj=None):
+        menu = menu_obj or MainMenu.objects.get(pk=1)
+        menu.use_specific = app_settings.USE_SPECIFIC_AUTO
+        with self.assertNumQueries(2):
+            menu.get_top_level_items()
 
 
 class TestPagesForDisplay(MainMenuTestCase):
