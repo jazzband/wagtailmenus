@@ -24,10 +24,10 @@ from .pages import AbstractLinkPage
 
 if WAGTAIL_VERSION >= (2, 0):
     from wagtail.core import hooks
-    from wagtail.core.models import Page
+    from wagtail.core.models import Page, Site
 else:
     from wagtail.wagtailcore import hooks
-    from wagtail.wagtailcore.models import Page
+    from wagtail.wagtailcore.models import Page, Site
 
 
 mark_safe_lazy = lazy(mark_safe, six.text_type)
@@ -1087,7 +1087,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_items_relation_setting_name = 'FLAT_MENU_ITEMS_RELATED_NAME'
 
     site = models.ForeignKey(
-        'wagtailcore.Site',
+        Site,
         verbose_name=_('site'),
         db_index=True,
         on_delete=models.CASCADE,
@@ -1151,6 +1151,13 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
             )
         except cls.DoesNotExist:
             return
+
+    @classmethod
+    def get_default_site_id(cls):
+        try:
+            return Site.objects.values('id').get(is_default_site=True)['id']
+        except Site.DoesNotExist:
+            pass
 
     @classmethod
     def get_for_site(cls, handle, site, fall_back_to_default_site_menus=False):
