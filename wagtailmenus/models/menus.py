@@ -1163,13 +1163,13 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     def get_for_site(cls, handle, site, fall_back_to_default_site_menus=False):
         """Get a FlatMenu instance with a matching `handle` for the `site`
         provided - or for the 'default' site if not found."""
-        queryset = cls.objects.filter(handle__exact=handle)
-        if fall_back_to_default_site_menus:
-            queryset = queryset.filter(
-                models.Q(site=site) | models.Q(site__is_default_site=True)
-            )
-        else:
-            queryset = queryset.filter(site=site)
+        site_query = models.Q(site_id=site.id)
+        if(fall_back_to_default_site_menus and not site.is_default_site):
+            default_site_id = cls.get_default_site_id()
+            if default_site_id:
+                site_query |= models.Q(site_id=default_site_id)
+
+        queryset = cls.objects.filter(handle__exact=handle).filter(site_query)
 
         default_site_menu = None
         for obj in queryset:
