@@ -2,10 +2,10 @@ Changelog
 =========
 
 
-2.X.X (XX.XX.XXXX) IN DEVELOPMENT
+2.10.0 (XX.XX.XXXX) IN DEVELOPMENT
 ----------------------------------
 
-TBA
+* Optimised MenuWithMenuItems.get_top_level_items() and AbstractFlatMenu.get_for_site() to use fewer database queries to render menus
 
 
 2.9.0 (06.05.2018)
