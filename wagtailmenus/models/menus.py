@@ -1173,7 +1173,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
 
         default_site_menu = None
         for obj in queryset:
-            if obj.site == site:
+            if obj.site_id == site.id:
                 return obj
             if fall_back_to_default_site_menus:
                 default_site_menu = obj
