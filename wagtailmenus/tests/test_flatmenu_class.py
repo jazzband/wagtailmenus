@@ -10,21 +10,21 @@ Site = utils.get_site_model()
 class FlatMenuTestCase(TestCase):
     """A base TestCase class for testing FlatMenu model class methods"""
 
-    def setUp(self):
-        self.site = Site.objects.get()
-        self.menus = (
-            FlatMenu.objects.create(
-                site=self.site, handle='test-1', title="Test Menu 1"
-            ),
-            FlatMenu.objects.create(
-                site=self.site, handle='test-2', title="Test Menu 2"
-            ),
-            FlatMenu.objects.create(
-                site=self.site, handle='test-3', title="Test Menu 3"
+    @staticmethod
+    def create_test_menus_for_site(site, count=3, set_option_vals=False):
+        for i in range(1, count + 1):
+            obj = FlatMenu.objects.create(
+                site=site, handle='test-%s' % i, title='Test Menu %s' % i
             )
+            if set_option_vals:
+                obj._option_vals = utils.make_optionvals_instance()
+            yield obj
+
+    def setUp(self):
+        self.site = Site.objects.get(is_default_site=True)
+        self.menus = tuple(
+            self.create_test_menus_for_site(self.site, set_option_vals=True)
         )
-        for menu in self.menus:
-            menu._option_vals = utils.make_optionvals_instance()
 
     def get_test_menu_instance(self):
         return self.menus[0]
