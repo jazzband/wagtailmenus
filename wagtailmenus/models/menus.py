@@ -393,6 +393,7 @@ class Menu:
         """
         ctx_vals = self._contextual_vals
         opt_vals = self._option_vals
+        request = self.request
         current_site = ctx_vals.current_site
         current_page = ctx_vals.current_page
         apply_active_classes = opt_vals.apply_active_classes
@@ -424,11 +425,11 @@ class Menu:
                     ctx_vals.original_menu_tag
                 ):
                     setattr(item, 'active_class', item.extra_classes)
-                    setattr(item, 'text', item.menu_text(self.request))
+                    setattr(item, 'text', item.menu_text(request))
                     if self._option_vals.use_absolute_page_urls:
-                        url = item.get_full_url(request=self.request)
+                        url = item.get_full_url(request=request)
                     else:
-                        url = item.relative_url(current_site, self.request)
+                        url = item.relative_url(current_site, request)
                     setattr(item, 'href', url)
                     yield item
                 continue
@@ -472,7 +473,7 @@ class Menu:
                         """
                         has_children_in_menu = page.has_submenu_items(
                             menu_instance=self,
-                            request=self.request,
+                            request=request,
                             allow_repeating_parents=allow_repeating_parents,
                             current_page=ctx_vals.current_page,
                             original_menu_tag=ctx_vals.original_menu_tag,
@@ -511,8 +512,7 @@ class Menu:
                 case.
                 """
                 if apply_active_classes:
-                    active_class = item.get_active_class_for_request(
-                        self.request)
+                    active_class = item.get_active_class_for_request(request)
                     setattr(item, 'active_class', active_class)
 
             # In case the specific page was fetched during the above operations
@@ -523,7 +523,7 @@ class Menu:
             if opt_vals.use_absolute_page_urls:
                 # Pages only have `get_full_url` from Wagtail 1.11 onwards
                 if hasattr(item, 'get_full_url'):
-                    url = item.get_full_url(request=self.request)
+                    url = item.get_full_url(request=request)
                 # Fallback for Wagtail versions prior to 1.11
                 else:
                     url = item.full_url
