@@ -1,4 +1,3 @@
-import warnings
 from collections import defaultdict, namedtuple
 from types import GeneratorType
 
@@ -17,7 +16,6 @@ from .. import app_settings
 from ..forms import FlatMenuAdminForm
 from ..panels import (
     main_menu_content_panels, flat_menu_content_panels, menu_settings_panels)
-from ..utils.deprecation import RemovedInWagtailMenus210Warning
 from ..utils.misc import get_site_from_request
 from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
@@ -32,20 +30,6 @@ else:
 
 
 mark_safe_lazy = lazy(mark_safe, six.text_type)
-
-# TODO: To be removed in v.2.10
-WARNING_MSG = (
-    "The current default 'active' class attribution behaviour for menu items "
-    "that link to custom URLs is deprecated in favour of the smarter approach "
-    "introduced in 2.8. You can use this new behaviour right now by "
-    "adding 'WAGTAILMENUS_CUSTOM_URL_SMART_ACTIVE_CLASSES = True' "
-    "to your project's settings (which will also silence this warning). See "
-    "the 2.8 release notes for more info: "
-    "http://wagtailmenus.readthedocs.io/en/stable/releases/2.8.0.html"
-)
-if not app_settings.CUSTOM_URL_SMART_ACTIVE_CLASSES:
-    warnings.warn(WARNING_MSG, category=RemovedInWagtailMenus210Warning)
-
 
 ContextualVals = namedtuple('ContextualVals', (
     'parent_context', 'request', 'current_site', 'current_level',
@@ -507,9 +491,8 @@ class Menu:
                 """
                 This is a `MenuItem` for a custom URL. If can be classed as
                 'active' if the URL matches the path of the current request,
-                or (if `apps_settings.CUSTOM_URL_SMART_ACTIVE_CLASSES == True`)
-                as the 'ancestor of the current page' if that looks to be the
-                case.
+                or as the 'ancestor of the current page' if that looks to be
+                the case.
                 """
                 if apply_active_classes:
                     active_class = item.get_active_class_for_request(request)
