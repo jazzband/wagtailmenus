@@ -128,7 +128,7 @@ Implementing ``MenuPage`` into your project
             ]
             ...
 
-3.  Create migtations for any models you've updated by running:
+3.  Create migrations for any models you've updated by running:
     
     .. code-block:: console
 
@@ -180,7 +180,7 @@ Wagtail has a restriction that forbids models from subclassing more than one oth
             ]
             ...
 
-2.   Create migtations for any models you've updated by running:
+2.   Create migrations for any models you've updated by running:
     
     .. code-block:: console
 
@@ -200,7 +200,7 @@ Using ``MenuPage`` to manipulating sub-menu items
 
 When a page model subclasses ``MenuPage`` or ``MenuPageMixin``, pages of that type are given special treatment by the menu generation template tags included in wagtailmenus, allowing them to make changes to the sub-menu items that get rendered below them.
 
-The functionaliy exists to allow ``MenuPage`` pages to add repeating links to themselves into a sub-menu, but can be extended to meet any custom needs you might have. 
+The functionality exists to allow ``MenuPage`` pages to add repeating links to themselves into a sub-menu, but can be extended to meet any custom needs you might have. 
 
 For example, if you had a ``ContactPage`` model, and in main menus, you wanted to add some additional links below each ``ContactPage``,  you could achieve that by overriding the ``modify_submenu_items()`` and ``has_submenu_items()`` methods like so:
 

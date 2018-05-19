@@ -21,7 +21,7 @@ Minor changes & bug fixes
 
 Various 'Python 3 only' code optimisations:
 
-- Removed __future__ unicode handling imports throughout.
+- Removed __future__ Unicode handling imports throughout.
 - Replaced 'old style' class definitions with 'new style' ones.
 - Simplified super() syntax throughout to the cleaner Python 3 implementation.
 - Fixed deprecation warnings pertaining to use of ``TestCase.assertRaisesRegexp``.

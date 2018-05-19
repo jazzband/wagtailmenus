@@ -96,7 +96,7 @@ Upgrade considerations
 ======================
 
 
-The ChildrenMenu's 'root_page' attribute is deprectated in favour of 'parent_page'
+The ChildrenMenu's 'root_page' attribute is deprecated in favour of 'parent_page'
 ----------------------------------------------------------------------------------
 
 In previous versions, the ChildrenMenu and SectionMenu classes both extended the same ``MenuFromRootPage`` class, which takes ``root_page`` as an init argument, then stores a reference to that page using an attribute of the same name. 
@@ -171,7 +171,7 @@ I highly doubt this will trip anybody up, but sorry if it does. Recent versions 
 ``wagtailmenus.models.menus.MenuFromRootPage`` is deprecated
 ------------------------------------------------------------
 
-With ``ChildrenMenu`` being refactored to use 'parent_page' as an attribute instead of 'root_page', and the new ``SubMenu`` menu class taking a similar approach, the ``MenuFromRootPage`` name only seems relevent to ``SectionMenu``, so it has been deprecated in favour of using a more generically-named ``MenuFromPage`` class, which is subclassed by all three.
+With ``ChildrenMenu`` being refactored to use 'parent_page' as an attribute instead of 'root_page', and the new ``SubMenu`` menu class taking a similar approach, the ``MenuFromRootPage`` name only seems relevant to ``SectionMenu``, so it has been deprecated in favour of using a more generically-named ``MenuFromPage`` class, which is subclassed by all three.
 
 
 ``wagtailmenus.menu_tags.prime_menu_items()`` is deprecated

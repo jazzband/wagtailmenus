@@ -33,7 +33,7 @@ choosing not to fetch any specific pages at all during rendering. Simply pass ``
 the Wagtail admin area.
 
 
-Basic argument valdation added to template tags
+Basic argument validation added to template tags
 -----------------------------------------------
 
 The ``max_levels``, ``use_specific``, ``parent_page`` and ``menuitem_or_page`` 

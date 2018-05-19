@@ -39,19 +39,25 @@ Follow the steps outlined below to prep changes in your fork:
     ensure the ``a`` or ``b`` is removed from the file name for the release, 
     and the reference to it in ``docs/source/releases/index.rst``.
 
-7.  Check that the docs build okay, and fix any errors raised by sphinx:
+7.  Check for and correct any spelling errors raised by sphinx:
+
+    .. code-block:: console
+
+        make spelling
+
+8.  Check that the docs build okay, and fix any errors raised by sphinx:
 
     .. code-block:: console
 
         make html
 
-8.  Commit changes so far:
+9.  Commit changes so far:
 
     .. code-block:: console
     
         git commit -am 'Bumped version and updated release notes'
        
-8.  Update the source translation files by running the following from the
+10.  Update the source translation files by running the following from the
     project's root directory:
 
     .. code-block:: console
@@ -62,13 +68,13 @@ Follow the steps outlined below to prep changes in your fork:
         # Commit the changes
         git commit -am 'Update source translation files'
 
-9.  Push all oustanding changes to github:
+11.  Push all oustanding changes to GitHub:
 
     .. code-block:: console
     
         git push
 
-10. Submit your changes as a PR to the main repo via
+12. Submit your changes as a PR to the main repo via
     https://github.com/rkhleics/wagtailmenus/compare
 
 
