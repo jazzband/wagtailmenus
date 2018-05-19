@@ -14,10 +14,10 @@ branch_url = "%stree/stable/%s" % (base_url, stable_branch_name)
 
 # Testing dependencies
 testing_extras = [
-    'django-webtest>=1.9',
-    'beautifulsoup4>=4.6',
+    'beautifulsoup4',
     'coverage',
-    'wagtail-condensedinlinepanel==0.4.2',
+    'django-webtest==1.9.2',  # For Django <2 compatibility
+    'wagtail-condensedinlinepanel==0.4.2',  # For Wagtail <2 compatibility
 ]
 
 documentation_extras = [
