@@ -70,7 +70,7 @@ If you're happy with the default ``MainMenu`` model, but wish customise the menu
                 FieldPanel('allow_subnav'),
             )
 
-2.  Create migtations for the new model by running:
+2.  Create migrations for the new model by running:
     
     .. code-block:: console
 
@@ -160,7 +160,7 @@ If you also need to override the ``MainMenu`` model, that's possible too. But, b
                 related_name=app_settings.MAIN_MENU_ITEMS_RELATED_NAME,
             )
 
-2.  Create migtations for the new models by running:
+2.  Create migrations for the new models by running:
     
     .. code-block:: console
 
@@ -245,7 +245,7 @@ If you're happy with the default ``FlatMenu`` model, but wish customise the menu
                 FieldPanel('allow_subnav'),
             )
 
-2.  Create migtations for the new models by running:
+2.  Create migrations for the new models by running:
     
     .. code-block:: console
 
@@ -394,7 +394,7 @@ If you also need to override the ``FlatMenu`` model, that's possible too. But, b
                 FieldPanel("allow_subnav"),
             )
 
-2.  Create migtations for the new models by running:
+2.  Create migrations for the new models by running:
     
     .. code-block:: console
 

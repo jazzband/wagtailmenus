@@ -2,7 +2,7 @@
 Wagtailmenus 2.3.1 release notes
 ================================
 
-This is a maintenence release to fix to address the following:
+This is a maintenance release to fix to address the following:
 
 * Code example formatting fixes, and better use of headings in README.md.
 * Added 'on_delete=models.CASCADE' to all relationship fields on models where

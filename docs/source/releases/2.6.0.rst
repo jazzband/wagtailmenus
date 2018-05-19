@@ -28,7 +28,7 @@ Improved compatibility with alternative template backends
 
 Wagtailmenus has been updated to use backend-specific templates for rendering, making it compatible with template backends other than Django's default backend (such as ``jinja2``).
 
-Although the likelihood of this new behavior introducing breaking changes to projects is minute, it is turned **OFF** by default for now, in order to give developers time to make any necessary changes. However, by version 2.8 the updated behaviour will replace the old behaviour completely, becoming non optional.
+Although the likelihood of this new behaviour introducing breaking changes to projects is minute, it is turned **OFF** by default for now, in order to give developers time to make any necessary changes. However, by version 2.8 the updated behaviour will replace the old behaviour completely, becoming non optional.
 
 To start using wagtailmenus with an alternative backend now (or to test your project's compatibility in advance), you can turn the updated behaviour **ON** by adding the following to your project's settings:
 
@@ -36,13 +36,13 @@ To start using wagtailmenus with an alternative backend now (or to test your pro
 
     WAGTAILMENUS_USE_BACKEND_SPECIFIC_TEMPLATES = True
 
-Thank you to Nguyễn Hồng Quân (hongquan) for contributing this!
+Thank you to Nguyễn Hồng Quân (@hongquan) for contributing this!
 
 
 New tabbed interface for menu editing
 -------------------------------------
 
-In an effort to improve the menu editing UI, Wagtail's ``TabbedInterface`` is now used to split a menu's fields into two tabs for editig: **Content** and **Settings**; with the latter including panels for the ``max_levels`` and ``use_specific`` fields (which were previously tucked away at the bottom of the edit page), and the former for everything else.
+In an effort to improve the menu editing UI, Wagtail's ``TabbedInterface`` is now used to split a menu's fields into two tabs for editing: **Content** and **Settings**; with the latter including panels for the ``max_levels`` and ``use_specific`` fields (which were previously tucked away at the bottom of the edit page), and the former for everything else.
 
 Two new attributes, ``content_panels`` and ``settings_panels`` have also been added to ``AbstractMainMenu`` and ``AbstractFlatMenu`` to allow the panels for each tab to be updated independently.
 
@@ -131,6 +131,6 @@ If you're overriding the ``panels`` attribute on a custom menu model in order to
 Upgrade considerations
 ======================
 
--   Following the standard deprecation period, any modify_submenu_items()
+-   Following the standard deprecation period, any ``modify_submenu_items()``
     methods implemented on custom Page type models must now accept a 'use_absolute_page_urls' keyword argument. See the 2.4 release notes for
     more info: http://wagtailmenus.readthedocs.io/en/stable/releases/2.4.0.html

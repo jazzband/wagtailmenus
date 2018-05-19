@@ -13,7 +13,7 @@ What's new?
 Class-based rendering behaviour for menus
 -----------------------------------------
 
-This version of wagtailmenus sees quite a large refactor in an attempt to address a large amount of repetition and inconsistency in tempate tag code, and to also break the process of rendering menus down into more clearly defined steps that can be overridden individually where needed.
+This version of wagtailmenus sees quite a large refactor in an attempt to address a large amount of repetition and inconsistency in template tag code, and to also break the process of rendering menus down into more clearly defined steps that can be overridden individually where needed.
 
 While the existing template tags remain, and are still the intended method for initiating rendering of menus from templates, their responsibilities have diminished somewhat. They are now only really responsible for performing basic validation on the option values passed to them - everything else is handled by the relevant Menu class.
 
@@ -35,7 +35,7 @@ Below is an outline of the new process, once the menu tag has prepared it's opti
 
 7. The ``get_context_data()`` method creates and returns a dictionary of values that need to be available in the template. This includes obvious things such as a list of ``menu_items`` for the current level, and other not-so-obvious things, which are intended to be picked up by the ``sub_menu`` tag (if it's being used in the template to render additional levels). The menu items are provided by the ``get_menu_items_for_rendering()`` method, which in turn splits responsibility for sourcing, priming, and modifying menu items between three other methods: ``get_raw_menu_items()``, ``prime_menu_items()`` and ``modify_menu_items()``, respectively.
 
-8. The ``get_template()`` method indentifies and returns an appropriate ``Template`` instance that can be used for rendering.
+8. The ``get_template()`` method identifies and returns an appropriate ``Template`` instance that can be used for rendering.
 
 9. With the data and template gathered, ``render_to_template()`` then converts the data into a ``Context`` object and sends it to the template's ``render()`` method, creating a string representation of the menu, which is sent back for inclusion in the original template.
 
@@ -79,9 +79,9 @@ When sourcing data for a main or flat menu, it doesn't make sense to apply two s
 Minor changes & bug fixes 
 =========================
 
-*   Fixed an issue with runtests.py that was causing tox builds in Travis CI
+*   Fixed an issue with ``runtests.py`` that was causing tox builds in Travis CI
     to report as successful, even when tests were failing. Contributed by
-    Oliver Bestwalter (obestwalter).
+    Oliver Bestwalter (@obestwalter).
 *   The ``stop_at_this_level`` argument for the ``sub_menu`` tag has been
     officially deprecated and the feature removed from documentation. It hasn't 
     worked for a few versions and nobody has mentioned it, so this is the first
@@ -96,7 +96,7 @@ Upgrade considerations
 ======================
 
 
-The ChildrenMenu's 'root_page' attribute is deprectated in favour of 'parent_page'
+The ChildrenMenu's 'root_page' attribute is deprecated in favour of 'parent_page'
 ----------------------------------------------------------------------------------
 
 In previous versions, the ChildrenMenu and SectionMenu classes both extended the same ``MenuFromRootPage`` class, which takes ``root_page`` as an init argument, then stores a reference to that page using an attribute of the same name. 
@@ -134,7 +134,7 @@ If you're calling 'get_base_menuitem_queryset' anywhere in your project, and are
 'MenuItemManager.for_display()' no longer filters the queryset
 --------------------------------------------------------------
 
-If you are subclasssing ``MenuItemManger`` to create managers for your custom menu item models, and are relying on the original 'for_display' method to filter out links based on their linked page's status/visibility, you may wish to revise your code to filter out the pages as before, like so:
+If you are subclassing ``MenuItemManger`` to create managers for your custom menu item models, and are relying on the original 'for_display' method to filter out links based on their linked page's status/visibility, you may wish to revise your code to filter out the pages as before, like so:
 
 
 .. code-block:: python
@@ -171,7 +171,7 @@ I highly doubt this will trip anybody up, but sorry if it does. Recent versions 
 ``wagtailmenus.models.menus.MenuFromRootPage`` is deprecated
 ------------------------------------------------------------
 
-With ``ChildrenMenu`` being refactored to use 'parent_page' as an attribute instead of 'root_page', and the new ``SubMenu`` menu class taking a similar approach, the ``MenuFromRootPage`` name only seems relevent to ``SectionMenu``, so it has been deprecated in favour of using a more generically-named ``MenuFromPage`` class, which is subclassed by all three.
+With ``ChildrenMenu`` being refactored to use 'parent_page' as an attribute instead of 'root_page', and the new ``SubMenu`` menu class taking a similar approach, the ``MenuFromRootPage`` name only seems relevant to ``SectionMenu``, so it has been deprecated in favour of using a more generically-named ``MenuFromPage`` class, which is subclassed by all three.
 
 
 ``wagtailmenus.menu_tags.prime_menu_items()`` is deprecated

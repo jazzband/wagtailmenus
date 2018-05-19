@@ -35,5 +35,5 @@ Release notes
     2.0.1
     2.0.0
 
-Release notes for versions preceeding ``v2.0.0`` can be found on Github:
+Release notes for versions preceding ``v2.0.0`` can be found on GitHub:
 https://github.com/rkhleics/wagtailmenus/releases?after=v2.0.0

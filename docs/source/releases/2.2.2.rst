@@ -2,8 +2,8 @@
 Wagtailmenus 2.2.2 release notes
 ================================
 
-This is a maintenence release to improve general code quality and make project 
-management easier. There are no compatiblilty issues to worry about.
+This is a maintenance release to improve general code quality and make project 
+management easier. There are no compatibility issues to worry about.
 
 What's changed?
 ===============

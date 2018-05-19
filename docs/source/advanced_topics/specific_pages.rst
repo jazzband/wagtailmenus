@@ -12,7 +12,7 @@ For pages, Wagtail makes use of a technique in Django called 'multi-table inheri
 
 Because of this, in order for Django to return 'specific' page type instance (e.g. an `EventPage`), it needs to fetch and join data from both tables; which has a negative effect on performance.
 
-Menu generation is particularly resource intensive, because a menu needs to know a lot of data about a lot of pages. Add a need for 'specific' page instances to that mix (perhaps you need to access multlingual field values that only exist in the specific database table, or you want to use other custom field values in your menu templates), and that intensity is understandably greater, as the data will likely be spread over many tables (depending on how many custom page types you are using), needing lots of database joins to put everything together.
+Menu generation is particularly resource intensive, because a menu needs to know a lot of data about a lot of pages. Add a need for 'specific' page instances to that mix (perhaps you need to access multilingual field values that only exist in the specific database table, or you want to use other custom field values in your menu templates), and that intensity is understandably greater, as the data will likely be spread over many tables (depending on how many custom page types you are using), needing lots of database joins to put everything together.
 
 Because every project has different needs, wagtailmenus gives you some fine grained control over how 'specific' pages should be used in your menus. When defining a ``MainMenu`` or ``FlatMenu`` in the CMS, the **Specific page use** field allows you to choose one of the following options, which can also be passed to any of the included template tags using the ``use_specific`` parameter.
 
@@ -22,7 +22,7 @@ Because every project has different needs, wagtailmenus gives you some fine grai
 Supported values for fetching specific pages
 --------------------------------------------
 
-* **Off** (value: ``0``): Use only standard ``Page`` model data and methods, and make the minimum number of database methods when rendering. If you aren't using wagtailmenu's ``MenuPage`` model in your project, and don't need to access any custom page model fields or methods in you menu templates, and aren't overriding ``get_url_parts()`` or other ``Page`` methods concerned with URL generation, you should use this option for optimal performance.
+* **Off** (value: ``0``): Use only standard ``Page`` model data and methods, and make the minimum number of database methods when rendering. If you aren't using wagtailmenus' ``MenuPage`` model in your project, and don't need to access any custom page model fields or methods in you menu templates, and aren't overriding ``get_url_parts()`` or other ``Page`` methods concerned with URL generation, you should use this option for optimal performance.
 
 * **Auto** (value: ``1``): Only fetch and use specific pages when needed for ``MenuPage`` operations (e.g. for 'repeating menu item' behaviour, and manipulation of sub-menu items via ``has_submenu_items()`` and ``modify_submenu_items()`` methods).
 

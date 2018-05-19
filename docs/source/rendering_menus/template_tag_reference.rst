@@ -148,7 +148,7 @@ Required?  Expected value type                       Default value
 No         Comma separated template paths (``str``)  ``''``
 =========  ========================================  =============
 
-Allows you to specify multiple templates to use for rendering different levels of sub menu. In the following example, ``"level_1.html"`` would be used to render the first level of the menu, then subsequent calls to ``{% sub_menu %}`` would use ``"level_2.html"`` to render any 2nd level menu items, or ``"level_3.html"`` for and 3rd level menu items.
+Allows you to specify multiple templates to use for rendering different levels of sub menu. In the following example, ``"level_1.html"`` would be used to render the first level of the menu, then subsequent calls to ``{% sub_menu %}`` would use ``"level_2.html"`` to render any second level menu items, or ``"level_3.html"`` for and third level menu items.
 
 .. code-block:: html
     
@@ -361,7 +361,7 @@ Required?  Expected value type                       Default value
 No         Comma separated template paths (``str``)  ``''``
 =========  ========================================  =============
 
-Allows you to specify multiple templates to use for rendering different levels of sub menu. In the following example, ``"level_1.html"`` would be used to render the first level of the menu, then subsequent calls to ``{% sub_menu %}`` would use ``"level_2.html"`` to render any 2nd level menu items, or ``"level_3.html"`` for and 3rd level (or greater) menu items.
+Allows you to specify multiple templates to use for rendering different levels of sub menu. In the following example, ``"level_1.html"`` would be used to render the first level of the menu, then subsequent calls to ``{% sub_menu %}`` would use ``"level_2.html"`` to render any second level menu items, or ``"level_3.html"`` for and third level (or greater) menu items.
 
 .. code-block:: html
     
@@ -548,7 +548,7 @@ Required?  Expected value type                       Default value
 No         Comma separated template paths (``str``)  ``''``
 =========  ========================================  =============
 
-Allows you to specify multiple templates to use for rendering different levels of sub menu. In the following example, ``"level_1.html"`` would be used to render the first level of the menu, then subsequent calls to ``{% sub_menu %}`` would use ``"level_2.html"`` to render any 2nd level menu items, or ``"level_3.html"`` for and 3rd level (or greater) menu items.
+Allows you to specify multiple templates to use for rendering different levels of sub menu. In the following example, ``"level_1.html"`` would be used to render the first level of the menu, then subsequent calls to ``{% sub_menu %}`` would use ``"level_2.html"`` to render any second level menu items, or ``"level_3.html"`` for and third level (or greater) menu items.
 
 .. code-block:: html
     
@@ -723,7 +723,7 @@ Required?  Expected value type                       Default value
 No         Comma separated template paths (``str``)  ``''``
 =========  ========================================  =============
 
-Allows you to specify multiple templates to use for rendering different levels of sub menu. In the following example, ``"level_1.html"`` would be used to render the first level of the menu, then subsequent calls to ``{% sub_menu %}`` would use ``"level_2.html"`` to render any 2nd level menu items, or ``"level_3.html"`` for and 3rd level (or greater) menu items.
+Allows you to specify multiple templates to use for rendering different levels of sub menu. In the following example, ``"level_1.html"`` would be used to render the first level of the menu, then subsequent calls to ``{% sub_menu %}`` would use ``"level_2.html"`` to render any second level menu items, or ``"level_3.html"`` for and third level (or greater) menu items.
 
 .. code-block:: html
     

@@ -33,8 +33,8 @@ choosing not to fetch any specific pages at all during rendering. Simply pass ``
 the Wagtail admin area.
 
 
-Basic argument valdation added to template tags
------------------------------------------------
+Basic argument validation added to template tags
+------------------------------------------------
 
 The ``max_levels``, ``use_specific``, ``parent_page`` and ``menuitem_or_page`` 
 arguments passed to all template tags are now checked to ensure their values
@@ -59,7 +59,7 @@ Dropped features
     `check_for_children` argument.
 
 -   The ``modify_submenu_items()`` and ``has_submenu_items()`` methods on the 
-    ``MenuPage`` model now both accept an optional ``menu_instance`` kwarg.
+    ``MenuPage`` model now both accept an optional ``menu_instance`` keyword argument.
 
 -   Added the ``WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES`` setting to allow
     override styles to be disabled.

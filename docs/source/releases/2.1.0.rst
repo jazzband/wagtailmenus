@@ -22,7 +22,7 @@ What's new?
 - Added the ``WAGTAILMENUS_PAGE_FIELD_FOR_MENU_ITEM_TEXT`` setting to allow 
   developers to specify a page attribute other than `title` to be used to
   populate the ``text`` attribute for menu items linking to pages.
-- Added german translations by Pierre (@bloodywing).
+- Added German translations by Pierre (@bloodywing).
 
 
 Upgrade considerations
