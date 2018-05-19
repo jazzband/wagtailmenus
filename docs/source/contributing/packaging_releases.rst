@@ -16,7 +16,7 @@ Follow the steps outlined below to prep changes in your fork:
         git checkout master
         git merge upstream/master
 
-2.  From your fork's ``master`` branch, create a new branch for prepping the
+2.  From your fork's ``master`` branch, create a new branch for preparing the
     release, e.g.:
 
     .. code-block:: console
@@ -88,7 +88,7 @@ Follow the steps outlined below to prep changes in your fork:
 Packaging and pushing to PyPi
 =============================
 
-When satisfied with the PR for prepping the files:
+When satisfied with the PR for preparing the files:
 
 1.  From https://github.com/rkhleics/wagtailmenus/pulls, merge the PR into the
     ``master`` branch using the "merge commit" option.
