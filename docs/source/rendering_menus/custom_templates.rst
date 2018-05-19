@@ -33,7 +33,8 @@ The following variables are added to the context by all included template tags, 
 :``current_level``: 
     An integer indicating the current level being rendered. This starts at
     ``1`` for the initial template tag call, then increments by one for each 
-    additional <ul> level that is added by calling the ``{% sub_menu %}`` tag
+    additional ``<ul>`` level that is added by calling the ``{% sub_menu %}`` 
+    tag
 
 :``max_levels``: 
     An integer indicating the maximum number of levels that should be rendered

@@ -185,7 +185,7 @@ There are two hooks you can use to modify menu items, which are called at differ
 menus_modify_raw_menu_items
 ---------------------------
 
-This hook allows you to modify the list **before** it is 'primed' (a process that sets 'href', 'text', 'active_class' and 'has_children_in_menu' attributes on each item), and **before** being sent to a parent page's 'modify_submenu_items()' method for further modification (see :ref:`manipulating_submenu_items`).
+This hook allows you to modify the list **before** it is 'primed' (a process that sets ``href``, ``text``, ``active_class`` and ``has_children_in_menu`` attributes on each item), and **before** being sent to a parent page's ``modify_submenu_items()`` method for further modification (see :ref:`manipulating_submenu_items`).
 
 .. NOTE::
     The below example shows only a subset of the arguments that are passed to methods using this hook. For a full list of the arguments supplied, see the :ref:`hooks_argument_reference` below.
@@ -217,7 +217,7 @@ This hook allows you to modify the list **before** it is 'primed' (a process tha
         return menu_items  # always return a list
 
 
-The modified list of menu items will then continue to be processed as normal, being passed to the menu's 'prime_menu_items()' method for priming, and then on to the parent page's 'modify_submenu_items()' for further modification.
+The modified list of menu items will then continue to be processed as normal, being passed to the menu's 'prime_menu_items()' method for priming, and then on to the parent page's ``modify_submenu_items()`` for further modification.
 
 
 .. _menus_modify_primed_menu_items:
@@ -225,7 +225,7 @@ The modified list of menu items will then continue to be processed as normal, be
 menus_modify_primed_menu_items
 ------------------------------
 
-This hook allows you to modify the list of items **after** they have been 'primed' and the modified by a parent page's 'modify_submenu_items()' methods (see :ref:`manipulating_submenu_items`).
+This hook allows you to modify the list of items **after** they have been 'primed' and the modified by a parent page's ``modify_submenu_items()`` methods (see :ref:`manipulating_submenu_items`).
 
 .. NOTE::
     The below example shows only a subset of the arguments that are passed to methods using this hook. For a full list of the arguments supplied, see the :ref:`hooks_argument_reference` below.

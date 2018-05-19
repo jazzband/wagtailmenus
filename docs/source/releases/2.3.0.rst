@@ -68,7 +68,7 @@ Other minor changes
 - In situations where ``request.site`` hasn't been set by wagtail's ``SiteMiddleware``, the wagtailmenus context processor will now use the default site to generate menus with.
 - Updated ``AbstractMenuItem.clean()`` to only ever return field-specific validation errors, because Wagtail doesn't render non-field errors for related models added to the editor interface using ``InlinePanel``.
 - Refactored ``runtest.py`` to accept a ``deprecation`` argument that can be used to surface deprecation warnings that arise when running tests.
-- Added Russian translations (submitted by Alex einsfr).
+- Added Russian translations (submitted by Alex @einsfr).
 
 
 Upgrade considerations

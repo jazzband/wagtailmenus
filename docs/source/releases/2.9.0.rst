@@ -37,7 +37,7 @@ New 'sub_menu_templates' menu tag option allows you to specify templates for mul
 
 To complement the new level-specific template functionality, a new ``sub_menu_templates`` option has been added to the ``main_menu``, ``flat_menu``, ``section_menu`` and ``children_menu`` tags  to allow you to specify multiple templates to use at different levels.
 
-For example, if you had a template (e.g ``abc.html``) that you'd like to use for the 2nd level of a section menu, and another (e.g. ``xyz.html``) that you'd like to use for the 3rd, you could specify that by doing the following:
+For example, if you had a template (e.g ``abc.html``) that you'd like to use for the second level of a section menu, and another (e.g. ``xyz.html``) that you'd like to use for the third, you could specify that by doing the following:
 
 .. code-block:: html
     
@@ -52,7 +52,7 @@ See the updated documentation form more information:
 Disable 'Main menu' or 'Flat menu' management options in the Wagtail admin area
 -------------------------------------------------------------------------------
 
-Implmented by Michael van de Waeter (mvdwaeter).
+Implemented by Michael van de Waeter (@mvdwaeter).
 
 Projects come in all shapes and sizes, and not all call for both types of menu. So, to reduce potential confusion for users in the CMS, you can now hide either (or both) the 'Flat menus' and 'Main menu' items from the 'Settings' menu in the admin area (and disables the underlying CMS functionality for each).
 

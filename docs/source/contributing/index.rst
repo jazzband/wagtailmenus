@@ -51,9 +51,9 @@ following criteria:
 Developing locally
 ==================
 
-If you'd like a runnable Django project to help with development of wagtailmenus, follow these steps to get started (Mac only). The development environment has django-debug-toolbar and some other helpful packages installed to help you debug with your code as you develop:
+If you'd like a runnable Django project to help with development of wagtailmenus, follow these steps to get started (Mac only). The development environment has ``django-debug-toolbar`` and some other helpful packages installed to help you debug with your code as you develop:
 
-1.  In a Terminal window, cd to the `wagtailmenus` root directory, and run:
+1.  In a Terminal window, ``cd`` to the project’s root directory, and run:
 
     .. code-block:: console
 

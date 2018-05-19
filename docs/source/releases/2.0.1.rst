@@ -2,4 +2,4 @@
 Wagtailmenus 2.0.1 release notes
 ================================
 
-This is a maintenence release to fix a bug reported by some users when using the ``{% main_menu %}`` tag without a ``max_levels`` value.
+This is a maintenance release to fix a bug reported by some users when using the ``{% main_menu %}`` tag without a ``max_levels`` value.

@@ -7,6 +7,7 @@ backends
 callable
 callables
 checkbox
+CI
 CMS
 codebase
 contrib
@@ -22,17 +23,21 @@ min
 mixin
 modal
 modals
+overridable
 prepopulated
 prepping
 QuerySet
 queryset
+refactor
 refactored
 screenshot
 searchable
+subclassed
 subclassing
 sub-menu
+toolbar
 tox
-Travis CI
+Travis
 Transifex
 uncollapse
 url
@@ -41,5 +46,3 @@ wagtail
 wagtailmenus
 wagtail-condensedinlinepanel
 workflow
-
-

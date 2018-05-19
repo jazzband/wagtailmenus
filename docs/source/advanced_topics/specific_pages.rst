@@ -22,7 +22,7 @@ Because every project has different needs, wagtailmenus gives you some fine grai
 Supported values for fetching specific pages
 --------------------------------------------
 
-* **Off** (value: ``0``): Use only standard ``Page`` model data and methods, and make the minimum number of database methods when rendering. If you aren't using wagtailmenu’s ``MenuPage`` model in your project, and don't need to access any custom page model fields or methods in you menu templates, and aren't overriding ``get_url_parts()`` or other ``Page`` methods concerned with URL generation, you should use this option for optimal performance.
+* **Off** (value: ``0``): Use only standard ``Page`` model data and methods, and make the minimum number of database methods when rendering. If you aren't using wagtailmenus' ``MenuPage`` model in your project, and don't need to access any custom page model fields or methods in you menu templates, and aren't overriding ``get_url_parts()`` or other ``Page`` methods concerned with URL generation, you should use this option for optimal performance.
 
 * **Auto** (value: ``1``): Only fetch and use specific pages when needed for ``MenuPage`` operations (e.g. for 'repeating menu item' behaviour, and manipulation of sub-menu items via ``has_submenu_items()`` and ``modify_submenu_items()`` methods).
 

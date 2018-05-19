@@ -36,7 +36,7 @@ To start using wagtailmenus with an alternative backend now (or to test your pro
 
     WAGTAILMENUS_USE_BACKEND_SPECIFIC_TEMPLATES = True
 
-Thank you to Nguyễn Hồng Quân (hongquan) for contributing this!
+Thank you to Nguyễn Hồng Quân (@hongquan) for contributing this!
 
 
 New tabbed interface for menu editing
@@ -131,6 +131,6 @@ If you're overriding the ``panels`` attribute on a custom menu model in order to
 Upgrade considerations
 ======================
 
--   Following the standard deprecation period, any modify_submenu_items()
+-   Following the standard deprecation period, any ``modify_submenu_items()``
     methods implemented on custom Page type models must now accept a 'use_absolute_page_urls' keyword argument. See the 2.4 release notes for
     more info: http://wagtailmenus.readthedocs.io/en/stable/releases/2.4.0.html
