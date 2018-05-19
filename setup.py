@@ -17,7 +17,7 @@ testing_extras = [
     'django-webtest==1.9.2',
     'beautifulsoup4==4.5.1',
     'coverage>=3.7.0',
-    'wagtail-condensedinlinepanel==0.3',
+    'wagtail-condensedinlinepanel==0.4.2',
 ]
 
 documentation_extras = [
