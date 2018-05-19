@@ -17,11 +17,12 @@
 * Sergey Fedoseev (sir-sigurd)
 * Pierre Manceaux (pierremanceaux)
 * Michael van de Waeter (mvdwaeter)
+* Philipp Bosch (philippbosch) (A Color Bright)
 
 
 ## Translators
 
-* François GUÉRIN (frague59)
+* François Guérin (frague59)
 * Claudio Marinozzi (pyMan)
 * Pierre Geier (bloodywing)
 * Max Kurama (MaxKurama)
