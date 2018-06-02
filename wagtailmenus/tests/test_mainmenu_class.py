@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from wagtailmenus import app_settings
+from wagtailmenus import constants
 from wagtailmenus.models import MainMenu
 from wagtailmenus.tests import base, utils
 
@@ -78,7 +78,7 @@ class TestTopLevelItems(MainMenuTestCase):
 
     def test_method_initiates_two_queries_when_vanilla_page_data_is_required(self, menu_obj=None):
         menu = menu_obj or MainMenu.objects.get(pk=1)
-        menu.use_specific = app_settings.USE_SPECIFIC_AUTO
+        menu.use_specific = constants.USE_SPECIFIC_AUTO
         with self.assertNumQueries(2):
             menu.get_top_level_items()
 

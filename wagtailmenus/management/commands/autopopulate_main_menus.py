@@ -2,12 +2,11 @@ import logging
 
 from django.core.management.base import BaseCommand
 from wagtail import VERSION as WAGTAIL_VERSION
+from wagtailmenus import app_settings
 if WAGTAIL_VERSION >= (2, 0):
     from wagtail.core.models import Site
 else:
     from wagtail.wagtailcore.models import Site
-
-from wagtailmenus import app_settings
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +30,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for site in Site.objects.all():
-            menu = app_settings.MAIN_MENU_MODEL_CLASS.get_for_site(site)
+            menu_model = app_settings.get_model('MAIN_MENU_MODEL')
+            menu = menu_model.get_for_site(site)
             if not menu.get_menu_items_manager().exists():
                 menu.add_menu_items_for_pages(
                     site.root_page.get_descendants(

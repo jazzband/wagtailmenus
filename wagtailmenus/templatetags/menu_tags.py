@@ -1,15 +1,12 @@
 from django.template import Library
 from wagtail import VERSION as WAGTAIL_VERSION
+from wagtailmenus import app_settings, constants
+from wagtailmenus.errors import SubMenuUsageError
+from wagtailmenus.utils.misc import validate_supplied_values
 if WAGTAIL_VERSION >= (2, 0):
     from wagtail.core.models import Page
 else:
     from wagtail.wagtailcore.models import Page
-
-from wagtailmenus import app_settings
-from wagtailmenus.errors import SubMenuUsageError
-from wagtailmenus.utils.misc import validate_supplied_values
-
-flat_menus_fbtdsm = app_settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS
 
 register = Library()
 
@@ -33,7 +30,8 @@ def main_menu(
     if not show_multiple_levels:
         max_levels = 1
 
-    return app_settings.MAIN_MENU_MODEL_CLASS.render_from_tag(
+    menu_class = app_settings.get_model('MAIN_MENU_MODEL')
+    return menu_class.render_from_tag(
         context=context,
         max_levels=max_levels,
         use_specific=use_specific,
@@ -53,16 +51,21 @@ def flat_menu(
     show_menu_heading=False, apply_active_classes=False,
     allow_repeating_parents=True, show_multiple_levels=True,
     template='', sub_menu_template='', sub_menu_templates=None,
-    fall_back_to_default_site_menus=flat_menus_fbtdsm,
-    use_absolute_page_urls=False, **kwargs
+    fall_back_to_default_site_menus=None, use_absolute_page_urls=False,
+    **kwargs
 ):
     validate_supplied_values('flat_menu', max_levels=max_levels,
                              use_specific=use_specific)
 
+    if fall_back_to_default_site_menus is None:
+        fall_back_to_default_site_menus = app_settings.get(
+            'FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS')
+
     if not show_multiple_levels:
         max_levels = 1
 
-    return app_settings.FLAT_MENU_MODEL_CLASS.render_from_tag(
+    menu_class = app_settings.get_model('FLAT_MENU_MODEL')
+    return menu_class.render_from_tag(
         context=context,
         handle=handle,
         fall_back_to_default_site_menus=fall_back_to_default_site_menus,
@@ -89,14 +92,14 @@ def section_menu(
     use_absolute_page_urls=False, **kwargs
 ):
     """Render a section menu for the current section."""
-
     validate_supplied_values('section_menu', max_levels=max_levels,
                              use_specific=use_specific)
 
     if not show_multiple_levels:
         max_levels = 1
 
-    return app_settings.SECTION_MENU_CLASS.render_from_tag(
+    menu_class = app_settings.get_class('SECTION_MENU_CLASS_PATH')
+    return menu_class.render_from_tag(
         context=context,
         max_levels=max_levels,
         use_specific=use_specific,
@@ -124,7 +127,8 @@ def children_menu(
         'children_menu', max_levels=max_levels, use_specific=use_specific,
         parent_page=parent_page)
 
-    return app_settings.CHILDREN_MENU_CLASS.render_from_tag(
+    menu_class = app_settings.get_class('CHILDREN_MENU_CLASS_PATH')
+    return menu_class.render_from_tag(
         context=context,
         parent_page=parent_page,
         max_levels=max_levels,
@@ -158,7 +162,7 @@ def sub_menu(
 
     if use_specific is None:
         use_specific = context.get(
-            'use_specific', app_settings.USE_SPECIFIC_AUTO)
+            'use_specific', constants.USE_SPECIFIC_AUTO)
 
     if apply_active_classes is None:
         apply_active_classes = context.get('apply_active_classes', True)

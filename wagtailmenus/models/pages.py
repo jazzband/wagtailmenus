@@ -6,14 +6,13 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 from wagtail import VERSION as WAGTAIL_VERSION
+from wagtailmenus import app_settings
+from wagtailmenus.forms import LinkPageAdminForm
+from wagtailmenus.panels import menupage_settings_panels, linkpage_edit_handler
 if WAGTAIL_VERSION >= (2, 0):
     from wagtail.core.models import Page
 else:
     from wagtail.wagtailcore.models import Page
-
-from .. import app_settings
-from ..forms import LinkPageAdminForm
-from ..panels import menupage_settings_panels, linkpage_edit_handler
 
 
 class MenuPageMixin(models.Model):
@@ -91,8 +90,9 @@ class MenuPageMixin(models.Model):
         override this method if you're creating a multilingual site and you
         have different translations of 'repeated_item_text' that you wish to
         surface."""
+        source_field_name = app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT
         return self.repeated_item_text or getattr(
-            self, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT, self.title
+            self, source_field_name, self.title
         )
 
     def get_repeated_menu_item(
@@ -191,11 +191,12 @@ class AbstractLinkPage(Page):
     def menu_text(self, request=None):
         """Return a string to use as link text when this page appears in
         menus."""
+        source_field_name = app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT
         if(
-            app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT != 'menu_text' and
-            hasattr(self, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT)
+            source_field_name != 'menu_text' and
+            hasattr(self, source_field_name)
         ):
-            return getattr(self, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT)
+            return getattr(self, source_field_name)
         return self.title
 
     def clean(self, *args, **kwargs):

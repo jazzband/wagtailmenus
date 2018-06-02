@@ -3,7 +3,7 @@ from django.test.client import RequestFactory
 from wagtail import VERSION as WAGTAIL_VERSION
 
 from wagtailmenus.models.menus import ContextualVals, OptionVals
-from wagtailmenus import app_settings
+from wagtailmenus import constants
 
 SUB_MENU_TEMPLATE_LIST = (
     'menus/sub_menu_level_2.html',
@@ -30,7 +30,7 @@ def get_site_model():
 
 def make_optionvals_instance(
     max_levels=2,
-    use_specific=app_settings.USE_SPECIFIC_AUTO,
+    use_specific=constants.USE_SPECIFIC_AUTO,
     apply_active_classes=True,
     allow_repeating_parents=True,
     use_absolute_page_urls=False,

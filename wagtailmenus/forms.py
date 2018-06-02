@@ -1,12 +1,11 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from wagtail import VERSION as WAGTAIL_VERSION
+from wagtailmenus import app_settings
 if WAGTAIL_VERSION >= (2, 0):
     from wagtail.admin.forms import WagtailAdminModelForm, WagtailAdminPageForm
 else:
     from wagtail.wagtailadmin.forms import WagtailAdminModelForm, WagtailAdminPageForm
-
-from . import app_settings
 
 
 class FlatMenuAdminForm(WagtailAdminModelForm):

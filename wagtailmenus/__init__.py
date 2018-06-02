@@ -16,8 +16,8 @@ def get_main_menu_model_string():
     main menu model (such as in foreign keys), but the model itself is not
     required.
     """
-    from wagtailmenus import app_settings
-    return app_settings.MAIN_MENU_MODEL
+    import wagtailmenus.app_settings
+    return wagtailmenus.app_settings.MAIN_MENU_MODEL
 
 
 def get_flat_menu_model_string():
@@ -27,8 +27,8 @@ def get_flat_menu_model_string():
     flat menu model (such as in foreign keys), but the model itself is not
     required.
     """
-    from wagtailmenus import app_settings
-    return app_settings.FLAT_MENU_MODEL
+    import wagtailmenus.app_settings
+    return wagtailmenus.app_settings.FLAT_MENU_MODEL
 
 
 def get_main_menu_model():
@@ -38,8 +38,8 @@ def get_main_menu_model():
     Defaults to the standard :class:`~wagtailmenus.models.MainMenu` model
     if no custom model is defined.
     """
-    from wagtailmenus import app_settings
-    return app_settings.MAIN_MENU_MODEL_CLASS
+    import wagtailmenus.app_settings
+    return wagtailmenus.app_settings.get_model('MAIN_MENU_MODEL')
 
 
 def get_flat_menu_model():
@@ -49,5 +49,5 @@ def get_flat_menu_model():
     Defaults to the standard :class:`~wagtailmenus.models.FlatMenu` model
     if no custom model is defined.
     """
-    from wagtailmenus import app_settings
-    return app_settings.FLAT_MENU_MODEL_CLASS
+    import wagtailmenus.app_settings
+    return wagtailmenus.app_settings.get_model('FLAT_MENU_MODEL')

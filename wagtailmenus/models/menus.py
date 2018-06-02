@@ -12,11 +12,9 @@ from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
 from wagtail import VERSION as WAGTAIL_VERSION
 
-from .. import app_settings
-from ..forms import FlatMenuAdminForm
-from ..panels import (
-    main_menu_content_panels, flat_menu_content_panels, menu_settings_panels)
-from ..utils.misc import get_site_from_request
+from wagtailmenus import app_settings, constants, forms, panels
+from wagtailmenus.utils.misc import get_site_from_request
+
 from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
 from .pages import AbstractLinkPage
@@ -62,7 +60,7 @@ class Menu:
     # instances by model field values, of by setting alternative values
     # at initialisation
     max_levels = 1
-    use_specific = app_settings.USE_SPECIFIC_AUTO
+    use_specific = constants.USE_SPECIFIC_AUTO
 
     @classmethod
     def render_from_tag(cls, context, **options):
@@ -217,8 +215,8 @@ class Menu:
             cached values where appropriate.
             """
             if(
-                use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL and
-                self.use_specific < app_settings.USE_SPECIFIC_TOP_LEVEL
+                use_specific >= constants.USE_SPECIFIC_TOP_LEVEL and
+                self.use_specific < constants.USE_SPECIFIC_TOP_LEVEL
             ):
                 self.clear_page_cache()
                 try:
@@ -605,7 +603,7 @@ class MenuFromPage(Menu):
             path__startswith=parent_page.path,
         )
         # Return 'specific' page instances if required
-        if(self.use_specific == app_settings.USE_SPECIFIC_ALWAYS):
+        if(self.use_specific == constants.USE_SPECIFIC_ALWAYS):
             return pages.specific()
         return pages
 
@@ -695,7 +693,7 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         # Replace self.root_page with it's 'specific' equivalent if it looks
         # like it'll help with modifying menu items or aid consistency
         if self.use_specific and type(self.root_page) is Page and (
-            self.use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL or
+            self.use_specific >= constants.USE_SPECIFIC_TOP_LEVEL or
             hasattr(self.root_page.specific_class, 'modify_submenu_items')
         ):
             self.root_page = self.root_page.specific
@@ -852,7 +850,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
 
     @classmethod
     def _get_menu_items_related_name(cls):
-        return getattr(app_settings, cls.menu_items_relation_setting_name)
+        return app_settings.get(cls.menu_items_relation_setting_name)
 
     def get_base_menuitem_queryset(self):
         qs = self.get_menu_items_manager().for_display()
@@ -894,7 +892,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
             top_level_pages = self.get_base_page_queryset().filter(
                 id__in=page_ids
             )
-            if self.use_specific >= app_settings.USE_SPECIFIC_TOP_LEVEL:
+            if self.use_specific >= constants.USE_SPECIFIC_TOP_LEVEL:
                 """
                 The menu is being generated with a specificity level of
                 TOP_LEVEL or ALWAYS, so we use PageQuerySet.specific() to fetch
@@ -952,7 +950,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         all_pages = all_pages & self.get_base_page_queryset()
 
         # Return 'specific' page instances if required
-        if self.use_specific == app_settings.USE_SPECIFIC_ALWAYS:
+        if self.use_specific == constants.USE_SPECIFIC_ALWAYS:
             return all_pages.specific()
 
         return all_pages
@@ -989,7 +987,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         data.update(kwargs)
         return super().get_context_data(**data)
 
-    settings_panels = menu_settings_panels
+    settings_panels = panels.menu_settings_panels
 
 
 # ########################################################
@@ -1000,7 +998,7 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_short_name = 'main'  # used to find templates
     menu_instance_context_name = 'main_menu'
     related_templatetag_name = 'main_menu'
-    content_panels = main_menu_content_panels
+    content_panels = panels.main_menu_content_panels
     menu_items_relation_setting_name = 'MAIN_MENU_ITEMS_RELATED_NAME'
 
     site = models.OneToOneField(
@@ -1013,7 +1011,7 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     )
     max_levels = models.PositiveSmallIntegerField(
         verbose_name=_('maximum levels'),
-        choices=app_settings.MAX_LEVELS_CHOICES,
+        choices=constants.MAX_LEVELS_CHOICES,
         default=2,
         help_text=mark_safe_lazy(_(
             "The maximum number of levels to display when rendering this "
@@ -1024,8 +1022,8 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     )
     use_specific = models.PositiveSmallIntegerField(
         verbose_name=_('specific page usage'),
-        choices=app_settings.USE_SPECIFIC_CHOICES,
-        default=app_settings.USE_SPECIFIC_AUTO,
+        choices=constants.USE_SPECIFIC_CHOICES,
+        default=constants.USE_SPECIFIC_AUTO,
         help_text=mark_safe_lazy(_(
             "Controls how 'specific' pages objects are fetched and used when "
             "rendering this menu. This value can be overidden by supplying a "
@@ -1066,8 +1064,8 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_short_name = 'flat'  # used to find templates
     menu_instance_context_name = 'flat_menu'
     related_templatetag_name = 'flat_menu'
-    base_form_class = FlatMenuAdminForm
-    content_panels = flat_menu_content_panels
+    base_form_class = forms.FlatMenuAdminForm
+    content_panels = panels.flat_menu_content_panels
     menu_items_relation_setting_name = 'FLAT_MENU_ITEMS_RELATED_NAME'
 
     site = models.ForeignKey(
@@ -1098,7 +1096,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     )
     max_levels = models.PositiveSmallIntegerField(
         verbose_name=_('maximum levels'),
-        choices=app_settings.MAX_LEVELS_CHOICES,
+        choices=constants.MAX_LEVELS_CHOICES,
         default=1,
         help_text=mark_safe_lazy(_(
             "The maximum number of levels to display when rendering this "
@@ -1109,8 +1107,8 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     )
     use_specific = models.PositiveSmallIntegerField(
         verbose_name=_('specific page usage'),
-        choices=app_settings.USE_SPECIFIC_CHOICES,
-        default=app_settings.USE_SPECIFIC_AUTO,
+        choices=constants.USE_SPECIFIC_CHOICES,
+        default=constants.USE_SPECIFIC_AUTO,
         help_text=mark_safe_lazy(_(
             "Controls how 'specific' pages objects are fetched and used when "
             "rendering this menu. This value can be overidden by supplying a "
