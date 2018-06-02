@@ -3,20 +3,21 @@ from django.contrib.admin.utils import quote
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail.contrib.modeladmin.helpers import ButtonHelper
+from wagtailmenus import app_settings
+from wagtailmenus.views import (
+    MainMenuIndexView, MainMenuEditView, FlatMenuCreateView,
+    FlatMenuEditView, FlatMenuCopyView
+)
 if WAGTAIL_VERSION >= (2, 0):
     from wagtail.core import hooks
 else:
     from wagtail.wagtailcore import hooks
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
-from wagtail.contrib.modeladmin.helpers import ButtonHelper
-
-from . import app_settings, get_main_menu_model, get_flat_menu_model
-from .views import (MainMenuIndexView, MainMenuEditView, FlatMenuCreateView,
-                    FlatMenuEditView, FlatMenuCopyView)
 
 
 class MainMenuAdmin(ModelAdmin):
-    model = get_main_menu_model()
+    model = app_settings.get_model('MAIN_MENU_MODEL')
     menu_label = _('Main menu')
     menu_icon = app_settings.MAINMENU_MENU_ICON
     index_view_class = MainMenuIndexView
@@ -71,7 +72,7 @@ class FlatMenuButtonHelper(ButtonHelper):
 
 
 class FlatMenuAdmin(ModelAdmin):
-    model = get_flat_menu_model()
+    model = app_settings.get_model('FLAT_MENU_MODEL')
     menu_label = _('Flat menus')
     menu_icon = app_settings.FLATMENU_MENU_ICON
     button_helper_class = FlatMenuButtonHelper
