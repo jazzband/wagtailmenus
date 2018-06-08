@@ -395,7 +395,10 @@ class TestCustomMenuModels(TestCase):
     def test_children_menu_override(self):
         from wagtailmenus import app_settings
         from wagtailmenus.tests.models import CustomChildrenMenu
-        self.assertEqual(app_settings.CHILDREN_MENU_CLASS, CustomChildrenMenu)
+        self.assertEqual(
+            app_settings.get_class('CHILDREN_MENU_CLASS_PATH'),
+            CustomChildrenMenu
+        )
 
         # check that template specified with the classes 'template_name'
         # attribute is the one that gets picked up
@@ -406,7 +409,10 @@ class TestCustomMenuModels(TestCase):
     def test_section_menu_override(self):
         from wagtailmenus import app_settings
         from wagtailmenus.tests.models import CustomSectionMenu
-        self.assertEqual(app_settings.SECTION_MENU_CLASS, CustomSectionMenu)
+        self.assertEqual(
+            app_settings.get_class('SECTION_MENU_CLASS_PATH'),
+            CustomSectionMenu
+        )
 
         # check that template specified with the classes
         # 'sub_menu_template_name' attribute gets picked up
@@ -438,7 +444,7 @@ class TestInvalidCustomMenuModels(TestCase):
     @override_settings(WAGTAILMENUS_MAIN_MENU_MODEL='CustomMainMenu',)
     def test_main_menu_invalid_format(self):
         with self.assertRaisesMessage(ImproperlyConfigured, (
-                "WAGTAILMENUS_MAIN_MENU_MODEL must be of the form "
+                "WAGTAILMENUS_MAIN_MENU_MODEL must be in the format "
                 "'app_label.model_name'"
         )):
             get_main_menu_model()
@@ -454,7 +460,7 @@ class TestInvalidCustomMenuModels(TestCase):
     @override_settings(WAGTAILMENUS_FLAT_MENU_MODEL='CustomFlatMenu',)
     def test_flat_menu_invalid_format(self):
         with self.assertRaisesMessage(ImproperlyConfigured, (
-            "WAGTAILMENUS_FLAT_MENU_MODEL must be of the form "
+            "WAGTAILMENUS_FLAT_MENU_MODEL must be in the format "
             "'app_label.model_name'"
         )):
             get_flat_menu_model()
@@ -472,20 +478,20 @@ class TestInvalidCustomMenuModels(TestCase):
         with self.assertRaisesMessage(ImproperlyConfigured, (
             "'CustomChildrenMenu' is not a valid import path. "
             "WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH must be a full dotted "
-            "python import path e.g. 'project.app.file.Class'"
+            "python import path e.g. 'project.app.module.Class'"
         )):
             from wagtailmenus import app_settings
-            app_settings.CHILDREN_MENU_CLASS
+            app_settings.get_class('CHILDREN_MENU_CLASS_PATH')
 
-    @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='CustomSectionMenu', )
+    @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='CustomSectionMenu',)
     def test_section_menu_invalid_path(self):
         with self.assertRaisesMessage(ImproperlyConfigured, (
             "'CustomSectionMenu' is not a valid import path. "
             "WAGTAILMENUS_SECTION_MENU_CLASS_PATH must be a full dotted "
-            "python import path e.g. 'project.app.file.Class'"
+            "python import path e.g. 'project.app.module.Class'"
         )):
             from wagtailmenus import app_settings
-            app_settings.SECTION_MENU_CLASS
+            app_settings.get_class('SECTION_MENU_CLASS_PATH')
 
 
 class TestNoAbsoluteUrlsPage(TestCase):

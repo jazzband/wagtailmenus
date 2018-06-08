@@ -48,7 +48,9 @@ def FlatMenuItemsInlinePanel(**kwargs):  # noqa
     will be passed on as kwargs to the target class's __init__ method.
     """
     return _define_inlinepanel(
-        relation_name=app_settings.FLAT_MENU_ITEMS_RELATED_NAME, **kwargs)
+        relation_name=app_settings.FLAT_MENU_ITEMS_RELATED_NAME,
+        **kwargs
+    )
 
 
 def MainMenuItemsInlinePanel(**kwargs):  # noqa
@@ -61,7 +63,9 @@ def MainMenuItemsInlinePanel(**kwargs):  # noqa
     will be passed on as kwargs to the target class's __init__ method.
     """
     return _define_inlinepanel(
-        relation_name=app_settings.MAIN_MENU_ITEMS_RELATED_NAME, **kwargs)
+        relation_name=app_settings.MAIN_MENU_ITEMS_RELATED_NAME,
+        **kwargs
+    )
 
 
 main_menu_content_panels = (

@@ -4,15 +4,14 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.fields import ParentalKey
 from wagtail import VERSION as WAGTAIL_VERSION
+from wagtailmenus import app_settings
+from wagtailmenus.managers import MenuItemManager
 if WAGTAIL_VERSION >= (2, 0):
     from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
     from wagtail.core.models import Page, Orderable
 else:
     from wagtail.wagtailadmin.edit_handlers import FieldPanel, PageChooserPanel
     from wagtail.wagtailcore.models import Page, Orderable
-
-from .. import app_settings
-from ..managers import MenuItemManager
 
 
 #########################################################
