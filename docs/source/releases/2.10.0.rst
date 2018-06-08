@@ -13,25 +13,69 @@ Wagtailmenus 2.10 (alpha) release notes
     :depth: 1
 
 
-What's new?
-===========
-
-TBA
-
-
 Minor changes & bug fixes 
 =========================
 
-TBA
-
-
-Deprecations
-============
-
-TBA
+- Optimised ``MenuWithMenuItems.get_top_level_items()`` and ``AbstractFlatMenu.get_for_site()`` to use fewer database queries.
+- Configured ``sphinxcontrib.spelling`` and used to correct spelling errors in docs.
+- Updated testing and documentation dependencies.
 
 
 Upgrade considerations
 ======================
 
-TBA
+``FLAT_MENU_MODEL_CLASS`` has been removed from app_settings
+------------------------------------------------------------
+
+If you're referencing ``FLAT_MENU_MODEL_CLASS`` from ``wagtailmenus.app_settings`` anywhere in your project, you'll need to change your code to use the module's new get_model() method instead.
+
+For example, you'd replace this:
+
+.. code-block:: python
+
+    from wagtailmenus import app_settings
+
+    model = app_settings.FLAT_MENU_MODEL_CLASS
+
+With this:
+
+.. code-block:: python
+
+    from wagtailmenus import app_settings
+
+    model = app_settings.get_model('FLAT_MENU_MODEL')
+
+
+``MAIN_MENU_MODEL_CLASS`` has been removed from app_settings
+------------------------------------------------------------
+
+If you're referencing ``MAIN_MENU_MODEL_CLASS`` from ``wagtailmenus.app_settings`` anywhere in your project, you'll need to change your code to use the module's new get_model() method instead.
+
+For example, you'd replace this:
+
+.. code-block:: python
+
+    from wagtailmenus import app_settings
+
+    model = app_settings.MAIN_MENU_MODEL_CLASS
+
+With this:
+
+.. code-block:: python
+
+    from wagtailmenus import app_settings
+
+    model = app_settings.get_model('MAIN_MENU_MODEL')
+
+
+Some other app settings values have moved ``wagtailmenus.constants``
+--------------------------------------------------------------------
+
+The following values have been moved from ``wagtailmenus.app_settings`` to a new ``wagtailmenus.constants`` module:
+
+- ``USE_SPECIFIC_OFF``
+- ``USE_SPECIFIC_AUTO``
+- ``USE_SPECIFIC_TOP_LEVEL``
+- ``USE_SPECIFIC_ALWAYS``
+- ``USE_SPECIFIC_CHOICES``
+- ``MAX_LEVELS_CHOICES``
