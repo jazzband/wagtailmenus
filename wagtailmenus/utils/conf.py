@@ -1,3 +1,4 @@
+import warnings
 from importlib import import_module
 from django.core.exceptions import ImproperlyConfigured
 
@@ -25,6 +26,43 @@ class AppSettings:
         default = self.defaults[setting_name]
         attr_name = self.prefix + setting_name
         return getattr(self._django_settings, attr_name, default)
+
+    def get_or_try_deprecated_name(
+        self, new_setting_name, deprecated_setting_name, warning_category=None
+    ):
+        """
+        As get(), but if no setting can be found in the Django settings
+        module matching ``new_setting_name``, will also attempt to find
+        a setting matching ``deprecated_setting_name``, before resulting to
+        returning the relevant default value from the ``defaults`` dictionary.
+
+        If a setting is found matching ``deprecated_setting_name``, a sensibly
+        worded deprecation warning is raised. The ``warning_category``
+        argument can be used to specify the warning categry class to use
+        for this warning (The built-in ``DeprecationWarning`` is used by
+        default).
+        """
+        prefixed_new_name = self.prefix + new_setting_name
+        prefixed_deprecated_name = self.prefix + deprecated_setting_name
+        try:
+            return getattr(self._django_settings, prefixed_new_name)
+        except AttributeError:
+            pass
+        try:
+            value = getattr(self._django_settings, prefixed_deprecated_name)
+            warnings.warn(
+                "The '{deprecated_name}' setting is deprecated in favour of "
+                "using '{new_name}'. Please update your settings module to "
+                "use the new setting name.".format(
+                    deprecated_name=prefixed_deprecated_name,
+                    new_name=prefixed_new_name,
+                ),
+                category=warning_category or DeprecationWarning
+            )
+            return value
+        except AttributeError:
+            pass
+        return self.defaults[new_setting_name]
 
     def get_class(self, setting_name):
         """Returns a python class, method, module or other object referenced by
