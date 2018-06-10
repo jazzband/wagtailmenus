@@ -430,7 +430,7 @@ Overriding the menu class used by ``{% section_menu %}``
 
 Like the ``main_menu`` and ``flat_menu`` tags, the ``section_menu`` tag uses a ``Menu`` class to fetch all of the data needed to render a menu. Though, because section menus are driven entirely by your existing page tree (and don't need to store any additional data), it's just a plain old Python class and not a Django model.
 
-The class ``wagtailmenus.models.menus.SectionMenu`` is used by default, but you can use the ``WAGTAILMENUS_SECTION_MENU_CLASS_PATH`` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify the base queryset that determines which pages should be included when rendering). To implement a custom classes, it's recommended that you subclass the ``SectionMenu`` and override any methods as required, like in the following example:
+The class ``wagtailmenus.models.menus.SectionMenu`` is used by default, but you can use the ``WAGTAILMENUS_SECTION_MENU_CLASS`` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify the base queryset that determines which pages should be included when rendering). To implement a custom classes, it's recommended that you subclass the ``SectionMenu`` and override any methods as required, like in the following example:
 
 .. code-block:: python
     
@@ -455,7 +455,7 @@ The class ``wagtailmenus.models.menus.SectionMenu`` is used by default, but you 
     
     # settings.py
 
-    WAGTAILMENUS_SECTION_MENU_CLASS_PATH = "mysite.appname.models.CustomSectionMenu"
+    WAGTAILMENUS_SECTION_MENU_CLASS = "mysite.appname.models.CustomSectionMenu"
 
 
 .. _custom_childrenmenu_class:
@@ -465,7 +465,7 @@ Overriding the menu class used by ``{% children_menu %}``
 
 Like all of the other tags, the ``children_menu`` tag uses a ``Menu`` class to fetch all of the data needed to render a menu. Though, because children menus are driven entirely by your existing page tree (and do not need to store any additional data), it's just a plain old Python class and not a Django model.
 
-The class ``wagtailmenus.models.menus.ChildrenMenu`` is used by default, but you can use the ``WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH`` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify which pages are included). For custom classes, it's recommended that you subclass ``ChildrenMenu`` and override any methods as required e.g:
+The class ``wagtailmenus.models.menus.ChildrenMenu`` is used by default, but you can use the ``WAGTAILMENUS_CHILDREN_MENU_CLASS`` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify which pages are included). For custom classes, it's recommended that you subclass ``ChildrenMenu`` and override any methods as required e.g:
 
 .. code-block:: python
     
@@ -489,5 +489,5 @@ The class ``wagtailmenus.models.menus.ChildrenMenu`` is used by default, but you
     
     # settings.py
 
-    WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH = "mysite.appname.models.CustomChildrenMenu"
+    WAGTAILMENUS_CHILDREN_MENU_CLASS = "mysite.appname.models.CustomChildrenMenu"
 
