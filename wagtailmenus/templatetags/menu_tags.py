@@ -98,7 +98,7 @@ def section_menu(
     if not show_multiple_levels:
         max_levels = 1
 
-    menu_class = app_settings.get_class('SECTION_MENU_CLASS_PATH')
+    menu_class = app_settings.get_class('SECTION_MENU_CLASS')
     return menu_class.render_from_tag(
         context=context,
         max_levels=max_levels,
@@ -127,7 +127,7 @@ def children_menu(
         'children_menu', max_levels=max_levels, use_specific=use_specific,
         parent_page=parent_page)
 
-    menu_class = app_settings.get_class('CHILDREN_MENU_CLASS_PATH')
+    menu_class = app_settings.get_class('CHILDREN_MENU_CLASS')
     return menu_class.render_from_tag(
         context=context,
         parent_page=parent_page,
