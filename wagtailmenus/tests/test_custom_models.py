@@ -406,6 +406,23 @@ class TestCustomMenuModels(TestCase):
         response = self.client.get('/about-us/')
         self.assertTemplateUsed(response, "menus/custom-overrides/children.html")
 
+    @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomChildrenMenu',)
+    def test_children_menu_override_using_deprecated_setting_name(self):
+        from wagtailmenus import app_settings
+        from wagtailmenus.tests.models import CustomChildrenMenu
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            self.assertEqual(
+                app_settings.get_class('CHILDREN_MENU_CLASS'),
+                CustomChildrenMenu
+            )
+        self.assertEqual(len(w), 1)
+        self.assertIn(
+            "The WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH setting is "
+            "deprecated in favour of using WAGTAILMENUS_CHILDREN_MENU_CLASS",
+            str(w[0])
+        )
+
     @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS='wagtailmenus.tests.models.CustomSectionMenu', )
     def test_section_menu_override(self):
         from wagtailmenus import app_settings
@@ -419,6 +436,23 @@ class TestCustomMenuModels(TestCase):
         # 'sub_menu_template_name' attribute gets picked up
         response = self.client.get('/about-us/')
         self.assertTemplateUsed(response, "menus/custom-overrides/section-sub.html")
+
+    @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomSectionMenu', )
+    def test_section_menu_override_using_deprecated_setting_name(self):
+        from wagtailmenus import app_settings
+        from wagtailmenus.tests.models import CustomSectionMenu
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            self.assertEqual(
+                app_settings.get_class('SECTION_MENU_CLASS'),
+                CustomSectionMenu
+            )
+        self.assertEqual(len(w), 1)
+        self.assertIn(
+            "The WAGTAILMENUS_SECTION_MENU_CLASS_PATH setting is deprecated "
+            "in favour of using WAGTAILMENUS_SECTION_MENU_CLASS",
+            str(w[0])
+        )
 
 
 class TestInvalidCustomMenuModels(TestCase):
