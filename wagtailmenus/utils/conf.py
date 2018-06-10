@@ -26,7 +26,7 @@ class AppSettings:
     def get_class(self, setting_name):
         """Returns a python class, method, module or other object referenced by
         an app setting who's value should be a valid import path string."""
-        value = self.get(setting_name)
+        value = getattr(self, setting_name)
         try:
             module_path, class_name = value.rsplit(".", 1)
             return getattr(import_module(module_path), class_name)
@@ -41,7 +41,7 @@ class AppSettings:
         """Returns a Django model referenced by an app setting who's value
         should be a 'model' string in the format 'app_label.model_name'."""
         from django.apps import apps  # delay import until needed
-        value = self.get(setting_name)
+        value = getattr(self, setting_name)
         try:
             return apps.get_model(value)
         except ValueError:
