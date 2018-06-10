@@ -7,16 +7,17 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase, override_settings
 from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core.models import Site
-else:
-    from wagtail.wagtailcore.models import Site
 from wagtailmenus import get_main_menu_model, get_flat_menu_model
+from wagtailmenus.conf import settings
 from wagtailmenus.models import MainMenu, FlatMenu
 from wagtailmenus.tests.models import (
     MainMenuCustomMenuItem, FlatMenuCustomMenuItem, NoAbsoluteUrlsPage,
     CustomMainMenu, CustomMainMenuItem, CustomFlatMenu, CustomFlatMenuItem
 )
+if WAGTAIL_VERSION >= (2, 0):
+    from wagtail.core.models import Site
+else:
+    from wagtail.wagtailcore.models import Site
 
 
 @override_settings(
@@ -394,10 +395,9 @@ class TestCustomMenuModels(TestCase):
 
     @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS='wagtailmenus.tests.models.CustomChildrenMenu',)
     def test_children_menu_override(self):
-        from wagtailmenus import app_settings
         from wagtailmenus.tests.models import CustomChildrenMenu
         self.assertEqual(
-            app_settings.get_class('CHILDREN_MENU_CLASS'),
+            settings.get_class('CHILDREN_MENU_CLASS'),
             CustomChildrenMenu
         )
 
@@ -408,12 +408,11 @@ class TestCustomMenuModels(TestCase):
 
     @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomChildrenMenu',)
     def test_children_menu_override_using_deprecated_setting_name(self):
-        from wagtailmenus import app_settings
         from wagtailmenus.tests.models import CustomChildrenMenu
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             self.assertEqual(
-                app_settings.get_class('CHILDREN_MENU_CLASS'),
+                settings.get_class('CHILDREN_MENU_CLASS'),
                 CustomChildrenMenu
             )
         self.assertEqual(len(w), 1)
@@ -425,10 +424,9 @@ class TestCustomMenuModels(TestCase):
 
     @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS='wagtailmenus.tests.models.CustomSectionMenu', )
     def test_section_menu_override(self):
-        from wagtailmenus import app_settings
         from wagtailmenus.tests.models import CustomSectionMenu
         self.assertEqual(
-            app_settings.get_class('SECTION_MENU_CLASS'),
+            settings.get_class('SECTION_MENU_CLASS'),
             CustomSectionMenu
         )
 
@@ -439,12 +437,11 @@ class TestCustomMenuModels(TestCase):
 
     @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomSectionMenu', )
     def test_section_menu_override_using_deprecated_setting_name(self):
-        from wagtailmenus import app_settings
         from wagtailmenus.tests.models import CustomSectionMenu
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             self.assertEqual(
-                app_settings.get_class('SECTION_MENU_CLASS'),
+                settings.get_class('SECTION_MENU_CLASS'),
                 CustomSectionMenu
             )
         self.assertEqual(len(w), 1)
@@ -515,8 +512,7 @@ class TestInvalidCustomMenuModels(TestCase):
             "WAGTAILMENUS_CHILDREN_MENU_CLASS must be a full dotted "
             "python import path e.g. 'project.app.module.Class'"
         )):
-            from wagtailmenus import app_settings
-            app_settings.get_class('CHILDREN_MENU_CLASS')
+            settings.get_class('CHILDREN_MENU_CLASS')
 
     @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS='CustomSectionMenu',)
     def test_section_menu_invalid_path(self):
@@ -525,8 +521,7 @@ class TestInvalidCustomMenuModels(TestCase):
             "WAGTAILMENUS_SECTION_MENU_CLASS must be a full dotted "
             "python import path e.g. 'project.app.module.Class'"
         )):
-            from wagtailmenus import app_settings
-            app_settings.get_class('SECTION_MENU_CLASS')
+            settings.get_class('SECTION_MENU_CLASS')
 
 
 class TestNoAbsoluteUrlsPage(TestCase):

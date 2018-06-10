@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from wagtail import VERSION as WAGTAIL_VERSION
-from wagtailmenus import app_settings
+from wagtailmenus.conf import settings
 if WAGTAIL_VERSION >= (2, 0):
     from wagtail.admin.forms import WagtailAdminModelForm, WagtailAdminPageForm
 else:
@@ -11,10 +11,10 @@ else:
 class FlatMenuAdminForm(WagtailAdminModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if app_settings.FLAT_MENUS_HANDLE_CHOICES:
+        if settings.FLAT_MENUS_HANDLE_CHOICES:
             self.fields['handle'] = forms.ChoiceField(
                 label=self.fields['handle'].label,
-                choices=app_settings.FLAT_MENUS_HANDLE_CHOICES
+                choices=settings.FLAT_MENUS_HANDLE_CHOICES
             )
 
 

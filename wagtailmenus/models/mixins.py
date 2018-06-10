@@ -1,6 +1,6 @@
 from django.template.loader import get_template, select_template
 
-from .. import app_settings
+from wagtailmenus.conf import settings
 
 
 def get_item_by_index_or_last_item(items, index):
@@ -86,7 +86,7 @@ class DefinesSubMenuTemplatesMixin:
         menu_name = self.menu_short_name
         site = self._contextual_vals.current_site
         level = self._contextual_vals.current_level
-        if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
+        if settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
             hostname = site.hostname
             template_names.extend([
                 "menus/%s/%s/level_%s.html" % (hostname, menu_name, level),
@@ -98,7 +98,7 @@ class DefinesSubMenuTemplatesMixin:
             "menus/%s/level_%s.html" % (menu_name, level),
             "menus/%s/sub_menu.html" % menu_name,
             "menus/%s_sub_menu.html" % menu_name,
-            app_settings.DEFAULT_SUB_MENU_TEMPLATE,
+            settings.DEFAULT_SUB_MENU_TEMPLATE,
         ])
         return template_names
 

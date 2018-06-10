@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.fields import ParentalKey
 from wagtail import VERSION as WAGTAIL_VERSION
-from wagtailmenus import app_settings
+from wagtailmenus.conf import settings
 from wagtailmenus.managers import MenuItemManager
 if WAGTAIL_VERSION >= (2, 0):
     from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
@@ -88,7 +88,7 @@ class AbstractMenuItem(models.Model, MenuItem):
             return ''
         return getattr(
             self.link_page,
-            app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
+            settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
             self.link_page.title
         )
 
@@ -135,12 +135,12 @@ class AbstractMenuItem(models.Model, MenuItem):
         if parsed_url.netloc:
             return ''
         if request.path == parsed_url.path:
-            return app_settings.ACTIVE_CLASS
+            return settings.ACTIVE_CLASS
         if (
             request.path.startswith(parsed_url.path) and
             parsed_url.path != '/'
         ):
-            return app_settings.ACTIVE_ANCESTOR_CLASS
+            return settings.ACTIVE_ANCESTOR_CLASS
         return ''
 
     def __str__(self):

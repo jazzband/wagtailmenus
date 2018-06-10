@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.contrib.modeladmin.helpers import ButtonHelper
-from wagtailmenus import app_settings
+from wagtailmenus.conf import settings
 from wagtailmenus.views import (
     MainMenuIndexView, MainMenuEditView, FlatMenuCreateView,
     FlatMenuEditView, FlatMenuCopyView
@@ -17,15 +17,15 @@ else:
 
 
 class MainMenuAdmin(ModelAdmin):
-    model = app_settings.get_model('MAIN_MENU_MODEL')
+    model = settings.get_model('MAIN_MENU_MODEL')
     menu_label = _('Main menu')
-    menu_icon = app_settings.MAINMENU_MENU_ICON
+    menu_icon = settings.MAINMENU_MENU_ICON
     index_view_class = MainMenuIndexView
     edit_view_class = MainMenuEditView
     add_to_settings_menu = True
 
     def get_form_view_extra_css(self):
-        if app_settings.ADD_EDITOR_OVERRIDE_STYLES:
+        if settings.ADD_EDITOR_OVERRIDE_STYLES:
             return ['wagtailmenus/css/menu-edit.css']
         return []
 
@@ -40,7 +40,7 @@ class MainMenuAdmin(ModelAdmin):
         )
 
 
-if app_settings.MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN:
+if settings.MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN:
     modeladmin_register(MainMenuAdmin)
 
 
@@ -72,9 +72,9 @@ class FlatMenuButtonHelper(ButtonHelper):
 
 
 class FlatMenuAdmin(ModelAdmin):
-    model = app_settings.get_model('FLAT_MENU_MODEL')
+    model = settings.get_model('FLAT_MENU_MODEL')
     menu_label = _('Flat menus')
-    menu_icon = app_settings.FLATMENU_MENU_ICON
+    menu_icon = settings.FLATMENU_MENU_ICON
     button_helper_class = FlatMenuButtonHelper
     ordering = ('-site__is_default_site', 'site__hostname', 'handle')
     create_view_class = FlatMenuCreateView
@@ -82,7 +82,7 @@ class FlatMenuAdmin(ModelAdmin):
     add_to_settings_menu = True
 
     def get_form_view_extra_css(self):
-        if app_settings.ADD_EDITOR_OVERRIDE_STYLES:
+        if settings.ADD_EDITOR_OVERRIDE_STYLES:
             return ['wagtailmenus/css/menu-edit.css']
         return []
 
@@ -122,7 +122,7 @@ class FlatMenuAdmin(ModelAdmin):
     items.short_description = _('no. of items')
 
 
-if app_settings.FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN:
+if settings.FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN:
     modeladmin_register(FlatMenuAdmin)
 
 
@@ -130,11 +130,11 @@ if app_settings.FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN:
 def wagtailmenu_params_helper(page, request, serve_args, serve_kwargs):
     section_root = request.site.root_page.get_descendants().ancestor_of(
         page, inclusive=True
-    ).filter(depth__exact=app_settings.SECTION_ROOT_DEPTH).first()
+    ).filter(depth__exact=settings.SECTION_ROOT_DEPTH).first()
     if section_root:
         section_root = section_root.specific
     ancestor_ids = page.get_ancestors().filter(
-        depth__gte=app_settings.SECTION_ROOT_DEPTH
+        depth__gte=settings.SECTION_ROOT_DEPTH
     ).values_list('id', flat=True)
     request.META.update({
         'WAGTAILMENUS_CURRENT_SECTION_ROOT': section_root,
