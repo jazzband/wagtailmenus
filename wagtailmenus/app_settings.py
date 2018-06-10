@@ -1,6 +1,7 @@
 import sys
 from wagtailmenus.constants import USE_SPECIFIC_AUTO
 from wagtailmenus.utils.conf import AppSettings
+from wagtailmenus.utils.deprecation import RemovedInWagtailMenus212Warning
 
 # All supported app settings must be added to the following dictionary
 defaults = dict(
@@ -37,4 +38,23 @@ defaults = dict(
     FLAT_MENU_MODELADMIN_CLASS='wagtailmenus.modeladmin.FlatMenuAdmin',
 )
 
-sys.modules[__name__] = AppSettings('WAGTAILMENUS_', defaults)
+
+class WagtailmenusAppSettings(AppSettings):
+
+    @property
+    def SECTION_MENU_CLASS(self):
+        return self.get_or_try_deprecated_name(
+            'SECTION_MENU_CLASS',
+            'SECTION_MENU_CLASS_PATH',
+            warning_category=RemovedInWagtailMenus212Warning
+        )
+
+    @property
+    def CHILDREN_MENU_CLASS(self):
+        return self.get_or_try_deprecated_name(
+            'CHILDREN_MENU_CLASS',
+            'CHILDREN_MENU_CLASS_PATH',
+            warning_category=RemovedInWagtailMenus212Warning
+        )
+
+sys.modules[__name__] = WagtailmenusAppSettings('WAGTAILMENUS_', defaults)
