@@ -5,8 +5,10 @@ from django.core.exceptions import ImproperlyConfigured
 class AppSettings:
 
     def __init__(self, prefix, defaults):
+        from django.conf import settings  # delay import until needed
         self.prefix = prefix
         self.defaults = defaults
+        self._django_settings = settings
 
     def __getattr__(self, name):
         try:
@@ -15,13 +17,14 @@ class AppSettings:
             return super().__getattr__(name)
 
     def get(self, setting_name):
-        """Returns an app setting value in it's native format, e.g.
-        string, integer, boolean. If the setting cannot be found in django
-        project settings, the relevant default value from defaults is returned.
         """
-        from django.conf import settings  # delay import until needed
+        Returns the value of the app setting named by ``setting_name``. If
+        the setting is unavailable in the Django settings module, then the
+        default value from the ``defaults`` dictionary is returned.
+        """
         default = self.defaults[setting_name]
-        return getattr(settings, self.prefix + setting_name, default)
+        attr_name = self.prefix + setting_name
+        return getattr(self._django_settings, attr_name, default)
 
     def get_class(self, setting_name):
         """Returns a python class, method, module or other object referenced by
