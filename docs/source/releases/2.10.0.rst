@@ -21,51 +21,58 @@ Minor changes & bug fixes
 - Updated testing and documentation dependencies.
 
 
+Deprecations
+============
+
+The ``WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH`` setting is deprecated
+-------------------------------------------------------------------
+
+If using this setting to override the menu class used for rendering children menus, like so:
+
+.. code-block:: python
+
+    # settings/base.py
+
+    WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH = 'project.app.module.Class'
+
+You should remove "_PATH" from the end of setting name, like so:
+
+.. code-block:: python
+
+    WAGTAILMENUS_CHILDREN_MENU_CLASS = 'project.app.module.Class'
+
+
+The ``WAGTAILMENUS_SECTION_MENU_CLASS_PATH`` setting is deprecated
+------------------------------------------------------------------
+
+If using this setting to override the menu class used for rendering children menus, like so:
+
+.. code-block:: python
+
+    # settings/base.py
+
+    WAGTAILMENUS_SECTION_MENU_CLASS_PATH = 'project.app.module.Class'
+
+You should remove "_PATH" from the end of setting name, like so:
+
+.. code-block:: python
+
+    WAGTAILMENUS_SECTION_MENU_CLASS = 'project.app.module.Class'
+
+
 Upgrade considerations
 ======================
 
 ``FLAT_MENU_MODEL_CLASS`` has been removed from app_settings
 ------------------------------------------------------------
 
-If you're referencing ``FLAT_MENU_MODEL_CLASS`` from ``wagtailmenus.app_settings`` anywhere in your project, you'll need to change your code to use the module's new get_model() method instead.
-
-For example, you'd replace this:
-
-.. code-block:: python
-
-    from wagtailmenus import app_settings
-
-    model = app_settings.FLAT_MENU_MODEL_CLASS
-
-With this:
-
-.. code-block:: python
-
-    from wagtailmenus import app_settings
-
-    model = app_settings.get_model('FLAT_MENU_MODEL')
+This is an internal API change, and so shouldn't affect you, but if you're referencing ``FLAT_MENU_MODEL_CLASS`` directly on the ``wagtailmenus.app_settings`` module, your code will no longer work. You should use ``wagtailmenus.get_flat_menu_model()`` instead.
 
 
 ``MAIN_MENU_MODEL_CLASS`` has been removed from app_settings
 ------------------------------------------------------------
 
-If you're referencing ``MAIN_MENU_MODEL_CLASS`` from ``wagtailmenus.app_settings`` anywhere in your project, you'll need to change your code to use the module's new get_model() method instead.
-
-For example, you'd replace this:
-
-.. code-block:: python
-
-    from wagtailmenus import app_settings
-
-    model = app_settings.MAIN_MENU_MODEL_CLASS
-
-With this:
-
-.. code-block:: python
-
-    from wagtailmenus import app_settings
-
-    model = app_settings.get_model('MAIN_MENU_MODEL')
+This is an internal API change, and so shouldn't affect you, but if you're referencing ``MAIN_MENU_MODEL_CLASS`` directly on the ``wagtailmenus.app_settings`` module, your code will no longer work. You should use ``wagtailmenus.get_main_menu_model()`` instead.
 
 
 Some other app settings values have moved ``wagtailmenus.constants``

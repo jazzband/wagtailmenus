@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+import warnings
 
 from bs4 import BeautifulSoup
 from django.contrib.auth import get_user_model
@@ -391,12 +392,12 @@ class TestCustomMenuModels(TestCase):
         </div>"""
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
-    @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomChildrenMenu',)
+    @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS='wagtailmenus.tests.models.CustomChildrenMenu',)
     def test_children_menu_override(self):
         from wagtailmenus import app_settings
         from wagtailmenus.tests.models import CustomChildrenMenu
         self.assertEqual(
-            app_settings.get_class('CHILDREN_MENU_CLASS_PATH'),
+            app_settings.get_class('CHILDREN_MENU_CLASS'),
             CustomChildrenMenu
         )
 
@@ -405,12 +406,29 @@ class TestCustomMenuModels(TestCase):
         response = self.client.get('/about-us/')
         self.assertTemplateUsed(response, "menus/custom-overrides/children.html")
 
-    @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomSectionMenu', )
+    @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomChildrenMenu',)
+    def test_children_menu_override_using_deprecated_setting_name(self):
+        from wagtailmenus import app_settings
+        from wagtailmenus.tests.models import CustomChildrenMenu
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            self.assertEqual(
+                app_settings.get_class('CHILDREN_MENU_CLASS'),
+                CustomChildrenMenu
+            )
+        self.assertEqual(len(w), 1)
+        self.assertIn(
+            "The WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH setting is "
+            "deprecated in favour of using WAGTAILMENUS_CHILDREN_MENU_CLASS",
+            str(w[0])
+        )
+
+    @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS='wagtailmenus.tests.models.CustomSectionMenu', )
     def test_section_menu_override(self):
         from wagtailmenus import app_settings
         from wagtailmenus.tests.models import CustomSectionMenu
         self.assertEqual(
-            app_settings.get_class('SECTION_MENU_CLASS_PATH'),
+            app_settings.get_class('SECTION_MENU_CLASS'),
             CustomSectionMenu
         )
 
@@ -418,6 +436,23 @@ class TestCustomMenuModels(TestCase):
         # 'sub_menu_template_name' attribute gets picked up
         response = self.client.get('/about-us/')
         self.assertTemplateUsed(response, "menus/custom-overrides/section-sub.html")
+
+    @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomSectionMenu', )
+    def test_section_menu_override_using_deprecated_setting_name(self):
+        from wagtailmenus import app_settings
+        from wagtailmenus.tests.models import CustomSectionMenu
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            self.assertEqual(
+                app_settings.get_class('SECTION_MENU_CLASS'),
+                CustomSectionMenu
+            )
+        self.assertEqual(len(w), 1)
+        self.assertIn(
+            "The WAGTAILMENUS_SECTION_MENU_CLASS_PATH setting is deprecated "
+            "in favour of using WAGTAILMENUS_SECTION_MENU_CLASS",
+            str(w[0])
+        )
 
 
 class TestInvalidCustomMenuModels(TestCase):
@@ -473,25 +508,25 @@ class TestInvalidCustomMenuModels(TestCase):
         )):
             get_flat_menu_model()
 
-    @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH='CustomChildrenMenu',)
+    @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS='CustomChildrenMenu',)
     def test_children_menu_invalid_path(self):
         with self.assertRaisesMessage(ImproperlyConfigured, (
             "'CustomChildrenMenu' is not a valid import path. "
-            "WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH must be a full dotted "
+            "WAGTAILMENUS_CHILDREN_MENU_CLASS must be a full dotted "
             "python import path e.g. 'project.app.module.Class'"
         )):
             from wagtailmenus import app_settings
-            app_settings.get_class('CHILDREN_MENU_CLASS_PATH')
+            app_settings.get_class('CHILDREN_MENU_CLASS')
 
-    @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='CustomSectionMenu',)
+    @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS='CustomSectionMenu',)
     def test_section_menu_invalid_path(self):
         with self.assertRaisesMessage(ImproperlyConfigured, (
             "'CustomSectionMenu' is not a valid import path. "
-            "WAGTAILMENUS_SECTION_MENU_CLASS_PATH must be a full dotted "
+            "WAGTAILMENUS_SECTION_MENU_CLASS must be a full dotted "
             "python import path e.g. 'project.app.module.Class'"
         )):
             from wagtailmenus import app_settings
-            app_settings.get_class('SECTION_MENU_CLASS_PATH')
+            app_settings.get_class('SECTION_MENU_CLASS')
 
 
 class TestNoAbsoluteUrlsPage(TestCase):

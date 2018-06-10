@@ -238,16 +238,27 @@ Menu class and model override settings
 --------------------------------------
 
 
-.. _CHILDREN_MENU_CLASS_PATH:
+.. _CHILDREN_MENU_CLASS:
 
-``WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``WAGTAILMENUS_CHILDREN_MENU_CLASS``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Default value: ``'wagtailmenus.models.menus.ChildrenMenu'``
 
 Use this to specify a custom menu class to be used by wagtailmenus' ``children_menu`` tag. The value should be the import path of your custom class as a string, e.g. ``'mysite.appname.models.CustomClass'``. 
 
-For more details see: :ref:`custom_childrenmenu_class`
+For more details see: :ref:`custom_childrenmenu_class` 
+
+
+.. _CHILDREN_MENU_CLASS_PATH:
+
+``WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. NOTE::
+    Deprecated in wagtailmenus 2.10 in favour of using :ref:`CHILDREN_MENU_CLASS` (above)
+
+Used to specify a custom menu class to be used by wagtailmenus' ``children_menu`` tag. The value should be the import path of your custom class as a string, e.g. ``'mysite.appname.models.CustomClass'``.
 
 
 .. _FLAT_MENU_MODEL:
@@ -298,9 +309,9 @@ Use this to specify the 'related name' that should be used to access menu items 
 For more details see: :ref:`custom_main_menu_models`
 
 
-.. _SECTION_MENU_CLASS_PATH:
+.. _SECTION_MENU_CLASS:
 
-``WAGTAILMENUS_SECTION_MENU_CLASS_PATH``
+``WAGTAILMENUS_SECTION_MENU_CLASS``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Default value: ``'wagtailmenus.models.menus.SectionMenu'``
@@ -308,6 +319,17 @@ Default value: ``'wagtailmenus.models.menus.SectionMenu'``
 Use this to specify a custom class to be used by wagtailmenus' ``section_menu`` tag. The value should be the import path of your custom class as a string, e.g. ``'mysite.appname.models.CustomClass'``. 
 
 For more details see: :ref:`custom_sectionmenu_class`
+
+
+.. _SECTION_MENU_CLASS_PATH:
+
+``WAGTAILMENUS_SECTION_MENU_CLASS_PATH``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. NOTE::
+    Deprecated in wagtailmenus 2.10 in favour of using :ref:`SECTION_MENU_CLASS` (above)
+
+Used to specify a custom class to be used by wagtailmenus' ``section_menu`` tag. The value should be the import path of your custom class as a string, e.g. ``'mysite.appname.models.CustomClass'``. 
 
 
 ----------------------
