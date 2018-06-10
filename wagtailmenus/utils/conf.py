@@ -51,8 +51,8 @@ class AppSettings:
         try:
             value = getattr(self._django_settings, prefixed_deprecated_name)
             warnings.warn(
-                "The '{deprecated_name}' setting is deprecated in favour of "
-                "using '{new_name}'. Please update your settings module to "
+                "The {deprecated_name} setting is deprecated in favour of "
+                "using {new_name}. Please update your settings module to "
                 "use the new setting name.".format(
                     deprecated_name=prefixed_deprecated_name,
                     new_name=prefixed_new_name,
