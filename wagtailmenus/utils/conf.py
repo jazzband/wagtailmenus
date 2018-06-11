@@ -1,6 +1,7 @@
 import warnings
 from importlib import import_module
 from django.core.exceptions import ImproperlyConfigured
+from django.core.signals import setting_changed
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -10,6 +11,9 @@ class BaseAppSettingsHelper:
 
     def __init__(self, defaults):
         self._defaults = defaults
+        self._import_cache = {}
+        self._model_cache = {}
+        setting_changed.connect(self.clear_cache, dispatch_uid=id(self))
 
     def __getattr__(self, name):
         try:
@@ -17,11 +21,16 @@ class BaseAppSettingsHelper:
         except AttributeError:
             return super().__getattr__(name)
 
+    def clear_cache(self, **kwargs):
+        self._import_cache = {}
+        self._model_cache = {}
+
     def get_default_value(self, setting_name):
         return getattr(self._defaults, setting_name)
 
-    def get_user_defined_setting(self, setting_name):
-        from django.conf import settings  # delay import until needed
+    def get_user_defined_value(self, setting_name):
+        # delay import until needed
+        from django.conf import settings
         attr_name = self.prefix + setting_name
         return getattr(settings, attr_name)
 
@@ -32,7 +41,7 @@ class BaseAppSettingsHelper:
         default value from the ``defaults`` dictionary is returned.
         """
         try:
-            return self.get_user_defined_setting(setting_name)
+            return self.get_user_defined_value(setting_name)
         except AttributeError:
             pass
         return self.get_default_value(setting_name)
@@ -47,11 +56,11 @@ class BaseAppSettingsHelper:
            settings module with a name matching ``other_setting_name``.
         """
         try:
-            return self.get_user_defined_setting(setting_name), False
+            return self.get_user_defined_value(setting_name), False
         except AttributeError:
             pass
         try:
-            return self.get_user_defined_setting(other_setting_name), True
+            return self.get_user_defined_value(other_setting_name), True
         except AttributeError:
             pass
         return self.get_default_value(setting_name), False
@@ -91,17 +100,21 @@ class BaseAppSettingsHelper:
         an ``ImproperlyConfigured`` error if the setting value is not a valid
         import path.
         """
-        value = getattr(self, setting_name)
+        if setting_name in self._import_cache:
+            return self._import_cache[setting_name]
+        setting_value = getattr(self, setting_name)
         try:
-            module_path, class_name = value.rsplit(".", 1)
-            return getattr(import_module(module_path), class_name)
+            module_path, class_name = setting_value.rsplit(".", 1)
+            result = getattr(import_module(module_path), class_name)
+            self._import_cache[setting_name] = result
+            return result
         except(ImportError, ValueError):
             raise ImproperlyConfigured(_(
                 "'{value}' is not a valid import path. {setting_name} must be "
                 "a full dotted python import path e.g. "
                 "'project.app.module.Class'."
             ).format(
-                value=value,
+                value=setting_value,
                 setting_name=self.prefix + setting_name,
             ))
 
@@ -112,10 +125,15 @@ class BaseAppSettingsHelper:
         ``ImproperlyConfigured`` error if the setting value is not in the
         correct format, or does not refers to a model that is not available.
         """
+        if setting_name in self._model_cache:
+            return self._model_cache[setting_name]
+
         from django.apps import apps  # delay import until needed
-        value = getattr(self, setting_name)
+        setting_value = getattr(self, setting_name)
         try:
-            return apps.get_model(value)
+            result = apps.get_model(setting_value)
+            self._model_cache[setting_name] = result
+            return result
         except ValueError:
             raise ImproperlyConfigured(_(
                 "{setting_name} must be in the format 'app_label.model_name'."
@@ -125,6 +143,6 @@ class BaseAppSettingsHelper:
                 "{setting_name} refers to model '{model_string}' that has not "
                 "been installed."
             ).format(
-                model_string=value,
+                model_string=setting_value,
                 setting_name=self.prefix + setting_name,
             ))
