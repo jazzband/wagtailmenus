@@ -1,5 +1,5 @@
 from wagtailmenus.utils.conf import BaseAppSettingsHelper
-from wagtailmenus.utils.deprecation import RemovedInWagtailMenus212Warning
+from wagtailmenus.utils import deprecation
 from . import defaults
 
 
@@ -11,7 +11,7 @@ class AppSettingsHelper(BaseAppSettingsHelper):
         return self.get_or_try_deprecated_name(
             'SECTION_MENU_CLASS',
             'SECTION_MENU_CLASS_PATH',
-            warning_category=RemovedInWagtailMenus212Warning
+            warning_category=deprecation.RemovedInWagtailMenus212Warning
         )
 
     @property
@@ -19,7 +19,7 @@ class AppSettingsHelper(BaseAppSettingsHelper):
         return self.get_or_try_deprecated_name(
             'CHILDREN_MENU_CLASS',
             'CHILDREN_MENU_CLASS_PATH',
-            warning_category=RemovedInWagtailMenus212Warning
+            warning_category=deprecation.RemovedInWagtailMenus212Warning
         )
 
 
