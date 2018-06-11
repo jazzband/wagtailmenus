@@ -8,7 +8,6 @@ from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase, override_settings
 from wagtail import VERSION as WAGTAIL_VERSION
 from wagtailmenus import get_main_menu_model, get_flat_menu_model
-from wagtailmenus.conf import settings
 from wagtailmenus.models import MainMenu, FlatMenu
 from wagtailmenus.tests.models import (
     MainMenuCustomMenuItem, FlatMenuCustomMenuItem, NoAbsoluteUrlsPage,
@@ -395,6 +394,7 @@ class TestCustomMenuModels(TestCase):
 
     @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS='wagtailmenus.tests.models.CustomChildrenMenu',)
     def test_children_menu_override(self):
+        from wagtailmenus.conf import settings
         from wagtailmenus.tests.models import CustomChildrenMenu
         self.assertEqual(
             settings.get_class('CHILDREN_MENU_CLASS'),
@@ -408,6 +408,7 @@ class TestCustomMenuModels(TestCase):
 
     @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomChildrenMenu',)
     def test_children_menu_override_using_deprecated_setting_name(self):
+        from wagtailmenus.conf import settings
         from wagtailmenus.tests.models import CustomChildrenMenu
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
@@ -424,6 +425,7 @@ class TestCustomMenuModels(TestCase):
 
     @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS='wagtailmenus.tests.models.CustomSectionMenu', )
     def test_section_menu_override(self):
+        from wagtailmenus.conf import settings
         from wagtailmenus.tests.models import CustomSectionMenu
         self.assertEqual(
             settings.get_class('SECTION_MENU_CLASS'),
@@ -437,6 +439,7 @@ class TestCustomMenuModels(TestCase):
 
     @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomSectionMenu', )
     def test_section_menu_override_using_deprecated_setting_name(self):
+        from wagtailmenus.conf import settings
         from wagtailmenus.tests.models import CustomSectionMenu
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
@@ -507,6 +510,7 @@ class TestInvalidCustomMenuModels(TestCase):
 
     @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS='CustomChildrenMenu',)
     def test_children_menu_invalid_path(self):
+        from wagtailmenus.conf import settings
         with self.assertRaisesMessage(ImproperlyConfigured, (
             "'CustomChildrenMenu' is not a valid import path. "
             "WAGTAILMENUS_CHILDREN_MENU_CLASS must be a full dotted "
@@ -516,6 +520,7 @@ class TestInvalidCustomMenuModels(TestCase):
 
     @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS='CustomSectionMenu',)
     def test_section_menu_invalid_path(self):
+        from wagtailmenus.conf import settings
         with self.assertRaisesMessage(ImproperlyConfigured, (
             "'CustomSectionMenu' is not a valid import path. "
             "WAGTAILMENUS_SECTION_MENU_CLASS must be a full dotted "
