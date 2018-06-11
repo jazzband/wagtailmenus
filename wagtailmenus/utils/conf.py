@@ -9,9 +9,7 @@ class BaseAppSettingsHelper:
     prefix = ''
 
     def __init__(self, defaults):
-        from django.conf import settings  # delay import until needed
         self._defaults = defaults
-        self._django_settings = settings
 
     def __getattr__(self, name):
         try:
@@ -23,8 +21,9 @@ class BaseAppSettingsHelper:
         return getattr(self._defaults, setting_name)
 
     def get_user_defined_setting(self, setting_name):
+        from django.conf import settings  # delay import until needed
         attr_name = self.prefix + setting_name
-        return getattr(self._django_settings, attr_name)
+        return getattr(settings, attr_name)
 
     def get(self, setting_name):
         """
