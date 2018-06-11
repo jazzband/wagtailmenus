@@ -10,18 +10,19 @@ class BaseAppSettingsHelper:
     prefix = ''
 
     def __init__(self, defaults):
+        from django.conf import settings
         self._defaults = defaults
+        self._django_settings = settings
         self._import_cache = {}
         self._model_cache = {}
-        setting_changed.connect(self.clear_cache, dispatch_uid=id(self))
+        setting_changed.connect(self.clear_caches, dispatch_uid=id(self))
 
     def __getattr__(self, name):
-        try:
+        if hasattr(self._defaults, name):
             return self.get(name)
-        except AttributeError:
-            return super().__getattr__(name)
+        raise AttributeError
 
-    def clear_cache(self, **kwargs):
+    def clear_caches(self, **kwargs):
         self._import_cache = {}
         self._model_cache = {}
 
@@ -29,10 +30,11 @@ class BaseAppSettingsHelper:
         return getattr(self._defaults, setting_name)
 
     def get_user_defined_value(self, setting_name):
-        # delay import until needed
-        from django.conf import settings
         attr_name = self.prefix + setting_name
-        return getattr(settings, attr_name)
+        return getattr(self._django_settings, attr_name)
+
+    def is_overridden(self, setting_name):
+        return hasattr(self._django_settings, self.prefix + setting_name)
 
     def get(self, setting_name):
         """
@@ -40,10 +42,8 @@ class BaseAppSettingsHelper:
         the setting is unavailable in the Django settings module, then the
         default value from the ``defaults`` dictionary is returned.
         """
-        try:
+        if self.is_overridden(setting_name):
             return self.get_user_defined_value(setting_name)
-        except AttributeError:
-            pass
         return self.get_default_value(setting_name)
 
     def get_or_try_other(self, setting_name, other_setting_name):
@@ -55,14 +55,10 @@ class BaseAppSettingsHelper:
         2. A boolean indicating whether the value was found in the Django
            settings module with a name matching ``other_setting_name``.
         """
-        try:
+        if self.is_overridden(setting_name):
             return self.get_user_defined_value(setting_name), False
-        except AttributeError:
-            pass
-        try:
+        if self.is_overridden(other_setting_name):
             return self.get_user_defined_value(other_setting_name), True
-        except AttributeError:
-            pass
         return self.get_default_value(setting_name), False
 
     def get_or_try_deprecated_name(
@@ -79,10 +75,10 @@ class BaseAppSettingsHelper:
         for this warning. If not supplied the built-in ``DeprecationWarning``
         class is used.
         """
-        value, value_from_deprecated_setting = self.get_or_try_other(
+        setting_value, value_from_deprecated_setting = self.get_or_try_other(
             setting_name, deprecated_setting_name)
         if not value_from_deprecated_setting:
-            return value
+            return setting_value
         warnings.warn(_(
             "The {deprecated_setting_name} setting is deprecated in favour "
             "of using {new_setting_name}. Please update your project's "
@@ -91,7 +87,7 @@ class BaseAppSettingsHelper:
             deprecated_setting_name=self.prefix + deprecated_setting_name,
             new_setting_name=self.prefix + setting_name
         ), category=warning_category or DeprecationWarning)
-        return value
+        return setting_value
 
     def get_class(self, setting_name):
         """
@@ -102,6 +98,7 @@ class BaseAppSettingsHelper:
         """
         if setting_name in self._import_cache:
             return self._import_cache[setting_name]
+
         setting_value = getattr(self, setting_name)
         try:
             module_path, class_name = setting_value.rsplit(".", 1)
