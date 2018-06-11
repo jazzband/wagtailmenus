@@ -12,7 +12,8 @@ from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
 from wagtail import VERSION as WAGTAIL_VERSION
 
-from wagtailmenus import app_settings, constants, forms, panels
+from wagtailmenus import forms, panels
+from wagtailmenus.conf import constants, settings
 from wagtailmenus.utils.misc import get_site_from_request
 
 from .menuitems import MenuItem
@@ -380,8 +381,8 @@ class Menu:
         current_page = ctx_vals.current_page
         apply_active_classes = opt_vals.apply_active_classes
         allow_repeating_parents = opt_vals.allow_repeating_parents
-        active_css_class = app_settings.ACTIVE_CLASS
-        ancestor_css_class = app_settings.ACTIVE_ANCESTOR_CLASS
+        active_css_class = settings.ACTIVE_CLASS
+        ancestor_css_class = settings.ACTIVE_ANCESTOR_CLASS
         stop_at_this_level = (ctx_vals.current_level >= self.max_levels)
 
         for item in menu_items:
@@ -423,7 +424,7 @@ class Menu:
                 menuitem = None
                 text = getattr(
                     page,
-                    app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
+                    settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
                     page.title
                 )
                 setattr(item, 'text', text)
@@ -437,7 +438,7 @@ class Menu:
                 has_children_in_menu = False
                 if (
                     not stop_at_this_level and
-                    page.depth >= app_settings.SECTION_ROOT_DEPTH and
+                    page.depth >= settings.SECTION_ROOT_DEPTH and
                     (menuitem is None or menuitem.allow_subnav)
                 ):
                     if (
@@ -539,7 +540,7 @@ class Menu:
         site = self._contextual_vals.current_site
         template_names = []
         menu_str = self.menu_short_name
-        if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
+        if settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
             hostname = site.hostname
             template_names.extend([
                 "menus/%s/%s/level_1.html" % (hostname, menu_str),
@@ -679,7 +680,7 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
 
     @classmethod
     def get_least_specific_template_name(cls):
-        return app_settings.DEFAULT_SECTION_MENU_TEMPLATE
+        return settings.DEFAULT_SECTION_MENU_TEMPLATE
 
     def __init__(self, root_page, max_levels, use_specific):
         self.root_page = root_page
@@ -706,8 +707,8 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         opt_vals = self._option_vals
         section_root = self.root_page
         current_page = ctx_vals.current_page
-        active_css_class = app_settings.ACTIVE_CLASS
-        ancestor_css_class = app_settings.ACTIVE_ANCESTOR_CLASS
+        active_css_class = settings.ACTIVE_CLASS
+        ancestor_css_class = settings.ACTIVE_ANCESTOR_CLASS
 
         # We use a different pattern for overriding 'get_context_data' here,
         # because we need access to data['menu_items'] below
@@ -716,7 +717,7 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
 
         if 'section_root' not in kwargs:
             section_root.text = getattr(
-                section_root, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
+                section_root, settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
                 section_root.title
             )
             if opt_vals.use_absolute_page_urls:
@@ -772,7 +773,7 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
 
     @classmethod
     def get_least_specific_template_name(cls):
-        return app_settings.DEFAULT_CHILDREN_MENU_TEMPLATE
+        return settings.DEFAULT_CHILDREN_MENU_TEMPLATE
 
     def __init__(self, parent_page, max_levels=None, use_specific=None):
         if max_levels is None:
@@ -850,7 +851,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
 
     @classmethod
     def _get_menu_items_related_name(cls):
-        return app_settings.get(cls.menu_items_relation_setting_name)
+        return settings.get(cls.menu_items_relation_setting_name)
 
     def get_base_menuitem_queryset(self):
         qs = self.get_menu_items_manager().for_display()
@@ -939,7 +940,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
                 page_depth = item.link_page.depth
                 if(
                     item.allow_subnav and
-                    page_depth >= app_settings.SECTION_ROOT_DEPTH
+                    page_depth >= settings.SECTION_ROOT_DEPTH
                 ):
                     all_pages = all_pages | Page.objects.filter(
                         depth__gt=page_depth,
@@ -1052,7 +1053,7 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
 
     @classmethod
     def get_least_specific_template_name(cls):
-        return app_settings.DEFAULT_MAIN_MENU_TEMPLATE
+        return settings.DEFAULT_MAIN_MENU_TEMPLATE
 
     def __str__(self):
         return _('Main menu for %(site_name)s') % {
@@ -1154,7 +1155,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
 
     @classmethod
     def get_least_specific_template_name(cls):
-        return app_settings.DEFAULT_FLAT_MENU_TEMPLATE
+        return settings.DEFAULT_FLAT_MENU_TEMPLATE
 
     def __str__(self):
         return '%s (%s)' % (self.title, self.handle)
@@ -1196,7 +1197,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         site = self._contextual_vals.current_site
         handle = self.handle
         template_names = []
-        if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
+        if settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
             hostname = site.hostname
             template_names.extend([
                 "menus/%s/flat/%s/level_1.html" % (hostname, handle),
@@ -1234,7 +1235,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         level = self._contextual_vals.current_level
         handle = self.handle
         template_names = []
-        if app_settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
+        if settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
             hostname = site.hostname
             template_names.extend([
                 "menus/%s/flat/%s/level_%s.html" % (hostname, handle, level),
@@ -1256,7 +1257,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
             "menus/%s_sub_menu.html" % handle,
             "menus/flat/level_%s.html" % level,
             "menus/flat/sub_menu.html",
-            app_settings.DEFAULT_SUB_MENU_TEMPLATE,
+            settings.DEFAULT_SUB_MENU_TEMPLATE,
         ])
         return template_names
 

@@ -1,8 +1,8 @@
 from distutils.version import LooseVersion
 
-from django.conf import settings
+from django.conf import settings as django_settings
 from django.utils.translation import ugettext_lazy as _
-from . import app_settings
+from wagtailmenus.conf import settings
 
 from wagtail import VERSION as WAGTAIL_VERSION
 if WAGTAIL_VERSION >= (2, 0):
@@ -24,7 +24,7 @@ else:
 def _define_inlinepanel(relation_name, **kwargs):
     klass = InlinePanel
     defaults = {'label': _('menu items')}
-    if 'condensedinlinepanel' in settings.INSTALLED_APPS:
+    if 'condensedinlinepanel' in django_settings.INSTALLED_APPS:
         import condensedinlinepanel
         from condensedinlinepanel.edit_handlers import CondensedInlinePanel
         if LooseVersion(condensedinlinepanel.__version__) >= LooseVersion('0.3'):
@@ -48,7 +48,7 @@ def FlatMenuItemsInlinePanel(**kwargs):  # noqa
     will be passed on as kwargs to the target class's __init__ method.
     """
     return _define_inlinepanel(
-        relation_name=app_settings.FLAT_MENU_ITEMS_RELATED_NAME,
+        relation_name=settings.FLAT_MENU_ITEMS_RELATED_NAME,
         **kwargs
     )
 
@@ -63,7 +63,7 @@ def MainMenuItemsInlinePanel(**kwargs):  # noqa
     will be passed on as kwargs to the target class's __init__ method.
     """
     return _define_inlinepanel(
-        relation_name=app_settings.MAIN_MENU_ITEMS_RELATED_NAME,
+        relation_name=settings.MAIN_MENU_ITEMS_RELATED_NAME,
         **kwargs
     )
 

@@ -6,7 +6,7 @@ from wagtail import VERSION as WAGTAIL_VERSION
 from wagtailmenus.models import (
     AbstractMenuItem, MainMenu, MainMenuItem, FlatMenu, FlatMenuItem
 )
-from wagtailmenus import app_settings
+from wagtailmenus.conf import settings
 if WAGTAIL_VERSION >= (2, 0):
     from wagtail.core.models import Page
 else:
@@ -114,7 +114,7 @@ class TestMenuItemsForRequest(TestCase):
         request = self.rf.get('/some-page/')
 
         active_class = menu_item.get_active_class_for_request(request)
-        self.assertEqual(active_class, app_settings.ACTIVE_CLASS)
+        self.assertEqual(active_class, settings.ACTIVE_CLASS)
 
     def test_menu_item_with_query_params(self):
         menu_item = AbstractMenuItem()
@@ -122,7 +122,7 @@ class TestMenuItemsForRequest(TestCase):
         request = self.rf.get('/some-page/?some_other_param=foo')
 
         active_class = menu_item.get_active_class_for_request(request)
-        self.assertEqual(active_class, app_settings.ACTIVE_CLASS)
+        self.assertEqual(active_class, settings.ACTIVE_CLASS)
 
     def test_menu_item_with_hash_fragment(self):
         menu_item = AbstractMenuItem()
@@ -130,7 +130,7 @@ class TestMenuItemsForRequest(TestCase):
         request = self.rf.get('/some-page/#some_other_hash_fragment')
 
         active_class = menu_item.get_active_class_for_request(request)
-        self.assertEqual(active_class, app_settings.ACTIVE_CLASS)
+        self.assertEqual(active_class, settings.ACTIVE_CLASS)
 
     def test_menu_item_ancestor(self):
         menu_item = AbstractMenuItem()
@@ -138,7 +138,7 @@ class TestMenuItemsForRequest(TestCase):
         request = self.rf.get('/some-page/some-child-page')
 
         active_class = menu_item.get_active_class_for_request(request)
-        self.assertEqual(active_class, app_settings.ACTIVE_ANCESTOR_CLASS)
+        self.assertEqual(active_class, settings.ACTIVE_ANCESTOR_CLASS)
 
     def test_menu_item_with_netloc(self):
         menu_item = AbstractMenuItem()
