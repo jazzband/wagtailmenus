@@ -125,6 +125,6 @@ class BaseAppSettingsHelper:
                 "{setting_name} refers to model '{model_string}' that has not "
                 "been installed."
             ).format(
-                value=value,
+                model_string=value,
                 setting_name=self.prefix + setting_name,
             ))
