@@ -13,6 +13,7 @@ Changelog
 * Remove `FLAT_MENU_MODEL_CLASS` and `MAIN_MENU_MODEL_CLASS` app settings attributes in favour of using the app settings module's `get_model()` method to return Django models when needed.
 * Deprecated the ``WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH`` setting in favour of using just ``WAGTAILMENUS_CHILDREN_MENU_CLASS``.
 * Deprecated the ``WAGTAILMENUS_SECTION_MENU_CLASS_PATH`` setting in favour of using just ``WAGTAILMENUS_SECTION_MENU_CLASS``.
+* Added Latin American Spanish translations (thanks to José Luis).
 
 
 2.9.0 (06.05.2018)
