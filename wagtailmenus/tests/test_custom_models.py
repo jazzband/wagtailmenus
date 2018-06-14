@@ -420,7 +420,7 @@ class TestCustomMenuModels(TestCase):
         self.assertIn(
             "The WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH setting is "
             "deprecated in favour of using WAGTAILMENUS_CHILDREN_MENU_CLASS",
-            str(w[0])
+            str(w[0].message)
         )
 
     @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS='wagtailmenus.tests.models.CustomSectionMenu', )
@@ -451,8 +451,44 @@ class TestCustomMenuModels(TestCase):
         self.assertIn(
             "The WAGTAILMENUS_SECTION_MENU_CLASS_PATH setting is deprecated "
             "in favour of using WAGTAILMENUS_SECTION_MENU_CLASS",
-            str(w[0])
+            str(w[0].message)
         )
+
+    def test_reference_to_deprecated_setting_raises_warning(self):
+        from wagtailmenus.conf import settings
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            settings.CHILDREN_MENU_CLASS_PATH
+        self.assertEqual(len(w), 1)
+        self.assertIn(
+            "CHILDREN_MENU_CLASS_PATH is deprecated in favour of using "
+            "CHILDREN_MENU_CLASS in app settings",
+            str(w[0].message)
+        )
+
+    def test_reference_to_deprecated_setting_via_get_class_raises_warning(self):
+        from wagtailmenus.conf import settings
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            settings.get_class('CHILDREN_MENU_CLASS_PATH')
+        self.assertEqual(len(w), 1)
+        self.assertIn(
+            "CHILDREN_MENU_CLASS_PATH is deprecated in favour of using "
+            "CHILDREN_MENU_CLASS in app settings",
+            str(w[0].message)
+        )
+
+    @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomSectionMenu', )
+    def test_reference_to_deprecated_setting_still_returns_the_correct_value(self):
+        from wagtailmenus.conf import settings
+        with warnings.catch_warnings(record=True):
+            warnings.simplefilter("always")
+            self.assertEqual(
+                settings.SECTION_MENU_CLASS_PATH,
+                'wagtailmenus.tests.models.CustomSectionMenu'
+            )
+
+
 
 
 class TestInvalidCustomMenuModels(TestCase):

@@ -172,9 +172,10 @@ class DeprecatedSetting:
     def warn_if_referenced_directly(self):
         if self.replacement_name is not None:
             msg = (
-                "The {setting_name} app setting is deprecated in "
-                "favour of using {replacement_name}. Please update your "
-                "code to reference the new setting instead."
+                "{setting_name} is deprecated in favour of using "
+                "{replacement_name} in app settings. Please update your code "
+                "to reference this new attribute on the module instead of "
+                "the deprecated one."
             )
         else:
             msg = "The {setting_name} app setting is deprecated."
