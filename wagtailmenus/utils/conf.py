@@ -84,9 +84,17 @@ class BaseAppSettingsHelper:
 
     def get(self, setting_name):
         """
-        Returns the value of the app setting named by ``setting_name``. If
-        the setting is unavailable in the Django settings module, then the
+        Returns the value of the app setting named by ``setting_name``.
+        If the setting is unavailable in the Django settings module, then the
         default value from the ``defaults`` dictionary is returned.
+
+        If the setting is deprecated, a suitable deprecation warning will be
+        raised, to help inform developers of the change.
+
+        If the named setting replaces a deprecated setting, and no user defined
+        setting name is defined using the new name, the method will look for a
+        user defined setting using the old name, and return that if found. A
+        deprecation warning will also be raised.
         """
         if setting_name in self._deprecated_settings:
             depr = self._deprecated_settings[setting_name]
@@ -106,9 +114,13 @@ class BaseAppSettingsHelper:
     def get_class(self, setting_name):
         """
         Returns a python class, method, module or other object referenced by
-        an app setting who's value should be a valid import path string. Raises
-        an ``ImproperlyConfigured`` error if the setting value is not a valid
-        import path.
+        an app setting who's value should be a string representation of a valid
+        python import path.
+
+        Will not work for relative paths.
+
+        Raises an ``ImproperlyConfigured`` error if the setting value is not
+        a valid import path.
         """
         if setting_name in self._import_cache:
             return self._import_cache[setting_name]
@@ -131,9 +143,10 @@ class BaseAppSettingsHelper:
     def get_model(self, setting_name):
         """
         Returns a Django model referenced by an app setting who's value should
-        be a 'model string' in the format 'app_label.model_name'. Raises an
-        ``ImproperlyConfigured`` error if the setting value is not in the
-        correct format, or does not refers to a model that is not available.
+        be a 'model string' in the format 'app_label.model_name'.
+
+        Raises an ``ImproperlyConfigured`` error if the setting value is not
+        in the correct format, or refers to a model that is not available.
         """
         if setting_name in self._model_cache:
             return self._model_cache[setting_name]
