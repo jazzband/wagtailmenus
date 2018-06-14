@@ -86,8 +86,7 @@ class BaseAppSettingsHelper:
         if self.in_defaults(setting_name):
             return getattr(self._defaults, setting_name)
         raise ImproperlyConfigured(
-            "No default value could be found for '{setting_name}'. Please "
-            "update your defaults module to include a value for this setting."
+            "'{setting_name}' could not be found in the defaults module."
             .format(setting_name=setting_name)
         )
 
