@@ -170,7 +170,7 @@ class DeprecatedSetting:
         self._prefix = value
 
     def warn_if_referenced_directly(self):
-        if not self.replacement_name:
+        if self.replacement_name is not None:
             msg = (
                 "The {setting_name} app setting is deprecated in "
                 "favour of using {replacement_name}. Please update your "
