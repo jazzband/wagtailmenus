@@ -21,6 +21,9 @@ class BaseAppSettingsHelper:
         self.perepare_deprecation_data()
         setting_changed.connect(self.clear_caches, dispatch_uid=id(self))
 
+    def in_defaults(self, setting_name):
+        return hasattr(self._defaults, setting_name)
+
     def perepare_deprecation_data(self):
         """
         Cycles through the list of AppSettingDeprecation instances set on
@@ -49,19 +52,25 @@ class BaseAppSettingsHelper:
         for item in self._deprecations:
             item.prefix = self._prefix
             self._deprecated_settings[item.setting_name] = item
-            if item.replacement_name:
-                if hasattr(self._defaults, item.replacement_name):
-                    self._replacement_settings[item.replacement_name] = item
-                    continue
+            if not self.in_defaults(item.setting_name):
                 raise ImproperlyConfigured(
-                    "'{replacement_name}' is not a valid replacement setting "
-                    "for {setting_name}. This could be a typo, or you may "
-                    "need to add {replacement_name} to the defaults module."
-                    .format(
-                        replacement_name=item.replacement_name,
+                    "'{setting_name}' cannot be found in the defaults module. "
+                    "A value should remain present there until the end of the "
+                    "setting's deprecation period.".format(
                         setting_name=item.setting_name,
                     )
                 )
+            if item.replacement_name:
+                self._replacement_settings[item.replacement_name] = item
+                if not self.in_defaults(item.replacement_name):
+                    raise ImproperlyConfigured(
+                        "'{replacement_name}' is not a valid replacement "
+                        "for {setting_name}. Please ensure {replacement_name} "
+                        "has been added to the defaults module.".format(
+                            replacement_name=item.replacement_name,
+                            setting_name=item.setting_name,
+                        )
+                    )
 
     def __getattr__(self, name):
         if hasattr(self._defaults, name):
@@ -73,7 +82,13 @@ class BaseAppSettingsHelper:
         self._model_cache = {}
 
     def get_default_value(self, setting_name):
-        return getattr(self._defaults, setting_name)
+        if self.in_defaults(setting_name):
+            return getattr(self._defaults, setting_name)
+        raise ImproperlyConfigured(
+            "No default value could be found for '{setting_name}'. Please "
+            "update your defaults module to include a value for this setting."
+            .format(setting_name=setting_name)
+        )
 
     def get_user_defined_value(self, setting_name):
         attr_name = self._prefix + setting_name
