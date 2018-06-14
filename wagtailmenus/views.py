@@ -9,7 +9,7 @@ from django.utils.translation import ugettext as _
 from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.contrib.modeladmin.views import (
     WMABaseView, CreateView, EditView, ModelFormView)
-from wagtailmenus import app_settings
+from wagtailmenus.conf import settings
 if WAGTAIL_VERSION >= (2, 0):
     from wagtail.admin import messages
     from wagtail.admin.edit_handlers import ObjectList, TabbedInterface
@@ -166,10 +166,10 @@ class FlatMenuCopyView(FlatMenuEditView):
             data = copy(self.request.POST)
             i = 0
             while(data.get('%s-%s-id' % (
-                app_settings.FLAT_MENU_ITEMS_RELATED_NAME, i
+                settings.FLAT_MENU_ITEMS_RELATED_NAME, i
             ))):
                 data['%s-%s-id' % (
-                    app_settings.FLAT_MENU_ITEMS_RELATED_NAME, i
+                    settings.FLAT_MENU_ITEMS_RELATED_NAME, i
                 )] = None
                 i += 1
             kwargs.update({

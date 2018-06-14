@@ -1,9 +1,9 @@
 from django.template import RequestContext
 from django.test.client import RequestFactory
 from wagtail import VERSION as WAGTAIL_VERSION
-
+from wagtailmenus.conf import constants
 from wagtailmenus.models.menus import ContextualVals, OptionVals
-from wagtailmenus import constants
+
 
 SUB_MENU_TEMPLATE_LIST = (
     'menus/sub_menu_level_2.html',
