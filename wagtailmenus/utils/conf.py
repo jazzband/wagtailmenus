@@ -75,7 +75,8 @@ class BaseAppSettingsHelper:
     def __getattr__(self, name):
         if hasattr(self._defaults, name):
             return self.get(name)
-        raise AttributeError
+        raise AttributeError("'{}' object has no attribute '{}'".format(
+            self.__class__.__name__, name))
 
     def clear_caches(self, **kwargs):
         self._import_cache = {}
