@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-import warnings
 
 from bs4 import BeautifulSoup
 from django.contrib.auth import get_user_model
@@ -406,23 +405,6 @@ class TestCustomMenuModels(TestCase):
         response = self.client.get('/about-us/')
         self.assertTemplateUsed(response, "menus/custom-overrides/children.html")
 
-    @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomChildrenMenu',)
-    def test_children_menu_override_using_deprecated_setting_name(self):
-        from wagtailmenus.conf import settings
-        from wagtailmenus.tests.models import CustomChildrenMenu
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            self.assertEqual(
-                settings.get_object('CHILDREN_MENU_CLASS'),
-                CustomChildrenMenu
-            )
-        self.assertEqual(len(w), 1)
-        self.assertIn(
-            "The WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH setting is "
-            "deprecated in favour of using WAGTAILMENUS_CHILDREN_MENU_CLASS",
-            str(w[0].message)
-        )
-
     @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS='wagtailmenus.tests.models.CustomSectionMenu', )
     def test_section_menu_override(self):
         from wagtailmenus.conf import settings
@@ -436,59 +418,6 @@ class TestCustomMenuModels(TestCase):
         # 'sub_menu_template_name' attribute gets picked up
         response = self.client.get('/about-us/')
         self.assertTemplateUsed(response, "menus/custom-overrides/section-sub.html")
-
-    @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomSectionMenu', )
-    def test_section_menu_override_using_deprecated_setting_name(self):
-        from wagtailmenus.conf import settings
-        from wagtailmenus.tests.models import CustomSectionMenu
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            self.assertEqual(
-                settings.get_object('SECTION_MENU_CLASS'),
-                CustomSectionMenu
-            )
-        self.assertEqual(len(w), 1)
-        self.assertIn(
-            "The WAGTAILMENUS_SECTION_MENU_CLASS_PATH setting is deprecated "
-            "in favour of using WAGTAILMENUS_SECTION_MENU_CLASS",
-            str(w[0].message)
-        )
-
-    def test_reference_to_deprecated_setting_raises_warning(self):
-        from wagtailmenus.conf import settings
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            settings.CHILDREN_MENU_CLASS_PATH
-        self.assertEqual(len(w), 1)
-        self.assertIn(
-            "CHILDREN_MENU_CLASS_PATH is deprecated in favour of using "
-            "CHILDREN_MENU_CLASS in app settings",
-            str(w[0].message)
-        )
-
-    def test_reference_to_deprecated_setting_via_get_object_raises_warning(self):
-        from wagtailmenus.conf import settings
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            settings.get_object('CHILDREN_MENU_CLASS_PATH')
-        self.assertEqual(len(w), 1)
-        self.assertIn(
-            "CHILDREN_MENU_CLASS_PATH is deprecated in favour of using "
-            "CHILDREN_MENU_CLASS in app settings",
-            str(w[0].message)
-        )
-
-    @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomSectionMenu', )
-    def test_reference_to_deprecated_setting_still_returns_the_correct_value(self):
-        from wagtailmenus.conf import settings
-        with warnings.catch_warnings(record=True):
-            warnings.simplefilter("always")
-            self.assertEqual(
-                settings.SECTION_MENU_CLASS_PATH,
-                'wagtailmenus.tests.models.CustomSectionMenu'
-            )
-
-
 
 
 class TestInvalidCustomMenuModels(TestCase):
