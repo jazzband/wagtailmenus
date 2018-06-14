@@ -1,11 +1,10 @@
-=======================================
-Wagtailmenus 2.10 (alpha) release notes
-=======================================
+===============================
+Wagtailmenus 2.10 release notes
+===============================
 
 .. NOTE ::
     
-    Wagtailmenus 2.10 is in the alpha stage of development. Any changes
-    detailed below are subject to change before the final 2.10 release.
+    In order to keep wagtailmenus working with the latest versions of Wagtail and Django, with code that is clean and maintainable, this version will be the last version to support Wagtail versions earlier than 2.0, or Django versions earlier than 2.0.
 
 
 .. contents::
@@ -104,7 +103,7 @@ Upgrade considerations
 ``FLAT_MENU_MODEL_CLASS`` has been removed from app settings
 ------------------------------------------------------------
 
-If you're referencing ``FLAT_MENU_MODEL_CLASS`` directly from wagtailmenus' app settings module, your code may no longer work.
+If you're referencing ``FLAT_MENU_MODEL_CLASS`` directly from wagtailmenus' app settings module, then you may need to make some changes.
 
 If you only need the 'model string' for the model (for example, to use in a 
 ``ForeignKey`` or ``ManyToManyField`` field definition), you should use
@@ -116,10 +115,40 @@ If you need the Django model class itself, use ``wagtailmenus.get_flat_menu_mode
 ``MAIN_MENU_MODEL_CLASS`` has been removed from app settings
 ------------------------------------------------------------
 
-If you're referencing ``MAIN_MENU_MODEL_CLASS`` directly from wagtailmenus' app settings module, your code may no longer work.
+If you're referencing ``MAIN_MENU_MODEL_CLASS`` directly from wagtailmenus' app settings module, then you may need to make some changes.
 
-If you only need the 'model string' for the model (for example, to use in a 
-``ForeignKey`` or ``ManyToManyField`` field definition), you should use
-``wagtailmenus.get_main_menu_model_string()`` instead.
+If you only need the 'model string' for the model (for example, to use in a ``ForeignKey`` or ``ManyToManyField`` field definition), you should use ``wagtailmenus.get_main_menu_model_string()`` instead.
 
 If you need the Django model class itself, use ``wagtailmenus.get_main_menu_model()``.
+
+
+The ``CHILDREN_MENU_CLASS`` app setting no longer returns a class
+-----------------------------------------------------------------
+
+If you're referencing ``CHILDREN_MENU_CLASS`` attribute on wagtailmenus' app settings module, then you may need to make some changes.
+
+The attribute still exists, but now only returns the import path of the class as a string, rather than the class itself. 
+
+If you need to access the class itself, you can use the app settings module's new ``get_object()`` method, like so:
+
+.. code-block:: python
+
+    from wagtailmenus.conf import settings
+
+    menu_class = settings.get_object('CHILDREN_MENU_CLASS')
+
+
+The ``SECTION_MENU_CLASS`` app setting no longer returns a class
+----------------------------------------------------------------
+
+If you're referencing ``SECTION_MENU_CLASS`` attribute on wagtailmenus' app settings module, then you may need to make some changes.
+
+The attribute still exists, but now only returns the import path of the class as a string, rather than the class itself. 
+
+If you need to access the class itself, you can use the app settings module's new ``get_object()`` method, like so:
+
+.. code-block:: python
+
+    from wagtailmenus.conf import settings
+
+    menu_class = settings.get_object('SECTION_MENU_CLASS')
