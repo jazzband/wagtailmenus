@@ -2,10 +2,17 @@ Changelog
 =========
 
 
-2.10.0 (XX.XX.XXXX) IN DEVELOPMENT
-----------------------------------
+2.10.0 (14.06.2018)
+-------------------
 
-* Optimised MenuWithMenuItems.get_top_level_items() and AbstractFlatMenu.get_for_site() to use fewer database queries to render menus
+* Optimised MenuWithMenuItems.get_top_level_items() and AbstractFlatMenu.get_for_site() to use fewer database queries to render menus.
+* Configured `sphinxcontrib.spelling` and used to correct spelling errors in docs.
+* Updated testing and documentation dependencies.
+* Moved `wagtailmenus.constants` and `wagtailmenus.app_settings` into a new `wagtailmenus.conf` app
+* Refactored the app settings module to be DRYer and more generic
+* Remove `FLAT_MENU_MODEL_CLASS` and `MAIN_MENU_MODEL_CLASS` app settings attributes in favour of using the app settings module's `get_model()` method to return Django models when needed.
+* Deprecated the ``WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH`` setting in favour of using just ``WAGTAILMENUS_CHILDREN_MENU_CLASS``.
+* Deprecated the ``WAGTAILMENUS_SECTION_MENU_CLASS_PATH`` setting in favour of using just ``WAGTAILMENUS_SECTION_MENU_CLASS``.
 
 
 2.9.0 (06.05.2018)
