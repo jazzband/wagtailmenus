@@ -397,7 +397,7 @@ class TestCustomMenuModels(TestCase):
         from wagtailmenus.conf import settings
         from wagtailmenus.tests.models import CustomChildrenMenu
         self.assertEqual(
-            settings.get_class('CHILDREN_MENU_CLASS'),
+            settings.get_object('CHILDREN_MENU_CLASS'),
             CustomChildrenMenu
         )
 
@@ -413,7 +413,7 @@ class TestCustomMenuModels(TestCase):
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             self.assertEqual(
-                settings.get_class('CHILDREN_MENU_CLASS'),
+                settings.get_object('CHILDREN_MENU_CLASS'),
                 CustomChildrenMenu
             )
         self.assertEqual(len(w), 1)
@@ -428,7 +428,7 @@ class TestCustomMenuModels(TestCase):
         from wagtailmenus.conf import settings
         from wagtailmenus.tests.models import CustomSectionMenu
         self.assertEqual(
-            settings.get_class('SECTION_MENU_CLASS'),
+            settings.get_object('SECTION_MENU_CLASS'),
             CustomSectionMenu
         )
 
@@ -444,7 +444,7 @@ class TestCustomMenuModels(TestCase):
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             self.assertEqual(
-                settings.get_class('SECTION_MENU_CLASS'),
+                settings.get_object('SECTION_MENU_CLASS'),
                 CustomSectionMenu
             )
         self.assertEqual(len(w), 1)
@@ -466,11 +466,11 @@ class TestCustomMenuModels(TestCase):
             str(w[0].message)
         )
 
-    def test_reference_to_deprecated_setting_via_get_class_raises_warning(self):
+    def test_reference_to_deprecated_setting_via_get_object_raises_warning(self):
         from wagtailmenus.conf import settings
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
-            settings.get_class('CHILDREN_MENU_CLASS_PATH')
+            settings.get_object('CHILDREN_MENU_CLASS_PATH')
         self.assertEqual(len(w), 1)
         self.assertIn(
             "CHILDREN_MENU_CLASS_PATH is deprecated in favour of using "
@@ -552,7 +552,7 @@ class TestInvalidCustomMenuModels(TestCase):
             "WAGTAILMENUS_CHILDREN_MENU_CLASS must be a full dotted "
             "python import path e.g. 'project.app.module.Class'"
         )):
-            settings.get_class('CHILDREN_MENU_CLASS')
+            settings.get_object('CHILDREN_MENU_CLASS')
 
     @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS='CustomSectionMenu',)
     def test_section_menu_invalid_path(self):
@@ -562,7 +562,7 @@ class TestInvalidCustomMenuModels(TestCase):
             "WAGTAILMENUS_SECTION_MENU_CLASS must be a full dotted "
             "python import path e.g. 'project.app.module.Class'"
         )):
-            settings.get_class('SECTION_MENU_CLASS')
+            settings.get_object('SECTION_MENU_CLASS')
 
 
 class TestNoAbsoluteUrlsPage(TestCase):

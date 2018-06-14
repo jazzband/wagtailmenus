@@ -111,7 +111,7 @@ class BaseAppSettingsHelper:
 
         return self.get_default_value(setting_name)
 
-    def get_class(self, setting_name):
+    def get_object(self, setting_name):
         """
         Returns a python class, method, module or other object referenced by
         an app setting who's value should be a string representation of a valid
