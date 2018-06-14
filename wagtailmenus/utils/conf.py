@@ -2,20 +2,62 @@ import warnings
 from importlib import import_module
 from django.core.exceptions import ImproperlyConfigured
 from django.core.signals import setting_changed
-from django.utils.translation import ugettext_lazy as _
 
 
 class BaseAppSettingsHelper:
 
     prefix = ''
+    deprecations = ()
 
-    def __init__(self, defaults):
+    def __init__(self, defaults, deprecations=None):
         from django.conf import settings
         self._defaults = defaults
         self._django_settings = settings
         self._import_cache = {}
         self._model_cache = {}
+        self._deprecations = deprecations or self.deprecations
+        if not isinstance(self._deprecations, (list, tuple)):
+            raise ImproperlyConfigured(
+                "'deprecations' must be a list or tuple of DeprecatedSetting "
+                "instances, not a {}".format(type(self._deprecations).__name__)
+            )
+        self.perepare_deprecation_data()
         setting_changed.connect(self.clear_caches, dispatch_uid=id(self))
+
+    def perepare_deprecation_data(self):
+        """
+        Cycles through the list of DeprecatedSetting instances set on
+        ``self._deprecations`` and creates two new dictionaries on it:
+
+        ``self._deprecated_settings``:
+            Uses the deprecated setting names as keys, and will be
+            used to identify if a requested setting value if for a deprecated
+            setting.
+
+        ``self._replacement_settings``:
+            Uses the 'replacement setting' names as keys (if supplied), and
+            allows us to temporarily support user-defined settings using the
+            old name when the new setting is requested.
+        """
+        self._deprecated_settings = {}
+        self._replacement_settings = {}
+
+        for item in self._deprecations:
+            item.prefix = self.prefix
+            self._deprecated_settings[item.setting_name] = item
+            if item.replacement_name:
+                if hasattr(self._defaults, item.replacement_name):
+                    self._replacement_settings[item.replacement_name] = item
+                    continue
+                raise ImproperlyConfigured(
+                    "'{replacement_name}' is not a valid replacement setting "
+                    "for {setting_name}. This could be a typo, or you may "
+                    "need to add {replacement_name} to the defaults module."
+                    .format(
+                        replacement_name=item.replacement_name,
+                        setting_name=item.setting_name,
+                    )
+                )
 
     def __getattr__(self, name):
         if hasattr(self._defaults, name):
@@ -42,52 +84,20 @@ class BaseAppSettingsHelper:
         the setting is unavailable in the Django settings module, then the
         default value from the ``defaults`` dictionary is returned.
         """
+        if setting_name in self._deprecated_settings:
+            depr = self._deprecated_settings[setting_name]
+            depr.warn_if_referenced_directly()
+
         if self.is_overridden(setting_name):
             return self.get_user_defined_value(setting_name)
+
+        if setting_name in self._replacement_settings:
+            depr = self._replacement_settings[setting_name]
+            if self.is_overridden(depr.setting_name):
+                depr.warn_if_deprecated_value_used_by_replacement()
+                return self.get_user_defined_value(depr.setting_name)
+
         return self.get_default_value(setting_name)
-
-    def get_or_try_other(self, setting_name, other_setting_name):
-        """
-        Returns a tuple containing two values:
-
-        1. The setting value itself, which may have come from the Django
-           settings, or may also be the default value.
-        2. A boolean indicating whether the value was found in the Django
-           settings module with a name matching ``other_setting_name``.
-        """
-        if self.is_overridden(setting_name):
-            return self.get_user_defined_value(setting_name), False
-        if self.is_overridden(other_setting_name):
-            return self.get_user_defined_value(other_setting_name), True
-        return self.get_default_value(setting_name), False
-
-    def get_or_try_deprecated_name(
-        self, setting_name, deprecated_setting_name, warning_category=None
-    ):
-        """
-        Use this instead of get() when an established app setting is renamed,
-        and you wish to continue to respect settings defined using the old name
-        for a time, before forcing developers to use the new one.
-
-        If a setting is found matching ``deprecated_setting_name``, a sensibly
-        worded deprecation warning is raised. The ``warning_category``
-        argument can be used to specify the warning categry class to use
-        for this warning. If not supplied the built-in ``DeprecationWarning``
-        class is used.
-        """
-        setting_value, value_from_deprecated_setting = self.get_or_try_other(
-            setting_name, deprecated_setting_name)
-        if not value_from_deprecated_setting:
-            return setting_value
-        warnings.warn(_(
-            "The {deprecated_setting_name} setting is deprecated in favour "
-            "of using {new_setting_name}. Please update your project's "
-            "settings module to use the new setting name."
-        ).format(
-            deprecated_setting_name=self.prefix + deprecated_setting_name,
-            new_setting_name=self.prefix + setting_name
-        ), category=warning_category or DeprecationWarning)
-        return setting_value
 
     def get_class(self, setting_name):
         """
@@ -106,14 +116,13 @@ class BaseAppSettingsHelper:
             self._import_cache[setting_name] = result
             return result
         except(ImportError, ValueError):
-            raise ImproperlyConfigured(_(
+            raise ImproperlyConfigured(
                 "'{value}' is not a valid import path. {setting_name} must be "
                 "a full dotted python import path e.g. "
-                "'project.app.module.Class'."
-            ).format(
-                value=setting_value,
-                setting_name=self.prefix + setting_name,
-            ))
+                "'project.app.module.Class'.".format(
+                    value=setting_value,
+                    setting_name=self.prefix + setting_name,
+                ))
 
     def get_model(self, setting_name):
         """
@@ -132,14 +141,59 @@ class BaseAppSettingsHelper:
             self._model_cache[setting_name] = result
             return result
         except ValueError:
-            raise ImproperlyConfigured(_(
+            raise ImproperlyConfigured(
                 "{setting_name} must be in the format 'app_label.model_name'."
-            ).format(setting_name=self.prefix + setting_name))
+                .format(setting_name=self.prefix + setting_name))
         except LookupError:
-            raise ImproperlyConfigured(_(
+            raise ImproperlyConfigured(
                 "{setting_name} refers to model '{model_string}' that has not "
-                "been installed."
-            ).format(
-                model_string=setting_value,
-                setting_name=self.prefix + setting_name,
-            ))
+                "been installed.".format(
+                    model_string=setting_value,
+                    setting_name=self.prefix + setting_name,
+                ))
+
+
+class DeprecatedSetting:
+    def __init__(self, setting_name, replaced_by=None,
+                 warning_category=None):
+        self.setting_name = setting_name
+        self.replacement_name = replaced_by
+        self.warning_category = warning_category or DeprecationWarning
+        self._prefix = ''
+
+    @property
+    def prefix(self):
+        return self._prefix
+
+    @prefix.setter
+    def prefix(self, value):
+        self._prefix = value
+
+    def warn_if_referenced_directly(self):
+        if not self.replacement_setting:
+            msg = (
+                "The {setting_name} app setting is deprecated in "
+                "favour of using {replacement_name}. Please update your "
+                "code to reference the new setting instead."
+            )
+        else:
+            msg = "The {setting_name} app setting is deprecated."
+
+        warnings.warn(
+            msg.format(
+                setting_name=self.setting_name,
+                replacement_name=self.replacement_name,
+            ),
+            category=self.warning_category
+        )
+
+    def warn_if_deprecated_value_used_by_replacement(self):
+        warnings.warn(
+            "The {setting_name} setting is deprecated in favour of "
+            "using {replacement_name}. Please update your project's "
+            "Django settings to use the new setting name.".format(
+                setting_name=self.prefix + self.setting_name,
+                replacement_name=self.prefix + self.replacement_name,
+            ),
+            category=self.warning_category
+        )
