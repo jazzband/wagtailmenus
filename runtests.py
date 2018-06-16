@@ -24,25 +24,25 @@ def parse_args(args=None):
 
 
 def runtests():
-    args, rest = parse_args()
+    parsed_args, unparsed_args = parse_args()
 
     only_wagtailmenus = r'^wagtailmenus(\.|$)'
-    if args.deprecation == 'all':
+    if parsed_args.deprecation == 'all':
         # Show all deprecation warnings from all packages
         warnings.simplefilter('default', category=DeprecationWarning)
         warnings.simplefilter('default', category=PendingDeprecationWarning)
-    elif args.deprecation == 'pending':
+    elif parsed_args.deprecation == 'pending':
         # Show all deprecation warnings
         warnings.filterwarnings('default', category=DeprecationWarning, module=only_wagtailmenus)
         warnings.filterwarnings('default', category=PendingDeprecationWarning, module=only_wagtailmenus)
-    elif args.deprecation == 'imminent':
+    elif parsed_args.deprecation == 'imminent':
         # Show only imminent deprecation warnings
         warnings.filterwarnings('default', category=DeprecationWarning, module=only_wagtailmenus)
-    elif args.deprecation == 'none':
+    elif parsed_args.deprecation == 'none':
         # Deprecation warnings are ignored
         pass
 
-    argv = [sys.argv[0], 'test'] + rest
+    argv = [sys.argv[0], 'test'] + unparsed_args
     return execute_from_command_line(argv)
 
 if __name__ == '__main__':
