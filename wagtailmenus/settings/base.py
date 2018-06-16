@@ -1,7 +1,5 @@
 import os
-from django import VERSION as DJANGO_VERSION
 from django.conf.global_settings import *  # NOQA
-from wagtail import VERSION as WAGTAIL_VERSION
 
 DEBUG = True
 SITE_ID = 1
@@ -26,35 +24,20 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'wagtail.admin',
+    'wagtail.core',
+    'wagtail.documents',
+    'wagtail.embeds',
+    'wagtail.images',
+    'wagtail.sites',
+    'wagtail.search',
+    'wagtail.snippets',
+    'wagtail.users',
+    'wagtail.contrib.redirects',
     'wagtail.contrib.settings',
     'wagtail.contrib.modeladmin',
+
 )
-if WAGTAIL_VERSION >= (2, 0):
-    INSTALLED_APPS += (
-        'wagtail.search',
-        'wagtail.embeds',
-        'wagtail.images',
-        'wagtail.sites',
-        'wagtail.users',
-        'wagtail.snippets',
-        'wagtail.documents',
-        'wagtail.contrib.redirects',
-        'wagtail.admin',
-        'wagtail.core',
-    )
-else:
-    INSTALLED_APPS += (
-        'wagtail.wagtailsearch',
-        'wagtail.wagtailembeds',
-        'wagtail.wagtailimages',
-        'wagtail.wagtailsites',
-        'wagtail.wagtailusers',
-        'wagtail.wagtailsnippets',
-        'wagtail.wagtaildocs',
-        'wagtail.wagtailredirects',
-        'wagtail.wagtailadmin',
-        'wagtail.wagtailcore',
-    )
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
@@ -98,26 +81,16 @@ TEMPLATES = [
     },
 ]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'wagtail.core.middleware.SiteMiddleware',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 )
-if WAGTAIL_VERSION >= (2, 0):
-    MIDDLEWARE_CLASSES += (
-        'wagtail.core.middleware.SiteMiddleware',
-        'wagtail.contrib.redirects.middleware.RedirectMiddleware',
-    )
-else:
-    MIDDLEWARE_CLASSES += (
-        'wagtail.wagtailcore.middleware.SiteMiddleware',
-        'wagtail.wagtailredirects.middleware.RedirectMiddleware',
-    )
-if DJANGO_VERSION >= (2, 0):
-    MIDDLEWARE = MIDDLEWARE_CLASSES
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
