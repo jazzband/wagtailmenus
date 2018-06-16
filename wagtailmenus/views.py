@@ -56,9 +56,12 @@ class MenuTabbedInterfaceMixin:
             ])
         return edit_handler.bind_to_model(self.model)
 
-    def get_edit_handler_class(self):
-        # For wagtail < 2.0
-        return self.get_edit_handler()
+    def form_invalid(self, form):
+        # TODO: This override is only required for Wagtail<2.1
+        messages.validation_error(
+            self.request, self.get_error_message(), form
+        )
+        return self.render_to_response(self.get_context_data())
 
 
 class MainMenuEditView(MenuTabbedInterfaceMixin, ModelFormView):
