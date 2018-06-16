@@ -195,14 +195,22 @@ class AbstractLinkPage(Page):
         if self.link_page and isinstance(
             self.link_page.specific, AbstractLinkPage
         ):
-            msg = _("A link page cannot link to another link page")
-            raise ValidationError({'link_page': msg})
+            raise ValidationError({
+                'link_page': ValidationError(
+                    _("A link page cannot link to another link page"),
+                    code='invalid'
+                ),
+            })
         if not self.link_url and not self.link_page:
-            msg = _("Please choose an internal page or provide a custom URL")
-            raise ValidationError({'link_url': msg, 'link_page': msg})
+            raise ValidationError(
+                _("Please choose an internal page or provide a custom URL"),
+                code='invalid'
+            )
         if self.link_url and self.link_page:
-            msg = _("Linking to both a page and custom URL is not permitted")
-            raise ValidationError({'link_url': msg, 'link_page': msg})
+            raise ValidationError(
+                _("Linking to both a page and custom URL is not permitted"),
+                code='invalid'
+            )
         super().clean(*args, **kwargs)
 
     def link_page_is_suitable_for_display(
@@ -242,6 +250,9 @@ class AbstractLinkPage(Page):
         # Return the url of the page being linked to, or the custom URL
         if self.link_url:
             return self.link_url
+
+        if not self.link_page:
+            return ''
 
         p = self.link_page.specific  # for tidier referencing below
         if full_url:
