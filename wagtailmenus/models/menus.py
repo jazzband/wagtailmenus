@@ -1153,23 +1153,6 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     def __str__(self):
         return '%s (%s)' % (self.title, self.handle)
 
-    def clean(self, *args, **kwargs):
-        """Raise validation error for unique_together constraint, as it's not
-        currently handled properly by wagtail."""
-
-        clashes = self.__class__.objects.filter(site=self.site,
-                                                handle=self.handle)
-        if self.pk:
-            clashes = clashes.exclude(pk__exact=self.pk)
-        if clashes.exists():
-            msg = _("Site and handle must create a unique combination. A menu "
-                    "already exists with these same two values.")
-            raise ValidationError({
-                'site': [msg],
-                'handle': [msg],
-            })
-        super().clean(*args, **kwargs)
-
     def get_heading(self):
         return self.heading
 
