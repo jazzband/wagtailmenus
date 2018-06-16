@@ -20,29 +20,30 @@ def make_parser():
 
 
 def parse_args(args=None):
-    return make_parser().parse_args(args)
+    return make_parser().parse_known_args(args)
 
 
 def runtests():
-    args = parse_args()
+    args, rest = parse_args()
 
+    only_wagtailmenus = r'^wagtailmenus(\.|$)'
     if args.deprecation == 'all':
         # Show all deprecation warnings from all packages
         warnings.simplefilter('default', category=DeprecationWarning)
         warnings.simplefilter('default', category=PendingDeprecationWarning)
     elif args.deprecation == 'pending':
         # Show all deprecation warnings
-        warnings.filterwarnings('default', category=DeprecationWarning)
-        warnings.filterwarnings('default', category=PendingDeprecationWarning)
+        warnings.filterwarnings('default', category=DeprecationWarning, module=only_wagtailmenus)
+        warnings.filterwarnings('default', category=PendingDeprecationWarning, module=only_wagtailmenus)
     elif args.deprecation == 'imminent':
         # Show only imminent deprecation warnings
-        warnings.filterwarnings('default', category=DeprecationWarning)
+        warnings.filterwarnings('default', category=DeprecationWarning, module=only_wagtailmenus)
     elif args.deprecation == 'none':
-        # Deprecation warnings are ignored by default
+        # Deprecation warnings are ignored
         pass
 
-    argv = [sys.argv[0], 'test']
+    argv = [sys.argv[0], 'test'] + rest
     return execute_from_command_line(argv)
-    
+
 if __name__ == '__main__':
     sys.exit(runtests())
