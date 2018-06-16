@@ -83,7 +83,7 @@ class CMSUsecaseTests(WebTest):
         response = form.submit()
 
         assert 'The flat menu could not be saved due to errors' in response
-        assert 'Site and handle must create a unique combination.' in response
+        assert 'Flat menu with this Site and Handle already exists.' in response
 
     def test_main_menu_save_success(self):
         edit_view = self.app.get(
