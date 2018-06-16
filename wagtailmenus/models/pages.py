@@ -108,12 +108,7 @@ class MenuPageMixin(models.Model):
 
         # Set/reset 'href'
         if use_absolute_page_urls:
-            # Try for 'get_full_url' method (added in Wagtail 1.11) or fall
-            # back to 'full_url' property
-            if hasattr(self, 'get_full_url'):
-                url = self.get_full_url(request=request)
-            else:
-                url = self.full_url
+            url = self.get_full_url(request=request)
         else:
             url = self.relative_url(current_site)
         menuitem.href = url
@@ -236,9 +231,9 @@ class AbstractLinkPage(Page):
         """
         if not self.show_in_menus:
             return False
-        if not self.link_page:
-            return True
-        return self.link_page_is_suitable_for_display()
+        if self.link_page:
+            return self.link_page_is_suitable_for_display()
+        return True
 
     def get_sitemap_urls(self):
         return []  # don't include pages of this type in sitemaps
@@ -250,19 +245,8 @@ class AbstractLinkPage(Page):
 
         p = self.link_page.specific  # for tidier referencing below
         if full_url:
-            # Try for 'get_full_url' method (added in Wagtail 1.11) or fall
-            # back to 'full_url' property
-            if hasattr(p, 'get_full_url'):
-                return p.get_full_url(request=request)
-            return p.full_url
-
-        # Try for 'get_url' method (added in Wagtail 1.11) or fall back to
-        # established 'relative_url' method or 'url' property
-        if hasattr(p, 'get_url'):
-            return p.get_url(request=request, current_site=current_site)
-        if current_site:
-            return p.relative_url(current_site=current_site)
-        return p.url
+            return p.get_full_url(request=request)
+        return p.get_url(request=request, current_site=current_site)
 
     def get_url(self, request=None, current_site=None):
         try:
