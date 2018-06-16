@@ -1,12 +1,9 @@
 from django.template import Library
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.core.models import Page
+
 from wagtailmenus.conf import constants, settings
 from wagtailmenus.errors import SubMenuUsageError
 from wagtailmenus.utils.misc import validate_supplied_values
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core.models import Page
-else:
-    from wagtail.wagtailcore.models import Page
 
 register = Library()
 

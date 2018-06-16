@@ -2,11 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 from bs4 import BeautifulSoup
 from django.test import TestCase
-from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core import hooks
-else:
-    from wagtail.wagtailcore import hooks
+from wagtail.core import hooks
 
 
 class TestHooks(TestCase):

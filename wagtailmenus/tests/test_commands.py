@@ -1,12 +1,7 @@
 from django.test import TestCase
 from django.core.management import call_command
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.core.models import Site
 from wagtailmenus.conf import settings
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core.models import Site
-else:
-    # < Wagtail 2.0
-    from wagtail.wagtailcore.models import Site
 
 
 class TestAutoPopulateMainMenus(TestCase):

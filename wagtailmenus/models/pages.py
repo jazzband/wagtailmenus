@@ -5,14 +5,11 @@ from django.db import models
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.core.models import Page
+
 from wagtailmenus.conf import settings
 from wagtailmenus.forms import LinkPageAdminForm
 from wagtailmenus.panels import menupage_settings_panels, linkpage_edit_handler
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core.models import Page
-else:
-    from wagtail.wagtailcore.models import Page
 
 
 class MenuPageMixin(models.Model):

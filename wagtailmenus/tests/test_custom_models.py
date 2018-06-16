@@ -5,17 +5,14 @@ from bs4 import BeautifulSoup
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase, override_settings
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.core.models import Site
+
 from wagtailmenus import get_main_menu_model, get_flat_menu_model
 from wagtailmenus.models import MainMenu, FlatMenu
 from wagtailmenus.tests.models import (
     MainMenuCustomMenuItem, FlatMenuCustomMenuItem, NoAbsoluteUrlsPage,
     CustomMainMenu, CustomMainMenuItem, CustomFlatMenu, CustomFlatMenuItem
 )
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core.models import Site
-else:
-    from wagtail.wagtailcore.models import Site
 
 
 @override_settings(

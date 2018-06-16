@@ -6,18 +6,14 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.text import capfirst
 from django.utils.translation import ugettext as _
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.admin import messages
+from wagtail.admin.edit_handlers import ObjectList, TabbedInterface
 from wagtail.contrib.modeladmin.views import (
-    WMABaseView, CreateView, EditView, ModelFormView)
+    WMABaseView, CreateView, EditView, ModelFormView
+)
+from wagtail.core.models import Site
+
 from wagtailmenus.conf import settings
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.admin import messages
-    from wagtail.admin.edit_handlers import ObjectList, TabbedInterface
-    from wagtail.core.models import Site
-else:
-    from wagtail.wagtailadmin import messages
-    from wagtail.wagtailadmin.edit_handlers import ObjectList, TabbedInterface
-    from wagtail.wagtailcore.models import Site
 
 
 class SiteSwitchForm(forms.Form):

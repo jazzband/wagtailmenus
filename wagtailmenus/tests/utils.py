@@ -1,6 +1,5 @@
 from django.template import RequestContext
 from django.test.client import RequestFactory
-from wagtail import VERSION as WAGTAIL_VERSION
 from wagtailmenus.conf import constants
 from wagtailmenus.models.menus import ContextualVals, OptionVals
 
@@ -13,18 +12,12 @@ SINGLE_ITEM_SUB_MENU_TEMPLATE_LIST = ('menus/sub_menu_level_2.html',)
 
 
 def get_page_model():
-    if WAGTAIL_VERSION >= (2, 0):
-        from wagtail.core.models import Page
-    else:
-        from wagtail.wagtailcore.models import Page
+    from wagtail.core.models import Page
     return Page
 
 
 def get_site_model():
-    if WAGTAIL_VERSION >= (2, 0):
-        from wagtail.core.models import Site
-    else:
-        from wagtail.wagtailcore.models import Site
+    from wagtail.core.models import Site
     return Site
 
 
