@@ -1,9 +1,10 @@
+import warnings
 from collections import defaultdict, namedtuple
 from types import GeneratorType
 
 from django.db import models
 from django.db.models import BooleanField, Case, Q, When
-from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import get_template, select_template
 from django.utils import six
 from django.utils.functional import cached_property, lazy
@@ -15,6 +16,8 @@ from wagtail.core.models import Page, Site
 
 from wagtailmenus import forms, panels
 from wagtailmenus.conf import constants, settings
+from wagtailmenus.utils.deprecation import RemovedInWagtailMenus213Warning
+from wagtailmenus.utils.inspection import accepts_kwarg
 from wagtailmenus.utils.misc import get_site_from_request
 from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
@@ -496,18 +499,22 @@ class Menu:
                 menuitem.link_page = page
 
             if opt_vals.use_absolute_page_urls:
-                # Pages only have `get_full_url` from Wagtail 1.11 onwards
-                if hasattr(item, 'get_full_url'):
-                    url = item.get_full_url(request=request)
-                # Fallback for Wagtail versions prior to 1.11
-                else:
-                    url = item.full_url
+                item.href = item.get_full_url(request=request)
             else:
                 # Both `Page` and `MenuItem` objects have a `relative_url`
                 # method that we can use to calculate a value for the `href`
                 # attribute
-                url = item.relative_url(current_site)
-            setattr(item, 'href', url)
+                if accepts_kwarg(item.relative_url, 'request'):
+                    item.href = item.relative_url(current_site, request)
+                else:
+                    warnings.warn(
+                        "The relative_url() method on custom MenuItem classes "
+                        "must accept a 'request' keyword argument. Please "
+                        "update the method signature on your {} class."
+                        .format(item.__class__.__name__),
+                        category=RemovedInWagtailMenus213Warning
+                    )
+                    item.href = item.relative_url(current_site)
             yield item
 
     def modify_menu_items(self, menu_items):
