@@ -16,6 +16,7 @@ branch_url = "%stree/stable/%s" % (base_url, stable_branch_name)
 testing_extras = [
     'beautifulsoup4>=4.5',
     'coverage>=4.5',
+    'django-webtest==1.9.2',  # Pinned for Django <2 compatibility
     'wagtail-condensedinlinepanel>=0.5,<0.6',
 ]
 
