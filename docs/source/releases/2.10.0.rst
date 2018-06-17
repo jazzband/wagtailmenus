@@ -4,7 +4,7 @@ Wagtailmenus 2.10 release notes
 
 .. NOTE ::
     
-    In order to keep wagtailmenus working with the latest versions of Wagtail and Django, with code that is clean and maintainable, this version will be the last feature release to support Wagtail or Django versions earlier than 2.0.
+    In order to keep wagtailmenus working with the latest versions of Wagtail and Django, with code that is clean and maintainable, this version will be the last feature release to support Wagtail versions earlier than 2.0, and Django versions earlier than 1.11.
 
 
 .. contents::
