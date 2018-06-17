@@ -15,10 +15,9 @@ matrix:
     python: 3.6
   - env: TOXENV=py36-dj2-wt21
     python: 3.6
-
-allow_failures:
-  # Ignore failures for Wagtail 2.1 until #4612 is fixed 
-  - env: TOXENV=py36-dj2-wt21
+  allow_failures:
+    # Ignore failures for Wagtail 2.1 until #4612 is fixed 
+    - env: TOXENV=py36-dj2-wt21
 
 install:
 - pip install tox codecov
