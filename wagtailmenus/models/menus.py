@@ -507,7 +507,8 @@ class Menu:
                 warnings.warn(
                     "The relative_url() method on custom MenuItem classes "
                     "must accept a 'request' keyword argument. Please update "
-                    "the method signature on your {} class.".format(
+                    "the method signature on your {} class. It will be "
+                    "mandatory in Wagtail 2.13.".format(
                         item.__class__.__name__
                     ),
                     category=RemovedInWagtailMenus213Warning
@@ -516,7 +517,7 @@ class Menu:
 
             return_list.append(item)
 
-        return return_list
+        return (item for item in return_list)
 
     def modify_menu_items(self, menu_items):
         """
