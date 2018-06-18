@@ -381,6 +381,7 @@ class Menu:
         ancestor_css_class = settings.ACTIVE_ANCESTOR_CLASS
         stop_at_this_level = (ctx_vals.current_level >= self.max_levels)
 
+        return_list = []
         for item in menu_items:
 
             if isinstance(item, MenuItem):
@@ -410,7 +411,7 @@ class Menu:
                     else:
                         url = item.relative_url(current_site, request)
                     setattr(item, 'href', url)
-                    yield item
+                    return_list.append(item)
                 continue
 
             else:
@@ -500,22 +501,22 @@ class Menu:
 
             if opt_vals.use_absolute_page_urls:
                 item.href = item.get_full_url(request=request)
+            elif accepts_kwarg(item.relative_url, 'request'):
+                item.href = item.relative_url(current_site, request)
             else:
-                # Both `Page` and `MenuItem` objects have a `relative_url`
-                # method that we can use to calculate a value for the `href`
-                # attribute
-                if accepts_kwarg(item.relative_url, 'request'):
-                    item.href = item.relative_url(current_site, request)
-                else:
-                    warnings.warn(
-                        "The relative_url() method on custom MenuItem classes "
-                        "must accept a 'request' keyword argument. Please "
-                        "update the method signature on your {} class."
-                        .format(item.__class__.__name__),
-                        category=RemovedInWagtailMenus213Warning
-                    )
-                    item.href = item.relative_url(current_site)
-            yield item
+                warnings.warn(
+                    "The relative_url() method on custom MenuItem classes "
+                    "must accept a 'request' keyword argument. Please update "
+                    "the method signature on your {} class.".format(
+                        item.__class__.__name__
+                    ),
+                    category=RemovedInWagtailMenus213Warning
+                )
+                item.href = item.relative_url(current_site)
+
+            return_list.append(item)
+
+        return return_list
 
     def modify_menu_items(self, menu_items):
         """
