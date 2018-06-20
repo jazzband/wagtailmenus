@@ -22,16 +22,23 @@ TBA
 Minor changes & bug fixes 
 =========================
 
-TBA
+- Added new 'Wagtail' trove classifiers in ``setup.py`` to reflect Wagtail version support.
+- Updated ``runtests.py`` to pass on any unparsed option arguments to Django's test method.
+- Updated ``runtests.py`` to filter out deprecation warnings originating from other apps by default. 
+- Updated ``MenuItem.relative_url()`` to accept a ``request`` parameter (for parity with ``wagtail.core.models.Page.relative_url()``), so that it can pass it on to the page method.
+- Updated ``Menu.prime_menu_items()`` to send the current ``HttpRequest`` to that ``MenuItem.relative_url()`` and ``Page.relative_url()``.
+- Updated admin views to utilise ``wagtail.admin.messages.validation_error()`` for reporting field-specific and non-field errors (Wagtail 2.1 has this built-in, but Wagtail 2.0 does not). 
 
 
 Deprecations
 ============
 
-TBA
+- If you're using custom ``MenuItem`` models in your project, and are overriding ``relative_url()``, you should update the method signature on your custom model to accept a ``request`` keyword argument, and it on to ``link_page.relative_url()`` and ``super().relative_url()`` (in addition to ``site``) if calling either of those. This will be mandatory in wagtailmenus 1.13.
 
 
 Upgrade considerations
 ======================
 
-TBA
+- Dropped support for Wagtail versions 1.10 to 1.13.
+- Dropped support for Django versions 1.8 to 1.10.
+- Menu.prime_menu_items() now returns a list instead of a generator. This is required to allow the method to raise warnings.
