@@ -517,7 +517,7 @@ class Menu:
 
             return_list.append(item)
 
-        return (item for item in return_list)
+        return return_list
 
     def modify_menu_items(self, menu_items):
         """
