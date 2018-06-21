@@ -16,8 +16,8 @@ branch_url = "%stree/stable/%s" % (base_url, stable_branch_name)
 testing_extras = [
     'beautifulsoup4>=4.5',
     'coverage>=4.5',
-    'django-webtest==1.9.2',  # Pinned for Django <2 compatibility
-    'wagtail-condensedinlinepanel==0.4.2',  # Pinned for Wagtail <2 compatibility
+    'django-webtest>=1.9,<1.10',
+    'wagtail-condensedinlinepanel>=0.5,<0.6',
 ]
 
 documentation_extras = [
@@ -52,16 +52,14 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Framework :: Django',
-        'Framework :: Django :: 1.10',
         'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.0',
+        'Framework :: Wagtail :: 2.0',
+        'Framework :: Wagtail :: 2.1',
         'Topic :: Internet :: WWW/HTTP',
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     ],
     python_requires='>=3.4,<3.8',
-    install_requires=[
-        "wagtail>=1.10",
-    ],
     extras_require={
         'testing': testing_extras,
         'docs': documentation_extras

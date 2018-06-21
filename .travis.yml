@@ -5,18 +5,19 @@ sudo: required
 
 matrix:
   include: 
-  - env: TOXENV=py34-dj110-wt110
-    python: 3.4 
-  - env: TOXENV=py35-dj110-wt111
-    python: 3.5 
-  - env: TOXENV=py36-dj110-wt112
-    python: 3.6
-  - env: TOXENV=py36-dj111-wt113
-    python: 3.6
-  - env: TOXENV=py36-dj111-wt2
-    python: 3.6
+  - env: TOXENV=py34-dj111-wt2
+    python: 3.4
+  - env: TOXENV=py34-dj2-wt2
+    python: 3.4
+  - env: TOXENV=py35-dj2-wt2
+    python: 3.5
   - env: TOXENV=py36-dj2-wt2
     python: 3.6
+  - env: TOXENV=py36-dj2-wt21
+    python: 3.6
+  allow_failures:
+    # Ignore failures for Wagtail 2.1 until #4612 is fixed 
+    - env: TOXENV=py36-dj2-wt21
 
 install:
 - pip install tox codecov

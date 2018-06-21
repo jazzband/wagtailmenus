@@ -2,19 +2,12 @@ from distutils.version import LooseVersion
 
 from django.conf import settings as django_settings
 from django.utils.translation import ugettext_lazy as _
-from wagtailmenus.conf import settings
+from wagtail.admin.edit_handlers import (
+    FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel,
+    PageChooserPanel, ObjectList, TabbedInterface
+)
 
-from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.admin.edit_handlers import (
-        FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel,
-        PageChooserPanel, ObjectList, TabbedInterface
-    )
-else:
-    from wagtail.wagtailadmin.edit_handlers import (
-        FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel,
-        PageChooserPanel, ObjectList, TabbedInterface
-    )
+from wagtailmenus.conf import settings
 
 
 # ########################################################

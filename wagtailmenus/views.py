@@ -6,18 +6,14 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.text import capfirst
 from django.utils.translation import ugettext as _
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.admin import messages
+from wagtail.admin.edit_handlers import ObjectList, TabbedInterface
 from wagtail.contrib.modeladmin.views import (
-    WMABaseView, CreateView, EditView, ModelFormView)
+    WMABaseView, CreateView, EditView, ModelFormView
+)
+from wagtail.core.models import Site
+
 from wagtailmenus.conf import settings
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.admin import messages
-    from wagtail.admin.edit_handlers import ObjectList, TabbedInterface
-    from wagtail.core.models import Site
-else:
-    from wagtail.wagtailadmin import messages
-    from wagtail.wagtailadmin.edit_handlers import ObjectList, TabbedInterface
-    from wagtail.wagtailcore.models import Site
 
 
 class SiteSwitchForm(forms.Form):
@@ -60,9 +56,12 @@ class MenuTabbedInterfaceMixin:
             ])
         return edit_handler.bind_to_model(self.model)
 
-    def get_edit_handler_class(self):
-        # For wagtail < 2.0
-        return self.get_edit_handler()
+    def form_invalid(self, form):
+        # TODO: This override is only required for Wagtail<2.1
+        messages.validation_error(
+            self.request, self.get_error_message(), form
+        )
+        return self.render_to_response(self.get_context_data())
 
 
 class MainMenuEditView(MenuTabbedInterfaceMixin, ModelFormView):

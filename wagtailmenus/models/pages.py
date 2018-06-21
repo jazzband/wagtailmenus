@@ -5,14 +5,11 @@ from django.db import models
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.core.models import Page
+
 from wagtailmenus.conf import settings
 from wagtailmenus.forms import LinkPageAdminForm
 from wagtailmenus.panels import menupage_settings_panels, linkpage_edit_handler
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core.models import Page
-else:
-    from wagtail.wagtailcore.models import Page
 
 
 class MenuPageMixin(models.Model):
@@ -111,12 +108,7 @@ class MenuPageMixin(models.Model):
 
         # Set/reset 'href'
         if use_absolute_page_urls:
-            # Try for 'get_full_url' method (added in Wagtail 1.11) or fall
-            # back to 'full_url' property
-            if hasattr(self, 'get_full_url'):
-                url = self.get_full_url(request=request)
-            else:
-                url = self.full_url
+            url = self.get_full_url(request=request)
         else:
             url = self.relative_url(current_site)
         menuitem.href = url
@@ -203,14 +195,22 @@ class AbstractLinkPage(Page):
         if self.link_page and isinstance(
             self.link_page.specific, AbstractLinkPage
         ):
-            msg = _("A link page cannot link to another link page")
-            raise ValidationError({'link_page': msg})
+            raise ValidationError({
+                'link_page': ValidationError(
+                    _("A link page cannot link to another link page"),
+                    code='invalid'
+                ),
+            })
         if not self.link_url and not self.link_page:
-            msg = _("Please choose an internal page or provide a custom URL")
-            raise ValidationError({'link_url': msg, 'link_page': msg})
+            raise ValidationError(
+                _("Please choose an internal page or provide a custom URL"),
+                code='invalid'
+            )
         if self.link_url and self.link_page:
-            msg = _("Linking to both a page and custom URL is not permitted")
-            raise ValidationError({'link_url': msg, 'link_page': msg})
+            raise ValidationError(
+                _("Linking to both a page and custom URL is not permitted"),
+                code='invalid'
+            )
         super().clean(*args, **kwargs)
 
     def link_page_is_suitable_for_display(
@@ -239,9 +239,9 @@ class AbstractLinkPage(Page):
         """
         if not self.show_in_menus:
             return False
-        if not self.link_page:
-            return True
-        return self.link_page_is_suitable_for_display()
+        if self.link_page:
+            return self.link_page_is_suitable_for_display()
+        return True
 
     def get_sitemap_urls(self):
         return []  # don't include pages of this type in sitemaps
@@ -251,21 +251,13 @@ class AbstractLinkPage(Page):
         if self.link_url:
             return self.link_url
 
+        if not self.link_page:
+            return ''
+
         p = self.link_page.specific  # for tidier referencing below
         if full_url:
-            # Try for 'get_full_url' method (added in Wagtail 1.11) or fall
-            # back to 'full_url' property
-            if hasattr(p, 'get_full_url'):
-                return p.get_full_url(request=request)
-            return p.full_url
-
-        # Try for 'get_url' method (added in Wagtail 1.11) or fall back to
-        # established 'relative_url' method or 'url' property
-        if hasattr(p, 'get_url'):
-            return p.get_url(request=request, current_site=current_site)
-        if current_site:
-            return p.relative_url(current_site=current_site)
-        return p.url
+            return p.get_full_url(request=request)
+        return p.get_url(request=request, current_site=current_site)
 
     def get_url(self, request=None, current_site=None):
         try:

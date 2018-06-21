@@ -1,31 +1,27 @@
+import warnings
 from collections import defaultdict, namedtuple
 from types import GeneratorType
 
 from django.db import models
 from django.db.models import BooleanField, Case, Q, When
-from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import get_template, select_template
 from django.utils import six
 from django.utils.functional import cached_property, lazy
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.core import hooks
+from wagtail.core.models import Page, Site
 
 from wagtailmenus import forms, panels
 from wagtailmenus.conf import constants, settings
+from wagtailmenus.utils.deprecation import RemovedInWagtailMenus213Warning
+from wagtailmenus.utils.inspection import accepts_kwarg
 from wagtailmenus.utils.misc import get_site_from_request
-
 from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
 from .pages import AbstractLinkPage
-
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core import hooks
-    from wagtail.core.models import Page, Site
-else:
-    from wagtail.wagtailcore import hooks
-    from wagtail.wagtailcore.models import Page, Site
 
 
 mark_safe_lazy = lazy(mark_safe, six.text_type)
@@ -385,6 +381,7 @@ class Menu:
         ancestor_css_class = settings.ACTIVE_ANCESTOR_CLASS
         stop_at_this_level = (ctx_vals.current_level >= self.max_levels)
 
+        return_list = []
         for item in menu_items:
 
             if isinstance(item, MenuItem):
@@ -414,7 +411,7 @@ class Menu:
                     else:
                         url = item.relative_url(current_site, request)
                     setattr(item, 'href', url)
-                    yield item
+                    return_list.append(item)
                 continue
 
             else:
@@ -503,19 +500,24 @@ class Menu:
                 menuitem.link_page = page
 
             if opt_vals.use_absolute_page_urls:
-                # Pages only have `get_full_url` from Wagtail 1.11 onwards
-                if hasattr(item, 'get_full_url'):
-                    url = item.get_full_url(request=request)
-                # Fallback for Wagtail versions prior to 1.11
-                else:
-                    url = item.full_url
+                item.href = item.get_full_url(request=request)
+            elif accepts_kwarg(item.relative_url, 'request'):
+                item.href = item.relative_url(current_site, request)
             else:
-                # Both `Page` and `MenuItem` objects have a `relative_url`
-                # method that we can use to calculate a value for the `href`
-                # attribute
-                url = item.relative_url(current_site)
-            setattr(item, 'href', url)
-            yield item
+                warnings.warn(
+                    "The relative_url() method on custom MenuItem classes "
+                    "must accept a 'request' keyword argument. Please update "
+                    "the method signature on your {} class. It will be "
+                    "mandatory in Wagtail 2.13.".format(
+                        item.__class__.__name__
+                    ),
+                    category=RemovedInWagtailMenus213Warning
+                )
+                item.href = item.relative_url(current_site)
+
+            return_list.append(item)
+
+        return return_list
 
     def modify_menu_items(self, menu_items):
         """
@@ -1159,23 +1161,6 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
 
     def __str__(self):
         return '%s (%s)' % (self.title, self.handle)
-
-    def clean(self, *args, **kwargs):
-        """Raise validation error for unique_together constraint, as it's not
-        currently handled properly by wagtail."""
-
-        clashes = self.__class__.objects.filter(site=self.site,
-                                                handle=self.handle)
-        if self.pk:
-            clashes = clashes.exclude(pk__exact=self.pk)
-        if clashes.exists():
-            msg = _("Site and handle must create a unique combination. A menu "
-                    "already exists with these same two values.")
-            raise ValidationError({
-                'site': [msg],
-                'handle': [msg],
-            })
-        super().clean(*args, **kwargs)
 
     def get_heading(self):
         return self.heading

@@ -1,10 +1,7 @@
 from bs4 import BeautifulSoup
 from django.test import TestCase, override_settings
-from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core.models import Site
-else:
-    from wagtail.wagtailcore.models import Site
+from wagtail.core.models import Site
+
 from wagtailmenus.errors import SubMenuUsageError
 from wagtailmenus.models import MainMenu, FlatMenu
 from wagtailmenus.templatetags.menu_tags import validate_supplied_values

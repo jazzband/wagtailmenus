@@ -7,7 +7,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase, TransactionTestCase, override_settings, \
     modify_settings
 from django_webtest import WebTest
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.admin.edit_handlers import ObjectList, InlinePanel
+from wagtail.core.models import Page, Site
 
 from wagtailmenus import (
     get_flat_menu_model, get_main_menu_model, wagtail_hooks
@@ -16,13 +17,6 @@ from wagtailmenus.panels import (
     FlatMenuItemsInlinePanel, MainMenuItemsInlinePanel
 )
 from wagtailmenus.tests.models import LinkPage
-
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.admin.edit_handlers import ObjectList, InlinePanel
-    from wagtail.core.models import Page, Site
-else:
-    from wagtail.wagtailadmin.edit_handlers import ObjectList, InlinePanel
-    from wagtail.wagtailcore.models import Page, Site
 
 FlatMenu = get_flat_menu_model()
 
@@ -89,7 +83,7 @@ class CMSUsecaseTests(WebTest):
         response = form.submit()
 
         assert 'The flat menu could not be saved due to errors' in response
-        assert 'Site and handle must create a unique combination.' in response
+        assert 'Flat menu with this Site and Handle already exists.' in response
 
     def test_main_menu_save_success(self):
         edit_view = self.app.get(

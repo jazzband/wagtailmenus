@@ -1,6 +1,19 @@
 Changelog
 =========
 
+2.11.0 (XX.XX.XXX)
+------------------
+
+* Dropped support for Wagtail versions 1.10 to 1.13.
+* Dropped support for Django versions 1.8 to 1.10.
+* Updated trove classifiers in `setup.py` to reflect Django and Wagtail version support.
+* Updated `runtests.py` to pass on any unparsed option arguments to Django's test method.
+* Updated `runtests.py` to filter out deprecation warnings originating from other apps by default. 
+* Updated `MenuItem.relative_url()` to accept a `request` parameter (for parity with `wagtail.core.models.Page.relative_url()`), so that it can pass it on to the page method.
+* Updated `Menu.prime_menu_items()` to send the current `HttpRequest` to that `MenuItem.relative_url()` and `Page.relative_url()`.
+* Updated admin views to utilise `wagtail.admin.messages.validation_error()` for reporting field-specific and non-field errors.
+* Removed redundant `install_requires` line from `setup.py`. Compatibility is made clear in other places - there's no need to force a minimum installed Wagtail version here. 
+
 
 2.10.0 (14.06.2018)
 -------------------

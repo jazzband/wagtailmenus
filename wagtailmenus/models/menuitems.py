@@ -1,17 +1,14 @@
 from urllib.parse import urlparse
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.fields import ParentalKey
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
+from wagtail.core.models import Page, Orderable
+
 from wagtailmenus.conf import settings
 from wagtailmenus.managers import MenuItemManager
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
-    from wagtail.core.models import Page, Orderable
-else:
-    from wagtail.wagtailadmin.edit_handlers import FieldPanel, PageChooserPanel
-    from wagtail.wagtailcore.models import Page, Orderable
 
 
 #########################################################
@@ -92,10 +89,12 @@ class AbstractMenuItem(models.Model, MenuItem):
             self.link_page.title
         )
 
-    def relative_url(self, site=None):
+    def relative_url(self, site=None, request=None):
         if self.link_page:
             try:
-                return self.link_page.relative_url(site) + self.url_append
+                page_url = self.link_page.get_url(
+                    request=request, current_site=site)
+                return page_url + self.url_append
             except TypeError:
                 return ''
         return self.link_url + self.url_append
@@ -103,13 +102,8 @@ class AbstractMenuItem(models.Model, MenuItem):
     def get_full_url(self, request=None):
         if self.link_page:
             try:
-                # Try for 'get_full_url' method (added in Wagtail 1.11) or fall
-                # back to 'full_url' property
-                if hasattr(self.link_page, 'get_full_url'):
-                    full_url = self.link_page.get_full_url(request=request)
-                else:
-                    full_url = self.link_page.full_url
-                return full_url + self.url_append
+                page_url = self.link_page.get_full_url(request=request)
+                return page_url + self.url_append
             except TypeError:
                 return ''
         return self.link_url + self.url_append
