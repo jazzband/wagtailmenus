@@ -59,7 +59,7 @@ For example, if your project uses an 'info' menu in the header, a 'footer' menu 
     )
 
 
-.. _WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN:
+.. _FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN:
 
 ``WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -69,7 +69,7 @@ Default value: ``True``
 By default, 'Flat menus' are editable in the Wagtail CMS. Setting this to `False` in your project's settings will disable editing 'Flat menus' in the Wagtail CMS.
 
 
-.. _WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS:
+.. _FLAT_MENUS_MODELADMIN_CLASS:
 
 ``_WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -98,7 +98,7 @@ Default value: ``'list-ol'``
 Use this to change the icon used to represent 'Main menus' in the Wagtail CMS.
 
 
-.. _WAGTAILMENUS_MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN:
+.. _MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN:
 
 ``WAGTAILMENUS_MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -108,7 +108,7 @@ Default value: ``True``
 By default, 'Main menus' are editable in the Wagtail CMS. Setting this to `False` in your project's settings will disable editing 'Main menus' in the Wagtail CMS.
 
 
-.. _WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS:
+.. _MAIN_MENUS_MODELADMIN_CLASS:
 
 ``_WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -58,6 +58,6 @@ Projects come in all shapes and sizes, and not all call for both types of menu. 
 
 See the settings documentation for more information:
 
-:ref:`WAGTAILMENUS_MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN`
+:ref:`MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN`
 
-:ref:`WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN`
+:ref:`FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN`
