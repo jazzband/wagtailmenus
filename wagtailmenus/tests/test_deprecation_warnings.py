@@ -1,39 +1,9 @@
 import warnings
 
-from django.test import TestCase, override_settings
+from django.test import TestCase
 
 
 class TestDeprecationWarningsRaised(TestCase):
-
-    @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomChildrenMenu',)
-    def test_warns_when_value_found_using_deprecated_setting_name(self):
-        from wagtailmenus.conf import settings
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            self.assertEqual(
-                settings.CHILDREN_MENU_CLASS,
-                'wagtailmenus.tests.models.CustomChildrenMenu'
-            )
-        self.assertIn(
-            "The WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH setting is "
-            "deprecated in favour of using WAGTAILMENUS_CHILDREN_MENU_CLASS",
-            str(w[0].message)
-        )
-
-    @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH='wagtailmenus.tests.models.CustomChildrenMenu',)
-    def test_warns_when_deprecated_setting_referenced_on_settings_module(self):
-        from wagtailmenus.conf import settings
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            self.assertEqual(
-                settings.CHILDREN_MENU_CLASS_PATH,
-                'wagtailmenus.tests.models.CustomChildrenMenu'
-            )
-        self.assertIn(
-            "CHILDREN_MENU_CLASS_PATH is deprecated in favour of using "
-            "CHILDREN_MENU_CLASS in app settings",
-            str(w[0].message)
-        )
 
     def test_warns_when_app_settings_imported_from_old_location(self):
         with warnings.catch_warnings(record=True) as w:

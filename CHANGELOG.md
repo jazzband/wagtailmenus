@@ -13,6 +13,11 @@ Changelog
 * Updated `Menu.prime_menu_items()` to send the current `HttpRequest` to that `MenuItem.relative_url()` and `Page.relative_url()`.
 * Updated admin views to utilise `wagtail.admin.messages.validation_error()` for reporting field-specific and non-field errors.
 * Removed redundant `install_requires` line from `setup.py`. Compatibility is made clear in other places - there's no need to force a minimum installed Wagtail version here. 
+* Moved custom `wagtail.contrib.modeladmin` classes out of `wagtailmenus.wagtail_hooks` and into a new `wagtailmenus.modeladmin` module.
+* Added the `WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS` setting to allow the default `ModelAdmin` class used to enable flat menu editing in the Wagtail admin area to be swapped out for a custom one. 
+* Added the `WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS` setting to allow the default `ModelAdmin` class used to enable main menu editing in the Wagtail admin area to be swapped out for a custom one. 
+* Moved most 'App settings related' tests to `wagtailmenus.conf.tests`, so that they're all in one place.
+
 
 
 2.10.0 (14.06.2018)
