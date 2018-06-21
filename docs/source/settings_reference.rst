@@ -50,11 +50,42 @@ For example, if your project uses an 'info' menu in the header, a 'footer' menu 
 
 .. code-block:: python
 
+    # settings.py
+
     WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES = (
         ('info', 'Info'),
         ('help', 'Help'),
         ('footer', 'Footer'),
     )
+
+
+.. _WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN:
+
+``WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Default value: ``True``
+
+By default, 'Flat menus' are editable in the Wagtail CMS. Setting this to `False` in your project's settings will disable editing 'Flat menus' in the Wagtail CMS.
+
+
+.. _WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS:
+
+``_WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Default value: ``'wagtailmenus.modeladmin.FlatMenuAdmin'``
+
+If you wish to override the ``ModelAdmin`` class used to represent **'Flat menus'** in the Wagtail admin area for your project (e.g. to display additional custom fields in the listing view, or change/add new views), you can do so by using this setting to swap out the default class for a custom one. e.g.
+
+.. code-block:: python
+
+    # settings.py
+
+    WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS = "projectname.appname.modulename.ClassName"
+
+
+The value should be an import path string, rather than a direct pointer to the class itself. Wagailmenus will lazily import the class from this path when it is required. If the path is invalid, and ``ImproperlyConfigured`` exception will be raised.
 
 
 .. _MAINMENU_MENU_ICON:
@@ -77,14 +108,22 @@ Default value: ``True``
 By default, 'Main menus' are editable in the Wagtail CMS. Setting this to `False` in your project's settings will disable editing 'Main menus' in the Wagtail CMS.
 
 
-.. _WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN:
+.. _WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS:
 
-``WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN``
+``_WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Default value: ``True``
+Default value: ``'wagtailmenus.modeladmin.MainMenuAdmin'``
 
-By default, 'Flat menus' are editable in the Wagtail CMS. Setting this to `False` in your project's settings will disable editing 'Flat menus' in the Wagtail CMS.
+If you wish to override the ``ModelAdmin`` class used to represent **'Main menus'** in the Wagtail admin area for your project (e.g. to display additional custom fields in the listing view, or change/add new views), you can do so by using this setting to swap out the default class for a custom one. e.g.
+
+.. code-block:: python
+
+    # settings.py
+
+    WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS = "projectname.appname.modulename.ClassName"
+
+The value should be an import path string, rather than a direct pointer to the class itself. Wagailmenus will lazily import the class from this path when it is required. If the path is invalid, and ``ImproperlyConfigured`` exception will be raised.
 
 
 ----------------------------------------------
@@ -152,6 +191,8 @@ Default value: ``False``
 If you have a multi-site project, and want to be able to use different templates for some or all of those sites, wagtailmenus can be configured to look for additional 'site specific' paths for each template. To enable this feature, you add the following to your project's settings:
 
 .. code-block:: python
+    
+    # settings.py
 
     WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS = True
 
