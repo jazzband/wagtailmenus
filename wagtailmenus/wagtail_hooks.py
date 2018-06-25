@@ -7,11 +7,11 @@ from wagtailmenus.modeladmin import ( # noqa
 )
 
 if settings.MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN:
-    modeladmin_register(settings.get_object('MAIN_MENUS_MODELADMIN_CLASS'))
+    modeladmin_register(settings.objects.MAIN_MENUS_MODELADMIN_CLASS)
 
 
 if settings.FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN:
-    modeladmin_register(settings.get_object('FLAT_MENUS_MODELADMIN_CLASS'))
+    modeladmin_register(settings.objects.FLAT_MENUS_MODELADMIN_CLASS)
 
 
 @hooks.register('before_serve_page')

@@ -853,7 +853,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
 
     @classmethod
     def _get_menu_items_related_name(cls):
-        return settings.get(cls.menu_items_relation_setting_name)
+        return getattr(settings, cls.menu_items_relation_setting_name)
 
     def get_base_menuitem_queryset(self):
         qs = self.get_menu_items_manager().for_display()

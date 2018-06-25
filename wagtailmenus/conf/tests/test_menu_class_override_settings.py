@@ -13,14 +13,14 @@ class TestChildrenMenuClassOverriding(TestCase):
 
     def test_default_value(self):
         self.assertEqual(
-            settings.get_object('CHILDREN_MENU_CLASS'),
+            settings.objects.CHILDREN_MENU_CLASS,
             default_models.ChildrenMenu
         )
 
     @override_settings(WAGTAILMENUS_CHILDREN_MENU_CLASS='wagtailmenus.tests.models.CustomChildrenMenu')
     def test_successful_override(self):
         self.assertEqual(
-            settings.get_object('CHILDREN_MENU_CLASS'),
+            settings.objects.CHILDREN_MENU_CLASS,
             test_models.CustomChildrenMenu
         )
 
@@ -31,7 +31,7 @@ class TestChildrenMenuClassOverriding(TestCase):
             "WAGTAILMENUS_CHILDREN_MENU_CLASS must be a full dotted "
             "python import path e.g. 'project.app.module.Class'"
         )):
-            settings.get_object('CHILDREN_MENU_CLASS')
+            settings.objects.CHILDREN_MENU_CLASS
 
 
 class TestSectionMenuClassOverriding(TestCase):
@@ -41,14 +41,14 @@ class TestSectionMenuClassOverriding(TestCase):
 
     def test_default_value(self):
         self.assertEqual(
-            settings.get_object('SECTION_MENU_CLASS'),
+            settings.objects.SECTION_MENU_CLASS,
             default_models.SectionMenu
         )
 
     @override_settings(WAGTAILMENUS_SECTION_MENU_CLASS='wagtailmenus.tests.models.CustomSectionMenu')
     def test_successful_override(self):
         self.assertEqual(
-            settings.get_object('SECTION_MENU_CLASS'),
+            settings.objects.SECTION_MENU_CLASS,
             test_models.CustomSectionMenu
         )
 
@@ -59,4 +59,4 @@ class TestSectionMenuClassOverriding(TestCase):
             "WAGTAILMENUS_SECTION_MENU_CLASS must be a full dotted "
             "python import path e.g. 'project.app.module.Class'"
         )):
-            settings.get_object('SECTION_MENU_CLASS')
+            settings.objects.SECTION_MENU_CLASS

@@ -10,7 +10,7 @@ from wagtailmenus import views
 
 
 class MainMenuAdmin(ModelAdmin):
-    model = settings.get_model('MAIN_MENU_MODEL')
+    model = settings.models.MAIN_MENU_MODEL
     menu_label = _('Main menu')
     menu_icon = settings.MAINMENU_MENU_ICON
     index_view_class = views.MainMenuIndexView
@@ -61,7 +61,7 @@ class FlatMenuButtonHelper(ButtonHelper):
 
 
 class FlatMenuAdmin(ModelAdmin):
-    model = settings.get_model('FLAT_MENU_MODEL')
+    model = settings.models.FLAT_MENU_MODEL
     menu_label = _('Flat menus')
     menu_icon = settings.FLATMENU_MENU_ICON
     button_helper_class = FlatMenuButtonHelper

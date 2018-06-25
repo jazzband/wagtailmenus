@@ -14,14 +14,14 @@ class TestFlatMenuModelAdminOverriding(TestCase):
 
     def test_default_value(self):
         self.assertEqual(
-            settings.get_object('FLAT_MENUS_MODELADMIN_CLASS'),
+            settings.objects.FLAT_MENUS_MODELADMIN_CLASS,
             FlatMenuAdmin
         )
 
     @override_settings(WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS='wagtailmenus.tests.modeladmin.CustomFlatMenuModelAdmin')
     def test_successful_override(self):
         self.assertEqual(
-            settings.get_object('FLAT_MENUS_MODELADMIN_CLASS'),
+            settings.objects.FLAT_MENUS_MODELADMIN_CLASS,
             CustomFlatMenuModelAdmin
         )
 
@@ -32,7 +32,7 @@ class TestFlatMenuModelAdminOverriding(TestCase):
             "WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS must be a full dotted "
             "python import path e.g. 'project.app.module.Class'"
         )):
-            settings.get_object('FLAT_MENUS_MODELADMIN_CLASS')
+            settings.objects.FLAT_MENUS_MODELADMIN_CLASS
 
 
 class TestMainMenuModelAdminOverriding(TestCase):
@@ -42,14 +42,14 @@ class TestMainMenuModelAdminOverriding(TestCase):
 
     def test_default_value(self):
         self.assertEqual(
-            settings.get_object('MAIN_MENUS_MODELADMIN_CLASS'),
+            settings.objects.MAIN_MENUS_MODELADMIN_CLASS,
             MainMenuAdmin
         )
 
     @override_settings(WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS='wagtailmenus.tests.modeladmin.CustomMainMenuModelAdmin')
     def test_successful_override(self):
         self.assertEqual(
-            settings.get_object('MAIN_MENUS_MODELADMIN_CLASS'),
+            settings.objects.MAIN_MENUS_MODELADMIN_CLASS,
             CustomMainMenuModelAdmin
         )
 
@@ -60,4 +60,4 @@ class TestMainMenuModelAdminOverriding(TestCase):
             "WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS must be a full dotted "
             "python import path e.g. 'project.app.module.Class'"
         )):
-            settings.get_object('MAIN_MENUS_MODELADMIN_CLASS')
+            settings.objects.MAIN_MENUS_MODELADMIN_CLASS
