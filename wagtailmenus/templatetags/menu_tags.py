@@ -27,7 +27,7 @@ def main_menu(
     if not show_multiple_levels:
         max_levels = 1
 
-    menu_class = settings.get_model('MAIN_MENU_MODEL')
+    menu_class = settings.models.MAIN_MENU_MODEL
     return menu_class.render_from_tag(
         context=context,
         max_levels=max_levels,
@@ -55,13 +55,12 @@ def flat_menu(
                              use_specific=use_specific)
 
     if fall_back_to_default_site_menus is None:
-        fall_back_to_default_site_menus = settings.get(
-            'FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS')
+        fall_back_to_default_site_menus = settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS
 
     if not show_multiple_levels:
         max_levels = 1
 
-    menu_class = settings.get_model('FLAT_MENU_MODEL')
+    menu_class = settings.models.FLAT_MENU_MODEL
     return menu_class.render_from_tag(
         context=context,
         handle=handle,
@@ -95,7 +94,7 @@ def section_menu(
     if not show_multiple_levels:
         max_levels = 1
 
-    menu_class = settings.get_object('SECTION_MENU_CLASS')
+    menu_class = settings.objects.SECTION_MENU_CLASS
     return menu_class.render_from_tag(
         context=context,
         max_levels=max_levels,
@@ -124,7 +123,7 @@ def children_menu(
         'children_menu', max_levels=max_levels, use_specific=use_specific,
         parent_page=parent_page)
 
-    menu_class = settings.get_object('CHILDREN_MENU_CLASS')
+    menu_class = settings.objects.CHILDREN_MENU_CLASS
     return menu_class.render_from_tag(
         context=context,
         parent_page=parent_page,

@@ -39,7 +39,7 @@ def get_main_menu_model():
     if no custom model is defined.
     """
     from wagtailmenus.conf import settings
-    return settings.get_model('MAIN_MENU_MODEL')
+    return settings.models.MAIN_MENU_MODEL
 
 
 def get_flat_menu_model():
@@ -50,4 +50,4 @@ def get_flat_menu_model():
     if no custom model is defined.
     """
     from wagtailmenus.conf import settings
-    return settings.get_model('FLAT_MENU_MODEL')
+    return settings.models.FLAT_MENU_MODEL

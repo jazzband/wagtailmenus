@@ -12,6 +12,12 @@ base_url = "https://github.com/rkhleics/wagtailmenus/"
 dowload_url = '%starball/v%s' % (base_url, __version__)
 branch_url = "%stree/stable/%s" % (base_url, stable_branch_name)
 
+# Essential dependencies
+dependencies = [
+    'django-cogwheels',
+]
+
+
 # Testing dependencies
 testing_extras = [
     'beautifulsoup4>=4.5',
@@ -59,6 +65,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     ],
+    install_requires=dependencies,
     python_requires='>=3.4,<3.8',
     extras_require={
         'testing': testing_extras,

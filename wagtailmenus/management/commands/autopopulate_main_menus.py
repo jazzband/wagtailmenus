@@ -27,7 +27,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for site in Site.objects.all():
-            menu_model = settings.get_model('MAIN_MENU_MODEL')
+            menu_model = settings.models.MAIN_MENU_MODEL
             menu = menu_model.get_for_site(site)
             if not menu.get_menu_items_manager().exists():
                 menu.add_menu_items_for_pages(

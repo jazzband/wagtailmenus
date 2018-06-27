@@ -10,7 +10,7 @@ class TestAutoPopulateMainMenus(TestCase):
     def setUp(self):
         super().setUp()
         # Delete any existing main menus and their items
-        self.model = settings.get_model('MAIN_MENU_MODEL')
+        self.model = settings.models.MAIN_MENU_MODEL
         self.model.objects.all().delete()
 
     def test_without_home_links(self):
