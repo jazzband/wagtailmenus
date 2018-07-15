@@ -1,12 +1,6 @@
-=======================================
-Wagtailmenus 2.11 (alpha) release notes
-=======================================
-
-.. NOTE ::
-    
-    Wagtailmenus 2.11 is in the alpha stage of development. Any changes
-    detailed below are subject to change before the final 2.11 release.
-
+===============================
+Wagtailmenus 2.11 release notes
+===============================s
 
 .. contents::
     :local:
@@ -56,5 +50,5 @@ Upgrade considerations
 - Dropped support for Wagtail versions 1.10 to 1.13.
 - Dropped support for Django versions 1.8 to 1.10.
 - Menu.prime_menu_items() now returns a list instead of a generator. This is required to allow the method to raise warnings.
-- Wagtailmenu's custom modeladmin classes have moved from ``wagtailmenus.wagtail_hooks`` to a new ``wagtailmenus.modeladmin`` module. Importing ``FlatMenuAdmin`` or ``MainMenuAdmin`` from the `wagtail_hooks` will still continue to work, but any references to ``wagtailmenus.wagtail_hooks.FlatMenuButtonHelper`` will need to be updated.
+- Wagtailmenus' custom ``modeladmin`` classes have moved from ``wagtailmenus.wagtail_hooks`` to a new ``wagtailmenus.modeladmin`` module. Importing ``FlatMenuAdmin`` or ``MainMenuAdmin`` from the `wagtail_hooks` will still continue to work, but any references to ``wagtailmenus.wagtail_hooks.FlatMenuButtonHelper`` will need to be updated.
 - If for any reason you are importing view classes directly from ``wagtailmenus.wagtail_hooks``, that will no longer work. You will have to update your code to import view classes from the views module itself (``wagtailmenus.views``).

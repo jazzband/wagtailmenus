@@ -1,6 +1,7 @@
 admin
 analytics
 app
+apps
 autopopulate
 backend
 backends
