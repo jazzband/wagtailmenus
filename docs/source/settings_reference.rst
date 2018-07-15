@@ -71,7 +71,7 @@ By default, 'Flat menus' are editable in the Wagtail CMS. Setting this to `False
 
 .. _FLAT_MENUS_MODELADMIN_CLASS:
 
-``_WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS``
+``WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Default value: ``'wagtailmenus.modeladmin.FlatMenuAdmin'``
@@ -110,7 +110,7 @@ By default, 'Main menus' are editable in the Wagtail CMS. Setting this to `False
 
 .. _MAIN_MENUS_MODELADMIN_CLASS:
 
-``_WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS``
+``WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Default value: ``'wagtailmenus.modeladmin.MainMenuAdmin'``
