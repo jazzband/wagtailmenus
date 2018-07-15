@@ -17,7 +17,8 @@ Changelog
 * Moved custom `wagtail.contrib.modeladmin` classes out of `wagtailmenus.wagtail_hooks` and into a new `wagtailmenus.modeladmin` module.
 * Added the `WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS` setting to allow the default `ModelAdmin` class used to enable flat menu editing in the Wagtail admin area to be swapped out for a custom one. 
 * Added the `WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS` setting to allow the default `ModelAdmin` class used to enable main menu editing in the Wagtail admin area to be swapped out for a custom one. 
-* Moved most 'App settings related' tests to `wagtailmenus.conf.tests`, so that they're all in one place.
+* Replaced custom app settings module with `django-cogwheels` and removed a lot of the tests that existed to test its workings.
+* Moved remaining app settings tests to `wagtailmenus.conf.tests`.
 
 
 

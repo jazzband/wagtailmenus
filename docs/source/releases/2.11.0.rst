@@ -41,7 +41,8 @@ Minor changes & bug fixes
 - Updated ``Menu.prime_menu_items()`` to send the current ``HttpRequest`` to that ``MenuItem.relative_url()`` and ``Page.relative_url()``.
 - Moved most 'App settings related' tests to `wagtailmenus.conf.tests`, so that they're all in one place.
 - Updated admin views to utilise ``wagtail.admin.messages.validation_error()`` for reporting field-specific and non-field errors (Wagtail 2.1 has this built-in, but Wagtail 2.0 does not). 
-
+- Replaced the custom app settings module with a ``django-cogwheels`` settings helper and removed a lot of the tests that existed to test its workings.
+- Moved remaining app settings tests to ``wagtailmenus.conf.tests``.
 
 Deprecations
 ============
