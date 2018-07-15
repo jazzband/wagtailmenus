@@ -4,6 +4,7 @@ Changelog
 2.11.0 (XX.XX.XXX)
 ------------------
 
+* Added support for Wagtail version 2.1.
 * Dropped support for Wagtail versions 1.10 to 1.13.
 * Dropped support for Django versions 1.8 to 1.10.
 * Updated trove classifiers in `setup.py` to reflect Django and Wagtail version support.
