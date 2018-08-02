@@ -25,7 +25,7 @@ The current version is tested for compatiblily with the following:
 
 - Wagtail versions 2.0 to 2.1
 - Django versions 1.11 to 2.0
-- Python versions 3.4 to 3.6
+- Python versions 3.4 to 3.7
 
 .. image:: https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/docs/source/_static/images/repeating-item.png
 
