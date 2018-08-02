@@ -42,4 +42,4 @@ deploy:
     tags: true
     branch: master
     repo: rkhleics/wagtailmenus
-    condition: "$TOXENV = py36-dj2-wt21"
+    condition: "$TOXENV = py37-dj2-wt21"
