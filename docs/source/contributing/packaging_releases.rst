@@ -107,7 +107,7 @@ When satisfied with the PR for preparing the files:
 
     .. code-block:: console
 
-        pip install -e '.[testing,docs]' -U
+        pip install -e '.[deployment]' -U
 
 4.  Push any updated translation source files to Transifex:
 
@@ -136,44 +136,15 @@ When satisfied with the PR for preparing the files:
         git commit -am 'Pulled updated translations from Transifex and converted to .mo'
         git push
 
-8.  Create a new tag for the new version and push that too:
+8.  Create a new tag for the new version and push that too. Travis CI should deploy the new version directly to PyPI once it's finished building:
 
     .. code-block:: console
         
-        git tag -a v2.X.X
+        git tag -a v2.X
         git push --tags
 
-9.  Create a new source distribution and universal wheel for the new version
-
-    .. code-block:: console
-
-        python setup.py sdist
-        python setup.py bdist_wheel --universal
-
-10. Update twine to the latest version and upload to the new distribution
-    files to the PyPi test environment.
-    
-    .. code-block:: console
-        
-        pip install twine --U
-        twine upload dist/* -r pypitest
-
-11. Test that the new test distribution installs okay:
-
-    .. code-block:: console
-
-        mktmpenv
-        pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple wagtailmenus
-        deactivate
-
-12. If all okay, push distribution files to the live PyPi:
-
-    .. code-block:: console
-
-        twine upload dist/* -r pypi
-
-13. Edit the release notes for the release from
+9. Edit the release notes for the release from
     https://github.com/rkhleics/wagtailmenus/releases, by copying and pasting
     the content from ``docs/releases/x.x.x.rst``
 
-14. Crack open a beer - you earned it!
+10. Crack open a beer - you earned it!

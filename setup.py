@@ -13,12 +13,10 @@ dowload_url = '%starball/v%s' % (base_url, __version__)
 branch_url = "%stree/stable/%s" % (base_url, stable_branch_name)
 
 # Essential dependencies
-dependencies = [
+requires = [
     'django-cogwheels',
 ]
 
-
-# Testing dependencies
 testing_extras = [
     'beautifulsoup4>=4.5',
     'coverage>=4.5',
@@ -31,6 +29,10 @@ documentation_extras = [
     'Sphinx>=1.7.4',
     'sphinxcontrib-spelling>=1.4',
     'sphinx_rtd_theme>=0.3',
+]
+
+deployment_extras = [
+    'transifex-client',
 ]
 
 setup(
@@ -57,6 +59,7 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Framework :: Django',
         'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.0',
@@ -64,10 +67,11 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     ],
-    install_requires=dependencies,
+    install_requires=requires,
     python_requires='>=3.4,<3.8',
     extras_require={
         'testing': testing_extras,
-        'docs': documentation_extras
+        'docs': documentation_extras,
+        'deployment': deployment_extras,
     },
 )
