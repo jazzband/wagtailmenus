@@ -33,9 +33,9 @@ Multi-level menus generated from your existing page tree
 
 We firmly believe that your page tree is the best place to define the structure, and the 'natural order' of pages within your site. Wagtailmenus only allows you to define the top-level items for each menu, because offering anything more would inevitably lead to site managers redefining parts of the page tree in multiple places, doomed to become outdated as the original tree changes over time.
 
-To generate multi-level menus, wagtailmenus takes the top-level items you define for each menu and automatically combines it with your page tree, efficiently identifying ancestors for each selected pages and outputting them as sub-menus following the same structure and order.
+To generate multi-level menus, wagtailmenus takes the top-level items you define for each menu and automatically combines it with your page tree, efficiently identifying descendants for each selected page and outputting them as sub-menus following the same structure and order.
 
-You can prevent any page from appearing menus simply by setting ``show_in_menus`` to ``False``. Pages will also no longer be included in menus if they are unpublished.
+You can prevent any page from appearing in menus simply by setting ``show_in_menus`` to ``False``. Pages will also no longer be included in menus if they are unpublished.
 
 
 Define menus for all your project needs
