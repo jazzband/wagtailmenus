@@ -23,7 +23,7 @@ wagtailmenus is an extension for Torchbox's `Wagtail CMS <https://github.com/tor
 
 The current version is tested for compatiblily with the following: 
 
-- Wagtail versions 2.0 to 2.1
+- Wagtail versions 2.0 to 2.2
 - Django versions 1.11 to 2.0
 - Python versions 3.4 to 3.7
 

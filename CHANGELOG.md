@@ -4,9 +4,16 @@ Changelog
 2.12.0 (XX.XX.XXXX)
 -------------------
 
-* Fix an issue with the release notes section menu in docs.
-* Updated Travis CI to deploy to PyPi automatically when commits are tagged appropriately.
-* Pinned django-cogwheels dependency version to 0.2.
+* TBA
+
+
+2.11.1 (10.09.2018)
+-------------------
+
+* Fixed an issue with the section menu in the release notes section of the docs.
+* Updated tox config to test against Python 3.7 and Wagtail 2.2.
+* Updated Travis CI config to deploy to PyPi automatically when commits are tagged appropriately.
+* Pinned django-cogwheels dependency to version 0.2 to reduce potential for backwards-incompatibility issues.
 
 
 2.11.0 (15.07.2018)
