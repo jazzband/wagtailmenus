@@ -1,8 +1,16 @@
 Changelog
 =========
 
-2.11.0 (XX.XX.XXX)
-------------------
+2.12.0 (XX.XX.XXXX)
+-------------------
+
+* Fix an issue with the release notes section menu in docs.
+* Updated Travis CI to deploy to PyPi automatically when commits are tagged appropriately.
+* Pinned django-cogwheels dependency version to 0.2.
+
+
+2.11.0 (15.07.2018)
+-------------------
 
 * Added support for Wagtail version 2.1.
 * Dropped support for Wagtail versions 1.10 to 1.13.
