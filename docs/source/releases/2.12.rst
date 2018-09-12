@@ -22,7 +22,10 @@ TBA
 Minor changes & bug fixes 
 =========================
 
-TBA
+- Fixed an issue with the section menu in the release notes section of the docs.
+- Updated tox config to test against Python 3.7 and Wagtail 2.2
+- Updated Travis CI config to deploy to PyPi automatically when commits are tagged appropriately.
+- Pinned django-cogwheels dependency to version 0.2 to reduce potential for backwards-incompatibility issues.
 
 
 Deprecations
@@ -34,4 +37,80 @@ TBA
 Upgrade considerations
 ======================
 
-TBA
+Following a standard deprecation period a two minor releases, the following functionality has now been removed.
+
+
+The WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH setting is no longer supported
+------------------------------------------------------------------------
+
+If you're using this to override the menu class used to render children menus in your project, you'll need to update your Django settings to use the new, shorter setting name: WAGTAILMENUS_CHILDREN_MENU_CLASS.
+
+For example, if you had the following:
+
+.. code-block:: python
+
+    # settings/base.py
+
+    WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH = 'project.menus.CustomChildrenMenu'
+
+You would change this to:
+
+.. code-block:: python
+
+    WAGTAILMENUS_CHILDREN_MENU_CLASS = 'project.menus.CustomChildrenMenu'
+
+
+The WAGTAILMENUS_SECTION_MENU_CLASS_PATH setting is no longer supported
+-----------------------------------------------------------------------
+
+If you're using this to override the menu class used to render section menus in your project, you'll need to update your Django settings to use the new, shorter setting name: WAGTAILMENUS_SECTION_MENU_CLASS.
+
+For example, if you had the following:
+
+.. code-block:: python
+
+    # settings/base.py
+
+    WAGTAILMENUS_SECTION_MENU_CLASS_PATH = 'project.menus.CustomSectionMenu'
+
+You would change this to:
+
+.. code-block:: python
+
+    WAGTAILMENUS_SECTION_MENU_CLASS = 'project.app.module.CustomSectionMenu'
+
+
+The ``wagtailmenus.app_settings`` module has been removed
+---------------------------------------------------------
+
+If you're importing this in your project from it's previous location, you should update the import statements in your code to use the new module path: ``wagtailmenus.conf.settings``
+
+For example, instead of the following:
+
+.. code-block:: python
+
+    from wagtailmenus import app_settings
+
+You should do:
+
+.. code-block:: python
+
+    from wagtailmenus.conf import settings
+
+
+The ``wagtailmenus.constants`` module has been removed
+------------------------------------------------------
+
+If you're importing this in your project from it's previous location, you should update the import statements in your code to use the new module path: `` wagtailmenus.conf.constants``
+
+For example, instead of the following:
+
+.. code-block:: python
+
+    from wagtailmenus import constants
+
+You should do:
+
+.. code-block:: python
+
+    from wagtailmenus.conf import constants
