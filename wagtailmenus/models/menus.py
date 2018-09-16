@@ -46,18 +46,11 @@ OptionVals = namedtuple('OptionVals', (
 
 class Menu:
     """The base class that which all other menu classes should inherit from"""
-    request = None
     menu_short_name = ''  # used by 'get_template_names()'
     related_templatetag_name = ''
     template_name = None
     menu_instance_context_name = 'menu'
     sub_menu_class = None
-
-    # These are defaults and should always be overriden for individual
-    # instances by model field values, of by setting alternative values
-    # at initialisation
-    max_levels = 1
-    use_specific = constants.USE_SPECIFIC_AUTO
 
     @classmethod
     def render_from_tag(cls, context, **options):
