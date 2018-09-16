@@ -770,15 +770,7 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     def get_least_specific_template_name(cls):
         return settings.DEFAULT_CHILDREN_MENU_TEMPLATE
 
-    def __init__(self, parent_page, max_levels=None, use_specific=None):
-        if max_levels is None:
-            raise TypeError(
-                "'max_levels' must be provided when creating a ChildrenMenu "
-                "instance, and must not be None")
-        if use_specific is None:
-            raise TypeError(
-                "'use_specific' must be provided when creating a ChildrenMenu "
-                "instance, and must not be None")
+    def __init__(self, parent_page, max_levels, use_specific):
         self.parent_page = parent_page
         self.max_levels = max_levels
         self.use_specific = use_specific

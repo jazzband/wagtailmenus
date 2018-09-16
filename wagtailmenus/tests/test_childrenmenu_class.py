@@ -12,19 +12,6 @@ class ChildrenMenuTestCase(TestCase):
         return ChildrenMenu(parent_page=Page(), max_levels=3, use_specific=1)
 
 
-class TestInitRequiredVals(ChildrenMenuTestCase):
-
-    def test_init_raises_typeerror_if_max_levels_not_supplied(self):
-        msg_extract = "'max_levels' must be provided when creating"
-        with self.assertRaisesRegex(TypeError, msg_extract):
-            ChildrenMenu(Page(), use_specific=1)
-
-    def test_init_raises_typeerror_if_use_specific_not_supplied(self):
-        msg_extract = "'use_specific' must be provided when creating"
-        with self.assertRaisesRegex(TypeError, msg_extract):
-            ChildrenMenu(Page(), max_levels=1)
-
-
 class TestGetSubMenuTemplateNames(
     ChildrenMenuTestCase, base.GetSubMenuTemplateNamesMethodTestCase
 ):
