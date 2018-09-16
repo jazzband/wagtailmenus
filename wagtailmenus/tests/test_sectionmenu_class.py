@@ -12,13 +12,6 @@ class SectionMenuTestCase(TestCase):
         return SectionMenu(root_page=Page(), max_levels=3, use_specific=1)
 
 
-class TestInitRequiredVals(SectionMenuTestCase):
-
-    def test_init_raises_typeerror_if_use_specific_not_supplied(self):
-        with self.assertRaises(TypeError):
-            SectionMenu(Page(), 1)
-
-
 class TestGetSubMenuTemplateNames(
     SectionMenuTestCase, base.GetSubMenuTemplateNamesMethodTestCase
 ):
