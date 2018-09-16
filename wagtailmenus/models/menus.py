@@ -228,7 +228,7 @@ class Menu:
             'menu_tag': self.related_templatetag_name,
             'parent_page': None,
             'max_levels': self.max_levels,
-            'use_specific': self.max_levels,
+            'use_specific': self.use_specific,
             'apply_active_classes': opt_vals.apply_active_classes,
             'allow_repeating_parents': opt_vals.allow_repeating_parents,
             'use_absolute_page_urls': opt_vals.use_absolute_page_urls,
