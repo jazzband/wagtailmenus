@@ -167,14 +167,14 @@ class Menu:
         )
 
     @classmethod
-    def get_option_vals_from_options(cls, context):
+    def get_option_vals_from_options(cls, **kwargs):
         warnings.warn(
             'The get_option_vals_from_options() class method is '
             'deprecated in v2.12 and will be removed in v3. Use '
             '_create_optionvals_obj_from_values() instead.',
             category=RemovedInWagtailMenus3Warning
         )
-        return cls._create_optionvals_obj_from_values(context)
+        return cls._create_optionvals_obj_from_values(**kwargs)
 
     @classmethod
     def get_or_create_from_values(cls, contextual_vals, option_vals):
