@@ -71,16 +71,37 @@ class Menu:
         more specific methods for overriding certain behaviour at different
         stages of rendering, such as:
 
-            * get_from_collected_values() (if the class IS a Django model)
-            * OR create_from_collected_values()
+            * get_from_collected_values() (if the class is a Django model), OR
+            * create_from_collected_values() (if it isn't)
 
             * prepare_to_render()
             * get_context_data()
             * render_to_template()
         """
+        instance = cls._get_render_prepared_object(
+            context,
+            max_levels=max_levels,
+            use_specific=use_specific,
+            apply_active_classes=apply_active_classes,
+            allow_repeating_parents=allow_repeating_parents,
+            use_absolute_page_urls=use_absolute_page_urls,
+            template_name=template_name,
+            **kwargs
+        )
+        if not instance:
+            return ''
+        return instance.render_to_template()
 
-        # The following two conditionals are to be removed in v3
-        if cls.get_contextual_vals_from_context.__func__ is not Menu.get_contextual_vals_from_context.__func__:
+    @classmethod
+    def _get_render_prepared_object(cls, context, **option_values):
+        """
+        Returns a fully prepared, request-aware menu object that can be used
+        for rendering. ``context`` could be a ``django.template.Context``
+        object passed to ``render_from_tag()`` by a menu tag.
+        """
+        class_method = cls.get_contextual_vals_from_context.__func__
+        original_method = Menu.get_contextual_vals_from_context.__func__
+        if class_method is not original_method:
             warnings.warn(
                 "From v2.12, the get_contextual_vals_from_context() class "
                 "method is deprecated, and will be removed in v3. Use "
@@ -90,28 +111,24 @@ class Menu:
             ctx_vals = cls.get_contextual_vals_from_context(context)
         else:
             ctx_vals = cls._create_contextualvals_obj_from_context(context)
-        if cls.get_option_vals_from_options.__func__ is not Menu.get_option_vals_from_options.__func__:
+
+        class_method = cls.get_option_vals_from_options.__func__
+        original_method = Menu.get_option_vals_from_options.__func__
+        if class_method is not original_method:
             warnings.warn(
                 "From v2.12, the get_option_vals_from_options() class "
                 "method is deprecated, and will be removed in v3. Use "
                 "_create_optionvals_obj_from_values() instead.",
                 category=RemovedInWagtailMenus3Warning
             )
-            optvals_create_method = cls.get_option_vals_from_options
+            opt_vals = cls.get_option_vals_from_options(**option_values)
         else:
-            optvals_create_method = cls._create_optionvals_obj_from_values
+            opt_vals = cls._create_optionvals_obj_from_values(**option_values)
 
-        opt_vals = optvals_create_method(
-            max_levels=max_levels,
-            use_specific=use_specific,
-            apply_active_classes=apply_active_classes,
-            allow_repeating_parents=allow_repeating_parents,
-            use_absolute_page_urls=use_absolute_page_urls,
-            template_name=template_name,
-            **kwargs)
-        # TODO: The following conditional is to be removed in v3
+        class_method = cls.get_instance_for_rendering.__func__
+        original_method = Menu.get_instance_for_rendering.__func__
         is_model_class = issubclass(cls, models.Model)
-        if cls.get_instance_for_rendering.__func__ is not Menu.get_instance_for_rendering.__func__:
+        if class_method is not original_method:
             warnings.warn(
                 "From v2.12, the get_instance_for_rendering() class "
                 "method is deprecated, and will be removed in v3. For "
@@ -128,9 +145,10 @@ class Menu:
         else:
             instance = cls.create_from_collected_values(ctx_vals, opt_vals)
         if not instance:
-            return ''
+            return None
+
         instance.prepare_to_render(context['request'], ctx_vals, opt_vals)
-        return instance.render_to_template()
+        return instance
 
     @classmethod
     def _create_contextualvals_obj_from_context(cls, context):
