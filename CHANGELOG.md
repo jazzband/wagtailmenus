@@ -4,7 +4,13 @@ Changelog
 2.12.0 (XX.XX.XXXX)
 -------------------
 
-* TBA
+* Changed the signature of ``Menu.render_from_tag()`` to better indicate common expected/supported arguments for menus.
+* Added a custom ``render_from_tag()`` method for each individual menu class, with a signature that highlights all relevant options, including those specific to that menu type.
+* Renamed ``Menu.get_contextual_vals_from_context()`` to ``Menu._create_contextualvals_obj_from_context()`` to give a better
+indication of what the method does.
+* Renamed ``Menu.get_option_vals_from_options`` to ``Menu._create_optionvals_obj_from_values()`` to give a better indication of what the method does.
+* Added the ``Menu.get_from_collected_values()`` method, which replaces ``Menu.get_instance_for_rendering()`` for menu classes that also inherit from ``django.db.models.Model``.
+* Added the ``Menu.create_from_collected_values()`` method, which replaces ``Menu.get_instance_for_rendering()`` for menu classes that **do not** inherit from ``django.db.models.Model``.
 
 
 2.11.1 (10.09.2018)
