@@ -76,8 +76,18 @@ class Menu:
             * get_context_data()
             * render_to_template()
         """
-        ctx_vals = cls.get_contextual_vals_from_context(context)
-        opt_vals = cls.get_option_vals_from_options(
+
+        # The following two conditionals are to be removed in v3
+        if cls.get_contextual_vals_from_context is not Menu.get_contextual_vals_from_context:
+            ctx_vals = cls.get_contextual_vals_from_context(context)
+        else:
+            ctx_vals = cls._create_contextualvals_obj_from_context(context)
+        if cls.get_option_vals_from_options is not Menu.get_option_vals_from_options:
+            optvals_create_method = cls.get_option_vals_from_options
+        else:
+            optvals_create_method = cls._create_optionvals_obj_from_values
+
+        opt_vals = optvals_create_method(
             max_levels=max_levels,
             use_specific=use_specific,
             apply_active_classes=apply_active_classes,
@@ -96,7 +106,7 @@ class Menu:
         return instance.render_to_template()
 
     @classmethod
-    def get_contextual_vals_from_context(cls, context):
+    def _create_contextualvals_obj_from_context(cls, context):
         """
         Gathers all of the 'contextual' data needed to render a menu instance
         and returns it in a structure that can be conveniently referenced
@@ -117,7 +127,17 @@ class Menu:
         )
 
     @classmethod
-    def get_option_vals_from_options(cls, **options):
+    def get_contextual_vals_from_context(cls, context):
+        warnings.warn(
+            'The get_contextual_vals_from_context() class method is '
+            'deprecated in v2.12 and will be removed in v3. Use '
+            '_create_contextualvals_obj_from_context() instead.',
+            category=RemovedInWagtailMenus3Warning
+        )
+        return cls._create_contextualvals_obj_from_context(context)
+
+    @classmethod
+    def _create_optionvals_obj_from_values(cls, **kwargs):
         """
         Takes all of the options passed to the class's ``render_from_tag()``
         method and returns them in a structure that can be conveniently
@@ -133,18 +153,28 @@ class Menu:
             option_vals.extra['fall_back_to_default_site_menus']
         """
         return OptionVals(
-            options.pop('max_levels'),
-            options.pop('use_specific'),
-            options.pop('apply_active_classes'),
-            options.pop('allow_repeating_parents'),
-            options.pop('use_absolute_page_urls'),
-            options.pop('parent_page', None),
-            options.pop('handle', None),  # for AbstractFlatMenu
-            options.pop('template_name', ''),
-            options.pop('sub_menu_template_name', ''),
-            options.pop('sub_menu_template_names', None),
-            options  # anything left over will be stored as 'extra'
+            kwargs.pop('max_levels'),
+            kwargs.pop('use_specific'),
+            kwargs.pop('apply_active_classes'),
+            kwargs.pop('allow_repeating_parents'),
+            kwargs.pop('use_absolute_page_urls'),
+            kwargs.pop('parent_page', None),
+            kwargs.pop('handle', None),  # for AbstractFlatMenu
+            kwargs.pop('template_name', ''),
+            kwargs.pop('sub_menu_template_name', ''),
+            kwargs.pop('sub_menu_template_names', None),
+            kwargs  # anything left over will be stored as 'extra'
         )
+
+    @classmethod
+    def get_option_vals_from_options(cls, context):
+        warnings.warn(
+            'The get_option_vals_from_options() class method is '
+            'deprecated in v2.12 and will be removed in v3. Use '
+            '_create_optionvals_obj_from_values() instead.',
+            category=RemovedInWagtailMenus3Warning
+        )
+        return cls._create_optionvals_obj_from_values(context)
 
     @classmethod
     def get_or_create_from_values(cls, contextual_vals, option_vals):
