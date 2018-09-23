@@ -111,7 +111,7 @@ class Menu:
             **kwargs)
         # TODO: The following conditional is to be removed in v3
         is_model_class = issubclass(cls, models.Model)
-        if hasattr(cls, 'get_instance_for_rendering'):
+        if cls.get_instance_for_rendering.__func__ is not Menu.get_instance_for_rendering.__func__:
             warnings.warn(
                 "From v2.12, the get_instance_for_rendering() class "
                 "method is deprecated, and will be removed in v3. For "
@@ -226,6 +226,18 @@ class Menu:
             "Subclasses of 'Menu' and 'django.db.models.Model' must define "
             "their own 'get_from_collected_values' method."
         )
+
+    @classmethod
+    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+        warnings.warn(
+            'The get_instance_for_rendering() class method is deprecated in '
+            'v2.12 and will be removed in v3. Use create_relevant_object_from_values() '
+            'instead.', category=RemovedInWagtailMenus3Warning
+        )
+        if issubclass(cls, models.Model):
+            return cls.get_from_collected_values(contextual_vals, option_vals)
+
+        return cls.create_from_collected_values(contextual_vals, option_vals)
 
     def get_sub_menu_class(self):
         """
