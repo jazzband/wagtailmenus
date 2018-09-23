@@ -16,7 +16,9 @@ from wagtail.core.models import Page, Site
 
 from wagtailmenus import forms, panels
 from wagtailmenus.conf import constants, settings
-from wagtailmenus.utils.deprecation import RemovedInWagtailMenus213Warning
+from wagtailmenus.utils.deprecation import (
+    RemovedInWagtailMenus213Warning, RemovedInWagtailMenus3Warning
+)
 from wagtailmenus.utils.inspection import accepts_kwarg
 from wagtailmenus.utils.misc import get_site_from_request
 from .menuitems import MenuItem
@@ -69,7 +71,7 @@ class Menu:
         more specific methods for overriding certain behaviour at different
         stages of rendering, such as:
 
-            * get_instance_for_rendering() (class method)
+            * get_or_create_from_values() (class method)
             * prepare_to_render()
             * get_context_data()
             * render_to_template()
@@ -83,7 +85,11 @@ class Menu:
             use_absolute_page_urls=use_absolute_page_urls,
             template_name=template_name,
             **kwargs)
-        instance = cls.get_instance_for_rendering(ctx_vals, opt_vals)
+        # TODO: The following conditional is to be removed in v3
+        if cls.get_instance_for_rendering is not Menu.get_instance_for_rendering:
+            instance = cls.get_instance_for_rendering(ctx_vals, opt_vals)
+        else:
+            instance = cls.get_or_create_from_values(ctx_vals, opt_vals)
         if not instance:
             return ''
         instance.prepare_to_render(context['request'], ctx_vals, opt_vals)
@@ -141,17 +147,29 @@ class Menu:
         )
 
     @classmethod
-    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+    def get_or_create_from_values(cls, contextual_vals, option_vals):
         """
         Called by the class's ``render_from_tag()`` method to get or create a
-        relevant instance to use for rendering. For model-based menu classes
-        like ``AbstractMainMenu`` and ``AbstractFlatMenu``, this will involve
-        fetching the relevant object from the database. For others, a new
-        instance should be created and returned.
+        a menu object appropriate for the provided contextual and option
+        values.
+
+        For model-based menu classes like ``AbstractMainMenu`` and
+        ``AbstractFlatMenu``, this will involve fetching the relevant
+        object from the database. For others, a new object will be
+        instantiated.
         """
         raise NotImplementedError(
             "Subclasses of 'Menu' must define their own "
-            "'get_instance_for_rendering' method")
+            "'get_or_create_from_values' method")
+
+    @classmethod
+    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+        warnings.warn(
+            'The get_instance_for_rendering() class method is deprecated in '
+            'v2.12 and will be removed in v3. Use get_or_create_from_values() '
+            'instead.', category=RemovedInWagtailMenus3Warning
+        )
+        return cls.get_or_create_from_values(contextual_vals, option_vals)
 
     def get_sub_menu_class(self):
         """
@@ -695,7 +713,7 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         )
 
     @classmethod
-    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+    def get_or_create_from_values(cls, contextual_vals, option_vals):
         if not contextual_vals.current_section_root_page:
             return
         return cls(
@@ -808,7 +826,7 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         )
 
     @classmethod
-    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+    def get_or_create_from_values(cls, contextual_vals, option_vals):
         parent_page = option_vals.parent_page or contextual_vals.current_page
         if not parent_page:
             return
@@ -861,7 +879,7 @@ class SubMenu(MenuFromPage):
         )
 
     @classmethod
-    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+    def get_or_create_from_values(cls, contextual_vals, option_vals):
         return cls(
             original_menu=contextual_vals.original_menu_instance,
             parent_page=option_vals.parent_page,
@@ -1116,7 +1134,7 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         )
 
     @classmethod
-    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+    def get_or_create_from_values(cls, contextual_vals, option_vals):
         try:
             return cls.get_for_site(contextual_vals.current_site)
         except cls.DoesNotExist:
@@ -1225,7 +1243,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         )
 
     @classmethod
-    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+    def get_or_create_from_values(cls, contextual_vals, option_vals):
         try:
             return cls.get_for_site(
                 option_vals.handle,
