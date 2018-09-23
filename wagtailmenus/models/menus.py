@@ -53,7 +53,11 @@ class Menu:
     sub_menu_class = None
 
     @classmethod
-    def render_from_tag(cls, context, **options):
+    def render_from_tag(
+        cls, context, max_levels=None, use_specific=None,
+        apply_active_classes=True, allow_repeating_parents=True,
+        use_absolute_page_urls=False, template_name='', **kwargs
+    ):
         """
         A template tag should call this method to render a menu.
         The ``Context`` instance and option values provided are used to get or
@@ -71,11 +75,17 @@ class Menu:
             * render_to_template()
         """
         ctx_vals = cls.get_contextual_vals_from_context(context)
-        opt_vals = cls.get_option_vals_from_options(**options)
+        opt_vals = cls.get_option_vals_from_options(
+            max_levels=max_levels,
+            use_specific=use_specific,
+            apply_active_classes=apply_active_classes,
+            allow_repeating_parents=allow_repeating_parents,
+            use_absolute_page_urls=use_absolute_page_urls,
+            template_name=template_name,
+            **kwargs)
         instance = cls.get_instance_for_rendering(ctx_vals, opt_vals)
         if not instance:
             return ''
-
         instance.prepare_to_render(context['request'], ctx_vals, opt_vals)
         return instance.render_to_template()
 
@@ -664,6 +674,27 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     related_templatetag_name = 'section_menu'
 
     @classmethod
+    def render_from_tag(
+        cls, context, show_section_root=True, max_levels=None, use_specific=None,
+        apply_active_classes=True, allow_repeating_parents=True,
+        use_absolute_page_urls=False, template_name='',
+        sub_menu_template_name='', sub_menu_template_names=None, **kwargs
+    ):
+        return super().render_from_tag(
+            context,
+            show_section_root=show_section_root,
+            max_levels=max_levels,
+            use_specific=use_specific,
+            apply_active_classes=apply_active_classes,
+            allow_repeating_parents=allow_repeating_parents,
+            use_absolute_page_urls=use_absolute_page_urls,
+            template_name=template_name,
+            sub_menu_template_name=sub_menu_template_name,
+            sub_menu_template_names=sub_menu_template_names,
+            **kwargs
+        )
+
+    @classmethod
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
         if not contextual_vals.current_section_root_page:
             return
@@ -756,6 +787,27 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     related_templatetag_name = 'children_menu'
 
     @classmethod
+    def render_from_tag(
+        cls, context, parent_page, max_levels=None, use_specific=None,
+        apply_active_classes=True, allow_repeating_parents=True,
+        use_absolute_page_urls=False, template_name='',
+        sub_menu_template_name='', sub_menu_template_names=None, **kwargs
+    ):
+        return super().render_from_tag(
+            context,
+            parent_page=parent_page,
+            max_levels=max_levels,
+            use_specific=use_specific,
+            apply_active_classes=apply_active_classes,
+            allow_repeating_parents=allow_repeating_parents,
+            use_absolute_page_urls=use_absolute_page_urls,
+            template_name=template_name,
+            sub_menu_template_name=sub_menu_template_name,
+            sub_menu_template_names=sub_menu_template_names,
+            **kwargs
+        )
+
+    @classmethod
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
         parent_page = option_vals.parent_page or contextual_vals.current_page
         if not parent_page:
@@ -789,6 +841,24 @@ class SubMenu(MenuFromPage):
     menu_short_name = 'sub'  # used to find templates
     menu_instance_context_name = 'sub_menu'
     related_templatetag_name = 'sub_menu'
+
+    @classmethod
+    def render_from_tag(
+        cls, context, parent_page, max_levels=None, use_specific=None,
+        apply_active_classes=True, allow_repeating_parents=True,
+        use_absolute_page_urls=False, template_name='', **kwargs
+    ):
+        return super().render_from_tag(
+            context,
+            parent_page=parent_page,
+            max_levels=max_levels,
+            use_specific=use_specific,
+            apply_active_classes=apply_active_classes,
+            allow_repeating_parents=allow_repeating_parents,
+            use_absolute_page_urls=use_absolute_page_urls,
+            template_name=template_name,
+            **kwargs
+        )
 
     @classmethod
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
@@ -1026,6 +1096,26 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         verbose_name_plural = _("main menu")
 
     @classmethod
+    def render_from_tag(
+        cls, context, max_levels=None, use_specific=None,
+        apply_active_classes=True, allow_repeating_parents=True,
+        use_absolute_page_urls=False, template_name='',
+        sub_menu_template_name='', sub_menu_template_names=None, **kwargs
+    ):
+        return super().render_from_tag(
+            context,
+            max_levels=max_levels,
+            use_specific=use_specific,
+            apply_active_classes=apply_active_classes,
+            allow_repeating_parents=allow_repeating_parents,
+            use_absolute_page_urls=use_absolute_page_urls,
+            template_name=template_name,
+            sub_menu_template_name=sub_menu_template_name,
+            sub_menu_template_names=sub_menu_template_names,
+            **kwargs
+        )
+
+    @classmethod
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
         try:
             return cls.get_for_site(contextual_vals.current_site)
@@ -1110,6 +1200,29 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         unique_together = ("site", "handle")
         verbose_name = _("flat menu")
         verbose_name_plural = _("flat menus")
+
+    @classmethod
+    def render_from_tag(
+        cls, context, handle, fall_back_to_default_site_menus=True,
+        max_levels=None, use_specific=None, apply_active_classes=True,
+        allow_repeating_parents=True, use_absolute_page_urls=False,
+        template_name='', sub_menu_template_name='',
+        sub_menu_template_names=None, **kwargs
+    ):
+        return super().render_from_tag(
+            context,
+            handle=handle,
+            fall_back_to_default_site_menus=fall_back_to_default_site_menus,
+            max_levels=max_levels,
+            use_specific=use_specific,
+            apply_active_classes=apply_active_classes,
+            allow_repeating_parents=allow_repeating_parents,
+            use_absolute_page_urls=use_absolute_page_urls,
+            template_name=template_name,
+            sub_menu_template_name=sub_menu_template_name,
+            sub_menu_template_names=sub_menu_template_names,
+            **kwargs
+        )
 
     @classmethod
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
