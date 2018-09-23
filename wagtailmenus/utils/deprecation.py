@@ -5,9 +5,9 @@ class RemovedInWagtailMenus213Warning(DeprecationWarning):
 removed_in_next_version_warning = RemovedInWagtailMenus213Warning
 
 
-class RemovedInWagtailMenus214Warning(PendingDeprecationWarning):
+class RemovedInWagtailMenus3Warning(PendingDeprecationWarning):
     pass
 
 
-class RemovedInWagtailMenus215Warning(PendingDeprecationWarning):
+class RemovedInWagtailMenus31Warning(PendingDeprecationWarning):
     pass
