@@ -17,6 +17,11 @@ class CustomChildrenMenu(ChildrenMenu):
 class CustomSectionMenu(SectionMenu):
     sub_menu_template_name = "menus/custom-overrides/section-sub.html"
 
+    @classmethod
+    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+        # To be removed in v3
+        return super().get_instance_for_rendering(contextual_vals, option_vals)
+
 
 class MultilingualMenuItem(models.Model):
     link_text_de = models.CharField(

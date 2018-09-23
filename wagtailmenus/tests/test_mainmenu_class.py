@@ -23,6 +23,17 @@ class MainMenuTestCase(TestCase):
         return MainMenu.objects.first()
 
 
+class TestMainMenuGeneralMethods(MainMenuTestCase):
+
+    def test_create_from_collected_values_is_not_implemented(self):
+        # Model-based menus use get_from_collected_values() instead of
+        # create_from_collected_values(), because existing objects are reused,
+        # rather than recreated each time
+        menu = self.get_test_menu_instance()
+        with self.assertRaises(NotImplementedError):
+            menu.create_from_collected_values(None, None)
+
+
 class TestTopLevelItems(MainMenuTestCase):
 
     # ------------------------------------------------------------------------
