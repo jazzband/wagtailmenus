@@ -74,35 +74,20 @@ class Menu:
             * get_context_data()
             * render_to_template()
         """
-        instance = cls._get_render_prepared_instance(
-            context,
+        ctx_vals = cls.get_contextual_vals_from_context(context)
+        opt_vals = cls.get_option_vals_from_options(
             max_levels=max_levels,
             use_specific=use_specific,
             apply_active_classes=apply_active_classes,
             allow_repeating_parents=allow_repeating_parents,
             use_absolute_page_urls=use_absolute_page_urls,
             template_name=template_name,
-            **kwargs
-        )
-        if not instance:
-            return ''
-        return instance.render_to_template()
-
-    @classmethod
-    def _get_render_prepared_instance(cls, context, **option_vals):
-        """
-        Calls the class's get_instance_for_rendering() method to fetch or
-        create a menu object appropriate for ``context`` (typically a
-        ``RequestContext`` object) and supplied option values, then calls that
-        object's prepare_to_render() method before returning it.
-        """
-        ctx_vals = cls.get_contextual_vals_from_context(context)
-        opt_vals = cls.get_option_vals_from_options(**option_vals)
+            **kwargs)
         instance = cls.get_instance_for_rendering(ctx_vals, opt_vals)
         if not instance:
-            return
+            return ''
         instance.prepare_to_render(context['request'], ctx_vals, opt_vals)
-        return instance
+        return instance.render_to_template()
 
     @classmethod
     def get_contextual_vals_from_context(cls, context):
