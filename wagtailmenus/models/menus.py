@@ -71,7 +71,9 @@ class Menu:
         more specific methods for overriding certain behaviour at different
         stages of rendering, such as:
 
-            * get_or_create_from_values() (class method)
+            * get_from_collected_values() (if the class IS a Django model)
+            * OR create_from_collected_values()
+
             * prepare_to_render()
             * get_context_data()
             * render_to_template()
@@ -99,7 +101,10 @@ class Menu:
         if cls.get_instance_for_rendering is not Menu.get_instance_for_rendering:
             instance = cls.get_instance_for_rendering(ctx_vals, opt_vals)
         else:
-            instance = cls.get_or_create_from_values(ctx_vals, opt_vals)
+            if issubclass(cls, models.Model):
+                instance = cls.get_from_collected_values(ctx_vals, opt_vals)
+            else:
+                instance = cls.create_from_collected_values(ctx_vals, opt_vals)
         if not instance:
             return ''
         instance.prepare_to_render(context['request'], ctx_vals, opt_vals)
@@ -177,29 +182,40 @@ class Menu:
         return cls._create_optionvals_obj_from_values(**kwargs)
 
     @classmethod
-    def get_or_create_from_values(cls, contextual_vals, option_vals):
+    def create_from_collected_values(cls, contextual_vals, option_vals):
         """
-        Called by the class's ``render_from_tag()`` method to get or create a
-        a menu object appropriate for the provided contextual and option
-        values.
-
-        For model-based menu classes like ``AbstractMainMenu`` and
-        ``AbstractFlatMenu``, this will involve fetching the relevant
-        object from the database. For others, a new object will be
-        instantiated.
+        When the menu class in not model-based, this method is called by
+        ``render_from_tag()`` to 'create' a menu object appropriate
+        for the provided contextual and option values.
         """
         raise NotImplementedError(
             "Subclasses of 'Menu' must define their own "
-            "'get_or_create_from_values' method")
+            "'create_from_collected_values' method."
+        )
+
+    @classmethod
+    def get_from_collected_values(cls, contextual_vals, option_vals):
+        """
+        When the menu class also subclasses django.db.models.Model, this
+        method is called by ``render_from_tag()`` to 'get' a menu object
+        appropriate for the provided contextual and option values.
+        """
+        raise NotImplementedError(
+            "Subclasses of 'Menu' and 'django.db.models.Model' must define "
+            "their own 'get_from_collected_values' method."
+        )
 
     @classmethod
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
         warnings.warn(
             'The get_instance_for_rendering() class method is deprecated in '
-            'v2.12 and will be removed in v3. Use get_or_create_from_values() '
+            'v2.12 and will be removed in v3. Use create_relevant_object_from_values() '
             'instead.', category=RemovedInWagtailMenus3Warning
         )
-        return cls.get_or_create_from_values(contextual_vals, option_vals)
+        if issubclass(cls, models.Model):
+            return cls.get_from_collected_values(contextual_vals, option_vals)
+
+        return cls.create_from_collected_values(contextual_vals, option_vals)
 
     def get_sub_menu_class(self):
         """
@@ -743,7 +759,7 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         )
 
     @classmethod
-    def get_or_create_from_values(cls, contextual_vals, option_vals):
+    def create_from_collected_values(cls, contextual_vals, option_vals):
         if not contextual_vals.current_section_root_page:
             return
         return cls(
@@ -856,7 +872,7 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         )
 
     @classmethod
-    def get_or_create_from_values(cls, contextual_vals, option_vals):
+    def create_from_collected_values(cls, contextual_vals, option_vals):
         parent_page = option_vals.parent_page or contextual_vals.current_page
         if not parent_page:
             return
@@ -909,7 +925,7 @@ class SubMenu(MenuFromPage):
         )
 
     @classmethod
-    def get_or_create_from_values(cls, contextual_vals, option_vals):
+    def create_from_collected_values(cls, contextual_vals, option_vals):
         return cls(
             original_menu=contextual_vals.original_menu_instance,
             parent_page=option_vals.parent_page,
@@ -1164,7 +1180,7 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         )
 
     @classmethod
-    def get_or_create_from_values(cls, contextual_vals, option_vals):
+    def get_from_collected_values(cls, contextual_vals, option_vals):
         try:
             return cls.get_for_site(contextual_vals.current_site)
         except cls.DoesNotExist:
@@ -1273,7 +1289,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         )
 
     @classmethod
-    def get_or_create_from_values(cls, contextual_vals, option_vals):
+    def get_from_collected_values(cls, contextual_vals, option_vals):
         try:
             return cls.get_for_site(
                 option_vals.handle,
