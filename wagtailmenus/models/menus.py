@@ -675,13 +675,14 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
 
     @classmethod
     def render_from_tag(
-        cls, context, max_levels=None, use_specific=None,
+        cls, context, show_section_root=True, max_levels=None, use_specific=None,
         apply_active_classes=True, allow_repeating_parents=True,
         use_absolute_page_urls=False, template_name='',
         sub_menu_template_name='', sub_menu_template_names=None, **kwargs
     ):
         return super().render_from_tag(
             context,
+            show_section_root=show_section_root,
             max_levels=max_levels,
             use_specific=use_specific,
             apply_active_classes=apply_active_classes,
@@ -1202,13 +1203,16 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
 
     @classmethod
     def render_from_tag(
-        cls, context, handle, max_levels=None, use_specific=None,
-        apply_active_classes=True, allow_repeating_parents=True,
-        use_absolute_page_urls=False, template_name='',
-        sub_menu_template_name='', sub_menu_template_names=None, **kwargs
+        cls, context, handle, fall_back_to_default_site_menus=True,
+        max_levels=None, use_specific=None, apply_active_classes=True,
+        allow_repeating_parents=True, use_absolute_page_urls=False,
+        template_name='', sub_menu_template_name='',
+        sub_menu_template_names=None, **kwargs
     ):
         return super().render_from_tag(
             context,
+            handle=handle,
+            fall_back_to_default_site_menus=fall_back_to_default_site_menus,
             max_levels=max_levels,
             use_specific=use_specific,
             apply_active_classes=apply_active_classes,
