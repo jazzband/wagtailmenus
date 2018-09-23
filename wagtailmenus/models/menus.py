@@ -96,8 +96,8 @@ class Menu:
         ``RequestContext`` object) and supplied option values, then calls that
         object's prepare_to_render() method before returning it.
         """
-        ctx_vals = cls._create_contextualvals_object_from_context(context)
-        opt_vals = cls._create_optionvals_object_from_values(**option_vals)
+        ctx_vals = cls.get_contextual_vals_from_context(context)
+        opt_vals = cls.get_option_vals_from_options(**option_vals)
         instance = cls.get_instance_for_rendering(ctx_vals, opt_vals)
         if not instance:
             return
