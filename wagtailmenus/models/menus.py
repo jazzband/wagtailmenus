@@ -80,7 +80,7 @@ class Menu:
         """
 
         # The following two conditionals are to be removed in v3
-        if cls.get_contextual_vals_from_context is not Menu.get_contextual_vals_from_context:
+        if cls.get_contextual_vals_from_context.__func__ is not Menu.get_contextual_vals_from_context.__func__:
             warnings.warn(
                 "From v2.12, the get_contextual_vals_from_context() class "
                 "method is deprecated, and will be removed in v3. Use "
@@ -90,7 +90,7 @@ class Menu:
             ctx_vals = cls.get_contextual_vals_from_context(context)
         else:
             ctx_vals = cls._create_contextualvals_obj_from_context(context)
-        if cls.get_option_vals_from_options is not Menu.get_option_vals_from_options:
+        if cls.get_option_vals_from_options.__func__ is not Menu.get_option_vals_from_options.__func__:
             warnings.warn(
                 "From v2.12, the get_option_vals_from_options() class "
                 "method is deprecated, and will be removed in v3. Use "
