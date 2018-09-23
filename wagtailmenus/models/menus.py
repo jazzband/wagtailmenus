@@ -675,14 +675,13 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
 
     @classmethod
     def render_from_tag(
-        cls, context, root_page, max_levels=None, use_specific=None,
+        cls, context, max_levels=None, use_specific=None,
         apply_active_classes=True, allow_repeating_parents=True,
         use_absolute_page_urls=False, template_name='',
         sub_menu_template_name='', sub_menu_template_names=None, **kwargs
     ):
         return super().render_from_tag(
             context,
-            root_page=root_page,
             max_levels=max_levels,
             use_specific=use_specific,
             apply_active_classes=apply_active_classes,
