@@ -16,7 +16,9 @@ from wagtail.core.models import Page, Site
 
 from wagtailmenus import forms, panels
 from wagtailmenus.conf import constants, settings
-from wagtailmenus.utils.deprecation import RemovedInWagtailMenus213Warning
+from wagtailmenus.utils.deprecation import (
+    RemovedInWagtailMenus213Warning, RemovedInWagtailMenus3Warning
+)
 from wagtailmenus.utils.inspection import accepts_kwarg
 from wagtailmenus.utils.misc import get_site_from_request
 from .menuitems import MenuItem
@@ -69,13 +71,37 @@ class Menu:
         more specific methods for overriding certain behaviour at different
         stages of rendering, such as:
 
-            * get_instance_for_rendering() (class method)
+            * get_from_collected_values() (if the class IS a Django model)
+            * OR create_from_collected_values()
+
             * prepare_to_render()
             * get_context_data()
             * render_to_template()
         """
-        ctx_vals = cls.get_contextual_vals_from_context(context)
-        opt_vals = cls.get_option_vals_from_options(
+
+        # The following two conditionals are to be removed in v3
+        if cls.get_contextual_vals_from_context.__func__ is not Menu.get_contextual_vals_from_context.__func__:
+            warnings.warn(
+                "From v2.12, the get_contextual_vals_from_context() class "
+                "method is deprecated, and will be removed in v3. Use "
+                "get_contextual_vals_from_context() instead.",
+                category=RemovedInWagtailMenus3Warning
+            )
+            ctx_vals = cls.get_contextual_vals_from_context(context)
+        else:
+            ctx_vals = cls._create_contextualvals_obj_from_context(context)
+        if cls.get_option_vals_from_options.__func__ is not Menu.get_option_vals_from_options.__func__:
+            warnings.warn(
+                "From v2.12, the get_option_vals_from_options() class "
+                "method is deprecated, and will be removed in v3. Use "
+                "_create_optionvals_obj_from_values() instead.",
+                category=RemovedInWagtailMenus3Warning
+            )
+            optvals_create_method = cls.get_option_vals_from_options
+        else:
+            optvals_create_method = cls._create_optionvals_obj_from_values
+
+        opt_vals = optvals_create_method(
             max_levels=max_levels,
             use_specific=use_specific,
             apply_active_classes=apply_active_classes,
@@ -83,14 +109,31 @@ class Menu:
             use_absolute_page_urls=use_absolute_page_urls,
             template_name=template_name,
             **kwargs)
-        instance = cls.get_instance_for_rendering(ctx_vals, opt_vals)
+        # TODO: The following conditional is to be removed in v3
+        is_model_class = issubclass(cls, models.Model)
+        if cls.get_instance_for_rendering.__func__ is not Menu.get_instance_for_rendering.__func__:
+            warnings.warn(
+                "From v2.12, the get_instance_for_rendering() class "
+                "method is deprecated, and will be removed in v3. For "
+                "'{}', you should override the {}() method instead.".format(
+                    cls.__name__,
+                    'get_from_collected_values' if is_model_class
+                    else 'create_from_collected_values'
+                ),
+                category=RemovedInWagtailMenus3Warning
+            )
+            instance = cls.get_instance_for_rendering(ctx_vals, opt_vals)
+        elif is_model_class:
+            instance = cls.get_from_collected_values(ctx_vals, opt_vals)
+        else:
+            instance = cls.create_from_collected_values(ctx_vals, opt_vals)
         if not instance:
             return ''
         instance.prepare_to_render(context['request'], ctx_vals, opt_vals)
         return instance.render_to_template()
 
     @classmethod
-    def get_contextual_vals_from_context(cls, context):
+    def _create_contextualvals_obj_from_context(cls, context):
         """
         Gathers all of the 'contextual' data needed to render a menu instance
         and returns it in a structure that can be conveniently referenced
@@ -111,7 +154,17 @@ class Menu:
         )
 
     @classmethod
-    def get_option_vals_from_options(cls, **options):
+    def get_contextual_vals_from_context(cls, context):
+        warnings.warn(
+            "From v2.12, the get_contextual_vals_from_context() class method "
+            "is deprecated, and will be removed in v3. Use "
+            "_create_contextualvals_obj_from_context() instead.",
+            category=RemovedInWagtailMenus3Warning
+        )
+        return cls._create_contextualvals_obj_from_context(context)
+
+    @classmethod
+    def _create_optionvals_obj_from_values(cls, **kwargs):
         """
         Takes all of the options passed to the class's ``render_from_tag()``
         method and returns them in a structure that can be conveniently
@@ -127,31 +180,64 @@ class Menu:
             option_vals.extra['fall_back_to_default_site_menus']
         """
         return OptionVals(
-            options.pop('max_levels'),
-            options.pop('use_specific'),
-            options.pop('apply_active_classes'),
-            options.pop('allow_repeating_parents'),
-            options.pop('use_absolute_page_urls'),
-            options.pop('parent_page', None),
-            options.pop('handle', None),  # for AbstractFlatMenu
-            options.pop('template_name', ''),
-            options.pop('sub_menu_template_name', ''),
-            options.pop('sub_menu_template_names', None),
-            options  # anything left over will be stored as 'extra'
+            kwargs.pop('max_levels'),
+            kwargs.pop('use_specific'),
+            kwargs.pop('apply_active_classes'),
+            kwargs.pop('allow_repeating_parents'),
+            kwargs.pop('use_absolute_page_urls'),
+            kwargs.pop('parent_page', None),
+            kwargs.pop('handle', None),  # for AbstractFlatMenu
+            kwargs.pop('template_name', ''),
+            kwargs.pop('sub_menu_template_name', ''),
+            kwargs.pop('sub_menu_template_names', None),
+            kwargs  # anything left over will be stored as 'extra'
+        )
+
+    @classmethod
+    def get_option_vals_from_options(cls, **kwargs):
+        warnings.warn(
+            'From v2.12, the get_option_vals_from_options() class method is '
+            'deprecated, and will be removed in v3. Use '
+            '_create_optionvals_obj_from_values() instead.',
+            category=RemovedInWagtailMenus3Warning
+        )
+        return cls._create_optionvals_obj_from_values(**kwargs)
+
+    @classmethod
+    def create_from_collected_values(cls, contextual_vals, option_vals):
+        """
+        When the menu class in not model-based, this method is called by
+        ``render_from_tag()`` to 'create' a menu object appropriate
+        for the provided contextual and option values.
+        """
+        raise NotImplementedError(
+            "Subclasses of 'Menu' must define their own "
+            "'create_from_collected_values' method."
+        )
+
+    @classmethod
+    def get_from_collected_values(cls, contextual_vals, option_vals):
+        """
+        When the menu class also subclasses django.db.models.Model, this
+        method is called by ``render_from_tag()`` to 'get' a menu object
+        appropriate for the provided contextual and option values.
+        """
+        raise NotImplementedError(
+            "Subclasses of 'Menu' and 'django.db.models.Model' must define "
+            "their own 'get_from_collected_values' method."
         )
 
     @classmethod
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
-        """
-        Called by the class's ``render_from_tag()`` method to get or create a
-        relevant instance to use for rendering. For model-based menu classes
-        like ``AbstractMainMenu`` and ``AbstractFlatMenu``, this will involve
-        fetching the relevant object from the database. For others, a new
-        instance should be created and returned.
-        """
-        raise NotImplementedError(
-            "Subclasses of 'Menu' must define their own "
-            "'get_instance_for_rendering' method")
+        warnings.warn(
+            'The get_instance_for_rendering() class method is deprecated in '
+            'v2.12 and will be removed in v3. Use create_relevant_object_from_values() '
+            'instead.', category=RemovedInWagtailMenus3Warning
+        )
+        if issubclass(cls, models.Model):
+            return cls.get_from_collected_values(contextual_vals, option_vals)
+
+        return cls.create_from_collected_values(contextual_vals, option_vals)
 
     def get_sub_menu_class(self):
         """
@@ -695,7 +781,7 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         )
 
     @classmethod
-    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+    def create_from_collected_values(cls, contextual_vals, option_vals):
         if not contextual_vals.current_section_root_page:
             return
         return cls(
@@ -808,7 +894,7 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         )
 
     @classmethod
-    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+    def create_from_collected_values(cls, contextual_vals, option_vals):
         parent_page = option_vals.parent_page or contextual_vals.current_page
         if not parent_page:
             return
@@ -861,7 +947,7 @@ class SubMenu(MenuFromPage):
         )
 
     @classmethod
-    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+    def create_from_collected_values(cls, contextual_vals, option_vals):
         return cls(
             original_menu=contextual_vals.original_menu_instance,
             parent_page=option_vals.parent_page,
@@ -1116,7 +1202,7 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         )
 
     @classmethod
-    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+    def get_from_collected_values(cls, contextual_vals, option_vals):
         try:
             return cls.get_for_site(contextual_vals.current_site)
         except cls.DoesNotExist:
@@ -1225,7 +1311,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         )
 
     @classmethod
-    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+    def get_from_collected_values(cls, contextual_vals, option_vals):
         try:
             return cls.get_for_site(
                 option_vals.handle,

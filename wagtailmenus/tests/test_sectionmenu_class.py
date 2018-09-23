@@ -12,6 +12,16 @@ class SectionMenuTestCase(TestCase):
         return SectionMenu(root_page=Page(), max_levels=3, use_specific=1)
 
 
+class TestSectionMenuGeneralMethods(SectionMenuTestCase):
+
+    def test_get_from_collected_values_is_not_implemented(self):
+        # Non model-based menus use create_from_collected_values() instead of
+        # get_from_collected_values(), because there's no 'getting' involved.
+        menu = self.get_test_menu_instance()
+        with self.assertRaises(NotImplementedError):
+            menu.get_from_collected_values(None, None)
+
+
 class TestGetSubMenuTemplateNames(
     SectionMenuTestCase, base.GetSubMenuTemplateNamesMethodTestCase
 ):

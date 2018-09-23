@@ -218,6 +218,7 @@ class TestCustomMenuItemsFrench(TestCase):
 @override_settings(
     WAGTAILMENUS_MAIN_MENU_MODEL='tests.CustomMainMenu',
     WAGTAILMENUS_FLAT_MENU_MODEL='tests.CustomFlatMenu',
+    WAGTAILMENUS_SECTION_MENU_CLASS='wagtailmenus.tests.models.CustomSectionMenu',
 )
 class TestCustomMenuModels(TestCase):
     fixtures = ['test.json', 'test_custom_models.json']
