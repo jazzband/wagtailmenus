@@ -89,6 +89,8 @@ PAGE_FIELD_FOR_MENU_ITEM_TEXT = 'title'
 
 SECTION_ROOT_DEPTH = 3
 
+ADD_SUB_MENU_ITEMS_TO_MENU_ITEMS = False
+
 
 # ----------
 # Deprecated

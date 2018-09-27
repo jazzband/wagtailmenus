@@ -468,6 +468,13 @@ class Menu:
         data.update(kwargs)
         return data
 
+    def get_menu_items_lazy(self):
+        """
+        Returns a SimpleLazy object, that will provide the result of
+        'get_menu_items_for_rendering'
+        """
+        return lazy(self.get_menu_items_for_rendering, list)
+
     def get_menu_items_for_rendering(self):
         """
         Return a list of 'menu items' to be included in the context for
@@ -601,6 +608,11 @@ class Menu:
                         has_children_in_menu = self.page_has_children(page)
 
                 setattr(item, 'has_children_in_menu', has_children_in_menu)
+
+                if item.has_children_in_menu and settings.ADD_SUB_MENU_ITEMS_TO_MENU_ITEMS:
+
+                    sub_menu = self.create_sub_menu(page)
+                    item.sub_menu_items = sub_menu.get_menu_items_lazy()
 
                 if apply_active_classes:
                     active_class = ''
