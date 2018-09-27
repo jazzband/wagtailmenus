@@ -257,13 +257,6 @@ class Menu:
 
         return cls.create_from_collected_values(contextual_vals, option_vals)
 
-    def get_sub_menu_class(self):
-        """
-        Called by the 'sub_menu' tag to identify which menu class to use for
-        rendering when 'self' is the original menu instance.
-        """
-        return self.sub_menu_class or SubMenu
-
     def prepare_to_render(self, request, contextual_vals, option_vals):
         """
         Before calling ``render_to_template()``, this method is called to give
@@ -403,6 +396,28 @@ class Menu:
         child pages.
         """
         return page.path in self.page_children_dict
+
+    def get_sub_menu_class(self):
+        """
+        Called by the 'sub_menu' tag to identify which menu class to use for
+        rendering when 'self' is the original menu instance.
+        """
+        return self.sub_menu_class or SubMenu
+
+    def create_sub_menu(self, parent_page):
+        ctx_vals = self._contextual_vals
+        menu_class = self.get_sub_menu_class()
+        context = self.create_dict_from_parent_context()
+        context.update(ctx_vals._asdict())
+        if not ctx_vals.original_menu_instance and ctx_vals.current_level == 1:
+            context['original_menu_instance'] = self
+        option_vals = self._option_vals._asdict()
+        option_vals.update({
+            'parent_page': parent_page,
+            'max_levels': self.max_levels,
+            'use_specific': self.use_specific,
+        })
+        return menu_class._get_render_prepared_object(context, **option_vals)
 
     def create_dict_from_parent_context(self):
         parent_context = self._contextual_vals.parent_context
