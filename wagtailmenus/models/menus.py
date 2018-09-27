@@ -404,6 +404,26 @@ class Menu:
         """
         return page.path in self.page_children_dict
 
+    def create_dict_from_parent_context(self):
+        parent_context = self._contextual_vals.parent_context
+
+        try:
+            # Django template engine (or similar) Context
+            return parent_context.flatten()
+        except AttributeError:
+            pass
+
+        try:
+            # Jinja2 Context
+            return parent_context.get_all()
+        except AttributeError:
+            pass
+
+        if isinstance(parent_context, dict):
+            return parent_context.copy()
+
+        return {}
+
     def get_context_data(self, **kwargs):
         """
         Return a dictionary containing all of the values needed to render the
@@ -412,11 +432,7 @@ class Menu:
         """
         ctx_vals = self._contextual_vals
         opt_vals = self._option_vals
-        try:
-            data = ctx_vals.parent_context.flatten()
-        except AttributeError:
-            # Jinja2 Context
-            data = ctx_vals.parent_context.get_all()
+        data = self.create_dict_from_parent_context()
         data.update(ctx_vals._asdict())
         data.update({
             'apply_active_classes': opt_vals.apply_active_classes,
