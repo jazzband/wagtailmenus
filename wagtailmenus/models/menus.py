@@ -29,16 +29,30 @@ from .pages import AbstractLinkPage
 mark_safe_lazy = lazy(mark_safe, six.text_type)
 
 ContextualVals = namedtuple('ContextualVals', (
-    'parent_context', 'request', 'current_site', 'current_level',
-    'original_menu_tag', 'original_menu_instance', 'current_page',
-    'current_section_root_page', 'current_page_ancestor_ids'
+    'parent_context',
+    'request',
+    'current_site',
+    'current_level',
+    'original_menu_tag',
+    'original_menu_instance',
+    'current_page',
+    'current_section_root_page',
+    'current_page_ancestor_ids',
 ))
 
 OptionVals = namedtuple('OptionVals', (
-    'max_levels', 'use_specific', 'apply_active_classes',
-    'allow_repeating_parents', 'use_absolute_page_urls', 'parent_page',
-    'handle', 'template_name', 'sub_menu_template_name',
-    'sub_menu_template_names', 'extra'
+    'max_levels',
+    'use_specific',
+    'apply_active_classes',
+    'allow_repeating_parents',
+    'use_absolute_page_urls',
+    'add_sub_menu_items_inline',
+    'parent_page',
+    'handle',
+    'template_name',
+    'sub_menu_template_name',
+    'sub_menu_template_names',
+    'extra',
 ))
 
 
@@ -58,7 +72,8 @@ class Menu:
     def render_from_tag(
         cls, context, max_levels=None, use_specific=None,
         apply_active_classes=True, allow_repeating_parents=True,
-        use_absolute_page_urls=False, template_name='', **kwargs
+        use_absolute_page_urls=False, add_sub_menu_items_inline=None,
+        template_name='', **kwargs
     ):
         """
         A template tag should call this method to render a menu.
@@ -85,6 +100,7 @@ class Menu:
             apply_active_classes=apply_active_classes,
             allow_repeating_parents=allow_repeating_parents,
             use_absolute_page_urls=use_absolute_page_urls,
+            add_sub_menu_items_inline=add_sub_menu_items_inline,
             template_name=template_name,
             **kwargs
         )
@@ -203,6 +219,7 @@ class Menu:
             kwargs.pop('apply_active_classes'),
             kwargs.pop('allow_repeating_parents'),
             kwargs.pop('use_absolute_page_urls'),
+            kwargs.pop('add_sub_menu_items_inline', settings.DEFAULT_ADD_SUBMENU_ITEMS_INLINE),
             kwargs.pop('parent_page', None),
             kwargs.pop('handle', None),  # for AbstractFlatMenu
             kwargs.pop('template_name', ''),
@@ -471,7 +488,7 @@ class Menu:
     def get_menu_items_lazy(self):
         """
         Returns a SimpleLazy object, that will provide the result of
-        'get_menu_items_for_rendering'
+        'get_menu_items_for_rendering' when evaluated.
         """
         return lazy(self.get_menu_items_for_rendering, list)
 
@@ -516,12 +533,12 @@ class Menu:
         are useful in menu templates.
         """
         ctx_vals = self._contextual_vals
-        opt_vals = self._option_vals
+        options = self._option_vals
         request = self.request
         current_site = ctx_vals.current_site
         current_page = ctx_vals.current_page
-        apply_active_classes = opt_vals.apply_active_classes
-        allow_repeating_parents = opt_vals.allow_repeating_parents
+        apply_active_classes = options.apply_active_classes
+        allow_repeating_parents = options.allow_repeating_parents
         active_css_class = settings.ACTIVE_CLASS
         ancestor_css_class = settings.ACTIVE_ANCESTOR_CLASS
         stop_at_this_level = (ctx_vals.current_level >= self.max_levels)
@@ -551,7 +568,7 @@ class Menu:
                 ):
                     setattr(item, 'active_class', item.extra_classes)
                     setattr(item, 'text', item.menu_text(request))
-                    if self._option_vals.use_absolute_page_urls:
+                    if options.use_absolute_page_urls:
                         url = item.get_full_url(request=request)
                     else:
                         url = item.relative_url(current_site, request)
@@ -609,7 +626,7 @@ class Menu:
 
                 setattr(item, 'has_children_in_menu', has_children_in_menu)
 
-                if item.has_children_in_menu and settings.ADD_SUB_MENU_ITEMS_TO_MENU_ITEMS:
+                if item.has_children_in_menu and options.add_sub_menu_items_inline:
 
                     sub_menu = self.create_sub_menu(page)
                     item.sub_menu_items = sub_menu.get_menu_items_lazy()
@@ -649,7 +666,7 @@ class Menu:
             if menuitem and page:
                 menuitem.link_page = page
 
-            if opt_vals.use_absolute_page_urls:
+            if options.use_absolute_page_urls:
                 item.href = item.get_full_url(request=request)
             elif accepts_kwarg(item.relative_url, 'request'):
                 item.href = item.relative_url(current_site, request)
@@ -824,8 +841,9 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     def render_from_tag(
         cls, context, show_section_root=True, max_levels=None, use_specific=None,
         apply_active_classes=True, allow_repeating_parents=True,
-        use_absolute_page_urls=False, template_name='',
-        sub_menu_template_name='', sub_menu_template_names=None, **kwargs
+        use_absolute_page_urls=False, add_sub_menu_items_inline=None,
+        template_name='', sub_menu_template_name='',
+        sub_menu_template_names=None, **kwargs
     ):
         return super().render_from_tag(
             context,
@@ -835,6 +853,7 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
             apply_active_classes=apply_active_classes,
             allow_repeating_parents=allow_repeating_parents,
             use_absolute_page_urls=use_absolute_page_urls,
+            add_sub_menu_items_inline=add_sub_menu_items_inline,
             template_name=template_name,
             sub_menu_template_name=sub_menu_template_name,
             sub_menu_template_names=sub_menu_template_names,
@@ -937,8 +956,9 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     def render_from_tag(
         cls, context, parent_page, max_levels=None, use_specific=None,
         apply_active_classes=True, allow_repeating_parents=True,
-        use_absolute_page_urls=False, template_name='',
-        sub_menu_template_name='', sub_menu_template_names=None, **kwargs
+        use_absolute_page_urls=False, add_sub_menu_items_inline=None,
+        template_name='', sub_menu_template_name='',
+        sub_menu_template_names=None, **kwargs
     ):
         return super().render_from_tag(
             context,
@@ -948,6 +968,7 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
             apply_active_classes=apply_active_classes,
             allow_repeating_parents=allow_repeating_parents,
             use_absolute_page_urls=use_absolute_page_urls,
+            add_sub_menu_items_inline=add_sub_menu_items_inline,
             template_name=template_name,
             sub_menu_template_name=sub_menu_template_name,
             sub_menu_template_names=sub_menu_template_names,
@@ -993,7 +1014,8 @@ class SubMenu(MenuFromPage):
     def render_from_tag(
         cls, context, parent_page, max_levels=None, use_specific=None,
         apply_active_classes=True, allow_repeating_parents=True,
-        use_absolute_page_urls=False, template_name='', **kwargs
+        use_absolute_page_urls=False, add_sub_menu_items_inline=False,
+        template_name='', **kwargs
     ):
         return super().render_from_tag(
             context,
@@ -1003,6 +1025,7 @@ class SubMenu(MenuFromPage):
             apply_active_classes=apply_active_classes,
             allow_repeating_parents=allow_repeating_parents,
             use_absolute_page_urls=use_absolute_page_urls,
+            add_sub_menu_items_inline=add_sub_menu_items_inline,
             template_name=template_name,
             **kwargs
         )
