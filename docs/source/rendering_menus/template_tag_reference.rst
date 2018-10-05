@@ -102,6 +102,41 @@ The tag will attempt to add 'active' and 'ancestor' CSS classes to the menu item
 You can change the CSS class strings used to indicate 'active' and 'ancestor' statuses by utilising the :ref:`ACTIVE_CLASS` and :ref:`ACTIVE_ANCESTOR_CLASS` settings.
 
 By default, menu items linking to custom URLs will also be attributed with the 'active' class if their ``link_url`` value matches the path of the current request _exactly_. However, there is now an alternative solution available, which you can enable by setting :ref:`CUSTOM_URL_SMART_ACTIVE_CLASSES` to ``True`` in your project's settings.
+-----
+
+use_absolute_page_urls
+~~~~~~~~~~~~~~~~~~~~~~
+
+=========  ===================  =============
+Required?  Expected value type  Default value
+=========  ===================  =============
+No         ``bool``             ``False``
+=========  ===================  =============
+
+
+By default, relative page URLs are used for the ``href`` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add ``use_absolute_page_urls=True`` to the ``main_menu`` tag in your template. The preference will also be respected automatically by any subsequent calls to ``{% sub_menu %}`` during the course of rendering the menu (unless explicitly overridden in custom menu templates ).
+
+    .. NOTE:
+        Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
+
+-----
+
+add_sub_menu_items_inline
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.5
+
+=========  ===================  =============
+Required?  Expected value type  Default value
+=========  ===================  =============
+No         ``bool``             ``False``
+=========  ===================  =============
+
+
+By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menu_items_inline=True`` to the initial ``{% main_menu %}`` tag call, then a list of sub menu items will be added directly to any menu item that has them (as ``item.sub_menu_items``), allowing you to easily access and use them within the same template.
+
+.. TIP:
+    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUBMENU_ITEMS_INLINE` setting in your project's Django settings.
 
 -----
 
@@ -160,24 +195,6 @@ For more information about overriding templates, see: :ref:`custom_templates`.
 
 For a list of preferred template paths for this tag, see: :ref:`custom_templates_main_menu`.
 
------
-
-use_absolute_page_urls
-~~~~~~~~~~~~~~~~~~~~~~
-
-=========  ===================  =============
-Required?  Expected value type  Default value
-=========  ===================  =============
-No         ``bool``             ``False``
-=========  ===================  =============
-
-
-By default, relative page URLs are used for the ``href`` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add ``use_absolute_page_urls=True`` to the ``main_menu`` tag in your template. The preference will also be respected automatically by any subsequent calls to ``{% sub_menu %}`` during the course of rendering the menu (unless explicitly overridden in custom menu templates ).
-
-    .. NOTE:
-        Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
-
------
 
 .. _flat_menu:
 
@@ -194,6 +211,7 @@ Example usage
     
     {% flat_menu 'footer' max_levels=1 show_menu_heading=False  use_specific=USE_SPECIFIC_TOP_LEVEL  fall_back_to_default_site_menus=True %}
 
+-----
 
 .. _flat_menu_args:
 
@@ -318,6 +336,25 @@ The default value can be changed to ``True`` by utilising the :ref:`FLAT_MENUS_F
 
 -----
 
+add_sub_menu_items_inline
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.5
+
+=========  ===================  =============
+Required?  Expected value type  Default value
+=========  ===================  =============
+No         ``bool``             ``False``
+=========  ===================  =============
+
+
+By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menu_items_inline=True`` to the initial ``{% main_menu %}`` tag call, then a list of sub menu items will be added directly to any menu item that has them (as ``item.sub_menu_items``), allowing you to easily access and use them within the same template.
+
+.. TIP:
+    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUBMENU_ITEMS_INLINE` setting in your project's Django settings.
+
+-----
+
 template
 ~~~~~~~~
 
@@ -332,6 +369,22 @@ Lets you render the menu to a template of your choosing. If not provided, wagtai
 For more information about overriding templates, see: :ref:`custom_templates`.
 
 For a list of preferred template paths this tag, see: :ref:`custom_templates_flat_menu`.
+
+-----
+
+use_absolute_page_urls
+~~~~~~~~~~~~~~~~~~~~~~
+
+=========  ===================  =============
+Required?  Expected value type  Default value
+=========  ===================  =============
+No         ``bool``             ``False``
+=========  ===================  =============
+
+By default, relative page URLs are used for the ``href`` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add ``use_absolute_page_urls=True`` to the ``{% flat_menu %}`` tag in your template. The preference will also be respected automatically by any subsequent calls to ``{% sub_menu %}`` during the course of rendering the menu (unless explicitly overridden in custom menu templates). 
+
+    .. NOTE:
+        Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
 
 -----
 
@@ -372,22 +425,6 @@ If not provided, wagtailmenus will attempt to find suitable sub menu templates a
 For more information about overriding templates, see: :ref:`custom_templates`.
 
 For a list of preferred template paths for this tag, see: :ref:`custom_templates_flat_menu`.
-
------
-
-use_absolute_page_urls
-~~~~~~~~~~~~~~~~~~~~~~
-
-=========  ===================  =============
-Required?  Expected value type  Default value
-=========  ===================  =============
-No         ``bool``             ``False``
-=========  ===================  =============
-
-By default, relative page URLs are used for the ``href`` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add ``use_absolute_page_urls=True`` to the ``{% flat_menu %}`` tag in your template. The preference will also be respected automatically by any subsequent calls to ``{% sub_menu %}`` during the course of rendering the menu (unless explicitly overridden in custom menu templates). 
-
-    .. NOTE:
-        Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
 
 -----
 
@@ -503,6 +540,39 @@ No         ``bool``             ``True``
 
 Repetition-related settings on your pages are respected by default, but you can add ``allow_repeating_parents=False`` to ignore them, and not repeat any pages in sub-menus when rendering. Please note that using this option will only have an effect if ``use_specific`` has a value of ``1`` or higher.
 
+use_absolute_page_urls
+~~~~~~~~~~~~~~~~~~~~~~
+
+=========  ===================  =============
+Required?  Expected value type  Default value
+=========  ===================  =============
+No         ``bool``             ``False``
+=========  ===================  =============
+
+By default, relative page URLs are used for the ``href`` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add ``use_absolute_page_urls=True`` to the ``{% section_menu %}`` tag in your template. The preference will also be respected automatically by any subsequent calls to ``{% sub_menu %}`` during the course of rendering the menu (unless explicitly overridden in custom menu templates). 
+    
+    .. NOTE:
+        Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
+
+-----
+
+add_sub_menu_items_inline
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.5
+
+=========  ===================  =============
+Required?  Expected value type  Default value
+=========  ===================  =============
+No         ``bool``             ``False``
+=========  ===================  =============
+
+
+By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menu_items_inline=True`` to the initial ``{% main_menu %}`` tag call, then a list of sub menu items will be added directly to any menu item that has them (as ``item.sub_menu_items``), allowing you to easily access and use them within the same template.
+
+.. TIP:
+    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUBMENU_ITEMS_INLINE` setting in your project's Django settings.
+
 -----
 
 template
@@ -559,22 +629,6 @@ If not provided, wagtailmenus will attempt to find suitable sub menu templates a
 For more information about overriding templates, see: :ref:`custom_templates`.
 
 For a list of preferred template paths for this tag, see: :ref:`custom_templates_section_menu`.
-
------
-
-use_absolute_page_urls
-~~~~~~~~~~~~~~~~~~~~~~
-
-=========  ===================  =============
-Required?  Expected value type  Default value
-=========  ===================  =============
-No         ``bool``             ``False``
-=========  ===================  =============
-
-By default, relative page URLs are used for the ``href`` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add ``use_absolute_page_urls=True`` to the ``{% section_menu %}`` tag in your template. The preference will also be respected automatically by any subsequent calls to ``{% sub_menu %}`` during the course of rendering the menu (unless explicitly overridden in custom menu templates). 
-    
-    .. NOTE:
-        Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
 
 -----
 
@@ -663,8 +717,6 @@ Unlike ``main_menu`` and `section_menu``, ``children_menu`` will NOT attempt to 
 
 You can change the CSS class strings used to indicate 'active' and 'ancestor' statuses by utilising the :ref:`ACTIVE_CLASS` and :ref:`ACTIVE_ANCESTOR_CLASS` settings.
 
-By default, menu items linking to custom URLs will also be attributed with the 'active' class if their ``link_url`` value matches the path of the current request _exactly_. However, there is now an alternative solution available, which you can enable by setting :ref:`CUSTOM_URL_SMART_ACTIVE_CLASSES` to ``True`` in your project's settings.
-
 -----
 
 allow_repeating_parents
@@ -677,6 +729,41 @@ No         ``bool``             ``True``
 =========  ===================  =============
 
 Repetition-related settings on your pages are respected by default, but you can add ``allow_repeating_parents=False`` to ignore them, and not repeat any pages in sub-menus when rendering. Please note that using this option will only have an effect if ``use_specific`` has a value of ``1`` or higher.
+
+-----
+
+use_absolute_page_urls
+~~~~~~~~~~~~~~~~~~~~~~
+
+=========  ===================  =============
+Required?  Expected value type  Default value
+=========  ===================  =============
+No         ``bool``             ``False``
+=========  ===================  =============
+
+By default, relative page URLs are used for the ``href`` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add ``use_absolute_page_urls=True`` to the ``{% children_menu %}`` tag in your template. The preference will also be respected automatically by any subsequent calls to ``{% sub_menu %}`` during the course of rendering the menu (unless explicitly overridden in custom menu templates).
+
+    .. NOTE:
+        Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
+
+-----
+
+add_sub_menu_items_inline
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.5
+
+=========  ===================  =============
+Required?  Expected value type  Default value
+=========  ===================  =============
+No         ``bool``             ``False``
+=========  ===================  =============
+
+
+By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menu_items_inline=True`` to the initial ``{% main_menu %}`` tag call, then a list of sub menu items will be added directly to any menu item that has them (as ``item.sub_menu_items``), allowing you to easily access and use them within the same template.
+
+.. TIP:
+    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUBMENU_ITEMS_INLINE` setting in your project's Django settings.
 
 -----
 
@@ -734,22 +821,6 @@ If not provided, wagtailmenus will attempt to find suitable sub menu templates a
 For more information about overriding templates, see: :ref:`custom_templates`.
 
 For a list of preferred template paths for this tag, see: :ref:`custom_templates_children_menu`.
-
------
-
-use_absolute_page_urls
-~~~~~~~~~~~~~~~~~~~~~~
-
-=========  ===================  =============
-Required?  Expected value type  Default value
-=========  ===================  =============
-No         ``bool``             ``False``
-=========  ===================  =============
-
-By default, relative page URLs are used for the ``href`` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add ``use_absolute_page_urls=True`` to the ``{% children_menu %}`` tag in your template. The preference will also be respected automatically by any subsequent calls to ``{% sub_menu %}`` during the course of rendering the menu (unless explicitly overridden in custom menu templates).
-
-    .. NOTE:
-        Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
 
 -----
 
@@ -823,21 +894,6 @@ Allows you to override the value set by the original tag by adding an alternativ
 
 -----
 
-template
-~~~~~~~~
-
-=========  =======================  =============
-Required?  Expected value type      Default value
-=========  =======================  =============
-No         Template path (``str``)  ``''``
-=========  =======================  =============
-
-Allows you to override the template set by the original menu tag (``sub_menu_template`` in the context) by passing a fixed template path to the  ``{% sub_menu %}`` tag in a custom menu template.
-
-For more information about overriding templates, see: :ref:`custom_templates`
-
------
-
 use_specific
 ~~~~~~~~~~~~
 
@@ -865,3 +921,18 @@ No         ``bool``             ``None`` (inherit from original tag)
 Allows you to override the value set on the original tag by explicitly adding ``use_absolute_page_urls=True`` or ``use_absolute_page_urls=False`` to a ``{% sub_menu %}`` tag in a custom menu template. 
 
 If ``True``, absolute page URLs will be used for the ``href`` attributes on page links instead of relative URLs.
+
+-----
+
+template
+~~~~~~~~
+
+=========  =======================  =============
+Required?  Expected value type      Default value
+=========  =======================  =============
+No         Template path (``str``)  ``''``
+=========  =======================  =============
+
+Allows you to override the template set by the original menu tag (``sub_menu_template`` in the context) by passing a fixed template path to the  ``{% sub_menu %}`` tag in a custom menu template.
+
+For more information about overriding templates, see: :ref:`custom_templates`
