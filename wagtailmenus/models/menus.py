@@ -219,7 +219,7 @@ class Menu:
             kwargs.pop('apply_active_classes'),
             kwargs.pop('allow_repeating_parents'),
             kwargs.pop('use_absolute_page_urls'),
-            kwargs.pop('add_sub_menu_items_inline', settings.DEFAULT_ADD_SUBMENU_ITEMS_INLINE),
+            kwargs.pop('add_sub_menu_items_inline', settings.DEFAULT_ADD_SUB_MENU_ITEMS_INLINE),
             kwargs.pop('parent_page', None),
             kwargs.pop('handle', None),  # for AbstractFlatMenu
             kwargs.pop('template_name', ''),
@@ -1269,8 +1269,9 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     def render_from_tag(
         cls, context, max_levels=None, use_specific=None,
         apply_active_classes=True, allow_repeating_parents=True,
-        use_absolute_page_urls=False, template_name='',
-        sub_menu_template_name='', sub_menu_template_names=None, **kwargs
+        use_absolute_page_urls=False, add_sub_menu_items_inline=False,
+        template_name='', sub_menu_template_name='',
+        sub_menu_template_names=None, **kwargs
     ):
         return super().render_from_tag(
             context,
@@ -1279,6 +1280,7 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
             apply_active_classes=apply_active_classes,
             allow_repeating_parents=allow_repeating_parents,
             use_absolute_page_urls=use_absolute_page_urls,
+            add_sub_menu_items_inline=add_sub_menu_items_inline,
             template_name=template_name,
             sub_menu_template_name=sub_menu_template_name,
             sub_menu_template_names=sub_menu_template_names,
@@ -1376,8 +1378,8 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         cls, context, handle, fall_back_to_default_site_menus=True,
         max_levels=None, use_specific=None, apply_active_classes=True,
         allow_repeating_parents=True, use_absolute_page_urls=False,
-        template_name='', sub_menu_template_name='',
-        sub_menu_template_names=None, **kwargs
+        add_sub_menu_items_inline=False, template_name='',
+        sub_menu_template_name='', sub_menu_template_names=None, **kwargs
     ):
         return super().render_from_tag(
             context,
@@ -1388,6 +1390,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
             apply_active_classes=apply_active_classes,
             allow_repeating_parents=allow_repeating_parents,
             use_absolute_page_urls=use_absolute_page_urls,
+            add_sub_menu_items_inline=add_sub_menu_items_inline,
             template_name=template_name,
             sub_menu_template_name=sub_menu_template_name,
             sub_menu_template_names=sub_menu_template_names,

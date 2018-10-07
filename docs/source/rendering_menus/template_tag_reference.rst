@@ -135,7 +135,7 @@ No         ``bool``             ``False``
 By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menu_items_inline=True`` to the initial ``{% main_menu %}`` tag call, then a list of sub menu items will be added directly to any menu item that has them (as ``item.sub_menu_items``), allowing you to easily access and use them within the same template.
 
 .. TIP:
-    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUBMENU_ITEMS_INLINE` setting in your project's Django settings.
+    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENU_ITEMS_INLINE` setting in your project's Django settings.
 
 -----
 
@@ -348,7 +348,7 @@ No         ``bool``             ``False``
 By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menu_items_inline=True`` to the initial ``{% main_menu %}`` tag call, then a list of sub menu items will be added directly to any menu item that has them (as ``item.sub_menu_items``), allowing you to easily access and use them within the same template.
 
 .. TIP:
-    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUBMENU_ITEMS_INLINE` setting in your project's Django settings.
+    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENU_ITEMS_INLINE` setting in your project's Django settings.
 
 -----
 
@@ -568,7 +568,7 @@ No         ``bool``             ``False``
 By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menu_items_inline=True`` to the initial ``{% main_menu %}`` tag call, then a list of sub menu items will be added directly to any menu item that has them (as ``item.sub_menu_items``), allowing you to easily access and use them within the same template.
 
 .. TIP:
-    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUBMENU_ITEMS_INLINE` setting in your project's Django settings.
+    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENU_ITEMS_INLINE` setting in your project's Django settings.
 
 -----
 
@@ -760,7 +760,7 @@ No         ``bool``             ``False``
 By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menu_items_inline=True`` to the initial ``{% main_menu %}`` tag call, then a list of sub menu items will be added directly to any menu item that has them (as ``item.sub_menu_items``), allowing you to easily access and use them within the same template.
 
 .. TIP:
-    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUBMENU_ITEMS_INLINE` setting in your project's Django settings.
+    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENU_ITEMS_INLINE` setting in your project's Django settings.
 
 -----
 
