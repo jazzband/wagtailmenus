@@ -565,6 +565,12 @@ class Menu:
             page, item = self._replace_with_specific_page(page, item)
 
             if not item.show_in_menus_custom(current_site, self, ctx_vals.original_menu_tag):
+            if not item.show_in_menus_custom(
+                request=request,
+                current_site=current_site,
+                menu_instance=self,
+                original_menu_tag=ctx_vals.original_menu_tag
+            ):
                 # This item shouldn't be displayed
                 return
 
