@@ -581,10 +581,11 @@ class Menu:
             return item
 
         # ---------------------------------------------------------------------
-        # Determine an appropriate 'has_children_in_menu' value
+        # Determine appropriate value for 'has_children_in_menu'
         # ---------------------------------------------------------------------
-        # NOTE: We aren't setting attributes yet, as the item could potentially
-        # be replaced here
+
+        # NOTE: Attributes aren't being set yet, as the item could potentially
+        # be replaced
 
         has_children_in_menu = False
 
@@ -612,11 +613,11 @@ class Menu:
                     has_children_in_menu = self.page_has_children(page)
 
         # ---------------------------------------------------------------------
-        # Determine an appropriate 'active_class' value
+        # Determine appropriate value for 'active_class'
         # ---------------------------------------------------------------------
 
-        # NOTE: We aren't setting attributes yet, as the item could potentially
-        # be replaced here
+        # NOTE: Attributes aren't being set yet, as the item could potentially
+        # be replaced
 
         active_class = ''
 
