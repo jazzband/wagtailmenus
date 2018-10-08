@@ -226,6 +226,20 @@ Default value: ``True``
 When not using wagtail's routing/serving mechanism to serve page objects, wagtailmenus can use the request path to attempt to identify a 'current' page, 'section root' page, allowing ``{% section_menu %}`` and active item highlighting to work. If this functionality is not required for your project, you can disable it by setting this value to ``False``.
 
 
+.. _DEFAULT_ADD_SUB_MENUS_INLINE:
+
+``WAGTAILMENUS_DEFAULT_ADD_SUB_MENUS_INLINE``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.12
+
+Default value: ``False``
+
+For all menu types, when preparing menu items for rendering, sub menus are not added to menu items directly by default, because it's more common for developers to use the ``{% sub_menu %}`` tag in a menu templates to render additional branches of the menu. In which case, the sub menu is created by the tag.
+
+This behaviour can be overridden on an 'individual use' basis by utilising the ``add_sub_menus_inline`` option available for each template tag. However, users wishing to change the default behaviour (so that sub menus are appended directly to menu items, without having to specify) can do so by providing a value of ``True`` in their project settings.
+
+
 .. _DEFAULT_CHILDREN_MENU_MAX_LEVELS:
 
 ``WAGTAILMENUS_DEFAULT_CHILDREN_MENU_MAX_LEVELS``
