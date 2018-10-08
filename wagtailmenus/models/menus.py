@@ -543,12 +543,11 @@ class Menu:
         current_page = ctx_vals.current_page
         request = self.request
         stop_at_this_level = ctx_vals.current_level >= self.max_levels
+        item_is_menu_item_object = isinstance(item, MenuItem)
 
         # ---------------------------------------------------------------------
         # Establish whether this item 'is' or 'links to' a page
         # ---------------------------------------------------------------------
-
-        item_is_menu_item_object = isinstance(item, MenuItem)
 
         if item_is_menu_item_object:
             item_is_page_object = False
