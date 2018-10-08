@@ -123,7 +123,8 @@ By default, relative page URLs are used for the ``href`` attribute on page links
 add_sub_menus_inline
 ~~~~~~~~~~~~~~~~~~~~
 
-.. versionadded:: 2.5
+.. versionadded:: 2.12
+
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -361,7 +362,8 @@ The default value can be changed to ``True`` by utilising the :ref:`FLAT_MENUS_F
 add_sub_menus_inline
 ~~~~~~~~~~~~~~~~~~~~
 
-.. versionadded:: 2.5
+.. versionadded:: 2.12
+
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -606,7 +608,8 @@ By default, relative page URLs are used for the ``href`` attribute on page links
 add_sub_menus_inline
 ~~~~~~~~~~~~~~~~~~~~
 
-.. versionadded:: 2.5
+.. versionadded:: 2.12
+
 
 =========  ===================  =============
 Required?  Expected value type  Default value
@@ -823,7 +826,7 @@ By default, relative page URLs are used for the ``href`` attribute on page links
 add_sub_menus_inline
 ~~~~~~~~~~~~~~~~~~~~
 
-.. versionadded:: 2.5
+.. versionadded:: 2.12
 
 =========  ===================  =============
 Required?  Expected value type  Default value
