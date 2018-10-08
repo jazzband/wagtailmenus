@@ -567,7 +567,7 @@ class Menu:
                 request=request,
                 current_site=current_site,
                 menu_instance=self,
-                original_menu_tag=ctx_vals.original_menu_tag
+                original_menu_tag=ctx_vals.original_menu_tag,
             ):
                 # This item shouldn't be displayed
                 return
