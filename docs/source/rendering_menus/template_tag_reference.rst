@@ -120,8 +120,8 @@ By default, relative page URLs are used for the ``href`` attribute on page links
 
 -----
 
-add_sub_menu_items_inline
-~~~~~~~~~~~~~~~~~~~~~~~~~
+add_sub_menus_inline
+~~~~~~~~~~~~~~~~~~~~
 
 .. versionadded:: 2.5
 
@@ -131,11 +131,36 @@ Required?  Expected value type  Default value
 No         ``bool``             ``False``
 =========  ===================  =============
 
+By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menus_inline=True`` to the initial ``{% main_menu %}`` tag call, then sub menus will be added directly to any menu item where `item.has_children_in_menu` is ``True``, allowing you to render them directly, without having to use the template tag.
 
-By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menu_items_inline=True`` to the initial ``{% main_menu %}`` tag call, then a list of sub menu items will be added directly to any menu item that has them (as ``item.sub_menu_items``), allowing you to easily access and use them within the same template.
+For example, instead of the following:
+
+.. code-block:: html
+
+    {% for item in menu_items %}
+        <li class="{{ item.active_class }}>
+            <a href="{{ item.href }}">{{ item.text }}</a>
+            {% if item.has_children_in_menu %}
+                {% sub_menu item %}
+            {% endif %}
+        </li>       
+    {% endfor %}
+
+You could do:
+
+.. code-block:: html
+
+    {% for item in menu_items %}
+        <li class="{{ item.active_class }}>
+            <a href="{{ item.href }}">{{ item.text }}</a>
+            {% if item.has_children_in_menu %}
+                {{ item.sub_menu.render_to_template }}
+            {% endif %}
+        </li>       
+    {% endfor %}
 
 .. TIP:
-    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENU_ITEMS_INLINE` setting in your project's Django settings.
+    If you'd rather have sub menus be added inline by default (without having to add ``add_sub_menus_inline=True`` each time you use a template tag), you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENUS_INLINE` setting in your project's Django settings.
 
 -----
 
@@ -333,8 +358,8 @@ The default value can be changed to ``True`` by utilising the :ref:`FLAT_MENUS_F
 
 -----
 
-add_sub_menu_items_inline
-~~~~~~~~~~~~~~~~~~~~~~~~~
+add_sub_menus_inline
+~~~~~~~~~~~~~~~~~~~~
 
 .. versionadded:: 2.5
 
@@ -344,11 +369,36 @@ Required?  Expected value type  Default value
 No         ``bool``             ``False``
 =========  ===================  =============
 
+By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menus_inline=True`` to the initial ``{% flat_menu %}`` tag call, then sub menus will be added directly to any menu item where `item.has_children_in_menu` is ``True``, allowing you to render them directly, without having to use the template tag.
 
-By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menu_items_inline=True`` to the initial ``{% main_menu %}`` tag call, then a list of sub menu items will be added directly to any menu item that has them (as ``item.sub_menu_items``), allowing you to easily access and use them within the same template.
+For example, instead of the following:
+
+.. code-block:: html
+
+    {% for item in menu_items %}
+        <li class="{{ item.active_class }}>
+            <a href="{{ item.href }}">{{ item.text }}</a>
+            {% if item.has_children_in_menu %}
+                {% sub_menu item %}
+            {% endif %}
+        </li>       
+    {% endfor %}
+
+You could do:
+
+.. code-block:: html
+
+    {% for item in menu_items %}
+        <li class="{{ item.active_class }}>
+            <a href="{{ item.href }}">{{ item.text }}</a>
+            {% if item.has_children_in_menu %}
+                {{ item.sub_menu.render_to_template }}
+            {% endif %}
+        </li>       
+    {% endfor %}
 
 .. TIP:
-    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENU_ITEMS_INLINE` setting in your project's Django settings.
+    If you'd rather have sub menus be added inline by default (without having to add ``add_sub_menus_inline=True`` each time you use a template tag), you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENUS_INLINE` setting in your project's Django settings.
 
 -----
 
@@ -553,8 +603,8 @@ By default, relative page URLs are used for the ``href`` attribute on page links
 
 -----
 
-add_sub_menu_items_inline
-~~~~~~~~~~~~~~~~~~~~~~~~~
+add_sub_menus_inline
+~~~~~~~~~~~~~~~~~~~~
 
 .. versionadded:: 2.5
 
@@ -564,11 +614,36 @@ Required?  Expected value type  Default value
 No         ``bool``             ``False``
 =========  ===================  =============
 
+By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menus_inline=True`` to the initial ``{% section_menu %}`` tag call, then sub menus will be added directly to any menu item where `item.has_children_in_menu` is ``True``, allowing you to render them directly, without having to use the template tag.
 
-By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menu_items_inline=True`` to the initial ``{% main_menu %}`` tag call, then a list of sub menu items will be added directly to any menu item that has them (as ``item.sub_menu_items``), allowing you to easily access and use them within the same template.
+For example, instead of the following:
+
+.. code-block:: html
+
+    {% for item in menu_items %}
+        <li class="{{ item.active_class }}>
+            <a href="{{ item.href }}">{{ item.text }}</a>
+            {% if item.has_children_in_menu %}
+                {% sub_menu item %}
+            {% endif %}
+        </li>       
+    {% endfor %}
+
+You could do:
+
+.. code-block:: html
+
+    {% for item in menu_items %}
+        <li class="{{ item.active_class }}>
+            <a href="{{ item.href }}">{{ item.text }}</a>
+            {% if item.has_children_in_menu %}
+                {{ item.sub_menu.render_to_template }}
+            {% endif %}
+        </li>       
+    {% endfor %}
 
 .. TIP:
-    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENU_ITEMS_INLINE` setting in your project's Django settings.
+    If you'd rather have sub menus be added inline by default (without having to add ``add_sub_menus_inline=True`` each time you use a template tag), you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENUS_INLINE` setting in your project's Django settings.
 
 -----
 
@@ -745,8 +820,8 @@ By default, relative page URLs are used for the ``href`` attribute on page links
 
 -----
 
-add_sub_menu_items_inline
-~~~~~~~~~~~~~~~~~~~~~~~~~
+add_sub_menus_inline
+~~~~~~~~~~~~~~~~~~~~
 
 .. versionadded:: 2.5
 
@@ -756,11 +831,36 @@ Required?  Expected value type  Default value
 No         ``bool``             ``False``
 =========  ===================  =============
 
+By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menus_inline=True`` to the initial ``{% children_menu %}`` tag call, then sub menus will be added directly to any menu item where `item.has_children_in_menu` is ``True``, allowing you to render them directly, without having to use the template tag.
 
-By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menu_items_inline=True`` to the initial ``{% main_menu %}`` tag call, then a list of sub menu items will be added directly to any menu item that has them (as ``item.sub_menu_items``), allowing you to easily access and use them within the same template.
+For example, instead of the following:
+
+.. code-block:: html
+
+    {% for item in menu_items %}
+        <li class="{{ item.active_class }}>
+            <a href="{{ item.href }}">{{ item.text }}</a>
+            {% if item.has_children_in_menu %}
+                {% sub_menu item %}
+            {% endif %}
+        </li>       
+    {% endfor %}
+
+You could do:
+
+.. code-block:: html
+
+    {% for item in menu_items %}
+        <li class="{{ item.active_class }}>
+            <a href="{{ item.href }}">{{ item.text }}</a>
+            {% if item.has_children_in_menu %}
+                {{ item.sub_menu.render_to_template }}
+            {% endif %}
+        </li>       
+    {% endfor %}
 
 .. TIP:
-    If you'd rather have sub menu items be added directly to menu items by default, without having to specify ``add_sub_menu_items_inline=True`` every time you use a menu tag, you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENU_ITEMS_INLINE` setting in your project's Django settings.
+    If you'd rather have sub menus be added inline by default (without having to add ``add_sub_menus_inline=True`` each time you use a template tag), you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENUS_INLINE` setting in your project's Django settings.
 
 -----
 
