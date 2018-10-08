@@ -521,163 +521,178 @@ class Menu:
         raise NotImplementedError("Subclasses of 'Menu' must define their own "
                                   "'get_raw_menu_items' method")
 
+    @staticmethod
+    def _replace_with_specific_page(page, menu_item):
+        """
+        If ``page`` is a vanilla ``Page` object, replace it with a 'specific'
+        version of itself. Also update ``menu_item``, depending on whether it's
+        a ``MenuItem`` object or a ``Page`` object.
+        """
+        if type(page) is Page:
+            page = page.specific
+            if isinstance(menu_item, MenuItem):
+                menu_item.link_page = page
+            else:
+                menu_item = page
+        return page, menu_item
+
+    def _prime_menu_item(self, item):
+        ctx_vals = self._contextual_vals
+        option_vals = self._option_vals
+        current_site = ctx_vals.current_site
+        current_page = ctx_vals.current_page
+        request = self.request
+        stop_at_this_level = ctx_vals.current_level >= self.max_levels
+        item_is_menu_item_object = isinstance(item, MenuItem)
+
+        # ---------------------------------------------------------------------
+        # Establish whether this item 'is' or 'links to' a page
+        # ---------------------------------------------------------------------
+
+        if item_is_menu_item_object:
+            item_is_page_object = False
+            page = item.link_page
+        else:
+            item_is_page_object = isinstance(item, Page)
+            page = item if item_is_page_object else None
+
+        # ---------------------------------------------------------------------
+        # Special handling for 'LinkPage' objects
+        # ---------------------------------------------------------------------
+
+        if item_is_page_object and issubclass(item.specific_class, AbstractLinkPage):
+            page, item = self._replace_with_specific_page(page, item)
+
+            if not item.show_in_menus_custom(
+                request=request,
+                current_site=current_site,
+                menu_instance=self,
+                original_menu_tag=ctx_vals.original_menu_tag,
+            ):
+                # This item shouldn't be displayed
+                return
+
+            item.active_class = item.extra_classes
+            item.text = item.menu_text(request)
+            if option_vals.use_absolute_page_urls:
+                item.href = item.get_full_url(request=request)
+            else:
+                item.href = item.relative_url(current_site, request)
+            return item
+
+        # ---------------------------------------------------------------------
+        # Determine appropriate value for 'has_children_in_menu'
+        # ---------------------------------------------------------------------
+
+        # NOTE: Attributes aren't being set yet, as the item could potentially
+        # be replaced
+
+        has_children_in_menu = False
+
+        if page:
+            if (
+                not stop_at_this_level and
+                page.depth >= settings.SECTION_ROOT_DEPTH and
+                (not item_is_menu_item_object or item.allow_subnav)
+            ):
+                if (
+                    self.use_specific and (
+                        hasattr(page, 'has_submenu_items') or
+                        hasattr(page.specific_class, 'has_submenu_items')
+                    )
+                ):
+                    page, item = self._replace_with_specific_page(page, item)
+                    has_children_in_menu = page.has_submenu_items(
+                        menu_instance=self,
+                        request=request,
+                        allow_repeating_parents=option_vals.allow_repeating_parents,
+                        current_page=current_page,
+                        original_menu_tag=ctx_vals.original_menu_tag,
+                    )
+                else:
+                    has_children_in_menu = self.page_has_children(page)
+
+        # ---------------------------------------------------------------------
+        # Determine appropriate value for 'active_class'
+        # ---------------------------------------------------------------------
+
+        # NOTE: Attributes aren't being set yet, as the item could potentially
+        # be replaced
+
+        active_class = ''
+
+        if option_vals.apply_active_classes:
+            if page:
+                if(current_page and page.pk == current_page.pk):
+                    # This is the current page, so the menu item should
+                    # probably have the 'active' class
+                    active_class = settings.ACTIVE_CLASS
+                    if (
+                        option_vals.allow_repeating_parents and
+                        self.use_specific and
+                        has_children_in_menu
+                    ):
+                        page, item = self._replace_with_specific_page(page, item)
+                        if getattr(page, 'repeat_in_subnav', False):
+                            active_class = settings.ACTIVE_ANCESTOR_CLASS
+
+                elif page.pk in ctx_vals.current_page_ancestor_ids:
+                    active_class = settings.ACTIVE_ANCESTOR_CLASS
+            else:
+                # This is a `MenuItem` for a custom URL
+                active_class = item.get_active_class_for_request(request)
+
+        # ---------------------------------------------------------------------
+        # Set 'text' attribute
+        # ---------------------------------------------------------------------
+
+        if item_is_menu_item_object:
+            item.text = item.menu_text
+        else:
+            item.text = getattr(item, settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT, item.title)
+
+        # ---------------------------------------------------------------------
+        # Set 'href' attribute
+        # ---------------------------------------------------------------------
+
+        if option_vals.use_absolute_page_urls:
+            item.href = item.get_full_url(request=request)
+        elif accepts_kwarg(item.relative_url, 'request'):
+            item.href = item.relative_url(current_site, request)
+        else:
+            warnings.warn(
+                "The relative_url() method on custom MenuItem classes "
+                "must accept a 'request' keyword argument. Please update "
+                "the method signature on your {} class. It will be "
+                "mandatory in Wagtail 2.13.".format(
+                    item.__class__.__name__
+                ),
+                category=RemovedInWagtailMenus213Warning
+            )
+            item.href = item.relative_url(current_site)
+
+        # ---------------------------------------------------------------------
+        # Set additional attributes
+        # ---------------------------------------------------------------------
+
+        item.has_children_in_menu = has_children_in_menu
+        item.active_class = active_class
+
+        if item.has_children_in_menu and option_vals.add_sub_menus_inline:
+            item.sub_menu = self.create_sub_menu(page)
+
+        return item
+
     def prime_menu_items(self, menu_items):
         """
         A generator method that takes a list of ``MenuItem`` or ``Page``
         objects and sets a number of additional attributes on each item that
         are useful in menu templates.
         """
-        ctx_vals = self._contextual_vals
-        options = self._option_vals
-        request = self.request
-        current_site = ctx_vals.current_site
-        current_page = ctx_vals.current_page
-        apply_active_classes = options.apply_active_classes
-        allow_repeating_parents = options.allow_repeating_parents
-        active_css_class = settings.ACTIVE_CLASS
-        ancestor_css_class = settings.ACTIVE_ANCESTOR_CLASS
-        stop_at_this_level = (ctx_vals.current_level >= self.max_levels)
-
-        return_list = []
         for item in menu_items:
-
-            if isinstance(item, MenuItem):
-                """
-                `menu_items` is a list of `MenuItem` objects from
-                `Menu.top_level_items`. Any `link_page` values will have been
-                replaced with specific pages if necessary
-                """
-                page = item.link_page
-                menuitem = item
-                setattr(item, 'text', item.menu_text)
-
-            elif issubclass(item.specific_class, AbstractLinkPage):
-                # Special treatment for link pages
-
-                if type(item) is Page:
-                    item = item.specific
-                if item.show_in_menus_custom(
-                    current_site,
-                    self,
-                    ctx_vals.original_menu_tag
-                ):
-                    setattr(item, 'active_class', item.extra_classes)
-                    setattr(item, 'text', item.menu_text(request))
-                    if options.use_absolute_page_urls:
-                        url = item.get_full_url(request=request)
-                    else:
-                        url = item.relative_url(current_site, request)
-                    setattr(item, 'href', url)
-                    return_list.append(item)
-                continue
-
-            else:
-                # `menu_items` is a list of `Page` objects
-
-                page = item
-                menuitem = None
-                text = getattr(
-                    page,
-                    settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
-                    page.title
-                )
-                setattr(item, 'text', text)
-
-            if page:
-                """
-                Work out whether this item should be flagged as needing
-                a sub-menu. It can be expensive, so we try to only do the
-                working out when absolutely necessary.
-                """
-                has_children_in_menu = False
-                if (
-                    not stop_at_this_level and
-                    page.depth >= settings.SECTION_ROOT_DEPTH and
-                    (menuitem is None or menuitem.allow_subnav)
-                ):
-                    if (
-                        self.use_specific and (
-                            hasattr(page, 'has_submenu_items') or
-                            hasattr(page.specific_class, 'has_submenu_items')
-                        )
-                    ):
-                        if type(page) is Page:
-                            page = page.specific
-                        """
-                        If the page has a `has_submenu_items` method, give
-                        responsibilty for determining `has_children_in_menu`
-                        to that.
-                        """
-                        has_children_in_menu = page.has_submenu_items(
-                            menu_instance=self,
-                            request=request,
-                            allow_repeating_parents=allow_repeating_parents,
-                            current_page=ctx_vals.current_page,
-                            original_menu_tag=ctx_vals.original_menu_tag,
-                        )
-
-                    else:
-                        has_children_in_menu = self.page_has_children(page)
-
-                setattr(item, 'has_children_in_menu', has_children_in_menu)
-
-                if has_children_in_menu and options.add_sub_menus_inline:
-                    item.sub_menu = self.create_sub_menu(page)
-
-                if apply_active_classes:
-                    active_class = ''
-                    if(current_page and page.pk == current_page.pk):
-                        # This is the current page, so the menu item should
-                        # probably have the 'active' class
-                        active_class = active_css_class
-                        if (
-                            allow_repeating_parents and
-                            self.use_specific and
-                            has_children_in_menu
-                        ):
-                            if type(page) is Page:
-                                page = page.specific
-                            if getattr(page, 'repeat_in_subnav', False):
-                                active_class = ancestor_css_class
-                    elif page.pk in ctx_vals.current_page_ancestor_ids:
-                        active_class = ancestor_css_class
-                    setattr(item, 'active_class', active_class)
-
-            elif page is None:
-                """
-                This is a `MenuItem` for a custom URL. If can be classed as
-                'active' if the URL matches the path of the current request,
-                or as the 'ancestor of the current page' if that looks to be
-                the case.
-                """
-                if apply_active_classes:
-                    active_class = item.get_active_class_for_request(request)
-                    setattr(item, 'active_class', active_class)
-
-            # In case the specific page was fetched during the above operations
-            # We'll set `MenuItem.link_page` to that specific page.
-            if menuitem and page:
-                menuitem.link_page = page
-
-            if options.use_absolute_page_urls:
-                item.href = item.get_full_url(request=request)
-            elif accepts_kwarg(item.relative_url, 'request'):
-                item.href = item.relative_url(current_site, request)
-            else:
-                warnings.warn(
-                    "The relative_url() method on custom MenuItem classes "
-                    "must accept a 'request' keyword argument. Please update "
-                    "the method signature on your {} class. It will be "
-                    "mandatory in Wagtail 2.13.".format(
-                        item.__class__.__name__
-                    ),
-                    category=RemovedInWagtailMenus213Warning
-                )
-                item.href = item.relative_url(current_site)
-
-            return_list.append(item)
-
-        return return_list
+            item = self._prime_menu_item(item)
+            if item is not None:
+                yield item
 
     def modify_menu_items(self, menu_items):
         """
@@ -934,8 +949,7 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
                             ):
                                 active_class = ancestor_css_class
                 section_root.active_class = active_class
-
-        data['section_root'] = section_root
+            data['section_root'] = section_root
         data.update(**kwargs)
         return data
 
