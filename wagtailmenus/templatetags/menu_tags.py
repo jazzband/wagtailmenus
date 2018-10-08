@@ -19,7 +19,7 @@ def main_menu(
     context, max_levels=None, use_specific=None, apply_active_classes=True,
     allow_repeating_parents=True, show_multiple_levels=True,
     template='', sub_menu_template='', sub_menu_templates=None,
-    use_absolute_page_urls=False, **kwargs
+    use_absolute_page_urls=False, add_sub_menus_inline=None, **kwargs
 ):
     validate_supplied_values('main_menu', max_levels=max_levels,
                              use_specific=use_specific)
@@ -35,6 +35,7 @@ def main_menu(
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
         use_absolute_page_urls=use_absolute_page_urls,
+        add_sub_menus_inline=add_sub_menus_inline,
         template_name=template,
         sub_menu_template_name=sub_menu_template,
         sub_menu_template_names=split_if_string(sub_menu_templates),
@@ -49,7 +50,7 @@ def flat_menu(
     allow_repeating_parents=True, show_multiple_levels=True,
     template='', sub_menu_template='', sub_menu_templates=None,
     fall_back_to_default_site_menus=None, use_absolute_page_urls=False,
-    **kwargs
+    add_sub_menus_inline=None, **kwargs
 ):
     validate_supplied_values('flat_menu', max_levels=max_levels,
                              use_specific=use_specific)
@@ -70,6 +71,7 @@ def flat_menu(
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
         use_absolute_page_urls=use_absolute_page_urls,
+        add_sub_menus_inline=add_sub_menus_inline,
         template_name=template,
         sub_menu_template_name=sub_menu_template,
         sub_menu_template_names=split_if_string(sub_menu_templates),
@@ -85,7 +87,7 @@ def section_menu(
     max_levels=settings.DEFAULT_SECTION_MENU_MAX_LEVELS,
     template='', sub_menu_template='', sub_menu_templates=None,
     use_specific=settings.DEFAULT_SECTION_MENU_USE_SPECIFIC,
-    use_absolute_page_urls=False, **kwargs
+    use_absolute_page_urls=False, add_sub_menus_inline=None, **kwargs
 ):
     """Render a section menu for the current section."""
     validate_supplied_values('section_menu', max_levels=max_levels,
@@ -102,6 +104,7 @@ def section_menu(
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
         use_absolute_page_urls=use_absolute_page_urls,
+        add_sub_menus_inline=add_sub_menus_inline,
         template_name=template,
         sub_menu_template_name=sub_menu_template,
         sub_menu_template_names=split_if_string(sub_menu_templates),
@@ -117,7 +120,7 @@ def children_menu(
     max_levels=settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS,
     template='', sub_menu_template='', sub_menu_templates=None,
     use_specific=settings.DEFAULT_CHILDREN_MENU_USE_SPECIFIC,
-    use_absolute_page_urls=False, **kwargs
+    use_absolute_page_urls=False, add_sub_menus_inline=None, **kwargs
 ):
     validate_supplied_values(
         'children_menu', max_levels=max_levels, use_specific=use_specific,
@@ -132,6 +135,7 @@ def children_menu(
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
         use_absolute_page_urls=use_absolute_page_urls,
+        add_sub_menus_inline=add_sub_menus_inline,
         template_name=template,
         sub_menu_template_name=sub_menu_template,
         sub_menu_template_names=split_if_string(sub_menu_templates),
@@ -143,7 +147,7 @@ def children_menu(
 def sub_menu(
     context, menuitem_or_page, use_specific=None, allow_repeating_parents=None,
     apply_active_classes=None, template='', use_absolute_page_urls=None,
-    **kwargs
+    add_sub_menus_inline=None, **kwargs
 ):
     """
     Retrieve the children pages for the `menuitem_or_page` provided, turn them
@@ -169,6 +173,9 @@ def sub_menu(
     if use_absolute_page_urls is None:
         use_absolute_page_urls = context.get('use_absolute_page_urls', False)
 
+    if add_sub_menus_inline is None:
+        add_sub_menus_inline = context.get('add_sub_menus_inline', False)
+
     if isinstance(menuitem_or_page, Page):
         parent_page = menuitem_or_page
     else:
@@ -187,6 +194,7 @@ def sub_menu(
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
         use_absolute_page_urls=use_absolute_page_urls,
+        add_sub_menus_inline=add_sub_menus_inline,
         template_name=template,
         **kwargs
     )
