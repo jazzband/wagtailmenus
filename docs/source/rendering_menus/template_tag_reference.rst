@@ -139,7 +139,7 @@ For example, instead of the following:
 .. code-block:: html
 
     {% for item in menu_items %}
-        <li class="{{ item.active_class }}>
+        <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
             {% if item.has_children_in_menu %}
                 {% sub_menu item %}
@@ -152,7 +152,7 @@ You could do:
 .. code-block:: html
 
     {% for item in menu_items %}
-        <li class="{{ item.active_class }}>
+        <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
             {% if item.has_children_in_menu %}
                 {{ item.sub_menu.render_to_template }}
@@ -378,7 +378,7 @@ For example, instead of the following:
 .. code-block:: html
 
     {% for item in menu_items %}
-        <li class="{{ item.active_class }}>
+        <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
             {% if item.has_children_in_menu %}
                 {% sub_menu item %}
@@ -391,7 +391,7 @@ You could do:
 .. code-block:: html
 
     {% for item in menu_items %}
-        <li class="{{ item.active_class }}>
+        <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
             {% if item.has_children_in_menu %}
                 {{ item.sub_menu.render_to_template }}
@@ -589,6 +589,8 @@ No         ``bool``             ``True``
 
 Repetition-related settings on your pages are respected by default, but you can add ``allow_repeating_parents=False`` to ignore them, and not repeat any pages in sub-menus when rendering. Please note that using this option will only have an effect if ``use_specific`` has a value of ``1`` or higher.
 
+-----
+
 use_absolute_page_urls
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -610,7 +612,6 @@ add_sub_menus_inline
 
 .. versionadded:: 2.12
 
-
 =========  ===================  =============
 Required?  Expected value type  Default value
 =========  ===================  =============
@@ -624,7 +625,7 @@ For example, instead of the following:
 .. code-block:: html
 
     {% for item in menu_items %}
-        <li class="{{ item.active_class }}>
+        <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
             {% if item.has_children_in_menu %}
                 {% sub_menu item %}
@@ -637,7 +638,7 @@ You could do:
 .. code-block:: html
 
     {% for item in menu_items %}
-        <li class="{{ item.active_class }}>
+        <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
             {% if item.has_children_in_menu %}
                 {{ item.sub_menu.render_to_template }}
@@ -839,9 +840,9 @@ By default, you have to call the ``{% sub_menu %}`` tag within a menu template t
 For example, instead of the following:
 
 .. code-block:: html
-
+    
     {% for item in menu_items %}
-        <li class="{{ item.active_class }}>
+        <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
             {% if item.has_children_in_menu %}
                 {% sub_menu item %}
@@ -854,7 +855,7 @@ You could do:
 .. code-block:: html
 
     {% for item in menu_items %}
-        <li class="{{ item.active_class }}>
+        <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
             {% if item.has_children_in_menu %}
                 {{ item.sub_menu.render_to_template }}
