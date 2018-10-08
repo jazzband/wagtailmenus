@@ -644,7 +644,7 @@ class Menu:
 
         if item_is_menu_item_object:
             item.text = item.menu_text
-        elif item_is_page_object:
+        else:
             item.text = getattr(item, settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT, item.title)
 
         # ---------------------------------------------------------------------
