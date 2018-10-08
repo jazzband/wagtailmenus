@@ -557,11 +557,10 @@ class Menu:
             page = item if item_is_page_object else None
 
         # ---------------------------------------------------------------------
-        # Special handling for 'link page' objects
+        # Special handling for 'LinkPage' objects
         # ---------------------------------------------------------------------
 
         if item_is_page_object and issubclass(item.specific_class, AbstractLinkPage):
-
             page, item = self._replace_with_specific_page(page, item)
 
             if not item.show_in_menus_custom(
@@ -584,9 +583,8 @@ class Menu:
         # ---------------------------------------------------------------------
         # Determine an appropriate 'has_children_in_menu' value
         # ---------------------------------------------------------------------
-
         # NOTE: We aren't setting attributes yet, as the item could potentially
-        # be replaced with a more specific page object.
+        # be replaced here
 
         has_children_in_menu = False
 
@@ -618,7 +616,7 @@ class Menu:
         # ---------------------------------------------------------------------
 
         # NOTE: We aren't setting attributes yet, as the item could potentially
-        # be replaced with a more specific page object.
+        # be replaced here
 
         active_class = ''
 
@@ -950,8 +948,7 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
                             ):
                                 active_class = ancestor_css_class
                 section_root.active_class = active_class
-
-        data['section_root'] = section_root
+            data['section_root'] = section_root
         data.update(**kwargs)
         return data
 
