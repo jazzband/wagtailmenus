@@ -535,13 +535,14 @@ class Menu:
         # Establish whether this item 'is' or 'links to' a page
         # ---------------------------------------------------------------------
 
-        page = None
-        item_is_page_object = isinstance(item, Page)
         item_is_menu_item_object = isinstance(item, MenuItem)
-        if item_is_page_object:
-            page = item
-        elif item_is_menu_item_object:
+
+        if item_is_menu_item_object:
+            item_is_page_object = False
             page = item.link_page
+        else:
+            item_is_page_object = isinstance(item, Page)
+            page = item if item_is_page_object else None
 
         # ---------------------------------------------------------------------
         # Special handling for 'link page' objects
