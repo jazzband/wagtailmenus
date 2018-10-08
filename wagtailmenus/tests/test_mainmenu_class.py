@@ -34,6 +34,39 @@ class TestMainMenuGeneralMethods(MainMenuTestCase):
             menu.create_from_collected_values(None, None)
 
 
+class TestGetMenuItemsForRendering(MainMenuTestCase):
+
+    # ------------------------------------------------------------------------
+    # MainMenu.get_menu_items_for_rendering()
+    # ------------------------------------------------------------------------
+    def get_render_ready_menu_instance(self, **option_vals):
+        menu = MainMenu.objects.get(pk=1)
+        ctx_vals = utils.make_contextualvals_instance()
+        opt_vals = utils.make_optionvals_instance(**option_vals)
+        menu.prepare_to_render(ctx_vals.request, ctx_vals, opt_vals)
+        return menu
+
+    def test_sub_menu_items_not_added_inline_by_default(self):
+        menu = self.get_render_ready_menu_instance()
+        items_with_children = tuple(
+            item for item in menu.get_menu_items_for_rendering()
+            if getattr(item, 'has_children_in_menu', False)
+        )
+        self.assertGreater(len(items_with_children), 1)
+        for menu_item in items_with_children:
+            self.assertFalse(hasattr(menu_item, 'sub_menu'))
+
+    def test_sub_menu_items_added_inline_if_option_value_set_to_true(self):
+        menu = self.get_render_ready_menu_instance(add_sub_menus_inline=True)
+        items_with_children = tuple(
+            item for item in menu.get_menu_items_for_rendering()
+            if getattr(item, 'has_children_in_menu', False)
+        )
+        for menu_item in items_with_children:
+            self.assertTrue(hasattr(menu_item, 'sub_menu'))
+            self.assertIsInstance(menu_item.sub_menu, menu.get_sub_menu_class())
+
+
 class TestTopLevelItems(MainMenuTestCase):
 
     # ------------------------------------------------------------------------
