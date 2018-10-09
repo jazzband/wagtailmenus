@@ -266,8 +266,10 @@ class Menu:
     def get_instance_for_rendering(cls, contextual_vals, option_vals):
         warnings.warn(
             'The get_instance_for_rendering() class method is deprecated in '
-            'v2.12 and will be removed in v3. Use create_relevant_object_from_values() '
-            'instead.', category=RemovedInWagtailMenus3Warning
+            'v2.12 and will be removed in v3. For model-based menu classes, '
+            'use get_from_collected_values() instead, and for non model-based '
+            'menu classes, use create_from_collected_values().', 
+            category=RemovedInWagtailMenus3Warning
         )
         if issubclass(cls, models.Model):
             return cls.get_from_collected_values(contextual_vals, option_vals)
