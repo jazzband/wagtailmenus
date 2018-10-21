@@ -81,7 +81,7 @@ flat_menu_content_panels = (
 
 menu_settings_panels = (
     MultiFieldPanel(
-        heading=_('Rendering setings'),
+        heading=_('Render settings'),
         children=(
             FieldPanel('max_levels'),
             FieldPanel('use_specific')
