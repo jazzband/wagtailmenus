@@ -11,6 +11,13 @@ indication of what the method does.
 * Renamed ``Menu.get_option_vals_from_options`` to ``Menu._create_optionvals_obj_from_values()`` to give a better indication of what the method does.
 * Added the ``Menu.get_from_collected_values()`` method, which replaces ``Menu.get_instance_for_rendering()`` for menu classes that also inherit from ``django.db.models.Model``.
 * Added the ``Menu.create_from_collected_values()`` method, which replaces ``Menu.get_instance_for_rendering()`` for menu classes that **do not** inherit from ``django.db.models.Model``.
+* Added the ``add_sub_menu_items_inline`` option to all template tags. When ``True``, ``SubMenu`` objects are automatically created and set as an attribute for each menu item (where appropriate), allowing developers to render multi-level menus without having to use the ``{% sub_menu %}`` tag.
+* Added the ``WAGTAILMENUS_DEFAULT_ADD_SUB_MENUS_INLINE`` setting to allow developers to change the default ``add_sub_menu_items_inline`` option value for all template tags.
+* Fixed a bug in ``Menu.get_common_hook_kwargs()`` where the value of ``self.max_levels`` was being used as the value for ``use_specific`` (instead of ``self.use_specific``).
+* Changed the "Rendering setings" (typo) heading in ``panels.menu_settings_panels`` to "Render settings".
+* Removed support for the deprecated ``WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH`` setting. 
+* Removed support for the deprecated ``WAGTAILMENUS_SECTION_MENU_CLASS_PATH`` setting.
+* Removed the deprecated ``wagtailmenus.constants`` module.
 
 
 2.11.1 (10.09.2018)
