@@ -49,9 +49,10 @@ class AbstractMenuItem(models.Model, MenuItem):
             "above page's URL."
         )
     )
-    handle = models.CharField(
+    handle = models.SlugField(
         verbose_name=_('handle'),
         max_length=100,
+        allow_unicode=True,
         blank=True,
         help_text=_(
             "Use this field to optionally specify an additional value for "
