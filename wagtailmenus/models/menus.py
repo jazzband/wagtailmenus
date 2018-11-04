@@ -1342,6 +1342,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     handle = models.SlugField(
         verbose_name=_('handle'),
         max_length=100,
+        allow_unicode=True,
         help_text=_(
             "Used to reference this menu in templates etc. Must be unique "
             "for the selected site."
