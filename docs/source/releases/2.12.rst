@@ -39,14 +39,25 @@ Deprecations
 
 The following items have been deprecated in this release. They will continue to be supported for a standard deprecation period of two minor releases, but will be removed in version 3.0.
 
-
-``Menu.get_instance_for_rendering()`` is deprecated
----------------------------------------------------
+``Menu.get_instance_for_rendering()``
+-------------------------------------
 
 In an effort to make method names more reflective of their functionality, this method has been replaced by two methods:
-``create_from_collected_values()`` and ``get_from_collected_values``. The former is implemented on menu classes that are  not model based (where an instance must be created from scratch each time, for example: ``ChildrenMenu``, ``SectionMenu``, ``SubMenu``), and the latter is implemented on model-based menu classes, where a corresponding object must be retreived from the database (so, ``AbstractMainMenu``, ``MainMenu``, ``AbstractFlatMenu`` and ``FlatMenu``). 
+``create_from_collected_values()`` and ``get_from_collected_values()``. The former is implemented on menu classes that are  not model based (where instances must be created from scratch each time, for example: ``ChildrenMenu``, ``SectionMenu``, ``SubMenu``), and the latter is implemented on model-based menu classes, where a corresponding object must be retreived from the database (so, ``AbstractMainMenu``, ``MainMenu``, ``AbstractFlatMenu`` and ``FlatMenu``). 
 
 ``render_from_tag()`` automatically calls one or the other, depending on whether the class inherits from ``django.db.models.Model``.
+
+If you're using custom menu classes in your project, and are currently overriding ``get_instance_for_rendering()`` for any of those classes, you should update your code to override one of the new methods instead. Both of these new methods accept the same arguments, and return the same values, so the transition should be very easy.
+
+``Menu.get_contextual_vals_from_context()``
+-------------------------------------------
+
+In an effort to make method names more reflective of their functionality, and to help dissuade users from overriding functionality that is subject to change, this method has been renamed to ``_create_contextualvals_obj_from_context()`` (becoming a 'private' method in the process).
+
+``Menu.get_option_vals_from_options()``
+---------------------------------------
+
+In an effort to make method names more reflective of their functionality, and to help dissuade users from overriding functionality that is subject to change, this method has been renamed to ``_create_optionvals_obj_from_values()`` (becoming a 'private' method in the process).
 
 
 Upgrade considerations
