@@ -20,7 +20,7 @@ What's new?
 New ``add_sub_menus_inline`` option for menu tags
 -------------------------------------------------
 
-By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menus_inline=True`` to the initial ``{% main_menu %}``, ``{% flat_menu %}``, ``{% children_menu %}`` or ``{% section_menu %}`` tag, then sub menus instances will be created added directly to any menu item where `item.has_children_in_menu` is ``True``, allowing you to programatically render the entire menu structure from within the same template.
+By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menus_inline=True`` to the initial ``{% main_menu %}``, ``{% flat_menu %}``, ``{% children_menu %}`` or ``{% section_menu %}`` tag, then sub menu instances will be created added directly to any menu item where `item.has_children_in_menu` is ``True``, allowing you to programatically render the entire menu structure from within the same template.
 
 For example, instead of the following:
 
