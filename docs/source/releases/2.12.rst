@@ -16,28 +16,61 @@ Wagtailmenus 2.12 (alpha) release notes
 What's new?
 ===========
 
-TBA
 
+New ``add_sub_menus_inline`` option for menu tags
+-------------------------------------------------
+
+By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menus_inline=True`` to the initial ``{% main_menu %}``, ``{% flat_menu %}``, ``{% children_menu %}`` or ``{% section_menu %}`` tag, then sub menus instances will be created added directly to any menu item where `item.has_children_in_menu` is ``True``, allowing you to programatically render the entire menu structure from within the same template.
+
+For example, instead of the following:
+
+.. code-block:: html
+
+    {% for item in menu_items %}
+        <li class="{{ item.active_class }}">
+            <a href="{{ item.href }}">{{ item.text }}</a>
+            {% if item.has_children_in_menu %}
+                {% sub_menu item %}
+            {% endif %}
+        </li>       
+    {% endfor %}
+ 
+You could do:
+ 
+.. code-block:: html
+ 
+     {% for item in menu_items %}
+        <li class="{{ item.active_class }}">
+            <a href="{{ item.href }}">{{ item.text }}</a>
+            {% if item.has_children_in_menu %}
+                {{ item.sub_menu.render_to_template }}
+            {% endif %}
+        </li>       
+    {% endfor %}
+    
+If you'd rather have sub menus be added inline by default (without having to add ``add_sub_menus_inline=True`` each time you use a template tag), you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENUS_INLINE` setting in your project's Django settings.
 
 Minor changes & bug fixes 
 =========================
 
 - Arabic translations added - Courtesy of @alfuhigi. Many thanks!
 - Fixed an issue with the section menu in the release notes section of the docs.
-- Updated tox config to test against Python 3.7 and Wagtail 2.2
+- Updated tox config to test against Python 3.7 and Wagtail 2.2,
 - Updated Travis CI config to deploy to PyPi automatically when commits are tagged appropriately.
 - Pinned django-cogwheels dependency to version 0.2 to reduce potential for backwards-incompatibility issues.
 - Changed the signature of ``Menu.render_from_tag()`` to better indicate common expected/supported arguments for menus.
+- Fixed ``Menu.get_common_hook_kwargs()``, so the menu instances ``use_specific`` attribute value is correctly passed to hooks.
+- Removed ``request``, ``max_levels`` and ``use_specific`` as class attributes from ``Menu`` to prevent unexpected mutation.
 - Added a custom ``render_from_tag()`` method for each individual menu class, with a signature that highlights all relevant options, including those specific to that menu type.
-- Renamed ``Menu.get_contextual_vals_from_context()`` to ``Menu._create_contextualvals_obj_from_context()`` to give a better
-indication of what the method does.
-- Renamed ``Menu.get_option_vals_from_options`` to ``Menu._create_optionvals_obj_from_values()`` to give a better indication of what the method does.
+- Renamed ``Menu.get_contextual_vals_from_context()`` to ``_create_contextualvals_obj_from_context()``.
+- Renamed ``Menu.get_option_vals_from_options`` to ``_create_optionvals_obj_from_values()``.
 
 
 Deprecations
 ============
 
 The following items have been deprecated in this release. They will continue to be supported for a standard deprecation period of two minor releases, but will be removed in version 3.0.
+
 
 ``Menu.get_instance_for_rendering()``
 -------------------------------------
@@ -49,10 +82,12 @@ In an effort to make method names more reflective of their functionality, this m
 
 If you're using custom menu classes in your project, and are currently overriding ``get_instance_for_rendering()`` for any of those classes, you should update your code to override one of the new methods instead. Both of these new methods accept the same arguments, and return the same values, so the transition should be very easy.
 
+
 ``Menu.get_contextual_vals_from_context()``
 -------------------------------------------
 
 In an effort to make method names more reflective of their functionality, and to help dissuade users from overriding functionality that is subject to change, this method has been renamed to ``_create_contextualvals_obj_from_context()`` (becoming a 'private' method in the process).
+
 
 ``Menu.get_option_vals_from_options()``
 ---------------------------------------
