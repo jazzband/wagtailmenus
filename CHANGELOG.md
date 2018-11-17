@@ -1,8 +1,14 @@
 Changelog
 =========
 
-2.12.0 (XX.XX.XXXX)
--------------------
+2.13a (XX.XX.XXXX)
+------------------
+
+* TBA
+
+
+2.12 (17.11.2018)
+-----------------
 
 * Changed the signature of ``Menu.render_from_tag()`` to better indicate common expected/supported arguments for menus.
 * Added a custom ``render_from_tag()`` method for each individual menu class, with a signature that highlights all relevant options, including those specific to that menu type.
