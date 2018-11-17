@@ -123,7 +123,7 @@ If you wish to override the ``ModelAdmin`` class used to represent **'Main menus
 
     WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS = "projectname.appname.modulename.ClassName"
 
-The value should be an import path string, rather than a direct pointer to the class itself. Wagailmenus will lazily import the class from this path when it is required. If the path is invalid, and ``ImproperlyConfigured`` exception will be raised.
+The value should be an import path string, rather than a direct pointer to the class itself. Wagtailmenus will lazily import the class from this path when it is required. If the path is invalid, and ``ImproperlyConfigured`` exception will be raised.
 
 
 ----------------------------------------------
