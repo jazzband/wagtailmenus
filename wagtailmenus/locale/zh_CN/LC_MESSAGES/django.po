@@ -3,14 +3,18 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
+# Translators:
+# 汇民 王 <whuim@qq.com>, 2018
+# Andy Babic, 2018
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-06 11:01+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: 汇民 王 <whuim@qq.com>, 2017\n"
+"POT-Creation-Date: 2018-11-17 16:47+0000\n"
+"PO-Revision-Date: 2017-03-20 23:04+0000\n"
+"Last-Translator: Andy Babic, 2018\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/rkhleics/teams/73023/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,121 +22,142 @@ msgstr ""
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: wagtailmenus/app_settings.py:12
+#: wagtailmenus/conf/constants.py:8
 msgid "Off (most efficient)"
 msgstr "关闭（效率最高）"
 
-#: wagtailmenus/app_settings.py:13
+#: wagtailmenus/conf/constants.py:9
 msgid "Auto"
 msgstr "自动"
 
-#: wagtailmenus/app_settings.py:14
+#: wagtailmenus/conf/constants.py:10
 msgid "Top level"
 msgstr "顶层"
 
-#: wagtailmenus/app_settings.py:15
+#: wagtailmenus/conf/constants.py:11
 msgid "Always (least efficient)"
 msgstr "始终（效率最低）"
 
-#: wagtailmenus/app_settings.py:18
+#: wagtailmenus/conf/constants.py:14
 msgid "1: No sub-navigation (flat)"
 msgstr "1：没有子导航（扁平化）"
 
-#: wagtailmenus/app_settings.py:19
+#: wagtailmenus/conf/constants.py:15
 msgid "2: Allow 1 level of sub-navigation"
 msgstr "2：允许 1 级子导航"
 
-#: wagtailmenus/app_settings.py:20
+#: wagtailmenus/conf/constants.py:16
 msgid "3: Allow 2 levels of sub-navigation"
 msgstr "3：允许 2 级子导航"
 
-#: wagtailmenus/app_settings.py:21
+#: wagtailmenus/conf/constants.py:17
 msgid "4: Allow 3 levels of sub-navigation"
 msgstr "4：允许 3 级子导航"
 
-#: wagtailmenus/forms.py:26
+#: wagtailmenus/forms.py:22
 msgid ""
 "By default, this will be used as the link text when appearing in menus."
 msgstr "默认情况下，这将用作菜单中显示的链接文本。"
 
-#: wagtailmenus/models/menuitems.py:36 wagtailmenus/models/pages.py:147
+#: wagtailmenus/modeladmin.py:14
+msgid "Main menu"
+msgstr "主菜单"
+
+#: wagtailmenus/modeladmin.py:42
+msgid "Copy"
+msgstr "复制"
+
+#: wagtailmenus/modeladmin.py:44
+#, python-format
+msgid "Copy this %(model_name)s"
+msgstr "复制这个%(model_name)s"
+
+#: wagtailmenus/modeladmin.py:65
+msgid "Flat menus"
+msgstr "扁平化菜单"
+
+#: wagtailmenus/modeladmin.py:103 wagtailmenus/models/menuitems.py:53
+#: wagtailmenus/models/menus.py:1343
+msgid "handle"
+msgstr "句柄"
+
+#: wagtailmenus/modeladmin.py:111
+msgid "no. of items"
+msgstr "菜单项编号"
+
+#: wagtailmenus/models/menuitems.py:32 wagtailmenus/models/pages.py:139
 msgid "link to an internal page"
 msgstr "链接到内部页面"
 
-#: wagtailmenus/models/menuitems.py:42 wagtailmenus/models/pages.py:154
+#: wagtailmenus/models/menuitems.py:38 wagtailmenus/models/pages.py:146
 msgid "link to a custom URL"
 msgstr "链接到自定义的网址"
 
-#: wagtailmenus/models/menuitems.py:48 wagtailmenus/models/pages.py:160
+#: wagtailmenus/models/menuitems.py:44 wagtailmenus/models/pages.py:152
 msgid "append to URL"
 msgstr "附加到网址"
 
-#: wagtailmenus/models/menuitems.py:52
+#: wagtailmenus/models/menuitems.py:48
 msgid ""
 "Use this to optionally append a #hash or querystring to the above page's "
 "URL."
 msgstr "使用此选项可以将一个哈希值或查询字符串附加到上述页面的URL。"
 
-#: wagtailmenus/models/menuitems.py:57 wagtailmenus/models/menus.py:1094
-#: wagtailmenus/wagtail_hooks.py:113
-msgid "handle"
-msgstr "句柄"
-
-#: wagtailmenus/models/menuitems.py:61
+#: wagtailmenus/models/menuitems.py:57
 msgid ""
 "Use this field to optionally specify an additional value for each menu item,"
 " which you can then reference in custom menu templates."
 msgstr "使用这个可选字段为每个菜单项指定一个附加值，然后您可以在自定义菜单模板中引用该值。"
 
-#: wagtailmenus/models/menuitems.py:67
+#: wagtailmenus/models/menuitems.py:63
 msgid "link text"
 msgstr "链接文本"
 
-#: wagtailmenus/models/menuitems.py:71
+#: wagtailmenus/models/menuitems.py:67
 msgid ""
 "Provide the text to use for a custom URL, or set on an internal page link to"
 " use instead of the page's title."
 msgstr "提供用于自定义网址的文本，或者设置在内部页面的链接上替代页面的标题。"
 
-#: wagtailmenus/models/menuitems.py:80
+#: wagtailmenus/models/menuitems.py:76
 msgid "menu item"
 msgstr "菜单项"
 
-#: wagtailmenus/models/menuitems.py:81 wagtailmenus/panels.py:26
+#: wagtailmenus/models/menuitems.py:77 wagtailmenus/panels.py:19
 msgid "menu items"
 msgstr "菜单项"
 
-#: wagtailmenus/models/menuitems.py:120 wagtailmenus/models/pages.py:208
+#: wagtailmenus/models/menuitems.py:113 wagtailmenus/models/pages.py:206
 msgid "Please choose an internal page or provide a custom URL"
 msgstr "请选择一个内部页面或提供一个自定义网址"
 
-#: wagtailmenus/models/menuitems.py:123 wagtailmenus/models/pages.py:211
+#: wagtailmenus/models/menuitems.py:116 wagtailmenus/models/pages.py:211
 msgid "Linking to both a page and custom URL is not permitted"
 msgstr "不允许同时链接到页面和自定义网址"
 
-#: wagtailmenus/models/menuitems.py:126
+#: wagtailmenus/models/menuitems.py:119
 msgid "This field is required when linking to a custom URL"
 msgstr "链接到自定义网址时此字段必填"
 
-#: wagtailmenus/models/menuitems.py:166 wagtailmenus/models/menuitems.py:182
+#: wagtailmenus/models/menuitems.py:157 wagtailmenus/models/menuitems.py:173
 msgid "allow sub-menu for this item"
 msgstr "允许此项有子菜单"
 
-#: wagtailmenus/models/menuitems.py:169 wagtailmenus/models/menuitems.py:185
+#: wagtailmenus/models/menuitems.py:160 wagtailmenus/models/menuitems.py:176
 msgid ""
 "NOTE: The sub-menu might not be displayed, even if checked. It depends on "
 "how the menu is used in this project's templates."
 msgstr "注意：即使选中，也可能不会显示子菜单。这取决于该项目的模板中菜单的使用方式。"
 
-#: wagtailmenus/models/menus.py:1002 wagtailmenus/models/menus.py:1083
+#: wagtailmenus/models/menus.py:1243 wagtailmenus/models/menus.py:1332
 msgid "site"
 msgstr "站点"
 
-#: wagtailmenus/models/menus.py:1009 wagtailmenus/models/menus.py:1108
+#: wagtailmenus/models/menus.py:1250 wagtailmenus/models/menus.py:1357
 msgid "maximum levels"
 msgstr "最大级别"
 
-#: wagtailmenus/models/menus.py:1013
+#: wagtailmenus/models/menus.py:1254
 msgid ""
 "The maximum number of levels to display when rendering this menu. The value "
 "can be overidden by supplying a different <code>max_levels</code> value to "
@@ -141,11 +166,11 @@ msgstr ""
 "菜单在渲染时显示的最大级别数。通过在模板中为<code>{% main_menu "
 "%}</code>标签提供一个不同的<code>max_levels</code>值，可以覆盖这个值。"
 
-#: wagtailmenus/models/menus.py:1020 wagtailmenus/models/menus.py:1119
+#: wagtailmenus/models/menus.py:1261 wagtailmenus/models/menus.py:1368
 msgid "specific page usage"
 msgstr "特定的页面用法"
 
-#: wagtailmenus/models/menus.py:1024
+#: wagtailmenus/models/menus.py:1265
 msgid ""
 "Controls how 'specific' pages objects are fetched and used when rendering "
 "this menu. This value can be overidden by supplying a different "
@@ -155,38 +180,38 @@ msgstr ""
 "渲染菜单时控制如何获取和使用'特定的'页面对象。通过在模板中为<code>{% main_menu "
 "%}</code>标签提供一个不同的<code>use_specific</code>值，可以覆盖这个值。"
 
-#: wagtailmenus/models/menus.py:1033 wagtailmenus/models/menus.py:1034
+#: wagtailmenus/models/menus.py:1274 wagtailmenus/models/menus.py:1275
 msgid "main menu"
 msgstr "主菜单"
 
-#: wagtailmenus/models/menus.py:1054
+#: wagtailmenus/models/menus.py:1317
 #, python-format
 msgid "Main menu for %(site_name)s"
 msgstr "%(site_name)s的主菜单"
 
-#: wagtailmenus/models/menus.py:1089
+#: wagtailmenus/models/menus.py:1338
 msgid "title"
 msgstr "标题"
 
-#: wagtailmenus/models/menus.py:1091
+#: wagtailmenus/models/menus.py:1340
 msgid "For internal reference only."
 msgstr "仅限于内部引用。"
 
-#: wagtailmenus/models/menus.py:1097
+#: wagtailmenus/models/menus.py:1346
 msgid ""
 "Used to reference this menu in templates etc. Must be unique for the "
 "selected site."
 msgstr "用于在模板等处引用此菜单。在选定的站点中必须是唯一的。"
 
-#: wagtailmenus/models/menus.py:1102
+#: wagtailmenus/models/menus.py:1351
 msgid "heading"
 msgstr "菜单标题"
 
-#: wagtailmenus/models/menus.py:1105
+#: wagtailmenus/models/menus.py:1354
 msgid "If supplied, appears above the menu when rendered."
 msgstr "如果提供了，渲染后显示在菜单项的上面。"
 
-#: wagtailmenus/models/menus.py:1112
+#: wagtailmenus/models/menus.py:1361
 msgid ""
 "The maximum number of levels to display when rendering this menu. The value "
 "can be overidden by supplying a different <code>max_levels</code> value to "
@@ -195,7 +220,7 @@ msgstr ""
 "菜单在渲染时显示的最大级别数。通过在模板中为<code>{% flat_menu "
 "%}</code>标签提供一个不同的<code>max_levels</code>值，可以覆盖这个值。"
 
-#: wagtailmenus/models/menus.py:1123
+#: wagtailmenus/models/menus.py:1372
 msgid ""
 "Controls how 'specific' pages objects are fetched and used when rendering "
 "this menu. This value can be overidden by supplying a different "
@@ -205,152 +230,121 @@ msgstr ""
 "渲染菜单时控制如何获取和使用'特定的'页面对象。通过在模板中为<code>{% flat_menu "
 "%}</code>标签提供一个不同的<code>use_specific</code>值，可以覆盖这个值。"
 
-#: wagtailmenus/models/menus.py:1133
+#: wagtailmenus/models/menus.py:1382
 msgid "flat menu"
 msgstr "扁平化菜单"
 
-#: wagtailmenus/models/menus.py:1134
+#: wagtailmenus/models/menus.py:1383
 msgid "flat menus"
 msgstr "扁平化菜单"
 
-#: wagtailmenus/models/menus.py:1177
-msgid ""
-"Site and handle must create a unique combination. A menu already exists with"
-" these same two values."
-msgstr "站点和句柄必须创建一个唯一的组合。有这两个组合值的菜单已经存在。"
-
-#: wagtailmenus/models/pages.py:21
+#: wagtailmenus/models/pages.py:17
 msgid "repeat in sub-navigation"
 msgstr "在子导航中重复"
 
-#: wagtailmenus/models/pages.py:24
+#: wagtailmenus/models/pages.py:20
 msgid ""
 "If checked, a link to this page will be repeated alongside it's direct "
 "children when displaying a sub-navigation for this page."
 msgstr "如果选中，当显示此页面的子导航时，此页面的链接将重复一次，显示在它的子页面旁边。"
 
-#: wagtailmenus/models/pages.py:29
+#: wagtailmenus/models/pages.py:25
 msgid "repeated item link text"
 msgstr "重复的菜单项链接文本"
 
-#: wagtailmenus/models/pages.py:33
+#: wagtailmenus/models/pages.py:29
 msgid ""
 "e.g. 'Section home' or 'Overview'. If left blank, the page title will be "
 "used."
 msgstr "例如：“章节首页”或“概述”。如果留空，将使用页面标题。"
 
-#: wagtailmenus/models/pages.py:164
+#: wagtailmenus/models/pages.py:156
 msgid "Use this to optionally append a #hash or querystring to the URL."
 msgstr "使用此可选选项可以将一个哈希值或查询字符串附加到URL。"
 
-#: wagtailmenus/models/pages.py:168
+#: wagtailmenus/models/pages.py:160
 msgid "menu item css classes"
 msgstr "菜单项css类"
 
-#: wagtailmenus/models/pages.py:172
+#: wagtailmenus/models/pages.py:164
 msgid ""
 "Optionally specify css classes to be added to this page when it appears in "
 "menus."
 msgstr "（可选）指定在菜单中显示此页面时要添加页面的CSS类。"
 
-#: wagtailmenus/models/pages.py:205
+#: wagtailmenus/models/pages.py:200
 msgid "A link page cannot link to another link page"
 msgstr "一个链接页面不能链接到另一个链接页面"
 
-#: wagtailmenus/models/pages.py:295
+#: wagtailmenus/models/pages.py:288
 #, python-format
 msgid "This page redirects to: %(url)s"
 msgstr "这个页面重定向到：%(url)s"
 
-#: wagtailmenus/panels.py:33
+#: wagtailmenus/panels.py:26
 msgid "Menu items"
 msgstr "菜单项"
 
-#: wagtailmenus/panels.py:34
+#: wagtailmenus/panels.py:27
 msgid "Add new item"
 msgstr "添加新菜单项"
 
-#: wagtailmenus/panels.py:35
+#: wagtailmenus/panels.py:28
 msgid "New item"
 msgstr "新菜单项"
 
-#: wagtailmenus/panels.py:73
+#: wagtailmenus/panels.py:70
 msgid "Menu details"
 msgstr "菜单详情"
 
-#: wagtailmenus/panels.py:87
-msgid "Rendering setings"
+#: wagtailmenus/panels.py:84
+msgid "Render settings"
 msgstr "渲染设置"
 
-#: wagtailmenus/panels.py:111 wagtailmenus/panels.py:145
-#: wagtailmenus/views.py:59
+#: wagtailmenus/panels.py:108 wagtailmenus/panels.py:142
+#: wagtailmenus/views.py:54
 msgid "Settings"
 msgstr "设置"
 
-#: wagtailmenus/panels.py:122
+#: wagtailmenus/panels.py:119
 msgid "Advanced menu behaviour"
 msgstr "高级菜单行为"
 
-#: wagtailmenus/panels.py:132
+#: wagtailmenus/panels.py:129
 msgid "Scheduled publishing"
 msgstr "已计划的发布"
 
-#: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:39
-msgid "Save"
-msgstr "保存"
-
-#: wagtailmenus/views.py:58
+#: wagtailmenus/views.py:53
 msgid "Content"
 msgstr "内容"
 
-#: wagtailmenus/views.py:70
+#: wagtailmenus/views.py:68
 msgid "Editing"
 msgstr "编辑"
 
-#: wagtailmenus/views.py:94
+#: wagtailmenus/views.py:92
 #, python-format
 msgid "Editing %(model_name)s"
 msgstr "编辑%(model_name)s"
 
-#: wagtailmenus/views.py:125
+#: wagtailmenus/views.py:123
 msgid "Main menu updated successfully."
 msgstr "主菜单已成功更新。"
 
-#: wagtailmenus/views.py:129
+#: wagtailmenus/views.py:127
 msgid "The menu could not be saved due to errors."
 msgstr "出现错误，无法保存菜单。"
 
-#: wagtailmenus/views.py:144
+#: wagtailmenus/views.py:142
 msgid "Copying"
 msgstr "复制"
 
-#: wagtailmenus/views.py:151
+#: wagtailmenus/views.py:149
 #, python-format
 msgid "Copying %(model_name)s"
 msgstr "复制%(model_name)s"
 
-#: wagtailmenus/views.py:183
+#: wagtailmenus/views.py:181
 #, python-brace-format
 msgid "Flat menu '{instance}' created."
 msgstr "扁平化菜单 '{instance}'已经创建。"
-
-#: wagtailmenus/wagtail_hooks.py:20
-msgid "Main menu"
-msgstr "主菜单"
-
-#: wagtailmenus/wagtail_hooks.py:52
-msgid "Copy"
-msgstr "复制"
-
-#: wagtailmenus/wagtail_hooks.py:54
-#, python-format
-msgid "Copy this %(model_name)s"
-msgstr "复制这个%(model_name)s"
-
-#: wagtailmenus/wagtail_hooks.py:75
-msgid "Flat menus"
-msgstr "扁平化菜单"
-
-#: wagtailmenus/wagtail_hooks.py:121
-msgid "no. of items"
-msgstr "菜单项编号"

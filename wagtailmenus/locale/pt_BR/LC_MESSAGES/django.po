@@ -3,14 +3,19 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
+# Translators:
+# Marcos Amorim <mamorim@outlook.com>, 2017
+# Clarice Bianchini Barreto da Costa <claricebbcosta@gmail.com>, 2018
+# Andy Babic, 2018
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-06 11:01+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Clarice Bianchini Barreto da Costa <claricebbcosta@gmail.com>, 2018\n"
+"POT-Creation-Date: 2018-11-17 16:47+0000\n"
+"PO-Revision-Date: 2017-03-20 23:04+0000\n"
+"Last-Translator: Andy Babic, 2018\n"
 "Language-Team: Portuguese (Brazil) (https://www.transifex.com/rkhleics/teams/73023/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,56 +23,82 @@ msgstr ""
 "Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: wagtailmenus/app_settings.py:12
+#: wagtailmenus/conf/constants.py:8
 msgid "Off (most efficient)"
 msgstr "Desligado (Mais eficiente)"
 
-#: wagtailmenus/app_settings.py:13
+#: wagtailmenus/conf/constants.py:9
 msgid "Auto"
 msgstr "Automático"
 
-#: wagtailmenus/app_settings.py:14
+#: wagtailmenus/conf/constants.py:10
 msgid "Top level"
 msgstr "Top level"
 
-#: wagtailmenus/app_settings.py:15
+#: wagtailmenus/conf/constants.py:11
 msgid "Always (least efficient)"
 msgstr "Sempre (Menos eficiente)"
 
-#: wagtailmenus/app_settings.py:18
+#: wagtailmenus/conf/constants.py:14
 msgid "1: No sub-navigation (flat)"
 msgstr "1: Sem submenus (simples)"
 
-#: wagtailmenus/app_settings.py:19
+#: wagtailmenus/conf/constants.py:15
 msgid "2: Allow 1 level of sub-navigation"
 msgstr "2: Permitir até 1 nível de submenu"
 
-#: wagtailmenus/app_settings.py:20
+#: wagtailmenus/conf/constants.py:16
 msgid "3: Allow 2 levels of sub-navigation"
 msgstr "3: Permitir até 2 níveis de submenus"
 
-#: wagtailmenus/app_settings.py:21
+#: wagtailmenus/conf/constants.py:17
 msgid "4: Allow 3 levels of sub-navigation"
 msgstr "4: Permitir até 3 níveis de submenu"
 
-#: wagtailmenus/forms.py:26
+#: wagtailmenus/forms.py:22
 msgid ""
 "By default, this will be used as the link text when appearing in menus."
 msgstr "Por padrão, esse será o texto do link usado quando aparecer em menus."
 
-#: wagtailmenus/models/menuitems.py:36 wagtailmenus/models/pages.py:147
+#: wagtailmenus/modeladmin.py:14
+msgid "Main menu"
+msgstr "Menu principal"
+
+#: wagtailmenus/modeladmin.py:42
+msgid "Copy"
+msgstr "Copiar"
+
+#: wagtailmenus/modeladmin.py:44
+#, python-format
+msgid "Copy this %(model_name)s"
+msgstr "Copiar este %(model_name)s"
+
+#: wagtailmenus/modeladmin.py:65
+msgid "Flat menus"
+msgstr "Menus simples"
+
+#: wagtailmenus/modeladmin.py:103 wagtailmenus/models/menuitems.py:53
+#: wagtailmenus/models/menus.py:1343
+msgid "handle"
+msgstr "handle"
+
+#: wagtailmenus/modeladmin.py:111
+msgid "no. of items"
+msgstr "nº de items"
+
+#: wagtailmenus/models/menuitems.py:32 wagtailmenus/models/pages.py:139
 msgid "link to an internal page"
 msgstr "link para uma página interna"
 
-#: wagtailmenus/models/menuitems.py:42 wagtailmenus/models/pages.py:154
+#: wagtailmenus/models/menuitems.py:38 wagtailmenus/models/pages.py:146
 msgid "link to a custom URL"
 msgstr "link para uma URL personalizada"
 
-#: wagtailmenus/models/menuitems.py:48 wagtailmenus/models/pages.py:160
+#: wagtailmenus/models/menuitems.py:44 wagtailmenus/models/pages.py:152
 msgid "append to URL"
 msgstr "adicionar a URL"
 
-#: wagtailmenus/models/menuitems.py:52
+#: wagtailmenus/models/menuitems.py:48
 msgid ""
 "Use this to optionally append a #hash or querystring to the above page's "
 "URL."
@@ -75,12 +106,7 @@ msgstr ""
 "Use esse campo opcionalmente para adicionar um #hash querystring à URL da "
 "página"
 
-#: wagtailmenus/models/menuitems.py:57 wagtailmenus/models/menus.py:1094
-#: wagtailmenus/wagtail_hooks.py:113
-msgid "handle"
-msgstr "handle"
-
-#: wagtailmenus/models/menuitems.py:61
+#: wagtailmenus/models/menuitems.py:57
 msgid ""
 "Use this field to optionally specify an additional value for each menu item,"
 " which you can then reference in custom menu templates."
@@ -88,11 +114,11 @@ msgstr ""
 "Use esse campo opcionalmente para especificar um valor adicional para cada "
 "item do menu, podendo referenciá-lo nos templates de menu customizado."
 
-#: wagtailmenus/models/menuitems.py:67
+#: wagtailmenus/models/menuitems.py:63
 msgid "link text"
 msgstr "texto do link"
 
-#: wagtailmenus/models/menuitems.py:71
+#: wagtailmenus/models/menuitems.py:67
 msgid ""
 "Provide the text to use for a custom URL, or set on an internal page link to"
 " use instead of the page's title."
@@ -100,32 +126,32 @@ msgstr ""
 "Especifique o texto a ser utilizado para uma URL personalizada, ou selecione"
 " um link para uma página interna ao invés do título da página."
 
-#: wagtailmenus/models/menuitems.py:80
+#: wagtailmenus/models/menuitems.py:76
 msgid "menu item"
 msgstr "item do menu"
 
-#: wagtailmenus/models/menuitems.py:81 wagtailmenus/panels.py:26
+#: wagtailmenus/models/menuitems.py:77 wagtailmenus/panels.py:19
 msgid "menu items"
 msgstr "itens do menu"
 
-#: wagtailmenus/models/menuitems.py:120 wagtailmenus/models/pages.py:208
+#: wagtailmenus/models/menuitems.py:113 wagtailmenus/models/pages.py:206
 msgid "Please choose an internal page or provide a custom URL"
 msgstr ""
 "Por favor, selecione uma página interna ou especifique uma URL personalizada"
 
-#: wagtailmenus/models/menuitems.py:123 wagtailmenus/models/pages.py:211
+#: wagtailmenus/models/menuitems.py:116 wagtailmenus/models/pages.py:211
 msgid "Linking to both a page and custom URL is not permitted"
 msgstr "Não é permitido fazer link para uma página e uma URL personalizada"
 
-#: wagtailmenus/models/menuitems.py:126
+#: wagtailmenus/models/menuitems.py:119
 msgid "This field is required when linking to a custom URL"
 msgstr "Campo obrigatório caso esteja fazendo link para uma URL personalizada"
 
-#: wagtailmenus/models/menuitems.py:166 wagtailmenus/models/menuitems.py:182
+#: wagtailmenus/models/menuitems.py:157 wagtailmenus/models/menuitems.py:173
 msgid "allow sub-menu for this item"
 msgstr "permitir sub-menus para esse item"
 
-#: wagtailmenus/models/menuitems.py:169 wagtailmenus/models/menuitems.py:185
+#: wagtailmenus/models/menuitems.py:160 wagtailmenus/models/menuitems.py:176
 msgid ""
 "NOTE: The sub-menu might not be displayed, even if checked. It depends on "
 "how the menu is used in this project's templates."
@@ -133,15 +159,15 @@ msgstr ""
 "ATENÇÃO: O sub-menu pode não ser exibido, mesmo que esteja marcado. Isso "
 "depende de estar implementado no template do projeto."
 
-#: wagtailmenus/models/menus.py:1002 wagtailmenus/models/menus.py:1083
+#: wagtailmenus/models/menus.py:1243 wagtailmenus/models/menus.py:1332
 msgid "site"
 msgstr "site"
 
-#: wagtailmenus/models/menus.py:1009 wagtailmenus/models/menus.py:1108
+#: wagtailmenus/models/menus.py:1250 wagtailmenus/models/menus.py:1357
 msgid "maximum levels"
 msgstr "nivel máximo"
 
-#: wagtailmenus/models/menus.py:1013
+#: wagtailmenus/models/menus.py:1254
 msgid ""
 "The maximum number of levels to display when rendering this menu. The value "
 "can be overidden by supplying a different <code>max_levels</code> value to "
@@ -151,11 +177,11 @@ msgstr ""
 " ser substituído fornecendo um valor diferente em <code>max_levels</code> "
 "para a tag <code>{% main_menu %}</code> em seus templates."
 
-#: wagtailmenus/models/menus.py:1020 wagtailmenus/models/menus.py:1119
+#: wagtailmenus/models/menus.py:1261 wagtailmenus/models/menus.py:1368
 msgid "specific page usage"
 msgstr "uso de páginas específicas"
 
-#: wagtailmenus/models/menus.py:1024
+#: wagtailmenus/models/menus.py:1265
 msgid ""
 "Controls how 'specific' pages objects are fetched and used when rendering "
 "this menu. This value can be overidden by supplying a different "
@@ -167,24 +193,24 @@ msgstr ""
 "diferente em <code>use_specific</code> para a tag <code>{% main_menu "
 "%}</code> em seus templates."
 
-#: wagtailmenus/models/menus.py:1033 wagtailmenus/models/menus.py:1034
+#: wagtailmenus/models/menus.py:1274 wagtailmenus/models/menus.py:1275
 msgid "main menu"
 msgstr "menu principal"
 
-#: wagtailmenus/models/menus.py:1054
+#: wagtailmenus/models/menus.py:1317
 #, python-format
 msgid "Main menu for %(site_name)s"
 msgstr "Menu principal para %(site_name)s"
 
-#: wagtailmenus/models/menus.py:1089
+#: wagtailmenus/models/menus.py:1338
 msgid "title"
 msgstr "título"
 
-#: wagtailmenus/models/menus.py:1091
+#: wagtailmenus/models/menus.py:1340
 msgid "For internal reference only."
 msgstr "Apenas para referência interna."
 
-#: wagtailmenus/models/menus.py:1097
+#: wagtailmenus/models/menus.py:1346
 msgid ""
 "Used to reference this menu in templates etc. Must be unique for the "
 "selected site."
@@ -192,15 +218,15 @@ msgstr ""
 "Utilizado para referenciar esse menu nos templates. Deve ser único para cada"
 " site."
 
-#: wagtailmenus/models/menus.py:1102
+#: wagtailmenus/models/menus.py:1351
 msgid "heading"
 msgstr "cabeçalho"
 
-#: wagtailmenus/models/menus.py:1105
+#: wagtailmenus/models/menus.py:1354
 msgid "If supplied, appears above the menu when rendered."
 msgstr "Se for preenchido, aparecerá acima do menu quando renderizado."
 
-#: wagtailmenus/models/menus.py:1112
+#: wagtailmenus/models/menus.py:1361
 msgid ""
 "The maximum number of levels to display when rendering this menu. The value "
 "can be overidden by supplying a different <code>max_levels</code> value to "
@@ -211,7 +237,7 @@ msgstr ""
 "<code>max_levels</code> com a tag <code>{% flat_menu %}</code> em seus "
 "templates."
 
-#: wagtailmenus/models/menus.py:1123
+#: wagtailmenus/models/menus.py:1372
 msgid ""
 "Controls how 'specific' pages objects are fetched and used when rendering "
 "this menu. This value can be overidden by supplying a different "
@@ -223,27 +249,19 @@ msgstr ""
 "diferente em <code>use_specific</code> para a tag <code>{% main_menu "
 "%}</code> em seus templates."
 
-#: wagtailmenus/models/menus.py:1133
+#: wagtailmenus/models/menus.py:1382
 msgid "flat menu"
 msgstr "menu simples"
 
-#: wagtailmenus/models/menus.py:1134
+#: wagtailmenus/models/menus.py:1383
 msgid "flat menus"
 msgstr "menus simples"
 
-#: wagtailmenus/models/menus.py:1177
-msgid ""
-"Site and handle must create a unique combination. A menu already exists with"
-" these same two values."
-msgstr ""
-"Site e 'handle' devem criar uma combinação única. Um menu já existe com "
-"esses mesmos dois valores."
-
-#: wagtailmenus/models/pages.py:21
+#: wagtailmenus/models/pages.py:17
 msgid "repeat in sub-navigation"
 msgstr "repetir na sub-navegação"
 
-#: wagtailmenus/models/pages.py:24
+#: wagtailmenus/models/pages.py:20
 msgid ""
 "If checked, a link to this page will be repeated alongside it's direct "
 "children when displaying a sub-navigation for this page."
@@ -251,11 +269,11 @@ msgstr ""
 "Se marcado, um link para esta página será repetido junto com seus filhos "
 "diretos ao exibir uma sub-navegação para esta página."
 
-#: wagtailmenus/models/pages.py:29
+#: wagtailmenus/models/pages.py:25
 msgid "repeated item link text"
 msgstr "texto para o link do item repetido"
 
-#: wagtailmenus/models/pages.py:33
+#: wagtailmenus/models/pages.py:29
 msgid ""
 "e.g. 'Section home' or 'Overview'. If left blank, the page title will be "
 "used."
@@ -263,16 +281,16 @@ msgstr ""
 "Exemplo: 'Seção Home' ou 'Visualização'. Se for deixado em banco, será "
 "utilizado o título da página."
 
-#: wagtailmenus/models/pages.py:164
+#: wagtailmenus/models/pages.py:156
 msgid "Use this to optionally append a #hash or querystring to the URL."
 msgstr ""
 "Use esse campo opcionalmente para adicionar um #hash ou querystring a URL."
 
-#: wagtailmenus/models/pages.py:168
+#: wagtailmenus/models/pages.py:160
 msgid "menu item css classes"
 msgstr "Classes css para itens do menu"
 
-#: wagtailmenus/models/pages.py:172
+#: wagtailmenus/models/pages.py:164
 msgid ""
 "Optionally specify css classes to be added to this page when it appears in "
 "menus."
@@ -280,104 +298,79 @@ msgstr ""
 "Opcionalmente, especifique classes css a serem adicionadas para essa página "
 "quando ela aparecer em menus."
 
-#: wagtailmenus/models/pages.py:205
+#: wagtailmenus/models/pages.py:200
 msgid "A link page cannot link to another link page"
 msgstr "Uma página link não pode fazer link para outra página link"
 
-#: wagtailmenus/models/pages.py:295
+#: wagtailmenus/models/pages.py:288
 #, python-format
 msgid "This page redirects to: %(url)s"
 msgstr "Essa página redireciona para: %(url)s"
 
-#: wagtailmenus/panels.py:33
+#: wagtailmenus/panels.py:26
 msgid "Menu items"
-msgstr ""
+msgstr "Itens do menu"
 
-#: wagtailmenus/panels.py:34
+#: wagtailmenus/panels.py:27
 msgid "Add new item"
 msgstr "Adicionar um novo item"
 
-#: wagtailmenus/panels.py:35
+#: wagtailmenus/panels.py:28
 msgid "New item"
 msgstr "Novo item"
 
-#: wagtailmenus/panels.py:73
+#: wagtailmenus/panels.py:70
 msgid "Menu details"
 msgstr "Detalhes do menu"
 
-#: wagtailmenus/panels.py:87
-msgid "Rendering setings"
-msgstr ""
+#: wagtailmenus/panels.py:84
+msgid "Render settings"
+msgstr "Configurações de renderização"
 
-#: wagtailmenus/panels.py:111 wagtailmenus/panels.py:145
-#: wagtailmenus/views.py:59
+#: wagtailmenus/panels.py:108 wagtailmenus/panels.py:142
+#: wagtailmenus/views.py:54
 msgid "Settings"
 msgstr "Configurações"
 
-#: wagtailmenus/panels.py:122
+#: wagtailmenus/panels.py:119
 msgid "Advanced menu behaviour"
 msgstr "Comportamento avançado do menu"
 
-#: wagtailmenus/panels.py:132
+#: wagtailmenus/panels.py:129
 msgid "Scheduled publishing"
 msgstr "Publicação agendada"
 
-#: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:39
-msgid "Save"
-msgstr "Salvar"
-
-#: wagtailmenus/views.py:58
+#: wagtailmenus/views.py:53
 msgid "Content"
 msgstr "Conteúdo"
 
-#: wagtailmenus/views.py:70
+#: wagtailmenus/views.py:68
 msgid "Editing"
 msgstr "Editando"
 
-#: wagtailmenus/views.py:94
+#: wagtailmenus/views.py:92
 #, python-format
 msgid "Editing %(model_name)s"
 msgstr "Editando %(model_name)s"
 
-#: wagtailmenus/views.py:125
+#: wagtailmenus/views.py:123
 msgid "Main menu updated successfully."
 msgstr "Menu principal atualizado com sucesso."
 
-#: wagtailmenus/views.py:129
+#: wagtailmenus/views.py:127
 msgid "The menu could not be saved due to errors."
 msgstr "O menu não pode ser salvo por conta de erros."
 
-#: wagtailmenus/views.py:144
+#: wagtailmenus/views.py:142
 msgid "Copying"
 msgstr "Copiando"
 
-#: wagtailmenus/views.py:151
+#: wagtailmenus/views.py:149
 #, python-format
 msgid "Copying %(model_name)s"
 msgstr "Copiando %(model_name)s"
 
-#: wagtailmenus/views.py:183
+#: wagtailmenus/views.py:181
 #, python-brace-format
 msgid "Flat menu '{instance}' created."
 msgstr "Menu simples '{instance}' criado."
-
-#: wagtailmenus/wagtail_hooks.py:20
-msgid "Main menu"
-msgstr "Menu principal"
-
-#: wagtailmenus/wagtail_hooks.py:52
-msgid "Copy"
-msgstr "Copiar"
-
-#: wagtailmenus/wagtail_hooks.py:54
-#, python-format
-msgid "Copy this %(model_name)s"
-msgstr "Copiar este %(model_name)s"
-
-#: wagtailmenus/wagtail_hooks.py:75
-msgid "Flat menus"
-msgstr "Menus simples"
-
-#: wagtailmenus/wagtail_hooks.py:121
-msgid "no. of items"
-msgstr "nº de items"
