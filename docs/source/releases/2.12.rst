@@ -1,12 +1,6 @@
-=======================================
-Wagtailmenus 2.12 (alpha) release notes
-=======================================
-
-.. NOTE ::
-    
-    Wagtailmenus 2.12 is in the alpha stage of development. Any changes
-    detailed below are subject to change before the final 2.12 release.
-
+===============================
+Wagtailmenus 2.12 release notes
+===============================
 
 .. contents::
     :local:
@@ -20,7 +14,7 @@ What's new?
 New ``add_sub_menus_inline`` option for menu tags
 -------------------------------------------------
 
-By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menus_inline=True`` to the initial ``{% main_menu %}``, ``{% flat_menu %}``, ``{% children_menu %}`` or ``{% section_menu %}`` tag, then sub menu instances will be created added directly to any menu item where ``item.has_children_in_menu`` is ``True``, allowing you to programatically render the entire menu structure from within the same template.
+By default, you have to call the ``{% sub_menu %}`` tag within a menu template to render new branches of a multi-level menu. However, if you add ``add_sub_menus_inline=True`` to the initial ``{% main_menu %}``, ``{% flat_menu %}``, ``{% children_menu %}`` or ``{% section_menu %}`` tag, then sub menu instances will be created added directly to any menu item where ``item.has_children_in_menu`` is ``True``, allowing you to easily render the entire menu structure from within the same template.
 
 For example, instead of the following:
 
@@ -55,9 +49,6 @@ Minor changes & bug fixes
 
 - Arabic translations added - Courtesy of @alfuhigi. Many thanks!
 - Fixed an issue with the section menu in the release notes section of the docs.
-- Updated tox config to test against Python 3.7 and Wagtail 2.2,
-- Updated Travis CI config to deploy to PyPi automatically when commits are tagged appropriately.
-- Pinned django-cogwheels dependency to version 0.2 to reduce potential for backwards-incompatibility issues.
 - Changed the signature of ``Menu.render_from_tag()`` to better indicate common expected/supported arguments for menus.
 - Fixed ``Menu.get_common_hook_kwargs()``, so the menu instances ``use_specific`` attribute value is correctly passed to hooks.
 - Removed ``request``, ``max_levels`` and ``use_specific`` as class attributes from ``Menu`` to prevent unexpected mutation.
@@ -76,7 +67,7 @@ The following items have been deprecated in this release. They will continue to 
 -------------------------------------
 
 In an effort to make method names more reflective of their functionality, this method has been replaced by two methods:
-``create_from_collected_values()`` and ``get_from_collected_values()``. The former is implemented on menu classes that are  not model based (where instances must be created from scratch each time, for example: ``ChildrenMenu``, ``SectionMenu``, ``SubMenu``), and the latter is implemented on model-based menu classes, where a corresponding object must be retreived from the database (so, ``AbstractMainMenu``, ``MainMenu``, ``AbstractFlatMenu`` and ``FlatMenu``). 
+``create_from_collected_values()`` and ``get_from_collected_values()``. The former is implemented on menu classes that are  not model based (where instances must be created from scratch each time, for example: ``ChildrenMenu``, ``SectionMenu``, ``SubMenu``), and the latter is implemented on model-based menu classes, where a corresponding object must be retrieved from the database (so, ``AbstractMainMenu``, ``MainMenu``, ``AbstractFlatMenu`` and ``FlatMenu``). 
 
 ``render_from_tag()`` automatically calls one or the other, depending on whether the class inherits from ``django.db.models.Model``.
 
@@ -162,7 +153,7 @@ You should do:
 The ``wagtailmenus.constants`` module has been removed
 ------------------------------------------------------
 
-If you're importing this in your project from it's previous location, you should update the import statements in your code to use the new module path: `` wagtailmenus.conf.constants``
+If you're importing this in your project from it's previous location, you should update the import statements in your code to use the new module path: ``wagtailmenus.conf.constants``
 
 For example, instead of the following:
 
