@@ -86,13 +86,13 @@ If you're using custom menu classes in your project, and are currently overridin
 ``Menu.get_contextual_vals_from_context()``
 -------------------------------------------
 
-In an effort to make method names more reflective of their functionality, and to help dissuade users from overriding functionality that is subject to change, this method has been renamed to ``_create_contextualvals_obj_from_context()`` (becoming a 'private' method in the process).
+In an effort to make method names more reflective of their functionality, and to help dissuade users from overriding functionality that is subject to change, this method has been renamed to ``_create_contextualvals_obj_from_context()`` (becoming a private method in the process).
 
 
 ``Menu.get_option_vals_from_options()``
 ---------------------------------------
 
-In an effort to make method names more reflective of their functionality, and to help dissuade users from overriding functionality that is subject to change, this method has been renamed to ``_create_optionvals_obj_from_values()`` (becoming a 'private' method in the process).
+In an effort to make method names more reflective of their functionality, and to help dissuade users from overriding functionality that is subject to change, this method has been renamed to ``_create_optionvals_obj_from_values()`` (becoming a private method in the process).
 
 
 Upgrade considerations
