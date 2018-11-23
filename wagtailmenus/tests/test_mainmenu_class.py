@@ -1,9 +1,7 @@
-import warnings
-from unittest import mock
 from django.test import TestCase
 
 from wagtailmenus.conf import constants
-from wagtailmenus.models import MainMenu, MainMenuItem
+from wagtailmenus.models import MainMenu
 from wagtailmenus.tests import base, utils
 
 Page = utils.get_page_model()
@@ -303,23 +301,3 @@ class TestGetTemplateNames(
 
 def mock_relative_url_method(self, site=None):
     return ''
-
-
-class TestMenuItemDeprecationWarning(MainMenuTestCase):
-
-    @mock.patch.object(MainMenuItem, 'relative_url', mock_relative_url_method)
-    def test_warns_when_custom_menuitem_relative_url_does_not_accept_request(self):
-        menu = self.get_test_menu_instance()
-        menu._option_vals = utils.make_optionvals_instance()
-        menu._contextual_vals = utils.make_contextualvals_instance(url='/test')
-        menu.request = menu._contextual_vals.request
-
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            menu.get_menu_items_for_rendering()
-        self.assertEqual(
-            str(w[0].message),
-            "The relative_url() method on custom MenuItem classes must accept "
-            "a 'request' keyword argument. Please update the method signature "
-            "on your MainMenuItem class. It will be mandatory in Wagtail 2.13."
-        )
