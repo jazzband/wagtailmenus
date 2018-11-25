@@ -19,7 +19,15 @@ matrix:
     sudo: false
     dist: trusty
     python: 3.6
-  - env: TOXENV=py37-dj2-wt22
+  - env: TOXENV=py36-dj2-wt22
+    sudo: false
+    dist: trusty
+    python: 3.6
+  - env: TOXENV=py36-dj21-wt23
+    sudo: false
+    dist: trusty
+    python: 3.6
+  - env: TOXENV=py37-dj21-wt23
     sudo: true
     dist: xenial
     python: 3.7
@@ -42,4 +50,4 @@ deploy:
     tags: true
     branch: master
     repo: rkhleics/wagtailmenus
-    condition: "$TOXENV = py37-dj2-wt22"
+    condition: "$TOXENV = py37-dj21-wt23"
