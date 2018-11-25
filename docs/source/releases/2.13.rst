@@ -22,7 +22,8 @@ TBA
 Minor changes & bug fixes 
 =========================
 
-TBA
+- Added support for Wagtail 2.3.
+- Added support for Django 2.1.
 
 
 Deprecations

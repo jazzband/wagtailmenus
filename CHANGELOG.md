@@ -5,7 +5,8 @@ Changelog
 ------------------
 
 * Dropped support for ``relative_url()`` methods on custom menu item models that do not support a ``request`` keyword argument.
-
+* Added support for Wagtail 2.3.
+* Added support for Django 2.1.
 
 
 2.12 (17.11.2018)
