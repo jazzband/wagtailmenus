@@ -34,4 +34,11 @@ TBA
 Upgrade considerations
 ======================
 
-TBA
+Following a standard deprecation period a two minor releases, the following functionality has now been removed.
+
+
+``relative_url()`` methods must accept a ``request`` keyword argument
+---------------------------------------------------------------------
+
+If you're using custom ``MenuItem`` models in your project, and are overriding ``relative_url()``, you should update the signature on your custom model method to accept a ``request`` keyword argument, and pass it on to ``link_page.relative_url()`` and ``super().relative_url()`` (in addition to ``site``) if calling either of those from.
+

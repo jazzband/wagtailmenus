@@ -16,10 +16,7 @@ from wagtail.core.models import Page, Site
 
 from wagtailmenus import forms, panels
 from wagtailmenus.conf import constants, settings
-from wagtailmenus.utils.deprecation import (
-    RemovedInWagtailMenus213Warning, RemovedInWagtailMenus3Warning
-)
-from wagtailmenus.utils.inspection import accepts_kwarg
+from wagtailmenus.utils.deprecation import RemovedInWagtailMenus3Warning
 from wagtailmenus.utils.misc import get_site_from_request
 from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
@@ -659,19 +656,8 @@ class Menu:
 
         if option_vals.use_absolute_page_urls:
             item.href = item.get_full_url(request=request)
-        elif accepts_kwarg(item.relative_url, 'request'):
-            item.href = item.relative_url(current_site, request)
         else:
-            warnings.warn(
-                "The relative_url() method on custom MenuItem classes "
-                "must accept a 'request' keyword argument. Please update "
-                "the method signature on your {} class. It will be "
-                "mandatory in Wagtail 2.13.".format(
-                    item.__class__.__name__
-                ),
-                category=RemovedInWagtailMenus213Warning
-            )
-            item.href = item.relative_url(current_site)
+            item.href = item.relative_url(current_site, request=request)
 
         # ---------------------------------------------------------------------
         # Set additional attributes
