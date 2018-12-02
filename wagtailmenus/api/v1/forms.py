@@ -86,9 +86,8 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         help_text=_(
             "The URL you are generating the menu for (relative to the site "
             "root). If you are generating a menu for a URL that does not map "
-            "exactly to a Page object, you can provide this instead of "
-            "'current_page' to help with derivation active classes and other "
-            "values."
+            "exactly to a Page object, you can provide this in place of "
+            "'current_page' to help derive active classes and other values."
         ),
     )
     current_page = fields.PageChoiceField(
