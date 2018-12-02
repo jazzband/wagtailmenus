@@ -668,6 +668,8 @@ class Menu:
 
         if item.has_children_in_menu and option_vals.add_sub_menus_inline:
             item.sub_menu = self.create_sub_menu(page)
+        else:
+            item.sub_menu = None
 
         return item
 

@@ -7,6 +7,8 @@ Changelog
 * Dropped support for ``relative_url()`` methods on custom menu item models that do not support a ``request`` keyword argument.
 * Added support for Wagtail 2.3.
 * Added support for Django 2.1.
+* Updated ``MenuPage.get_repeated_menu_item()`` to nullify `sub_menu` on the copy to reduce likelihood of infinite recursion errors.
+* Updated ``Menu._prime_menu_item()`` to set `sub_menu` to None if no new value is being added, to reduce likelihood of infinite recursion errors.
 
 
 2.12 (17.11.2018)
