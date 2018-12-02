@@ -13,9 +13,11 @@ LANGUAGE_CODE = 'en'
 
 INSTALLED_APPS = (
     'wagtailmenus',
+    'wagtailmenus.api',
 
     'taggit',
     'modelcluster',
+    'rest_framework',
 
     'django.contrib.admin',
     'django.contrib.auth',
