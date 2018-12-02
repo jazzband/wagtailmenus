@@ -265,7 +265,7 @@ class Menu:
             'The get_instance_for_rendering() class method is deprecated in '
             'v2.12 and will be removed in v3. For model-based menu classes, '
             'use get_from_collected_values() instead, and for non model-based '
-            'menu classes, use create_from_collected_values().', 
+            'menu classes, use create_from_collected_values().',
             category=RemovedInWagtailMenus3Warning
         )
         if issubclass(cls, models.Model):
@@ -880,68 +880,57 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
 
     def prepare_to_render(self, request, contextual_vals, option_vals):
         super().prepare_to_render(request, contextual_vals, option_vals)
+        root_page = self.root_page
 
         # Replace self.root_page with it's 'specific' equivalent if it looks
         # like it'll help with modifying menu items or aid consistency
-        if self.use_specific and type(self.root_page) is Page and (
+        if self.use_specific and type(root_page) is Page and (
             self.use_specific >= constants.USE_SPECIFIC_TOP_LEVEL or
-            hasattr(self.root_page.specific_class, 'modify_submenu_items')
+            hasattr(root_page.specific_class, 'modify_submenu_items')
         ):
-            self.root_page = self.root_page.specific
+            root_page = self.root_page.specific
+
+        root_page.text = getattr(
+            root_page, settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
+            root_page.title
+        )
+        if option_vals.use_absolute_page_urls:
+            href = root_page.get_full_url(request=self.request)
+        else:
+            href = root_page.relative_url(contextual_vals.current_site)
+        root_page.href = href
+
+        active_class = ''
+        current_page = contextual_vals.current_page
+        if option_vals.apply_active_classes:
+            if current_page and root_page.id == current_page.id:
+                # `root_page` is the current page, so should probably
+                # have the 'active' class. But, not if there's going to be a
+                # 'repeated item' in the menu items (in which case, the
+                # repeated item should get the active class)
+                if (
+                    option_vals.allow_repeating_parents and
+                    option_vals.use_specific and
+                    getattr(root_page, 'repeat_in_subnav', False)
+                ):
+                    active_class = settings.ACTIVE_ANCESTOR_CLASS
+                else:
+                    active_class = settings.ACTIVE_CLASS
+            elif root_page.id in contextual_vals.current_page_ancestor_ids:
+                active_class = settings.ACTIVE_ANCESTOR_CLASS
+        root_page.active_class = active_class
+        self.root_page = root_page
 
     def get_parent_page_for_menu_items(self):
         return self.root_page
 
     def get_context_data(self, **kwargs):
-        ctx_vals = self._contextual_vals
-        opt_vals = self._option_vals
-        section_root = self.root_page
-        current_page = ctx_vals.current_page
-        active_css_class = settings.ACTIVE_CLASS
-        ancestor_css_class = settings.ACTIVE_ANCESTOR_CLASS
-
-        # We use a different pattern for overriding 'get_context_data' here,
-        # because we need access to data['menu_items'] below
-        data = super().get_context_data()
-        data['show_section_root'] = opt_vals.extra['show_section_root']
-
-        if 'section_root' not in kwargs:
-            section_root.text = getattr(
-                section_root, settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
-                section_root.title
-            )
-            if opt_vals.use_absolute_page_urls:
-                if hasattr(section_root, 'get_full_url'):
-                    href = section_root.get_full_url(request=self.request)
-                else:
-                    href = section_root.full_url
-            else:
-                href = section_root.relative_url(ctx_vals.current_site)
-            section_root.href = href
-
-            if opt_vals.apply_active_classes:
-                active_class = ancestor_css_class
-                if current_page and section_root.pk == current_page.pk:
-                    # `section_root` is the current page, so should probably
-                    # have the 'active' class...
-                    active_class = active_css_class
-                    menu_items = data['menu_items']
-                    # ...unless there's a 'repeated item' in menu_items that
-                    # already has the 'active' class
-                    if(
-                        opt_vals.allow_repeating_parents and self.use_specific
-                    ):
-                        for item in menu_items:
-                            css_class = getattr(item, 'active_class', '')
-                            if(
-                                css_class == active_css_class and
-                                getattr(item, 'pk', 0) == section_root.pk
-                            ):
-                                active_class = ancestor_css_class
-                section_root.active_class = active_class
-            data['section_root'] = section_root
-        data.update(**kwargs)
-        return data
+        data = {
+            'show_section_root': self._option_vals.extra['show_section_root'],
+            'section_root': self.root_page,
+        }
+        data.update(kwargs)
+        return super().get_context_data(**data)
 
 
 class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
