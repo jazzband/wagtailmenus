@@ -119,8 +119,9 @@ class MenuPageMixin(models.Model):
         else:
             menuitem.active_class = ''
 
-        # Set/reset 'has_children_in_menu'
+        # Set/reset 'has_children_in_menu' and 'sub_menu'
         menuitem.has_children_in_menu = False
+        menuitem.sub_menu = None
 
         return menuitem
 
