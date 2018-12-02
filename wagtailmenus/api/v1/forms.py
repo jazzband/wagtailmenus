@@ -268,7 +268,7 @@ class MainMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
 
 
 class FlatMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
-    handle = forms.SlugField(
+    handle = fields.FlatMenuHandleField(
         help_text=_(
             "The 'handle' for the flat menu you wish to generate. For "
             "example: 'info' or 'contact'."

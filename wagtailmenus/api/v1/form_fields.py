@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from wagtail.core.models import Page, Site
 
-from wagtailmenus.conf import constants
+from wagtailmenus.conf import constants, settings
 
 
 class JavascriptStyleBooleanSelect(forms.Select):
@@ -112,4 +112,12 @@ class SiteChoiceField(forms.ModelChoiceField):
     def __init__(self, *args, **kwargs):
         if 'queryset' not in 'kwargs':
             kwargs['queryset'] = Site.objects.none()
+        super().__init__(*args, **kwargs)
+
+
+class FlatMenuHandleField(forms.SlugField):
+
+    def __init__(self, *args, **kwargs):
+        if settings.FLAT_MENUS_HANDLE_CHOICES:
+            kwargs['widget'] = forms.Select(choices=settings.FLAT_MENUS_HANDLE_CHOICES)
         super().__init__(*args, **kwargs)
