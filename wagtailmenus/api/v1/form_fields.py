@@ -51,16 +51,14 @@ class BooleanChoiceField(forms.BooleanField):
 
     def clean(self, value):
         if value is None:
-            raise ValidationError("This value must be 'true' or 'false'")
+            raise ValidationError("The value must be 'true' or 'false'", code="invalid")
         return value
 
 
 class UseSpecificChoiceField(forms.TypedChoiceField):
 
     default_error_messages = {
-        'invalid_choice': _(
-            '%(value)s is not valid. The value must be one of: '
-        ) + ','.join(str(v) for v in constants.USE_SPECIFIC_VALUES)
+        'invalid_choice': _('%(value)s is not a supported value.')
     }
 
     def __init__(self, *args, **kwargs):
@@ -78,9 +76,7 @@ class UseSpecificChoiceField(forms.TypedChoiceField):
 class MaxLevelsChoiceField(forms.TypedChoiceField):
 
     default_error_messages = {
-        'invalid_choice': _(
-            '%(value)s is not valid. The value must be one of: '
-        ) + ','.join(str(v) for v, l in constants.MAX_LEVELS_CHOICES)
+        'invalid_choice': _('%(value)s is not a supported value.')
     }
 
     def __init__(self, *args, **kwargs):
