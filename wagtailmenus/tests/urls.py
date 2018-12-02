@@ -17,5 +17,6 @@ urlpatterns = [
         TemplateView.as_view(template_name='page.html')),
     url(r'^news-and-events/$',
         TemplateView.as_view(template_name='page.html')),
+    url(r'menu_api/', include('wagtailmenus.api.urls')),
     url(r'', include(wagtail_urls)),
 ]
