@@ -64,7 +64,7 @@ class TestGetMenuItemsForRendering(MainMenuTestCase):
         )
         self.assertGreater(len(items_with_children), 1)
         for menu_item in items_with_children:
-            self.assertFalse(hasattr(menu_item, 'sub_menu'))
+            self.assertIs(getattr(menu_item, 'sub_menu', None), None)
 
     def test_sub_menu_items_added_inline_if_option_value_set_to_true(self):
         menu = self.get_render_ready_menu_instance(add_sub_menus_inline=True)
@@ -73,5 +73,5 @@ class TestGetMenuItemsForRendering(MainMenuTestCase):
             if getattr(item, 'has_children_in_menu', False)
         )
         for menu_item in items_with_children:
-            self.assertTrue(hasattr(menu_item, 'sub_menu'))
+            self.assertTrue(menu_item.sub_menu)
             self.assertIsInstance(menu_item.sub_menu, menu.get_sub_menu_class())
