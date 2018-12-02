@@ -901,13 +901,9 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         root_page.href = href
 
         active_class = ''
-        current_page = contextual_vals.current_page
         if option_vals.apply_active_classes:
+            current_page = contextual_vals.current_page
             if current_page and root_page.id == current_page.id:
-                # `root_page` is the current page, so should probably
-                # have the 'active' class. But, not if there's going to be a
-                # 'repeated item' in the menu items (in which case, the
-                # repeated item should get the active class)
                 if (
                     option_vals.allow_repeating_parents and
                     option_vals.use_specific and
