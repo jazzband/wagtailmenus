@@ -32,9 +32,12 @@ class ArgumentFormTestMixin:
         form_cls = self.get_form_class()
         return form_cls(view, request, data=data, initial=initial)
 
-    def make_request(self, url=None):
+    def make_request(self, url=None, url_name=None):
         if url is None:
-            url = reverse(self.url_namespace + ':' + self.default_request_url_name)
+            url_name = url_name or self.default_request_url_name
+            if not url_name.startswith(self.url_namespace):
+                url_name = self.url_namespace + ':' + url_name
+            url = reverse(url_name)
         return self.request_factory.get(url)
 
 
