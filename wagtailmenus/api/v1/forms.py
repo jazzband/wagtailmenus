@@ -179,29 +179,22 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         self.derive_ancestor_page_ids(cleaned_data)
         return cleaned_data
 
-    def get_dummy_request(self):
-        if self._dummy_request:
-            return self._dummy_request
-        try:
-            url = self.cleaned_data['current_url']
-        except KeyError:
+    def make_dummy_request(self, url):
+        if not url:
             return
-
-        self._dummy_request = make_dummy_request(url=url, original_request=self._request)
-        return self._dummy_request
+        return make_dummy_request(url=url, original_request=self._request)
 
     def derive_current_page(self, cleaned_data, force_derivation=False, accept_best_match=True):
         """
         If necessary, attempts to derive a 'current_page' value from other
-        values in ``cleaned_data``, and add that value to ``cleaned_data``.
-
-        If ``accept_best_match`` is True, and a matching page isn't found on
-        the first attempt, the method will recursively remove components from
-        the url and retry until a math is found. If this yiels a result, it
-        will be added to ``cleaned_data`` as 'best_match_page'.
-
+        values in ``cleaned_data``, and adds that value to ``cleaned_data``.
         By default, the page is only derived when 'apply_active_classes' is
-        True. But, 'force_derivation' can be used to force derivation.
+        True. But, ``force_derivation`` can be used to force it.
+
+        If the URL doesn't match a Page 'exactly' and `accept_best_match` is
+        True, ``guess_page_from_url()`` will attempt to find a 'best match' by
+        removing components from the url. If such a match is found, it will be
+        added to ``cleaned_data`` as 'best_match_page'.
         """
         if(
             cleaned_data.get('current_page') or
@@ -213,27 +206,49 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         ):
             return
 
-        site = cleaned_data['site']
-        request = self.get_dummy_request()
+        match, is_exact_match = self.guess_page_from_url(
+            url=cleaned_data['url'],
+            site=cleaned_data['site'],
+            accept_best_match=accept_best_match,
+        )
+
+        if match:
+            if is_exact_match:
+                cleaned_data['current_page'] = match
+            else:
+                cleaned_data['best_match_page'] = match
+
+        if not accept_best_match and not cleaned_data['current_page']:
+            self.add_error('current_page', UNDERIVABLE_MSG)
+
+    def guess_page_from_url(self, site, url, accept_best_match=True):
+        """
+        Attempts to guess a wagtail Page from a URL. Returns a tuple, where
+        the first element is the matching Page object (or None if no match
+        was found), and a boolean indicating whether the page matched the
+        URL exactly.
+
+        If ``accept_best_match`` is True, and a matching page isn't found on
+        the first attempt, the method will recursively remove components from
+        the url and retry until a match is found.
+        """
+        request = self.make_dummy_request(url)
         first_run = True
         match = None
         path_components = [pc for pc in request.path.split('/') if pc]
-
         while match is None and path_components:
             try:
                 match = site.root_page.specific.route(request, path_components)[0]
                 if first_run:
-                    cleaned_data['current_page'] = match
+                    return match, True
                 else:
-                    cleaned_data['best_match_page'] = match
+                    return match, False
             except Http404:
                 if not accept_best_match:
                     break
                 path_components.pop()
                 first_run = False
-
-        if not accept_best_match and not cleaned_data['current_page']:
-            self.add_error('current_page', UNDERIVABLE_MSG)
+        return None, False
 
     def derive_ancestor_page_ids(self, cleaned_data):
         """
