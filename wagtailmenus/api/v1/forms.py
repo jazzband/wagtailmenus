@@ -53,13 +53,13 @@ class BaseAPIViewArgumentForm(forms.Form):
         return self.data
 
     @property
-    def template(self):
+    def template_name(self):
         if 'crispy_forms' in django_settings.INSTALLED_APPS:
             return 'wagtailmenus/api/forms/crispy_form.html'
         return 'wagtailmenus/api/forms/form.html'
 
     def to_html(self, request):
-        template = loader.get_template(self.template)
+        template = loader.get_template(self.template_name)
         context = {'form': self}
         return template.render(context, request)
 
