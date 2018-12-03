@@ -58,7 +58,7 @@ class BaseAPIViewArgumentForm(forms.Form):
             return 'wagtailmenus/api/forms/crispy_form.html'
         return 'wagtailmenus/api/forms/form.html'
 
-    def to_html(self, request, view):
+    def to_html(self, request):
         template = loader.get_template(self.template)
         context = {'form': self}
         return template.render(context, request)

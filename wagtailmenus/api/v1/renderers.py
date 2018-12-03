@@ -17,5 +17,5 @@ class BrowsableAPIWithArgumentFormRenderer(BrowsableAPIRenderer):
     def get_argument_form(self, data, view, request):
         form = view.get_argument_form(request)
         template = loader.get_template(self.argument_form_template)
-        context = {'elements': [form.to_html(request, view)]}
+        context = {'elements': [form.to_html(request)]}
         return template.render(context)
