@@ -65,11 +65,11 @@ class BaseAPIViewArgumentForm(forms.Form):
 
     @property
     def helper(self):
-        try:
-            from crispy_forms.helper import FormHelper
-            from crispy_forms.layout import Layout, Submit
-        except ImportError:
+        if 'crispy_forms' not in django_settings.INSTALLED_APPS:
             return
+
+        from crispy_forms.helper import FormHelper
+        from crispy_forms.layout import Layout, Submit
 
         layout_components = list(self.fields.keys()) + [
             Submit('', _('Submit'), css_class='btn-default'),
