@@ -37,8 +37,10 @@ class BaseAPIViewArgumentForm(forms.Form):
         """
         supplementary_vals = {}
         for name, field in self.fields.items():
-            if self.data.get(name, '') == '' and name in self.initial:
-                supplementary_vals[name] = self.initial[name]
+            if self.data.get(name, '') == '':
+                val = self.get_initial_for_field(field, name)
+                if val:
+                    supplementary_vals[name] = val
         if supplementary_vals:
             if not getattr(self.data, '_mutable', True):
                 self.data = self.data.copy()
