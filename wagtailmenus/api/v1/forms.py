@@ -142,11 +142,24 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "to the relevant setting value for this menu type."
         )
     )
+    language = forms.ChoiceField(
+        label=_('Language'),
+        required=False,
+        choices=django_settings.LANGUAGES,
+        initial=django_settings.LANGUAGE_CODE,
+        help_text=_(
+            "The language you wish to rendering the menu in. Must be one of "
+            "the languages defined in your LANGUAGES setting. Will only "
+            "affect the result if USE_I18N is True. Defaults to LANGUAGE_CODE."
+        )
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['current_page'].queryset = Page.objects.filter(depth__gt=1)
         self.fields['site'].queryset = Site.objects.all()
+        if not django_settings.USE_I18N:
+            self.fields['language'].widget = forms.HiddenInput()
         self._dummy_request = None
 
     def clean(self):
@@ -266,6 +279,7 @@ class MainMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
         'apply_active_classes',
         'allow_repeating_parents',
         'use_absolute_page_urls',
+        'language',
     )
 
 
@@ -296,6 +310,7 @@ class FlatMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
         'apply_active_classes',
         'allow_repeating_parents',
         'use_absolute_page_urls',
+        'language',
     )
 
 
@@ -318,6 +333,7 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         'apply_active_classes',
         'allow_repeating_parents',
         'use_absolute_page_urls',
+        'language',
     )
 
     def __init__(self, *args, **kwargs):
@@ -380,6 +396,7 @@ class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         'apply_active_classes',
         'allow_repeating_parents',
         'use_absolute_page_urls',
+        'language',
     )
 
     def __init__(self, *args, **kwargs):

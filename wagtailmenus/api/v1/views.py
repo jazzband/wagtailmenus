@@ -1,5 +1,7 @@
 from collections import OrderedDict
 
+from django.conf import settings as django_settings
+from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.exceptions import ValidationError, NotFound
 from rest_framework.views import APIView
@@ -132,6 +134,11 @@ class MenuGeneratorView(APIView):
 
         return Response(menu_serializer.data)
 
+    def activate_selected_language(self, language):
+        # Activate selected language if appropriate
+        if django_settings.USE_I18N:
+            translation.activate(language)
+
     def get_menu_instance(self, request, form):
         """
         The Menu classes themselves are responsible for getting/creating menu
@@ -155,6 +162,11 @@ class MenuGeneratorView(APIView):
         }
         cls = self.get_menu_class()
         data['add_sub_menus_inline'] = True  # This should always be True
+
+        # Activate selected language
+        self.activate_selected_language(data['language'])
+
+        # Generate the menu and return
         menu_instance = cls._get_render_prepared_object(dummy_context, **data)
         if menu_instance is None:
             raise NotFound(_(
