@@ -207,7 +207,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             return
 
         match, is_exact_match = self.guess_page_from_url(
-            url=cleaned_data['url'],
+            url=cleaned_data['current_url'],
             site=cleaned_data['site'],
             accept_best_match=accept_best_match,
         )
