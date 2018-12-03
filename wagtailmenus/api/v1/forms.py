@@ -192,7 +192,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         True. But, ``force_derivation`` can be used to force it.
 
         If the URL doesn't match a Page 'exactly' and `accept_best_match` is
-        True, ``guess_page_from_url()`` will attempt to find a 'best match' by
+        True, ``get_page_for_url()`` will attempt to find a 'best match' by
         removing components from the url. If such a match is found, it will be
         added to ``cleaned_data`` as 'best_match_page'.
         """
@@ -206,7 +206,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         ):
             return
 
-        match, is_exact_match = self.guess_page_from_url(
+        match, is_exact_match = self.get_page_for_url(
             url=cleaned_data['current_url'],
             site=cleaned_data['site'],
             accept_best_match=accept_best_match,
@@ -221,7 +221,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         if not accept_best_match and not cleaned_data['current_page']:
             self.add_error('current_page', UNDERIVABLE_MSG)
 
-    def guess_page_from_url(self, site, url, accept_best_match=True):
+    def get_page_for_url(self, url, site, accept_best_match=True):
         """
         Attempts to guess a wagtail Page from a URL. Returns a tuple, where
         the first element is the matching Page object (or None if no match
