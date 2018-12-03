@@ -20,8 +20,7 @@ class BaseAPIViewArgumentForm(forms.Form):
     A form class that accepts 'view' and 'request' arguments at initialisation,
     is capable of rendering itself to a template (in a similar fashion to
     ``django_filters.rest_framework.DjangoFilterBackend``), and has some
-    custom clean() behaviour that makes it more useful when data is being
-    supplied via GET instead of just POST.
+    custom cleaning behaviour to better handle missing values.
     """
     def __init__(self, view, request, **kwargs):
         self._view = view
@@ -30,10 +29,11 @@ class BaseAPIViewArgumentForm(forms.Form):
 
     def full_clean(self):
         """
-        Because non-required arguements are very often not included in supplied
-        data, initial data misses it's usual opportunity to become a default
+        Because non-required arguments are very often not provided for
+        API requests, and because request values are not 'posted' by the
+        form, initial data misses it's usual opportunity to become a default
         value. This override changes that by supplementing ``self.data`` with
-        initial values from the form before cleaning.
+        initial values before the usual cleaning happens.
         """
         supplementary_vals = {}
         for name, field in self.fields.items():
