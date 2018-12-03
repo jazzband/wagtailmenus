@@ -29,12 +29,16 @@ class BaseAPIViewArgumentForm(forms.Form):
 
     def full_clean(self):
         """
-        Because non-required arguments are very often not provided for
-        API requests, and because request values are not 'posted' by the
-        form, initial data misses it's usual opportunity to become a default
-        value. This override changes that by supplementing ``self.data`` with
-        initial values before the usual cleaning happens.
+        Because non-required arguments are often not provided for API requests,
+        and because request values are not 'posted' by the form, initial data
+        misses it's usual opportunity to become a default value. This override
+        changes that by supplementing ``self.data`` with initial values before
+        the usual cleaning happens.
         """
+        self.supplement_missing_data_with_initial_values()
+        return super().full_clean()
+
+    def supplement_missing_data_with_initial_values(self):
         supplementary_vals = {}
         for name, field in self.fields.items():
             if not field.required and self.data.get(name) in ('', None):
@@ -46,7 +50,7 @@ class BaseAPIViewArgumentForm(forms.Form):
             if not getattr(self.data, '_mutable', True):
                 self.data = self.data.copy()
             self.data.update(supplementary_vals)
-        return super().full_clean()
+        return self.data
 
     @property
     def template(self):
