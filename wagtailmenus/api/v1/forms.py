@@ -171,7 +171,6 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         self.fields['site'].queryset = Site.objects.all()
         if not django_settings.USE_I18N:
             self.fields['language'].widget = forms.HiddenInput()
-        self._dummy_request = None
 
     def clean(self):
         cleaned_data = super().clean()
