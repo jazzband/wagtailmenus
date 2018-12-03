@@ -218,9 +218,6 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             else:
                 cleaned_data['best_match_page'] = match
 
-        if not accept_best_match and not cleaned_data['current_page']:
-            self.add_error('current_page', UNDERIVABLE_MSG)
-
     def get_page_for_url(self, url, site, accept_best_match=True):
         """
         Attempts to guess a wagtail Page from a URL. Returns a tuple, where
