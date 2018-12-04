@@ -49,8 +49,8 @@ class MenuGeneratorView(APIView):
     use_absolute_page_urls_default = False
 
     renderer_classes = (
+        JSONRenderer,
         renderers.BrowsableAPIWithArgumentFormRenderer,
-        JSONRenderer
     )
 
     def get_menu_class(self):
