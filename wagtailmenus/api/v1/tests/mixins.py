@@ -65,7 +65,9 @@ class CommonArgumentFormTestsMixin:
         self.assertIsInstance(form.fields['language'].widget, forms.HiddenInput)
 
     def _clean_triggers_call_to_method(self, form, method_name):
+        # Setting this to an empty dict to avoid having to run full_clean()
         form.cleaned_data = {}
+        # Mocking the method here to keep things quick
         with mock.patch.object(form, method_name, return_value=None) as mocked_method:
             try:
                 form.clean()
