@@ -7,7 +7,7 @@ from wagtail.core.models import Page, Site
 
 from wagtailmenus.api.v1 import forms as app_forms
 
-from .mixins import ArgumentFormTestMixin, CommonArgumentFormTestsMixin
+from .mixins import ArgumentFormTestMixin
 
 
 class TestBaseAPIViewArgumentForm(ArgumentFormTestMixin, TestCase):
@@ -213,9 +213,3 @@ class TestDeriveAncestorPageIDs(ArgumentFormTestMixin, TestCase):
         data = self.make_data_dict(current_page=Page.objects.first(), apply_active_classes=False)
         with self.assertNumQueries(0):
             form.derive_ancestor_page_ids(cleaned_data=data)
-
-
-class TestBaseMenuGeneratorArgumentFormCommonMethods(
-    CommonArgumentFormTestsMixin, ArgumentFormTestMixin, TestCase
-):
-    form_class = app_forms.BaseMenuGeneratorArgumentForm
