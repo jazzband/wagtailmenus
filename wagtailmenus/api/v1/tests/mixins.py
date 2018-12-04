@@ -26,7 +26,7 @@ class ArgumentFormTestMixin:
 
     def get_form(self, view=None, request=None, data=None, initial=None, set_errors=False):
         """
-        Creates an instance of self.get_form_class() to use in tests.
+        Creates an instance of ``self.get_form_class()`` to use in tests.
 
         If ``request`` is None, a dummy one will be created for the
         ``default_request_url_name``.
