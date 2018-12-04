@@ -124,7 +124,8 @@ class TestSectionMenuGeneratorArgumentForm(CommonArgumentFormTestsMixin, Argumen
         form.cleaned_data = data
 
         # Call the method
-        form.derive_section_root_page(data)
+        with self.assertNumQueries(0):
+            form.derive_section_root_page(data)
 
         # Check outcome
         self.assertIs(data['section_root_page'], section_root_page_value)
@@ -137,7 +138,8 @@ class TestSectionMenuGeneratorArgumentForm(CommonArgumentFormTestsMixin, Argumen
         form.cleaned_data = data
 
         # Call the method
-        form.derive_section_root_page(data)
+        with self.assertNumQueries(0):
+            form.derive_section_root_page(data)
 
         # Check outcome
         self.assertNotIn('section_root_page', data)
@@ -151,7 +153,8 @@ class TestSectionMenuGeneratorArgumentForm(CommonArgumentFormTestsMixin, Argumen
         form.cleaned_data = data
 
         # Call the method
-        form.derive_section_root_page(data)
+        with self.assertNumQueries(0):
+            form.derive_section_root_page(data)
 
         # Check outcome
         self.assertNotIn('section_root_page', data)
@@ -198,7 +201,7 @@ class TestSectionMenuGeneratorArgumentForm(CommonArgumentFormTestsMixin, Argumen
         )
         self.assertFalse(form.errors)
 
-    def test_derive_section_root_page_does_not_query_for_ancestors_if_the_page_is_section_root(self):
+    def test_derive_section_root_page_uses_the_page_itself_if_a_section_root(self):
         # Prepare form and values for test
         form = self.get_form(set_errors=True)
         page = Page.objects.filter(depth__exact=settings.SECTION_ROOT_DEPTH).first()
