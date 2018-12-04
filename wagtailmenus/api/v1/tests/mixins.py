@@ -24,13 +24,24 @@ class ArgumentFormTestMixin:
             )
         return self.form_class
 
-    def get_form(self, view=None, request=None, data=None, initial={}):
-        # 'view' isn't really used anywhere, so it's safe to leave as None
-        # However, we can easily create a stand-in value for 'request'
+    def get_form(self, view=None, request=None, data=None, initial=None, set_errors=False):
+        """
+        Creates an instance of self.get_form_class() to use in tests.
+
+        If ``request`` is None, a dummy one will be created for the
+        ``default_request_url_name``.
+
+        If ``set_errors`` is True, a the form's ``_errors`` attribute will be
+        set to prevent ``full_clean()`` being triggered when attempting to
+        expect form errors.
+        """
         if request is None:
             request = self.make_request()
-        form_cls = self.get_form_class()
-        return form_cls(view, request, data=data, initial=initial)
+        cls = self.get_form_class()
+        form = cls(view, request, data=data, initial=initial or {})
+        if set_errors:
+            form._errors = {}
+        return form
 
     def make_request(self, url=None, url_name=None):
         if url is None:
