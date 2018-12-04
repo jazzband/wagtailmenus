@@ -386,21 +386,25 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         else:
             self.add_error('parent_page', UNDERIVABLE_MSG)
 
-    def derive_current_page(self, cleaned_data, force_derivation=False, accept_best_match=False):
+    def derive_current_page(self, cleaned_data, **kwargs):
         """
-        Overrides ArgValidatorForm.derive_current_page(),
+        Overrides BaseMenuGeneratorArgumentForm.derive_current_page(),
         because if neither 'parent_page' or 'current_page' have been
         provided, we want to force derivation of 'current_page', so that it
         can serve as a stand-in for 'parent_page'.
 
-        A 'best match' is not a good enough stand-in for 'parent_page', so we
-        use a False value for 'accept_best_match' by default.
+        A 'best match' might is not good enough to derive 'parent_page', so
+        we supply False for ``accept_best_match``.
         """
-        force_derivation = force_derivation or (
-            not cleaned_data.get('parent_page') and
-            not cleaned_data.get('current_page')
-        )
-        super().derive_current_page(cleaned_data, force_derivation, accept_best_match)
+        kwargs_for_super = {
+            'accept_best_match': False,
+            'force_derivation': bool(
+                not cleaned_data.get('parent_page') and
+                not cleaned_data.get('current_page')
+            ),
+        }
+        kwargs_for_super.update(kwargs)
+        super().derive_current_page(cleaned_data, **kwargs_for_super)
 
 
 class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
@@ -461,18 +465,22 @@ class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         else:
             cleaned_data['section_root_page'] = source_page
 
-    def derive_current_page(self, cleaned_data, force_derivation=False, accept_best_match=True):
+    def derive_current_page(self, cleaned_data, **kwargs):
         """
-        Overrides ArgValidatorForm.derive_current_page(),
+        Overrides BaseMenuGeneratorArgumentForm.derive_current_page(),
         because if neither 'section_root_page' or 'current_page' have been
         provided, we want to force derivation of 'current_page', so that we
         are able to derive 'section_root_page' from it.
 
         A 'best match' might be good enough to derive 'section_root_page', so
-        we'll leave 'accept_best_match' as True by default.
+        we supply False for ``accept_best_match``.
         """
-        force_derivation = force_derivation or (
-            not cleaned_data.get('section_root_page') and
-            not cleaned_data.get('current_page')
-        )
-        super().derive_current_page(cleaned_data, force_derivation, accept_best_match)
+        kwargs_for_super = {
+            'accept_best_match': True,
+            'force_derivation': bool(
+                not cleaned_data.get('section_root_page') and
+                not cleaned_data.get('current_page')
+            ),
+        }
+        kwargs_for_super.update(kwargs)
+        super().derive_current_page(cleaned_data, **kwargs_for_super)
