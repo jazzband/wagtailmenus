@@ -9,7 +9,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
-from wagtailmenus.conf import settings
+from wagtailmenus.conf import settings as wagtailmenus_settings
 from . import forms
 from . import renderers
 from . import serializers
@@ -181,7 +181,7 @@ class MainMenuGeneratorView(MenuGeneratorView):
     Returns a JSON representation of a 'main menu' (including menu items) matching the supplied arguments.
     """
     name = _('Generate Main Menu')
-    menu_class = settings.models.MAIN_MENU_MODEL
+    menu_class = wagtailmenus_settings.models.MAIN_MENU_MODEL
     argument_form_class = forms.MainMenuGeneratorArgumentForm
     menu_serializer_class = serializers.MainMenuSerializer
 
@@ -191,7 +191,7 @@ class FlatMenuGeneratorView(MenuGeneratorView):
     Returns a JSON representation of a 'flat menu' (including menu items) matching the supplied arguments.
     """
     name = _('Generate Flat Menu')
-    menu_class = settings.models.FLAT_MENU_MODEL
+    menu_class = wagtailmenus_settings.models.FLAT_MENU_MODEL
     argument_form_class = forms.FlatMenuGeneratorArgumentForm
     menu_serializer_class = serializers.FlatMenuSerializer
 
@@ -209,13 +209,13 @@ class ChildrenMenuGeneratorView(MenuGeneratorView):
     Returns a JSON representation of a 'children menu' (including menu items) matching the supplied arguments.
     """
     name = _('Generate Children Menu')
-    menu_class = settings.objects.CHILDREN_MENU_CLASS
+    menu_class = wagtailmenus_settings.objects.CHILDREN_MENU_CLASS
     argument_form_class = forms.ChildrenMenuGeneratorArgumentForm
     menu_serializer_class = serializers.ChildrenMenuSerializer
 
     # argument defaults
-    max_levels_default = settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS
-    use_specific_default = settings.DEFAULT_CHILDREN_MENU_USE_SPECIFIC
+    max_levels_default = wagtailmenus_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS
+    use_specific_default = wagtailmenus_settings.DEFAULT_CHILDREN_MENU_USE_SPECIFIC
     apply_active_classes_default = False
 
 
@@ -224,10 +224,10 @@ class SectionMenuGeneratorView(MenuGeneratorView):
     Returns a JSON representation of a 'section menu' (including menu items) matching the supplied arguments.
     """
     name = _('Generate Section Menu')
-    menu_class = settings.objects.SECTION_MENU_CLASS
+    menu_class = wagtailmenus_settings.objects.SECTION_MENU_CLASS
     argument_form_class = forms.SectionMenuGeneratorArgumentForm
     menu_serializer_class = serializers.SectionMenuSerializer
 
     # argument defaults
-    max_levels_default = settings.DEFAULT_SECTION_MENU_MAX_LEVELS
-    use_specific_default = settings.DEFAULT_SECTION_MENU_USE_SPECIFIC
+    max_levels_default = wagtailmenus_settings.DEFAULT_SECTION_MENU_MAX_LEVELS
+    use_specific_default = wagtailmenus_settings.DEFAULT_SECTION_MENU_USE_SPECIFIC
