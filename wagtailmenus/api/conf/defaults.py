@@ -1,41 +1,70 @@
 # NOTE: All supported app settings must be added here
 
+# -----------------------
+# Menu serializer classes
+# -----------------------
 
-# -------------------------
-# Menu object serialization
-# -------------------------
+# A ``None`` value means  "Use the default serializer class for the
+# version of the API I'm using". Because this can vary between versions,
+# default values are not added here.
 
-MAIN_MENU_FIELDS = ('site', 'items')
+CHILDREN_MENU_SERIALIZER = None
 
-FLAT_MENU_FIELDS = ('site', 'handle', 'title', 'heading', 'items')
+FLAT_MENU_SERIALIZER = None
+
+MAIN_MENU_SERIALIZER = None
+
+SECTION_MENU_SERIALIZER = None
+
+
+# ----------------------------
+# Menu item serializer classes
+# ----------------------------
+
+# A ``None`` value means  "Use the default serializer class for the
+# version of the API being used". Because this can vary between versions,
+# default values are not added here.
+
+FLAT_MENU_ITEM_SERIALIZER = None
+
+MAIN_MENU_ITEM_SERIALIZER = None
+
+SECTION_MENU_ITEM_SERIALIZER = None
+
+CHILDREN_MENU_ITEM_SERIALIZER = None
 
 
 # -----------------------
-# Menu item serialization
+# Page serializer classes
 # -----------------------
 
-MENU_ITEM_FIELDS = ('text', 'href', 'active_class', 'page', 'children')
+PARENT_PAGE_SERIALIZER = None
 
-FLAT_MENU_ITEM_FIELDS = ('text', 'href', 'handle', 'active_class', 'page', 'children')
+SECTION_ROOT_SERIALIZER = None
 
-MAIN_MENU_ITEM_FIELDS = ('text', 'href', 'handle', 'active_class', 'page', 'children')
+MENU_ITEM_PAGE_SERIALIZER = None
 
 
-# ------------------
-# Page serialization
-# ------------------
+# -----------------------------------
+# Default menu item serializer fields
+# -----------------------------------
 
-default_page_fields = ('id', 'title', 'slug', 'type')
+DEFAULT_FLAT_MENU_ITEM_SERIALIZER_FIELDS = ('text', 'href', 'handle', 'active_class', 'page', 'children')
 
-SECTION_ROOT_PAGE_FIELDS = default_page_fields
+DEFAULT_MENU_ITEM_SERIALIZER_FIELDS = ('text', 'href', 'active_class', 'page', 'children')
 
-PARENT_PAGE_FIELDS = default_page_fields
+DEFAULT_MAIN_MENU_ITEM_SERIALIZER_FIELDS = ('text', 'href', 'handle', 'active_class', 'page', 'children')
 
-MENU_ITEM_PAGE_FIELDS = default_page_fields
 
-MAIN_MENU_ITEM_PAGE_FIELDS = default_page_fields
+# ------------------------------
+# Default page serializer fields
+# ------------------------------
 
-FLAT_MENU_ITEM_PAGE_FIELDS = default_page_fields
+DEFAULT_PARENT_PAGE_SERIALIZER_FIELDS = ('id', 'title', 'slug', 'type')
+
+DEFAULT_SECTION_ROOT_SERIALIZER_FIELDS = ('text', 'href', 'active_class', 'page')
+
+DEFAULT_MENU_ITEM_PAGE_SERIALIZER_FIELDS = ('id', 'title', 'slug', 'type')
 
 
 # ----------

@@ -16,26 +16,48 @@ flat_menu_model = wagtailmenus_settings.models.FLAT_MENU_MODEL
 
 
 class BasePageSerializer(ModelSerializer):
+    """
+    Used to render 'page' info for menu items. This could be a ``link_page``
+    value for a model-based menu item (e.g. a ``MainMenuItem`` or
+    ``FlatMenuItem`` object), or a representation of the menu item itself (if
+    the menu item is in fact a ``Page`` object).
+    """
     type = PageTypeField(read_only=True)
 
 
 class InstanceSpecificFieldsMixin:
+    """
+    A mixin to facilitate the addition/replacement of fields based on the
+    ``instance`` being serialized.
+    """
 
     def to_representation(self, instance):
-        self.add_instance_specific_fields(instance)
+        self.make_instance_specific_field_changes(instance)
         return super().to_representation(instance)
 
-    def add_instance_specific_fields(self):
+    def make_instance_specific_field_changes(self, instance):
         pass
 
 
 class MenuItemSerializerMixin(InstanceSpecificFieldsMixin):
+    """
+    A mixin to faciliate rendering of a number of different types of menu
+    items, including ``MainMenuItem`` or ``FlatMenuItem`` objects (or custom
+    variations of those), ``Page`` objects, or even dictionary-like structures
+    added by custom hooks or ``MenuPageMixin.modify_submenu_items()`` methods.
+    """
 
-    def __init__(self, *args, **kwargs):
-        self._page_fields = kwargs.pop('page_fields', api_settings.MENU_ITEM_PAGE_FIELDS)
-        super().__init__(*args, **kwargs)
+    page_field_init_kwargs = {
+        'read_only': True,
+        'source': PAGE_ATTR,
+    }
 
     def to_representation(self, instance):
+        """
+        Due to the varied nature of menu item data, this override sets a couple
+        of additional attributes (or adds extra items to a dictionary) that can
+        be reliably used as a source for ``children`` and ``page`` fields.
+        """
         children_val = ()
         if getattr(instance, 'sub_menu', None):
             children_val = instance.sub_menu.items
@@ -55,23 +77,31 @@ class MenuItemSerializerMixin(InstanceSpecificFieldsMixin):
         self.instance = instance
         return super().to_representation(instance)
 
-    def add_instance_specific_fields(self, instance):
-        try:
-            page = getattr(instance, PAGE_ATTR)
-        except AttributeError:
+    def make_instance_specific_field_changes(self, instance):
+        if isinstance(instance, dict):
             page = instance.get(PAGE_ATTR)
-        if page:
-            cls = self.get_page_specific_serializer_class(page)
-            self.fields['page'] = cls(source=PAGE_ATTR)
+        else:
+            page = getattr(instance, PAGE_ATTR, None)
+        self.replace_page_field(instance, page)
 
-    def get_page_specific_serializer_class(self, page):
+    def replace_page_field(self, instance, page):
+        field_class = self.get_page_field_class(instance, page)
+        init_kwargs = self.get_page_field_init_kwargs(instance, page)
+        self.fields['page'] = field_class(**init_kwargs)
 
-        class PageSerializer(BasePageSerializer):
+    def get_page_field_class(self, instance, page):
+        if api_settings.MENU_ITEM_PAGE_SERIALIZER:
+            return api_settings.objects.MENU_ITEM_PAGE_SERIALIZER
+
+        class DefaultMenuItemPageSerializer(BasePageSerializer):
             class Meta:
                 model = type(page)
-                fields = self._page_fields
+                fields = api_settings.DEFAULT_MENU_ITEM_PAGE_SERIALIZER_FIELDS
 
-        return PageSerializer
+        return DefaultMenuItemPageSerializer
+
+    def get_page_field_init_kwargs(self, instance, page):
+        return self.page_field_init_kwargs
 
 
 class MenuItemSerializer(MenuItemSerializerMixin, Serializer):
@@ -79,71 +109,173 @@ class MenuItemSerializer(MenuItemSerializerMixin, Serializer):
     text = fields.CharField(read_only=True)
     page = fields.DictField(read_only=True)
     active_class = fields.CharField(read_only=True)
-
-
-class RecursiveMenuItemSerializer(MenuItemSerializer):
     children = RecursiveField(many=True, read_only=True, source=CHILDREN_ATTR)
 
     class Meta:
-        fields = api_settings.MENU_ITEM_FIELDS
+        fields = api_settings.DEFAULT_MENU_ITEM_SERIALIZER_FIELDS
 
 
-class BaseModelMenuItemSerializer(MenuItemSerializerMixin, ModelSerializer):
+class BaseMenuItemModelSerializer(MenuItemSerializerMixin, ModelSerializer):
+    """
+    Used as a base class when dynamically creating serializers for model
+    objects with menu-like attributes, including subclasses of
+    ``AbstractMainMenuItem`` and ``AbstractFlatMenuItem``, and also for
+    ``section_root`` in ``SectionMenuSerializer`` - which is a page object with
+    menu-like attributes added.
+    """
     href = fields.CharField(read_only=True)
     text = fields.CharField(read_only=True)
     active_class = fields.CharField(read_only=True)
     page = fields.DictField(read_only=True)
-    children = RecursiveMenuItemSerializer(many=True, read_only=True, source=CHILDREN_ATTR)
+    children = MenuItemSerializer(many=True, read_only=True, source=CHILDREN_ATTR)
 
 
-class MainMenuSerializer(InstanceSpecificFieldsMixin, ModelSerializer):
+class MenuSerializerMixin(InstanceSpecificFieldsMixin):
+    """
+    A mixin to faciliate rendering of a number of different types of menu,
+    including subclasses of ``AbastractMainMenu`` or ``AbstractFlatMenu``, or
+    instances of non-model-based menu classes like ``ChildrenMenu`` or
+    ``SectionMenu``.
+    """
+
+    items_field_init_kwargs = {
+        'many': True,
+        'read_only': True,
+    }
+
+    def make_instance_specific_field_changes(self, instance):
+        super().make_instance_specific_field_changes(instance)
+        self.replace_items_field(instance)
+
+    def replace_items_field(self, instance):
+        field_class = self.get_items_field_class(instance)
+        init_kwargs = self.get_items_field_init_kwargs(instance)
+        self.fields['items'] = field_class(**init_kwargs)
+
+    def get_items_field_class(self, instance):
+        raise NotImplementedError
+
+    def get_items_field_init_kwargs(self, instance):
+        return self.items_field_init_kwargs
+
+
+class MainMenuSerializer(MenuSerializerMixin, ModelSerializer):
+
+    # Placeholder fields
     items = fields.ListField()
 
     class Meta:
         model = main_menu_model
-        fields = api_settings.MAIN_MENU_FIELDS
+        fields = ('site', 'items')
 
-    def add_instance_specific_fields(self, instance):
+    def get_items_field_class(self, instance):
+        if api_settings.MAIN_MENU_ITEM_SERIALIZER:
+            return api_settings.objects.MAIN_MENU_ITEM_SERIALIZER
 
-        class MainMenuItemSerializer(BaseModelMenuItemSerializer):
+        class DefaultMainMenuItemSerializer(BaseMenuItemModelSerializer):
             class Meta:
                 model = instance.get_menu_items_manager().model
-                fields = api_settings.MAIN_MENU_ITEM_FIELDS
+                fields = api_settings.DEFAULT_MAIN_MENU_ITEM_SERIALIZER_FIELDS
 
-        self.fields['items'] = MainMenuItemSerializer(many=True, read_only=True, page_fields=api_settings.MAIN_MENU_ITEM_PAGE_FIELDS)
+        return DefaultMainMenuItemSerializer
 
 
-class FlatMenuSerializer(InstanceSpecificFieldsMixin, ModelSerializer):
+class FlatMenuSerializer(MenuSerializerMixin, ModelSerializer):
+
+    # Placeholder fields
     items = fields.ListField()
 
     class Meta:
         model = flat_menu_model
-        fields = api_settings.FLAT_MENU_FIELDS
+        fields = ('site', 'handle', 'title', 'heading', 'items')
 
-    def add_instance_specific_fields(self, instance):
+    def get_items_field_class(self, instance):
+        if api_settings.FLAT_MENU_ITEM_SERIALIZER:
+            return api_settings.objects.FLAT_MENU_ITEM_SERIALIZER
 
-        class FlatMenuItemSerializer(BaseModelMenuItemSerializer):
+        class DefaultFlatMenuItemSerializer(BaseMenuItemModelSerializer):
             class Meta:
                 model = instance.get_menu_items_manager().model
-                fields = api_settings.FLAT_MENU_ITEM_FIELDS
+                fields = api_settings.DEFAULT_FLAT_MENU_ITEM_SERIALIZER_FIELDS
 
-        self.fields['items'] = FlatMenuItemSerializer(many=True, read_only=True, page_fields=api_settings.FLAT_MENU_ITEM_PAGE_FIELDS)
+        return DefaultFlatMenuItemSerializer
 
 
-class ChildrenMenuSerializer(InstanceSpecificFieldsMixin, Serializer):
-    parent_page = fields.DictField(read_only=True)
-    items = RecursiveMenuItemSerializer(many=True, read_only=True)
+class ChildrenMenuSerializer(MenuSerializerMixin, Serializer):
 
-    def add_instance_specific_fields(self, instance):
+    # Placeholder fields
+    parent_page = fields.DictField()
+    items = fields.ListField()
 
-        class ParentPageSerializer(BasePageSerializer):
+    parent_page_field_init_kwargs = {
+        'read_only': True,
+    }
+
+    def make_instance_specific_field_changes(self, instance):
+        super().make_instance_specific_field_changes(instance)
+        self.replace_parent_page_field(instance)
+
+    def replace_parent_page_field(self, instance):
+        field_class = self.get_parent_page_field_class(instance)
+        init_kwargs = self.get_parent_page_field_init_kwargs(instance)
+        self.fields['parent_page'] = field_class(**init_kwargs)
+
+    def get_items_field_class(self, instance):
+        if api_settings.CHILDREN_MENU_ITEM_SERIALIZER:
+            return api_settings.objects.CHILDREN_MENU_ITEM_SERIALIZER
+        return MenuItemSerializer
+
+    def get_parent_page_field_class(self, instance):
+        if api_settings.PARENT_PAGE_SERIALIZER:
+            return api_settings.objects.PARENT_PAGE_SERIALIZER
+
+        class DefaultParentPageSerializer(BasePageSerializer):
             class Meta:
                 model = type(instance.parent_page)
-                fields = api_settings.PARENT_PAGE_FIELDS
+                fields = api_settings.DEFAULT_PARENT_PAGE_SERIALIZER_FIELDS
+        return DefaultParentPageSerializer
 
-        self.fields['parent_page'] = ParentPageSerializer()
+    def get_parent_page_field_init_kwargs(self, instance):
+        return self.parent_page_field_init_kwargs
 
 
-class SectionMenuSerializer(Serializer):
-    section_root = MenuItemSerializer(source='root_page', read_only=True, page_fields=api_settings.SECTION_ROOT_PAGE_FIELDS)
-    items = RecursiveMenuItemSerializer(many=True, read_only=True)
+class SectionMenuSerializer(MenuSerializerMixin, Serializer):
+
+    # Placeholder fields
+    section_root = fields.DictField()
+    items = fields.ListField()
+
+    section_root_field_init_kwargs = {
+        'read_only': True,
+        'source': 'root_page',
+    }
+
+    def make_instance_specific_field_changes(self, instance):
+        super().make_instance_specific_field_changes(instance)
+        self.replace_section_root_field(instance)
+
+    def replace_section_root_field(self, instance):
+        field_class = self.get_section_root_field_class(instance)
+        init_kwargs = self.get_section_root_field_init_kwargs(instance)
+        self.fields['section_root'] = field_class(**init_kwargs)
+
+    def get_items_field_class(self, instance):
+        if api_settings.SECTION_MENU_ITEM_SERIALIZER:
+            return api_settings.objects.SECTION_MENU_ITEM_SERIALIZER
+        return MenuItemSerializer
+
+    def get_section_root_field_class(self, instance):
+        if api_settings.SECTION_ROOT_SERIALIZER:
+            return api_settings.objects.SECTION_ROOT_SERIALIZER
+
+        # BaseMenuItemModelSerializer is being used below because SectionMenu
+        # adds 'text', 'href' and 'active_class' attrs to 'root_page', which
+        # this base class handles nicely.
+        class DefaultSectionRootSerializer(BaseMenuItemModelSerializer):
+            class Meta:
+                model = type(instance.root_page)
+                fields = api_settings.DEFAULT_SECTION_ROOT_SERIALIZER_FIELDS
+        return DefaultSectionRootSerializer
+
+    def get_section_root_field_init_kwargs(self, instance):
+        return self.section_root_field_init_kwargs
