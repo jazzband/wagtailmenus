@@ -6,7 +6,8 @@ from django.template import loader
 from wagtail.core.models import Page, Site
 
 from wagtailmenus.conf import settings
-from wagtailmenus.utils.misc import make_dummy_request
+from wagtailmenus.utils.misc import (
+    get_page_from_request, get_site_from_request, make_dummy_request)
 from . import form_fields as fields
 
 
@@ -190,21 +191,12 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         if cleaned_data.get('site'):
             return
 
-        site = self.get_site_for_request(self._request)
+        site = get_site_from_request(self._request)
 
         if site:
             cleaned_data['site'] = site
         else:
             self.add_error('site', UNDERIVABLE_MSG)
-
-    def get_site_for_request(self, request):
-        if isinstance(getattr(request, 'site', None), Site):
-            # Site was added by Wagtail's SiteMiddleware
-            return request.site
-        try:
-            return Site.find_for_request(request)
-        except Site.DoesNotExist:
-            return
 
     def derive_current_page(self, cleaned_data, force_derivation=False, accept_best_match=True):
         """
@@ -228,8 +220,9 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         ):
             return
 
-        match, is_exact_match = self.get_page_for_url(
-            url=cleaned_data['current_url'],
+        request = self.make_dummy_request(cleaned_data['current_url'])
+        match, is_exact_match = get_page_from_request(
+            request=request,
             site=cleaned_data['site'],
             accept_best_match=accept_best_match,
         )

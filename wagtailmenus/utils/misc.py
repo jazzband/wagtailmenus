@@ -109,6 +109,7 @@ def derive_section_root(page):
     value of the ``WAGTAILMENUS_SECTION_ROOT_DEPTH`` setting.
     """
     from wagtailmenus.conf import settings
+
     desired_depth = settings.SECTION_ROOT_DEPTH
     if page.depth == desired_depth:
         return page.specific
