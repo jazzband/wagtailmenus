@@ -200,7 +200,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             cleaned_data['site'] = self._request.site
         else:
             try:
-                cleaned_data['site'] = Site.objects.find_for_request(self._request)
+                cleaned_data['site'] = Site.find_for_request(self._request)
             except Site.DoesNotExist:
                 self.add_error('site', UNDERIVABLE_MSG)
 
