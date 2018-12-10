@@ -193,7 +193,7 @@ class TestDeriveCurrentPage(ArgumentFormTestMixin, TestCase):
         self.assertEqual(data['current_page'], 'XYZ')
         self.assertIs(data.get('best_match_page'), None)
 
-    @mock.patch('wagtailmenus.api.v1.forms', 'get_page_from_request', return_value=('XYZ', False))
+    @mock.patch('wagtailmenus.api.v1.forms.get_page_from_request', return_value=('XYZ', False))
     def test_sets_best_match_page_if_partial_url_match_found(
         self, mocked_method
     ):
