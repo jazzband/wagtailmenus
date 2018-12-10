@@ -189,20 +189,27 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
 
     def derive_site(self, cleaned_data):
         """
-        If necessary, attempts to derive a 'site' value from the domain the
-        API result has been requested from.
+        If no 'site' value was provided, attempts to derive one from the
+        ``request`` value provided at initialisation.
         """
         if cleaned_data.get('site'):
             return
 
-        if isinstance(getattr(self._request, 'site', None), Site):
-            # Wagtail's SiteMiddleware is in use
-            cleaned_data['site'] = self._request.site
+        site = self.get_site_for_request(self._request)
+
+        if site:
+            cleaned_data['site'] = site
         else:
-            try:
-                cleaned_data['site'] = Site.find_for_request(self._request)
-            except Site.DoesNotExist:
-                self.add_error('site', UNDERIVABLE_MSG)
+            self.add_error('site', UNDERIVABLE_MSG)
+
+    def get_site_for_request(self, request):
+        if isinstance(getattr(request, 'site', None), Site):
+            # Site was added by Wagtail's SiteMiddleware
+            return request.site
+        try:
+            return Site.find_for_request(request)
+        except Site.DoesNotExist:
+            return
 
     def derive_current_page(self, cleaned_data, force_derivation=False, accept_best_match=True):
         """
