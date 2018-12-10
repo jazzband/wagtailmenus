@@ -1,6 +1,7 @@
 from unittest import mock
 
 from django import forms
+from django.http import Http404
 from django.test import modify_settings, TestCase
 
 from wagtail.core.models import Page, Site
@@ -226,6 +227,58 @@ class TestDeriveCurrentPage(ArgumentFormTestMixin, TestCase):
         self.assertTrue(mocked_method.called)
         self.assertEqual(data['best_match_page'], 'XYZ')
         self.assertIs(data.get('current_page'), None)
+
+
+class TestGetPageForURL(ArgumentFormTestMixin, TestCase):
+
+    form_class = app_forms.BaseMenuGeneratorArgumentForm
+
+    @mock.patch.object(Page, 'route')
+    def test_no_match_attempts_made_if_url_is_blank_or_none(self, mocked_method):
+        form = self.get_form()
+        site = Site.objects.first()
+
+        for url in ('', None):
+            form.get_page_for_url(url, site)
+
+        self.assertFalse(mocked_method.called)
+
+    @mock.patch.object(Page, 'route', side_effect=Http404('Not found'))
+    def test_attempts_match_until_path_components_are_exhausted(self, mocked_method):
+        form = self.get_form()
+        url = '/news-and-events/latest-news/blah/'
+        path_components = [pc for pc in url.split('/') if pc]
+        site = Site.objects.first()
+
+        form.get_page_for_url(url, site)
+        self.assertEqual(mocked_method.call_count, len(path_components))
+
+    @mock.patch.object(Page, 'route', side_effect=Http404('Not found'))
+    def test_attempts_only_once_if_accept_best_match_is_false(self, mocked_method):
+        form = self.get_form()
+        url = '/news-and-events/latest-news/blah/'
+        site = Site.objects.first()
+
+        form.get_page_for_url(url, site, accept_best_match=False)
+        self.assertEqual(mocked_method.call_count, 1)
+
+    @mock.patch.object(Page, 'route', return_value=(1, 2, 3))
+    def test_exact_match_is_true_if_result_found_on_first_attempt(self, mocked_method):
+        form = self.get_form()
+        url = '/news-and-events/latest-news/blah/'
+        site = Site.objects.first()
+
+        page, exact_match = form.get_page_for_url(url, site)
+        self.assertIs(exact_match, True)
+
+    @mock.patch.object(Page, 'route', side_effect=[Http404('Not found'), (1, 2, 3)])
+    def test_exact_match_is_false_if_result_found_on_consecutive_attempt(self, mocked_method):
+        form = self.get_form()
+        url = '/news-and-events/latest-news/blah/'
+        site = Site.objects.first()
+
+        page, exact_match = form.get_page_for_url(url, site)
+        self.assertIs(exact_match, False)
 
 
 class TestDeriveAncestorPageIDs(ArgumentFormTestMixin, TestCase):
