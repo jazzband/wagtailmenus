@@ -98,7 +98,7 @@ class MenuGeneratorView(APIView):
         }
 
     def get_serializer(self, instance, *args, **kwargs):
-        cls = self.get_default_serializer_class()
+        cls = self.get_serializer_class()
         kwargs['context'] = self.get_serializer_context()
         return cls(instance=instance, *args, **kwargs)
 
@@ -110,12 +110,12 @@ class MenuGeneratorView(APIView):
             raise NotImplementedError(
                 "For subclasses of MenuGeneratorView, you must set the "
                 "'default_serializer_class' attribute or override the "
-                "get_default_serializer_class() class method."
+                "get_serializer_class() class method."
             )
 
         setting_name = self.serializer_class_setting_name
         if setting_name:
-            override_value = api_settings.get_raw(setting_name)
+            override_value = api_settings.get(setting_name)
             if override_value:
                 # Use the 'objects' helper to retrieve the actual class
                 return getattr(api_settings.objects, setting_name)
