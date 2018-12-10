@@ -83,9 +83,12 @@ class BaseAPIViewArgumentForm(forms.Form):
 
 class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
     site = fields.SiteChoiceField(
+        required=False,
         label=_('Site'),
         help_text=_(
-            "The ID of the Wagtail Site you are generating the menu for."
+            "The ID of the Wagtail Site you are generating the menu for. If "
+            "not provided, the view will attempt to derive this from the "
+            "port/domain parts of the URL for the current API request."
         ),
     )
     current_url = forms.URLField(
@@ -174,6 +177,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
 
     def clean(self):
         cleaned_data = super().clean()
+        self.derive_site(cleaned_data)
         self.derive_current_page(cleaned_data)
         self.derive_ancestor_page_ids(cleaned_data)
         return cleaned_data
@@ -182,6 +186,23 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         if not url:
             return
         return make_dummy_request(url=url, original_request=self._request)
+
+    def derive_site(self, cleaned_data):
+        """
+        If necessary, attempts to derive a 'site' value from the domain the
+        API result has been requested from.
+        """
+        if cleaned_data.get('site'):
+            return
+
+        if isinstance(getattr(self._request, 'site', None), Site):
+            # Wagtail's SiteMiddleware is in use
+            cleaned_data['site'] = self._request.site
+        else:
+            try:
+                cleaned_data['site'] = Site.objects.find_for_request(self._request)
+            except Site.DoesNotExist:
+                self.add_error('site', UNDERIVABLE_MSG)
 
     def derive_current_page(self, cleaned_data, force_derivation=False, accept_best_match=True):
         """
@@ -288,10 +309,13 @@ class BaseMenuModelGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
 class MainMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
     site = fields.SiteChoiceField(
+        required=False,
         label=_('Site'),
         help_text=_(
             "The ID of the Wagtail Site you are generating a menu for. Used "
-            "to retrieve the relevant menu object from the database."
+            "to retrieve the relevant menu object from the database. If not "
+            "provided, the view will attempt to derive this from the "
+            "port/domain parts of the URL for the current API request."
         ),
     )
 
