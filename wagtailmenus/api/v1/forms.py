@@ -182,11 +182,6 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         self.derive_ancestor_page_ids(cleaned_data)
         return cleaned_data
 
-    def make_dummy_request(self, url):
-        if not url:
-            return
-        return make_dummy_request(url=url, original_request=self._request)
-
     def derive_site(self, cleaned_data):
         """
         If no 'site' value was provided, attempts to derive one from the
@@ -256,23 +251,24 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         the first attempt, the method will recursively remove components from
         the url and retry until a match is found.
         """
-        request = self.make_dummy_request(url)
-        first_run = True
-        match = None
-        path_components = [pc for pc in request.path.split('/') if pc]
-        while match is None and path_components:
-            try:
-                match = site.root_page.specific.route(request, path_components)[0]
-                if first_run:
-                    return match, True
-                else:
-                    return match, False
-            except Http404:
-                if not accept_best_match:
-                    break
-                path_components.pop()
-                first_run = False
+        if url:
+            request = self.make_dummy_request(url)
+            first_run = True
+            match = None
+            path_components = [pc for pc in request.path.split('/') if pc]
+            while match is None and path_components:
+                try:
+                    match = site.root_page.specific.route(request, path_components)[0]
+                    return match, first_run
+                except Http404:
+                    if not accept_best_match:
+                        break
+                    path_components.pop()
+                    first_run = False
         return None, False
+
+    def make_dummy_request(self, url):
+        return make_dummy_request(url=url, original_request=self._request)
 
     def derive_ancestor_page_ids(self, cleaned_data):
         """
