@@ -86,6 +86,10 @@ class CommonArgumentFormTestsMixin:
                 pass
             return mocked_method.called
 
+    def test_clean_triggers_derive_site(self):
+        form = self.get_form()
+        self.assertTrue(self._clean_triggers_call_to_method(form, method_name='derive_site'))
+
     def test_clean_triggers_derive_current_page(self):
         form = self.get_form()
         self.assertTrue(self._clean_triggers_call_to_method(form, method_name='derive_current_page'))

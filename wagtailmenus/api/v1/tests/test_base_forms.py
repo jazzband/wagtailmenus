@@ -91,6 +91,37 @@ class TestBaseAPIViewArgumentForm(ArgumentFormTestMixin, TestCase):
         self.assertTrue(result.endswith('/crispy_form.html'))
 
 
+class TestDeriveSite(ArgumentFormTestMixin, TestCase):
+
+    form_class = app_forms.BaseMenuGeneratorArgumentForm
+
+    @mock.patch.object(form_class, 'get_site_for_request')
+    def test_does_not_attempt_to_derive_if_site_is_already_present(self, mocked_method):
+        form = self.get_form()
+        data = {'site': Site.objects.first()}
+        form.derive_site(cleaned_data=data)
+        self.assertFalse(mocked_method.called)
+
+    @mock.patch.object(form_class, 'get_site_for_request', return_value='ABC')
+    def test_sets_site_if_get_site_site_can_be_derived(self, mocked_method):
+        form = self.get_form()
+        data = {}
+        form.derive_site(cleaned_data=data)
+        self.assertTrue(mocked_method.called)
+        self.assertEqual(data['site'], 'ABC')
+
+    @mock.patch.object(form_class, 'get_site_for_request', return_value=None)
+    def test_adds_field_error_if_site_cannot_be_derived(self, mocked_method):
+        form = self.get_form(set_errors=True)
+        data = {}
+        form.cleaned_data = {}
+        form.derive_site(cleaned_data=data)
+        self.assertTrue(mocked_method.called)
+        self.assertNotIn('site', data)
+        self.assertEqual(len(form.errors), 1)
+        self.assertTrue(form.has_error('site'))
+
+
 class TestDeriveCurrentPage(ArgumentFormTestMixin, TestCase):
 
     form_class = app_forms.BaseMenuGeneratorArgumentForm
