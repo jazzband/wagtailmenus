@@ -61,18 +61,16 @@ class MenuGeneratorView(APIView):
     def get_menu_class(self):
         if self.menu_class is None:
             raise NotImplementedError(
-                "For subclasses of MenuGeneratorView, you must set the "
-                "'menu_class' attribute or override the "
-                "get_menu_class() class method."
+                "You must either set the 'menu_class' attribute or override "
+                "the get_menu_class() method for '%s'" % self.__class__.__name__
             )
         return self.menu_class
 
     def get_argument_form_class(self):
         if self.argument_form_class is None:
             raise NotImplementedError(
-                "For subclasses of MenuGeneratorView, you must set the "
-                "'argument_form_class' attribute or override the "
-                "get_argument_form_class) class method."
+                "You must either set the 'argument_form_class' attribute or "
+                "override the get_argument_form_class() method for '%s'" % self.__class__.__name__
             )
         return self.argument_form_class
 
@@ -108,9 +106,8 @@ class MenuGeneratorView(APIView):
 
         if self.default_serializer_class is None:
             raise NotImplementedError(
-                "For subclasses of MenuGeneratorView, you must set the "
-                "'default_serializer_class' attribute or override the "
-                "get_serializer_class() class method."
+                "You must either set the 'default_serializer_class' attribute "
+                "or override the get_serializer_class() method for '%s'" % self.__class__.__name__
             )
 
         setting_name = self.serializer_class_setting_name
