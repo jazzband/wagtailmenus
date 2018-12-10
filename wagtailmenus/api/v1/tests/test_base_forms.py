@@ -122,6 +122,29 @@ class TestDeriveSite(ArgumentFormTestMixin, TestCase):
         self.assertTrue(form.has_error('site'))
 
 
+class TestGetSiteForRequest(ArgumentFormTestMixin, TestCase):
+
+    form_class = app_forms.BaseMenuGeneratorArgumentForm
+
+    def test_returns_site_attribute_from_request_if_a_site_object(self):
+        form = self.get_form(set_errors=True)
+        request = self.make_request()
+        dummy_site = Site(hostname='beepboop')
+        request.site = dummy_site
+
+        result = form.get_site_for_request(request)
+        self.assertIs(result, dummy_site)
+
+    @mock.patch.object(Site, 'find_for_request')
+    def test_find_for_request_called_if_site_attribute_is_not_a_site_object(self, mocked_method):
+        form = self.get_form(set_errors=True)
+        request = self.make_request()
+        request.site = 'just a string'
+
+        form.get_site_for_request(request)
+        self.assertTrue(mocked_method.called)
+
+
 class TestDeriveCurrentPage(ArgumentFormTestMixin, TestCase):
 
     form_class = app_forms.BaseMenuGeneratorArgumentForm
