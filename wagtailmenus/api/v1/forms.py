@@ -1,6 +1,5 @@
 from django import forms
 from django.conf import settings as django_settings
-from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 from django.template import loader
 from wagtail.core.models import Page, Site
@@ -206,9 +205,9 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         True. But, ``force_derivation`` can be used to force it.
 
         If the URL doesn't match a Page 'exactly' and `accept_best_match` is
-        True, ``get_page_for_url()`` will attempt to find a 'best match' by
-        removing components from the url. If such a match is found, it will be
-        added to ``cleaned_data`` as 'best_match_page'.
+        True, ``get_page_from_request()`` will attempt to find a 'best match'
+        by removing components from the url. If such a match is found, it will
+        be added to ``cleaned_data`` as 'best_match_page'.
         """
         if(
             cleaned_data.get('current_page') or
@@ -232,33 +231,6 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
                 cleaned_data['current_page'] = match
             else:
                 cleaned_data['best_match_page'] = match
-
-    def get_page_for_url(self, url, site, accept_best_match=True):
-        """
-        Attempts to guess a wagtail Page from a URL. Returns a tuple, where
-        the first element is the matching Page object (or None if no match
-        was found), and a boolean indicating whether the page matched the
-        URL exactly.
-
-        If ``accept_best_match`` is True, and a matching page isn't found on
-        the first attempt, the method will recursively remove components from
-        the url and retry until a match is found.
-        """
-        if url:
-            request = self.make_dummy_request(url)
-            first_run = True
-            match = None
-            path_components = [pc for pc in request.path.split('/') if pc]
-            while match is None and path_components:
-                try:
-                    match = site.root_page.specific.route(request, path_components)[0]
-                    return match, first_run
-                except Http404:
-                    if not accept_best_match:
-                        break
-                    path_components.pop()
-                    first_run = False
-        return None, False
 
     def make_dummy_request(self, url):
         return make_dummy_request(url=url, original_request=self._request)
