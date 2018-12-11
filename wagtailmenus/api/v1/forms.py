@@ -232,9 +232,6 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             else:
                 cleaned_data['best_match_page'] = match
 
-    def make_dummy_request(self, url):
-        return make_dummy_request(url=url, original_request=self._request)
-
     def derive_ancestor_page_ids(self, cleaned_data):
         """
         If required, attempts to derive a set of 'ancestor_page_ids' from
@@ -250,6 +247,9 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         else:
             ancestor_ids = ()
         cleaned_data['ancestor_page_ids'] = ancestor_ids
+
+    def make_dummy_request(self, url):
+        return make_dummy_request(url=url, original_request=self._request)
 
 
 class BaseMenuModelGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
