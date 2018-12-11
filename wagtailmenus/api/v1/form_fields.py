@@ -51,14 +51,14 @@ class BooleanChoiceField(forms.BooleanField):
 
     def clean(self, value):
         if value is None:
-            raise ValidationError("The value must be 'true' or 'false'", code="invalid")
+            raise ValidationError("The value must be 'true' or 'false'.", code="invalid")
         return value
 
 
 class UseSpecificChoiceField(forms.TypedChoiceField):
 
     default_error_messages = {
-        'invalid_choice': _('%(value)s is not a supported value')
+        'invalid_choice': _('%(value)s is not a supported value.')
     }
 
     def __init__(self, *args, **kwargs):
@@ -76,7 +76,7 @@ class UseSpecificChoiceField(forms.TypedChoiceField):
 class MaxLevelsChoiceField(forms.TypedChoiceField):
 
     default_error_messages = {
-        'invalid_choice': _('%(value)s is not a supported value')
+        'invalid_choice': _('%(value)s is not a supported value.')
     }
 
     def __init__(self, *args, **kwargs):
@@ -94,7 +94,7 @@ class MaxLevelsChoiceField(forms.TypedChoiceField):
 class PageChoiceField(forms.ModelChoiceField):
 
     default_error_messages = {
-        'invalid_choice': _('%(value)s is not a valid page ID')
+        'invalid_choice': _('%(value)s is not a valid page ID.')
     }
 
     def __init__(self, *args, **kwargs):
@@ -106,7 +106,7 @@ class PageChoiceField(forms.ModelChoiceField):
 class SiteChoiceField(forms.ModelChoiceField):
 
     default_error_messages = {
-        'invalid_choice': _('%(value)s is not a valid site ID')
+        'invalid_choice': _('%(value)s is not a valid site ID.')
     }
 
     def __init__(self, *args, **kwargs):
