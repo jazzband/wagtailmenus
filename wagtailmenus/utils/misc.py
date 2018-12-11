@@ -126,7 +126,7 @@ def make_dummy_request(url, original_request, **metadata):
     url_info = urlparse(url)
     hostname = url_info.hostname
     path = url_info.path
-    port = url_info.port or 80
+    port = url_info.port or (443 if url_info.scheme == 'https' else 80)
     scheme = url_info.scheme
 
     dummy_values = {
