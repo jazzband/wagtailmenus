@@ -58,7 +58,7 @@ class BooleanChoiceField(forms.BooleanField):
 class UseSpecificChoiceField(forms.TypedChoiceField):
 
     default_error_messages = {
-        'invalid_choice': _('%(value)s is not a supported value.')
+        'invalid_choice': _('%(value)s is not a supported value')
     }
 
     def __init__(self, *args, **kwargs):
@@ -76,7 +76,7 @@ class UseSpecificChoiceField(forms.TypedChoiceField):
 class MaxLevelsChoiceField(forms.TypedChoiceField):
 
     default_error_messages = {
-        'invalid_choice': _('%(value)s is not a supported value.')
+        'invalid_choice': _('%(value)s is not a supported value')
     }
 
     def __init__(self, *args, **kwargs):
