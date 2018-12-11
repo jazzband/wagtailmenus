@@ -164,16 +164,6 @@ class MenuGeneratorView(APIView):
             self._original_language = translation.get_language()
             translation.activate(language)
 
-    def restore_original_language(self):
-        """
-        Reactivates the language that was active before a 'selected language'
-        was activated. This is called after menu representation has been
-        extracted from the serializer, so that the response itself can be
-        rendered in the original language.
-        """
-        if django_settings.USE_I18N and hasattr(self, '_original_language'):
-            translation.activate(self._original_language)
-
     def get_menu_instance(self, request, form):
         """
         The Menu classes themselves are responsible for getting/creating menu
@@ -207,6 +197,16 @@ class MenuGeneratorView(APIView):
             )
 
         return menu_instance
+
+    def restore_original_language(self):
+        """
+        Reactivates the language that was active before a 'selected language'
+        was activated. This is called after menu representation has been
+        extracted from the serializer, so that the response itself can be
+        rendered in the original language.
+        """
+        if django_settings.USE_I18N and hasattr(self, '_original_language'):
+            translation.activate(self._original_language)
 
 
 class MainMenuGeneratorView(MenuGeneratorView):
