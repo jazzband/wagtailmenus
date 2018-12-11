@@ -144,7 +144,7 @@ class Menu:
 
     @classmethod
     def _get_site(cls, context):
-        site = context.get('site')
+        site = context.get('current_site')
         if isinstance(site, Site):
             return site
         request = context.get('request')
