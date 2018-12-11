@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
+from wagtail.core.models import Page, Site
 
-from wagtail.core.models import Page
+from wagtailmenus.models import MainMenu
 
 
 class APIViewTestMixin:
@@ -37,6 +38,13 @@ class TestMainMenuGeneratorView(APIViewTestMixin, TestCase):
         response = self.get()
         self.assertEqual(response.status_code, 200)
 
+    def test_responds_with_200_if_no_such_menu_exists_because_one_is_created(self):
+        new_site = Site.objects.create(hostname='new.com', root_page_id=1)
+        self.assertFalse(MainMenu.objects.filter(site_id=new_site.id).exists())
+        response = self.get(site=new_site.id)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(MainMenu.objects.filter(site_id=new_site.id).exists())
+
 
 class TestFlatMenuGeneratorView(APIViewTestMixin, TestCase):
 
@@ -46,6 +54,17 @@ class TestFlatMenuGeneratorView(APIViewTestMixin, TestCase):
     def test_loads_without_errors(self):
         response = self.get(handle='contact')
         self.assertEqual(response.status_code, 200)
+
+    def test_responds_with_404_if_no_such_menu_exists(self):
+        response = self.get(site=1, handle='blahblahblah')
+        self.assertEqual(response.status_code, 404)
+
+    def test_responds_with_400_if_non_slug_handle_provided(self):
+        response = self.get(site=1, handle='blah!blah!blah!')
+        self.assertEqual(response.status_code, 400)
+        json = response.json()
+        self.assertIn('handle', json)
+        self.assertEqual(json['handle'][0], "Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens.")
 
 
 class TestChildrenMenuGeneratorView(APIViewTestMixin, TestCase):
