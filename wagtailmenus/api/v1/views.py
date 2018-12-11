@@ -138,18 +138,41 @@ class MenuGeneratorView(APIView):
         if not form.is_valid():
             raise ValidationError(form.errors)
 
+        # Activate selected language
+        self.activate_selected_language(form.cleaned_data['language'])
+
         # Get a menu instance using the valid data
         menu_instance = self.get_menu_instance(request, form)
 
         # Create a serializer for this menu instance
         menu_serializer = self.get_serializer(menu_instance, *args, **kwargs)
+        response_data = menu_serializer.data
 
-        return Response(menu_serializer.data)
+        # Restore original language now that the menu has been serialized
+        self.restore_original_language()
+
+        return Response(response_data)
 
     def activate_selected_language(self, language):
-        # Activate selected language if appropriate
+        """
+        Activates the provided language using translation.get_language(). Used
+        before calling ``get_menu_instance()`` and ``get_serializer()``, to
+        allow the menu to be rendered in the selected language.
+        """
         if django_settings.USE_I18N:
+            # store the the active language so that it can be restored
+            self._original_language = translation.get_language()
             translation.activate(language)
+
+    def restore_original_language(self):
+        """
+        Reactivates the language that was active before a 'selected language'
+        was activated. This is called after menu representation has been
+        extracted from the serializer, so that the response itself can be
+        rendered in the original language.
+        """
+        if django_settings.USE_I18N and hasattr(self, '_original_language'):
+            translation.activate(self._original_language)
 
     def get_menu_instance(self, request, form):
         """
@@ -175,9 +198,6 @@ class MenuGeneratorView(APIView):
         cls = self.get_menu_class()
         data['add_sub_menus_inline'] = True  # This should always be True
 
-        # Activate selected language
-        self.activate_selected_language(data['language'])
-
         # Generate the menu and return
         menu_instance = cls._get_render_prepared_object(dummy_context, **data)
         if menu_instance is None:
@@ -185,6 +205,7 @@ class MenuGeneratorView(APIView):
                 "No {class_name} object could be found matching the supplied "
                 "values.").format(class_name=cls.__name__)
             )
+
         return menu_instance
 
 
