@@ -1,22 +1,8 @@
 from django.test import TestCase
-from django.urls import reverse
 from wagtail.core.models import Page, Site
 
-from wagtailmenus.models import MainMenu
-
-
-class APIViewTestMixin:
-
-    url_namespace = 'wagtailmenus_api:v1'
-    url_name = ''
-
-    def get_base_url(self):
-        if not self.url_name:
-            raise NotImplementedError
-        return reverse(self.url_namespace + ':' + self.url_name)
-
-    def get(self, **kwargs):
-        return self.client.get(self.get_base_url(), data=kwargs)
+from wagtailmenus import get_main_menu_model
+from .mixins import APIViewTestMixin
 
 
 class TestMenuGeneratorIndexView(APIViewTestMixin, TestCase):
@@ -39,11 +25,12 @@ class TestMainMenuGeneratorView(APIViewTestMixin, TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_responds_with_200_if_no_such_menu_exists_because_one_is_created(self):
+        model = get_main_menu_model()
         new_site = Site.objects.create(hostname='new.com', root_page_id=1)
-        self.assertFalse(MainMenu.objects.filter(site_id=new_site.id).exists())
+        self.assertFalse(model.objects.filter(site_id=new_site.id).exists())
         response = self.get(site=new_site.id)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(MainMenu.objects.filter(site_id=new_site.id).exists())
+        self.assertTrue(model.objects.filter(site_id=new_site.id).count())
 
 
 class TestFlatMenuGeneratorView(APIViewTestMixin, TestCase):

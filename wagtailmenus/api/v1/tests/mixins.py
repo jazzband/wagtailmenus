@@ -6,6 +6,20 @@ from django.test import override_settings, RequestFactory
 from django.urls import reverse
 
 
+class APIViewTestMixin:
+
+    url_namespace = 'wagtailmenus_api:v1'
+    url_name = ''
+
+    def get_base_url(self):
+        if not self.url_name:
+            raise NotImplementedError
+        return reverse(self.url_namespace + ':' + self.url_name)
+
+    def get(self, **kwargs):
+        return self.client.get(self.get_base_url(), data=kwargs)
+
+
 class ArgumentFormTestMixin:
     url_namespace = 'wagtailmenus_api:v1'
     default_request_url_name = 'main_menu'
