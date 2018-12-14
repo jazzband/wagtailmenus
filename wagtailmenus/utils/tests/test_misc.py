@@ -294,8 +294,6 @@ class TestGetSiteFromRequest(TestCase):
     @mock.patch.object(Site, 'find_for_request', side_effect=Site.DoesNotExist())
     def test_returns_none_if_find_for_request_raises_doesnotexist_error(self, mocked_method):
         request = request_factory.get('/')
-        Site.objects.all().update(is_default_site=False)
-
         result = get_site_from_request(request)
         self.assertIs(result, None)
 
