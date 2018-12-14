@@ -38,9 +38,15 @@ class TestFlatMenuGeneratorView(APIViewTestMixin, TestCase):
     url_name = 'flat_menu'
     fixtures = ['test.json']
 
-    def test_loads_without_errors(self):
+    def test_renders_json_data_by_default(self):
         response = self.get(handle='contact')
         self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.json(), dict)
+
+    def test_custom_renderer_renders_argument_form_to_template(self):
+        with self.assertTemplateUsed('wagtailmenus/api/argument_form_modal.html'):
+            response = self.get(handle='contact', format='api')
+            self.assertEqual(response.status_code, 200)
 
     def test_responds_with_404_if_no_such_menu_exists(self):
         response = self.get(site=1, handle='blahblahblah')
