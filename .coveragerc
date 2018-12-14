@@ -2,7 +2,7 @@
 [run]
 branch = True
 
-source = wagtailmenus
+source = wagtailmenus/*
 
 omit =
     */migrations/*
