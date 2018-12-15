@@ -1,7 +1,7 @@
 from unittest import mock
 
 from django import forms
-from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.core.exceptions import ImproperlyConfigured
 from django.test import override_settings, RequestFactory
 from django.urls import reverse
 
@@ -94,10 +94,7 @@ class CommonArgumentFormTestsMixin:
         form.cleaned_data = {}
         # Mocking the method here to keep things quick
         with mock.patch.object(form, method_name, return_value=None) as mocked_method:
-            try:
-                form.clean()
-            except ValidationError:
-                pass
+            form.clean()
             return mocked_method.called
 
     def test_clean_triggers_derive_site(self):
