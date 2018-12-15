@@ -96,7 +96,7 @@ class MenuItemSerializerMixin(InstanceSpecificFieldsMixin):
         class DefaultMenuItemPageSerializer(BasePageSerializer):
             class Meta:
                 model = type(page)
-                fields = api_settings.DEFAULT_MENU_ITEM_PAGE_SERIALIZER_FIELDS
+                fields = api_settings.MENU_ITEM_PAGE_SERIALIZER_FIELDS
 
         return DefaultMenuItemPageSerializer
 
@@ -112,7 +112,7 @@ class MenuItemSerializer(MenuItemSerializerMixin, Serializer):
     children = RecursiveField(many=True, read_only=True, source=CHILDREN_ATTR)
 
     class Meta:
-        fields = api_settings.DEFAULT_MENU_ITEM_SERIALIZER_FIELDS
+        fields = api_settings.MENU_ITEM_SERIALIZER_FIELDS
 
 
 class BaseMenuItemModelSerializer(MenuItemSerializerMixin, ModelSerializer):
@@ -175,7 +175,7 @@ class MainMenuSerializer(MenuSerializerMixin, ModelSerializer):
         class DefaultMainMenuItemSerializer(BaseMenuItemModelSerializer):
             class Meta:
                 model = instance.get_menu_items_manager().model
-                fields = api_settings.DEFAULT_MAIN_MENU_ITEM_SERIALIZER_FIELDS
+                fields = api_settings.MAIN_MENU_ITEM_SERIALIZER_FIELDS
 
         return DefaultMainMenuItemSerializer
 
@@ -196,7 +196,7 @@ class FlatMenuSerializer(MenuSerializerMixin, ModelSerializer):
         class DefaultFlatMenuItemSerializer(BaseMenuItemModelSerializer):
             class Meta:
                 model = instance.get_menu_items_manager().model
-                fields = api_settings.DEFAULT_FLAT_MENU_ITEM_SERIALIZER_FIELDS
+                fields = api_settings.FLAT_MENU_ITEM_SERIALIZER_FIELDS
 
         return DefaultFlatMenuItemSerializer
 
@@ -232,7 +232,7 @@ class ChildrenMenuSerializer(MenuSerializerMixin, Serializer):
         class DefaultParentPageSerializer(BasePageSerializer):
             class Meta:
                 model = type(instance.parent_page)
-                fields = api_settings.DEFAULT_PARENT_PAGE_SERIALIZER_FIELDS
+                fields = api_settings.PARENT_PAGE_SERIALIZER_FIELDS
         return DefaultParentPageSerializer
 
     def get_parent_page_field_init_kwargs(self, instance):
@@ -274,7 +274,7 @@ class SectionMenuSerializer(MenuSerializerMixin, Serializer):
         class DefaultSectionRootSerializer(BaseMenuItemModelSerializer):
             class Meta:
                 model = type(instance.root_page)
-                fields = api_settings.DEFAULT_SECTION_ROOT_SERIALIZER_FIELDS
+                fields = api_settings.SECTION_ROOT_SERIALIZER_FIELDS
         return DefaultSectionRootSerializer
 
     def get_section_root_field_init_kwargs(self, instance):
