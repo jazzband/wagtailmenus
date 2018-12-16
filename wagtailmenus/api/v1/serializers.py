@@ -15,6 +15,22 @@ main_menu_model = wagtailmenus_settings.models.MAIN_MENU_MODEL
 flat_menu_model = wagtailmenus_settings.models.FLAT_MENU_MODEL
 
 
+class ContextSpecificFieldsMixin:
+    """
+    A mixin to facilitate the addition/replacement of fields based on the
+    specific ``instance`` being serialized, and any other context available.
+    """
+    def to_representation(self, instance):
+        fields = self.fields
+        self.update_fields(
+            fields, instance, getattr(self, '_context', {})
+        )
+        return super().to_representation(instance)
+
+    def update_fields(self, fields, instance, context):
+        pass
+
+
 class BasePageSerializer(ModelSerializer):
     """
     Used to render 'page' info for menu items. This could be a ``link_page``
@@ -25,21 +41,7 @@ class BasePageSerializer(ModelSerializer):
     type = PageTypeField(read_only=True)
 
 
-class InstanceSpecificFieldsMixin:
-    """
-    A mixin to facilitate the addition/replacement of fields based on the
-    ``instance`` being serialized.
-    """
-
-    def to_representation(self, instance):
-        self.make_instance_specific_field_changes(instance)
-        return super().to_representation(instance)
-
-    def make_instance_specific_field_changes(self, instance):
-        pass
-
-
-class MenuItemSerializerMixin(InstanceSpecificFieldsMixin):
+class MenuItemSerializerMixin(ContextSpecificFieldsMixin):
     """
     A mixin to faciliate rendering of a number of different types of menu
     items, including ``MainMenuItem`` or ``FlatMenuItem`` objects (or custom
@@ -77,12 +79,13 @@ class MenuItemSerializerMixin(InstanceSpecificFieldsMixin):
         self.instance = instance
         return super().to_representation(instance)
 
-    def make_instance_specific_field_changes(self, instance):
-        if isinstance(instance, dict):
-            page = instance.get(PAGE_ATTR)
-        else:
-            page = getattr(instance, PAGE_ATTR, None)
-        self.replace_page_field(instance, page)
+    def update_fields(self, fields, instance, context):
+        if 'page' in fields:
+            if isinstance(instance, dict):
+                page = instance.get(PAGE_ATTR)
+            else:
+                page = getattr(instance, PAGE_ATTR, None)
+            self.replace_page_field(instance, page)
 
     def replace_page_field(self, instance, page):
         field_class = self.get_page_field_class(instance, page)
@@ -111,9 +114,6 @@ class MenuItemSerializer(MenuItemSerializerMixin, Serializer):
     active_class = fields.CharField(read_only=True)
     children = RecursiveField(many=True, read_only=True, source=CHILDREN_ATTR)
 
-    class Meta:
-        fields = api_settings.MENU_ITEM_SERIALIZER_FIELDS
-
 
 class BaseMenuItemModelSerializer(MenuItemSerializerMixin, ModelSerializer):
     """
@@ -130,7 +130,7 @@ class BaseMenuItemModelSerializer(MenuItemSerializerMixin, ModelSerializer):
     children = MenuItemSerializer(many=True, read_only=True, source=CHILDREN_ATTR)
 
 
-class MenuSerializerMixin(InstanceSpecificFieldsMixin):
+class MenuSerializerMixin(ContextSpecificFieldsMixin):
     """
     A mixin to faciliate rendering of a number of different types of menu,
     including subclasses of ``AbastractMainMenu`` or ``AbstractFlatMenu``, or
@@ -143,9 +143,10 @@ class MenuSerializerMixin(InstanceSpecificFieldsMixin):
         'read_only': True,
     }
 
-    def make_instance_specific_field_changes(self, instance):
-        super().make_instance_specific_field_changes(instance)
-        self.replace_items_field(instance)
+    def update_fields(self, fields, instance, context):
+        super().update_fields(fields, instance, context)
+        if 'items' in fields:
+            self.replace_items_field(instance)
 
     def replace_items_field(self, instance):
         field_class = self.get_items_field_class(instance)
@@ -211,9 +212,10 @@ class ChildrenMenuSerializer(MenuSerializerMixin, Serializer):
         'read_only': True,
     }
 
-    def make_instance_specific_field_changes(self, instance):
-        super().make_instance_specific_field_changes(instance)
-        self.replace_parent_page_field(instance)
+    def update_fields(self, fields, instance, context):
+        super().update_fields(fields, instance, context)
+        if 'parent_page' in fields:
+            self.replace_parent_page_field(instance)
 
     def replace_parent_page_field(self, instance):
         field_class = self.get_parent_page_field_class(instance)
@@ -250,9 +252,10 @@ class SectionMenuSerializer(MenuSerializerMixin, Serializer):
         'source': 'root_page',
     }
 
-    def make_instance_specific_field_changes(self, instance):
-        super().make_instance_specific_field_changes(instance)
-        self.replace_section_root_field(instance)
+    def update_fields(self, fields, instance, context):
+        super().update_fields(fields, instance, context)
+        if 'section_root' in fields:
+            self.replace_section_root_field(instance)
 
     def replace_section_root_field(self, instance):
         field_class = self.get_section_root_field_class(instance)
