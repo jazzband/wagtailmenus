@@ -82,7 +82,22 @@ class AbstractMenuItem(models.Model, MenuItem):
     )
 
     # Override to modify output of related pages in wagtailmenus.api
-    api_page_fields = (
+    page_api_fields = (
+        'id',
+        'title',
+        'slug',
+        'type',
+    )
+
+    child_api_fields = (
+        'text',
+        'href',
+        'active_class',
+        'page',
+        'children',
+    )
+
+    child_page_api_fields = (
         'id',
         'title',
         'slug',
