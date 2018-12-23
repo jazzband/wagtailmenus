@@ -1073,6 +1073,12 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         ))
     )
 
+    # Override to modify output for custom classes in wagtailmenus.api
+    api_fields = (
+        'site',
+        'items',
+    )
+
     class Meta:
         abstract = True
         verbose_name = _("main menu")
@@ -1165,6 +1171,15 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
             "<code>max_levels</code> value to the <code>{% flat_menu %}"
             "</code> tag in your templates."
         ))
+    )
+
+    # Override to modify output for custom classes in wagtailmenus.api
+    api_fields = (
+        'site',
+        'handle',
+        'title',
+        'heading',
+        'items',
     )
 
     class Meta:
