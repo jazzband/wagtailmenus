@@ -89,21 +89,6 @@ class AbstractMenuItem(models.Model, MenuItem):
         'type',
     )
 
-    child_api_fields = (
-        'text',
-        'href',
-        'active_class',
-        'page',
-        'children',
-    )
-
-    child_page_api_fields = (
-        'id',
-        'title',
-        'slug',
-        'type',
-    )
-
     class Meta:
         abstract = True
         verbose_name = _("menu item")
