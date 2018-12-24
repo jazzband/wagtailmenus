@@ -695,6 +695,35 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     menu_instance_context_name = 'section_menu'
     related_templatetag_name = 'section_menu'
 
+    api_fields = (
+        'section_root',
+        'items'
+    )
+
+    section_root_api_fields = (
+        'id',
+        'text',
+        'href',
+        'active_class',
+        'slug',
+        'type',
+    )
+
+    item_api_fields = (
+        'text',
+        'href',
+        'active_class',
+        'page',
+        'children',
+    )
+
+    item_page_api_fields = (
+        'id',
+        'title',
+        'slug',
+        'type',
+    )
+
     @classmethod
     def render_from_tag(
         cls, context, show_section_root=True, max_levels=None,
@@ -778,6 +807,33 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     menu_short_name = 'children'  # used to find templates
     menu_instance_context_name = 'children_menu'
     related_templatetag_name = 'children_menu'
+
+    api_fields = (
+        'parent_page',
+        'items'
+    )
+
+    parent_page_api_fields = (
+        'id',
+        'title',
+        'slug',
+        'type',
+    )
+
+    item_api_fields = (
+        'text',
+        'href',
+        'active_class',
+        'page',
+        'children',
+    )
+
+    item_page_api_fields = (
+        'id',
+        'title',
+        'slug',
+        'type',
+    )
 
     @classmethod
     def render_from_tag(
