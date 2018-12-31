@@ -212,10 +212,8 @@ class SectionMenuSerializer(MenuSerializerMixin, Serializer):
         if api_settings.SECTION_ROOT_SERIALIZER:
             return api_settings.objects.SECTION_ROOT_SERIALIZER
 
-        # BaseMenuItemModelSerializer is being used below because SectionMenu
-        # adds 'text', 'href' and 'active_class' attrs to 'root_page', which
-        # this base class handles nicely.
-        class DefaultSectionRootSerializer(BaseMenuItemModelSerializer):
+        class DefaultSectionRootSerializer(BaseMenuItemModelSerializer, BasePageSerializer):
+
             class Meta:
                 model = type(instance.root_page)
                 fields = self.get_section_root_serializer_fields(instance)
