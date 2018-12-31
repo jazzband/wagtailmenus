@@ -88,11 +88,11 @@ class MenuItemSerializerMixin(ContextSpecificFieldsMixin):
             self.replace_page_field(instance, page)
 
     def replace_page_field(self, instance, page):
-        field_class = self.get_page_field_class(instance, page)
-        init_kwargs = self.get_page_field_init_kwargs(instance, page)
+        field_class = self.get_page_serializer_class(instance, page)
+        init_kwargs = self.get_page_serializer_init_kwargs(instance, page)
         self.fields['page'] = field_class(**init_kwargs)
 
-    def get_page_field_class(self, instance, page):
+    def get_page_serializer_class(self, instance, page):
         if api_settings.MENU_ITEM_PAGE_SERIALIZER:
             return api_settings.objects.MENU_ITEM_PAGE_SERIALIZER
 
@@ -103,7 +103,7 @@ class MenuItemSerializerMixin(ContextSpecificFieldsMixin):
 
         return DefaultMenuItemPageSerializer
 
-    def get_page_field_init_kwargs(self, instance, page):
+    def get_page_serializer_init_kwargs(self, instance, page):
         return self.page_field_init_kwargs
 
 
@@ -149,14 +149,14 @@ class MenuSerializerMixin(ContextSpecificFieldsMixin):
             self.replace_items_field(instance)
 
     def replace_items_field(self, instance):
-        field_class = self.get_items_field_class(instance)
-        init_kwargs = self.get_items_field_init_kwargs(instance)
+        field_class = self.get_items_serializer_class(instance)
+        init_kwargs = self.get_items_serializer_init_kwargs(instance)
         self.fields['items'] = field_class(**init_kwargs)
 
-    def get_items_field_class(self, instance):
+    def get_items_serializer_class(self, instance):
         raise NotImplementedError
 
-    def get_items_field_init_kwargs(self, instance):
+    def get_items_serializer_init_kwargs(self, instance):
         return self.items_field_init_kwargs
 
 
@@ -169,7 +169,7 @@ class MainMenuSerializer(MenuSerializerMixin, ModelSerializer):
         model = main_menu_model
         fields = ('site', 'items')
 
-    def get_items_field_class(self, instance):
+    def get_items_serializer_class(self, instance):
         if api_settings.MAIN_MENU_ITEM_SERIALIZER:
             return api_settings.objects.MAIN_MENU_ITEM_SERIALIZER
 
@@ -190,7 +190,7 @@ class FlatMenuSerializer(MenuSerializerMixin, ModelSerializer):
         model = flat_menu_model
         fields = ('site', 'handle', 'title', 'heading', 'items')
 
-    def get_items_field_class(self, instance):
+    def get_items_serializer_class(self, instance):
         if api_settings.FLAT_MENU_ITEM_SERIALIZER:
             return api_settings.objects.FLAT_MENU_ITEM_SERIALIZER
 
@@ -218,16 +218,16 @@ class ChildrenMenuSerializer(MenuSerializerMixin, Serializer):
             self.replace_parent_page_field(instance)
 
     def replace_parent_page_field(self, instance):
-        field_class = self.get_parent_page_field_class(instance)
-        init_kwargs = self.get_parent_page_field_init_kwargs(instance)
+        field_class = self.get_parent_page_serializer_class(instance)
+        init_kwargs = self.get_parent_page_serializer_init_kwargs(instance)
         self.fields['parent_page'] = field_class(**init_kwargs)
 
-    def get_items_field_class(self, instance):
+    def get_items_serializer_class(self, instance):
         if api_settings.CHILDREN_MENU_ITEM_SERIALIZER:
             return api_settings.objects.CHILDREN_MENU_ITEM_SERIALIZER
         return MenuItemSerializer
 
-    def get_parent_page_field_class(self, instance):
+    def get_parent_page_serializer_class(self, instance):
         if api_settings.PARENT_PAGE_SERIALIZER:
             return api_settings.objects.PARENT_PAGE_SERIALIZER
 
@@ -237,7 +237,7 @@ class ChildrenMenuSerializer(MenuSerializerMixin, Serializer):
                 fields = api_settings.PARENT_PAGE_SERIALIZER_FIELDS
         return DefaultParentPageSerializer
 
-    def get_parent_page_field_init_kwargs(self, instance):
+    def get_parent_page_serializer_init_kwargs(self, instance):
         return self.parent_page_field_init_kwargs
 
 
@@ -258,16 +258,16 @@ class SectionMenuSerializer(MenuSerializerMixin, Serializer):
             self.replace_section_root_field(instance)
 
     def replace_section_root_field(self, instance):
-        field_class = self.get_section_root_field_class(instance)
+        field_class = self.get_section_root_serializer_class(instance)
         init_kwargs = self.get_section_root_field_init_kwargs(instance)
         self.fields['section_root'] = field_class(**init_kwargs)
 
-    def get_items_field_class(self, instance):
+    def get_items_serializer_class(self, instance):
         if api_settings.SECTION_MENU_ITEM_SERIALIZER:
             return api_settings.objects.SECTION_MENU_ITEM_SERIALIZER
         return MenuItemSerializer
 
-    def get_section_root_field_class(self, instance):
+    def get_section_root_serializer_class(self, instance):
         if api_settings.SECTION_ROOT_SERIALIZER:
             return api_settings.objects.SECTION_ROOT_SERIALIZER
 
@@ -280,5 +280,5 @@ class SectionMenuSerializer(MenuSerializerMixin, Serializer):
                 fields = api_settings.SECTION_ROOT_SERIALIZER_FIELDS
         return DefaultSectionRootSerializer
 
-    def get_section_root_field_init_kwargs(self, instance):
+    def get_section_root_serializer_init_kwargs(self, instance):
         return self.section_root_field_init_kwargs
