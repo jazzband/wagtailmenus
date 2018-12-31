@@ -10,7 +10,7 @@ from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
 from wagtailmenus.conf import settings as wagtailmenus_settings
-from wagtailmenus.api.conf import settings as api_settings
+from wagtailmenus.api.v1.conf import settings as api_settings
 from . import forms
 from . import renderers
 from . import serializers

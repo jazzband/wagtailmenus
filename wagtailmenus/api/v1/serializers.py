@@ -5,7 +5,7 @@ from rest_framework_recursive.fields import RecursiveField
 from wagtail.core.models import Page
 from wagtail.api.v2.serializers import PageTypeField
 from wagtailmenus.conf import settings as wagtailmenus_settings
-from wagtailmenus.api.conf import settings as api_settings
+from wagtailmenus.api.v1.conf import settings as api_settings
 from wagtailmenus.models.menuitems import AbstractMenuItem
 
 CHILDREN_ATTR = '__children'
