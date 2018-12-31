@@ -6,8 +6,8 @@ from wagtail.core.models import Page
 from wagtailmenus.api.v1.conf import settings as api_settings
 from wagtailmenus.models.menuitems import AbstractMenuItem
 
-from .pages import BasePageSerializer
-from .utils import ContextSpecificFieldsMixin
+from .page import BasePageSerializer
+from .util import ContextSpecificFieldsMixin
 
 
 CHILDREN_ATTR = '__children'

@@ -4,9 +4,9 @@ from rest_framework.serializers import ModelSerializer, Serializer
 from wagtailmenus.conf import settings as wagtailmenus_settings
 from wagtailmenus.api.v1.conf import settings as api_settings
 
-from .menuitems import BaseMenuItemModelSerializer, RecursiveMenuItemSerializer
-from .pages import BasePageSerializer
-from .utils import ContextSpecificFieldsMixin
+from .menuitem import BaseMenuItemModelSerializer, RecursiveMenuItemSerializer
+from .page import BasePageSerializer
+from .util import ContextSpecificFieldsMixin
 
 
 main_menu_model = wagtailmenus_settings.models.MAIN_MENU_MODEL
