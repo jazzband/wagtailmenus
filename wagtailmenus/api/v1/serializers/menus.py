@@ -22,6 +22,7 @@ class MenuSerializerMixin(ContextSpecificFieldsMixin):
     """
 
     item_fields_setting_name = None
+    item_page_fields_setting_name = None
 
     items_field_init_kwargs = {
         'many': True,
@@ -38,6 +39,9 @@ class MenuSerializerMixin(ContextSpecificFieldsMixin):
         init_kwargs = self.get_items_serializer_init_kwargs(instance)
         self.fields['items'] = field_class(**init_kwargs)
 
+    def get_items_serializer_class(self, instance):
+        raise NotImplementedError
+
     def get_items_serializer_fields(self, instance):
         if self.item_fields_setting_name is None:
             raise NotImplementedError
@@ -49,8 +53,16 @@ class MenuSerializerMixin(ContextSpecificFieldsMixin):
             return model.api_fields
         return instance.item_api_fields
 
-    def get_items_serializer_class(self, instance):
-        raise NotImplementedError
+    def get_item_page_serializer_fields(self, instance):
+        if self.item_page_fields_setting_name is None:
+            raise NotImplementedError
+        field_list = api_settings.get(self.item_page_fields_setting_name)
+        if field_list is not None:
+            return field_list
+        if hasattr(instance, 'get_menu_items_manager'):
+            model = instance.get_menu_items_manager().model
+            return model.page_api_fields
+        return instance.item_page_api_fields
 
     def get_items_serializer_init_kwargs(self, instance):
         return self.items_field_init_kwargs
@@ -59,6 +71,7 @@ class MenuSerializerMixin(ContextSpecificFieldsMixin):
 class MainMenuSerializer(MenuSerializerMixin, ModelSerializer):
 
     item_fields_setting_name = 'MAIN_MENU_ITEM_SERIALIZER_FIELDS'
+    item_page_fields_setting_name = 'MAIN_MENU_ITEM_PAGE_SERIALIZER_FIELDS'
 
     # Placeholder fields
     items = fields.ListField()
@@ -75,6 +88,7 @@ class MainMenuSerializer(MenuSerializerMixin, ModelSerializer):
             class Meta:
                 model = instance.get_menu_items_manager().model
                 fields = self.get_items_serializer_fields(instance)
+                page_fields = self.get_item_page_serializer_fields(instance)
 
         return DefaultMainMenuItemSerializer
 
@@ -82,6 +96,7 @@ class MainMenuSerializer(MenuSerializerMixin, ModelSerializer):
 class FlatMenuSerializer(MenuSerializerMixin, ModelSerializer):
 
     item_fields_setting_name = 'FLAT_MENU_ITEM_SERIALIZER_FIELDS'
+    item_page_fields_setting_name = 'FLAT_MENU_ITEM_PAGE_SERIALIZER_FIELDS'
 
     # Placeholder fields
     items = fields.ListField()
@@ -98,6 +113,7 @@ class FlatMenuSerializer(MenuSerializerMixin, ModelSerializer):
             class Meta:
                 model = instance.get_menu_items_manager().model
                 fields = self.get_items_serializer_fields(instance)
+                page_fields = self.get_item_page_serializer_fields(instance)
 
         return DefaultFlatMenuItemSerializer
 
@@ -105,6 +121,7 @@ class FlatMenuSerializer(MenuSerializerMixin, ModelSerializer):
 class ChildrenMenuSerializer(MenuSerializerMixin, Serializer):
 
     item_fields_setting_name = 'CHILDREN_MENU_ITEM_SERIALIZER_FIELDS'
+    item_page_fields_setting_name = 'CHILDREN_MENU_ITEM_PAGE_SERIALIZER_FIELDS'
 
     # Placeholder fields
     parent_page = fields.DictField()
@@ -131,6 +148,7 @@ class ChildrenMenuSerializer(MenuSerializerMixin, Serializer):
         class ChildrenMenuItemSerializer(RecursiveMenuItemSerializer):
             class Meta:
                 fields = self.get_items_serializer_fields(instance)
+                page_fields = self.get_item_page_serializer_fields(instance)
 
         return ChildrenMenuItemSerializer
 
@@ -158,6 +176,7 @@ class ChildrenMenuSerializer(MenuSerializerMixin, Serializer):
 class SectionMenuSerializer(MenuSerializerMixin, Serializer):
 
     item_fields_setting_name = 'SECTION_MENU_ITEM_SERIALIZER_FIELDS'
+    item_page_fields_setting_name = 'SECTION_MENU_ITEM_PAGE_SERIALIZER_FIELDS'
 
     # Placeholder fields
     section_root = fields.DictField()
@@ -185,6 +204,7 @@ class SectionMenuSerializer(MenuSerializerMixin, Serializer):
         class SectionMenuItemSerializer(RecursiveMenuItemSerializer):
             class Meta:
                 fields = self.get_items_serializer_fields(instance)
+                page_fields = self.get_item_page_serializer_fields(instance)
 
         return SectionMenuItemSerializer
 
