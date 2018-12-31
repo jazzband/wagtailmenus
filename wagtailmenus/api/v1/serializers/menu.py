@@ -70,8 +70,8 @@ class MenuSerializerMixin(ContextSpecificFieldsMixin):
 
 class MainMenuSerializer(MenuSerializerMixin, ModelSerializer):
 
-    item_fields_setting_name = 'MAIN_MENU_ITEM_SERIALIZER_FIELDS'
-    item_page_fields_setting_name = 'MAIN_MENU_ITEM_PAGE_SERIALIZER_FIELDS'
+    item_fields_setting_name = 'MAIN_MENU_ITEM_FIELDS'
+    item_page_fields_setting_name = 'MAIN_MENU_ITEM_PAGE_FIELDS'
 
     # Placeholder fields
     items = fields.ListField()
@@ -95,8 +95,8 @@ class MainMenuSerializer(MenuSerializerMixin, ModelSerializer):
 
 class FlatMenuSerializer(MenuSerializerMixin, ModelSerializer):
 
-    item_fields_setting_name = 'FLAT_MENU_ITEM_SERIALIZER_FIELDS'
-    item_page_fields_setting_name = 'FLAT_MENU_ITEM_PAGE_SERIALIZER_FIELDS'
+    item_fields_setting_name = 'FLAT_MENU_ITEM_FIELDS'
+    item_page_fields_setting_name = 'FLAT_MENU_ITEM_PAGE_FIELDS'
 
     # Placeholder fields
     items = fields.ListField()
@@ -120,8 +120,8 @@ class FlatMenuSerializer(MenuSerializerMixin, ModelSerializer):
 
 class ChildrenMenuSerializer(MenuSerializerMixin, Serializer):
 
-    item_fields_setting_name = 'CHILDREN_MENU_ITEM_SERIALIZER_FIELDS'
-    item_page_fields_setting_name = 'CHILDREN_MENU_ITEM_PAGE_SERIALIZER_FIELDS'
+    item_fields_setting_name = 'CHILDREN_MENU_ITEM_FIELDS'
+    item_page_fields_setting_name = 'CHILDREN_MENU_ITEM_PAGE_FIELDS'
 
     # Placeholder fields
     parent_page = fields.DictField()
@@ -164,7 +164,7 @@ class ChildrenMenuSerializer(MenuSerializerMixin, Serializer):
         return ParentPageSerializer
 
     def get_parent_page_serializer_fields(self, instance):
-        field_list = api_settings.PARENT_PAGE_SERIALIZER_FIELDS
+        field_list = api_settings.PARENT_PAGE_FIELDS
         if field_list is not None:
             return field_list
         return instance.parent_page_api_fields
@@ -175,8 +175,8 @@ class ChildrenMenuSerializer(MenuSerializerMixin, Serializer):
 
 class SectionMenuSerializer(MenuSerializerMixin, Serializer):
 
-    item_fields_setting_name = 'SECTION_MENU_ITEM_SERIALIZER_FIELDS'
-    item_page_fields_setting_name = 'SECTION_MENU_ITEM_PAGE_SERIALIZER_FIELDS'
+    item_fields_setting_name = 'SECTION_MENU_ITEM_FIELDS'
+    item_page_fields_setting_name = 'SECTION_MENU_ITEM_PAGE_FIELDS'
 
     # Placeholder fields
     section_root = fields.DictField()
@@ -221,7 +221,7 @@ class SectionMenuSerializer(MenuSerializerMixin, Serializer):
         return SectionRootSerializer
 
     def get_section_root_serializer_fields(self, instance):
-        field_list = api_settings.SECTION_ROOT_SERIALIZER_FIELDS
+        field_list = api_settings.SECTION_ROOT_FIELDS
         if field_list is not None:
             return field_list
         return instance.section_root_api_fields

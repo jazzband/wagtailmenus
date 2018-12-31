@@ -88,8 +88,8 @@ class RecursiveMenuItemSerializer(MenuItemSerializerMixin, Serializer):
     children = RecursiveField(many=True, read_only=True, source=CHILDREN_ATTR)
 
     class Meta:
-        fields = api_settings.MENU_ITEM_SERIALIZER_FIELDS
-        page_fields = api_settings.MENU_ITEM_PAGE_SERIALIZER_FIELDS
+        fields = api_settings.MENU_ITEM_FIELDS
+        page_fields = api_settings.MENU_ITEM_PAGE_FIELDS
 
 
 class BaseMenuItemModelSerializer(MenuItemSerializerMixin, ModelSerializer):
