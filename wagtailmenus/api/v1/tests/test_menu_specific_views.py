@@ -20,9 +20,42 @@ class TestMainMenuGeneratorView(APIViewTestMixin, TestCase):
     url_name = 'main_menu'
     fixtures = ['test.json']
 
-    def test_loads_without_errors(self):
+    def test_renders_json_data_by_default(self):
         response = self.get()
         self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.json(), dict)
+
+    def test_custom_renderer_renders_argument_form_to_template(self):
+        with self.assertTemplateUsed('wagtailmenus/api/argument_form_modal.html'):
+            response = self.get(format='api')
+            self.assertEqual(response.status_code, 200)
+
+    def test_boolean_field_value_interpretation(self):
+        # JavascriptStyleBooleanSelect is designed to interpret 'true' and
+        # 'false' values from the request's querystring
+        response = self.get(
+            apply_active_classes='false',
+            allow_repeating_parents='false',
+            use_absolute_page_urls='true',
+        )
+        original_json = response.json()
+
+        # However, it will also interpret 'True' as 'true' and 'False' as 'false'
+        title_case_response = self.get(
+            apply_active_classes='False',
+            allow_repeating_parents='False',
+            use_absolute_page_urls='True',
+        )
+        # The result is the same as above
+        self.assertEqual(original_json, title_case_response.json())
+
+        # It will also interpret '1' as 'true' and '0' as 'false'
+        one_or_zero_response = self.get(
+            apply_active_classes='0',
+            allow_repeating_parents='0',
+            use_absolute_page_urls='1',
+        )
+        self.assertEqual(original_json, one_or_zero_response.json())
 
     def test_responds_with_200_if_no_such_menu_exists_because_one_is_created(self):
         model = get_main_menu_model()
@@ -57,7 +90,10 @@ class TestFlatMenuGeneratorView(APIViewTestMixin, TestCase):
         self.assertEqual(response.status_code, 400)
         json = response.json()
         self.assertIn('handle', json)
-        self.assertEqual(json['handle'][0], "Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens.")
+        self.assertEqual(
+            json['handle'][0],
+            "Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens."
+        )
 
 
 class TestChildrenMenuGeneratorView(APIViewTestMixin, TestCase):
@@ -65,9 +101,19 @@ class TestChildrenMenuGeneratorView(APIViewTestMixin, TestCase):
     url_name = 'children_menu'
     fixtures = ['test.json']
 
-    def test_loads_without_errors(self):
-        response = self.get(parent_page=Page.objects.get(url_path='/home/').id)
+    @property
+    def test_page(self):
+        return Page.objects.get(url_path='/home/')
+
+    def test_renders_json_data_by_default(self):
+        response = self.get(parent_page=self.test_page.id)
         self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.json(), dict)
+
+    def test_custom_renderer_renders_argument_form_to_template(self):
+        with self.assertTemplateUsed('wagtailmenus/api/argument_form_modal.html'):
+            response = self.get(parent_page=self.test_page.id, format='api')
+            self.assertEqual(response.status_code, 200)
 
 
 class TestSectionMenuGeneratorView(APIViewTestMixin, TestCase):
@@ -75,6 +121,16 @@ class TestSectionMenuGeneratorView(APIViewTestMixin, TestCase):
     url_name = 'section_menu'
     fixtures = ['test.json']
 
-    def test_loads_without_errors(self):
-        response = self.get(section_root_page=Page.objects.get(url_path='/home/about-us/').id)
+    @property
+    def test_page(self):
+        return Page.objects.get(url_path='/home/about-us/')
+
+    def test_renders_json_data_by_default(self):
+        response = self.get(section_root_page=self.test_page.id)
         self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.json(), dict)
+
+    def test_custom_renderer_renders_argument_form_to_template(self):
+        with self.assertTemplateUsed('wagtailmenus/api/argument_form_modal.html'):
+            response = self.get(section_root_page=self.test_page.id, format='api')
+            self.assertEqual(response.status_code, 200)
