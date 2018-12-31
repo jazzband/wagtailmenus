@@ -5,7 +5,7 @@ from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.exceptions import ValidationError, NotFound
 from rest_framework.views import APIView
-from rest_framework.renderers import JSONRenderer
+from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
@@ -18,6 +18,8 @@ from . import serializers
 
 class MenuGeneratorIndexView(APIView):
     name = "Menu Generation"
+
+    renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
     def get(self, request, *args, **kwargs):
         # Return a plain {"name": "hyperlink"} response.
