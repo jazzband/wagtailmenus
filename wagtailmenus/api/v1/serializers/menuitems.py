@@ -72,7 +72,7 @@ class MenuItemSerializerMixin(ContextSpecificFieldsMixin):
         class DefaultMenuItemPageSerializer(BasePageSerializer):
             class Meta:
                 model = type(page)
-                fields = api_settings.MENU_ITEM_PAGE_SERIALIZER_FIELDS
+                fields = self.Meta.page_fields
 
         return DefaultMenuItemPageSerializer
 
@@ -86,6 +86,10 @@ class RecursiveMenuItemSerializer(MenuItemSerializerMixin, Serializer):
     page = fields.DictField(read_only=True)
     active_class = fields.CharField(read_only=True)
     children = RecursiveField(many=True, read_only=True, source=CHILDREN_ATTR)
+
+    class Meta:
+        fields = api_settings.MENU_ITEM_SERIALIZER_FIELDS
+        page_fields = api_settings.MENU_ITEM_PAGE_SERIALIZER_FIELDS
 
 
 class BaseMenuItemModelSerializer(MenuItemSerializerMixin, ModelSerializer):
