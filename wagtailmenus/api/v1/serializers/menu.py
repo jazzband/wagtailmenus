@@ -84,13 +84,13 @@ class MainMenuSerializer(MenuSerializerMixin, ModelSerializer):
         if api_settings.MAIN_MENU_ITEM_SERIALIZER:
             return api_settings.objects.MAIN_MENU_ITEM_SERIALIZER
 
-        class DefaultMainMenuItemSerializer(BaseMenuItemModelSerializer):
+        class MainMenuItemSerializer(BaseMenuItemModelSerializer):
             class Meta:
                 model = instance.get_menu_items_manager().model
                 fields = self.get_items_serializer_fields(instance)
                 page_fields = self.get_item_page_serializer_fields(instance)
 
-        return DefaultMainMenuItemSerializer
+        return MainMenuItemSerializer
 
 
 class FlatMenuSerializer(MenuSerializerMixin, ModelSerializer):
@@ -109,13 +109,13 @@ class FlatMenuSerializer(MenuSerializerMixin, ModelSerializer):
         if api_settings.FLAT_MENU_ITEM_SERIALIZER:
             return api_settings.objects.FLAT_MENU_ITEM_SERIALIZER
 
-        class DefaultFlatMenuItemSerializer(BaseMenuItemModelSerializer):
+        class FlatMenuItemSerializer(BaseMenuItemModelSerializer):
             class Meta:
                 model = instance.get_menu_items_manager().model
                 fields = self.get_items_serializer_fields(instance)
                 page_fields = self.get_item_page_serializer_fields(instance)
 
-        return DefaultFlatMenuItemSerializer
+        return FlatMenuItemSerializer
 
 
 class ChildrenMenuSerializer(MenuSerializerMixin, Serializer):
@@ -156,12 +156,12 @@ class ChildrenMenuSerializer(MenuSerializerMixin, Serializer):
         if api_settings.PARENT_PAGE_SERIALIZER:
             return api_settings.objects.PARENT_PAGE_SERIALIZER
 
-        class DefaultParentPageSerializer(BasePageSerializer):
+        class ParentPageSerializer(BasePageSerializer):
             class Meta:
                 model = type(instance.parent_page)
                 fields = self.get_parent_page_serializer_fields(instance)
 
-        return DefaultParentPageSerializer
+        return ParentPageSerializer
 
     def get_parent_page_serializer_fields(self, instance):
         field_list = api_settings.PARENT_PAGE_SERIALIZER_FIELDS
@@ -212,13 +212,13 @@ class SectionMenuSerializer(MenuSerializerMixin, Serializer):
         if api_settings.SECTION_ROOT_SERIALIZER:
             return api_settings.objects.SECTION_ROOT_SERIALIZER
 
-        class DefaultSectionRootSerializer(BaseMenuItemModelSerializer, BasePageSerializer):
+        class SectionRootSerializer(BaseMenuItemModelSerializer, BasePageSerializer):
 
             class Meta:
                 model = type(instance.root_page)
                 fields = self.get_section_root_serializer_fields(instance)
 
-        return DefaultSectionRootSerializer
+        return SectionRootSerializer
 
     def get_section_root_serializer_fields(self, instance):
         field_list = api_settings.SECTION_ROOT_SERIALIZER_FIELDS

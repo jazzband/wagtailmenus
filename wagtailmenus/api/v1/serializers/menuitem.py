@@ -69,12 +69,12 @@ class MenuItemSerializerMixin(ContextSpecificFieldsMixin):
         if api_settings.MENU_ITEM_PAGE_SERIALIZER:
             return api_settings.objects.MENU_ITEM_PAGE_SERIALIZER
 
-        class DefaultMenuItemPageSerializer(BasePageSerializer):
+        class MenuItemPageSerializer(BasePageSerializer):
             class Meta:
                 model = type(page)
                 fields = self.Meta.page_fields
 
-        return DefaultMenuItemPageSerializer
+        return MenuItemPageSerializer
 
     def get_page_serializer_init_kwargs(self, instance, page):
         return self.page_field_init_kwargs
