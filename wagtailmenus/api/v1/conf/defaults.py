@@ -55,6 +55,9 @@ MENU_ITEM_SERIALIZER_FIELDS = ('text', 'href', 'active_class', 'page', 'children
 
 MAIN_MENU_ITEM_SERIALIZER_FIELDS = ('text', 'href', 'handle', 'active_class', 'page', 'children')
 
+SECTION_MENU_ITEM_SERIALIZER_FIELDS = MENU_ITEM_SERIALIZER_FIELDS
+
+CHILDREN_MENU_ITEM_SERIALIZER_FIELDS = MENU_ITEM_SERIALIZER_FIELDS
 
 # ------------------------------
 # Default page serializer fields
