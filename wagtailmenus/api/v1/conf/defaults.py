@@ -49,23 +49,23 @@ MENU_ITEM_PAGE_SERIALIZER = None
 # Default menu item serializer fields
 # -----------------------------------
 
-FLAT_MENU_ITEM_SERIALIZER_FIELDS = ('text', 'href', 'handle', 'active_class', 'page', 'children')
-
 MENU_ITEM_SERIALIZER_FIELDS = ('text', 'href', 'active_class', 'page', 'children')
 
-MAIN_MENU_ITEM_SERIALIZER_FIELDS = ('text', 'href', 'handle', 'active_class', 'page', 'children')
+FLAT_MENU_ITEM_SERIALIZER_FIELDS = None
 
-SECTION_MENU_ITEM_SERIALIZER_FIELDS = MENU_ITEM_SERIALIZER_FIELDS
+MAIN_MENU_ITEM_SERIALIZER_FIELDS = None
 
-CHILDREN_MENU_ITEM_SERIALIZER_FIELDS = MENU_ITEM_SERIALIZER_FIELDS
+SECTION_MENU_ITEM_SERIALIZER_FIELDS = None
+
+CHILDREN_MENU_ITEM_SERIALIZER_FIELDS = None
 
 # ------------------------------
 # Default page serializer fields
 # ------------------------------
 
-PARENT_PAGE_SERIALIZER_FIELDS = ('id', 'title', 'slug', 'type')
+PARENT_PAGE_SERIALIZER_FIELDS = None
 
-SECTION_ROOT_SERIALIZER_FIELDS = ('text', 'href', 'active_class', 'page')
+SECTION_ROOT_SERIALIZER_FIELDS = None
 
 MENU_ITEM_PAGE_SERIALIZER_FIELDS = ('id', 'title', 'slug', 'type')
 
