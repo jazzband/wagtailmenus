@@ -4,26 +4,18 @@
 # Menu serializer classes
 # -----------------------
 
-# A ``None`` value means  "Use the default serializer class for the
-# version of the API I'm using". Because this can vary between versions,
-# default values are not added here.
+CHILDREN_MENU_SERIALIZER = 'wagtailmenus.api.v1.serializers.ChildrenMenuSerializer'
 
-CHILDREN_MENU_SERIALIZER = None
+FLAT_MENU_SERIALIZER = 'wagtailmenus.api.v1.serializers.FlatMenuSerializer'
 
-FLAT_MENU_SERIALIZER = None
+MAIN_MENU_SERIALIZER = 'wagtailmenus.api.v1.serializers.MainMenuSerializer'
 
-MAIN_MENU_SERIALIZER = None
-
-SECTION_MENU_SERIALIZER = None
+SECTION_MENU_SERIALIZER = 'wagtailmenus.api.v1.serializers.SectionMenuSerializer'
 
 
 # ----------------------------
 # Menu item serializer classes
 # ----------------------------
-
-# A ``None`` value means  "Use the default serializer class for the
-# version of the API being used". Because this can vary between versions,
-# default values are not added here.
 
 FLAT_MENU_ITEM_SERIALIZER = None
 

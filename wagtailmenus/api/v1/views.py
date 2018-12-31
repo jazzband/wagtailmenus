@@ -44,7 +44,6 @@ class MenuGeneratorView(APIView):
 
     # serialization
     serializer_class = None  # override this for custom view classes
-    default_serializer_class = None
     serializer_class_setting_name = None
 
     # argument validation and defaults
@@ -105,20 +104,8 @@ class MenuGeneratorView(APIView):
     def get_serializer_class(self):
         if self.serializer_class is not None:
             return self.serializer_class
-
-        if self.default_serializer_class is None:
-            raise NotImplementedError(
-                "You must either set the 'default_serializer_class' attribute "
-                "or override the get_serializer_class() method for '%s'" % self.__class__.__name__
-            )
-
         setting_name = self.serializer_class_setting_name
-        if setting_name:
-            override_value = api_settings.get(setting_name)
-            if override_value:
-                # Use the 'objects' helper to retrieve the actual class
-                return getattr(api_settings.objects, setting_name)
-        return self.default_serializer_class
+        return getattr(api_settings.objects, setting_name)
 
     def get_serializer_context(self):
         return {
@@ -220,7 +207,6 @@ class MainMenuGeneratorView(MenuGeneratorView):
     argument_form_class = forms.MainMenuGeneratorArgumentForm
 
     # serialization
-    default_serializer_class = serializers.MainMenuSerializer
     serializer_class_setting_name = 'MAIN_MENU_SERIALIZER'
 
 
@@ -233,7 +219,6 @@ class FlatMenuGeneratorView(MenuGeneratorView):
     argument_form_class = forms.FlatMenuGeneratorArgumentForm
 
     # serialization
-    default_serializer_class = serializers.FlatMenuSerializer
     serializer_class_setting_name = 'FLAT_MENU_SERIALIZER'
 
     # argument defaults
@@ -254,7 +239,6 @@ class ChildrenMenuGeneratorView(MenuGeneratorView):
     argument_form_class = forms.ChildrenMenuGeneratorArgumentForm
 
     # serialization
-    default_serializer_class = serializers.ChildrenMenuSerializer
     serializer_class_setting_name = 'CHILDREN_MENU_SERIALIZER'
 
     # argument defaults
@@ -272,7 +256,6 @@ class SectionMenuGeneratorView(MenuGeneratorView):
     argument_form_class = forms.SectionMenuGeneratorArgumentForm
 
     # serialization
-    default_serializer_class = serializers.SectionMenuSerializer
     serializer_class_setting_name = 'SECTION_MENU_SERIALIZER'
 
     # argument defaults
