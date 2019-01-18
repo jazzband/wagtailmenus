@@ -4,11 +4,11 @@
 Installing wagtailmenus
 =========================
 
-1.  Install the package using pip: 
+1.  Install the package using pip:
 
     .. code-block:: console
 
-        pip install wagtailmenus 
+        pip install wagtailmenus
 
 2.  Add ``wagtailmenus`` and ``wagtail.contrib.modeladmin`` to the
     ``INSTALLED_APPS`` setting in your project settings:
@@ -21,10 +21,10 @@ Installing wagtailmenus
             'wagtailmenus',
         ]
 
-3.  Add ``wagtailmenus.context_processors.wagtailmenus`` to the 
-    ``context_processors`` list in your ``TEMPLATES`` setting. The setting 
+3.  Add ``wagtailmenus.context_processors.wagtailmenus`` to the
+    ``context_processors`` list in your ``TEMPLATES`` setting. The setting
     should look something like this:
-    
+
     .. code-block:: python
 
         TEMPLATES = [
@@ -52,16 +52,16 @@ Installing wagtailmenus
         ]
 
 4.  Run migrations to create database tables for wagtailmenus:
-    
+
     .. code-block:: console
 
         python manage.py migrate wagtailmenus
 
 5.  **This step is optional**. If you're adding wagtailmenus to an existing
     project, and the tree for each site follows a structure similar to the
-    example below, you may find it useful to run the 'autopopulate_main_menus' 
+    example below, you may find it useful to run the 'autopopulate_main_menus'
     command to populate main menus for your site(s).
-    
+
     However, this will only yield useful results if the 'root page' you've
     set for your site(s) is what you consider to be the 'Home' page, and the
     pages directly below that are the pages you'd like to link to in your main
@@ -70,8 +70,8 @@ Installing wagtailmenus
     For example, if your page structure looked like the following:
 
     .. code-block:: none
-    
-        Home (Set as 'root page' for the site)     
+
+        Home (Set as 'root page' for the site)
         ├── About us
         ├── What we do
         ├── Careers
@@ -125,18 +125,18 @@ Installing ``wagtail-condensedinlinepanel``
 
 Although doing so is entirely optional, for an all-round better menu editing experience, we recommend using wagtailmenus together with `wagtail-condensedinlinepanel <https://github.com/wagtail/wagtail-condensedinlinepanel>`_.
 
-``wagtail-condensedinlinepanel`` offers a React-powered alternative to Wagtail's built-in ``InlinePanel`` with some great extra features that make it perfect for managing menu items; including drag-and-drop reordering and the ability to add new items at any position. 
+``wagtail-condensedinlinepanel`` offers a React-powered alternative to Wagtail's built-in ``InlinePanel`` with some great extra features that make it perfect for managing menu items; including drag-and-drop reordering and the ability to add new items at any position.
 
 If you'd like to give it a try, follow the installation instructions below, and wagtailmenus will automatically use the app's ``CollapsedInlinePanel`` class.
 
 
 1.  Install the package using pip.
 
-    If your project uses Wagtail ``2.0`` or later, run: 
+    If your project uses Wagtail ``2.0`` or later, run:
 
     .. code-block:: console
 
-        pip install wagtail-condensedinlinepanel==0.5.0
+        pip install wagtail-condensedinlinepanel==0.5.2
 
     Otherwise, run:
 

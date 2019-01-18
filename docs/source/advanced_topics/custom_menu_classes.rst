@@ -12,7 +12,7 @@ Using custom menu classes and models
 
 .. _custom_main_menu_models:
 
-Overriding the models used for main menus 
+Overriding the models used for main menus
 =========================================
 
 There are a couple of different approaches for overriding the models used for defining / rendering main menus. The best approach for your project depends on which models you need to override.
@@ -23,11 +23,11 @@ Replacing the ``MainMenuItem`` model only
 
 If you're happy with the default ``MainMenu`` model, but wish customise the menu item model (e.g. to add images, description fields, or extra fields for translated strings), you can use the :ref:`MAIN_MENU_ITEMS_RELATED_NAME` setting to have main menus use a different model, both within Wagtail's CMS, and for generating the list of ``menu_items`` used by menu templates.
 
-1.  Within your project, define your custom model by subclassing 
+1.  Within your project, define your custom model by subclassing
     ``AbstractMainMenuItem``:
 
     .. code-block:: python
-        
+
         # appname/models.py
 
         from django.db import models
@@ -71,7 +71,7 @@ If you're happy with the default ``MainMenu`` model, but wish customise the menu
             )
 
 2.  Create migrations for the new model by running:
-    
+
     .. code-block:: console
 
         python manage.py makemigrations appname
@@ -90,7 +90,7 @@ If you're happy with the default ``MainMenu`` model, but wish customise the menu
         # Set this to the 'related_name' attribute used on the ParentalKey field
         WAGTAILMENUS_MAIN_MENU_ITEMS_RELATED_NAME = "custom_menu_items"
 
-5.  *That's it!* The custom models will now be used instead of the default ones. 
+5.  *That's it!* The custom models will now be used instead of the default ones.
 
     .. NOTE::
         Although you won't be able to see them in the CMS any longer, the default models and any data that was in the original database table will remain intact.
@@ -101,11 +101,11 @@ Replacing both the ``MainMenu`` and ``MainMenuItem`` models
 
 If you also need to override the ``MainMenu`` model, that's possible too. But, because the ``MainMenuItem`` model is tied to ``MainMenu``, you'll also need to create custom menu item model (whether you wish to add fields / change their behaviour, or not).
 
-1.  Within your project, define your custom models by subclassing the 
+1.  Within your project, define your custom models by subclassing the
     ``AbstractMainMenu`` and ``AbstractMainMenuItem`` model classes:
 
     .. code-block:: python
-        
+
         # appname/models.py
 
         from django.db import models
@@ -114,7 +114,7 @@ If you also need to override the ``MainMenu`` model, that's possible too. But, b
         from django.utils import timezone
         from modelcluster.fields import ParentalKey
         from wagtail.wagtailadmin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel
-        from wagtailmenus import app_settings
+        from wagtailmenus.conf import settings
         from wagtailmenus.models import AbstractMainMenu, AbstractMainMenuItem
 
 
@@ -157,11 +157,11 @@ If you also need to override the ``MainMenu`` model, that's possible too. But, b
             menu = ParentalKey(
                 LimitedMainMenu, # we can use the model from above
                 on_delete=models.CASCADE,
-                related_name=app_settings.MAIN_MENU_ITEMS_RELATED_NAME,
+                related_name=settings.MAIN_MENU_ITEMS_RELATED_NAME,
             )
 
 2.  Create migrations for the new models by running:
-    
+
     .. code-block:: console
 
         python manage.py makemigrations appname
@@ -176,12 +176,12 @@ If you also need to override the ``MainMenu`` model, that's possible too. But, b
     model instead of the default one. e.g:
 
     .. code-block:: python
-        
+
         # settings.py
 
         WAGTAILMENUS_MAIN_MENU_MODEL = "appname.LimitedMainMenu"
 
-5.  *That's it!* The custom models will now be used instead of the default ones. 
+5.  *That's it!* The custom models will now be used instead of the default ones.
 
     .. NOTE::
         Although you won't be able to see them in the CMS any longer, the default models and any data that was in the original database table will remain intact.
@@ -200,9 +200,9 @@ Replacing the ``FlatMenuItem`` model only
 If you're happy with the default ``FlatMenu`` model, but wish customise the menu item models (e.g. to add images, description fields, or extra fields for translated strings), you can use the :ref:`FLAT_MENU_ITEMS_RELATED_NAME` setting to have flat menus use a different model, both within Wagtail's CMS, and for generating the list of ``menu_items`` used by menu templates.
 
 1.  Within your project, define your custom model by subclassing ``AbstractFlatMenuItem``:
-    
+
     .. code-block:: python
-        
+
         # apname/models.py
 
         from django.db import models
@@ -246,7 +246,7 @@ If you're happy with the default ``FlatMenu`` model, but wish customise the menu
             )
 
 2.  Create migrations for the new models by running:
-    
+
     .. code-block:: console
 
         python manage.py makemigrations appname
@@ -261,7 +261,7 @@ If you're happy with the default ``FlatMenu`` model, but wish customise the menu
     instead of the default one. e.g:
 
     .. code-block:: python
-        
+
         # settings.py
 
         # Use the 'related_name' attribute you used on your custom model's ParentalKey field
@@ -278,11 +278,11 @@ Replacing both the ``FlatMenu`` and ``FlatMenuItem`` models
 
 If you also need to override the ``FlatMenu`` model, that's possible too. But, because the ``FlatMenuItem`` model is tied to ``FlatMenu``, you'll also need to create custom menu item model (whether you wish to add fields or their behaviour or not).
 
-1.  Within your project, define your custom models by subclassing the 
+1.  Within your project, define your custom models by subclassing the
     ``AbstractFlatMenu`` and ``AbstractFlatMenuItem`` model classes:
-    
+
     .. code-block:: python
-        
+
         # appname/models.py
 
         from django.db import models
@@ -290,14 +290,14 @@ If you also need to override the ``FlatMenu`` model, that's possible too. But, b
         from django.utils.translation import ugettext_lazy as _
         from modelcluster.fields import ParentalKey
         from wagtail.wagtailadmin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel
-        from wagtailmenus import app_settings
+        from wagtailmenus.conf import settings
         from wagtailmenus.panels import FlatMenuItemsInlinePanel
         from wagtailmenus.models import AbstractFlatMenu, AbstractFlatMenuItem
 
 
         class TranslatedField(object):
             """
-            A class that can be used on models to return a 'field' in the 
+            A class that can be used on models to return a 'field' in the
             desired language, where there a multiple versions of a field to
             cater for multiple languages (in this case, English, German & French)
             """
@@ -358,7 +358,7 @@ If you also need to override the ``FlatMenu`` model, that's possible too. But, b
             menu = ParentalKey(
                 TranslatedFlatMenu, # we can use the model from above
                 on_delete=models.CASCADE,
-                related_name=app_settings.FLAT_MENU_ITEMS_RELATED_NAME,
+                related_name=settings.FLAT_MENU_ITEMS_RELATED_NAME,
             )
             link_text_de = models.CharField(
                 verbose_name=_("link text (german)"),
@@ -377,7 +377,7 @@ If you also need to override the ``FlatMenu`` model, that's possible too. But, b
                 """Use `translated_link_text` instead of just `link_text`"""
                 return self.translated_link_text or getattr(
                     self.link_page,
-                    app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
+                    settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
                     self.link_page.title
                 )
 
@@ -395,7 +395,7 @@ If you also need to override the ``FlatMenu`` model, that's possible too. But, b
             )
 
 2.  Create migrations for the new models by running:
-    
+
     .. code-block:: console
 
         python manage.py makemigrations appname
@@ -410,12 +410,12 @@ If you also need to override the ``FlatMenu`` model, that's possible too. But, b
     menu model instead of the default one. e.g:
 
     .. code-block:: python
-        
+
         # settings.py
 
         WAGTAILMENUS_FLAT_MENU_MODEL = "appname.TranslatedFlatMenu"
 
-5.  That's it! The custom models will now be used instead of the default ones. 
+5.  That's it! The custom models will now be used instead of the default ones.
 
     .. NOTE::
         Although you won't be able to see them in the CMS any longer, the
@@ -433,7 +433,7 @@ Like the ``main_menu`` and ``flat_menu`` tags, the ``section_menu`` tag uses a `
 The class ``wagtailmenus.models.menus.SectionMenu`` is used by default, but you can use the ``WAGTAILMENUS_SECTION_MENU_CLASS`` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify the base queryset that determines which pages should be included when rendering). To implement a custom classes, it's recommended that you subclass the ``SectionMenu`` and override any methods as required, like in the following example:
 
 .. code-block:: python
-    
+
     # mysite/appname/models.py
 
     from django.utils.translation import ugettext_lazy as _
@@ -442,7 +442,7 @@ The class ``wagtailmenus.models.menus.SectionMenu`` is used by default, but you 
 
 
     class CustomSectionMenu(SectionMenu):
-        
+
         def get_base_page_queryset(self):
             # Show draft and expired pages in menu for superusers
             if self.request.user.is_superuser:
@@ -450,9 +450,9 @@ The class ``wagtailmenus.models.menus.SectionMenu`` is used by default, but you 
             # Resort to default behaviour for everybody else
             return super(CustomSectionMenu, self).get_base_page_queryset()
 
-    
+
 .. code-block:: python
-    
+
     # settings.py
 
     WAGTAILMENUS_SECTION_MENU_CLASS = "mysite.appname.models.CustomSectionMenu"
@@ -468,7 +468,7 @@ Like all of the other tags, the ``children_menu`` tag uses a ``Menu`` class to f
 The class ``wagtailmenus.models.menus.ChildrenMenu`` is used by default, but you can use the ``WAGTAILMENUS_CHILDREN_MENU_CLASS`` setting in your project to make wagtailmenus use an alternative class (for example, if you want to modify which pages are included). For custom classes, it's recommended that you subclass ``ChildrenMenu`` and override any methods as required e.g:
 
 .. code-block:: python
-    
+
     # appname/menus.py
 
     from django.utils.translation import ugettext_lazy as _
@@ -486,7 +486,7 @@ The class ``wagtailmenus.models.menus.ChildrenMenu`` is used by default, but you
 
 
 .. code-block:: python
-    
+
     # settings.py
 
     WAGTAILMENUS_CHILDREN_MENU_CLASS = "mysite.appname.models.CustomChildrenMenu"
