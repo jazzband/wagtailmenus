@@ -18,6 +18,7 @@
 * Pierre Manceaux (pierremanceaux)
 * Michael van de Waeter (mvdwaeter)
 * Philipp Bosch (philippbosch) (A Color Bright)
+* Oktay Altay (OktayAltay)
 
 
 ## Translators
