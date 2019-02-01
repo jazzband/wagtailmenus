@@ -244,7 +244,7 @@ class AbstractLinkPage(Page):
             return self.link_page_is_suitable_for_display()
         return True
 
-    def get_sitemap_urls(self):
+    def get_sitemap_urls(self, request=None):
         return []  # don't include pages of this type in sitemaps
 
     def _url_base(self, request=None, current_site=None, full_url=False):
