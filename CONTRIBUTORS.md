@@ -19,6 +19,7 @@
 * Michael van de Waeter (mvdwaeter)
 * Philipp Bosch (philippbosch) (A Color Bright)
 * Oktay Altay (OktayAltay)
+* Dan Bentley (danbentley)
 
 
 ## Translators
