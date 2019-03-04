@@ -1,6 +1,6 @@
 {% load menu_tags %}
 {% if menu_items %}
-	<ul class="sub-menu" data-level="{{ current_level }}">
+	<ul class="{% block ul_class %}sub-menu{% endblock %}" data-level="{{ current_level }}">
 	{% for item in menu_items %}
 	    <li class="{{ item.active_class }}{% if item.extra_menuitem_css_class %} {{ item.extra_menuitem_css_class }}{% endif %}">
 	        <a href="{{ item.href }}">{{ item.text }}</a>

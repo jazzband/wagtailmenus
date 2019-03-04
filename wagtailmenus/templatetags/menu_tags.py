@@ -1,24 +1,25 @@
 from django.template import Library
-from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core.models import Page
-else:
-    from wagtail.wagtailcore.models import Page
+from wagtail.core.models import Page
 
-from wagtailmenus import app_settings
+from wagtailmenus.conf import constants, settings
 from wagtailmenus.errors import SubMenuUsageError
 from wagtailmenus.utils.misc import validate_supplied_values
 
-flat_menus_fbtdsm = app_settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS
-
 register = Library()
+
+
+def split_if_string(val, separator=','):
+    if isinstance(val, str):
+        return tuple(item.strip() for item in val.split(separator))
+    return val
 
 
 @register.simple_tag(takes_context=True)
 def main_menu(
     context, max_levels=None, use_specific=None, apply_active_classes=True,
     allow_repeating_parents=True, show_multiple_levels=True,
-    template='', sub_menu_template='', use_absolute_page_urls=False, **kwargs
+    template='', sub_menu_template='', sub_menu_templates=None,
+    use_absolute_page_urls=False, add_sub_menus_inline=None, **kwargs
 ):
     validate_supplied_values('main_menu', max_levels=max_levels,
                              use_specific=use_specific)
@@ -26,15 +27,18 @@ def main_menu(
     if not show_multiple_levels:
         max_levels = 1
 
-    return app_settings.MAIN_MENU_MODEL_CLASS.render_from_tag(
+    menu_class = settings.models.MAIN_MENU_MODEL
+    return menu_class.render_from_tag(
         context=context,
         max_levels=max_levels,
         use_specific=use_specific,
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
         use_absolute_page_urls=use_absolute_page_urls,
+        add_sub_menus_inline=add_sub_menus_inline,
         template_name=template,
         sub_menu_template_name=sub_menu_template,
+        sub_menu_template_names=split_if_string(sub_menu_templates),
         **kwargs
     )
 
@@ -44,17 +48,21 @@ def flat_menu(
     context, handle, max_levels=None, use_specific=None,
     show_menu_heading=False, apply_active_classes=False,
     allow_repeating_parents=True, show_multiple_levels=True,
-    template='', sub_menu_template='',
-    fall_back_to_default_site_menus=flat_menus_fbtdsm,
-    use_absolute_page_urls=False, **kwargs
+    template='', sub_menu_template='', sub_menu_templates=None,
+    fall_back_to_default_site_menus=None, use_absolute_page_urls=False,
+    add_sub_menus_inline=None, **kwargs
 ):
     validate_supplied_values('flat_menu', max_levels=max_levels,
                              use_specific=use_specific)
 
+    if fall_back_to_default_site_menus is None:
+        fall_back_to_default_site_menus = settings.FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS
+
     if not show_multiple_levels:
         max_levels = 1
 
-    return app_settings.FLAT_MENU_MODEL_CLASS.render_from_tag(
+    menu_class = settings.models.FLAT_MENU_MODEL
+    return menu_class.render_from_tag(
         context=context,
         handle=handle,
         fall_back_to_default_site_menus=fall_back_to_default_site_menus,
@@ -63,8 +71,10 @@ def flat_menu(
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
         use_absolute_page_urls=use_absolute_page_urls,
+        add_sub_menus_inline=add_sub_menus_inline,
         template_name=template,
         sub_menu_template_name=sub_menu_template,
+        sub_menu_template_names=split_if_string(sub_menu_templates),
         show_menu_heading=show_menu_heading,
         **kwargs
     )
@@ -74,28 +84,30 @@ def flat_menu(
 def section_menu(
     context, show_section_root=True, show_multiple_levels=True,
     apply_active_classes=True, allow_repeating_parents=True,
-    max_levels=app_settings.DEFAULT_SECTION_MENU_MAX_LEVELS,
-    template='', sub_menu_template='',
-    use_specific=app_settings.DEFAULT_SECTION_MENU_USE_SPECIFIC,
-    use_absolute_page_urls=False, **kwargs
+    max_levels=settings.DEFAULT_SECTION_MENU_MAX_LEVELS,
+    template='', sub_menu_template='', sub_menu_templates=None,
+    use_specific=settings.DEFAULT_SECTION_MENU_USE_SPECIFIC,
+    use_absolute_page_urls=False, add_sub_menus_inline=None, **kwargs
 ):
     """Render a section menu for the current section."""
-
     validate_supplied_values('section_menu', max_levels=max_levels,
                              use_specific=use_specific)
 
     if not show_multiple_levels:
         max_levels = 1
 
-    return app_settings.SECTION_MENU_CLASS.render_from_tag(
+    menu_class = settings.objects.SECTION_MENU_CLASS
+    return menu_class.render_from_tag(
         context=context,
         max_levels=max_levels,
         use_specific=use_specific,
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
         use_absolute_page_urls=use_absolute_page_urls,
+        add_sub_menus_inline=add_sub_menus_inline,
         template_name=template,
         sub_menu_template_name=sub_menu_template,
+        sub_menu_template_names=split_if_string(sub_menu_templates),
         show_section_root=show_section_root,
         **kwargs
     )
@@ -105,16 +117,17 @@ def section_menu(
 def children_menu(
     context, parent_page=None, allow_repeating_parents=True,
     apply_active_classes=False,
-    max_levels=app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS,
-    template='', sub_menu_template='',
-    use_specific=app_settings.DEFAULT_CHILDREN_MENU_USE_SPECIFIC,
-    use_absolute_page_urls=False, **kwargs
+    max_levels=settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS,
+    template='', sub_menu_template='', sub_menu_templates=None,
+    use_specific=settings.DEFAULT_CHILDREN_MENU_USE_SPECIFIC,
+    use_absolute_page_urls=False, add_sub_menus_inline=None, **kwargs
 ):
     validate_supplied_values(
         'children_menu', max_levels=max_levels, use_specific=use_specific,
         parent_page=parent_page)
 
-    return app_settings.CHILDREN_MENU_CLASS.render_from_tag(
+    menu_class = settings.objects.CHILDREN_MENU_CLASS
+    return menu_class.render_from_tag(
         context=context,
         parent_page=parent_page,
         max_levels=max_levels,
@@ -122,8 +135,10 @@ def children_menu(
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
         use_absolute_page_urls=use_absolute_page_urls,
+        add_sub_menus_inline=add_sub_menus_inline,
         template_name=template,
         sub_menu_template_name=sub_menu_template,
+        sub_menu_template_names=split_if_string(sub_menu_templates),
         **kwargs
     )
 
@@ -132,7 +147,7 @@ def children_menu(
 def sub_menu(
     context, menuitem_or_page, use_specific=None, allow_repeating_parents=None,
     apply_active_classes=None, template='', use_absolute_page_urls=None,
-    **kwargs
+    add_sub_menus_inline=None, **kwargs
 ):
     """
     Retrieve the children pages for the `menuitem_or_page` provided, turn them
@@ -142,12 +157,12 @@ def sub_menu(
                              menuitem_or_page=menuitem_or_page)
 
     max_levels = context.get(
-        'max_levels', app_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS
+        'max_levels', settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS
     )
 
     if use_specific is None:
         use_specific = context.get(
-            'use_specific', app_settings.USE_SPECIFIC_AUTO)
+            'use_specific', constants.USE_SPECIFIC_AUTO)
 
     if apply_active_classes is None:
         apply_active_classes = context.get('apply_active_classes', True)
@@ -157,6 +172,9 @@ def sub_menu(
 
     if use_absolute_page_urls is None:
         use_absolute_page_urls = context.get('use_absolute_page_urls', False)
+
+    if add_sub_menus_inline is None:
+        add_sub_menus_inline = context.get('add_sub_menus_inline', False)
 
     if isinstance(menuitem_or_page, Page):
         parent_page = menuitem_or_page
@@ -176,6 +194,7 @@ def sub_menu(
         apply_active_classes=apply_active_classes,
         allow_repeating_parents=allow_repeating_parents,
         use_absolute_page_urls=use_absolute_page_urls,
+        add_sub_menus_inline=add_sub_menus_inline,
         template_name=template,
         **kwargs
     )

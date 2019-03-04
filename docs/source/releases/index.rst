@@ -5,6 +5,12 @@ Release notes
 .. toctree::
     :maxdepth: 1
 
+    2.13
+    2.12
+    2.11.1
+    2.11
+    2.10.0
+    2.9.0
     2.8.0
     2.7.1
     2.7.0
@@ -33,5 +39,5 @@ Release notes
     2.0.1
     2.0.0
 
-Release notes for versions preceeding ``v2.0.0`` can be found on Github:
+Release notes for versions preceding ``v2.0.0`` can be found on GitHub:
 https://github.com/rkhleics/wagtailmenus/releases?after=v2.0.0

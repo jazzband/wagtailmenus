@@ -1,13 +1,13 @@
-class RemovedInWagtailMenus29Warning(DeprecationWarning):
+class RemovedInWagtailMenus3Warning(DeprecationWarning):
     pass
 
 
-removed_in_next_version_warning = RemovedInWagtailMenus29Warning
+removed_in_next_version_warning = RemovedInWagtailMenus3Warning
 
 
-class RemovedInWagtailMenus210Warning(PendingDeprecationWarning):
+class RemovedInWagtailMenus31Warning(PendingDeprecationWarning):
     pass
 
 
-class RemovedInWagtailMenus211Warning(PendingDeprecationWarning):
+class RemovedInWagtailMenus32Warning(PendingDeprecationWarning):
     pass

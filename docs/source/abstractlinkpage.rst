@@ -9,7 +9,7 @@ Because main and flat menus only allow editors to define the top-level items in 
 
 Just like menu items defined for a menu via the CMS, link pages can link to other pages or custom URLs, and if linking to another page, the link will automatically become hidden if the target page is unpublished, expires, or is set to no longer show in menus. It will also appear again if the target page is published or set to show in menus again.
 
-By default, link pages are not allowed to have children pages, and shouldn't appear in wagtail-generated sitemaps or search results.
+By default, link pages are not allowed to have children pages, and shouldn't appear in wagtail-generated site maps or search results.
 
 
 .. _implementing_abstractlinkpage:
@@ -33,7 +33,7 @@ Like ``MenuPage``, ``AbstractLinkPage`` is an abstract model, so in order to use
             pass
 
 
-2.   Create migtations for any models you've updated by running:
+2.   Create migrations for any models you've updated by running:
     
     .. code-block:: console
 

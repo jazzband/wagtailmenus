@@ -1,0 +1,12 @@
+{% extends 'wagtailmenus/includes/header.html' %}
+
+{% block right_content %}
+    {% if site_switcher %}
+        <form method="get" id="settings-site-switch">
+            <label for="{{ site_switcher.site.id_for_label }}">
+                Site:
+            </label>
+            {{ site_switcher.site }}
+        </form>
+    {% endif %}  
+{% endblock %}

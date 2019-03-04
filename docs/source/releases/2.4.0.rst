@@ -14,7 +14,7 @@ Check out the new documentation!
 --------------------------------
 
 It's been a long wait, but I finally got around to making it happen. Wagtailmenus now has
-easily navigatable and searchable documentation, kindly hosted by readthedocs.org. Find it at http://wagtailmenus.readthedocs.io/
+easily navigable and searchable documentation, kindly hosted by ``readthedocs.org``. Find it at http://wagtailmenus.readthedocs.io/
 
 
 New ``get_text_for_repeated_menu_item()`` method on ``MenuPageMixin`` and ``MenuPage`` models
@@ -22,14 +22,14 @@ New ``get_text_for_repeated_menu_item()`` method on ``MenuPageMixin`` and ``Menu
 
 The new method is called by ``get_repeated_menu_item()`` to get a string to use to populate the ``text`` attribute on repeated menu items.
 
-The method is designed to be overriden in cases where the text value needs to come from different fields. e.g. in multilingual site where different translations of 'repeated_item_text' must be surfaced.
+The method is designed to be overridden in cases where the text value needs to come from different fields. e.g. in multilingual site where different translations of 'repeated_item_text' must be surfaced.
 
 By default, if the ``repeated_item_text`` field is left blank, the ``WAGTAILMENUS_PAGE_FIELD_FOR_MENU_ITEM_TEXT`` is respected, instead of
 just returning ``Page.title``.
 
 
-New ``use_absolute_page_urls`` param added to template tags
------------------------------------------------------------
+New ``use_absolute_page_urls`` parameter added to template tags
+---------------------------------------------------------------
 
 The new parameter allows you to render menus that use 'absolute' URLs
 for pages (including the protocol/domain derived from the relevant 
@@ -52,7 +52,7 @@ Upgrade considerations
 
 The signature of the ``modify_submenu_items()`` and ``get_repeated_menu_item()`` methods on ``MenuPage`` and ``MenuPageMixin`` models has been updated to accept a new ``use_absolute_page_urls`` keyword argument.
 
-If you're overrding either of these methods in your project, you should think about updating the signatures of those methods to accept
+If you're overriding either of these methods in your project, you should think about updating the signatures of those methods to accept
 the new argument and pass it through when calling ``super()``, like in the following example:
 
 .. code-block:: python

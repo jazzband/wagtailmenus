@@ -1,10 +1,101 @@
 Changelog
 =========
 
-2.X.X (XX.XX.XXXX) IN DEVELOPMENT
-----------------------------------
+2.13a (XX.XX.XXXX)
+------------------
 
-TBA
+* Dropped support for ``relative_url()`` methods on custom menu item models that do not support a ``request`` keyword argument.
+* Added support for Wagtail 2.4.
+* Added support for Wagtail 2.3.
+* Added support for Django 2.1.
+* Minor documentation updates (OktayAltay).
+* Updated ``MenuPage.get_repeated_menu_item()`` to nullify `sub_menu` on the copy to reduce likelihood of infinite recursion errors.
+* Updated ``Menu._prime_menu_item()`` to set `sub_menu` to None if no new value is being added, to reduce likelihood of infinite recursion errors.
+* Updated ``SectionMenu.prepare_to_render()`` to augment ``root_page`` with 'text', 'href' and 'active_class' attributes, so that it no longer has to be done in ``SectionMenu.get_context_data()``.
+
+
+2.12 (17.11.2018)
+-----------------
+
+* Changed the signature of ``Menu.render_from_tag()`` to better indicate common expected/supported arguments for menus.
+* Added a custom ``render_from_tag()`` method for each individual menu class, with a signature that highlights all relevant options, including those specific to that menu type.
+* Renamed ``Menu.get_contextual_vals_from_context()`` to ``Menu._create_contextualvals_obj_from_context()`` to give a better
+indication of what the method does.
+* Renamed ``Menu.get_option_vals_from_options`` to ``Menu._create_optionvals_obj_from_values()`` to give a better indication of what the method does.
+* Added the ``Menu.get_from_collected_values()`` method, which replaces ``Menu.get_instance_for_rendering()`` for menu classes that also inherit from ``django.db.models.Model``.
+* Added the ``Menu.create_from_collected_values()`` method, which replaces ``Menu.get_instance_for_rendering()`` for menu classes that **do not** inherit from ``django.db.models.Model``.
+* Added the ``add_sub_menu_items_inline`` option to all template tags. When ``True``, ``SubMenu`` objects are automatically created and set as an attribute for each menu item (where appropriate), allowing developers to render multi-level menus without having to use the ``{% sub_menu %}`` tag.
+* Added the ``WAGTAILMENUS_DEFAULT_ADD_SUB_MENUS_INLINE`` setting to allow developers to change the default ``add_sub_menu_items_inline`` option value for all template tags.
+* Fixed a bug in ``Menu.get_common_hook_kwargs()`` where the value of ``self.max_levels`` was being used as the value for ``use_specific`` (instead of ``self.use_specific``).
+* Changed the "Rendering setings" (typo) heading in ``panels.menu_settings_panels`` to "Render settings".
+* Removed support for the deprecated ``WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH`` setting. 
+* Removed support for the deprecated ``WAGTAILMENUS_SECTION_MENU_CLASS_PATH`` setting.
+* Removed the deprecated ``wagtailmenus.constants`` module.
+
+
+2.11.1 (10.09.2018)
+-------------------
+
+* Fixed an issue with the section menu in the release notes section of the docs.
+* Updated tox config to test against Python 3.7 and Wagtail 2.2.
+* Updated Travis CI config to deploy to PyPi automatically when commits are tagged appropriately.
+* Pinned django-cogwheels dependency to version 0.2 to reduce potential for backwards-incompatibility issues.
+
+
+2.11.0 (15.07.2018)
+-------------------
+
+* Added support for Wagtail version 2.1.
+* Dropped support for Wagtail versions 1.10 to 1.13.
+* Dropped support for Django versions 1.8 to 1.10.
+* Updated trove classifiers in `setup.py` to reflect Django and Wagtail version support.
+* Updated `runtests.py` to pass on any unparsed option arguments to Django's test method.
+* Updated `runtests.py` to filter out deprecation warnings originating from other apps by default. 
+* Updated `MenuItem.relative_url()` to accept a `request` parameter (for parity with `wagtail.core.models.Page.relative_url()`), so that it can pass it on to the page method.
+* Updated `Menu.prime_menu_items()` to send the current `HttpRequest` to that `MenuItem.relative_url()` and `Page.relative_url()`.
+* Updated admin views to utilise `wagtail.admin.messages.validation_error()` for reporting field-specific and non-field errors.
+* Removed redundant `install_requires` line from `setup.py`. Compatibility is made clear in other places - there's no need to force a minimum installed Wagtail version here. 
+* Moved custom `wagtail.contrib.modeladmin` classes out of `wagtailmenus.wagtail_hooks` and into a new `wagtailmenus.modeladmin` module.
+* Added the `WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS` setting to allow the default `ModelAdmin` class used to enable flat menu editing in the Wagtail admin area to be swapped out for a custom one. 
+* Added the `WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS` setting to allow the default `ModelAdmin` class used to enable main menu editing in the Wagtail admin area to be swapped out for a custom one. 
+* Replaced custom app settings module with `django-cogwheels` and removed a lot of the tests that existed to test its workings.
+* Moved remaining app settings tests to `wagtailmenus.conf.tests`.
+
+
+
+2.10.0 (14.06.2018)
+-------------------
+
+* Optimised MenuWithMenuItems.get_top_level_items() and AbstractFlatMenu.get_for_site() to use fewer database queries to render menus.
+* Configured `sphinxcontrib.spelling` and used to correct spelling errors in docs.
+* Updated testing and documentation dependencies.
+* Moved `wagtailmenus.constants` and `wagtailmenus.app_settings` into a new `wagtailmenus.conf` app
+* Refactored the app settings module to be DRYer and more generic
+* Remove `FLAT_MENU_MODEL_CLASS` and `MAIN_MENU_MODEL_CLASS` app settings attributes in favour of using the app settings module's `get_model()` method to return Django models when needed.
+* Deprecated the ``WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH`` setting in favour of using just ``WAGTAILMENUS_CHILDREN_MENU_CLASS``.
+* Deprecated the ``WAGTAILMENUS_SECTION_MENU_CLASS_PATH`` setting in favour of using just ``WAGTAILMENUS_SECTION_MENU_CLASS``.
+* Added Latin American Spanish translations (thanks to José Luis).
+
+
+2.9.0 (06.05.2018)
+------------------
+
+* Added `WAGTAILMENUS_MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN` setting to the 'Main menu' menu item and underlying management functionality to be removed from the Wagtail admin area (thanks to Michael van de Waeter).
+* Added `WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN` setting to the 'Flat menus' menu item and underlying management functionality to be removed from the Wagtail admin area (thanks to Michael van de Waeter).
+* Added the 'sub_menu_templates' option to menu tags to allow sub menu templates to be specified for each level.
+* Updated 'get_template_names()' and 'get_sub_menu_template_names()' methods for each class to search for template paths including the level currently being rendered, allowing developers to define level-specific templates in their templates directory, and have wagtailmenus find and use them automatically.
+
+
+2.8.0 (29.03.2018)
+------------------
+
+* Added improved active class attribution behaviour for menu items that link to custom URLs (Enabled using the `WAGTAILMENUS_CUSTOM_URL_SMART_ACTIVE_CLASSES` setting).
+* Deprecated the existing active class attribution behaviour in favour of the above.
+* Backend-specific template instances are now always used for rendering.
+* Removed `get_template_engine()` method from `wagtailmenus.models.menus.Menu`
+* Removed `panels` attributes from the `AbstractMainMenu` and `AbstractFlatMenu` models
+* Removed `main_menu_panels` and `flat_menu_panels` from `wagtailmenus.panels`.
+* Various documentation spelling/formatting corrections (thanks to Sergey Fedoseev and Pierre Manceaux).
 
 
 2.7.1 (07.03.2018)

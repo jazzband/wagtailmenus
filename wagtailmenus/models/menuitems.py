@@ -1,18 +1,14 @@
 from urllib.parse import urlparse
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.fields import ParentalKey
-from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
-    from wagtail.core.models import Page, Orderable
-else:
-    from wagtail.wagtailadmin.edit_handlers import FieldPanel, PageChooserPanel
-    from wagtail.wagtailcore.models import Page, Orderable
+from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
+from wagtail.core.models import Page, Orderable
 
-from .. import app_settings
-from ..managers import MenuItemManager
+from wagtailmenus.conf import settings
+from wagtailmenus.managers import MenuItemManager
 
 
 #########################################################
@@ -89,14 +85,16 @@ class AbstractMenuItem(models.Model, MenuItem):
             return ''
         return getattr(
             self.link_page,
-            app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
+            settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT,
             self.link_page.title
         )
 
-    def relative_url(self, site=None):
+    def relative_url(self, site=None, request=None):
         if self.link_page:
             try:
-                return self.link_page.relative_url(site) + self.url_append
+                page_url = self.link_page.get_url(
+                    request=request, current_site=site)
+                return page_url + self.url_append
             except TypeError:
                 return ''
         return self.link_url + self.url_append
@@ -104,13 +102,8 @@ class AbstractMenuItem(models.Model, MenuItem):
     def get_full_url(self, request=None):
         if self.link_page:
             try:
-                # Try for 'get_full_url' method (added in Wagtail 1.11) or fall
-                # back to 'full_url' property
-                if hasattr(self.link_page, 'get_full_url'):
-                    full_url = self.link_page.get_full_url(request=request)
-                else:
-                    full_url = self.link_page.full_url
-                return full_url + self.url_append
+                page_url = self.link_page.get_full_url(request=request)
+                return page_url + self.url_append
             except TypeError:
                 return ''
         return self.link_url + self.url_append
@@ -128,22 +121,20 @@ class AbstractMenuItem(models.Model, MenuItem):
         super().clean(*args, **kwargs)
 
     def get_active_class_for_request(self, request=None):
-        # Returns the 'active_class' for a custom link item.
-        if app_settings.CUSTOM_URL_SMART_ACTIVE_CLASSES:
-            # new behaviour
-            parsed_url = urlparse(self.link_url)
-            if parsed_url.netloc:
-                return ''
-            if request.path == parsed_url.path:
-                return app_settings.ACTIVE_CLASS
-            if (
-                request.path.startswith(parsed_url.path) and
-                parsed_url.path != '/'
-            ):
-                return app_settings.ACTIVE_ANCESTOR_CLASS
-        if self.link_url == request.path:
-            # previous behaviour
-            return app_settings.ACTIVE_CLASS
+        """
+        Return the most appropriate 'active_class' for this menu item (only
+        used when 'link_url' is used instead of 'link_page').
+        """
+        parsed_url = urlparse(self.link_url)
+        if parsed_url.netloc:
+            return ''
+        if request.path == parsed_url.path:
+            return settings.ACTIVE_CLASS
+        if (
+            request.path.startswith(parsed_url.path) and
+            parsed_url.path != '/'
+        ):
+            return settings.ACTIVE_ANCESTOR_CLASS
         return ''
 
     def __str__(self):

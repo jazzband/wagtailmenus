@@ -1,12 +1,8 @@
 from django.db import models
 from modelcluster.fields import ParentalKey
-from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.admin.edit_handlers import (
-        FieldPanel, MultiFieldPanel, PageChooserPanel)
-else:
-    from wagtail.wagtailadmin.edit_handlers import (
-        FieldPanel, MultiFieldPanel, PageChooserPanel)
+from wagtail.admin.edit_handlers import (
+    FieldPanel, MultiFieldPanel, PageChooserPanel)
+
 from wagtailmenus.models import (
     SectionMenu, ChildrenMenu, AbstractMainMenu,
     AbstractMainMenuItem, AbstractFlatMenu, AbstractFlatMenuItem)
@@ -20,6 +16,11 @@ class CustomChildrenMenu(ChildrenMenu):
 
 class CustomSectionMenu(SectionMenu):
     sub_menu_template_name = "menus/custom-overrides/section-sub.html"
+
+    @classmethod
+    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+        # To be removed in v3
+        return super().get_instance_for_rendering(contextual_vals, option_vals)
 
 
 class MultilingualMenuItem(models.Model):
@@ -88,6 +89,21 @@ class FlatMenuCustomMenuItem(MultilingualMenuItem, AbstractFlatMenuItem):
 
 class CustomMainMenu(AbstractMainMenu):
     panels = AbstractMainMenu.content_panels + AbstractMainMenu.settings_panels
+
+    @classmethod
+    def get_contextual_vals_from_context(cls, context):
+        # To be removed in v3
+        return super().get_contextual_vals_from_context(context)
+
+    @classmethod
+    def get_option_vals_from_options(cls, **kwargs):
+        # To be removed in v3
+        return super().get_option_vals_from_options(**kwargs)
+
+    @classmethod
+    def get_instance_for_rendering(cls, contextual_vals, option_vals):
+        # To be removed in v3
+        return super().get_instance_for_rendering(contextual_vals, option_vals)
 
 
 class CustomFlatMenu(AbstractFlatMenu):

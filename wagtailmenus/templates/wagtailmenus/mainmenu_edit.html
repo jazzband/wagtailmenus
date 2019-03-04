@@ -1,56 +1,18 @@
 {% extends "modeladmin/create.html" %}
 {% load i18n %}
 
-{% block content %}
-    
-    <header class="nice-padding merged">
-        <div class="row">
-            <div class="left">
-                <div class="col">
-                    <h1 class="icon icon-{{ view.header_icon }}">
-                        {% trans view.page_title %}
-                        <span>{{ view.get_page_subtitle }}</span>
-                    </h1>
-                </div>
-            </div>
-            <div class="right">
-                {% if site_switcher %}
-                <form method="get" id="settings-site-switch">
-                    <label for="{{ site_switcher.site.id_for_label }}">
-                        Site:
-                    </label>
-                    {{ site_switcher.site }}
-                </form>
-                {% endif %}
-            </div>
-        </div>
-    </header>
-
-    <form action="?" method="POST">
-        {% csrf_token %}
-
-        {{ edit_handler.render_form_content }}
-        
-        <footer>
-            <ul>
-                <li class="actions">
-                    {% block form_actions %}
-                        <div class="dropdown dropup match-width">
-                            <input type="submit" value="{% trans 'Save' %}" class="button" />
-                        </div>
-                    {% endblock %}
-                </li>
-            </ul>
-        </footer>
-        
-    </form>
+{% block header %}
+    {% include "wagtailmenus/includes/header_with_site_switcher.html" with title=view.page_title subtitle=view.get_page_subtitle icon=view.header_icon %}
 {% endblock %}
+
+{% block form_action %}?{% endblock %}
 
 {% block extra_css %}
     {% include "wagtailadmin/pages/_editor_css.html" %}
     {{ edit_handler.form.media.css }}
     {{ view.media.css }}
 {% endblock %}
+
 {% block extra_js %}
     {% include "wagtailadmin/pages/_editor_js.html" %}
     {{ edit_handler.form.media.js }}

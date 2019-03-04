@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.utils.functional import SimpleLazyObject
-from . import app_settings
-from .utils.misc import get_site_from_request
+from wagtailmenus.conf import constants, settings
+from wagtailmenus.utils.misc import get_site_from_request
 
 
 def wagtailmenus(request):
@@ -14,8 +14,8 @@ def wagtailmenus(request):
         match = None
         site = get_site_from_request(request, fallback_to_default=True)
 
-        guess_pos = app_settings.GUESS_TREE_POSITION_FROM_PATH
-        sroot_depth = app_settings.SECTION_ROOT_DEPTH
+        guess_pos = settings.GUESS_TREE_POSITION_FROM_PATH
+        sroot_depth = settings.SECTION_ROOT_DEPTH
 
         if guess_pos and not current_page:
             path_components = [pc for pc in request.path.split('/') if pc]
@@ -55,8 +55,8 @@ def wagtailmenus(request):
 
     return {
         'wagtailmenus_vals': SimpleLazyObject(_get_value_dict),
-        'USE_SPECIFIC_OFF': app_settings.USE_SPECIFIC_OFF,
-        'USE_SPECIFIC_AUTO': app_settings.USE_SPECIFIC_AUTO,
-        'USE_SPECIFIC_TOP_LEVEL': app_settings.USE_SPECIFIC_TOP_LEVEL,
-        'USE_SPECIFIC_ALWAYS': app_settings.USE_SPECIFIC_ALWAYS,
+        'USE_SPECIFIC_OFF': constants.USE_SPECIFIC_OFF,
+        'USE_SPECIFIC_AUTO': constants.USE_SPECIFIC_AUTO,
+        'USE_SPECIFIC_TOP_LEVEL': constants.USE_SPECIFIC_TOP_LEVEL,
+        'USE_SPECIFIC_ALWAYS': constants.USE_SPECIFIC_ALWAYS,
     }

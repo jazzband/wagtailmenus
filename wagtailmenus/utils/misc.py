@@ -1,10 +1,6 @@
-from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core.models import Page, Site
-else:
-    from wagtail.wagtailcore.models import Page, Site
+from wagtail.core.models import Page, Site
 
-from ..models.menuitems import MenuItem
+from wagtailmenus.models.menuitems import MenuItem
 
 
 def get_site_from_request(request, fallback_to_default=True):

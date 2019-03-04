@@ -185,7 +185,7 @@ There are two hooks you can use to modify menu items, which are called at differ
 menus_modify_raw_menu_items
 ---------------------------
 
-This hook allows you to modify the list **before** it is 'primed' (a process that sets 'href', 'text', 'active_class' and 'has_children_in_menu' attributes on each item), and **before** being sent to a parent page's 'modify_submenu_items()' method for further modification (see :ref:`manipulating_submenu_items`).
+This hook allows you to modify the list **before** it is 'primed' (a process that sets ``href``, ``text``, ``active_class`` and ``has_children_in_menu`` attributes on each item), and **before** being sent to a parent page's ``modify_submenu_items()`` method for further modification (see :ref:`manipulating_submenu_items`).
 
 .. NOTE::
     The below example shows only a subset of the arguments that are passed to methods using this hook. For a full list of the arguments supplied, see the :ref:`hooks_argument_reference` below.
@@ -217,7 +217,7 @@ This hook allows you to modify the list **before** it is 'primed' (a process tha
         return menu_items  # always return a list
 
 
-The modified list of menu items will then continue to be processed as normal, being passed to the menu's 'prime_menu_items()' method for priming, and then on to the parent page's 'modify_submenu_items()' for further modification.
+The modified list of menu items will then continue to be processed as normal, being passed to the menu's 'prime_menu_items()' method for priming, and then on to the parent page's ``modify_submenu_items()`` for further modification.
 
 
 .. _menus_modify_primed_menu_items:
@@ -225,7 +225,7 @@ The modified list of menu items will then continue to be processed as normal, be
 menus_modify_primed_menu_items
 ------------------------------
 
-This hook allows you to modify the list of items **after** they have been 'primed' and the modified by a parent page's 'modify_submenu_items()' methods (see :ref:`manipulating_submenu_items`).
+This hook allows you to modify the list of items **after** they have been 'primed' and the modified by a parent page's ``modify_submenu_items()`` methods (see :ref:`manipulating_submenu_items`).
 
 .. NOTE::
     The below example shows only a subset of the arguments that are passed to methods using this hook. For a full list of the arguments supplied, see the :ref:`hooks_argument_reference` below.
@@ -279,7 +279,7 @@ Below is a full list of the additional arguments that are passed to methods usin
     If the menu being rendered is showing 'children' of a specific page, this will be the ``Page`` instance who's children pages are being displayed. The value might also be ``None`` if no parent page is involved. For example, if rendering the top level items of a main or flat menu.
 
 ``menu_tag``
-    The name of the tag that was called to render the current part of the menu. If rendering the first level of a menu, this will have the same value as ``original_menu_tag``. If not, it will have the value `'sub_menu'` (unless you're using custom tags that pass a different 'tag_name' value to the menu classe's 'render_from_tag' method)
+    The name of the tag that was called to render the current part of the menu. If rendering the first level of a menu, this will have the same value as ``original_menu_tag``. If not, it will have the value `'sub_menu'` (unless you're using custom tags that pass a different 'tag_name' value to the menu class's 'render_from_tag' method)
 
 ``original_menu_tag``
     The name of the tag that was called to initiate rendering of the menu that is currently being rendered. For example, if you're using the ``main_menu`` tag to render a multi-level main menu, even though ``sub_menu`` may be called to render subsequent additional levels, 'original_menu_tag' should retain the value ``'main_menu'``. Should be one of: ``'main_menu'``, ``'flat_menu'``, ``'section_menu'`` or ``'children_menu'``. Comparable to the ``menu_type`` values supplied to other hooks.
@@ -294,13 +294,13 @@ Below is a full list of the additional arguments that are passed to methods usin
     An integer value indicating the 'level' or 'depth' that is currently being rendered in the process of rendering a multi-level menu. This will start at `1` for the first/top-level items of a menu, and increment by `1` for each additional level.
 
 ``max_levels``
-    An integer value indicatiing the maxiumum number of levels that should be rendered for the current menu. This will either have been specified by the developer using the ``max_levels`` argument of a menu tag, or might have been set in the CMS for a specific ``MainMenu`` or ``FlatMenu`` instance. 
+    An integer value indicating the maximum number of levels that should be rendered for the current menu. This will either have been specified by the developer using the ``max_levels`` argument of a menu tag, or might have been set in the CMS for a specific ``MainMenu`` or ``FlatMenu`` instance. 
 
 ``current_site``
     A Wagtail ``Site`` instance, indicating the site that the current request is for (usually also available as ``request.site``)
 
 ``current_page``
-    A Wagtail ``Page`` instance, indicating what wagtailmenus beleives to be the page that is currently being viewed / requested by a user. This might be ``None`` if you're using additional views in your project to provide functionality at URLs that don't map to a ``Page`` in Wagtail.
+    A Wagtail ``Page`` instance, indicating what wagtailmenus believes to be the page that is currently being viewed / requested by a user. This might be ``None`` if you're using additional views in your project to provide functionality at URLs that don't map to a ``Page`` in Wagtail.
 
 ``current_page_ancestor_ids``
     A list of ids of ``Page`` instances that are an 'ancestor' of ``current_page``.

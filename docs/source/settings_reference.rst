@@ -50,11 +50,42 @@ For example, if your project uses an 'info' menu in the header, a 'footer' menu 
 
 .. code-block:: python
 
+    # settings.py
+
     WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES = (
         ('info', 'Info'),
         ('help', 'Help'),
         ('footer', 'Footer'),
     )
+
+
+.. _FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN:
+
+``WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Default value: ``True``
+
+By default, 'Flat menus' are editable in the Wagtail CMS. Setting this to `False` in your project's settings will disable editing 'Flat menus' in the Wagtail CMS.
+
+
+.. _FLAT_MENUS_MODELADMIN_CLASS:
+
+``WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Default value: ``'wagtailmenus.modeladmin.FlatMenuAdmin'``
+
+If you wish to override the ``ModelAdmin`` class used to represent **'Flat menus'** in the Wagtail admin area for your project (e.g. to display additional custom fields in the listing view, or change/add new views), you can do so by using this setting to swap out the default class for a custom one. e.g.
+
+.. code-block:: python
+
+    # settings.py
+
+    WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS = "projectname.appname.modulename.ClassName"
+
+
+The value should be an import path string, rather than a direct pointer to the class itself. wagtailmenus will lazily import the class from this path when it is required. If the path is invalid, an ``ImproperlyConfigured`` exception will be raised.
 
 
 .. _MAINMENU_MENU_ICON:
@@ -65,6 +96,34 @@ For example, if your project uses an 'info' menu in the header, a 'footer' menu 
 Default value: ``'list-ol'``
 
 Use this to change the icon used to represent 'Main menus' in the Wagtail CMS.
+
+
+.. _MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN:
+
+``WAGTAILMENUS_MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Default value: ``True``
+
+By default, 'Main menus' are editable in the Wagtail CMS. Setting this to `False` in your project's settings will disable editing 'Main menus' in the Wagtail CMS.
+
+
+.. _MAIN_MENUS_MODELADMIN_CLASS:
+
+``WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Default value: ``'wagtailmenus.modeladmin.MainMenuAdmin'``
+
+If you wish to override the ``ModelAdmin`` class used to represent **'Main menus'** in the Wagtail admin area for your project (e.g. to display additional custom fields in the listing view, or change/add new views), you can do so by using this setting to swap out the default class for a custom one. e.g.
+
+.. code-block:: python
+
+    # settings.py
+
+    WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS = "projectname.appname.modulename.ClassName"
+
+The value should be an import path string, rather than a direct pointer to the class itself. Wagtailmenus will lazily import the class from this path when it is required. If the path is invalid, and ``ImproperlyConfigured`` exception will be raised.
 
 
 ----------------------------------------------
@@ -129,7 +188,17 @@ The name of the template used for rendering by the ``{% sub_menu %}`` tag when n
 
 Default value: ``False``
 
-If you have a multi-site project where each site may require it's own set of menu templates, you can change this setting to ``True`` to have wagtailmenus automatically look in additional site-specific locations when finding templates for rendering. 
+If you have a multi-site project, and want to be able to use different templates for some or all of those sites, wagtailmenus can be configured to look for additional 'site specific' paths for each template. To enable this feature, you add the following to your project's settings:
+
+.. code-block:: python
+    
+    # settings.py
+
+    WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS = True
+
+With this set, menu tags will attempt to identify the relevant ``wagtail.core.models.Site`` instance for the current ``request``. Wagtailmenus will then look for template names with the ``domain`` value of that ``Site`` object in their path.
+
+For more information about where wagtailmenus looks for templates, see: :ref:`custom_templates_auto`
 
 
 ------------------------------
@@ -155,6 +224,20 @@ The default value used for ``fall_back_to_default_site_menus`` option of the ``{
 Default value: ``True``
 
 When not using wagtail's routing/serving mechanism to serve page objects, wagtailmenus can use the request path to attempt to identify a 'current' page, 'section root' page, allowing ``{% section_menu %}`` and active item highlighting to work. If this functionality is not required for your project, you can disable it by setting this value to ``False``.
+
+
+.. _DEFAULT_ADD_SUB_MENUS_INLINE:
+
+``WAGTAILMENUS_DEFAULT_ADD_SUB_MENUS_INLINE``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.12
+
+Default value: ``False``
+
+For all menu types, when preparing menu items for rendering, sub menus are not added to menu items directly by default, because it's more common for developers to use the ``{% sub_menu %}`` tag in a menu templates to render additional branches of the menu. In which case, the sub menu is created by the tag.
+
+This behaviour can be overridden on an 'individual use' basis by utilising the ``add_sub_menus_inline`` option available for each template tag. However, users wishing to change the default behaviour (so that sub menus are appended directly to menu items, without having to specify) can do so by providing a value of ``True`` in their project settings.
 
 
 .. _DEFAULT_CHILDREN_MENU_MAX_LEVELS:
@@ -210,16 +293,16 @@ Menu class and model override settings
 --------------------------------------
 
 
-.. _CHILDREN_MENU_CLASS_PATH:
+.. _CHILDREN_MENU_CLASS:
 
-``WAGTAILMENUS_CHILDREN_MENU_CLASS_PATH``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``WAGTAILMENUS_CHILDREN_MENU_CLASS``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Default value: ``'wagtailmenus.models.menus.ChildrenMenu'``
 
 Use this to specify a custom menu class to be used by wagtailmenus' ``children_menu`` tag. The value should be the import path of your custom class as a string, e.g. ``'mysite.appname.models.CustomClass'``. 
 
-For more details see: :ref:`custom_childrenmenu_class`
+For more details see: :ref:`custom_childrenmenu_class` 
 
 
 .. _FLAT_MENU_MODEL:
@@ -270,9 +353,9 @@ Use this to specify the 'related name' that should be used to access menu items 
 For more details see: :ref:`custom_main_menu_models`
 
 
-.. _SECTION_MENU_CLASS_PATH:
+.. _SECTION_MENU_CLASS:
 
-``WAGTAILMENUS_SECTION_MENU_CLASS_PATH``
+``WAGTAILMENUS_SECTION_MENU_CLASS``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Default value: ``'wagtailmenus.models.menus.SectionMenu'``
@@ -328,10 +411,11 @@ Default value: ``3``
 
 Use this to specify the 'depth' value of a project's 'section root' pages. For most Wagtail projects, this should be ``3`` (Root page depth = ``1``, Home page depth = ``2``), but it may well differ, depending on the needs of the project.
 
+
 .. _CUSTOM_URL_SMART_ACTIVE_CLASSES:
 
 ``WAGTAILMENUS_CUSTOM_URL_SMART_ACTIVE_CLASSES``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Default value: ``False``
 

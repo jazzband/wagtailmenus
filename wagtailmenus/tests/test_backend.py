@@ -1,22 +1,22 @@
+from importlib import reload
+from unittest.mock import call, patch
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
-from django.test import TransactionTestCase, override_settings, modify_settings
+from django.test import TestCase, TransactionTestCase, override_settings, \
+    modify_settings
 from django_webtest import WebTest
-from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.admin.edit_handlers import ObjectList, InlinePanel
-    from wagtail.core.models import Page, Site
-else:
-    from wagtail.wagtailadmin.edit_handlers import ObjectList, InlinePanel
-    from wagtail.wagtailcore.models import Page, Site
+from wagtail.admin.edit_handlers import ObjectList, InlinePanel
+from wagtail.core.models import Page, Site
 
-from wagtailmenus import get_flat_menu_model, get_main_menu_model
+from wagtailmenus import (
+    get_flat_menu_model, get_main_menu_model, wagtail_hooks
+)
 from wagtailmenus.panels import (
-    FlatMenuItemsInlinePanel, MainMenuItemsInlinePanel)
-
+    FlatMenuItemsInlinePanel, MainMenuItemsInlinePanel
+)
 from wagtailmenus.tests.models import LinkPage
-
 
 FlatMenu = get_flat_menu_model()
 
@@ -83,7 +83,7 @@ class CMSUsecaseTests(WebTest):
         response = form.submit()
 
         assert 'The flat menu could not be saved due to errors' in response
-        assert 'Site and handle must create a unique combination.' in response
+        assert 'Flat menu with this Site and Handle already exists.' in response
 
     def test_main_menu_save_success(self):
         edit_view = self.app.get(
@@ -260,16 +260,11 @@ class TestSuperUser(TransactionTestCase):
         self.assertTrue(isinstance(FlatMenuItemsInlinePanel(), InlinePanel))
         self.assertTrue(isinstance(MainMenuItemsInlinePanel(), InlinePanel))
 
-    """
-    TODO: Uncomment once wagtail-condensedinlinepanel releases a Wagtail 2.0
-    compatible version
-
     @modify_settings(INSTALLED_APPS={'append': 'condensedinlinepanel'})
     def test_panels_are_condensedinlinepanels(self):
         from condensedinlinepanel.edit_handlers import CondensedInlinePanel
         self.assertTrue(isinstance(FlatMenuItemsInlinePanel(), CondensedInlinePanel))
         self.assertTrue(isinstance(MainMenuItemsInlinePanel(), CondensedInlinePanel))
-    """
 
 
 class TestNonSuperUser(TransactionTestCase):

@@ -1,13 +1,7 @@
 from django.test import TestCase
 from django.core.management import call_command
-from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core.models import Site
-else:
-    # < Wagtail 2.0
-    from wagtail.wagtailcore.models import Site
-
-from wagtailmenus import app_settings
+from wagtail.core.models import Site
+from wagtailmenus.conf import settings
 
 
 class TestAutoPopulateMainMenus(TestCase):
@@ -16,7 +10,7 @@ class TestAutoPopulateMainMenus(TestCase):
     def setUp(self):
         super().setUp()
         # Delete any existing main menus and their items
-        self.model = app_settings.MAIN_MENU_MODEL_CLASS
+        self.model = settings.models.MAIN_MENU_MODEL
         self.model.objects.all().delete()
 
     def test_without_home_links(self):

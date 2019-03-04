@@ -12,15 +12,18 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+from wagtailmenus import __version__, VERSION
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
 
-from wagtailmenus import __version__, VERSION
+import os
+import sys
+sys.path.insert(0, os.path.abspath('.'))
+
+from filters import ContributorNamesFilter, MentionsFilter
+
 
 # -- General configuration ------------------------------------------------
 
@@ -31,10 +34,7 @@ from wagtailmenus import __version__, VERSION
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinxcontrib.spelling',
-]
+extensions = ['sphinxcontrib.spelling']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -67,7 +67,7 @@ release = __version__
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en_GB'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -84,7 +84,8 @@ todo_include_todos = False
 
 spelling_lang = 'en_GB'
 spelling_word_list_filename = 'spelling_wordlist.txt'
-
+spelling_show_suggestions = True
+spelling_filters = [ContributorNamesFilter, MentionsFilter]
 
 # -- Options for HTML output ----------------------------------------------
 

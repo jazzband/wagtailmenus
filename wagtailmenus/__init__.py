@@ -2,7 +2,7 @@ from wagtailmenus.utils.version import get_version, get_stable_branch_name
 
 # major.minor.patch.release.number
 # release must be one of alpha, beta, rc, or final
-VERSION = (2, 8, 0, 'alpha', 0)
+VERSION = (2, 13, 0, 'alpha', 0)
 __version__ = get_version(VERSION)
 stable_branch_name = get_stable_branch_name(VERSION)
 
@@ -16,8 +16,8 @@ def get_main_menu_model_string():
     main menu model (such as in foreign keys), but the model itself is not
     required.
     """
-    from wagtailmenus import app_settings
-    return app_settings.MAIN_MENU_MODEL
+    from wagtailmenus.conf import settings
+    return settings.MAIN_MENU_MODEL
 
 
 def get_flat_menu_model_string():
@@ -27,8 +27,8 @@ def get_flat_menu_model_string():
     flat menu model (such as in foreign keys), but the model itself is not
     required.
     """
-    from wagtailmenus import app_settings
-    return app_settings.FLAT_MENU_MODEL
+    from wagtailmenus.conf import settings
+    return settings.FLAT_MENU_MODEL
 
 
 def get_main_menu_model():
@@ -38,8 +38,8 @@ def get_main_menu_model():
     Defaults to the standard :class:`~wagtailmenus.models.MainMenu` model
     if no custom model is defined.
     """
-    from wagtailmenus import app_settings
-    return app_settings.MAIN_MENU_MODEL_CLASS
+    from wagtailmenus.conf import settings
+    return settings.models.MAIN_MENU_MODEL
 
 
 def get_flat_menu_model():
@@ -49,5 +49,5 @@ def get_flat_menu_model():
     Defaults to the standard :class:`~wagtailmenus.models.FlatMenu` model
     if no custom model is defined.
     """
-    from wagtailmenus import app_settings
-    return app_settings.FLAT_MENU_MODEL_CLASS
+    from wagtailmenus.conf import settings
+    return settings.models.FLAT_MENU_MODEL

@@ -14,11 +14,17 @@
 * Nguyễn Hồng Quân (hongquan)
 * Jérôme Lebleu (jeromelebleu)
 * Joshua C. Jackson (inostia)
+* Sergey Fedoseev (sir-sigurd)
+* Pierre Manceaux (pierremanceaux)
+* Michael van de Waeter (mvdwaeter)
+* Philipp Bosch (philippbosch) (A Color Bright)
+* Oktay Altay (OktayAltay)
+* Dan Bentley (danbentley)
 
 
 ## Translators
 
-* François GUÉRIN (frague59)
+* François Guérin (frague59)
 * Claudio Marinozzi (pyMan)
 * Pierre Geier (bloodywing)
 * Max Kurama (MaxKurama)
@@ -29,4 +35,5 @@
 * alyoung
 * Clarice Bianchini (claricebbcosta)
 * Jérôme Lebleu (jeromelebleu)
-
+* José Luis (SalahAdDin)
+* Abdulaziz Alfuhigi (3bdul3ziz)

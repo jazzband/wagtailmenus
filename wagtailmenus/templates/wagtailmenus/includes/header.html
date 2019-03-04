@@ -1,0 +1,13 @@
+<header class="merged tab-merged">
+    <div class="row nice-padding">
+        <div class="left">
+            <div class="col header-title">
+                <h1 class="icon icon-{{ icon }}">
+                {{ title }}{% if subtitle %} <span>{{ subtitle }}</span>{% endif %}</h1>
+            </div>
+        </div>
+        <div class="right">
+            {% block right_content %}{% endblock %}
+        </div>
+    </div>
+</header>

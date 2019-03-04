@@ -5,15 +5,11 @@ from django.db import models
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
-from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (2, 0):
-    from wagtail.core.models import Page
-else:
-    from wagtail.wagtailcore.models import Page
+from wagtail.core.models import Page
 
-from .. import app_settings
-from ..forms import LinkPageAdminForm
-from ..panels import menupage_settings_panels, linkpage_edit_handler
+from wagtailmenus.conf import settings
+from wagtailmenus.forms import LinkPageAdminForm
+from wagtailmenus.panels import menupage_settings_panels, linkpage_edit_handler
 
 
 class MenuPageMixin(models.Model):
@@ -91,8 +87,9 @@ class MenuPageMixin(models.Model):
         override this method if you're creating a multilingual site and you
         have different translations of 'repeated_item_text' that you wish to
         surface."""
+        source_field_name = settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT
         return self.repeated_item_text or getattr(
-            self, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT, self.title
+            self, source_field_name, self.title
         )
 
     def get_repeated_menu_item(
@@ -111,24 +108,20 @@ class MenuPageMixin(models.Model):
 
         # Set/reset 'href'
         if use_absolute_page_urls:
-            # Try for 'get_full_url' method (added in Wagtail 1.11) or fall
-            # back to 'full_url' property
-            if hasattr(self, 'get_full_url'):
-                url = self.get_full_url(request=request)
-            else:
-                url = self.full_url
+            url = self.get_full_url(request=request)
         else:
             url = self.relative_url(current_site)
         menuitem.href = url
 
         # Set/reset 'active_class'
         if apply_active_classes and self == current_page:
-            menuitem.active_class = app_settings.ACTIVE_CLASS
+            menuitem.active_class = settings.ACTIVE_CLASS
         else:
             menuitem.active_class = ''
 
-        # Set/reset 'has_children_in_menu'
+        # Set/reset 'has_children_in_menu' and 'sub_menu'
         menuitem.has_children_in_menu = False
+        menuitem.sub_menu = None
 
         return menuitem
 
@@ -191,25 +184,34 @@ class AbstractLinkPage(Page):
     def menu_text(self, request=None):
         """Return a string to use as link text when this page appears in
         menus."""
+        source_field_name = settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT
         if(
-            app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT != 'menu_text' and
-            hasattr(self, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT)
+            source_field_name != 'menu_text' and
+            hasattr(self, source_field_name)
         ):
-            return getattr(self, app_settings.PAGE_FIELD_FOR_MENU_ITEM_TEXT)
+            return getattr(self, source_field_name)
         return self.title
 
     def clean(self, *args, **kwargs):
         if self.link_page and isinstance(
             self.link_page.specific, AbstractLinkPage
         ):
-            msg = _("A link page cannot link to another link page")
-            raise ValidationError({'link_page': msg})
+            raise ValidationError({
+                'link_page': ValidationError(
+                    _("A link page cannot link to another link page"),
+                    code='invalid'
+                ),
+            })
         if not self.link_url and not self.link_page:
-            msg = _("Please choose an internal page or provide a custom URL")
-            raise ValidationError({'link_url': msg, 'link_page': msg})
+            raise ValidationError(
+                _("Please choose an internal page or provide a custom URL"),
+                code='invalid'
+            )
         if self.link_url and self.link_page:
-            msg = _("Linking to both a page and custom URL is not permitted")
-            raise ValidationError({'link_url': msg, 'link_page': msg})
+            raise ValidationError(
+                _("Linking to both a page and custom URL is not permitted"),
+                code='invalid'
+            )
         super().clean(*args, **kwargs)
 
     def link_page_is_suitable_for_display(
@@ -238,11 +240,11 @@ class AbstractLinkPage(Page):
         """
         if not self.show_in_menus:
             return False
-        if not self.link_page:
-            return True
-        return self.link_page_is_suitable_for_display()
+        if self.link_page:
+            return self.link_page_is_suitable_for_display()
+        return True
 
-    def get_sitemap_urls(self):
+    def get_sitemap_urls(self, request=None):
         return []  # don't include pages of this type in sitemaps
 
     def _url_base(self, request=None, current_site=None, full_url=False):
@@ -250,21 +252,13 @@ class AbstractLinkPage(Page):
         if self.link_url:
             return self.link_url
 
+        if not self.link_page:
+            return ''
+
         p = self.link_page.specific  # for tidier referencing below
         if full_url:
-            # Try for 'get_full_url' method (added in Wagtail 1.11) or fall
-            # back to 'full_url' property
-            if hasattr(p, 'get_full_url'):
-                return p.get_full_url(request=request)
-            return p.full_url
-
-        # Try for 'get_url' method (added in Wagtail 1.11) or fall back to
-        # established 'relative_url' method or 'url' property
-        if hasattr(p, 'get_url'):
-            return p.get_url(request=request, current_site=current_site)
-        if current_site:
-            return p.relative_url(current_site=current_site)
-        return p.url
+            return p.get_full_url(request=request)
+        return p.get_url(request=request, current_site=current_site)
 
     def get_url(self, request=None, current_site=None):
         try:

@@ -12,20 +12,27 @@ base_url = "https://github.com/rkhleics/wagtailmenus/"
 dowload_url = '%starball/v%s' % (base_url, __version__)
 branch_url = "%stree/stable/%s" % (base_url, stable_branch_name)
 
-# Testing dependencies
+# Essential dependencies
+requires = [
+    'django-cogwheels==0.2',
+]
+
 testing_extras = [
-    'django-webtest>=1.8.0',
-    'beautifulsoup4>=4.4.1,<4.5.02',
-    'coverage>=3.7.0',
-    'wagtail-condensedinlinepanel==0.3',
+    'beautifulsoup4<4.6.1,>=4.5.1',
+    'coverage>=4.5',
+    'django-webtest>=1.9,<1.10',
+    'wagtail-condensedinlinepanel>=0.5,<0.6',
 ]
 
 documentation_extras = [
     'pyenchant>=2.0',
-    'sphinxcontrib-spelling>=2.3.0',
-    'Sphinx>=1.3.1',
-    'sphinx-autobuild>=0.5.2',
-    'sphinx_rtd_theme>=0.1.8',
+    'Sphinx>=1.7.4',
+    'sphinxcontrib-spelling>=1.4',
+    'sphinx_rtd_theme>=0.3',
+]
+
+deployment_extras = [
+    'transifex-client',
 ]
 
 setup(
@@ -52,18 +59,20 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Framework :: Django',
-        'Framework :: Django :: 1.10',
         'Framework :: Django :: 1.11',
+        'Framework :: Django :: 2.0',
+        'Framework :: Django :: 2.1',
+        'Framework :: Wagtail :: 2',
         'Topic :: Internet :: WWW/HTTP',
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     ],
+    install_requires=requires,
     python_requires='>=3.4,<3.8',
-    install_requires=[
-        "wagtail>=1.10",
-    ],
     extras_require={
         'testing': testing_extras,
-        'docs': documentation_extras
+        'docs': documentation_extras,
+        'deployment': deployment_extras,
     },
 )

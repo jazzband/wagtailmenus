@@ -2,7 +2,7 @@
 Wagtailmenus 2.7.1 release notes
 ================================
 
-This is a maintenence release to fix a bug that was resulting in ``content_panels`` and ``setting_panels`` being ignored by Wagtail's editing UI when editing main or flat menus.
+This is a maintenance release to fix a bug that was resulting in ``content_panels`` and ``setting_panels`` being ignored by Wagtail's editing UI when editing main or flat menus.
 
 There have also been a few minor tweaks to the documentation, including:
 

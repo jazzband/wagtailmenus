@@ -8,7 +8,7 @@ Managing flat menus via the CMS
 The flat menu list
 ==================
 
-All of the flat menus created for a project will appear in the menu list page making it easy to find, update, copy or delete your menus later. As soon as you create menus for more than one site in a multi-site project, the listing page will give you additional information and filters to help manage your menus: 
+All of the flat menus created for a project will appear in the menu list page, making it easy to find, update, copy or delete your menus later. As soon as you create menus for more than one site in a multi-site project, the listing page will give you additional information and filters to help manage your menus: 
 
     .. image:: _static/images/wagtailmenus-flatmenu-list.png
         :alt: Screenshot showing the FlatMenu listing page for a multi-site setup
@@ -43,8 +43,8 @@ Adding a new flat menu
     
 3.  Use the "MENU ITEMS" inline panel to define the links you want the menu
     to have. If you wish, you can use the **handle** field to specify an
-    additional value for each item, which you'll be able to access in
-    from within menu templates.
+    additional value for each item, which you'll be able to access from
+    within menu templates.
     
     .. NOTE:: 
         Even if selected as menu items, pages must be 'live' and have a 
