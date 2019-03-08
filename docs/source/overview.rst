@@ -13,7 +13,7 @@ Overview and key concepts
 Better control over top-level menu items
 ========================================
 
-When you have a 'main navigation' menu powered purely by the page tree, things can get a little tricky, as they are often designed in a way that is very sensitive to change. Some moderators might not understand that publishing a new page at the top level (or reordering those pages) will dramatically affect the main navigation (and possibly even break the design). And really, *why should they?* 
+When you have a 'main navigation' menu powered purely by the page tree, things can get a little tricky, as the main menu is often designed in a way that is very sensitive to change. Some moderators might not understand that publishing a new page at the top level (or reordering those pages) will dramatically affect the main navigation (and possibly even break the design). And really, *why should they?* 
 
 Wagtailmenus solves this problem by allowing you to choose exactly which pages should appear as top-level items. It adds new functionality to Wagtail's CMS, allowing you to simply and effectively create and manage menus, using a familiar interface.
 
@@ -33,9 +33,9 @@ Multi-level menus generated from your existing page tree
 
 We firmly believe that your page tree is the best place to define the structure, and the 'natural order' of pages within your site. Wagtailmenus only allows you to define the top-level items for each menu, because offering anything more would inevitably lead to site managers redefining parts of the page tree in multiple places, doomed to become outdated as the original tree changes over time.
 
-To generate multi-level menus, wagtailmenus takes the top-level items you define for each menu and automatically combines it with your page tree, efficiently identifying ancestors for each selected pages and outputting them as sub-menus following the same structure and order.
+To generate multi-level menus, wagtailmenus takes the top-level items you define for each menu and automatically combines it with your page tree, efficiently identifying descendants for each selected page and outputting them as sub-menus following the page tree's structure and order.
 
-You can prevent any page from appearing menus simply by setting ``show_in_menus`` to ``False``. Pages will also no longer be included in menus if they are unpublished.
+You can prevent any page from appearing in menus by simply setting ``show_in_menus`` to ``False``. Pages will also no longer be included in menus if they are unpublished.
 
 
 Define menus for all your project needs
@@ -62,7 +62,7 @@ While main menus always have to be defined for each site, for flat menus, you ca
 
 You can even use different approaches for different flat menus in the same project. If you'd like to learn more, take a look at the ``fall_back_to_default_site_menus`` option in :ref:`flat_menu_args` 
 
-A **copy** feature in also available from the flat menu management interface, allowing you to quickly and easily copy existing menus from one site to another.
+A **copy** feature is also available from the flat menu management interface, allowing you to quickly and easily copy existing menus from one site to another.
 
 In a multi-site project, you can also configure wagtailmenus to use separate sets of templates for each site for rendering (See :ref:`custom_templates_auto`)
 
