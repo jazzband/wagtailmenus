@@ -40,7 +40,7 @@ If the **About Us** page uses a model that subclasses ``MenuPage`` or ``MenuPage
     .. image:: _static/images/wagtailmenus-menupage-settings-visible.png
         :alt: Screenshot show the expanded 'advanced menu behaviour' panel
 
-Now, wherever the children of the **About Us** page are output (using one of the above menu tags), an additional link will appear alongside them, allowing the that page to be accessed more easily. In the example above, you'll see **"Section overview"** has been added to the a **Repeated item link text** field. With this set, the link text for the repeated item should read **"Section overview"**, instead of just repeating the page's title, like so:
+Now, wherever the children of the **About Us** page are output (using one of the above menu tags), an additional link will appear alongside them, allowing that page to be accessed more easily. In the example above, you'll see **"Section overview"** has been added to the **Repeated item link text** field. With this set, the link text for the repeated item should read **"Section overview"**, instead of just repeating the page's title, like so:
 
 .. image:: _static/images/repeating-item.png
     :alt: Screenshot showing the repeated nav item appearing in a rendered menu
@@ -97,7 +97,7 @@ Implementing ``MenuPage`` into your project
     models involved, you can skip this step. But, if you are overriding the
     ``settings_panels`` attribute on a custom model to surface other custom
     fields in that tab, you'll need to include additional panels to surface the
-    new ``MenuPage`` fields in the page edit interface. Wagtailmenus includes a pre-defined ``menupage_panel`` to make this easier, which you can use like
+    new ``MenuPage`` fields in the page editor interface. Wagtailmenus includes a pre-defined ``menupage_panel`` to make this easier, which you can use like
     this:
 
     .. code-block:: python
@@ -149,7 +149,7 @@ Implementing ``MenuPageMixin`` into your project
 Wagtail has a restriction that forbids models from subclassing more than one other class derived from ``Page``, and that single page-derived class must be the left-most item when subclassing more than one model class. Most of the time, that doesn't cause any noticeable issues. But, in some cases, it can make it difficult to swap out base model classes used for page models. In these cases, you can use ``wagtailmenus.models.MenuPageMixin`` instead of ``MenuPage``. 
 
 .. NOTE::
-    ``MenuPageMixin`` doesn't change make any changes to the panel configuration on your model in order to surface it's new fields in the page editing interface. If you want those fields to appear, you'll have to override ``settings_panels`` on your model to include ``menupage_panel``
+    ``MenuPageMixin`` doesn't change make any changes to the panel configuration on your model that would cause it's new fields to be surfaced in the page editing interface. If you want those fields to appear, you'll have to override ``settings_panels`` on your model to include ``menupage_panel``
 
 
 1.   Subclass ``wagtailmenus.models.MenuPageMixin`` to create your model, including it to the right of any other class that subclasses ``Page``: 
@@ -171,7 +171,7 @@ Wagtail has a restriction that forbids models from subclassing more than one oth
 
             # It's not possible for MenuPageMixin to set `settings_panel`, so you must
             # override `settings_panels` yourself, and include `menupage_panel` in
-            # order to surface additional field in the 'Settings' tab of the editor
+            # order to surface additional fields in the 'Settings' tab of the editor
             # interface
             settings_panels = [
                 FieldPanel('custom_settings_field_one'),
@@ -195,8 +195,8 @@ Wagtail has a restriction that forbids models from subclassing more than one oth
 
 .. _manipulating_submenu_items:
 
-Using ``MenuPage`` to manipulating sub-menu items
-=================================================
+Using ``MenuPage`` to manipulate sub-menu items
+===============================================
 
 When a page model subclasses ``MenuPage`` or ``MenuPageMixin``, pages of that type are given special treatment by the menu generation template tags included in wagtailmenus, allowing them to make changes to the sub-menu items that get rendered below them.
 
