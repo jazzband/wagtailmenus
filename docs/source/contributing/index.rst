@@ -141,26 +141,26 @@ You might find it easier to set up a Travis CI service integration for your fork
 Building the documentation
 ==========================
 
-First install the necessary requirements by running:
+1. First install the necessary requirements by running:
 
-.. code-block:: console
+    .. code-block:: console
 
-    workon wagtailmenus
-    pip install -e '.[docs]' -U
+        workon wagtailmenus
+        pip install -e '.[docs]' -U
 
-``cd`` into the ``docs`` directory to do documentation-related stuff:
+2. ``cd`` into the ``docs`` directory to do documentation-related stuff:
 
-.. code-block:: console
+    .. code-block:: console
 
-    cd docs
+        cd docs
 
-Check for and correct any spelling errors raised by sphinx:
+3. Check for and correct any spelling errors raised by sphinx:
 
     .. code-block:: console
 
         make spelling
 
-Check that the docs build okay, and look out for errors or warnings:
+4. Check that the docs build okay, and look out for errors or warnings:
 
     .. code-block:: console
 
