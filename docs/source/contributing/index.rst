@@ -37,10 +37,10 @@ following criteria:
 
 1.  Documentation updates to cover any new features or changes.
 
-2.  If you're not in the list already, add a new line to ``CONTRIBUTORS.md`` 
+2.  If you're not in the list already, add a new line to ``CONTRIBUTORS.md``
     (under the 'Contributors' heading) with your name, company name, and an optional twitter handle / email address.
 
-3.  For all new features, please add additional unit tests to 
+3.  For all new features, please add additional unit tests to
     ``wagtailmenus.tests``, to test what you've written. Although the quality
     of unit tests is the most important thing (they should be readable, and
     test the correct thing / combination of things), code coverage is important
@@ -56,18 +56,18 @@ If you'd like a runnable Django project to help with development of wagtailmenus
 1.  In a Terminal window, ``cd`` to the project’s root directory, and run:
 
     .. code-block:: console
-    
-        mkvirtualenv wagtailmenus
-        pip install -e '.[testing,docs]' -U
-        pip install -r requirements/development.txt
 
-2.  Create a copy of the development settings: 
+        mkvirtualenv wagtailmenus
+        pip install -e '.[development]' -U
+        setvirtualenvproject
+
+2.  Create a copy of the development settings:
 
     .. code-block:: console
 
         cp wagtailmenus/settings/development.py.example wagtailmenus/settings/development.py
 
-3.  Create a copy of the development urls:  
+3.  Create a copy of the development urls:
 
     .. code-block:: console
 
@@ -78,27 +78,27 @@ If you'd like a runnable Django project to help with development of wagtailmenus
     .. code-block:: console
 
         cp manage.py.example manage.py
-        
+
 5.  Run the migrate command to set up the database tables:
 
     .. code-block:: console
 
         python manage.py migrate
 
-6.  To load some test data into the database, run:  
+6.  To load some test data into the database, run:
 
     .. code-block:: console
 
         python manage.py loaddata wagtailmenus/tests/fixtures/test.json
 
-7.  Create a new superuser that you can use to access the CMS:  
+7.  Create a new superuser that you can use to access the CMS:
 
     .. code-block:: console
 
         python manage.py createsuperuser
 
-8.  Run the project using the standard Django command: 
-    
+8.  Run the project using the standard Django command:
+
     .. code-block:: console
 
         python manage.py runserver
@@ -106,14 +106,15 @@ If you'd like a runnable Django project to help with development of wagtailmenus
 Your local copies of ``settings/development.py`` and ``manage.py`` will be ignored by git when you push any changes, as will anything you add to the ``wagtailmenus/development/`` directory.
 
 
-Testing locally
-===============
+Running the test suite
+======================
 
 It's important that any new code is tested before submitting. To quickly test code in your active development environment, you should first install all of the requirements by running:
 
 .. code-block:: console
 
-    pip install -e '.[testing,docs]' -U
+    workon wagtailmenus
+    pip install -e '.[testing]' -U
 
 Then, run the following command to execute tests:
 
@@ -135,6 +136,35 @@ Testing in a single environment is a quick and easy way to identify obvious issu
     tox
 
 You might find it easier to set up a Travis CI service integration for your fork in GitHub (look under **Settings > Apps and integrations** in GitHub's web interface for your fork), and have Travis CI run tests whenever you commit changes. The test configuration files already present in the project should work for your fork too, making it a cinch to set up.
+
+
+Building the documentation
+==========================
+
+First install the necessary requirements by running:
+
+.. code-block:: console
+
+    workon wagtailmenus
+    pip install -e '.[docs]' -U
+
+``cd`` into the ``docs`` directory to do documentation-related stuff:
+
+.. code-block:: console
+
+    cd docs
+
+Check for and correct any spelling errors raised by sphinx:
+
+    .. code-block:: console
+
+        make spelling
+
+Check that the docs build okay, and look out for errors or warnings:
+
+    .. code-block:: console
+
+        make html
 
 
 Other topics
