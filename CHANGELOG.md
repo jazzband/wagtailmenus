@@ -4,14 +4,16 @@ Changelog
 2.13a (XX.XX.XXXX)
 ------------------
 
-* Dropped support for ``relative_url()`` methods on custom menu item models that do not support a ``request`` keyword argument.
+* Dropped support for `relative_url()` methods on custom menu item models that do not support a `request` keyword argument.
 * Added support for Wagtail 2.4.
 * Added support for Wagtail 2.3.
 * Added support for Django 2.1.
 * Minor documentation updates (OktayAltay).
-* Updated ``MenuPage.get_repeated_menu_item()`` to nullify `sub_menu` on the copy to reduce likelihood of infinite recursion errors.
-* Updated ``Menu._prime_menu_item()`` to set `sub_menu` to None if no new value is being added, to reduce likelihood of infinite recursion errors.
-* Updated ``SectionMenu.prepare_to_render()`` to augment ``root_page`` with 'text', 'href' and 'active_class' attributes, so that it no longer has to be done in ``SectionMenu.get_context_data()``.
+* Updated `MenuPage.get_repeated_menu_item()` to nullify `sub_menu` on the copy to reduce likelihood of infinite recursion errors.
+* Updated `Menu._prime_menu_item()` to set `sub_menu` to None if no new value is being added, to reduce likelihood of infinite recursion errors.
+* Updated `SectionMenu.prepare_to_render()` to augment `root_page` with 'text', 'href' and 'active_class' attributes, so that it no longer has to be done in `SectionMenu.get_context_data()`.
+* Updated `AbstractLinkPage.get_sitemap_urls()` signature to match Wagtail 2.2 (Dan Bentley)
+* Documentation typo correction and other improvements (DanAtShenTech)
 
 
 2.12 (17.11.2018)
