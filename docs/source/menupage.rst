@@ -196,7 +196,7 @@ Wagtail has a restriction that forbids models from subclassing more than one oth
 .. _manipulating_submenu_items:
 
 Using ``MenuPage`` to manipulate sub-menu items
-=================================================
+===============================================
 
 When a page model subclasses ``MenuPage`` or ``MenuPageMixin``, pages of that type are given special treatment by the menu generation template tags included in wagtailmenus, allowing them to make changes to the sub-menu items that get rendered below them.
 
