@@ -17,7 +17,10 @@ from wagtailmenus.conf import settings
 def _define_inlinepanel(relation_name, **kwargs):
     klass = InlinePanel
     defaults = {'label': _('menu items')}
-    if 'condensedinlinepanel' in django_settings.INSTALLED_APPS:
+    if(
+        settings.USE_CONDENSEDINLINEPANEL and
+        'condensedinlinepanel' in django_settings.INSTALLED_APPS
+    ):
         import condensedinlinepanel
         from condensedinlinepanel.edit_handlers import CondensedInlinePanel
         if LooseVersion(condensedinlinepanel.__version__) >= LooseVersion('0.3'):
