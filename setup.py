@@ -24,6 +24,14 @@ testing_extras = [
     'wagtail-condensedinlinepanel>=0.5,<0.6',
 ]
 
+development_extras = [
+    'wagtail>=2.4,<2.5',
+    'django-debug-toolbar',
+    'django-extensions',
+    'ipdb',
+    'werkzeug',
+]
+
 documentation_extras = [
     'pyenchant>=2.0',
     'Sphinx>=1.7.4',
@@ -73,6 +81,7 @@ setup(
     extras_require={
         'testing': testing_extras,
         'docs': documentation_extras,
+        'development': development_extras + testing_extras,
         'deployment': deployment_extras,
     },
 )
