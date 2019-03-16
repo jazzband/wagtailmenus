@@ -1,12 +1,6 @@
-=======================================
-Wagtailmenus 2.13 (alpha) release notes
-=======================================
-
-.. NOTE ::
-    
-    Wagtailmenus 2.13 is in the alpha stage of development. Any changes
-    detailed below are subject to change before the final 2.13 release.
-
+===============================
+Wagtailmenus 2.13 release notes
+===============================
 
 .. contents::
     :local:
@@ -19,7 +13,7 @@ What's new?
 There are no new major features in this release.
 
 
-Minor changes & bug fixes 
+Minor changes & bug fixes
 =========================
 
 - Added support for Wagtail 2.3.
@@ -28,9 +22,10 @@ Minor changes & bug fixes
 - Minor documentation updates (OktayAltay).
 - Updated ``MenuPage.get_repeated_menu_item()`` to nullify ``sub_menu`` on the copy to reduce likelihood of infinite recursion errors.
 - Updated ``Menu._prime_menu_item()`` to set ``sub_menu`` to None if no new value is being added, to reduce likelihood of infinite recursion errors.
-- Updated ``SectionMenu.prepare_to_render()`` to augment ``root_page`` with 'text', 'href' and 'active_class' attributes, so that it no longer has to be done in ``SectionMenu.get_context_data()``.
-- Updated ``AbstractLinkPage.get_sitemap_urls()`` signature to match Wagtail 2.2 (Dan Bentley)
-- Documentation typo correction and other improvements (DanAtShenTech)
+- Updated ``SectionMenu.prepare_to_render()`` to augment ``root_page`` with ``text``, ``href`` and ``active_class`` attributes, so that it no longer has to be done in ``SectionMenu.get_context_data()``.
+- Updated ``AbstractLinkPage.get_sitemap_urls()`` signature to match Wagtail 2.2 (Dan Bentley).
+- Documentation typo correction and other improvements (DanAtShenTech).
+- Fix an issue where the ``WAGTAILMENUS_USE_CONDENSEDINLINEPANEL`` setting wasn't being respected.
 
 
 Deprecations
@@ -49,4 +44,3 @@ Following a standard deprecation period a two minor releases, the following func
 ---------------------------------------------------------------------
 
 If you're using custom ``MenuItem`` models in your project, and are overriding ``relative_url()``, you should update the signature on your custom model method to accept a ``request`` keyword argument, and pass it on to ``link_page.relative_url()`` and ``super().relative_url()`` (in addition to ``site``) if calling either of those from.
-
