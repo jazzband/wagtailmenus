@@ -13,7 +13,6 @@ INSTALLED_APPS += (
     'debug_toolbar',
     'wagtailmenus.tests',
     'wagtailmenus.development',
-    'wagtail.contrib.wagtailstyleguide',
 )
 
 DATABASES = {
@@ -23,9 +22,9 @@ DATABASES = {
     }
 }
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-) + MIDDLEWARE_CLASSES
+) + MIDDLEWARE
 
 ROOT_URLCONF = 'wagtailmenus.development.urls'
 WAGTAIL_SITE_NAME = 'Wagtailmenus development'
