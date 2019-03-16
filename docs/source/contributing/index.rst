@@ -56,6 +56,7 @@ If you'd like a runnable Django project to help with development of wagtailmenus
 1.  In a Terminal window, ``cd`` to the project’s root directory, and run:
 
     .. code-block:: console
+    
         mkvirtualenv wagtailmenus
         pip install -e '.[testing,docs]' -U
         pip install -r requirements/development.txt
