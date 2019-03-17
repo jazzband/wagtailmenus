@@ -16,7 +16,6 @@ from wagtail.core.models import Page, Site
 
 from wagtailmenus import forms, panels
 from wagtailmenus.conf import constants, settings
-from wagtailmenus.utils.deprecation import RemovedInWagtailMenus3Warning
 from wagtailmenus.utils.misc import get_site_from_request
 from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
@@ -112,48 +111,10 @@ class Menu:
         for rendering. ``context`` could be a ``django.template.Context``
         object passed to ``render_from_tag()`` by a menu tag.
         """
-        class_method = cls.get_contextual_vals_from_context.__func__
-        original_method = Menu.get_contextual_vals_from_context.__func__
-        if class_method is not original_method:
-            warnings.warn(
-                "From v2.12, the get_contextual_vals_from_context() class "
-                "method is deprecated, and will be removed in v3. Use "
-                "get_contextual_vals_from_context() instead.",
-                category=RemovedInWagtailMenus3Warning
-            )
-            ctx_vals = cls.get_contextual_vals_from_context(context)
-        else:
-            ctx_vals = cls._create_contextualvals_obj_from_context(context)
+        ctx_vals = cls._create_contextualvals_obj_from_context(context)
+        opt_vals = cls._create_optionvals_obj_from_values(**option_values)
 
-        class_method = cls.get_option_vals_from_options.__func__
-        original_method = Menu.get_option_vals_from_options.__func__
-        if class_method is not original_method:
-            warnings.warn(
-                "From v2.12, the get_option_vals_from_options() class "
-                "method is deprecated, and will be removed in v3. Use "
-                "_create_optionvals_obj_from_values() instead.",
-                category=RemovedInWagtailMenus3Warning
-            )
-            opt_vals = cls.get_option_vals_from_options(**option_values)
-        else:
-            opt_vals = cls._create_optionvals_obj_from_values(**option_values)
-
-        class_method = cls.get_instance_for_rendering.__func__
-        original_method = Menu.get_instance_for_rendering.__func__
-        is_model_class = issubclass(cls, models.Model)
-        if class_method is not original_method:
-            warnings.warn(
-                "From v2.12, the get_instance_for_rendering() class "
-                "method is deprecated, and will be removed in v3. For "
-                "'{}', you should override the {}() method instead.".format(
-                    cls.__name__,
-                    'get_from_collected_values' if is_model_class
-                    else 'create_from_collected_values'
-                ),
-                category=RemovedInWagtailMenus3Warning
-            )
-            instance = cls.get_instance_for_rendering(ctx_vals, opt_vals)
-        elif is_model_class:
+        if issubclass(cls, models.Model):
             instance = cls.get_from_collected_values(ctx_vals, opt_vals)
         else:
             instance = cls.create_from_collected_values(ctx_vals, opt_vals)
@@ -183,16 +144,6 @@ class Menu:
             context_processor_vals.get('section_root'),
             context_processor_vals.get('current_page_ancestor_ids', ()),
         )
-
-    @classmethod
-    def get_contextual_vals_from_context(cls, context):
-        warnings.warn(
-            "From v2.12, the get_contextual_vals_from_context() class method "
-            "is deprecated, and will be removed in v3. Use "
-            "_create_contextualvals_obj_from_context() instead.",
-            category=RemovedInWagtailMenus3Warning
-        )
-        return cls._create_contextualvals_obj_from_context(context)
 
     @classmethod
     def _create_optionvals_obj_from_values(cls, **kwargs):
@@ -226,16 +177,6 @@ class Menu:
         )
 
     @classmethod
-    def get_option_vals_from_options(cls, **kwargs):
-        warnings.warn(
-            'From v2.12, the get_option_vals_from_options() class method is '
-            'deprecated, and will be removed in v3. Use '
-            '_create_optionvals_obj_from_values() instead.',
-            category=RemovedInWagtailMenus3Warning
-        )
-        return cls._create_optionvals_obj_from_values(**kwargs)
-
-    @classmethod
     def create_from_collected_values(cls, contextual_vals, option_vals):
         """
         When the menu class in not model-based, this method is called by
@@ -258,20 +199,6 @@ class Menu:
             "Subclasses of 'Menu' and 'django.db.models.Model' must define "
             "their own 'get_from_collected_values' method."
         )
-
-    @classmethod
-    def get_instance_for_rendering(cls, contextual_vals, option_vals):
-        warnings.warn(
-            'The get_instance_for_rendering() class method is deprecated in '
-            'v2.12 and will be removed in v3. For model-based menu classes, '
-            'use get_from_collected_values() instead, and for non model-based '
-            'menu classes, use create_from_collected_values().',
-            category=RemovedInWagtailMenus3Warning
-        )
-        if issubclass(cls, models.Model):
-            return cls.get_from_collected_values(contextual_vals, option_vals)
-
-        return cls.create_from_collected_values(contextual_vals, option_vals)
 
     def prepare_to_render(self, request, contextual_vals, option_vals):
         """
