@@ -18,7 +18,7 @@ Writing custom menu templates
 What context variables are available to use?
 --------------------------------------------
 
-The following variables are added to the context by all included template tags, which you can make use of in your templates:
+The following variables are added to the context for each menu template or sub-menu template that you create:
 
 :``menu_items``: 
     If the template is for rendering the first level of a main or flat menu,
@@ -51,7 +51,7 @@ The following variables are added to the context by all included template tags, 
     levels (should be picked up automatically by the ``sub_menu`` tag).
 
 :``original_menu_tag``: 
-    A string value indicating the name of tag was originally called in order to
+    A string value indicating the name of the tag that was originally called in order to
     render the branch currently being rendered. The value will be one of 
     ``"main_menu"``, ``"flat_menu"``, ``"section_menu"``, ``"children_menu"``
     or ``"sub_menu"``.
@@ -113,7 +113,7 @@ Using preferred paths and names for your templates
 
 This is the easiest (and recommended) approach for getting wagtailmenus to use your custom menu templates for rendering.
 
-When you do not specify templates to use using the ``template``, ``sub_menu_template``, or ``sub_menu_templates`` arguments template tag arguments, wagtailmenus looks in a list of gradually less specific paths until it finds an appropriate template to use. If you're familiar with Django, you'll probably already be familiar with this concept. Essentially, you can easily override the default menu templates by putting your custom templates in a preferred location within your project.
+When you do not specify templates names using the ``template``, ``sub_menu_template``, or ``sub_menu_templates`` template tag arguments, wagtailmenus looks in a list of gradually less specific paths until it finds an appropriate template to use. If you're familiar with Django, you'll probably already be familiar with this concept. Essentially, you can easily override the default menu templates by putting your custom templates in a preferred location within your project.
 
 The following sections outline the preferred template paths for each tag, in the order that they are searched for (most specific first).
 
@@ -219,7 +219,7 @@ For flat menus, the tag also uses the `handle` field of the specific menu being 
 
 **Examples**
 
-For a flat menu with the handle ``info``, that is required to show two levels of menu items, your templates directory might look like this:
+For a flat menu with the handle ``info`` that is required to show two levels of menu items, your templates directory might look like this:
 ::
 
     templates
