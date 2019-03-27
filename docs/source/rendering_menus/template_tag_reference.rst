@@ -45,7 +45,7 @@ Required?  Expected value type  Default value
 No         ``bool``             ``True``
 =========  ===================  =============
 
-Adding ``show_multiple_levels=False`` to the tag in your template is essentially a more descriptive way of adding ``max_levels`` to ``1``.
+Adding ``show_multiple_levels=False`` to the tag in your template is essentially a more descriptive way of setting ``max_levels`` to ``1``.
 
 -----
 
@@ -84,7 +84,7 @@ Required?  Expected value type  Default value
 No         ``bool``             ``True``
 =========  ===================  =============
 
-Item repetition settings set on each page are respected by default, but you can add ``allow_repeating_parents=False`` to ignore them, and not repeat any pages in sub-menus when rendering multiple levels.
+Item repetition settings that are set on each page are respected by default, but you can add ``allow_repeating_parents=False`` to ignore them and not repeat any pages in sub-menus when rendering multiple levels.
 
 -----
 
@@ -178,7 +178,7 @@ Lets you render the menu to a template of your choosing. If not provided, wagtai
 
 For more information about overriding templates, see: :ref:`custom_templates`.
 
-For a list of preferred template paths this tag, see: :ref:`custom_templates_main_menu`.
+For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_main_menu`.
 
 -----
 
@@ -195,7 +195,7 @@ Lets you specify a template to be used for rendering sub menus. All subsequent c
 
 For more information about overriding templates, see: :ref:`custom_templates`.
 
-For a list of preferred template paths this tag, see: :ref:`custom_templates_main_menu`.
+For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_main_menu`.
 
 -----
 
@@ -340,7 +340,7 @@ Required?  Expected value type  Default value
 No         ``bool``             ``True``
 =========  ===================  =============
 
-Repetition-related settings on your pages are respected by default, but you can add ``allow_repeating_parents=False`` to ignore them, and not repeat any pages in sub-menus when rendering. Please note that using this option will only have an effect if ``use_specific`` has a value of ``1`` or higher.
+Repetition-related settings on your pages are respected by default, but you can add ``allow_repeating_parents=False`` to ignore them and not repeat any pages in sub-menus when rendering. Please note that using this option will only have an effect if ``use_specific`` has a value of ``1`` or higher.
 
 -----
 
@@ -353,7 +353,7 @@ Required?  Expected value type  Default value
 No         ``bool``             ``False``
 =========  ===================  =============
 
-When using the ``flat_menu`` tag, wagtailmenus identifies the 'current site', and attempts to find a menu for that site, matching the ``handle`` provided. By default, if no menu is found for the current site, nothing is rendered. However, if ``fall_back_to_default_site_menus=True`` is provided, wagtailmenus will search search the 'default' site (In the CMS, this will be the site with the '**Is default site**' checkbox ticked) for a menu with the same handle, and use that instead before giving up. 
+When using the ``flat_menu`` tag, wagtailmenus identifies the 'current site', and attempts to find a menu for that site, matching the ``handle`` provided. By default, if no menu is found for the current site, nothing is rendered. However, if ``fall_back_to_default_site_menus=True`` is provided, wagtailmenus will search the 'default' site (in the CMS, this will be the site with the '**Is default site**' checkbox ticked) for a menu with the same handle and, if found, use that instead before giving up. 
 
 The default value can be changed to ``True`` by utilising the :ref:`FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS` setting.
 
@@ -417,7 +417,7 @@ Lets you render the menu to a template of your choosing. If not provided, wagtai
 
 For more information about overriding templates, see: :ref:`custom_templates`.
 
-For a list of preferred template paths this tag, see: :ref:`custom_templates_flat_menu`.
+For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_flat_menu`.
 
 -----
 
@@ -450,7 +450,7 @@ Lets you specify a template to be used for rendering sub menus (if enabled using
 
 For more information about overriding templates, see: :ref:`custom_templates`.
 
-For a list of preferred template paths this tag, see: :ref:`custom_templates_flat_menu`.
+For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_flat_menu`.
 
 -----
 
@@ -664,7 +664,7 @@ Lets you render the menu to a template of your choosing. If not provided, wagtai
 
 For more information about overriding templates, see: :ref:`custom_templates`.
 
-For a list of preferred template paths this tag, see: :ref:`custom_templates_section_menu`.
+For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_section_menu`.
 
 -----
 
@@ -681,7 +681,7 @@ Lets you specify a template to be used for rendering sub menus. All subsequent c
 
 For more information about overriding templates, see: :ref:`custom_templates`.
 
-For a list of preferred template paths this tag, see: :ref:`custom_templates_section_menu`.
+For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_section_menu`.
 
 -----
 
@@ -881,7 +881,7 @@ Lets you render the menu to a template of your choosing. If not provided, wagtai
 
 For more information about overriding templates, see: :ref:`custom_templates`
 
-For a list of preferred template paths this tag, see: :ref:`custom_templates_children_menu`
+For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_children_menu`
 
 -----
 
@@ -898,7 +898,7 @@ Lets you specify a template to be used for rendering sub menus. All subsequent c
 
 For more information about overriding templates, see: :ref:`custom_templates`
 
-For a list of preferred template paths this tag, see: :ref:`custom_templates_children_menu`
+For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_children_menu`
 
 -----
 
