@@ -10,7 +10,7 @@ Managing main menus via the CMS
 2.  Click on **Settings** in the side menu, then select **Main menu** from the
     options that appear.
 
-3.  You'll be automatically redirected to the an edit page for the current site
+3.  You'll be automatically redirected to an edit page for the current site
     (or the 'default' site, if the current site cannot be identified). For 
     multi-site projects, a 'site switcher' will appear in the top right,
     allowing you to edit main menus for each site. 
@@ -29,9 +29,7 @@ Managing main menus via the CMS
         showing up, edit the page and check whether the "Show in menus"
         checkbox is checked (found under the "Promote" tab by default).
 
-5.  At the very bottom of the form, you'll find the **ADVANCED SETTINGS** 
-    panel, which is collapsed by default. Click on the arrow icon next to the
-    heading to reveal the **Maximum levels** and **Specific usage** fields,
+5.  Use the **SETTINGS** inline panel to define the **Maximum levels** and **Specific usage** fields,
     which you can alter to fit the needs of your project. For more information
     about specific usage see :ref:`specific_pages`.
 
