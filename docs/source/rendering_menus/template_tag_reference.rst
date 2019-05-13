@@ -178,7 +178,7 @@ Lets you render the menu to a template of your choosing. If not provided, wagtai
 
 For more information about overriding templates, see: :ref:`custom_templates`.
 
-For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_main_menu`.
+For a list of preferred template paths for this tag, see: :ref:`custom_templates_main_menu`.
 
 -----
 
@@ -195,7 +195,7 @@ Lets you specify a template to be used for rendering sub menus. All subsequent c
 
 For more information about overriding templates, see: :ref:`custom_templates`.
 
-For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_main_menu`.
+For a list of preferred template paths for this tag, see: :ref:`custom_templates_main_menu`.
 
 -----
 
@@ -417,7 +417,7 @@ Lets you render the menu to a template of your choosing. If not provided, wagtai
 
 For more information about overriding templates, see: :ref:`custom_templates`.
 
-For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_flat_menu`.
+For a list of preferred template paths for this tag, see: :ref:`custom_templates_flat_menu`.
 
 -----
 
@@ -450,7 +450,7 @@ Lets you specify a template to be used for rendering sub menus (if enabled using
 
 For more information about overriding templates, see: :ref:`custom_templates`.
 
-For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_flat_menu`.
+For a list of preferred template paths for this tag, see: :ref:`custom_templates_flat_menu`.
 
 -----
 
@@ -664,7 +664,7 @@ Lets you render the menu to a template of your choosing. If not provided, wagtai
 
 For more information about overriding templates, see: :ref:`custom_templates`.
 
-For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_section_menu`.
+For a list of preferred template paths for this tag, see: :ref:`custom_templates_section_menu`.
 
 -----
 
@@ -681,7 +681,7 @@ Lets you specify a template to be used for rendering sub menus. All subsequent c
 
 For more information about overriding templates, see: :ref:`custom_templates`.
 
-For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_section_menu`.
+For a list of preferred template paths for this tag, see: :ref:`custom_templates_section_menu`.
 
 -----
 
@@ -881,7 +881,7 @@ Lets you render the menu to a template of your choosing. If not provided, wagtai
 
 For more information about overriding templates, see: :ref:`custom_templates`
 
-For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_children_menu`
+For a list of preferred template paths for this tag, see: :ref:`custom_templates_children_menu`
 
 -----
 
@@ -898,7 +898,7 @@ Lets you specify a template to be used for rendering sub menus. All subsequent c
 
 For more information about overriding templates, see: :ref:`custom_templates`
 
-For a list of preferred template paths for this tag argument, see: :ref:`custom_templates_children_menu`
+For a list of preferred template paths for this tag, see: :ref:`custom_templates_children_menu`
 
 -----
 
