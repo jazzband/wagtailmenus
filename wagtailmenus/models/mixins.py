@@ -74,13 +74,13 @@ class DefinesSubMenuTemplatesMixin:
             # Fixes bug #329. get_sub_menu_template_names() must receive
             # the `level` value from this method in order for level-specific
             # tempalate naming to work.
-
             self.__sub_menu_template_level = level
+            kwargs = {}
             if accepts_kwarg(self.get_sub_menu_template_names, 'level'):
                 kwargs = {'level': level}
-            else:
-                kwargs = {}
             template_names = self.get_sub_menu_template_names(**kwargs)
+
+            # Identify a template from the list
             template = select_template(template_names)
 
         # Cache the template instance before returning
@@ -95,10 +95,7 @@ class DefinesSubMenuTemplatesMixin:
         should be ordered with most specific names first, since the first
         template found to exist will be used for rendering."""
         if level is None:
-            if hasattr(self, '__sub_menu_template_level'):
-                level = self.__sub_menu_template_level
-            else:
-                level = 2
+            level = getattr(self, '__sub_menu_template_level', 2)
 
         template_names = []
         menu_name = self.menu_short_name
