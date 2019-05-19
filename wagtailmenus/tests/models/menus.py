@@ -85,6 +85,11 @@ class FlatMenuCustomMenuItem(MultilingualMenuItem, AbstractFlatMenuItem):
 class CustomMainMenu(AbstractMainMenu):
     panels = AbstractMainMenu.content_panels + AbstractMainMenu.settings_panels
 
+    def get_sub_menu_template_names(self):
+        # The fix for #329 works should work even when the super class method
+        # does not recieve the 'level' argument
+        return super().get_sub_menu_template_names()
+
 
 class CustomFlatMenu(AbstractFlatMenu):
     heading_de = models.CharField(

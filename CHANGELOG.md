@@ -4,7 +4,13 @@ Changelog
 3.0 (XX.XX.XXXX)
 ----------------
 
-TBA
+* Fixed bug [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which was preventing level-specific template naming from working as specified in the docs.
+
+
+2.13.1 (XX.XX.XXXX)
+-------------------
+
+* Fixed bug [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which was preventing level-specific template naming from working as specified in the docs.
 
 
 2.13 (16.03.2019)
@@ -21,6 +27,12 @@ TBA
 * Updated `AbstractLinkPage.get_sitemap_urls()` signature to match Wagtail 2.2 (Dan Bentley).
 * Documentation typo correction and other improvements (DanAtShenTech).
 * Fix an issue where the `WAGTAILMENUS_USE_CONDENSEDINLINEPANEL` setting wasn't being respected.
+
+
+2.12.1 (XX.XX.XXXX)
+-------------------
+
+* Fixed bug [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which was preventing level-specific template naming from working as specified in the docs.
 
 
 2.12 (17.11.2018)
@@ -70,6 +82,11 @@ indication of what the method does.
 * Replaced custom app settings module with `django-cogwheels` and removed a lot of the tests that existed to test its workings.
 * Moved remaining app settings tests to `wagtailmenus.conf.tests`.
 
+
+2.10.1 (XX.XX.XXXX)
+-------------------
+
+* Fixed bug [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which was preventing level-specific template naming from working as specified in the docs.
 
 
 2.10.0 (14.06.2018)

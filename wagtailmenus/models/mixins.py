@@ -1,6 +1,7 @@
 from django.template.loader import get_template, select_template
 
 from wagtailmenus.conf import settings
+from wagtailmenus.utils.inspection import accepts_kwarg
 
 
 def get_item_by_index_or_last_item(items, index):
@@ -69,7 +70,18 @@ class DefinesSubMenuTemplatesMixin:
             template = get_template(template_name)
         else:
             # A template wasn't specified, so search the filesystem
-            template = select_template(self.get_sub_menu_template_names())
+
+            # Fixes bug #329. get_sub_menu_template_names() must receive
+            # the `level` value from this method in order for level-specific
+            # tempalate naming to work.
+            self.__sub_menu_template_level = level
+            kwargs = {}
+            if accepts_kwarg(self.get_sub_menu_template_names, 'level'):
+                kwargs = {'level': level}
+            template_names = self.get_sub_menu_template_names(**kwargs)
+
+            # Identify a template from the list
+            template = select_template(template_names)
 
         # Cache the template instance before returning
         self._sub_menu_template_cache[level] = template
@@ -77,15 +89,18 @@ class DefinesSubMenuTemplatesMixin:
 
     sub_menu_template = property(get_sub_menu_template)
 
-    def get_sub_menu_template_names(self):
-        """Return a list of template paths/names to search when rendering a
-        sub menu for this menu instance. The list should beordered with most
-        specific names first, since the first template found to exist will be
-        used for rendering"""
+    def get_sub_menu_template_names(self, level=None):
+        """Return a list of template paths/names to search for when rendering
+        a sub menu for this menu instance at the supplied `level`. The list
+        should be ordered with most specific names first, since the first
+        template found to exist will be used for rendering."""
+        if level is None:
+            level = getattr(self, '__sub_menu_template_level', 2)
+
         template_names = []
         menu_name = self.menu_short_name
         site = self._contextual_vals.current_site
-        level = self._contextual_vals.current_level
+
         if settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:
             hostname = site.hostname
             template_names.extend([
