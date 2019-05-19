@@ -1,0 +1,7 @@
+=================================
+Wagtailmenus 2.13.1 release notes
+=================================
+
+This release includes fixes for the following bugs:
+
+- `#329 <https://github.com/rkhleics/wagtailmenus/issues/329>`_, which was preventing level-specific template names working as specified in the docs.
