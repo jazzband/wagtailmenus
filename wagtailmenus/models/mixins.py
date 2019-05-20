@@ -71,14 +71,17 @@ class DefinesSubMenuTemplatesMixin:
         else:
             # A template wasn't specified, so search the filesystem
 
-            # Fixes bug #329. get_sub_menu_template_names() must receive
-            # the `level` value from this method in order for level-specific
-            # tempalate naming to work.
+            # Fixes bug #329. get_sub_menu_template_names() must be able to
+            # access the `level` value from this method in order for
+            # level-specific tempalate naming to work
             self.__sub_menu_template_level = level
             kwargs = {}
             if accepts_kwarg(self.get_sub_menu_template_names, 'level'):
+                # The 'level' argument value will be used instead of
+                # `__sub_menu_template_level`
                 kwargs = {'level': level}
             template_names = self.get_sub_menu_template_names(**kwargs)
+            del self.__sub_menu_template_level
 
             # Identify a template from the list
             template = select_template(template_names)
