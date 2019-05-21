@@ -2,7 +2,7 @@ language: python
 cache: pip
 
 matrix:
-  include: 
+  include:
   - env: TOXENV=py34-dj111-wt2
     sudo: false
     dist: trusty
@@ -42,7 +42,7 @@ install:
 script:
 - tox
 
-after_success: 
+after_success:
 - codecov
 
 deploy:
@@ -52,6 +52,6 @@ deploy:
   password: ${PYPI_PASSWORD}
   on:
     tags: true
-    branch: master
+    branch: stable/2.13.x
     repo: rkhleics/wagtailmenus
     condition: "$TOXENV = py37-dj21-wt24"
