@@ -7,6 +7,13 @@ Changelog
 TBA
 
 
+2.13.1 (21.05.2019)
+-------------------
+
+* Fixed bug [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
+* Fixed bug [#323](https://github.com/rkhleics/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
+
+
 2.13 (16.03.2019)
 -----------------
 
@@ -21,6 +28,13 @@ TBA
 * Updated `AbstractLinkPage.get_sitemap_urls()` signature to match Wagtail 2.2 (Dan Bentley).
 * Documentation typo correction and other improvements (DanAtShenTech).
 * Fix an issue where the `WAGTAILMENUS_USE_CONDENSEDINLINEPANEL` setting wasn't being respected.
+
+
+2.12.1 (21.05.2019)
+-------------------
+
+* Fixed bug [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
+* Fixed bug [#323](https://github.com/rkhleics/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
 
 
 2.12 (17.11.2018)
