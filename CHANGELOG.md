@@ -1,7 +1,14 @@
 Changelog
 =========
 
-2.12.0 (XX.XX.XXXX)
+2.12.1 (21.05.2019)
+-------------------
+
+* Fixed bug [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
+* Fixed bug [#323](https://github.com/rkhleics/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
+
+
+2.12.0 (07.11.2018)
 -------------------
 
 * Changed the signature of ``Menu.render_from_tag()`` to better indicate common expected/supported arguments for menus.
