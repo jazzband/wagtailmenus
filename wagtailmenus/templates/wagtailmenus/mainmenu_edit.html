@@ -16,5 +16,6 @@
 {% block extra_js %}
     {% include "wagtailadmin/pages/_editor_js.html" %}
     {{ edit_handler.form.media.js }}
+    {{ edit_handler.html_declarations }}
     {{ view.media.js }}
 {% endblock %}
