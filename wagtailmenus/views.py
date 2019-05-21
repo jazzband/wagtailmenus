@@ -131,15 +131,11 @@ class MainMenuEditView(MenuTabbedInterfaceMixin, ModelFormView):
 
 
 class FlatMenuCreateView(MenuTabbedInterfaceMixin, CreateView):
-
-    def get_template_names(self):
-        return ['wagtailmenus/flatmenu_create.html']
+    pass
 
 
 class FlatMenuEditView(MenuTabbedInterfaceMixin, EditView):
-
-    def get_template_names(self):
-        return ['wagtailmenus/flatmenu_edit.html']
+    pass
 
 
 class FlatMenuCopyView(FlatMenuEditView):

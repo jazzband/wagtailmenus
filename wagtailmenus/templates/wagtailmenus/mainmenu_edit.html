@@ -1,4 +1,17 @@
-{% extends "wagtailmenus/create.html" %}
+{% extends "modeladmin/create.html" %}
+
+{% block extra_css %}
+    {% include "wagtailadmin/pages/_editor_css.html" %}
+    {{ edit_handler.form.media.css }}
+    {{ view.media.css }}
+{% endblock %}
+
+{% block extra_js %}
+    {% include "wagtailadmin/pages/_editor_js.html" %}
+    {{ edit_handler.form.media.js }}
+    {{ edit_handler.html_declarations }}
+    {{ view.media.js }}
+{% endblock %}
 
 {% block header %}
     {% include "wagtailmenus/includes/header_with_site_switcher.html" with title=view.page_title subtitle=view.get_page_subtitle icon=view.header_icon %}
