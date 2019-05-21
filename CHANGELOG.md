@@ -4,13 +4,15 @@ Changelog
 3.0 (XX.XX.XXXX)
 ----------------
 
-* Fixed bug [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which was preventing level-specific template naming from working as specified in the docs.
+* Fixed bug [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
+* Fixed bug [#323](https://github.com/rkhleics/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
 
 
 2.13.1 (XX.XX.XXXX)
 -------------------
 
-* Fixed bug [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which was preventing level-specific template naming from working as specified in the docs.
+* Fixed bug [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
+* Fixed bug [#323](https://github.com/rkhleics/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
 
 
 2.13 (16.03.2019)
@@ -32,7 +34,8 @@ Changelog
 2.12.1 (XX.XX.XXXX)
 -------------------
 
-* Fixed bug [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which was preventing level-specific template naming from working as specified in the docs.
+* Fixed bug [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
+* Fixed bug [#323](https://github.com/rkhleics/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
 
 
 2.12 (17.11.2018)
@@ -86,7 +89,7 @@ indication of what the method does.
 2.10.1 (XX.XX.XXXX)
 -------------------
 
-* Fixed bug [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which was preventing level-specific template naming from working as specified in the docs.
+* Fixed bug [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
 
 
 2.10.0 (14.06.2018)

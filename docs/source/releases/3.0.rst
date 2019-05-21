@@ -22,7 +22,8 @@ TBA
 Minor changes & bug fixes
 =========================
 
-* Fixed bug `#329 <https://github.com/rkhleics/wagtailmenus/issues/329>`_, which was preventing level-specific template naming from working as specified in the docs.
+* Fixed bug `#329 <https://github.com/rkhleics/wagtailmenus/issues/329>`_, which prevented level-specific template naming from working as specified in the docs.
+* Fixed bug `#323 <https://github.com/rkhleics/wagtailmenus/issues/323>`_, which prevented ``StreamField`` from working properly when creating or editing menus with custom item models.
 
 
 Deprecations
