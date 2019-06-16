@@ -70,7 +70,9 @@ class DefinesSubMenuTemplatesMixin:
             template = get_template(template_name)
         else:
             # A template wasn't specified, so search the filesystem
-            template = select_template(self.get_sub_menu_template_names(level))
+            template = select_template(
+                self.get_sub_menu_template_names(level=level)
+            )
 
         # Cache the template instance before returning
         self._sub_menu_template_cache[level] = template
