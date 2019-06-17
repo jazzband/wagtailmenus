@@ -63,7 +63,8 @@ class MenuGeneratorView(APIView):
         if self.menu_class is None:
             raise NotImplementedError(
                 "You must either set the 'menu_class' attribute or override "
-                "the get_menu_class() method for '%s'" % self.__class__.__name__
+                "the get_menu_class() method for '%s'"
+                % self.__class__.__name__
             )
         return self.menu_class
 
@@ -71,7 +72,8 @@ class MenuGeneratorView(APIView):
         if self.argument_form_class is None:
             raise NotImplementedError(
                 "You must either set the 'argument_form_class' attribute or "
-                "override the get_argument_form_class() method for '%s'" % self.__class__.__name__
+                "override the get_argument_form_class() method for '%s'"
+                % self.__class__.__name__
             )
         return self.argument_form_class
 
@@ -115,9 +117,10 @@ class MenuGeneratorView(APIView):
         }
 
     def get(self, request, *args, **kwargs):
-        # seen_types is a mapping of type name strings (format: "app_label.ModelName")
-        # to model classes. When an page object is serialised in the API, its model
-        # is added to this mapping
+        # seen_types is a mapping of type name strings
+        # (format: "app_label.ModelName") to model classes.
+        # When an page object is serialised in the API, its
+        # model is added to this mapping
         self.seen_types = OrderedDict()
 
         # Ensure all necessary argument values are present and valid
@@ -128,30 +131,16 @@ class MenuGeneratorView(APIView):
             raise ValidationError(form.errors)
 
         # Activate selected language
-        self.activate_selected_language(form.cleaned_data['language'])
+        with translation.override(form.cleaned_data['language']):
 
-        # Get a menu instance using the valid data
-        menu_instance = self.get_menu_instance(request, form)
+            # Get a menu instance using the valid data
+            menu_instance = self.get_menu_instance(request, form)
 
-        # Create a serializer for this menu instance
-        menu_serializer = self.get_serializer(menu_instance, *args, **kwargs)
-        response_data = menu_serializer.data
-
-        # Restore original language now that the menu has been serialized
-        self.restore_original_language()
+            # Create a serializer for this menu instance
+            menu_serializer = self.get_serializer(menu_instance, *args, **kwargs)
+            response_data = menu_serializer.data
 
         return Response(response_data)
-
-    def activate_selected_language(self, language):
-        """
-        Activates the provided language using translation.get_language(). Used
-        before calling ``get_menu_instance()`` and ``get_serializer()``, to
-        allow the menu to be rendered in the selected language.
-        """
-        if django_settings.USE_I18N:
-            # store the the active language so that it can be restored
-            self._original_language = translation.get_language()
-            translation.activate(language)
 
     def get_menu_instance(self, request, form):
         """
@@ -186,16 +175,6 @@ class MenuGeneratorView(APIView):
             )
 
         return menu_instance
-
-    def restore_original_language(self):
-        """
-        Reactivates the language that was active before a 'selected language'
-        was activated. This is called after menu representation has been
-        extracted from the serializer, so that the response itself can be
-        rendered in the original language.
-        """
-        if django_settings.USE_I18N and hasattr(self, '_original_language'):
-            translation.activate(self._original_language)
 
 
 class MainMenuGeneratorView(MenuGeneratorView):
