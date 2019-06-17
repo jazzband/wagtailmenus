@@ -9,11 +9,11 @@
 .. image:: https://codecov.io/gh/rkhleics/wagtailmenus/branch/master/graph/badge.svg
     :alt: Code coverage
     :target: https://codecov.io/gh/rkhleics/wagtailmenus
-        
+
 .. image:: https://readthedocs.org/projects/wagtailmenus/badge/?version=stable
     :alt: Documentation Status
     :target: http://wagtailmenus.readthedocs.io/en/stable/?badge=stable
-    
+
 
 ============
 wagtailmenus
@@ -21,10 +21,10 @@ wagtailmenus
 
 wagtailmenus is an extension for Torchbox's `Wagtail CMS <https://github.com/torchbox/wagtail>`_ to help you manage and render multi-level navigation and simple flat menus in a consistent, flexible way.
 
-The current version is tested for compatiblily with the following: 
+The current version is tested for compatiblily with the following:
 
-- Wagtail versions 2.0 to 2.4
-- Django versions 1.11 to 2.1
+- Wagtail versions 2.0 to 2.5
+- Django versions 1.11 to 2.2
 - Python versions 3.4 to 3.7
 
 .. image:: https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/docs/source/_static/images/repeating-item.png

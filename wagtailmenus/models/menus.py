@@ -1392,12 +1392,11 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
             template_names.append(lstn)
         return template_names
 
-    def get_sub_menu_template_names(self):
+    def get_sub_menu_template_names(self, level=2):
         """Returns a list of template names to search for when rendering a
         a sub menu for a specific flat menu object (making use of self.handle)
         """
         site = self._contextual_vals.current_site
-        level = self._contextual_vals.current_level
         handle = self.handle
         template_names = []
         if settings.SITE_SPECIFIC_TEMPLATE_DIRS and site:

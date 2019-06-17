@@ -22,6 +22,8 @@ TBA
 Minor changes & bug fixes
 =========================
 
+* Added support for Django 2.2 (no code changes necessary).
+* Added support for Wagtail 2.5 (no code changes necessary).
 * Fixed bug `#329 <https://github.com/rkhleics/wagtailmenus/issues/329>`_, which prevented level-specific template naming from working as specified in the docs.
 * Fixed bug `#323 <https://github.com/rkhleics/wagtailmenus/issues/323>`_, which prevented ``StreamField`` from working properly when creating or editing menus with custom item models.
 
@@ -35,11 +37,30 @@ TBA
 Upgrade considerations
 ======================
 
+Changes to ``Menu.get_sub_menu_templates()``
+--------------------------------------------
+
+If you are overriding this method on a custom menu class you will need to update the method's signature to accept a ``level`` argument with a default value of ``2``. If you are calling ``super().get_sub_menu_templates()`` from within the override method, you should also pass the ``level`` value through to that, like so:
+
+.. code-block:: python
+
+    MyCustomMenu(OriginalMenuClass):
+
+        def get_sub_menu_templates(self, level=2):
+            # your custom here
+            ...
+            # passing level on to super() version
+            return super().get_sub_menu_templates(level)
+
+
+Planned removals
+----------------
+
 Following a standard deprecation period a two minor releases, the following functionality has now been removed.
 
 
 ``Menu.get_instance_for_rendering()``
--------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In an effort to make method names more reflective of their functionality, this method has been replaced by two methods:
 ``create_from_collected_values()`` and ``get_from_collected_values()``. The former is implemented on menu classes that are not model based (where instances must be created from scratch each time, for example: ``ChildrenMenu``, ``SectionMenu``, ``SubMenu``), and the latter is implemented on model-based menu classes, where a corresponding object must be retrieved from the database (so, ``AbstractMainMenu``, ``MainMenu``, ``AbstractFlatMenu`` and ``FlatMenu``).
@@ -50,12 +71,12 @@ If you're using custom menu classes in your project, and are overriding ``get_in
 
 
 ``Menu.get_contextual_vals_from_context()``
--------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In an effort to make method names more reflective of their functionality, and to help dissuade users from overriding functionality that could be subject to change in future, this method has been renamed to ``_create_contextualvals_obj_from_context()`` (becoming a private method in the process).
 
 
 ``Menu.get_option_vals_from_options()``
----------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In an effort to make method names more reflective of their functionality, and to help dissuade users from overriding functionality that could be subject to change in future, this method has been renamed to ``_create_optionvals_obj_from_values()`` (becoming a private method in the process).
