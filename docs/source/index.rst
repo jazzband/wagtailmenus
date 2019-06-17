@@ -5,15 +5,15 @@ Welcome to the wagtailmenus documentation!
 wagtailmenus is an open-source extension for `Wagtail CMS
 <https://github.com/torchbox/wagtail>`_ to help you define, manage and render menus in a consistent, yet flexible way.
 
-The current version is tested for compatibility with the following: 
+The current version is tested for compatibility with the following:
 
-- Wagtail versions 2.0 to 2.4
-- Django versions 1.11 to 2.1
+- Wagtail versions 2.0 to 2.5
+- Django versions 1.11 to 2.2
 - Python versions 3.4 to 3.7
 
 To find out more about what wagtailmenus does and why, see :doc:`overview`
 
-To view the code, open an issue, or submit a pull request, view the `wagtailmenus project on github <https://github.com/rkhleics/wagtailmenus>`_. 
+To view the code, open an issue, or submit a pull request, view the `wagtailmenus project on github <https://github.com/rkhleics/wagtailmenus>`_.
 
 
 Below are some useful links to help you get you started:
@@ -50,5 +50,3 @@ Full index
     settings_reference
     contributing/index
     releases/index
-
-
