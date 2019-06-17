@@ -16,13 +16,13 @@ matrix:
   - env: TOXENV=py37-dj2-wt21
     dist: xenial
     python: 3.7
-  - env: TOXENV=py37-dj21-wt22
+  - env: TOXENV=py37-dj2-wt22
     dist: xenial
     python: 3.7
   - env: TOXENV=py37-dj21-wt23
     dist: xenial
     python: 3.7
-  - env: TOXENV=py37-dj22-wt24
+  - env: TOXENV=py37-dj21-wt24
     dist: xenial
     python: 3.7
   - env: TOXENV=py37-dj22-wt25
