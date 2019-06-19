@@ -86,6 +86,8 @@ class BaseMenuGeneratorView(APIView):
 
     def get_form_init_kwargs(self):
         return {
+            'request': self.request,
+            'view': self,
             'data': self.request.POST or self.request.GET,
             'initial': self.get_form_initial(),
         }
@@ -102,7 +104,7 @@ class BaseMenuGeneratorView(APIView):
     def get_form(self):
         form_class = self.get_form_class()
         init_kwargs = self.get_form_init_kwargs()
-        return form_class()(**init_kwargs)
+        return form_class(**init_kwargs)
 
     def get_serializer(self, instance, **kwargs):
         serializer_class = self.get_serializer_class()
