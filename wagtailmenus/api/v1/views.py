@@ -84,29 +84,24 @@ class BaseMenuGeneratorView(APIView):
             )
         return cls.serializer_class
 
-    @classmethod
-    def get_form_kwargs(cls, request):
+    def get_form_init_kwargs(self):
         return {
-            'request': request,
-            'view': cls,
-            'data': request.POST or request.GET,
-            'initial': cls.get_form_initial(request),
+            'data': self.request.POST or self.request.GET,
+            'initial': self.get_form_initial(),
         }
 
-    @classmethod
-    def get_form_initial(cls, request):
+    def get_form_initial(self):
         return {
-            'max_levels': cls.max_levels_default,
-            'use_specific': cls.use_specific_default,
-            'apply_active_classes': cls.apply_active_classes_default,
-            'allow_repeating_parents': cls.allow_repeating_parents_default,
-            'use_absolute_page_urls': cls.use_absolute_page_urls_default,
+            'max_levels': self.max_levels_default,
+            'use_specific': self.use_specific_default,
+            'apply_active_classes': self.apply_active_classes_default,
+            'allow_repeating_parents': self.allow_repeating_parents_default,
+            'use_absolute_page_urls': self.use_absolute_page_urls_default,
         }
 
-    @classmethod
-    def get_form(cls, request, **kwargs):
-        init_kwargs = cls.get_form_kwargs(request)
-        form_class = cls.get_form_class()
+    def get_form(self):
+        form_class = self.get_form_class()
+        init_kwargs = self.get_form_init_kwargs()
         return form_class()(**init_kwargs)
 
     def get_serializer(self, instance, **kwargs):
@@ -131,7 +126,7 @@ class BaseMenuGeneratorView(APIView):
         self.seen_types = OrderedDict()
 
         # Ensure all necessary argument values are present and valid
-        form = self.get_form(request, **kwargs)
+        form = self.get_form()
         self.form = form
 
         if not form.is_valid():

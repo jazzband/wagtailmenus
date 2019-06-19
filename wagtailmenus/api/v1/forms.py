@@ -22,9 +22,9 @@ class BaseAPIViewArgumentForm(forms.Form):
     ``django_filters.rest_framework.DjangoFilterBackend``), and has some
     custom cleaning behaviour to better handle missing values.
     """
-    def __init__(self, view, request, **kwargs):
-        self._view = view
-        self._request = request
+    def __init__(self, **kwargs):
+        self._view = kwargs.pop('view')
+        self._request = kwargs.pop('request')
         super().__init__(**kwargs)
 
     def full_clean(self):
