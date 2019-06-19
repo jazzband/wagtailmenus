@@ -1,12 +1,12 @@
 from django.test import override_settings, TestCase
 
-from wagtailmenus.api.v1.views import MenuGeneratorView
+from wagtailmenus.api.v1.views import BaseMenuGeneratorView
 from wagtailmenus.api.v1.serializers import FlatMenuSerializer, MainMenuSerializer
 
 
 class TestGetSerializerClass(TestCase):
 
-    class CustomView(MenuGeneratorView):
+    class CustomView(BaseMenuGeneratorView):
         default_serializer_class = MainMenuSerializer
         serializer_class_setting_name = 'MAIN_MENU_SERIALIZER'
 
