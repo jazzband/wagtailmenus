@@ -203,8 +203,8 @@ class FlatMenuGeneratorView(BaseMenuGeneratorView):
     # argument defaults
     fall_back_to_default_site_menus_default = True
 
-    def get_form_initial(self, request):
-        initial = super().get_form_initial(request)
+    def get_form_initial(self):
+        initial = super().get_form_initial()
         initial['fall_back_to_default_site_menus'] = self.fall_back_to_default_site_menus_default
         return initial
 
