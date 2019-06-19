@@ -106,19 +106,17 @@ class BaseMenuGeneratorView(APIView):
         init_kwargs = self.get_form_init_kwargs()
         return form_class(**init_kwargs)
 
-    def get_serializer(self, instance, **kwargs):
+    def get_serializer(self, menu_instance):
         serializer_class = self.get_serializer_class()
-        context = self.get_serializer_context(**kwargs)
-        return serializer_class(instance=instance, context=context)
+        context = self.get_serializer_context()
+        return serializer_class(menu_instance, context=context)
 
-    def get_serializer_context(self, **kwargs):
-        context = {
+    def get_serializer_context(self):
+        return {
             'request': self.request,
             'format': self.format_kwarg,
             'view': self,
         }
-        context.update(kwargs)
-        return context
 
     def get(self, request, *args, **kwargs):
         # seen_types is a mapping of type name strings
@@ -141,7 +139,7 @@ class BaseMenuGeneratorView(APIView):
             menu_instance = self.get_menu_instance(request, form)
 
             # Create a serializer for this menu instance
-            menu_serializer = self.get_serializer(menu_instance, request, **kwargs)
+            menu_serializer = self.get_serializer(menu_instance)
             response_data = menu_serializer.data
 
         return Response(response_data)

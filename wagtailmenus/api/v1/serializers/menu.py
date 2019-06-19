@@ -185,7 +185,7 @@ class SectionMenuSerializer(MenuSerializerMixin, Serializer):
         return self.section_root_serializer_fields
 
     def get_section_root_serializer_init_kwargs(self, instance):
-        return self.section_root_field_init_kwargs
+        return self.section_root_serializer_init_kwargs
 
     def get_items_serializer_class(self, instance):
         class SectionMenuItemSerializer(RecursiveMenuItemSerializer):
