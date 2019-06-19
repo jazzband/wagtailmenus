@@ -3,7 +3,6 @@ from rest_framework.serializers import ModelSerializer, Serializer
 from rest_framework_recursive.fields import RecursiveField
 
 from wagtail.core.models import Page
-from wagtailmenus.api.v1.conf import settings as api_settings
 from wagtailmenus.models.menuitems import AbstractMenuItem
 
 from .page import BasePageSerializer
@@ -30,8 +29,8 @@ class MenuItemSerializerMixin(ContextSpecificFieldsMixin):
     def to_representation(self, instance):
         """
         Due to the varied nature of menu item data, this override sets a couple
-        of additional attributes (or adds extra items to a dictionary) that can
-        be reliably used as a source for ``children`` and ``page`` fields.
+        of additional values that can be reliably used as a source for
+        ``children`` and ``page`` fields.
         """
         children_val = ()
         if getattr(instance, 'sub_menu', None):
@@ -50,6 +49,7 @@ class MenuItemSerializerMixin(ContextSpecificFieldsMixin):
             setattr(instance, CHILDREN_ATTR, children_val)
             setattr(instance, PAGE_ATTR, page_val)
         self.instance = instance
+
         return super().to_representation(instance)
 
     def update_fields(self, fields, instance, context):
@@ -66,15 +66,16 @@ class MenuItemSerializerMixin(ContextSpecificFieldsMixin):
         self.fields['page'] = field_class(**init_kwargs)
 
     def get_page_serializer_class(self, instance, page):
-        if api_settings.MENU_ITEM_PAGE_SERIALIZER:
-            return api_settings.objects.MENU_ITEM_PAGE_SERIALIZER
 
         class MenuItemPageSerializer(BasePageSerializer):
             class Meta:
                 model = type(page)
-                fields = self.Meta.page_fields
+                fields = self.get_page_serializer_fields(instance, page)
 
         return MenuItemPageSerializer
+
+    def get_page_serializer_fields(self, instance, page):
+        return self.Meta.page_fields
 
     def get_page_serializer_init_kwargs(self, instance, page):
         return self.page_field_init_kwargs
@@ -86,10 +87,6 @@ class RecursiveMenuItemSerializer(MenuItemSerializerMixin, Serializer):
     page = fields.DictField(read_only=True)
     active_class = fields.CharField(read_only=True)
     children = RecursiveField(many=True, read_only=True, source=CHILDREN_ATTR)
-
-    class Meta:
-        fields = api_settings.MENU_ITEM_FIELDS
-        page_fields = api_settings.MENU_ITEM_PAGE_FIELDS
 
 
 class BaseMenuItemModelSerializer(MenuItemSerializerMixin, ModelSerializer):

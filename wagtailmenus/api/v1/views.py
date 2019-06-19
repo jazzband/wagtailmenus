@@ -11,8 +11,8 @@ from rest_framework.response import Response
 
 from wagtailmenus.conf import settings as wagtailmenus_settings
 from wagtailmenus.api.v1.conf import settings as api_settings
+from wagtailmenus.api.v1.renderers import BrowsableAPIWithArgumentFormRenderer
 from . import forms
-from . import renderers
 
 
 class MenuGeneratorIndexView(APIView):
@@ -52,10 +52,7 @@ class BaseMenuGeneratorView(APIView):
     # serialization
     serializer_class = None
 
-    renderer_classes = (
-        JSONRenderer,
-        renderers.BrowsableAPIWithArgumentFormRenderer,
-    )
+    renderer_classes = (JSONRenderer, BrowsableAPIWithArgumentFormRenderer)
 
     @classmethod
     def get_menu_class(cls):
@@ -109,7 +106,8 @@ class BaseMenuGeneratorView(APIView):
     @classmethod
     def get_form(cls, request, **kwargs):
         init_kwargs = cls.get_form_kwargs(request)
-        return cls.get_form_class()(**init_kwargs)
+        form_class = cls.get_form_class()
+        return form_class()(**init_kwargs)
 
     def get_serializer(self, instance, **kwargs):
         serializer_class = self.get_serializer_class()
