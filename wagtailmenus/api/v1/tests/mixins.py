@@ -52,7 +52,13 @@ class ArgumentFormTestMixin:
         if request is None:
             request = self.make_request()
         cls = self.get_form_class()
-        form = cls(view, request, data=data, initial=initial or {})
+        form_kwargs = dict(
+            view=view,
+            request=request,
+            data=data,
+            initial=initial or {}
+        )
+        form = cls(**form_kwargs)
         if set_errors:
             form._errors = {}
         return form
