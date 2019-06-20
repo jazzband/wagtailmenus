@@ -1,4 +1,5 @@
 from rest_framework import fields
+from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer, Serializer
 from rest_framework_recursive.fields import RecursiveField
 
@@ -9,10 +10,6 @@ from .page import BasePageSerializer
 from .util import ContextSpecificFieldsMixin
 
 
-CHILDREN_ATTR = '__children'
-PAGE_ATTR = '__page'
-
-
 class MenuItemSerializerMixin(ContextSpecificFieldsMixin):
     """
     A mixin to faciliate rendering of a number of different types of menu
@@ -20,73 +17,36 @@ class MenuItemSerializerMixin(ContextSpecificFieldsMixin):
     variations of those), ``Page`` objects, or even dictionary-like structures
     added by custom hooks or ``MenuPageMixin.modify_submenu_items()`` methods.
     """
+    children_serializer_class = RecursiveField
 
-    page_field_init_kwargs = {
-        'read_only': True,
-        'source': PAGE_ATTR,
-    }
+    def get_children(self, instance):
+        value = self.get_children_value(instance)
+        serializer_class = self.children_serializer_class
+        return serializer_class(value, many=True, context=self.context)
 
-    def to_representation(self, instance):
-        """
-        Due to the varied nature of menu item data, this override sets a couple
-        of additional values that can be reliably used as a source for
-        ``children`` and ``page`` fields.
-        """
-        children_val = ()
+    def get_children_value(self, instance):
         if getattr(instance, 'sub_menu', None):
-            children_val = instance.sub_menu.items
+            return instance.sub_menu.items
+        return ()
 
-        page_val = None
+    def get_page(self, instance):
+        value = self.get_page_value(instance)
+        serializer_class = BasePageSerializer
+        return serializer_class(value, context=self.context)
+
+    def get_page_value(self, instance):
         if isinstance(instance, Page):
-            page_val = instance
-        elif isinstance(instance, AbstractMenuItem):
-            page_val = instance.link_page
-
-        if isinstance(instance, dict):
-            instance[CHILDREN_ATTR] = children_val
-            instance[PAGE_ATTR] = page_val
-        else:
-            setattr(instance, CHILDREN_ATTR, children_val)
-            setattr(instance, PAGE_ATTR, page_val)
-        self.instance = instance
-
-        return super().to_representation(instance)
-
-    def update_fields(self, fields, instance, context):
-        if 'page' in fields:
-            if isinstance(instance, dict):
-                page = instance.get(PAGE_ATTR)
-            else:
-                page = getattr(instance, PAGE_ATTR, None)
-            self.replace_page_field(instance, page)
-
-    def replace_page_field(self, instance, page):
-        field_class = self.get_page_serializer_class(instance, page)
-        init_kwargs = self.get_page_serializer_init_kwargs(instance, page)
-        self.fields['page'] = field_class(**init_kwargs)
-
-    def get_page_serializer_class(self, instance, page):
-
-        class MenuItemPageSerializer(BasePageSerializer):
-            class Meta:
-                model = type(page)
-                fields = self.get_page_serializer_fields(instance, page)
-
-        return MenuItemPageSerializer
-
-    def get_page_serializer_fields(self, instance, page):
-        return self.Meta.page_fields
-
-    def get_page_serializer_init_kwargs(self, instance, page):
-        return self.page_field_init_kwargs
+            return instance
+        if isinstance(instance, AbstractMenuItem):
+            return instance.link_page
 
 
 class RecursiveMenuItemSerializer(MenuItemSerializerMixin, Serializer):
     href = fields.CharField(read_only=True)
     text = fields.CharField(read_only=True)
-    page = fields.DictField(read_only=True)
     active_class = fields.CharField(read_only=True)
-    children = RecursiveField(many=True, read_only=True, source=CHILDREN_ATTR)
+    page = serializers.SerializerMethodField()
+    children = serializers.SerializerMethodField()
 
 
 class BaseMenuItemModelSerializer(MenuItemSerializerMixin, ModelSerializer):
@@ -100,5 +60,7 @@ class BaseMenuItemModelSerializer(MenuItemSerializerMixin, ModelSerializer):
     href = fields.CharField(read_only=True)
     text = fields.CharField(read_only=True)
     active_class = fields.CharField(read_only=True)
-    page = fields.DictField(read_only=True)
-    children = RecursiveMenuItemSerializer(many=True, read_only=True, source=CHILDREN_ATTR)
+    page = serializers.SerializerMethodField()
+    children = serializers.SerializerMethodField()
+
+    children_serializer_class = RecursiveMenuItemSerializer
