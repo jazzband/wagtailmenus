@@ -71,23 +71,36 @@ class AbstractMenuItem(models.Model, MenuItem):
 
     objects = MenuItemManager()
 
-    # Override to modify output for custom classes in wagtailmenus.api
-    api_fields = (
+    # Override these lists to modify output of
+    # custom menu item in wagtailmenus.api
+    api_fields = [
         'text',
         'href',
         'handle',
         'active_class',
         'page',
         'children',
-    )
-
-    # Override to modify output of related pages in wagtailmenus.api
-    page_api_fields = (
+    ]
+    sub_item_api_fields = [
+        'text',
+        'href',
+        'active_class',
+        'page',
+        'children',
+    ]
+    page_api_fields = [
         'id',
         'title',
         'slug',
         'type',
-    )
+    ]
+    sub_item_page_api_fields = [
+        'text',
+        'href',
+        'active_class',
+        'page',
+        'children',
+    ]
 
     class Meta:
         abstract = True

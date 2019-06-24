@@ -1,6 +1,5 @@
 from collections import OrderedDict
 
-from django.conf import settings as django_settings
 from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.exceptions import ValidationError, NotFound
@@ -13,6 +12,7 @@ from wagtailmenus.conf import settings as wagtailmenus_settings
 from wagtailmenus.api.v1.conf import settings as api_settings
 from wagtailmenus.api.v1.renderers import BrowsableAPIWithArgumentFormRenderer
 from . import forms
+from . import serializers
 
 
 class MenuGeneratorIndexView(APIView):
@@ -101,7 +101,7 @@ class BaseMenuGeneratorView(APIView):
             'use_absolute_page_urls': self.use_absolute_page_urls_default,
         }
 
-    def get_form(self):
+    def get_form(self, request):
         form_class = self.get_form_class()
         init_kwargs = self.get_form_init_kwargs()
         return form_class(**init_kwargs)
@@ -126,7 +126,7 @@ class BaseMenuGeneratorView(APIView):
         self.seen_types = OrderedDict()
 
         # Ensure all necessary argument values are present and valid
-        form = self.get_form()
+        form = self.get_form(request)
         self.form = form
 
         if not form.is_valid():

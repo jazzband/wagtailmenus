@@ -7,17 +7,11 @@ from wagtailmenus.api.v1.serializers import FlatMenuSerializer, MainMenuSerializ
 class TestGetSerializerClass(TestCase):
 
     class CustomView(BaseMenuGeneratorView):
-        default_serializer_class = MainMenuSerializer
-        serializer_class_setting_name = 'MAIN_MENU_SERIALIZER'
+        serializer_class = MainMenuSerializer
 
     view_class = CustomView
 
-    def test_returns_default_serializer_by_default(self):
-        view = self.view_class()
-        result = view.get_serializer_class()
-        self.assertEqual(result, view.default_serializer_class)
-
-    def test_returns_serializer_class_attribute_value_is_set(self):
+    def test_returns_serializer_class_attribute_when_set(self):
         view = self.view_class()
         view.serializer_class = FlatMenuSerializer
         result = view.get_serializer_class()

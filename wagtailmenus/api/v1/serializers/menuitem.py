@@ -6,33 +6,41 @@ from rest_framework_recursive.fields import RecursiveField
 from wagtail.core.models import Page
 from wagtailmenus.models.menuitems import AbstractMenuItem
 
-from .page import BasePageSerializer
-from .util import ContextSpecificFieldsMixin
+from .page import PageSerializer
 
 
-class MenuItemSerializerMixin(ContextSpecificFieldsMixin):
+class MenuItemSerializer(serializers.Serializer):
     """
     A mixin to faciliate rendering of a number of different types of menu
     items, including ``MainMenuItem`` or ``FlatMenuItem`` objects (or custom
     variations of those), ``Page`` objects, or even dictionary-like structures
     added by custom hooks or ``MenuPageMixin.modify_submenu_items()`` methods.
     """
-    children_serializer_class = RecursiveField
+    href = fields.CharField(read_only=True)
+    text = fields.CharField(read_only=True)
+    active_class = fields.CharField(read_only=True)
+    page = serializers.SerializerMethodField()
+    children = serializers.SerializerMethodField()
 
-    def get_children(self, instance):
-        value = self.get_children_value(instance)
-        serializer_class = self.children_serializer_class
-        return serializer_class(value, many=True, context=self.context)
+    @classmethod
+    def get_children_serializer_class(cls):
+        return cls
+
+    @classmethod
+    def get_page_serializer_class(cls):
+        return cls.Meta.page_serializer_class
 
     def get_children_value(self, instance):
         if getattr(instance, 'sub_menu', None):
             return instance.sub_menu.items
         return ()
 
-    def get_page(self, instance):
-        value = self.get_page_value(instance)
-        serializer_class = BasePageSerializer
-        return serializer_class(value, context=self.context)
+    def get_children(self, instance):
+        value = self.get_children_value(instance)
+        if not value:
+            return value
+        serializer_class = self.get_children_serializer_class()
+        return serializer_class(value, many=True, context=self.context).data
 
     def get_page_value(self, instance):
         if isinstance(instance, Page):
@@ -40,16 +48,13 @@ class MenuItemSerializerMixin(ContextSpecificFieldsMixin):
         if isinstance(instance, AbstractMenuItem):
             return instance.link_page
 
-
-class RecursiveMenuItemSerializer(MenuItemSerializerMixin, Serializer):
-    href = fields.CharField(read_only=True)
-    text = fields.CharField(read_only=True)
-    active_class = fields.CharField(read_only=True)
-    page = serializers.SerializerMethodField()
-    children = serializers.SerializerMethodField()
+    def get_page(self, instance):
+        page = self.get_page_value(instance)
+        serializer_class = self.get_page_serializer_class()
+        return serializer_class(page, context=self.context).data
 
 
-class BaseMenuItemModelSerializer(MenuItemSerializerMixin, ModelSerializer):
+class BaseMenuItemModelSerializer(MenuItemSerializer, ModelSerializer):
     """
     Used as a base class when dynamically creating serializers for model
     objects with menu-like attributes, including subclasses of
@@ -57,10 +62,13 @@ class BaseMenuItemModelSerializer(MenuItemSerializerMixin, ModelSerializer):
     ``section_root`` in ``SectionMenuSerializer`` - which is a page object with
     menu-like attributes added.
     """
-    href = fields.CharField(read_only=True)
-    text = fields.CharField(read_only=True)
-    active_class = fields.CharField(read_only=True)
-    page = serializers.SerializerMethodField()
-    children = serializers.SerializerMethodField()
 
-    children_serializer_class = RecursiveMenuItemSerializer
+    @classmethod
+    def get_children_serializer_class(cls):
+
+        class SubMenuItemSerializer(MenuItemSerializer):
+            class Meta:
+                fields = cls.Meta.sub_item_fields
+                page_serializer_class = cls.Meta.sub_item_page_serializer_class
+
+        return SubMenuItemSerializer

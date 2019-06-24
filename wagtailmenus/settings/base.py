@@ -39,7 +39,6 @@ INSTALLED_APPS = (
     'wagtail.contrib.routable_page',
     'wagtail.contrib.settings',
     'wagtail.contrib.modeladmin',
-
 )
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -55,6 +54,8 @@ LOGIN_REDIRECT_URL = 'wagtailadmin_home'
 LOCALE_PATHS = (
     os.path.join(PROJECT_ROOT, 'locale'),
 )
+
+ALLOWED_HOSTS = ['0.0.0.0']
 
 # =============================================================================
 # Templates

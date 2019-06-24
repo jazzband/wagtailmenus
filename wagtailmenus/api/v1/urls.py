@@ -2,7 +2,6 @@ from django.conf.urls import url
 from . import views
 
 app_name = 'v1'
-
 urlpatterns = [
     url(r'^$', views.MenuGeneratorIndexView.as_view(), name="index"),
     url(r'^main_menu/$', views.MainMenuGeneratorView.as_view(), name="main_menu"),
