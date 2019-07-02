@@ -51,6 +51,7 @@ class BaseMenuGeneratorView(APIView):
 
     # serialization
     serializer_class = None
+    serializer_class_setting_name = None
 
     renderer_classes = (JSONRenderer, BrowsableAPIWithArgumentFormRenderer)
 
@@ -76,13 +77,15 @@ class BaseMenuGeneratorView(APIView):
 
     @classmethod
     def get_serializer_class(cls):
-        if cls.serializer_class is None:
-            raise NotImplementedError(
-                "You must either set the 'serializer_class' attribute or "
-                "override the get_serializer_class() method for '%s'"
-                % cls.__name__
-            )
-        return cls.serializer_class
+        if cls.serializer_class:
+            return cls.serializer_class
+        if cls.serializer_class_setting_name:
+            return api_settings.get_object(cls.serializer_class_setting_name)
+        raise NotImplementedError(
+            "You must either set the 'serializer_class' attribute, "
+            "or override the get_serializer_class() method for '%s'"
+            % cls.__name__
+        )
 
     def get_form_init_kwargs(self):
         return {
@@ -187,7 +190,7 @@ class MainMenuGeneratorView(BaseMenuGeneratorView):
     name = _('Generate Main Menu')
     menu_class = wagtailmenus_settings.models.MAIN_MENU_MODEL
     form_class = forms.MainMenuGeneratorArgumentForm
-    serializer_class = api_settings.objects.MAIN_MENU_SERIALIZER
+    serializer_class_setting_name = 'MAIN_MENU_SERIALIZER'
 
 
 class FlatMenuGeneratorView(BaseMenuGeneratorView):
@@ -198,7 +201,7 @@ class FlatMenuGeneratorView(BaseMenuGeneratorView):
     name = _('Generate Flat Menu')
     menu_class = wagtailmenus_settings.models.FLAT_MENU_MODEL
     form_class = forms.FlatMenuGeneratorArgumentForm
-    serializer_class = api_settings.objects.FLAT_MENU_SERIALIZER
+    serializer_class_setting_name = 'FLAT_MENU_SERIALIZER'
 
     # argument defaults
     fall_back_to_default_site_menus_default = True
@@ -217,7 +220,7 @@ class ChildrenMenuGeneratorView(BaseMenuGeneratorView):
     name = _('Generate Children Menu')
     menu_class = wagtailmenus_settings.objects.CHILDREN_MENU_CLASS
     form_class = forms.ChildrenMenuGeneratorArgumentForm
-    serializer_class = api_settings.objects.CHILDREN_MENU_SERIALIZER
+    serializer_class_setting_name = 'CHILDREN_MENU_SERIALIZER'
 
     # argument defaults
     max_levels_default = wagtailmenus_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS
@@ -233,7 +236,7 @@ class SectionMenuGeneratorView(BaseMenuGeneratorView):
     name = _('Generate Section Menu')
     menu_class = wagtailmenus_settings.objects.SECTION_MENU_CLASS
     form_class = forms.SectionMenuGeneratorArgumentForm
-    serializer_class = api_settings.objects.SECTION_MENU_SERIALIZER
+    serializer_class_setting_name = 'SECTION_MENU_SERIALIZER'
 
     # argument defaults
     max_levels_default = wagtailmenus_settings.DEFAULT_SECTION_MENU_MAX_LEVELS
