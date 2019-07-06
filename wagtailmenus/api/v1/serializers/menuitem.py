@@ -9,13 +9,16 @@ from wagtailmenus.models.menuitems import AbstractMenuItem
 from .page import PageSerializer
 
 
-class MenuItemSerializer(serializers.Serializer):
+class BaseMenuItemSerializer(serializers.Serializer):
     """
     A mixin to faciliate rendering of a number of different types of menu
     items, including ``MainMenuItem`` or ``FlatMenuItem`` objects (or custom
     variations of those), ``Page`` objects, or even dictionary-like structures
     added by custom hooks or ``MenuPageMixin.modify_submenu_items()`` methods.
     """
+    children_serializer_class = None
+    page_serializer_class = None
+
     href = fields.CharField(read_only=True)
     text = fields.CharField(read_only=True)
     active_class = fields.CharField(read_only=True)
@@ -24,11 +27,13 @@ class MenuItemSerializer(serializers.Serializer):
 
     @classmethod
     def get_children_serializer_class(cls):
+        if cls.children_serializer_class:
+            return cls.children_serializer_class
         return cls
 
     @classmethod
     def get_page_serializer_class(cls):
-        return cls.Meta.page_serializer_class
+        return cls.page_serializer_class
 
     def get_children_value(self, instance):
         if getattr(instance, 'sub_menu', None):
@@ -49,12 +54,14 @@ class MenuItemSerializer(serializers.Serializer):
             return instance.link_page
 
     def get_page(self, instance):
-        page = self.get_page_value(instance)
         serializer_class = self.get_page_serializer_class()
+        if serializer_class is None:
+            return ()
+        page = self.get_page_value(instance)
         return serializer_class(page, context=self.context).data
 
 
-class BaseMenuItemModelSerializer(MenuItemSerializer, ModelSerializer):
+class BaseModelMenuItemSerializer(BaseMenuItemSerializer, ModelSerializer):
     """
     Used as a base class when dynamically creating serializers for model
     objects with menu-like attributes, including subclasses of
@@ -62,13 +69,4 @@ class BaseMenuItemModelSerializer(MenuItemSerializer, ModelSerializer):
     ``section_root`` in ``SectionMenuSerializer`` - which is a page object with
     menu-like attributes added.
     """
-
-    @classmethod
-    def get_children_serializer_class(cls):
-
-        class SubMenuItemSerializer(MenuItemSerializer):
-            class Meta:
-                fields = cls.Meta.sub_item_fields
-                page_serializer_class = cls.Meta.sub_item_page_serializer_class
-
-        return SubMenuItemSerializer
+    pass
