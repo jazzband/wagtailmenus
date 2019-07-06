@@ -81,6 +81,12 @@ class AbstractMenuItem(models.Model, MenuItem):
         'page',
         'children',
     ]
+    page_api_fields = [
+        'id',
+        'title',
+        'slug',
+        'type',
+    ]
     sub_item_api_fields = [
         'text',
         'href',
@@ -88,18 +94,11 @@ class AbstractMenuItem(models.Model, MenuItem):
         'page',
         'children',
     ]
-    page_api_fields = [
+    sub_item_page_api_fields = [
         'id',
         'title',
         'slug',
         'type',
-    ]
-    sub_item_page_api_fields = [
-        'text',
-        'href',
-        'active_class',
-        'page',
-        'children',
     ]
 
     class Meta:
