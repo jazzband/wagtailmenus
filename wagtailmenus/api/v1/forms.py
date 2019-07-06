@@ -91,8 +91,9 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "port/domain parts of the URL for the current API request."
         ),
     )
-    current_url = forms.URLField(
+    current_url = forms.CharField(
         required=False,
+        max_length=500,
         label=_("Current URL"),
         help_text=_(
             "The URL you are generating the menu for (relative to the site "
