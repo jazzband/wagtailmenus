@@ -17,7 +17,7 @@ class BaseMenuItemSerializer(serializers.Serializer):
     added by custom hooks or ``MenuPageMixin.modify_submenu_items()`` methods.
     """
     children_serializer_class = None
-    page_serializer_class = None
+    page_serializer_class = PageSerializer
 
     href = fields.CharField(read_only=True)
     text = fields.CharField(read_only=True)
@@ -54,11 +54,9 @@ class BaseMenuItemSerializer(serializers.Serializer):
             return instance.link_page
 
     def get_page(self, instance):
+        value = self.get_page_value(instance)
         serializer_class = self.get_page_serializer_class()
-        if serializer_class is None:
-            return ()
-        page = self.get_page_value(instance)
-        return serializer_class(page, context=self.context).data
+        return serializer_class(value, context=self.context).data
 
 
 class BaseModelMenuItemSerializer(BaseMenuItemSerializer, ModelSerializer):
