@@ -1,7 +1,5 @@
 from rest_framework import fields
 from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer, Serializer
-from rest_framework_recursive.fields import RecursiveField
 
 from wagtail.core.models import Page
 from wagtailmenus.models.menuitems import AbstractMenuItem
@@ -59,12 +57,14 @@ class BaseMenuItemSerializer(serializers.Serializer):
         return serializer_class(value, context=self.context).data
 
 
-class BaseModelMenuItemSerializer(BaseMenuItemSerializer, ModelSerializer):
+class BaseModelMenuItemSerializer(
+    BaseMenuItemSerializer, serializers.ModelSerializer
+):
     """
-    Used as a base class when dynamically creating serializers for model
-    objects with menu-like attributes, including subclasses of
-    ``AbstractMainMenuItem`` and ``AbstractFlatMenuItem``, and also for
-    ``section_root`` in ``SectionMenuSerializer`` - which is a page object with
-    menu-like attributes added.
+    Used as a base class when dynamically creating a serializer for model
+    objects with menu-like attributes, such as subclasses of
+    ``AbstractMainMenuItem`` and ``AbstractFlatMenuItem``. It is also used
+    for ``section_root`` in ``SectionMenuSerializer``, which is a page object
+    with additional menu-like attributes added.
     """
     pass
