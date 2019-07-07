@@ -5,9 +5,10 @@ from django.template import loader
 from wagtail.core.models import Page, Site
 
 from wagtailmenus.conf import settings
+from wagtailmenus.api.v1 import settings as api_settings
 from wagtailmenus.utils.misc import (
-    get_page_from_request, get_site_from_request, make_dummy_request)
-from . import form_fields as fields
+    get_page_from_request, get_site_from_request)
+from wagtailmenus.api.form_fields as api_fields
 
 
 UNDERIVABLE_MSG = _(
@@ -82,34 +83,29 @@ class BaseAPIViewArgumentForm(forms.Form):
 
 
 class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
-    site = fields.SiteChoiceField(
-        required=False,
-        label=_('Site'),
-        help_text=_(
-            "The ID of the Wagtail Site you are generating the menu for. If "
-            "not provided, the view will attempt to derive this from the "
-            "port/domain parts of the URL for the current API request."
-        ),
-    )
-    current_url = forms.CharField(
-        required=False,
+    current_site_derivation_required = False
+    current_page_derivation_accept_best_matches = True
+
+    current_url = forms.URLField(
         max_length=500,
         label=_("Current URL"),
         help_text=_(
-            "The URL you are generating the menu for (relative to the site "
-            "root). If you are generating a menu for a URL that does not map "
-            "exactly to a Page object, you can provide this in place of "
-            "'current_page' to help derive active classes and other values."
+            "The URL of the page you are generating the menu for, "
+            "including scheme and domain). For example: "
+            "'https://www.example.com/about-us/'."
         ),
     )
-    current_page = fields.PageChoiceField(
+    current_page = api_fields.PageChoiceField(
         label=_('Current page'),
         required=False,
         help_text=_(
-            "The ID of the Wagtail Page you are generating the menu for."
+            "The ID of the Wagtail Page you are generating the menu for. "
+            "If not provided, the endpoint will attempt to derive this "
+            "from 'current_url', but providing this value (if available) "
+            "will improve efficiency."
         ),
     )
-    max_levels = fields.MaxLevelsChoiceField(
+    max_levels = api_fields.MaxLevelsChoiceField(
         label=_('Maximum levels'),
         required=False,
         help_text=_(
@@ -118,7 +114,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "for this menu type."
         )
     )
-    use_specific = fields.UseSpecificChoiceField(
+    use_specific = api_fields.UseSpecificChoiceField(
         label=_('Specific page usage'),
         required=False,
         help_text=_(
@@ -127,7 +123,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "type."
         )
     )
-    apply_active_classes = fields.BooleanChoiceField(
+    apply_active_classes = api_fields.BooleanChoiceField(
         label=_('Apply active classes'),
         required=False,
         help_text=_(
@@ -137,7 +133,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "type."
         ),
     )
-    allow_repeating_parents = fields.BooleanChoiceField(
+    allow_repeating_parents = api_fields.BooleanChoiceField(
         label=_('Allow repeating parents'),
         required=False,
         help_text=_(
@@ -147,14 +143,14 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "relevant setting value for this menu type."
         )
     )
-    use_absolute_page_urls = fields.BooleanChoiceField(
+    use_absolute_page_urls = api_fields.BooleanChoiceField(
         label=_('Use absolute page URLs'),
         required=False,
         help_text=_(
             "Whether the view should use absolute page URLs instead of "
-            "relative ones for menu items that link to pages, even if the "
-            "page is within the page tree for the provided 'site'. Defaults "
-            "to the relevant setting value for this menu type."
+            "relative ones for menu items that link to pages, regardless "
+            "of whether the page is within the same 'site'. Defaults "
+            "to False."
         )
     )
     language = forms.ChoiceField(
@@ -183,48 +179,69 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         self.derive_ancestor_page_ids(cleaned_data)
         return cleaned_data
 
-    def derive_site(self, cleaned_data):
+    def current_site_derivation_needed(self, cleaned_data):
         """
-        If no 'site' value was provided, attempts to derive one from the
-        ``request`` value provided at initialisation.
+        Returns a boolean indicating whether the form should
+        attempt to derive a 'current_site' value from other
+        values in ``cleaned_data``.
         """
-        if cleaned_data.get('site'):
+        if cleaned_data.get('current_site'):
+            return False
+        return (
+            self.current_site_derivation_required or
+            self.current_page_derivation_needed(cleaned_data)
+        )
+
+    def current_page_derivation_needed(self, cleaned_data):
+        """
+        Returns a boolean indicating whether the form should
+        attempt to derive a 'current_page' value from other
+        values in ``cleaned_data``.
+        """
+        if cleaned_data.get('current_page'):
+            return False
+        return cleaned_data.get('apply_active_classes')
+
+    def derive_current_site(self, cleaned_data):
+        """
+        If needed, attempts to derive a 'current_site' value from
+        other values in ``cleaned_data`` and add it to ``cleaned_data``.
+        """
+
+        if not self.current_site_derivation_needed(cleaned_data):
             return
 
-        site = get_site_from_request(self._request)
+        func = api_settings.objects.CURRENT_SITE_DERIVATION_FUNCTION
 
-        if site:
-            cleaned_data['site'] = site
-        else:
-            self.add_error('site', UNDERIVABLE_MSG)
+        cleaned_data['current_site'] = func(
+            url=cleaned_data.get('current_url'),
+            page=cleaned_data.get('current_page'),
+            api_request=self._request,
+        )
 
-    def derive_current_page(self, cleaned_data, force_derivation=False, accept_best_match=True):
+    def derive_current_page(self, cleaned_data):
         """
-        If necessary, attempts to derive a 'current_page' value from other
-        values in ``cleaned_data``, and adds that value to ``cleaned_data``.
-        By default, the page is only derived when 'apply_active_classes' is
-        True. But, ``force_derivation`` can be used to force it.
+        If needed, attempts to derive a 'current_page' value from
+        other values in ``cleaned_data`` and add it to ``cleaned_data``.
 
-        If the URL doesn't match a Page 'exactly' and `accept_best_match` is
-        True, ``get_page_from_request()`` will attempt to find a 'best match'
-        by removing components from the url. If such a match is found, it will
-        be added to ``cleaned_data`` as 'best_match_page'.
+        If the form class allows it, and a ``Page`` cannot be found
+        matching the 'current_url' EXACTLY, the derivation function
+        may return a 'best match' instead - which will be added as
+        'best_match_page' to ``cleaned_data`` instead.
         """
-        if(
-            cleaned_data.get('current_page') or
-            not cleaned_data.get('site') or
-            not cleaned_data.get('current_url') or (
-                not force_derivation and
-                not cleaned_data.get('apply_active_classes')
-            )
-        ):
+
+        if not self.current_page_derivation_required(cleaned_data):
             return
 
-        request = self.make_dummy_request(cleaned_data['current_url'])
-        match, is_exact_match = get_page_from_request(
-            request=request,
-            site=cleaned_data['site'],
-            accept_best_match=accept_best_match,
+        accept_best_match = self.exact_current_page_derivation_required(cleaned_data)
+
+        func = api_settings.objects.CURRENT_PAGE_DERIVATION_FUNCTION
+
+        match, is_exact_match = func(
+            cleaned_data.get('current_url'),
+            current_site=cleaned_data.get('site'),
+            api_request=self._request,
+            accept_best_match=self.current_page_derivation_accept_best_matches,
         )
 
         if match:
@@ -249,12 +266,10 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             ancestor_ids = ()
         cleaned_data['ancestor_page_ids'] = ancestor_ids
 
-    def make_dummy_request(self, url):
-        return make_dummy_request(url=url, original_request=self._request)
-
 
 class BaseMenuModelGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
-    max_levels = fields.MaxLevelsChoiceField(
+
+    max_levels = api_fields.MaxLevelsChoiceField(
         label=_('Maximum levels'),
         required=False,
         empty_label=_('Default: Use the value set for the menu object'),
@@ -264,7 +279,7 @@ class BaseMenuModelGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
             "on the matching menu object."
         ),
     )
-    use_specific = fields.UseSpecificChoiceField(
+    use_specific = api_fields.UseSpecificChoiceField(
         label=_('Specific page usage'),
         required=False,
         empty_label=_('Default: Use the value set for the menu object'),
@@ -277,21 +292,12 @@ class BaseMenuModelGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
 
 class MainMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
-    site = fields.SiteChoiceField(
-        required=False,
-        label=_('Site'),
-        help_text=_(
-            "The ID of the Wagtail Site you are generating a menu for. Used "
-            "to retrieve the relevant menu object from the database. If not "
-            "provided, the view will attempt to derive this from the "
-            "port/domain parts of the URL for the current API request."
-        ),
-    )
+
+    current_site_derivation_required = True
 
     field_order = (
-        'site',
-        'current_page',
         'current_url',
+        'current_page',
         'max_levels',
         'use_specific',
         'apply_active_classes',
@@ -302,6 +308,9 @@ class MainMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
 
 
 class FlatMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
+
+    current_site_derivation_required = True
+
     handle = fields.FlatMenuHandleField(
         label=_('Handle'),
         help_text=_(
@@ -320,11 +329,10 @@ class FlatMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
     )
 
     field_order = (
-        'site',
+        'current_url',
         'handle',
         'fall_back_to_default_site_menus',
         'current_page',
-        'current_url',
         'max_levels',
         'use_specific',
         'apply_active_classes',
@@ -335,6 +343,9 @@ class FlatMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
 
 
 class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
+
+    current_page_derivation_accept_best_matches = False
+
     parent_page = fields.PageChoiceField(
         label=_("Parent page"),
         required=False,
@@ -345,9 +356,8 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
     )
 
     field_order = (
-        'site',
-        'current_page',
         'current_url',
+        'current_page',
         'parent_page',
         'max_levels',
         'use_specific',
@@ -360,6 +370,12 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['parent_page'].queryset = Page.objects.filter(depth__gt=1)
+
+    def current_page_derivation_needed(self, cleaned_data):
+        return (
+            super().current_page_derivation_needed(cleaned_data) or
+            not cleaned_data.get('parent_page')
+        )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -401,6 +417,7 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
 
 class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
+
     section_root_page = fields.PageChoiceField(
         label=_("Section root page"),
         required=False,
@@ -413,9 +430,8 @@ class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
     )
 
     field_order = (
-        'site',
-        'current_page',
         'current_url',
+        'current_page',
         'section_root_page',
         'max_levels',
         'use_specific',
@@ -429,6 +445,12 @@ class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         super().__init__(*args, **kwargs)
         self.fields['section_root_page'].queryset = Page.objects.filter(
             depth__exact=settings.SECTION_ROOT_DEPTH)
+
+    def current_page_derivation_needed(self, cleaned_data):
+        return (
+            super().current_page_derivation_needed(cleaned_data) or
+            not cleaned_data.get('section_root_page')
+        )
 
     def clean(self):
         """

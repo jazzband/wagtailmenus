@@ -136,7 +136,9 @@ class BaseMenuGeneratorView(APIView):
             raise ValidationError(form.errors)
 
         # Activate selected language
-        with translation.override(form.cleaned_data['language']):
+        with translation.override(
+            form.cleaned_data['language'] or translation.get_language()
+        ):
 
             # Get a menu instance using the valid data
             menu_instance = self.get_menu_instance(request, form)
