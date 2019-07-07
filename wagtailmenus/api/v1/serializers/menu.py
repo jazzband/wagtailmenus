@@ -88,6 +88,7 @@ class MenuSerializerMixin:
     def get_item_page_serializer_class(self, menu_instance, item_model=None):
 
         class ItemPageSerializer(self.item_page_serializer_base_class):
+
             class Meta:
                 model = Page
                 fields = self.get_item_page_fields(menu_instance, item_model)
@@ -96,6 +97,13 @@ class MenuSerializerMixin:
 
 
 class ModelBasedMenuSerializer(MenuSerializerMixin, ModelSerializer):
+    """
+    Used to serialize menus that are defined using a model, with an
+    inline model to define menu items (for example ``MainMenu`` or
+    ``FlatMenu``.
+    """
+
+    items = SerializerMethodField()
 
     item_serializer_base_class = BaseModelMenuItemSerializer
 
@@ -105,10 +113,15 @@ class ModelBasedMenuSerializer(MenuSerializerMixin, ModelSerializer):
     sub_item_page_fields = None
     sub_item_page_serializer_base_class = PageSerializer
 
-    items = SerializerMethodField()
-
     def get_item_serializer_class(self, menu_instance, item_model):
+        """
+        Menu items are recursively serialized (using the same class for all
+        levels) by default, but this won't work for model-based menu
+        items, because the sub items are not instances of the same model.
 
+        This class generates a separate serializer class for sub menu items,
+        and sets it on the item serializer.
+        """
         class ItemSerializer(self.item_serializer_base_class):
 
             page_serializer_class = self.get_item_page_serializer_class(
@@ -158,6 +171,12 @@ class ModelBasedMenuSerializer(MenuSerializerMixin, ModelSerializer):
 
 
 class MainMenuSerializer(ModelBasedMenuSerializer):
+    """
+    Used to serialize instances of ``MainMenu``, or some other subclass of
+    ``AbastractMenuItem`` if a custom main menu model is being used.
+    Menu item data will automatically be drawn from custom menu item
+    models if one is being used.
+    """
 
     class Meta:
         model = main_menu_model
@@ -165,6 +184,12 @@ class MainMenuSerializer(ModelBasedMenuSerializer):
 
 
 class FlatMenuSerializer(ModelBasedMenuSerializer):
+    """
+    Used to serialize instances of ``FlatMenu``, or some other subclass of
+    ``AbastractMenuItem`` if a custom main menu model is being used.
+    Menu item data will automatically be drawn from custom menu item
+    models if one is being used.
+    """
 
     class Meta:
         model = flat_menu_model
