@@ -57,9 +57,6 @@ class BaseMenuGeneratorView(APIView):
     serializer_class = None
     serializer_class_setting_name = None
 
-    #
-    requires_current_site = False
-
     renderer_classes = (JSONRenderer, BrowsableAPIWithArgumentFormRenderer)
 
     @classmethod
@@ -128,17 +125,6 @@ class BaseMenuGeneratorView(APIView):
             'view': self,
         }
 
-    def is_current_site_derivation_required(self, data):
-        """
-        Returns a boolean indicating whether the view should
-        attempt to derive a 'current_site' value from other
-        values in ``data``.
-        """
-        return (
-            self.requires_current_site or
-            self.is_current_page_derivation_required(data)
-        )
-
     def derive_current_site(self, data):
         """
         Attempts to derive a 'current_site' value from other
@@ -146,10 +132,14 @@ class BaseMenuGeneratorView(APIView):
         """
         func = api_settings.objects.CURRENT_SITE_DERIVATION_FUNCTION
 
+        site_page = data.get('current_page') or \
+            data.get('parent_page') or \
+            data.get('section_root_page')
+
         data['current_site'] = func(
             url=data.get('current_url'),
-            page=data.get('current_page'),
-            api_request=self._request,
+            page=site_page,
+            api_request=self.request,
         )
 
     def is_current_page_derivation_required(self, data):
@@ -158,9 +148,10 @@ class BaseMenuGeneratorView(APIView):
         attempt to derive a 'current_page' value from other
         values in ``data``.
         """
-        if data.get('current_page'):
-            return False
-        return data.get('apply_active_classes')
+        return (
+            data.get('current_page') is None and
+            data.get('apply_active_classes')
+        )
 
     def accept_best_match_for_current_page(self, data):
         return True
@@ -178,7 +169,7 @@ class BaseMenuGeneratorView(APIView):
         match, is_exact_match = func(
             data.get('current_url'),
             current_site=data.get('site'),
-            api_request=self._request,
+            api_request=self.request,
             accept_best_match=self.accept_best_match_for_current_page(data),
         )
 
@@ -207,8 +198,7 @@ class BaseMenuGeneratorView(APIView):
 
     def get_augmented_form_data(self, form):
         data = form.cleaned_data
-        if self.is_current_site_derivation_required(data):
-            self.derive_current_site(data)
+        self.derive_current_site(data)
         if self.is_current_page_derivation_required(data):
             self.derive_current_page(data)
         if data['apply_active_classes']:
@@ -289,10 +279,6 @@ class MainMenuGeneratorView(BaseMenuGeneratorView):
     form_class = forms.MainMenuGeneratorArgumentForm
     serializer_class_setting_name = 'MAIN_MENU_SERIALIZER'
 
-    # always derive the current site, as it is needed
-    # to identify the correct menu instance
-    current_site_required = True
-
     def get_form_data(self, form):
         data = super().get_form_data(form)
         return data
@@ -307,10 +293,6 @@ class FlatMenuGeneratorView(BaseMenuGeneratorView):
     menu_class = wagtailmenus_settings.models.FLAT_MENU_MODEL
     form_class = forms.FlatMenuGeneratorArgumentForm
     serializer_class_setting_name = 'FLAT_MENU_SERIALIZER'
-
-    # always derive the current site, as it is needed
-    # to identify the correct menu instance
-    current_site_required = True
 
     # argument defaults
     fall_back_to_default_site_menus_default = True
