@@ -5,15 +5,7 @@ from django.template import loader
 from wagtail.core.models import Page, Site
 
 from wagtailmenus.conf import settings
-from wagtailmenus.api.v1 import settings as api_settings
-from wagtailmenus.utils.misc import (
-    get_page_from_request, get_site_from_request)
 from wagtailmenus.api import form_fields as api_form_fields
-
-
-UNDERIVABLE_MSG = _(
-    "This value was not provided and could not be derived from other values."
-)
 
 
 class BaseAPIViewArgumentForm(forms.Form):
@@ -83,9 +75,6 @@ class BaseAPIViewArgumentForm(forms.Form):
 
 
 class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
-    current_site_derivation_required = False
-    current_page_derivation_accept_best_matches = True
-
     current_url = forms.URLField(
         max_length=500,
         label=_("Current URL"),
@@ -168,105 +157,11 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['current_page'].queryset = Page.objects.filter(depth__gt=1)
-        self.fields['site'].queryset = Site.objects.all()
         if not django_settings.USE_I18N:
             self.fields['language'].widget = forms.HiddenInput()
 
-    def clean(self):
-        cleaned_data = super().clean()
-        self.derive_site(cleaned_data)
-        self.derive_current_page(cleaned_data)
-        self.derive_ancestor_page_ids(cleaned_data)
-        return cleaned_data
-
-    def current_site_derivation_needed(self, cleaned_data):
-        """
-        Returns a boolean indicating whether the form should
-        attempt to derive a 'current_site' value from other
-        values in ``cleaned_data``.
-        """
-        if cleaned_data.get('current_site'):
-            return False
-        return (
-            self.current_site_derivation_required or
-            self.current_page_derivation_needed(cleaned_data)
-        )
-
-    def current_page_derivation_needed(self, cleaned_data):
-        """
-        Returns a boolean indicating whether the form should
-        attempt to derive a 'current_page' value from other
-        values in ``cleaned_data``.
-        """
-        if cleaned_data.get('current_page'):
-            return False
-        return cleaned_data.get('apply_active_classes')
-
-    def derive_current_site(self, cleaned_data):
-        """
-        If needed, attempts to derive a 'current_site' value from
-        other values in ``cleaned_data`` and add it to ``cleaned_data``.
-        """
-
-        if not self.current_site_derivation_needed(cleaned_data):
-            return
-
-        func = api_settings.objects.CURRENT_SITE_DERIVATION_FUNCTION
-
-        cleaned_data['current_site'] = func(
-            url=cleaned_data.get('current_url'),
-            page=cleaned_data.get('current_page'),
-            api_request=self._request,
-        )
-
-    def derive_current_page(self, cleaned_data):
-        """
-        If needed, attempts to derive a 'current_page' value from
-        other values in ``cleaned_data`` and add it to ``cleaned_data``.
-
-        If the form class allows it, and a ``Page`` cannot be found
-        matching the 'current_url' EXACTLY, the derivation function
-        may return a 'best match' instead - which will be added as
-        'best_match_page' to ``cleaned_data`` instead.
-        """
-
-        if not self.current_page_derivation_required(cleaned_data):
-            return
-
-        func = api_settings.objects.CURRENT_PAGE_DERIVATION_FUNCTION
-
-        match, is_exact_match = func(
-            cleaned_data.get('current_url'),
-            current_site=cleaned_data.get('site'),
-            api_request=self._request,
-            accept_best_match=self.current_page_derivation_accept_best_matches,
-        )
-
-        if match:
-            if is_exact_match:
-                cleaned_data['current_page'] = match
-            else:
-                cleaned_data['best_match_page'] = match
-
-    def derive_ancestor_page_ids(self, cleaned_data):
-        """
-        If required, attempts to derive a set of 'ancestor_page_ids' from
-        page values in ``cleaned_data`` and add them to ``cleaned_data``.
-        """
-        source_page = cleaned_data.get('current_page') or cleaned_data.get('best_match_page')
-        if source_page and cleaned_data.get('apply_active_classes'):
-            ancestor_ids = set(
-                source_page.get_ancestors(inclusive=cleaned_data.get('current_page') is None)
-                .filter(depth__gte=settings.SECTION_ROOT_DEPTH)
-                .values_list('id', flat=True)
-            )
-        else:
-            ancestor_ids = ()
-        cleaned_data['ancestor_page_ids'] = ancestor_ids
-
 
 class BaseMenuModelGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
-
     max_levels = api_form_fields.MaxLevelsChoiceField(
         label=_('Maximum levels'),
         required=False,
@@ -290,9 +185,6 @@ class BaseMenuModelGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
 
 class MainMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
-
-    current_site_derivation_required = True
-
     field_order = (
         'current_url',
         'current_page',
@@ -306,9 +198,6 @@ class MainMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
 
 
 class FlatMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
-
-    current_site_derivation_required = True
-
     handle = api_form_fields.FlatMenuHandleField(
         label=_('Handle'),
         help_text=_(
@@ -342,8 +231,6 @@ class FlatMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
 
 class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
-    current_page_derivation_accept_best_matches = False
-
     parent_page = api_form_fields.PageChoiceField(
         label=_("Parent page"),
         required=False,
@@ -368,50 +255,6 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['parent_page'].queryset = Page.objects.filter(depth__gt=1)
-
-    def current_page_derivation_needed(self, cleaned_data):
-        return (
-            super().current_page_derivation_needed(cleaned_data) or
-            not cleaned_data.get('parent_page')
-        )
-
-    def clean(self):
-        cleaned_data = super().clean()
-        self.derive_parent_page(cleaned_data)
-        return cleaned_data
-
-    def derive_parent_page(self, cleaned_data):
-        """
-        If necessary, and 'current_page' has been provided or successfully
-        derived, add the same value to ``cleaned_data`` as 'parent_page'.
-        """
-        if cleaned_data.get('parent_page'):
-            return
-
-        if cleaned_data.get('current_page'):
-            cleaned_data['parent_page'] = cleaned_data['current_page']
-        else:
-            self.add_error('parent_page', UNDERIVABLE_MSG)
-
-    def derive_current_page(self, cleaned_data, **kwargs):
-        """
-        Overrides BaseMenuGeneratorArgumentForm.derive_current_page(),
-        because if neither 'parent_page' or 'current_page' have been
-        provided, we want to force derivation of 'current_page', so that it
-        can serve as a stand-in for 'parent_page'.
-
-        A 'best match' might is not good enough to derive 'parent_page', so
-        we supply False for ``accept_best_match``.
-        """
-        kwargs_for_super = {
-            'accept_best_match': False,
-            'force_derivation': bool(
-                not cleaned_data.get('parent_page') and
-                not cleaned_data.get('current_page')
-            ),
-        }
-        kwargs_for_super.update(kwargs)
-        super().derive_current_page(cleaned_data, **kwargs_for_super)
 
 
 class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
@@ -443,57 +286,3 @@ class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         super().__init__(*args, **kwargs)
         self.fields['section_root_page'].queryset = Page.objects.filter(
             depth__exact=settings.SECTION_ROOT_DEPTH)
-
-    def current_page_derivation_needed(self, cleaned_data):
-        return (
-            super().current_page_derivation_needed(cleaned_data) or
-            not cleaned_data.get('section_root_page')
-        )
-
-    def clean(self):
-        """
-        Allow 'section_root_page' to be derived from other values if it was not
-        provided.
-        """
-        cleaned_data = super().clean()
-        self.derive_section_root_page(cleaned_data)
-        return cleaned_data
-
-    def derive_section_root_page(self, cleaned_data):
-        """
-        If not already present, attempt to derive a 'section_root_page' value
-        from page values in ``cleaned_data`` update supplied ``data`` dictionary to include it.
-        """
-        if cleaned_data.get('section_root_page'):
-            return
-
-        source_page = cleaned_data.get('current_page') or cleaned_data.get('best_match_page')
-        section_root_depth = settings.SECTION_ROOT_DEPTH
-        if source_page is None or source_page.depth < section_root_depth:
-            self.add_error('section_root_page', UNDERIVABLE_MSG)
-            return
-        if source_page.depth > section_root_depth:
-            cleaned_data['section_root_page'] = source_page.get_ancestors().get(
-                depth__exact=section_root_depth)
-        else:
-            cleaned_data['section_root_page'] = source_page
-
-    def derive_current_page(self, cleaned_data, **kwargs):
-        """
-        Overrides BaseMenuGeneratorArgumentForm.derive_current_page(),
-        because if neither 'section_root_page' or 'current_page' have been
-        provided, we want to force derivation of 'current_page', so that we
-        are able to derive 'section_root_page' from it.
-
-        A 'best match' might be good enough to derive 'section_root_page', so
-        we supply False for ``accept_best_match``.
-        """
-        kwargs_for_super = {
-            'accept_best_match': True,
-            'force_derivation': bool(
-                not cleaned_data.get('section_root_page') and
-                not cleaned_data.get('current_page')
-            ),
-        }
-        kwargs_for_super.update(kwargs)
-        super().derive_current_page(cleaned_data, **kwargs_for_super)
