@@ -8,7 +8,7 @@ from wagtailmenus.conf import settings
 from wagtailmenus.api.v1 import settings as api_settings
 from wagtailmenus.utils.misc import (
     get_page_from_request, get_site_from_request)
-from wagtailmenus.api.form_fields as api_fields
+from wagtailmenus.api import form_fields as api_form_fields
 
 
 UNDERIVABLE_MSG = _(
@@ -95,7 +95,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "'https://www.example.com/about-us/'."
         ),
     )
-    current_page = api_fields.PageChoiceField(
+    current_page = api_form_fields.PageChoiceField(
         label=_('Current page'),
         required=False,
         help_text=_(
@@ -105,7 +105,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "will improve efficiency."
         ),
     )
-    max_levels = api_fields.MaxLevelsChoiceField(
+    max_levels = api_form_fields.MaxLevelsChoiceField(
         label=_('Maximum levels'),
         required=False,
         help_text=_(
@@ -114,7 +114,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "for this menu type."
         )
     )
-    use_specific = api_fields.UseSpecificChoiceField(
+    use_specific = api_form_fields.UseSpecificChoiceField(
         label=_('Specific page usage'),
         required=False,
         help_text=_(
@@ -123,7 +123,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "type."
         )
     )
-    apply_active_classes = api_fields.BooleanChoiceField(
+    apply_active_classes = api_form_fields.BooleanChoiceField(
         label=_('Apply active classes'),
         required=False,
         help_text=_(
@@ -133,7 +133,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "type."
         ),
     )
-    allow_repeating_parents = api_fields.BooleanChoiceField(
+    allow_repeating_parents = api_form_fields.BooleanChoiceField(
         label=_('Allow repeating parents'),
         required=False,
         help_text=_(
@@ -143,7 +143,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "relevant setting value for this menu type."
         )
     )
-    use_absolute_page_urls = api_fields.BooleanChoiceField(
+    use_absolute_page_urls = api_form_fields.BooleanChoiceField(
         label=_('Use absolute page URLs'),
         required=False,
         help_text=_(
@@ -233,8 +233,6 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         if not self.current_page_derivation_required(cleaned_data):
             return
 
-        accept_best_match = self.exact_current_page_derivation_required(cleaned_data)
-
         func = api_settings.objects.CURRENT_PAGE_DERIVATION_FUNCTION
 
         match, is_exact_match = func(
@@ -269,7 +267,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
 
 class BaseMenuModelGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
-    max_levels = api_fields.MaxLevelsChoiceField(
+    max_levels = api_form_fields.MaxLevelsChoiceField(
         label=_('Maximum levels'),
         required=False,
         empty_label=_('Default: Use the value set for the menu object'),
@@ -279,7 +277,7 @@ class BaseMenuModelGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
             "on the matching menu object."
         ),
     )
-    use_specific = api_fields.UseSpecificChoiceField(
+    use_specific = api_form_fields.UseSpecificChoiceField(
         label=_('Specific page usage'),
         required=False,
         empty_label=_('Default: Use the value set for the menu object'),
@@ -311,14 +309,14 @@ class FlatMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
 
     current_site_derivation_required = True
 
-    handle = fields.FlatMenuHandleField(
+    handle = api_form_fields.FlatMenuHandleField(
         label=_('Handle'),
         help_text=_(
             "The 'handle' for the flat menu you wish to generate. For "
             "example: 'info' or 'contact'."
         )
     )
-    fall_back_to_default_site_menus = fields.BooleanChoiceField(
+    fall_back_to_default_site_menus = api_form_fields.BooleanChoiceField(
         label=_('Fall back to default site menus'),
         required=False,
         help_text=_(
@@ -346,7 +344,7 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
     current_page_derivation_accept_best_matches = False
 
-    parent_page = fields.PageChoiceField(
+    parent_page = api_form_fields.PageChoiceField(
         label=_("Parent page"),
         required=False,
         help_text=_(
@@ -418,7 +416,7 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
 class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
-    section_root_page = fields.PageChoiceField(
+    section_root_page = api_form_fields.PageChoiceField(
         label=_("Section root page"),
         required=False,
         help_text=_(
