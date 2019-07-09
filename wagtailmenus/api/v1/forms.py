@@ -259,6 +259,7 @@ class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
     section_root_page = api_form_fields.PageChoiceField(
         label=_("Section root page"),
         required=False,
+        indent_choice_labels=False,
         help_text=_(
             "The root page for the 'section', whose children and other "
             "decendents you want show menu items for. If not supplied, the "

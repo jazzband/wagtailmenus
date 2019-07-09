@@ -100,7 +100,17 @@ class PageChoiceField(forms.ModelChoiceField):
     def __init__(self, *args, **kwargs):
         if 'queryset' not in 'kwargs':
             kwargs['queryset'] = Page.objects.none()
+        self.indent_choice_labels = kwargs.pop('indent_choice_labels', True)
         super().__init__(*args, **kwargs)
+
+    def label_from_instance(self, obj):
+        if self.indent_choice_labels:
+            if obj.depth > 1:
+                indent = ''.join('    - ' for i in range(obj.depth-2))
+            else:
+                indent = ''
+            return '{indent}{page}'.format(indent=indent, page=obj)
+        return str(obj)
 
 
 class SiteChoiceField(forms.ModelChoiceField):
