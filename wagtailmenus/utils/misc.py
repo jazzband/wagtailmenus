@@ -32,16 +32,11 @@ def get_fake_request():
     return request
 
 
-def get_site_from_request(request, fallback_to_default=True):
+def get_site_from_request(request):
     site = getattr(request, 'site', None)
     if isinstance(site, Site):
-        return request.site
-    site = Site.find_for_request(request)
-    if site:
         return site
-    if fallback_to_default:
-        return Site.objects.filter(is_default_site=True).first()
-    return None
+    return Site.find_for_request(request)
 
 
 def derive_page(request, site, accept_best_match=True, max_subsequent_route_failures=3):

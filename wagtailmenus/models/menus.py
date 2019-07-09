@@ -697,7 +697,7 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
 
     api_fields = (
         'section_root',
-        'items'
+        'items',
     )
 
     section_root_api_fields = (
@@ -1390,6 +1390,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
 # ########################################################
 # Concrete models
 # ########################################################
+
 
 class MainMenu(AbstractMainMenu):
     """The default model for 'main menu' instances."""

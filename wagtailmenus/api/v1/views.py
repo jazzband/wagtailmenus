@@ -108,10 +108,14 @@ class BaseMenuGeneratorView(APIView):
             'use_absolute_page_urls': self.use_absolute_page_urls_default,
         }
 
-    def get_form(self, request):
+    def get_form(self):
+        if hasattr(self, '_form'):
+            return self._form
         form_class = self.get_form_class()
         init_kwargs = self.get_form_init_kwargs()
-        return form_class(**init_kwargs)
+        form = form_class(**init_kwargs)
+        self._form = form
+        return form
 
     def get_serializer(self, menu_instance):
         serializer_class = self.get_serializer_class()
@@ -124,23 +128,6 @@ class BaseMenuGeneratorView(APIView):
             'format': self.format_kwarg,
             'view': self,
         }
-
-    def derive_current_site(self, data):
-        """
-        Attempts to derive a 'current_site' value from other
-        values in ``data`` update``data`` with that value.
-        """
-        func = api_settings.objects.CURRENT_SITE_DERIVATION_FUNCTION
-
-        site_page = data.get('current_page') or \
-            data.get('parent_page') or \
-            data.get('section_root_page')
-
-        data['current_site'] = func(
-            url=data.get('current_url'),
-            page=site_page,
-            api_request=self.request,
-        )
 
     def is_current_page_derivation_required(self, data):
         """
@@ -161,14 +148,11 @@ class BaseMenuGeneratorView(APIView):
         Attempts to derive a 'current_page' value from other values
         in ``data`` and update``data`` with that value.
         """
-        if not self.current_page_derivation_required(data):
-            return
-
         func = api_settings.objects.CURRENT_PAGE_DERIVATION_FUNCTION
 
         match, is_exact_match = func(
             data.get('current_url'),
-            current_site=data.get('site'),
+            current_site=self.request.site,
             api_request=self.request,
             accept_best_match=self.accept_best_match_for_current_page(data),
         )
@@ -196,9 +180,7 @@ class BaseMenuGeneratorView(APIView):
             ancestor_ids = ()
         data['ancestor_page_ids'] = ancestor_ids
 
-    def get_augmented_form_data(self, form):
-        data = form.cleaned_data
-        self.derive_current_site(data)
+    def process_form_data(self, data):
         if self.is_current_page_derivation_required(data):
             self.derive_current_page(data)
         if data['apply_active_classes']:
@@ -212,22 +194,28 @@ class BaseMenuGeneratorView(APIView):
         # model is added to this mapping
         self.seen_types = OrderedDict()
 
-        # Ensure all necessary argument values are present and valid
-        form = self.get_form(request)
-        self.form = form
-
+        # Ensure all argument values are valid
+        form = self.get_form()
         if not form.is_valid():
             raise ValidationError(form.errors)
 
-        data = self.get_augmented_form_data(form)
+        # Derive current site and add to the current request
+        site_derivation_function = api_settings.objects.CURRENT_SITE_DERIVATION_FUNCTION
+        self.request.site = site_derivation_function(
+            form.cleaned_data['current_url'],
+            api_request=self.request,
+        )
 
-        # Activate selected language
+        # Run post-processing on form data
+        processed_data = self.process_form_data(form.cleaned_data)
+
+        # Activate selected language during serialization
         with translation.override(
-            data.get('language', translation.get_language())
+            processed_data.get('language', translation.get_language())
         ):
 
             # Get a menu instance using the valid data
-            menu_instance = self.get_menu_instance(data)
+            menu_instance = self.get_menu_instance(processed_data)
 
             # Create a serializer for this menu instance
             menu_serializer = self.get_serializer(menu_instance)
@@ -248,22 +236,21 @@ class BaseMenuGeneratorView(APIView):
         # similar data structure.
         dummy_context = {
             'request': self.request,
-            'current_site': data.pop('current_site'),
             'wagtailmenus_vals': {
                 'current_page': data.pop('current_page', None),
                 'section_root': data.pop('section_root_page', None),
                 'current_page_ancestor_ids': data.pop('ancestor_page_ids', ()),
             }
         }
-        cls = self.get_menu_class()
         data['add_sub_menus_inline'] = True  # This should always be True
 
         # Generate the menu and return
-        menu_instance = cls._get_render_prepared_object(dummy_context, **data)
+        menu_class = self.get_menu_class()
+        menu_instance = menu_class._get_render_prepared_object(dummy_context, **data)
         if menu_instance is None:
             raise NotFound(_(
                 "No {class_name} object could be found matching the supplied "
-                "values.").format(class_name=cls.__name__)
+                "values.").format(class_name=menu_class.__name__)
             )
 
         return menu_instance
@@ -278,10 +265,6 @@ class MainMenuGeneratorView(BaseMenuGeneratorView):
     menu_class = wagtailmenus_settings.models.MAIN_MENU_MODEL
     form_class = forms.MainMenuGeneratorArgumentForm
     serializer_class_setting_name = 'MAIN_MENU_SERIALIZER'
-
-    def get_form_data(self, form):
-        data = super().get_form_data(form)
-        return data
 
 
 class FlatMenuGeneratorView(BaseMenuGeneratorView):
@@ -301,10 +284,6 @@ class FlatMenuGeneratorView(BaseMenuGeneratorView):
         initial = super().get_form_initial()
         initial['fall_back_to_default_site_menus'] = self.fall_back_to_default_site_menus_default
         return initial
-
-    def get_form_data(self, form):
-        data = super().get_form_data(form)
-        return data
 
 
 class ChildrenMenuGeneratorView(BaseMenuGeneratorView):
@@ -332,8 +311,8 @@ class ChildrenMenuGeneratorView(BaseMenuGeneratorView):
         # only an exact match for 'current_url' will do
         return bool(data['parent_page'])
 
-    def get_augmented_form_data(self, form):
-        data = super().get_form_data(form)
+    def process_form_data(self, data):
+        data = super().process_form_data(data)
         if not data['parent_page']:
             self.derive_parent_page(data)
         return data
@@ -370,8 +349,8 @@ class SectionMenuGeneratorView(BaseMenuGeneratorView):
             not data.get('section_root_page')
         )
 
-    def get_augmented_form_data(self, form):
-        data = super().get_form_data(form)
+    def process_form_data(self, data):
+        data = super().process_form_data(data)
         if not data['section_root_page']:
             self.derive_section_root_page(data)
         return data

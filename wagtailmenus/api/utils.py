@@ -9,12 +9,10 @@ from wagtail.core.sites import get_site_for_hostname
 from wagtailmenus.utils.misc import get_page_from_request
 
 
-def derive_current_site(url, page, api_request):
+def derive_current_site(url, api_request):
     """
-    Attempts to find a ``Site`` object for the current ``api_request``.
-    If supplied, the site should be derived from ``page``, which
-    is a ``Page`` object know to be from the same site. Otherwise,
-    it should be derived from the supplied ``url``.
+    Attempts to find a ``Site`` object for the current ``api_request``
+    from the supplied ``url``.
 
     This function makes some assumptions about how Wagtail is being
     used, and might not be appropriate for some 'headless' implementations.
@@ -22,9 +20,6 @@ def derive_current_site(url, page, api_request):
     (accepting the same arguments as this one) and register it using the
     ``WAGTAILMENUS_API_V1_CURRENT_SITE_DERIVATION_FUNCTION`` setting.
     """
-    if page is not None:
-        return page.specific.get_site()
-
     parsed_url = urlparse(url)
     port = parsed_url.port or 443 if parsed_url.scheme == 'https' else 80
     return get_site_for_hostname(parsed_url.hostname, port)
