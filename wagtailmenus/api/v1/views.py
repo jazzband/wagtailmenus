@@ -93,8 +93,6 @@ class BaseMenuGeneratorView(APIView):
 
     def get_form_init_kwargs(self):
         return {
-            'request': self.request,
-            'view': self,
             'data': self.request.POST or self.request.GET,
             'initial': self.get_form_initial(),
         }

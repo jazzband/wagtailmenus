@@ -15,11 +15,6 @@ class BaseAPIViewArgumentForm(forms.Form):
     ``django_filters.rest_framework.DjangoFilterBackend``), and has some
     custom cleaning behaviour to better handle missing values.
     """
-    def __init__(self, **kwargs):
-        self._view = kwargs.pop('view')
-        self._request = kwargs.pop('request')
-        super().__init__(**kwargs)
-
     def full_clean(self):
         """
         Because non-required arguments are often not provided for API requests,
@@ -92,8 +87,8 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         help_text=_(
             "The ID of the Wagtail Page you are generating the menu for. "
             "You should try to provided this where possible, but only "
-            "if you are rendering the specified page, as it will affect "
-            "active class application."
+            "if you are rendering the specified page, as doing to will "
+            "have an affect on active class application."
         ),
     )
     max_levels = api_form_fields.MaxLevelsChoiceField(
