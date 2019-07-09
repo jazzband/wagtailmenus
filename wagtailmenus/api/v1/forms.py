@@ -76,12 +76,14 @@ class BaseAPIViewArgumentForm(forms.Form):
 
 class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
     current_url = forms.URLField(
-        max_length=500,
+        max_length=300,
         label=_("Current URL"),
         help_text=_(
-            "The URL of the page you are generating the menu for, "
-            "including scheme and domain). For example: "
-            "'https://www.example.com/about-us/'."
+            "The full URL of the page you are generating the menu for, "
+            "including scheme and domain (e.g. "
+            "'https://www.example.com/about-us/'). This is used to "
+            "derive the current site, and also to help with active "
+            "class application when 'current_page' is not supplied."
         ),
     )
     current_page = api_form_fields.PageChoiceField(
@@ -89,9 +91,9 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         required=False,
         help_text=_(
             "The ID of the Wagtail Page you are generating the menu for. "
-            "If not provided, the endpoint will attempt to derive this "
-            "from 'current_url', but providing this value (if available) "
-            "will improve efficiency."
+            "You should try to provided this where possible, but only "
+            "if you are rendering the specified page, as it will affect "
+            "active class application."
         ),
     )
     max_levels = api_form_fields.MaxLevelsChoiceField(
