@@ -245,7 +245,6 @@ class TestSuperUser(TransactionTestCase):
             response, '<th scope="col"  class="sortable column-site">')
         self.assertContains(response, '<div class="changelist-filter col3">')
 
-    @override_settings(WAGTAILMENUS_ADD_EDITOR_OVERRIDE_STYLES=False,)
     def test_flatmenu_edit(self):
         response = self.client.get(
             '/admin/wagtailmenus/flatmenu/edit/1/')
@@ -255,16 +254,6 @@ class TestSuperUser(TransactionTestCase):
         response = self.client.get(
             '/admin/wagtailmenus/flatmenu/copy/1/')
         self.assertEqual(response.status_code, 200)
-
-    def test_panels_are_not_condensedinlinepanels(self):
-        self.assertTrue(isinstance(FlatMenuItemsInlinePanel(), InlinePanel))
-        self.assertTrue(isinstance(MainMenuItemsInlinePanel(), InlinePanel))
-
-    @modify_settings(INSTALLED_APPS={'append': 'condensedinlinepanel'})
-    def test_panels_are_condensedinlinepanels(self):
-        from condensedinlinepanel.edit_handlers import CondensedInlinePanel
-        self.assertTrue(isinstance(FlatMenuItemsInlinePanel(), CondensedInlinePanel))
-        self.assertTrue(isinstance(MainMenuItemsInlinePanel(), CondensedInlinePanel))
 
 
 class TestNonSuperUser(TransactionTestCase):
