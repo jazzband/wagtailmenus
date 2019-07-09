@@ -44,5 +44,4 @@ url
 urls
 wagtail
 wagtailmenus
-wagtail-condensedinlinepanel
 workflow
