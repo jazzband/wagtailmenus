@@ -14,54 +14,34 @@ from wagtailmenus.conf import settings
 # For menu models
 # ########################################################
 
-def _define_inlinepanel(relation_name, **kwargs):
-    klass = InlinePanel
-    defaults = {'label': _('menu items')}
-    if(
-        settings.USE_CONDENSEDINLINEPANEL and
-        'condensedinlinepanel' in django_settings.INSTALLED_APPS
-    ):
-        import condensedinlinepanel
-        from condensedinlinepanel.edit_handlers import CondensedInlinePanel
-        if LooseVersion(condensedinlinepanel.__version__) >= LooseVersion('0.3'):
-            klass = CondensedInlinePanel
-            defaults = {
-                'heading': _('Menu items'),
-                'label': _("Add new item"),
-                'new_card_header_text': _("New item"),
-            }
-    defaults.update(kwargs)
-    return klass(relation_name, **defaults)
+class MenuItemInlinePanel(InlinePanel):
+
+    def __init__(self, **kwargs):
+        defaults = {
+            'heading': _('Menu items'),
+            'label': _('menu item'),
+            'relation_name': self.get_default_relation_name(),
+        }
+        for key, val in defaults.items():
+            if not kwargs.get(key):
+                kwargs[key] = val
+
+        relation_name = kwargs.pop('relation_name')
+        return super().__init__(relation_name, **kwargs)
 
 
-def FlatMenuItemsInlinePanel(**kwargs):  # noqa
-    """
-    Returns either a ``InlinePanel`` or ``CondensedInlinePanel`` instance (
-    depending on whether a sufficient version of `condensedinlinepanel` is
-    installed) for editing menu items for a flat menu.
+class FlatMenuItemsInlinePanel(MenuItemInlinePanel):
 
-    Use in panel definitions like any standard panel class. Any supplied kwargs
-    will be passed on as kwargs to the target class's __init__ method.
-    """
-    return _define_inlinepanel(
-        relation_name=settings.FLAT_MENU_ITEMS_RELATED_NAME,
-        **kwargs
-    )
+    @classmethod
+    def get_default_relation_name(cls):
+        return settings.FLAT_MENU_ITEMS_RELATED_NAME
 
 
-def MainMenuItemsInlinePanel(**kwargs):  # noqa
-    """
-    Returns either a ``InlinePanel`` or ``CondensedInlinePanel`` instance (
-    depending on whether a sufficient version of `condensedinlinepanel` is
-    installed) for editing menu items for a main menu.
+class MainMenuItemsInlinePanel(MenuItemInlinePanel):
 
-    Use in panel definitions like any standard panel class. Any supplied kwargs
-    will be passed on as kwargs to the target class's __init__ method.
-    """
-    return _define_inlinepanel(
-        relation_name=settings.MAIN_MENU_ITEMS_RELATED_NAME,
-        **kwargs
-    )
+    @classmethod
+    def get_default_relation_name(cls):
+        return settings.MAIN_MENU_ITEMS_RELATED_NAME
 
 
 main_menu_content_panels = (
