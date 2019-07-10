@@ -43,7 +43,7 @@ Use this to change the icon used to represent 'Flat menus' in the Wagtail CMS.
 
 Default value: ``None``
 
-Can be set to a tuple of choices in the `standard Django choices format 
+Can be set to a tuple of choices in the `standard Django choices format
 <https://docs.djangoproject.com/en/1.10/ref/models/fields/#field-choices>`_ to change the presentation of the ``FlatMenu.handle`` field from a text field, to a select field with fixed choices, when adding, editing or copying a flat menus in Wagtail's CMS.
 
 For example, if your project uses an 'info' menu in the header, a 'footer' menu in the footer, and a 'help' menu in the sidebar, you could do the following:
@@ -191,7 +191,7 @@ Default value: ``False``
 If you have a multi-site project, and want to be able to use different templates for some or all of those sites, wagtailmenus can be configured to look for additional 'site specific' paths for each template. To enable this feature, you add the following to your project's settings:
 
 .. code-block:: python
-    
+
     # settings.py
 
     WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS = True
@@ -260,34 +260,6 @@ Default value: ``2``
 The maximum number of levels rendered by the ``{% section_menu %}`` tag when no value has been specified using the ``max_levels`` parameter.
 
 
-.. _DEFAULT_CHILDREN_MENU_USE_SPECIFIC:
-
-``WAGTAILMENUS_DEFAULT_CHILDREN_MENU_USE_SPECIFIC``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Default value: ``1`` (Auto)
-
-Controls how 'specific' pages objects are fetched and used during rendering of the ``{% children_menu %}`` tag when no ``use_specific`` value isn't supplied. 
-
-If you'd like to use custom page fields in your children menus (e.g. translated field values or image fields) or if your page models override ``get_url_parts()``, ``relative_url()`` or other ``Page`` methods involved in URL generation, you'll likely want to update this. 
-
-To find out more about what values are supported and the effect they have, see: :ref:`specific_pages`
-
-
-.. _DEFAULT_SECTION_MENU_USE_SPECIFIC:
-
-``WAGTAILMENUS_DEFAULT_SECTION_MENU_USE_SPECIFIC``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Default value: ``1`` (Auto)
-
-Controls how 'specific' pages objects are fetched and used during rendering of the ``{% section_menu %}`` tag when no alternative value has been specified using the ``use_specific`` parameter.
-
-If you'd like to use custom page fields in your section menus (e.g. translated field values, images, or other fields / methods) or if your page models override ``get_url_parts()``, ``relative_url()`` or other ``Page`` methods involved in URL generation, you'll likely want to update this. 
-
-To find out more about what values are supported and the effect they have, see: :ref:`specific_pages`
-
-
 --------------------------------------
 Menu class and model override settings
 --------------------------------------
@@ -300,9 +272,9 @@ Menu class and model override settings
 
 Default value: ``'wagtailmenus.models.menus.ChildrenMenu'``
 
-Use this to specify a custom menu class to be used by wagtailmenus' ``children_menu`` tag. The value should be the import path of your custom class as a string, e.g. ``'mysite.appname.models.CustomClass'``. 
+Use this to specify a custom menu class to be used by wagtailmenus' ``children_menu`` tag. The value should be the import path of your custom class as a string, e.g. ``'mysite.appname.models.CustomClass'``.
 
-For more details see: :ref:`custom_childrenmenu_class` 
+For more details see: :ref:`custom_childrenmenu_class`
 
 
 .. _FLAT_MENU_MODEL:
@@ -312,7 +284,7 @@ For more details see: :ref:`custom_childrenmenu_class`
 
 Default value: ``'wagtailmenus.FlatMenu'``
 
-Use this to specify a custom model to use for flat menus instead of the default. The model should be a subclass of ``wagtailmenus.AbstractFlatMenu``. 
+Use this to specify a custom model to use for flat menus instead of the default. The model should be a subclass of ``wagtailmenus.AbstractFlatMenu``.
 
 For more details see: :ref:`custom_flat_menu_models`
 
@@ -348,7 +320,7 @@ For more details see: :ref:`custom_main_menu_models`
 
 Default value: ``'menu_items'``
 
-Use this to specify the 'related name' that should be used to access menu items from main menu instances. Used to replace the default ``MainMenuItem`` model with a custom one. 
+Use this to specify the 'related name' that should be used to access menu items from main menu instances. Used to replace the default ``MainMenuItem`` model with a custom one.
 
 For more details see: :ref:`custom_main_menu_models`
 
@@ -360,7 +332,7 @@ For more details see: :ref:`custom_main_menu_models`
 
 Default value: ``'wagtailmenus.models.menus.SectionMenu'``
 
-Use this to specify a custom class to be used by wagtailmenus' ``section_menu`` tag. The value should be the import path of your custom class as a string, e.g. ``'mysite.appname.models.CustomClass'``. 
+Use this to specify a custom class to be used by wagtailmenus' ``section_menu`` tag. The value should be the import path of your custom class as a string, e.g. ``'mysite.appname.models.CustomClass'``.
 
 For more details see: :ref:`custom_sectionmenu_class`
 
