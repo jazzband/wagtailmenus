@@ -23,7 +23,6 @@ def get_site_model():
 
 def make_optionvals_instance(
     max_levels=2,
-    use_specific=constants.USE_SPECIFIC_AUTO,
     apply_active_classes=True,
     allow_repeating_parents=True,
     use_absolute_page_urls=False,
@@ -37,7 +36,6 @@ def make_optionvals_instance(
 ):
     return OptionVals(
         max_levels,
-        use_specific,
         apply_active_classes,
         allow_repeating_parents,
         use_absolute_page_urls,

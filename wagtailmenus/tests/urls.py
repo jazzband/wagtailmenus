@@ -17,17 +17,5 @@ urlpatterns = [
         TemplateView.as_view(template_name='page.html')),
     url(r'^news-and-events/$',
         TemplateView.as_view(template_name='page.html')),
-    # Hijacking the iron-man page to render a different template, that tests
-    # the effect of `use_specific=0` in template tags
-    url(r'^superheroes/marvel-comics/iron-man/$',
-        TemplateView.as_view(template_name='use-specific-off.html')),
-    # Hijacking the batman page to render a different template, that tests
-    # the effect of `use_specific=2` in template tags
-    url(r'^superheroes/dc-comics/batman/$',
-        TemplateView.as_view(template_name='use-specific-top-level.html')),
-    # Hijacking the wonder-woman page to render to different template, that
-    # tests the effect of `use_specific=3` in template tags
-    url(r'^superheroes/dc-comics/wonder-woman/$',
-        TemplateView.as_view(template_name='use-specific-always.html')),
     url(r'', include(wagtail_urls)),
 ]

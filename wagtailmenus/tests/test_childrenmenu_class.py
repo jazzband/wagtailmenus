@@ -9,7 +9,7 @@ Page = utils.get_page_model()
 class ChildrenMenuTestCase(TestCase):
 
     def get_test_menu_instance(self):
-        return ChildrenMenu(parent_page=Page(), max_levels=3, use_specific=1)
+        return ChildrenMenu(parent_page=Page(), max_levels=3)
 
 
 class TestGetSubMenuTemplateNames(

@@ -71,21 +71,21 @@ class TestCustomMenuItemsGerman(TestCase):
         soup = BeautifulSoup(response.content, 'html5lib')
 
         # Assertions to compare rendered HTML against expected HTML
-        menu_html = soup.find(id='main-menu').decode()
+        menu_html = soup.find(id='main-menu-two-levels').decode()
         expected_menu_html = """
-        <div id="main-menu">
+        <div id="main-menu-two-levels">
             <ul class="nav navbar-nav">
                 <li class=""><a href="/">Home</a></li>
-                <li class=" dropdown top-level">
+                <li class=" dropdown">
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Etwa <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
-                        <li class=" top-level"><a href="/about-us/">Abschnitt zu Hause</a></li>
+                        <li class=""><a href="/about-us/">Abschnitt zu Hause</a></li>
                         <li class=""><a href="/about-us/meet-the-team/">Meet the team</a></li>
                         <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
-                <li class=" dropdown top-level">
+                <li class=" dropdown">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; Veranstaltungen <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
@@ -150,21 +150,21 @@ class TestCustomMenuItemsFrench(TestCase):
         soup = BeautifulSoup(response.content, 'html5lib')
 
         # Assertions to compare rendered HTML against expected HTML
-        menu_html = soup.find(id='main-menu').decode()
+        menu_html = soup.find(id='main-menu-two-levels').decode()
         expected_menu_html = """
-        <div id="main-menu">
+        <div id="main-menu-two-levels">
             <ul class="nav navbar-nav">
                 <li class=""><a href="/">Home</a></li>
-                <li class=" dropdown top-level">
+                <li class=" dropdown">
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sur <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
-                        <li class=" top-level"><a href="/about-us/">Section accueil</a></li>
+                        <li class=""><a href="/about-us/">Section accueil</a></li>
                         <li class=""><a href="/about-us/meet-the-team/">Meet the team</a></li>
                         <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
-                <li class=" dropdown top-level">
+                <li class=" dropdown">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Nouvelles et événements <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
@@ -252,21 +252,21 @@ class TestCustomMenuModels(TestCase):
         soup = BeautifulSoup(response.content, 'html5lib')
 
         # Assertions to compare rendered HTML against expected HTML
-        menu_html = soup.find(id='main-menu').decode()
+        menu_html = soup.find(id='main-menu-two-levels').decode()
         expected_menu_html = """
-        <div id="main-menu">
+        <div id="main-menu-two-levels">
             <ul class="nav navbar-nav">
                 <li class=""><a href="/">Home</a></li>
-                <li class=" dropdown top-level">
+                <li class=" dropdown">
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
-                        <li class=" top-level"><a href="/about-us/">Section home</a></li>
+                        <li class=""><a href="/about-us/">Section home</a></li>
                         <li class=""><a href="/about-us/meet-the-team/">Meet the team</a></li>
                         <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
-                <li class=" dropdown top-level">
+                <li class=" dropdown">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
@@ -294,21 +294,21 @@ class TestCustomMenuModels(TestCase):
         soup = BeautifulSoup(response.content, 'html5lib')
 
         # Assertions to compare rendered HTML against expected HTML
-        menu_html = soup.find(id='main-menu').decode()
+        menu_html = soup.find(id='main-menu-two-levels').decode()
         expected_menu_html = """
-        <div id="main-menu">
+        <div id="main-menu-two-levels">
             <ul class="nav navbar-nav">
                 <li class=""><a href="/">Home</a></li>
-                <li class=" dropdown top-level">
+                <li class=" dropdown">
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Etwa <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
-                        <li class=" top-level"><a href="/about-us/">Abschnitt zu Hause</a></li>
+                        <li class=""><a href="/about-us/">Abschnitt zu Hause</a></li>
                         <li class=""><a href="/about-us/meet-the-team/">Meet the team</a></li>
                         <li class=""><a href="/about-us/our-heritage/">Our heritage</a></li>
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
-                <li class=" dropdown top-level">
+                <li class=" dropdown">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; Veranstaltungen <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
