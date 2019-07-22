@@ -55,8 +55,4 @@ def wagtailmenus(request):
 
     return {
         'wagtailmenus_vals': SimpleLazyObject(_get_value_dict),
-        'USE_SPECIFIC_OFF': constants.USE_SPECIFIC_OFF,
-        'USE_SPECIFIC_AUTO': constants.USE_SPECIFIC_AUTO,
-        'USE_SPECIFIC_TOP_LEVEL': constants.USE_SPECIFIC_TOP_LEVEL,
-        'USE_SPECIFIC_ALWAYS': constants.USE_SPECIFIC_ALWAYS,
     }

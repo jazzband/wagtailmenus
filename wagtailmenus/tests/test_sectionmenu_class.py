@@ -9,7 +9,7 @@ Page = utils.get_page_model()
 class SectionMenuTestCase(TestCase):
 
     def get_test_menu_instance(self):
-        return SectionMenu(root_page=Page(), max_levels=3, use_specific=1)
+        return SectionMenu(root_page=Page(), max_levels=3)
 
 
 class TestSectionMenuGeneralMethods(SectionMenuTestCase):

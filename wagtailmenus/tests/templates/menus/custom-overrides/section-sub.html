@@ -1,2 +1,14 @@
+{% load menu_tags %}
 <p>This sub menu is soooo custom!</p>
-{% include "menus/sub_menu.html "%}
+{% if menu_items %}
+	<ul>
+	{% for item in menu_items %}
+	    <li class="{{ item.active_class }}">
+	        <a href="{{ item.href }}">{{ item.text }}</a>
+	        {% if item.has_children_in_menu %}
+	        	{% sub_menu item %}
+	        {% endif %}
+	    </li>
+	{% endfor %}
+	</ul>
+{% endif %}

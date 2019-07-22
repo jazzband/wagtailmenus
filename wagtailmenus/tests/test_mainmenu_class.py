@@ -35,129 +35,74 @@ class TestMainMenuGeneralMethods(MainMenuTestCase):
 class TestTopLevelItems(MainMenuTestCase):
 
     # ------------------------------------------------------------------------
-    # MainMenu.top_level_items()
+    # MainMenu.top_level_items
     # ------------------------------------------------------------------------
 
-    def test_setting_and_clearing_of_cache_values(self):
-        menu = MainMenu.objects.get(pk=1)
-        # This menu has a `use_specific` value of 1 (AUTO)
-        self.assertEqual(menu.use_specific, 1)
+    def test_uses_many_queries_when_menu_items_link_to_pages(self):
+        # 6 queries in total:
+        # 1. Fetch menu items
+        # 2. Fetch vanilla pages
+        # 3-6: Fetching specific pages (HomePage, TopLevelPage, LowLevelPage, ContactPage)
+        menu = self.get_test_menu_instance()
+        with self.assertNumQueries(6):
+            menu.top_level_items
 
-        # So, the top-level items it returns should all just be custom links
-        # or have a `link_page` that is just a vanilla Page object.
-        for item in menu.top_level_items:
-            self.assertTrue(item.link_page is None or type(item.link_page) is Page)
-
-        # After being called once, top_level_options should be cached, so
-        # accessing it again shouldn't trigger any database queries
-        with self.assertNumQueries(0):
-            for item in menu.top_level_items:
-                self.assertTrue(item.link_page or item.link_url)
-
-        # Lets change `use_specific` to 2 (TOP_LEVEL)
-        menu.set_use_specific(2)
-
-        # The above should clear the cached value, so if we call
-        # top_level_items again, we should get a fresh list of specific pages
-        for item in menu.top_level_items:
-            self.assertTrue(item.link_page is None or type(item.link_page) is not Page)
-
-        # Lets change `use_specific` to 0 (OFF) again
-        menu.set_use_specific(0)
-
-        # Because the work has already been done to fetch specific items, even
-        # though we might not need specific items, the cached value should
-        # remain in-tact, with no more queries being triggered on recall.
-        with self.assertNumQueries(0):
-            for item in menu.top_level_items:
-                assert item.link_page is None or type(item.link_page) is not Page
-
-    def test_method_initiates_one_query_when_no_menu_items_link_to_pages(self):
-        # First, let's replace any menu items that link to pages with links
+    def test_uses_a_single_query_when_no_menu_items_link_to_pages(self):
+        # Replace any menu items that link to pages with links
         # to custom urls
+        menu = self.get_test_menu_instance()
         for i, item in enumerate(
-            MainMenu.objects.get(pk=1).get_menu_items_manager().all()
+            menu.get_menu_items_manager().all()
         ):
             if item.link_page_id:
                 item.link_page = None
                 item.link_url = '/test/{}/'.format(i)
                 item.save()
 
-        menu = MainMenu.objects.get(pk=1)
+        # If no menu items link to pages, no further queries are needed
         with self.assertNumQueries(1):
-            menu.get_top_level_items()
-
-    def test_method_initiates_two_queries_when_vanilla_page_data_is_required(self, menu_obj=None):
-        menu = menu_obj or MainMenu.objects.get(pk=1)
-        menu.use_specific = constants.USE_SPECIFIC_AUTO
-        with self.assertNumQueries(2):
-            menu.get_top_level_items()
+            menu.top_level_items
 
 
-class TestPagesForDisplay(MainMenuTestCase):
+class TestGetPagesForDisplay(MainMenuTestCase):
 
     # ------------------------------------------------------------------------
-    # MainMenu.pages_for_display()
+    # MainMenu.pages_for_display
     # ------------------------------------------------------------------------
 
-    def test_setting_and_clearing_of_cache_values(self):
+    def test_result(self):
         menu = MainMenu.objects.get(pk=1)
-        # This menu has a `use_specific` value of 1 (AUTO)
-        self.assertEqual(menu.use_specific, 1)
         # And a `max_levels` value of 2
         self.assertEqual(menu.max_levels, 2)
 
-        # So, every page returned by `pages_for_display` should just be a
-        # vanilla Page object, that is live, not expired and meant to
-        # appear in menus
-        for p in menu.pages_for_display:
-            self.assertEqual(type(p), Page)
+        # Every page returned by `pages_for_display` should be a
+        # live, not expired and meant to appear in menus
+        for p in menu.pages_for_display.values():
             self.assertTrue(p.live)
             self.assertFalse(p.expired)
             self.assertTrue(p.show_in_menus)
 
-        # Their should be 6 pages total
-        self.assertEqual(len(menu.pages_for_display), 6)
+        # Their should be 12 pages total, 1 for each item, plus children:
+        # 1.  <HomePage: Home>,
+        # 2.  <TopLevelPage: About us>
+        #     3.  <LowLevelPage: Meet the team>
+        #     4.  <LowLevelPage: Our heritage>
+        #     5.  <LowLevelPage: Our mission and values>
+        # X.  <TopLevelPage: Superheroes> - not included (show_in_menus=False)
+        #     6.  <LowLevelPage: Marvel Comics>
+        #     7.  <LowLevelPage: D.C. Comics>
+        # 8.  <TopLevelPage: News & events>
+        #     9.  <LowLevelPage: Latest news>
+        #     10. <LowLevelPage: Upcoming events>
+        #     11. <LowLevelPage: In the press>
+        # 12. <ContactPage: Contact us>
+        self.assertEqual(len(menu.pages_for_display), 12)
 
         # After being called once, pages_for_display should be cached, so
         # accessing it again shouldn't trigger any database queries
         with self.assertNumQueries(0):
-            for p in menu.pages_for_display:
-                self.assertTrue(p.title)
+            list(menu.pages_for_display.values())
 
-        # Lets change `use_specific` to 3 (ALWAYS)
-        menu.set_use_specific(3)
-
-        # The above should clear the cached value, so if we call
-        # pages_for_display again, we should get a fresh list of specific pages
-        for p in menu.pages_for_display:
-            self.assertNotEqual(type(p), Page)
-
-        # Lets change `max_levels` to 1
-        menu.set_max_levels(1)
-
-        # The above should clear the cached value, so if we call
-        # pages_for_display again, we it should provide an empty queryset
-        self.assertQuerysetEqual(menu.pages_for_display, Page.objects.none())
-
-        # Lets change `max_levels` to 3
-        menu.set_max_levels(3)
-
-        # The above should cleare the cached value, and now pages_for_display
-        # should reurn 12 pages total to display
-        self.assertEqual(len(menu.pages_for_display), 9)
-
-        # As with `top_level_items` Even is we set `use_specific` to a lower
-        # value, the cached `pages_for_display` value will not be cleared, as
-        # it specific is better than not.
-        menu.set_use_specific(1)
-
-        # Because the work has already been done to fetch specific pages, even
-        # though we might not need specific items, the cached value should
-        # remain in-tact, with no more queries being triggered on recall.
-        with self.assertNumQueries(0):
-            for p in menu.pages_for_display:
-                assert type(p) is not Page
 
 
 class TestAddMenuItemsForPages(MainMenuTestCase):

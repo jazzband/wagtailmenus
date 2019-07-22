@@ -323,9 +323,6 @@ Below is a full list of the additional arguments that are passed to methods usin
 
     If the current page was 'Vacancy one', the section root page would be 'Careers'. Or, if the current page was 'Article one', the section root page would be 'News & events'.
 
-``use_specific``
-    An integer value indicating the preferred policy for using ``PageQuerySet.specific()`` and ``Page.specific`` in rendering the current menu. For more information see: :ref:`specific_pages`.
-
 ``allow_repeating_parents``
     A boolean value indicating the preferred policy for having pages that subclass ``MenuPageMixin`` add a repeated versions of themselves to it's children pages (when rendering a `sub_menu` for that page). For more information see: :ref:`menupage_and_menupagemixin`.
 

@@ -67,7 +67,6 @@ menu_settings_panels = (
         heading=_('Render settings'),
         children=(
             FieldPanel('max_levels'),
-            FieldPanel('use_specific')
         ),
     ),
 )
