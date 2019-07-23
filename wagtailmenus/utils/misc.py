@@ -14,10 +14,10 @@ def get_site_from_request(request, fallback_to_default=True):
 
 def derive_page(request, site, accept_best_match=True, max_subsequent_route_failures=3):
     """
-    Attempts to find a ``Page`` from ``site`` matching the path of the
-    supplied ``request``. Returns a tuple, where the first element is the
-    matching ``Page`` object (or ``None`` if no match was found), and the
-    second a boolean indicating whether the page matched the full URL.
+    Attempts to find a ``Page`` from the provided ``site`` matching the path
+    of the supplied ``request``. Returns a tuple, where the first item is
+    the matching page (or ``None`` if no match was found), and the second item
+    is a boolean indicating whether the page matched the full URL.
 
     If ``accept_best_match`` is ``True``, the method will attempt to find a
     'best match', matching as many path components as possible. This process
