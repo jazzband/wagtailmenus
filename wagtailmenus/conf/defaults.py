@@ -55,6 +55,8 @@ FLAT_MENUS_FALL_BACK_TO_DEFAULT_SITE_MENUS = False
 
 GUESS_TREE_POSITION_FROM_PATH = True
 
+GUESS_TREE_POSITION_FROM_PATH_MAX_ATTEMPTS = 10
+
 
 # --------------------------------------
 # Menu class and model override settings

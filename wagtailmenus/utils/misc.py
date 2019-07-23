@@ -23,6 +23,8 @@ def get_page_from_request(request, site, accept_best_match=True):
     matching the full URL, the method will attempt to find a 'best match'
     for the request instead.
     """
+    from wagtailmenus.conf import settings
+
     routing_point = site.root_page.specific
     path_components = [pc for pc in request.path.split('/') if pc]
 
@@ -33,6 +35,13 @@ def get_page_from_request(request, site, accept_best_match=True):
         except Http404:
             return None, False
 
+    # Apply a sensible limit to the number of route attempts
+    path_components_limited = False
+    max_attempts = settings.GUESS_TREE_POSITION_FROM_PATH_MAX_ATTEMPTS
+    if len(path_components) > max_attempts:
+        path_components = path_components[:max_attempts]
+        path_components_limited = True
+
     best_match = None
     full_url_match = False
     lookup_components = []
@@ -42,7 +51,7 @@ def get_page_from_request(request, site, accept_best_match=True):
         lookup_components.append(component)
         try:
             best_match = routing_point.route(request, lookup_components)[0]
-            full_url_match = bool(i == len(path_components))
+            full_url_match = bool(not path_components_limited and i == len(path_components))
             if best_match != routing_point:
                 # A new page was reached. Next time, try routing from this new
                 # page, using a single lookup component
