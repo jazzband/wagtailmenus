@@ -12,24 +12,22 @@ def get_site_from_request(request, fallback_to_default=True):
     return None
 
 
-def get_page_from_request(request, site, accept_best_match=True, max_subsequent_route_failures=3):
+def derive_page(request, site, accept_best_match=True, max_subsequent_route_failures=3):
     """
-    Attempts to find a ``Page`` within ``site`` for the supplied ``request``.
-    Returns a tuple, where the first element is the matching ``Page`` object
-    (or ``None`` if no match was found), and a boolean indicating whether the
-    page matched the full URL.
+    Attempts to find a ``Page`` from ``site`` matching the path of the
+    supplied ``request``. Returns a tuple, where the first element is the
+    matching ``Page`` object (or ``None`` if no match was found), and the
+    second a boolean indicating whether the page matched the full URL.
 
     If ``accept_best_match`` is ``True``, the method will attempt to find a
-    'best match' for the request, matching as many path components as possible.
-    This process will continue until all path components have been exhausted,
-    or more than ``subsequent_404s_permitted`` Http404 errors are encountered
-    between successful route() results.
+    'best match', matching as many path components as possible. This process
+    will continue until all path components have been exhausted, or routing
+    fails more that ``max_subsequent_route_failures`` times in a row.
     """
     routing_point = site.root_page.specific
     path_components = [pc for pc in request.path.split('/') if pc]
 
     if not accept_best_match:
-        # Attempt to find a full URL match, or give up
         try:
             return routing_point.route(request, path_components)[0], True
         except Http404:
@@ -70,6 +68,20 @@ def get_page_from_request(request, site, accept_best_match=True, max_subsequent_
                 continue
 
     return best_match, full_url_match
+
+
+def derive_section_root(page):
+    """
+    Returns the 'section root' for the provided ``page``, or ``None``
+    if no such page can be identified. Results are dependant on the
+    value of the ``WAGTAILMENUS_SECTION_ROOT_DEPTH`` setting.
+    """
+    from wagtailmenus.conf import settings
+    desired_depth = settings.SECTION_ROOT_DEPTH
+    if page.depth == desired_depth:
+        return page.specific
+    if page.depth > desired_depth:
+        return page.get_ancestors().get(depth=desired_depth).specific
 
 
 def validate_supplied_values(tag, max_levels=None, parent_page=None,

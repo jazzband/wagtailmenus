@@ -1,7 +1,9 @@
 from django.http import Http404
 from django.utils.functional import SimpleLazyObject
 from wagtailmenus.conf import settings
-from wagtailmenus.utils.misc import get_site_from_request, get_page_from_request
+from wagtailmenus.utils.misc import (
+    get_site_from_request, derive_page, derive_section_root
+)
 
 
 def wagtailmenus(request):
@@ -17,18 +19,12 @@ def wagtailmenus(request):
         section_root_depth = settings.SECTION_ROOT_DEPTH
 
         if guess_position and not current_page:
-            match, full_url_match = get_page_from_request(request, site, accept_best_match=True)
+            match, full_url_match = derive_page(request, site)
             if full_url_match:
                 current_page = match
 
-        if guess_position and not section_root:
-            best_match = current_page or match
-            if best_match:
-                if best_match.depth == section_root_depth:
-                    section_root = best_match
-                elif best_match.depth > section_root_depth:
-                    section_root = best_match.get_ancestors().filter(
-                        depth__exact=section_root_depth).first()
+        if not section_root and current_page or match:
+            section_root = derive_section_root(current_page or match)
 
         if current_page or match:
             page = current_page or match
