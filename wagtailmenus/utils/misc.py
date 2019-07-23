@@ -47,7 +47,7 @@ def derive_page(request, site, accept_best_match=True, max_subsequent_route_fail
             # they are exhausted, or the maximum number of subsequent failures
             # has been reached
             subsequent_route_failures += 1
-            if subsequent_route_failures > max_subsequent_route_failures:
+            if subsequent_route_failures >= max_subsequent_route_failures:
                 break  # give up
         else:
             # route() was successful. have all components been used yet?
