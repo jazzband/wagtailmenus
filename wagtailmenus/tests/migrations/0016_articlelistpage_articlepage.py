@@ -8,7 +8,6 @@ import wagtail.contrib.routable_page.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('wagtailcore', '0041_group_collection_permissions_verbose_name_plural'),
         ('tests', '0015_remove_use_specific'),
     ]
 

@@ -239,8 +239,9 @@ class ArticleListPage(RoutablePageMixin, Page):
 
         if len(path_components) >= 4:
 
-            # Normal routing didn't find anything, so attempt to route to an
-            # article using date/slug components
+            # Attempt to route to an article using date/slug components
+            # NOTE: The page must have been published in order for
+            # `first_published_at` to be set
             try:
                 year = path_components[0]  # year
                 month = path_components[1]  # month
@@ -281,13 +282,16 @@ class ArticlePage(Page):
         part, so that article urls include segments for the
         article's `publish_date` as well as the `slug`
         """
-        url_parts = super().get_url_parts(request)
+        site_id, root_url, page_path = super().get_url_parts(request)
 
-        page_path_bits = url_parts[2].rstrip('/').split('/')
+        page_path_bits = page_path.rstrip('/').split('/')
         slug = page_path_bits.pop()
+
         page_path_bits.extend(
-            self.publish_date.strftime('%Y/%m/%d').split('/')
+            self.publish_date.strftime('%Y|%m|%d').split('|')
         )
+
+        # Add the slug to the end and re-combine
         page_path_bits.append(slug)
         page_path = '/'.join(page_path_bits) + '/'
-        return url_parts[0], url_parts[1], page_path
+        return site_id, root_url, page_path

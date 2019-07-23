@@ -42,9 +42,9 @@ class TestTopLevelItems(MainMenuTestCase):
         # 6 queries in total:
         # 1. Fetch menu items
         # 2. Fetch vanilla pages
-        # 3-6: Fetching specific pages (HomePage, TopLevelPage, LowLevelPage, ContactPage)
+        # 3-7: Fetch specific pages (HomePage, TopLevelPage, LowLevelPage, ArticleListPage, ContactPage)
         menu = self.get_test_menu_instance()
-        with self.assertNumQueries(6):
+        with self.assertNumQueries(7):
             menu.top_level_items
 
     def test_uses_a_single_query_when_no_menu_items_link_to_pages(self):
