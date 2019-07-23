@@ -12,19 +12,19 @@ def get_site_from_request(request, fallback_to_default=True):
     return None
 
 
-def get_page_from_request(request, site, accept_best_match=True):
+def get_page_from_request(request, site, accept_best_match=True, max_subsequent_route_failures=3):
     """
-    Attempts to find a ``Page`` within ``site`` for the supplied
-    ``request``. Returns a tuple, where the first element is the matching
-    ``Page`` object (or ``None`` if no match was found), and a boolean
-    indicating whether the page matched the full URL.
+    Attempts to find a ``Page`` within ``site`` for the supplied ``request``.
+    Returns a tuple, where the first element is the matching ``Page`` object
+    (or ``None`` if no match was found), and a boolean indicating whether the
+    page matched the full URL.
 
-    If ``accept_best_match`` is ``True``, and a page cannot be found
-    matching the full URL, the method will attempt to find a 'best match'
-    for the request instead.
+    If ``accept_best_match`` is ``True``, the method will attempt to find a
+    'best match' for the request, matching as many path components as possible.
+    This process will continue until all path components have been exhausted,
+    or more than ``subsequent_404s_permitted`` Http404 errors are encountered
+    between successful route() results.
     """
-    from wagtailmenus.conf import settings
-
     routing_point = site.root_page.specific
     path_components = [pc for pc in request.path.split('/') if pc]
 
@@ -35,36 +35,39 @@ def get_page_from_request(request, site, accept_best_match=True):
         except Http404:
             return None, False
 
-    # Apply a sensible limit to the number of route attempts
-    path_components_limited = False
-    max_attempts = settings.GUESS_TREE_POSITION_FROM_PATH_MAX_ATTEMPTS
-    if len(path_components) > max_attempts:
-        path_components = path_components[:max_attempts]
-        path_components_limited = True
-
     best_match = None
     full_url_match = False
     lookup_components = []
+    subsequent_route_failures = 0
 
-    # Keep trying to route() until path components are exhausted
     for i, component in enumerate(path_components, 1):
         lookup_components.append(component)
         try:
             best_match = routing_point.route(request, lookup_components)[0]
-            full_url_match = bool(not path_components_limited and i == len(path_components))
+        except Http404:
+            # route() was unsucessful. keep trying with more components until
+            # they are exhausted, or the maximum number of subsequent failures
+            # has been reached
+            subsequent_route_failures += 1
+            if subsequent_route_failures > max_subsequent_route_failures:
+                break  # give up
+        else:
+            # route() was successful. have all components been used yet?
+            full_url_match = bool(i == len(path_components))
+
+            # reset failure count
+            subsequent_route_failures = 0
+
             if best_match != routing_point:
-                # A new page was reached. Next time, try routing from this new
-                # page, using a single lookup component
+                # A new page was reached. Next, try route() from this new
+                # page, using fresh lookup components
                 routing_point = best_match
                 lookup_components = []
             else:
-                # It looks like `routing_point` has multiple routes. Next time,
-                # try routing from the same page with more components
+                # `routing_point` has multiple routes. Next, try route() from
+                # the same page with more components, as a new page could still
+                # be reached
                 continue
-        except Http404:
-            # No luck this time, but keep trying with more components until
-            # a new page is reached, or there are no components left.
-            continue
 
     return best_match, full_url_match
 
