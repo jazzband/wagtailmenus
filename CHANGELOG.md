@@ -5,6 +5,7 @@ Changelog
 ----------------
 
 * Always fetch/use specific page data when rendering menus (see release notes for more details).
+* Optimised 'derive page from URL' and 'derive section root' logic
 * Added support for Django 2.2 (no code changes necessary).
 * Added support for Wagtail 2.5 (no code changes necessary).
 * Removed support for `get_sub_menu_templates()` methods that do not accept a **level** argument.
