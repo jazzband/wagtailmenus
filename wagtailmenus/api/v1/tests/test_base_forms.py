@@ -141,14 +141,14 @@ class TestDeriveCurrentPage(ArgumentFormTestMixin, TestCase):
         result.update(kwargs)
         return result
 
-    @mock.patch('wagtailmenus.api.v1.forms.get_page_from_request')
+    @mock.patch('wagtailmenus.api.v1.forms.derive_page')
     def test_does_not_attempt_to_derive_if_current_page_is_already_present(self, mocked_method):
         form = self.get_form()
         data = self.make_data_dict(current_page=Page.objects.first())
         form.derive_current_page(cleaned_data=data)
         self.assertFalse(mocked_method.called)
 
-    @mock.patch('wagtailmenus.api.v1.forms.get_page_from_request')
+    @mock.patch('wagtailmenus.api.v1.forms.derive_page')
     def test_does_not_attempt_to_derive_if_current_url_is_blank_or_none(self, mocked_method):
         form = self.get_form()
         test_values = ('', None)
@@ -157,14 +157,14 @@ class TestDeriveCurrentPage(ArgumentFormTestMixin, TestCase):
             form.derive_current_page(cleaned_data=data)
             self.assertFalse(mocked_method.called)
 
-    @mock.patch('wagtailmenus.api.v1.forms.get_page_from_request')
+    @mock.patch('wagtailmenus.api.v1.forms.derive_page')
     def test_does_not_attempt_to_derive_if_site_is_none(self, mocked_method):
         form = self.get_form()
         data = self.make_data_dict(site=None)
         form.derive_current_page(cleaned_data=data)
         self.assertFalse(mocked_method.called)
 
-    @mock.patch('wagtailmenus.api.v1.forms.get_page_from_request')
+    @mock.patch('wagtailmenus.api.v1.forms.derive_page')
     def test_does_not_attempt_to_derive_if_apply_active_classes_if_false(
         self, mocked_method
     ):
@@ -173,7 +173,7 @@ class TestDeriveCurrentPage(ArgumentFormTestMixin, TestCase):
         form.derive_current_page(cleaned_data=data)
         self.assertFalse(mocked_method.called)
 
-    @mock.patch('wagtailmenus.api.v1.forms.get_page_from_request', return_value=(None, False))
+    @mock.patch('wagtailmenus.api.v1.forms.derive_page', return_value=(None, False))
     def test_attempts_if_apply_active_classes_if_false_but_force_derivation_is_true(
         self, mocked_method
     ):
@@ -182,7 +182,7 @@ class TestDeriveCurrentPage(ArgumentFormTestMixin, TestCase):
         form.derive_current_page(cleaned_data=data, force_derivation=True)
         self.assertTrue(mocked_method.called)
 
-    @mock.patch('wagtailmenus.api.v1.forms.get_page_from_request', return_value=('XYZ', True))
+    @mock.patch('wagtailmenus.api.v1.forms.derive_page', return_value=('XYZ', True))
     def test_sets_current_page_if_full_url_match_found(
         self, mocked_method
     ):
@@ -193,7 +193,7 @@ class TestDeriveCurrentPage(ArgumentFormTestMixin, TestCase):
         self.assertEqual(data['current_page'], 'XYZ')
         self.assertIs(data.get('best_match_page'), None)
 
-    @mock.patch('wagtailmenus.api.v1.forms.get_page_from_request', return_value=('XYZ', False))
+    @mock.patch('wagtailmenus.api.v1.forms.derive_page', return_value=('XYZ', False))
     def test_sets_best_match_page_if_partial_url_match_found(
         self, mocked_method
     ):

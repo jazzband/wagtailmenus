@@ -3,7 +3,7 @@ from django.utils.functional import SimpleLazyObject
 
 from wagtailmenus.conf import constants, settings
 from wagtailmenus.utils.misc import (
-    derive_page, derive_section_root, get_site_from_request, get_page_from_request
+    derive_page, derive_section_root, get_site_from_request
 )
 
 

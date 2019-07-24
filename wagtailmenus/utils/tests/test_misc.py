@@ -10,7 +10,7 @@ from wagtail.core.models import Page, Site
 from wagtailmenus.conf import defaults
 from wagtailmenus.utils.misc import (
     derive_page, derive_section_root, get_fake_request,
-    get_page_from_request, get_site_from_request
+    get_site_from_request
 )
 from wagtailmenus.tests.models import (
     ArticleListPage, ArticlePage, LowLevelPage, TopLevelPage
@@ -307,7 +307,7 @@ class TestGetPageFromRequest(TestCase):
         request = request_factory.get(path)
         site = Site.objects.first()
 
-        get_page_from_request(request, site=site)
+        derive_page(request, site=site)
         self.assertEqual(mocked_method.call_count, len(path_components))
 
     @mock.patch.object(Page, 'route', side_effect=Http404('Not found'))
@@ -315,7 +315,7 @@ class TestGetPageFromRequest(TestCase):
         request = request_factory.get('/news-and-events/latest-news/blah/')
         site = Site.objects.first()
 
-        get_page_from_request(request, site=site, accept_best_match=False)
+        derive_page(request, site=site, accept_best_match=False)
         self.assertEqual(mocked_method.call_count, 1)
 
     @mock.patch.object(Page, 'route', return_value=(1, 2, 3))
@@ -323,7 +323,7 @@ class TestGetPageFromRequest(TestCase):
         request = request_factory.get('/news-and-events/latest-news/blah/')
         site = Site.objects.first()
 
-        page, exact_match = get_page_from_request(request, site)
+        page, exact_match = derive_page(request, site)
         self.assertIs(exact_match, True)
 
     @mock.patch.object(Page, 'route', side_effect=[Http404('Not found'), (1, 2, 3)])
@@ -331,5 +331,5 @@ class TestGetPageFromRequest(TestCase):
         request = request_factory.get('/news-and-events/latest-news/blah/')
         site = Site.objects.first()
 
-        page, exact_match = get_page_from_request(request, site)
+        page, exact_match = derive_page(request, site)
         self.assertIs(exact_match, False)

@@ -6,7 +6,7 @@ from django.core.handlers.base import BaseHandler
 from django.core.handlers.wsgi import WSGIRequest
 from wagtail.core.sites import get_site_for_hostname
 
-from wagtailmenus.utils.misc import get_page_from_request
+from wagtailmenus.utils.misc import derive_page
 
 
 def derive_current_site(url, api_request):
@@ -46,7 +46,7 @@ def derive_current_page(url, site, api_request, accept_best_match):
     # Create a dummy request is created for the supplied URL, but otherwise
     # matching
     dummy_request = make_dummy_request(url, api_request)
-    return get_page_from_request(
+    return derive_page(
         request=dummy_request,
         site=site,
         accept_best_match=accept_best_match
