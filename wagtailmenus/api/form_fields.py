@@ -55,24 +55,6 @@ class BooleanChoiceField(forms.BooleanField):
         return value
 
 
-class UseSpecificChoiceField(forms.TypedChoiceField):
-
-    default_error_messages = {
-        'invalid_choice': _('The provided value is not supported.')
-    }
-
-    def __init__(self, *args, **kwargs):
-        empty_label = kwargs.pop('empty_label', '-----')
-        choices = (('', empty_label),) + constants.USE_SPECIFIC_CHOICES
-        defaults = {
-            'choices': choices,
-            'coerce': int,
-            'empty_value': None,
-        }
-        kwargs.update({k: v for k, v in defaults.items() if k not in kwargs})
-        super().__init__(*args, **kwargs)
-
-
 class MaxLevelsChoiceField(forms.TypedChoiceField):
 
     default_error_messages = {

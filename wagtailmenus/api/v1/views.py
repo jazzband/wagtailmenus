@@ -48,7 +48,6 @@ class BaseMenuGeneratorView(APIView):
     # argument validation and defaults
     form_class = None
     max_levels_default = None
-    use_specific_default = None
     apply_active_classes_default = False
     allow_repeating_parents_default = True
     use_absolute_page_urls_default = False
@@ -100,7 +99,6 @@ class BaseMenuGeneratorView(APIView):
     def get_form_initial(self):
         return {
             'max_levels': self.max_levels_default,
-            'use_specific': self.use_specific_default,
             'apply_active_classes': self.apply_active_classes_default,
             'allow_repeating_parents': self.allow_repeating_parents_default,
             'use_absolute_page_urls': self.use_absolute_page_urls_default,
@@ -296,7 +294,6 @@ class ChildrenMenuGeneratorView(BaseMenuGeneratorView):
 
     # argument defaults
     max_levels_default = wagtailmenus_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS
-    use_specific_default = wagtailmenus_settings.DEFAULT_CHILDREN_MENU_USE_SPECIFIC
 
     def is_current_page_derivation_required(self, data):
         return (
@@ -339,7 +336,6 @@ class SectionMenuGeneratorView(BaseMenuGeneratorView):
 
     # argument defaults
     max_levels_default = wagtailmenus_settings.DEFAULT_SECTION_MENU_MAX_LEVELS
-    use_specific_default = wagtailmenus_settings.DEFAULT_SECTION_MENU_USE_SPECIFIC
 
     def is_current_page_derivation_required(self, data):
         return (

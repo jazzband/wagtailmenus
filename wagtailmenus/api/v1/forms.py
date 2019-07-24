@@ -100,15 +100,6 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "for this menu type."
         )
     )
-    use_specific = api_form_fields.UseSpecificChoiceField(
-        label=_('Specific page usage'),
-        required=False,
-        help_text=_(
-            "How 'specific' page objects should be utilised when generating "
-            "the result. Defaults to the relevant setting value for this menu "
-            "type."
-        )
-    )
     apply_active_classes = api_form_fields.BooleanChoiceField(
         label=_('Apply active classes'),
         required=False,
@@ -169,16 +160,6 @@ class BaseMenuModelGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
             "on the matching menu object."
         ),
     )
-    use_specific = api_form_fields.UseSpecificChoiceField(
-        label=_('Specific page usage'),
-        required=False,
-        empty_label=_('Default: Use the value set for the menu object'),
-        help_text=_(
-            "How 'specific' page objects should be utilised when generating "
-            "the result. Defaults to the 'use_specific' field value on the "
-            "matching menu object."
-        ),
-    )
 
 
 class MainMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
@@ -186,7 +167,6 @@ class MainMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
         'current_url',
         'current_page',
         'max_levels',
-        'use_specific',
         'apply_active_classes',
         'allow_repeating_parents',
         'use_absolute_page_urls',
@@ -218,7 +198,6 @@ class FlatMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
         'fall_back_to_default_site_menus',
         'current_page',
         'max_levels',
-        'use_specific',
         'apply_active_classes',
         'allow_repeating_parents',
         'use_absolute_page_urls',
@@ -242,7 +221,6 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         'current_page',
         'parent_page',
         'max_levels',
-        'use_specific',
         'apply_active_classes',
         'allow_repeating_parents',
         'use_absolute_page_urls',
@@ -273,7 +251,6 @@ class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         'current_page',
         'section_root_page',
         'max_levels',
-        'use_specific',
         'apply_active_classes',
         'allow_repeating_parents',
         'use_absolute_page_urls',
