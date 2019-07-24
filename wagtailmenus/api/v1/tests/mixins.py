@@ -38,7 +38,7 @@ class ArgumentFormTestMixin:
             )
         return self.form_class
 
-    def get_form(self, view=None, request=None, data=None, initial=None, set_errors=False):
+    def get_form(self, data=None, initial=None, set_errors=False):
         """
         Creates an instance of ``self.get_form_class()`` to use in tests.
 
@@ -49,12 +49,8 @@ class ArgumentFormTestMixin:
         set to prevent ``full_clean()`` being triggered when attempting to
         expect form errors.
         """
-        if request is None:
-            request = self.make_request()
         cls = self.get_form_class()
         form_kwargs = dict(
-            view=view,
-            request=request,
             data=data,
             initial=initial or {}
         )
@@ -94,23 +90,3 @@ class CommonArgumentFormTestsMixin:
     def test_language_field_has_hiddeninput_widget_when_use_i18n_is_false(self):
         form = self.get_form()
         self.assertIsInstance(form.fields['language'].widget, forms.HiddenInput)
-
-    def _clean_triggers_call_to_method(self, form, method_name):
-        # Setting this to an empty dict to avoid having to run full_clean()
-        form.cleaned_data = {}
-        # Mocking the method here to keep things quick
-        with mock.patch.object(form, method_name, return_value=None) as mocked_method:
-            form.clean()
-            return mocked_method.called
-
-    def test_clean_triggers_derive_site(self):
-        form = self.get_form()
-        self.assertTrue(self._clean_triggers_call_to_method(form, method_name='derive_site'))
-
-    def test_clean_triggers_derive_current_page(self):
-        form = self.get_form()
-        self.assertTrue(self._clean_triggers_call_to_method(form, method_name='derive_current_page'))
-
-    def test_clean_triggers_derive_ancestor_page_ids(self):
-        form = self.get_form()
-        self.assertTrue(self._clean_triggers_call_to_method(form, method_name='derive_ancestor_page_ids'))
