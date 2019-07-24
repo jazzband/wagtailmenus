@@ -1,58 +1,43 @@
 from django.http import Http404
 from django.utils.functional import SimpleLazyObject
-from wagtailmenus.conf import constants, settings
-from wagtailmenus.utils.misc import get_site_from_request
+from wagtailmenus.conf import settings
+from wagtailmenus.utils.misc import (
+    get_site_from_request, derive_page, derive_section_root
+)
 
 
 def wagtailmenus(request):
 
-    def _get_value_dict():
+    def _get_wagtailmenus_vals():
         current_page = request.META.get('WAGTAILMENUS_CURRENT_PAGE')
         section_root = request.META.get('WAGTAILMENUS_CURRENT_SECTION_ROOT')
-        ancestor_ids = request.META.get(
-            'WAGTAILMENUS_CURRENT_PAGE_ANCESTOR_IDS')
-        match = None
         site = get_site_from_request(request, fallback_to_default=True)
+        ancestor_ids = ()
+        match = None
 
-        guess_pos = settings.GUESS_TREE_POSITION_FROM_PATH
-        sroot_depth = settings.SECTION_ROOT_DEPTH
+        guess_position = settings.GUESS_TREE_POSITION_FROM_PATH
+        section_root_depth = settings.SECTION_ROOT_DEPTH
 
-        if guess_pos and not current_page:
-            path_components = [pc for pc in request.path.split('/') if pc]
-            # Keep trying to find a page using the path components until there
-            # are no components left, or a page has been identified
-            first_run = True
-            while path_components and match is None:
-                try:
-                    match, args, kwargs = site.root_page.specific.route(
-                        request, path_components)
-                    ancestor_ids = match.get_ancestors(inclusive=True).filter(
-                        depth__gte=sroot_depth).values_list('id', flat=True)
-                    if first_run:
-                        # A page was found matching the exact path, so it's
-                        # safe to assume it's the 'current page'
-                        current_page = match
-                except Http404:
-                    # No match found, so remove a path component and try again
-                    path_components.pop()
-                first_run = False
+        if guess_position and not current_page:
+            match, full_url_match = derive_page(request, site)
+            if full_url_match:
+                current_page = match
 
-        if guess_pos and not section_root:
-            best_match = current_page or match
-            if best_match:
-                if best_match.depth == sroot_depth:
-                    section_root = best_match
-                elif best_match.depth > sroot_depth:
-                    # Attempt to identify the section root page from best_match
-                    section_root = best_match.get_ancestors().filter(
-                        depth__exact=sroot_depth).first()
+        if not section_root and current_page or match:
+            section_root = derive_section_root(current_page or match)
+
+        if current_page or match:
+            page = current_page or match
+            if page.depth >= section_root_depth:
+                ancestor_ids = page.get_ancestors(inclusive=True).filter(
+                    depth__gte=section_root_depth).values_list('id', flat=True)
 
         return {
             'current_page': current_page,
             'section_root': section_root,
-            'current_page_ancestor_ids': ancestor_ids or (),
+            'current_page_ancestor_ids': ancestor_ids,
         }
 
     return {
-        'wagtailmenus_vals': SimpleLazyObject(_get_value_dict),
+        'wagtailmenus_vals': SimpleLazyObject(_get_wagtailmenus_vals),
     }
