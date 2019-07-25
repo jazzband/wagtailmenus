@@ -71,24 +71,21 @@ class BaseAPIViewArgumentForm(forms.Form):
 
 class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
     current_url = forms.URLField(
-        max_length=300,
         label=_("Current URL"),
+        max_length=300,
+        required=False,
         help_text=_(
             "The full URL of the page you are generating the menu for, "
-            "including scheme and domain (e.g. "
-            "'https://www.example.com/about-us/'). This is used to "
-            "derive the current site, and also to help with active "
-            "class application when 'current_page' is not supplied."
+            "including scheme and domain. For example: "
+            "'https://www.example.com/about-us/')."
         ),
     )
     current_page = api_form_fields.PageChoiceField(
         label=_('Current page'),
         required=False,
         help_text=_(
-            "The ID of the Wagtail Page you are generating the menu for. "
-            "You should try to provided this where possible, but only "
-            "if you are rendering the specified page, as doing to will "
-            "have an affect on active class application."
+            "The ID of the Wagtail Page you are generating the menu for, "
+            "if applicable."
         ),
     )
     max_levels = api_form_fields.MaxLevelsChoiceField(
@@ -106,8 +103,8 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         help_text=_(
             "Whether the view should set 'active_class' attributes on menu "
             "items to help indicate a user's current position within the menu "
-            "structure. Defaults to the relevant setting value for this menu "
-            "type."
+            "structure. Defaults to 'false'. If providing a value of 'true', "
+            "'current_url' or 'current_page' must also be provided."
         ),
     )
     allow_repeating_parents = api_form_fields.BooleanChoiceField(
@@ -120,14 +117,13 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "relevant setting value for this menu type."
         )
     )
-    use_absolute_page_urls = api_form_fields.BooleanChoiceField(
-        label=_('Use absolute page URLs'),
+    use_relative_page_urls = api_form_fields.BooleanChoiceField(
+        label=_('Use relative page URLs'),
         required=False,
         help_text=_(
-            "Whether the view should use absolute page URLs instead of "
-            "relative ones for menu items that link to pages, regardless "
-            "of whether the page is within the same 'site'. Defaults "
-            "to False."
+            "Whether the view should use relative URLs for page links instead "
+            "of absolute ones. Defaults to 'false'. If providing a value of "
+            "'true', 'current_url' or 'current_page' must also be provided."
         )
     )
     language = forms.ChoiceField(
@@ -148,6 +144,19 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         if not django_settings.USE_I18N:
             self.fields['language'].widget = forms.HiddenInput()
 
+    def clean(self):
+        data = self.cleaned_data
+        if not data["current_url"] and not data["current_page"]:
+            message = (
+                "If providing a value of 'true', 'current_url' or "
+                "'current_page' must also be provided."
+            )
+            if data['apply_active_classes']:
+                self.add_error('apply_active_classes', message)
+            if data['use_relative_page_urls']:
+                self.add_error('use_relative_page_urls', message)
+        return super().clean()
+
 
 class BaseMenuModelGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
     max_levels = api_form_fields.MaxLevelsChoiceField(
@@ -161,6 +170,16 @@ class BaseMenuModelGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         ),
     )
 
+    def clean(self):
+        data = self.cleaned_data
+        if not data["current_url"] and not data["current_page"]:
+            message = (
+                "This or 'current_page' are required to allow the "
+                "correct menu instance to be identified."
+            )
+            self.add_error('current_url', message)
+        return super().clean()
+
 
 class MainMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
     field_order = (
@@ -169,7 +188,7 @@ class MainMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
         'max_levels',
         'apply_active_classes',
         'allow_repeating_parents',
-        'use_absolute_page_urls',
+        'use_relative_page_urls',
         'language',
     )
 
@@ -187,20 +206,21 @@ class FlatMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
         required=False,
         help_text=_(
             "If a menu cannot be found matching the provided 'handle' for the "
-            "supplied (or derived) site, use the flat menu defined for the "
-            "'default' site (if available)."
+            "site indicated by 'current_url' or 'current_page', use the flat "
+            "menu defined for the 'default' site (if available). Defaults to "
+            "'false'."
         )
     )
 
     field_order = (
-        'current_url',
         'handle',
-        'fall_back_to_default_site_menus',
+        'current_url',
         'current_page',
+        'fall_back_to_default_site_menus',
         'max_levels',
         'apply_active_classes',
         'allow_repeating_parents',
-        'use_absolute_page_urls',
+        'use_relative_page_urls',
         'language',
     )
 
@@ -211,8 +231,9 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         label=_("Parent page"),
         required=False,
         help_text=_(
-            "The page you wish to show children page links for (if different "
-            "to 'current_page')."
+            "The ID of the page you want the menu to show children page links "
+            "for. If not supplied, the endpoint will attempt to derive this "
+            "from 'current_url' or 'current_page'."
         )
     )
 
@@ -223,7 +244,7 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         'max_levels',
         'apply_active_classes',
         'allow_repeating_parents',
-        'use_absolute_page_urls',
+        'use_relative_page_urls',
         'language',
     )
 
@@ -231,6 +252,15 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         super().__init__(*args, **kwargs)
         self.fields['parent_page'].queryset = Page.objects.filter(depth__gt=1)
 
+    def clean(self):
+        data = self.cleaned_data
+        if not data['parent_page'] and data["current_url"] and not data["current_page"]:
+            message = (
+                "This value can only be ommitted when providing 'current_url' "
+                "or 'current_page'."
+            )
+            self.add_error('parent_page', message)
+        return super().clean()
 
 class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
@@ -239,10 +269,9 @@ class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         required=False,
         indent_choice_labels=False,
         help_text=_(
-            "The root page for the 'section', whose children and other "
-            "decendents you want show menu items for. If not supplied, the "
-            "view will attempt to derive this from 'current_page' or "
-            "'current_url'."
+            "The ID of the 'section root page' you want the menu to show "
+            "descendant page links for. If not supplied, the endpoint will "
+            "attempt to derive this from 'current_url' or 'current_page'."
         )
     )
 
@@ -253,7 +282,7 @@ class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         'max_levels',
         'apply_active_classes',
         'allow_repeating_parents',
-        'use_absolute_page_urls',
+        'use_relative_page_urls',
         'language',
     )
 
@@ -261,3 +290,13 @@ class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         super().__init__(*args, **kwargs)
         self.fields['section_root_page'].queryset = Page.objects.filter(
             depth__exact=settings.SECTION_ROOT_DEPTH)
+
+    def clean(self):
+        data = self.cleaned_data
+        if not data['section_root_page'] and data["current_url"] and not data["current_page"]:
+            message = (
+                "This value can only be ommitted when providing 'current_url' "
+                "or 'current_page'."
+            )
+            self.add_error('section_root_page', message)
+        return super().clean()
