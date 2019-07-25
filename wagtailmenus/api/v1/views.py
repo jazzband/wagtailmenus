@@ -9,6 +9,7 @@ from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
 from wagtailmenus.conf import settings as wagtailmenus_settings
+from wagtailmenus.utils.misc import derive_section_root, derive_ancestor_ids
 from wagtailmenus.api.v1.conf import settings as api_settings
 from wagtailmenus.api.v1.renderers import BrowsableAPIWithArgumentFormRenderer
 from . import forms
@@ -48,9 +49,7 @@ class BaseMenuGeneratorView(APIView):
     # argument validation and defaults
     form_class = None
     max_levels_default = None
-    apply_active_classes_default = False
     allow_repeating_parents_default = True
-    use_absolute_page_urls_default = False
 
     # serialization
     serializer_class = None
@@ -99,9 +98,7 @@ class BaseMenuGeneratorView(APIView):
     def get_form_initial(self):
         return {
             'max_levels': self.max_levels_default,
-            'apply_active_classes': self.apply_active_classes_default,
             'allow_repeating_parents': self.allow_repeating_parents_default,
-            'use_absolute_page_urls': self.use_absolute_page_urls_default,
         }
 
     def get_form(self):
@@ -125,63 +122,67 @@ class BaseMenuGeneratorView(APIView):
             'view': self,
         }
 
-    def is_current_page_derivation_required(self, data):
-        """
-        Returns a boolean indicating whether the form should
-        attempt to derive a 'current_page' value from other
-        values in ``data``.
-        """
-        return (
-            data.get('current_page') is None and
-            data.get('apply_active_classes')
-        )
-
-    def accept_best_match_for_current_page(self, data):
-        return True
-
-    def derive_current_page(self, data):
-        """
-        Attempts to derive a 'current_page' value from other values
-        in ``data`` and update``data`` with that value.
-        """
-        func = api_settings.objects.CURRENT_PAGE_DERIVATION_FUNCTION
-
-        match, is_exact_match = func(
-            data.get('current_url'),
-            current_site=self.request.site,
-            api_request=self.request,
-            accept_best_match=self.accept_best_match_for_current_page(data),
-        )
-
-        if match:
-            if is_exact_match:
-                data['current_page'] = match
-            else:
-                data['best_match_page'] = match
-
-    def derive_ancestor_page_ids(self, data):
-        """
-        Attempts to derive a tuple of 'ancestor_page_ids' from
-        page values in ``data`` and update ``data`` with the value.
-        """
-        source_page = data.get('current_page') or \
-            data.get('best_match_page')
-        if source_page:
-            ancestor_ids = tuple(
-                source_page.get_ancestors(inclusive=data['current_page'] is None)
-                .filter(depth__gte=wagtailmenus_settings.SECTION_ROOT_DEPTH)
-                .values_list('id', flat=True)
-            )
-        else:
-            ancestor_ids = ()
-        data['ancestor_page_ids'] = ancestor_ids
-
     def process_form_data(self, data):
-        if self.is_current_page_derivation_required(data):
-            self.derive_current_page(data)
+        if not data['current_page'] and not data.get('best_match_page') and (
+            data['apply_active_classes'] or data['use_relative_urls']
+        ):
+            self.set_current_or_best_match_page(data)
+
         if data['apply_active_classes']:
-            self.derive_ancestor_page_ids(data)
+            self.set_ancestor_page_ids(data)
+
+        # Replace 'use_relative_page_urls' with 'use_absolute_page_urls'
+        data['use_absolute_page_urls'] = not data.pop('use_relative_page_urls')
+
         return data
+
+    def set_current_site(self, data):
+        """
+        Attempts to derive a 'current_site' value from other
+        values in ``data`` and update ``data`` with the value.
+        """
+        derivation_function = api_settings.objects.CURRENT_SITE_DERIVATION_FUNCTION
+
+        site_page = data.get('current_page') or \
+            data.get('parent_page') or \
+            data.get('section_root_page')
+
+        data['current_site'] = derivation_function(
+            self.request, site_page, data['current_url']
+        )
+
+    def set_current_or_best_match_page(self, data):
+        """
+        Attempts to derive a ``Page`` value from 'current_url` in
+        ``data``. If a page is found matching the complete URL, it will
+        be added to data as 'current_page'. Otherwise, it will be added
+        as 'best_match_page'.
+        """
+        derivation_function = api_settings.objects.CURRENT_PAGE_DERIVATION_FUNCTION
+
+        if not data.get('current_site'):
+            self.derive_current_site(data)
+
+        page, full_url_match = derivation_function(
+            self.request,
+            data['current_site'],
+            data.get('current_url'),
+        )
+
+        if full_url_match:
+            data['current_page'] = page
+        else:
+            data['best_match_page'] = page
+
+    def set_ancestor_page_ids(self, data):
+        """
+        Attempts to derive and list of 'ancestor_page_ids' from
+        'current_page' or 'best_match_page' values in ``data`` and
+        update ``data`` with that value.
+        """
+        data['ancestor_page_ids'] = derive_ancestor_ids(
+            data['current_page'] or data.get('best_match_page')
+        )
 
     def get(self, request, *args, **kwargs):
         # seen_types is a mapping of type name strings
@@ -195,21 +196,15 @@ class BaseMenuGeneratorView(APIView):
         if not form.is_valid():
             raise ValidationError(form.errors)
 
-        # Derive current site and add to the current request
-        site_derivation_function = api_settings.objects.CURRENT_SITE_DERIVATION_FUNCTION
-        self.request.site = site_derivation_function(
-            form.cleaned_data['current_url'],
-            api_request=self.request,
+        # Apply any additional processing to form data
+        processed_data = self.process_form_data(
+            form.cleaned_data.copy()
         )
-
-        # Run post-processing on form data
-        processed_data = self.process_form_data(form.cleaned_data)
 
         # Activate selected language during serialization
         with translation.override(
             processed_data.get('language', translation.get_language())
         ):
-
             # Get a menu instance using the valid data
             menu_instance = self.get_menu_instance(processed_data)
 
@@ -226,6 +221,10 @@ class BaseMenuGeneratorView(APIView):
         method is to bundle up all available data into a format that
         ``Menu._get_render_prepared_object()`` will understand, and call that.
         """
+
+        # Set request.site attribute from 'current_site'
+        if 'current_site' in data:
+            self.request.site = data.pop('current_site')
 
         # `Menu._get_render_prepared_object()`` normally recieves a
         # ``RequestContext`` object, but will accept a dictionary with a
@@ -262,6 +261,10 @@ class MainMenuGeneratorView(BaseMenuGeneratorView):
     form_class = forms.MainMenuGeneratorArgumentForm
     serializer_class_setting_name = 'MAIN_MENU_SERIALIZER'
 
+    def process_form_data(self, data):
+        data['current_site'] = self.derive_current_site(data)
+        return super().process_form_data(data)
+
 
 class FlatMenuGeneratorView(BaseMenuGeneratorView):
     """
@@ -281,6 +284,10 @@ class FlatMenuGeneratorView(BaseMenuGeneratorView):
         initial['fall_back_to_default_site_menus'] = self.fall_back_to_default_site_menus_default
         return initial
 
+    def process_form_data(self, data):
+        data['current_site'] = self.derive_current_site(data)
+        return super().process_form_data(data)
+
 
 class ChildrenMenuGeneratorView(BaseMenuGeneratorView):
     """
@@ -295,33 +302,26 @@ class ChildrenMenuGeneratorView(BaseMenuGeneratorView):
     # argument defaults
     max_levels_default = wagtailmenus_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS
 
-    def is_current_page_derivation_required(self, data):
-        return (
-            super().is_current_page_derivation_required(data) or
-            not data.get('parent_page')
-        )
-
-    def accept_best_match_for_current_page(self, data):
-        # If 'current_page' will be used to supplement 'parent_page',
-        # only an exact match for 'current_url' will do
-        return bool(data['parent_page'])
-
     def process_form_data(self, data):
-        data = super().process_form_data(data)
         if not data['parent_page']:
-            self.derive_parent_page(data)
-        return data
+            self.set_parent_page(data)
+        return super().process_form_data(data)
 
-    def derive_parent_page(self, data):
+    def set_parent_page(self, data):
         """
-        Attempts to derive 'parent_page' value from other values in
-        ``data`` and update ``data`` with the value.
+        Attempts to derive a 'parent_page' value from 'current_page'
+        or 'current_url' values in ``data``, and update ``data`` with
+        the value. Raises a ``ValidationError`` if the value cannot be
+        derived.
         """
+        if not data['current_page']:
+            self.set_current_or_best_match_page(data)
+
+        # NOTE: 'best_match_page' is not a good enough substitute here
         if data['current_page']:
             data['parent_page'] = data['current_page']
-            return
-
-        raise ValidationError({'parent_page': UNDERIVABLE_MSG})
+        else:
+            raise ValidationError({'parent_page': UNDERIVABLE_MSG})
 
 
 class SectionMenuGeneratorView(BaseMenuGeneratorView):
@@ -337,32 +337,26 @@ class SectionMenuGeneratorView(BaseMenuGeneratorView):
     # argument defaults
     max_levels_default = wagtailmenus_settings.DEFAULT_SECTION_MENU_MAX_LEVELS
 
-    def is_current_page_derivation_required(self, data):
-        return (
-            super().is_current_page_derivation_required(data) or
-            not data.get('section_root_page')
-        )
-
     def process_form_data(self, data):
-        data = super().process_form_data(data)
         if not data['section_root_page']:
-            self.derive_section_root_page(data)
-        return data
+            self.set_section_root_page(data)
+        return super().process_form_data(data)
 
-    def derive_section_root_page(self, data):
+    def set_section_root_page(self, data):
         """
-        Attempts to derive a 'section_root_page' value from other values in
-        ``data`` and update ``data`` with the value.
+        Attempts to derive a 'parent_page' value from 'current_page'
+        or 'current_url' values in ``data``, and update ``data`` with
+        the value. Raises a ``ValidationError`` if the value cannot be
+        derived.
         """
-        source_page = data.get('current_page') or data.get('best_match_page')
-        section_root_depth = wagtailmenus_settings.SECTION_ROOT_DEPTH
+        if not data['current_page']:
+            self.set_current_or_best_match_page(data)
 
-        if source_page:
-            if source_page.dept == section_root_depth:
-                data['section_root_page'] = source_page
-            elif source_page.depth > section_root_depth:
-                data['section_root_page'] = source_page.get_ancestors().get(
-                    depth__exact=section_root_depth)
+        # NOTE: 'current_page' or 'best_match_page' will do here, so
+        # long as they are deep enough
+        section_root = derive_section_root(data['current_page'] or data.get('best_match_page'))
 
-        if not data['section_root_page']:
+        if section_root:
+            data['section_root_page'] = section_root
+        else:
             raise ValidationError({'section_root_page': UNDERIVABLE_MSG})
