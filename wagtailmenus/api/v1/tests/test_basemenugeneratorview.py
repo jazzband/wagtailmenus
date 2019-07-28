@@ -9,7 +9,7 @@ class TestGetSerializerClass(TestCase):
     def test_prefers_serializer_class_attribute(self):
 
         class TestView(BaseMenuGeneratorView):
-            serializer_class = serializers.MainMenuSerializer
+            serializer_class = serializers.SectionMenuSerializer
             serializer_class_setting_name = 'CHILDREN_MENU_SERIALIZER'
 
         self.assertIs(
@@ -27,13 +27,13 @@ class TestGetSerializerClass(TestCase):
             serializers.ChildrenMenuSerializer
         )
 
-    @override_settings(WAGTAILMENUS_API_V1_MAIN_MENU_SERIALIZER='wagtailmenus.api.v1.serializers.FlatMenuSerializer')
+    @override_settings(WAGTAILMENUS_API_V1_CHILDREN_MENU_SERIALIZER='wagtailmenus.api.v1.serializers.SectionMenuSerializer')
     def test_returns_custom_serializer_if_setting_is_overridden(self):
 
         class TestView(BaseMenuGeneratorView):
-            serializer_class_setting_name = 'MAIN_MENU_SERIALIZER'
+            serializer_class_setting_name = 'CHILDREN_MENU_SERIALIZER'
 
         self.assertIs(
             TestView.get_serializer_class(),
-            serializers.FlatMenuSerializer
+            serializers.SectionMenuSerializer
         )
