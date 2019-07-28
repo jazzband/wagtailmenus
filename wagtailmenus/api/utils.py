@@ -104,3 +104,24 @@ def make_dummy_request(url, original_request, **metadata):
     handler._middleware_chain(request)
 
     return request
+
+
+def make_serializer_class(name, base_class, field_names, model=None, field_serializer_overrides=None, **additional_attributes):
+    _model = model
+
+    if _model is not None:
+        class Meta:
+            model = _model
+            fields = list(field_names)
+    else:
+        class Meta:
+            fields = list(field_names)
+
+    attrs = {'Meta': Meta}
+
+    if field_serializer_overrides:
+        attrs.update(field_serializer_overrides)
+
+    attrs.update(additional_attributes)
+
+    return type(name, (base_class, ), attrs)
