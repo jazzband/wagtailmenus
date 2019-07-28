@@ -78,7 +78,7 @@ class BaseAPIViewArgumentForm(forms.Form):
 
 class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
     current_url = forms.URLField(
-        label=_("Current URL"),
+        label='current_url',
         max_length=300,
         required=False,
         help_text=_(
@@ -88,7 +88,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         ),
     )
     current_page_id = api_form_fields.PageChoiceField(
-        label=_('Current page'),
+        label='current_page_id',
         required=False,
         help_text=_(
             "The ID of the Wagtail Page you are generating the menu for, "
@@ -96,7 +96,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         ),
     )
     max_levels = api_form_fields.MaxLevelsChoiceField(
-        label=_('Maximum levels'),
+        label='max_levels',
         required=False,
         help_text=_(
             "The maximum number of levels of menu items that should be "
@@ -105,7 +105,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         )
     )
     apply_active_classes = api_form_fields.BooleanChoiceField(
-        label=_('Apply active classes'),
+        label='apply_active_classes',
         required=False,
         initial=False,
         help_text=_(
@@ -116,7 +116,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         ),
     )
     allow_repeating_parents = api_form_fields.BooleanChoiceField(
-        label=_('Allow repeating parents'),
+        label='allow_repeating_parents',
         required=False,
         initial=False,
         help_text=_(
@@ -127,7 +127,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         )
     )
     relative_page_urls = api_form_fields.BooleanChoiceField(
-        label=_('Use relative page URLs'),
+        label='relative_page_urls',
         required=False,
         initial=False,
         help_text=_(
@@ -137,7 +137,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         )
     )
     language = forms.ChoiceField(
-        label=_('Language'),
+        label='language',
         required=False,
         choices=settings.LANGUAGES,
         initial=settings.LANGUAGE_CODE,
@@ -220,7 +220,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
 
 class BaseMenuModelGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
     max_levels = api_form_fields.MaxLevelsChoiceField(
-        label=_('Maximum levels'),
+        label='max_levels',
         required=False,
         empty_label=_('Default: Use the value set for the menu object'),
         help_text=_(
@@ -260,14 +260,14 @@ class MainMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
 
 class FlatMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
     handle = api_form_fields.FlatMenuHandleField(
-        label=_('Handle'),
+        label='handle',
         help_text=_(
             "The 'handle' for the flat menu you wish to generate. For "
             "example: 'info' or 'contact'."
         )
     )
     fall_back_to_default_site_menus = api_form_fields.BooleanChoiceField(
-        label=_('Fall back to default site menus'),
+        label=_('fall_back_to_default_site_menus'),
         required=False,
         help_text=_(
             "If a menu cannot be found matching the provided 'handle' for the "
@@ -293,7 +293,7 @@ class FlatMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
 class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
     parent_page_id = api_form_fields.PageChoiceField(
-        label=_("Parent page"),
+        label='parent_page_id',
         help_text=_(
             "The ID of the page you want the menu to show children page links "
             "for."
@@ -328,7 +328,7 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
     section_root_page_id = api_form_fields.PageChoiceField(
-        label=_("Section root page"),
+        label='section_root_page_id',
         required=False,
         indent_choice_labels=False,
         help_text=_(
