@@ -17,11 +17,6 @@ from wagtailmenus.api.v1.renderers import BrowsableAPIWithArgumentFormRenderer
 from . import forms
 
 
-UNDERIVABLE_MSG = _(
-    "This value was not provided and could not be derived from other values."
-)
-
-
 class MenuGeneratorIndexView(APIView):
     name = "Menu Generation"
 
