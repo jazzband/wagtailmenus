@@ -5,6 +5,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
+from wagtail.api import APIField
 from wagtail.core.models import Page, Orderable
 
 from wagtailmenus.conf import settings
@@ -71,34 +72,37 @@ class AbstractMenuItem(models.Model, MenuItem):
 
     objects = MenuItemManager()
 
-    # Override these lists to modify output of
-    # custom menu item in wagtailmenus.api
+    # Override to modify output for custom classes in wagtailmenus.api
     api_fields = [
-        'text',
-        'href',
-        'handle',
-        'active_class',
-        'page',
-        'children',
+        APIField('text'),
+        APIField('href'),
+        APIField('handle'),
+        APIField('active_class'),
+        APIField('page'),
+        APIField('children'),
     ]
+
     page_api_fields = [
-        'id',
-        'title',
-        'slug',
-        'type',
+        APIField('id'),
+        APIField('title'),
+        APIField('slug'),
+        APIField('type'),
     ]
+
     sub_item_api_fields = [
-        'text',
-        'href',
-        'active_class',
-        'page',
-        'children',
+        APIField('text'),
+        APIField('href'),
+        APIField('handle'),
+        APIField('active_class'),
+        APIField('page'),
+        APIField('children'),
     ]
+
     sub_item_page_api_fields = [
-        'id',
-        'title',
-        'slug',
-        'type',
+        APIField('id'),
+        APIField('title'),
+        APIField('slug'),
+        APIField('type'),
     ]
 
     class Meta:

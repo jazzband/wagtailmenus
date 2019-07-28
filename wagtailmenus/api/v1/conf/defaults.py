@@ -4,11 +4,11 @@
 # Menu serializer classes
 # -----------------------
 
+BASE_MAIN_MENU_SERIALIZER = 'wagtailmenus.api.v1.serializers.BaseModelMenuSerializer'
+
+BASE_FLAT_MENU_SERIALIZER = 'wagtailmenus.api.v1.serializers.BaseModelMenuSerializer'
+
 CHILDREN_MENU_SERIALIZER = 'wagtailmenus.api.v1.serializers.ChildrenMenuSerializer'
-
-FLAT_MENU_SERIALIZER = 'wagtailmenus.api.v1.serializers.FlatMenuSerializer'
-
-MAIN_MENU_SERIALIZER = 'wagtailmenus.api.v1.serializers.MainMenuSerializer'
 
 SECTION_MENU_SERIALIZER = 'wagtailmenus.api.v1.serializers.SectionMenuSerializer'
 

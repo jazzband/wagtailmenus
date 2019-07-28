@@ -10,6 +10,7 @@ from rest_framework.response import Response
 
 from wagtailmenus.conf import settings as wagtailmenus_settings
 from wagtailmenus.utils.misc import derive_ancestor_ids
+from wagtailmenus.api.utils import make_serializer_class
 from wagtailmenus.api.v1.conf import settings as api_settings
 from wagtailmenus.api.v1.renderers import BrowsableAPIWithArgumentFormRenderer
 
@@ -199,44 +200,6 @@ class BaseMenuGeneratorView(APIView):
         return menu_instance
 
 
-class MainMenuGeneratorView(BaseMenuGeneratorView):
-    """
-    Returns a JSON representation of a 'main menu' (including menu items)
-    matching the supplied arguments.
-    """
-    name = _('Generate Main Menu')
-    menu_class = wagtailmenus_settings.models.MAIN_MENU_MODEL
-    form_class = forms.MainMenuGeneratorArgumentForm
-    serializer_class_setting_name = 'MAIN_MENU_SERIALIZER'
-
-    def process_form_data(self, data):
-        data['current_site'] = self.derive_current_site(data)
-        return super().process_form_data(data)
-
-
-class FlatMenuGeneratorView(BaseMenuGeneratorView):
-    """
-    Returns a JSON representation of a 'flat menu' (including menu items)
-    matching the supplied arguments.
-    """
-    name = _('Generate Flat Menu')
-    menu_class = wagtailmenus_settings.models.FLAT_MENU_MODEL
-    form_class = forms.FlatMenuGeneratorArgumentForm
-    serializer_class_setting_name = 'FLAT_MENU_SERIALIZER'
-
-    # argument defaults
-    fall_back_to_default_site_menus_default = True
-
-    def get_form_initial(self):
-        initial = super().get_form_initial()
-        initial['fall_back_to_default_site_menus'] = self.fall_back_to_default_site_menus_default
-        return initial
-
-    def process_form_data(self, data):
-        data['current_site'] = self.derive_current_site(data)
-        return super().process_form_data(data)
-
-
 class ChildrenMenuGeneratorView(BaseMenuGeneratorView):
     """
     Returns a JSON representation of a 'children menu' (including menu items)
@@ -265,5 +228,77 @@ class SectionMenuGeneratorView(BaseMenuGeneratorView):
     max_levels_default = wagtailmenus_settings.DEFAULT_SECTION_MENU_MAX_LEVELS
 
 
+class MenuBasedMenuGeneratorView(BaseMenuGeneratorView):
+    base_serializer_class = None
+    base_serializer_class_setting_name = None
+
+    @classmethod
+    def get_serializer_fields(cls):
+        return cls.menu_class.api_fields
+
+    @classmethod
+    def get_serializer_field_names(cls):
+        return [field.name for field in cls.get_serializer_fields()]
+
+    @classmethod
+    def get_serializer_field_overrides(cls):
+        return {
+            field.name: field.serializer
+            for field in cls.get_serializer_fields()
+            if field.serializer is not None
+        }
+
+    @classmethod
+    def get_base_serializer_class(cls):
+        if cls.base_serializer_class:
+            return cls.base_serializer_class
+        return api_settings.get_object(cls.base_serializer_class_setting_name)
+
+    @classmethod
+    def get_serializer_class_create_kwargs(cls, base_class, **kwargs):
+        values = {
+            'model': cls.menu_class,
+            'field_names': cls.get_serializer_field_names(),
+            'field_serializer_overrides': cls.get_serializer_field_overrides(),
+        }
+        values.update(kwargs)
+        return values
+
+    @classmethod
+    def get_serializer_class(cls):
+        if cls.serializer_class:
+            return cls.serializer_class
+        name = cls.menu_class.__name__ + 'Serializer'
+        base_class = cls.get_base_serializer_class()
+        create_kwargs = cls.get_serializer_class_create_kwargs(base_class)
+        return make_serializer_class(name, base_class, **create_kwargs)
 
 
+class MainMenuGeneratorView(MenuBasedMenuGeneratorView):
+    """
+    Returns a JSON representation of a 'main menu' (including menu items)
+    matching the supplied arguments.
+    """
+    name = _('Generate Main Menu')
+    menu_class = wagtailmenus_settings.models.MAIN_MENU_MODEL
+    form_class = forms.MainMenuGeneratorArgumentForm
+    base_serializer_class_setting_name = 'BASE_MAIN_MENU_SERIALIZER'
+
+
+class FlatMenuGeneratorView(MenuBasedMenuGeneratorView):
+    """
+    Returns a JSON representation of a 'flat menu' (including menu items)
+    matching the supplied arguments.
+    """
+    name = _('Generate Flat Menu')
+    menu_class = wagtailmenus_settings.models.FLAT_MENU_MODEL
+    form_class = forms.FlatMenuGeneratorArgumentForm
+    base_serializer_class_setting_name = 'BASE_FLAT_MENU_SERIALIZER'
+
+    # argument defaults
+    fall_back_to_default_site_menus_default = True
+
+    def get_form_initial(self):
+        initial = super().get_form_initial()
+        initial['fall_back_to_default_site_menus'] = self.fall_back_to_default_site_menus_default
+        return initial
