@@ -26,7 +26,7 @@ class TestMainMenuGeneratorView(APIViewTestMixin, TestCase):
             'format': 'json',
             'apply_active_classes': 'true',
             'allow_repeating_parents': 'true',
-            'use_relative_page_urls': 'true',
+            'relative_page_urls': 'true',
         }
 
     def test_renders_json_data_by_default(self):
@@ -63,7 +63,7 @@ class TestFlatMenuGeneratorView(APIViewTestMixin, TestCase):
             'format': 'json',
             'apply_active_classes': 'true',
             'allow_repeating_parents': 'true',
-            'use_relative_page_urls': 'true',
+            'relative_page_urls': 'true',
         }
 
     def test_renders_json_data_by_default(self):
@@ -102,7 +102,7 @@ class TestChildrenMenuGeneratorView(APIViewTestMixin, TestCase):
             'format': 'json',
             'apply_active_classes': 'true',
             'allow_repeating_parents': 'true',
-            'use_relative_page_urls': 'true',
+            'relative_page_urls': 'true',
         }
 
     def test_renders_json_data_by_default(self):
@@ -130,7 +130,7 @@ class TestSectionMenuGeneratorView(APIViewTestMixin, TestCase):
             'format': 'json',
             'apply_active_classes': 'true',
             'allow_repeating_parents': 'true',
-            'use_relative_page_urls': 'true',
+            'relative_page_urls': 'true',
         }
 
     def test_renders_json_data_by_default(self):
