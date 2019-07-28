@@ -291,8 +291,8 @@ class BaseModelMenuSerializer(MenuSerializerMixin, serializers.ModelSerializer):
 
 class ChildrenMenuSerializer(MenuSerializerMixin, serializers.Serializer):
 
-    items = serializers.SerializerMethodField()
     parent_page = serializers.SerializerMethodField()
+    items = serializers.SerializerMethodField()
 
     # Subclasses can use the following attributes to customise
     # serialization of 'parent_page' instead of updating the
@@ -351,8 +351,8 @@ class ChildrenMenuSerializer(MenuSerializerMixin, serializers.Serializer):
 
 class SectionMenuSerializer(MenuSerializerMixin, serializers.Serializer):
 
-    items = serializers.SerializerMethodField()
     section_root = serializers.SerializerMethodField()
+    items = serializers.SerializerMethodField()
 
     # Subclasses can use the following attributes to customise
     # serialization of 'section_root' instead of updating the
