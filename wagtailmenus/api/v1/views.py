@@ -178,7 +178,7 @@ class BaseMenuGeneratorView(APIView):
             'wagtailmenus_vals': {
                 'current_page': form_data.pop('current_page', None),
                 'section_root': form_data.pop('section_root_page', None),
-                'current_page_ancestor_ids': form_data.pop('ancestor_page_ids', ()),
+                'current_page_ancestor_ids': ancestor_page_ids,
             }
         }
 
