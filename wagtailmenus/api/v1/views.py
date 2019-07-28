@@ -228,7 +228,7 @@ class SectionMenuGeneratorView(BaseMenuGeneratorView):
     max_levels_default = wagtailmenus_settings.DEFAULT_SECTION_MENU_MAX_LEVELS
 
 
-class MenuBasedMenuGeneratorView(BaseMenuGeneratorView):
+class BaseModelMenuGeneratorView(BaseMenuGeneratorView):
     base_serializer_class = None
     base_serializer_class_setting_name = None
 
@@ -274,7 +274,7 @@ class MenuBasedMenuGeneratorView(BaseMenuGeneratorView):
         return make_serializer_class(name, base_class, **create_kwargs)
 
 
-class MainMenuGeneratorView(MenuBasedMenuGeneratorView):
+class MainMenuGeneratorView(BaseModelMenuGeneratorView):
     """
     Returns a JSON representation of a 'main menu' (including menu items)
     matching the supplied arguments.
@@ -285,7 +285,7 @@ class MainMenuGeneratorView(MenuBasedMenuGeneratorView):
     base_serializer_class_setting_name = 'BASE_MAIN_MENU_SERIALIZER'
 
 
-class FlatMenuGeneratorView(MenuBasedMenuGeneratorView):
+class FlatMenuGeneratorView(BaseModelMenuGeneratorView):
     """
     Returns a JSON representation of a 'flat menu' (including menu items)
     matching the supplied arguments.
