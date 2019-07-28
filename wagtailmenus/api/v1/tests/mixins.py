@@ -38,25 +38,18 @@ class ArgumentFormTestMixin:
             )
         return self.form_class
 
-    def get_form(self, data=None, initial=None, set_errors=False):
+    def get_form(self, request=None, data=None, initial=None):
         """
         Creates an instance of ``self.get_form_class()`` to use in tests.
 
         If ``request`` is None, a dummy one will be created for the
         ``default_request_url_name``.
-
-        If ``set_errors`` is True, a the form's ``_errors`` attribute will be
-        set to prevent ``full_clean()`` being triggered when attempting to
-        expect form errors.
         """
+        if request is None:
+            request = self.make_request()
         cls = self.get_form_class()
-        form_kwargs = dict(
-            data=data,
-            initial=initial or {}
-        )
-        form = cls(**form_kwargs)
-        if set_errors:
-            form._errors = {}
+        form = cls(request=request, data=data, initial=initial or {})
+        form._errors = {}
         return form
 
     def make_request(self, url=None, url_name=None):
