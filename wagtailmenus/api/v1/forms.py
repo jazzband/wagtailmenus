@@ -371,10 +371,10 @@ class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
     def derive_section_root_page(self):
         data = self.cleaned_data
 
-        if not data.get("current_page_id") and not data.get("current_url"):
-            self.add_error('section_root_page', (
-                "This value can only be ommitted when providing 'current_page' "
-                "or 'current_url'."
+        if not data.get('current_page_id') and not data.get('current_url'):
+            self.add_error('section_root_page_id', (
+                "This value can only be ommitted when providing "
+                "'current_page_id' or 'current_url'."
             ))
             return
 
@@ -389,7 +389,7 @@ class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
             data['section_root_page_id'] = section_root.pk
 
         else:
-            self.add_error('section_root_page', (
-                "This value could not be derived from the 'current_page' or "
-                "'current_url' values provided."
+            self.add_error('section_root_page_id', (
+                "This value could not be derived from the 'current_page_id' "
+                "or 'current_url' values provided."
             ))
