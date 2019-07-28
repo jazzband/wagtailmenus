@@ -126,7 +126,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "relevant setting value for this menu type."
         )
     )
-    use_relative_page_urls = api_form_fields.BooleanChoiceField(
+    relative_page_urls = api_form_fields.BooleanChoiceField(
         label=_('Use relative page URLs'),
         required=False,
         initial=False,
@@ -165,7 +165,7 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
 
     def clean(self):
         data = super().clean()
-        for field_name in ('apply_active_classes', 'use_relative_page_urls'):
+        for field_name in ('apply_active_classes', 'relative_page_urls'):
             if data.get(field_name):
                 if not data.get("current_page_id") and not data.get("current_url"):
                     self.add_error(field_name, (
@@ -253,7 +253,7 @@ class MainMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
         'max_levels',
         'apply_active_classes',
         'allow_repeating_parents',
-        'use_relative_page_urls',
+        'relative_page_urls',
         'language',
     )
 
@@ -285,7 +285,7 @@ class FlatMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
         'max_levels',
         'apply_active_classes',
         'allow_repeating_parents',
-        'use_relative_page_urls',
+        'relative_page_urls',
         'language',
     )
 
@@ -307,7 +307,7 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         'max_levels',
         'apply_active_classes',
         'allow_repeating_parents',
-        'use_relative_page_urls',
+        'relative_page_urls',
         'language',
     )
 
@@ -345,7 +345,7 @@ class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         'max_levels',
         'apply_active_classes',
         'allow_repeating_parents',
-        'use_relative_page_urls',
+        'relative_page_urls',
         'language',
     )
 

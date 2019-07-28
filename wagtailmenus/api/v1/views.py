@@ -187,7 +187,7 @@ class BaseMenuGeneratorView(APIView):
         menu_instance = menu_class._get_render_prepared_object(
             dummy_context,
             add_sub_menus_inline=True,
-            use_absolute_page_urls=not form_data.pop('use_relative_page_urls'),
+            use_absolute_page_urls=not form_data.pop('relative_page_urls'),
             ancestor_page_ids=ancestor_page_ids,
             **form_data
         )
