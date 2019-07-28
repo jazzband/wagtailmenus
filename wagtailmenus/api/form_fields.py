@@ -10,8 +10,8 @@ class JavascriptStyleBooleanSelect(forms.Select):
 
     def __init__(self, attrs=None):
         choices = (
-            ('true', _('Yes')),
-            ('false', _('No')),
+            ('true', _('true')),
+            ('false', _('false')),
         )
         super().__init__(attrs, choices)
 
