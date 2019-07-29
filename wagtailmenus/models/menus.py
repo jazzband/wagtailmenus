@@ -762,9 +762,9 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
             root_page.title
         )
         if option_vals.use_absolute_page_urls:
-            href = root_page.get_full_url(request=self.request)
+            href = root_page.get_full_url(request=request)
         else:
-            href = root_page.relative_url(contextual_vals.current_site)
+            href = root_page.relative_url(contextual_vals.current_site, request=request)
         root_page.href = href
 
         active_class = ''
