@@ -462,10 +462,7 @@ class Menu:
         # Determine appropriate value for 'has_children_in_menu'
         # ---------------------------------------------------------------------
 
-        # NOTE: Attributes aren't being set yet, as the item could potentially
-        # be replaced
-
-        has_children_in_menu = False
+        item.has_children_in_menu = False
 
         if page:
             if (
@@ -474,7 +471,7 @@ class Menu:
                 (not item_is_menu_item_object or item.allow_subnav)
             ):
                 if hasattr(page, 'has_submenu_items'):
-                    has_children_in_menu = page.has_submenu_items(
+                    item.has_children_in_menu = page.has_submenu_items(
                         menu_instance=self,
                         request=request,
                         allow_repeating_parents=option_vals.allow_repeating_parents,
@@ -482,35 +479,32 @@ class Menu:
                         original_menu_tag=ctx_vals.original_menu_tag,
                     )
                 else:
-                    has_children_in_menu = self.page_has_children(page)
+                    item.has_children_in_menu = self.page_has_children(page)
 
         # ---------------------------------------------------------------------
         # Determine appropriate value for 'active_class'
         # ---------------------------------------------------------------------
 
-        # NOTE: Attributes aren't being set yet, as the item could potentially
-        # be replaced
-
-        active_class = ''
+        item.active_class = ''
 
         if option_vals.apply_active_classes:
             if page:
                 if(current_page and page.pk == current_page.pk):
                     # This is the current page, so the menu item should
                     # probably have the 'active' class
-                    active_class = settings.ACTIVE_CLASS
+                    item.active_class = settings.ACTIVE_CLASS
                     if (
                         option_vals.allow_repeating_parents and
-                        has_children_in_menu
+                        item.has_children_in_menu
                     ):
                         if getattr(page, 'repeat_in_subnav', False):
-                            active_class = settings.ACTIVE_ANCESTOR_CLASS
+                            item.active_class = settings.ACTIVE_ANCESTOR_CLASS
 
                 elif page.pk in ctx_vals.current_page_ancestor_ids:
-                    active_class = settings.ACTIVE_ANCESTOR_CLASS
+                    item.active_class = settings.ACTIVE_ANCESTOR_CLASS
             else:
                 # This is a `MenuItem` for a custom URL
-                active_class = item.get_active_class_for_request(request)
+                item.active_class = item.get_active_class_for_request(request)
 
         # ---------------------------------------------------------------------
         # Set 'text' attribute
@@ -533,9 +527,6 @@ class Menu:
         # ---------------------------------------------------------------------
         # Set additional attributes
         # ---------------------------------------------------------------------
-
-        item.has_children_in_menu = has_children_in_menu
-        item.active_class = active_class
 
         if item.has_children_in_menu and option_vals.add_sub_menus_inline:
             item.sub_menu = self.create_sub_menu(page)
