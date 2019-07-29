@@ -11,7 +11,6 @@ from wagtailmenus.tests.models import CustomFlatMenu
 
 class TestView(BaseModelMenuGeneratorView):
     menu_class = CustomFlatMenu
-    base_serializer_class_setting_name = 'BASE_FLAT_MENU_SERIALIZER'
 
 
 class TestBaseModelMenuGeneratorView(TestCase):
@@ -33,39 +32,11 @@ class TestBaseModelMenuGeneratorView(TestCase):
         self.assertIn('translated_heading', overrides)
         self.assertIsInstance(overrides['translated_heading'], CharField)
 
-    def test_get_base_serializer_class_uses_setting_by_default(self):
-
-        # If the setting is not overridden, the BASE_FLAT_MENU_SERIALIZER
-        # default should be returned
-        self.assertIs(
-            TestView.get_base_serializer_class(),
-            serializers.BaseModelMenuSerializer
-        )
-
-        # If overriden, the specified class should be returned
-        with self.settings(WAGTAILMENUS_API_V1_BASE_FLAT_MENU_SERIALIZER='rest_framework.serializers.Serializer'):
-            self.assertIs(
-                TestView.get_base_serializer_class(),
-                Serializer
-            )
-
-    def test_get_base_serializer_class_prefers_base_serializer_class_attribute_if_set(self):
-
-        class TestViewWithSerializerClass(TestView):
-            base_serializer_class = Serializer
-
-        self.assertIs(
-            TestViewWithSerializerClass.get_base_serializer_class(),
-            TestViewWithSerializerClass.base_serializer_class
-        )
-
     def test_get_serializer_class_create_kwargs(self):
         """
-        Typically, only the base class is passed to this method
+        Typically, no arguements are passed to this method
         """
-        result = TestView.get_serializer_class_create_kwargs(
-            serializers.BaseModelMenuSerializer
-        )
+        result = TestView.get_serializer_class_create_kwargs()
         self.assertEqual(result, {
             'model': CustomFlatMenu,
             'field_names': ['handle', 'translated_heading'],
@@ -77,9 +48,7 @@ class TestBaseModelMenuGeneratorView(TestCase):
         Subclasses can provide additional kwargs to update the result
         (a bit like View.get_context_data() in Django)
         """
-        result = TestView.get_serializer_class_create_kwargs(
-            serializers.BaseModelMenuSerializer, foo='bar', bar='baz'
-        )
+        result = TestView.get_serializer_class_create_kwargs(foo='bar', bar='baz')
         self.assertIn('foo', result)
         self.assertEqual(result['foo'], 'bar')
         self.assertIn('foo', result)
