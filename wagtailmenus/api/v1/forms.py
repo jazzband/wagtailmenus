@@ -77,6 +77,14 @@ class BaseAPIViewArgumentForm(forms.Form):
 
 
 class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
+    current_page_id = api_form_fields.PageIDChoiceField(
+        label='current_page_id',
+        required=False,
+        help_text=_(
+            "The ID of the Wagtail Page you are generating the menu for "
+            "(if available)."
+        ),
+    )
     current_url = forms.URLField(
         label='current_url',
         max_length=300,
@@ -85,14 +93,6 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "The full URL of the page you are generating the menu for, "
             "including scheme and domain. For example: "
             "'https://www.example.com/about-us/')."
-        ),
-    )
-    current_page_id = api_form_fields.PageChoiceField(
-        label='current_page_id',
-        required=False,
-        help_text=_(
-            "The ID of the Wagtail Page you are generating the menu for, "
-            "if applicable."
         ),
     )
     max_levels = api_form_fields.MaxLevelsChoiceField(
@@ -292,7 +292,7 @@ class FlatMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
 
 class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
-    parent_page_id = api_form_fields.PageChoiceField(
+    parent_page_id = api_form_fields.PageIDChoiceField(
         label='parent_page_id',
         help_text=_(
             "The ID of the page you want the menu to show children page links "
@@ -327,7 +327,7 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
 class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
-    section_root_page_id = api_form_fields.PageChoiceField(
+    section_root_page_id = api_form_fields.PageIDChoiceField(
         label='section_root_page_id',
         required=False,
         indent_choice_labels=False,

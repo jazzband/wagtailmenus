@@ -1,9 +1,41 @@
+from functools import lru_cache
+
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from wagtail.core.models import Page, Site
 
 from wagtailmenus.conf import constants, settings
+
+
+@lru_cache(maxsize=64)
+def get_label_indent(depth, indent_string):
+    if depth > 1:
+        return ''.join(str(indent_string) for i in range(depth-2))
+    return ''
+
+
+class IndentedPageChoiceIterator(forms.models.ModelChoiceIterator):
+    indent_string = '    - '
+
+    def __init__(self, field):
+        self.field = field
+        # Limit fields to help with performance
+        self.queryset = field.queryset.only('id', 'depth', 'title')
+
+    def label_from_instance(self, obj):
+        # Indent field labels according to depth (if enabled)
+        if self.field.indent_choice_labels:
+            return '{indent}{title}'.format(
+                indent=get_label_indent(obj.depth, self.indent_string),
+                title=obj.title,
+            )
+        return obj.title
+
+    def choice(self, obj):
+        # Use the above label_from_instance() method instead
+        # of the one
+        return (self.field.prepare_value(obj), self.label_from_instance(obj))
 
 
 class JavascriptStyleBooleanSelect(forms.Select):
@@ -73,26 +105,19 @@ class MaxLevelsChoiceField(forms.TypedChoiceField):
         super().__init__(*args, **kwargs)
 
 
-class PageChoiceField(forms.ModelChoiceField):
+class PageIDChoiceField(forms.ModelChoiceField):
 
     default_error_messages = {
         'invalid_choice': _('The provided value is not a valid page ID.')
     }
 
+    iterator = IndentedPageChoiceIterator
+
     def __init__(self, *args, **kwargs):
-        if 'queryset' not in 'kwargs':
-            kwargs['queryset'] = Page.objects.none()
+        if 'queryset' not in kwargs:
+            kwargs['queryset'] = Page.objects.filter(depth__gt=1)
         self.indent_choice_labels = kwargs.pop('indent_choice_labels', True)
         super().__init__(*args, **kwargs)
-
-    def label_from_instance(self, obj):
-        if self.indent_choice_labels:
-            if obj.depth > 1:
-                indent = ''.join('    - ' for i in range(obj.depth-2))
-            else:
-                indent = ''
-            return '{indent}{page}'.format(indent=indent, page=obj)
-        return str(obj)
 
 
 class SiteChoiceField(forms.ModelChoiceField):
