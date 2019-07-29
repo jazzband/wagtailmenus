@@ -72,7 +72,14 @@ class AbstractMenuItem(models.Model, MenuItem):
 
     objects = MenuItemManager()
 
-    # Override to modify output for custom classes in wagtailmenus.api
+    """
+    Override this to change the representation of 'items.item' in API
+    responses. The serializer should be capable of rendering most custom
+    ``MenuItem`` field value by default. To include other fields or attributes,
+    or to override the default value representation for a field, provide a
+    field serializer as the second positional argument when defining an
+    ``APIField`` (as shown at: http://docs.wagtail.io/en/stable/advanced_topics/api/v2/configuration.html#custom-serialisers)
+    """
     api_fields = [
         APIField('text'),
         APIField('href'),
@@ -82,6 +89,14 @@ class AbstractMenuItem(models.Model, MenuItem):
         APIField('children'),
     ]
 
+    """
+    Override this to change the representation of 'items.item.page' in API
+    responses.  The serializer is only capable of serializing vanilla ``Page``
+    field values by default. To serialize custom page field values (or to
+    override the default field representation for a vanilla ``Page`` field),
+    provide a field serializer as the second positional argument when defining
+    an ``APIField`` (as shown at: http://docs.wagtail.io/en/stable/advanced_topics/api/v2/configuration.html#custom-serialisers)
+    """
     page_api_fields = [
         APIField('id'),
         APIField('title'),
@@ -89,15 +104,28 @@ class AbstractMenuItem(models.Model, MenuItem):
         APIField('type'),
     ]
 
+    """
+    Override this to change the representation of 'items.item.children.item' in
+    API responses. To surface custom page field values, it is recommended that
+    you update ``sub_item_page_api_fields`` instead, as that value is
+    guaranteed to be a ``Page`` object (whereas the 'item' value is not).
+    """
     sub_item_api_fields = [
         APIField('text'),
         APIField('href'),
-        APIField('handle'),
         APIField('active_class'),
         APIField('page'),
         APIField('children'),
     ]
 
+    """
+    Override this to customise serialization of 'items.item.children.item.page'
+    in API responses. The serializer is only capable of serializing vanilla
+    ``Page`` field values by default. To serialize custom page field values
+    (or to override the default field representation for a vanilla ``Page``
+    field), provide a field serializer as the second positional argument when
+    defining an ``APIField`` (as shown at: http://docs.wagtail.io/en/stable/advanced_topics/api/v2/configuration.html#custom-serialisers)
+    """
     sub_item_page_api_fields = [
         APIField('id'),
         APIField('title'),

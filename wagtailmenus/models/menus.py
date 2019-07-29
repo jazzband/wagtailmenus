@@ -688,6 +688,15 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     menu_instance_context_name = 'section_menu'
     related_templatetag_name = 'section_menu'
 
+    """
+    Override this to change the representation of 'section_root' in API
+    responses. The serializer should be capable of rendering custom page
+    field values, but only if the ``Page`` object being serialized always has
+    those fields. To include other fields or attributes, or to override the
+    default value representation for a field, provide a field serializer
+    as the second positional argument when defining an ``APIField`` (as shown
+    at: http://docs.wagtail.io/en/stable/advanced_topics/api/v2/configuration.html#custom-serialisers)
+    """
     section_root_api_fields = [
         APIField('id'),
         APIField('title'),
@@ -698,6 +707,12 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         APIField('active_class', fields.CharField(read_only=True))
     ]
 
+    """
+    Override this to change the representation of 'items.item' in API
+    responses. To surface custom page field values, it is recommended that you
+    update ``item_page_api_fields`` instead, , as that value is guaranteed to
+    be a ``Page`` object (whereas the 'item' value is not).
+    """
     item_api_fields = [
         APIField('text'),
         APIField('href'),
@@ -706,6 +721,14 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         APIField('children'),
     ]
 
+    """
+    Override this to change the representation of 'items.item.page' in API
+    responses. The serializer is only capable of serializing vanilla ``Page``
+    field values by default. To serialize custom page field values (or to
+    override the default field representation for a vanilla ``Page`` field),
+    provide a field serializer as the second positional argument when defining
+    an ``APIField`` (as shown at: http://docs.wagtail.io/en/stable/advanced_topics/api/v2/configuration.html#custom-serialisers)
+    """
     item_page_api_fields = [
         APIField('id'),
         APIField('title'),
@@ -797,6 +820,15 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     menu_instance_context_name = 'children_menu'
     related_templatetag_name = 'children_menu'
 
+    """
+    Override this to change the representation of 'parent_page' in API
+    responses. The serializer should be capable of rendering custom page
+    field values, but only if the ``Page`` object being serialized always has
+    those fields. To include other fields or attributes, or to override the
+    default value representation for a field, provide a field serializer
+    as the second positional argument when defining an ``APIField`` (as shown
+    at: http://docs.wagtail.io/en/stable/advanced_topics/api/v2/configuration.html#custom-serialisers)
+    """
     parent_page_api_fields = [
         APIField('id'),
         APIField('title'),
@@ -804,6 +836,12 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         APIField('type'),
     ]
 
+    """
+    Override this to change the representation of 'items.item' in API
+    responses. To surface custom page field values, it is recommended that you
+    update ``item_page_api_fields`` instead, , as that value is guaranteed to
+    be a ``Page`` object (whereas the 'item' value isn't).
+    """
     item_api_fields = [
         APIField('text'),
         APIField('href'),
@@ -812,6 +850,14 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
         APIField('children'),
     ]
 
+    """
+    Override this to change the representation of 'items.item.page' in API
+    responses. The serializer is only capable of serializing vanilla ``Page``
+    field values by default. To serialize custom page field values (or to
+    override the default field representation for a vanilla ``Page`` field),
+    provide a field serializer as the second positional argument when defining
+    an ``APIField`` (as shown at: http://docs.wagtail.io/en/stable/advanced_topics/api/v2/configuration.html#custom-serialisers)
+    """
     item_page_api_fields = [
         APIField('id'),
         APIField('title'),
