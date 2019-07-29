@@ -13,6 +13,7 @@ from wagtailmenus.utils.misc import derive_ancestor_ids
 from wagtailmenus.api.utils import make_serializer_class
 from wagtailmenus.api.v1.conf import settings as api_settings
 from wagtailmenus.api.v1.renderers import BrowsableAPIWithArgumentFormRenderer
+from wagtailmenus.api.v1.serializers import BaseModelMenuSerializer
 
 from . import forms
 
@@ -224,8 +225,7 @@ class SectionMenuGeneratorView(BaseMenuGeneratorView):
 
 
 class BaseModelMenuGeneratorView(BaseMenuGeneratorView):
-    base_serializer_class = None
-    base_serializer_class_setting_name = None
+    base_serializer_class = BaseModelMenuSerializer
 
     @classmethod
     def get_serializer_fields(cls):
@@ -244,13 +244,7 @@ class BaseModelMenuGeneratorView(BaseMenuGeneratorView):
         }
 
     @classmethod
-    def get_base_serializer_class(cls):
-        if cls.base_serializer_class:
-            return cls.base_serializer_class
-        return api_settings.get_object(cls.base_serializer_class_setting_name)
-
-    @classmethod
-    def get_serializer_class_create_kwargs(cls, base_class, **kwargs):
+    def get_serializer_class_create_kwargs(cls, **kwargs):
         values = {
             'model': cls.menu_class,
             'field_names': cls.get_serializer_field_names(),
@@ -264,8 +258,8 @@ class BaseModelMenuGeneratorView(BaseMenuGeneratorView):
         if cls.serializer_class:
             return cls.serializer_class
         name = cls.menu_class.__name__ + 'Serializer'
-        base_class = cls.get_base_serializer_class()
-        create_kwargs = cls.get_serializer_class_create_kwargs(base_class)
+        base_class = cls.base_serializer_class
+        create_kwargs = cls.get_serializer_class_create_kwargs()
         return make_serializer_class(name, base_class, **create_kwargs)
 
 
