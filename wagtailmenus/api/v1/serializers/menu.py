@@ -57,10 +57,10 @@ class MenuSerializerMixin:
         }
 
     @classmethod
-    def get_item_serializer_init_kwargs(cls, base_class, item_model, menu_instance, **kwargs):
+    def get_item_serializer_create_kwargs(cls, item_model, menu_instance, **kwargs):
         """
         Subclasses can add new or update values by providing them as 'kwargs'
-        when calling super().get_item_serializer_init_kwargs().
+        when calling super().get_item_serializer_create_kwargs().
         """
         values = {
             'model': item_model,
@@ -74,7 +74,7 @@ class MenuSerializerMixin:
     @classmethod
     def get_item_serializer_class(cls, item_model, menu_instance):
         base_class = cls.base_item_serializer_class
-        init_kwargs = cls.get_item_serializer_init_kwargs(base_class, item_model, menu_instance)
+        init_kwargs = cls.get_item_serializer_create_kwargs(item_model, menu_instance)
         return make_serializer_class('SubItemSerializer', base_class, **init_kwargs)
 
     # -----------------------------------------------------------------------------
@@ -108,10 +108,10 @@ class MenuSerializerMixin:
         }
 
     @classmethod
-    def get_item_page_serializer_init_kwargs(cls, base_class, item_model, menu_instance, **kwargs):
+    def get_item_page_serializer_create_kwargs(cls, item_model, menu_instance, **kwargs):
         """
         Subclasses can add new or update values by providing them as 'kwargs'
-        when calling super().get_item_page_serializer_init_kwargs().
+        when calling super().get_item_page_serializer_create_kwargs().
         """
         values = {
             'model': Page,
@@ -124,7 +124,7 @@ class MenuSerializerMixin:
     @classmethod
     def get_item_page_serializer_class(cls, item_model, menu_instance):
         base_class = cls.base_item_page_serializer_class
-        init_kwargs = cls.get_item_page_serializer_init_kwargs(base_class, item_model, menu_instance)
+        init_kwargs = cls.get_item_page_serializer_create_kwargs(item_model, menu_instance)
         return make_serializer_class('SubItemPageSerializer', base_class, **init_kwargs)
 
     def get_items(self, menu_instance):
@@ -170,20 +170,20 @@ class BaseModelMenuSerializer(MenuSerializerMixin, serializers.ModelSerializer):
     # -----------------------------------------------------------------------------
 
     @classmethod
-    def get_item_serializer_init_kwargs(cls, base_class, item_model, menu_instance, **kwargs):
+    def get_item_serializer_create_kwargs(cls, item_model, menu_instance, **kwargs):
         """
-        Overrides MenuSerializerMixin.get_item_serializer_init_kwargs() to set
+        Overrides MenuSerializerMixin.get_item_serializer_create_kwargs() to set
         the 'children_serializer_class' attribute on the serializer used for
         top-level items.
 
         Subclasses can add new or update values by providing them as 'kwargs'
-        when calling super().get_item_serializer_init_kwargs().
+        when calling super().get_item_serializer_create_kwargs().
         """
         values = {
             'children_serializer_class': cls.get_sub_item_serializer_class(item_model, menu_instance)
         }
         values.update(kwargs)
-        return super().get_item_serializer_init_kwargs(base_class, item_model, menu_instance, **values)
+        return super().get_item_serializer_create_kwargs(item_model, menu_instance, **values)
 
     # -----------------------------------------------------------------------------
     # sub_item
@@ -213,10 +213,10 @@ class BaseModelMenuSerializer(MenuSerializerMixin, serializers.ModelSerializer):
         }
 
     @classmethod
-    def get_sub_item_serializer_init_kwargs(cls, base_class, item_model, menu_instance, **kwargs):
+    def get_sub_item_serializer_create_kwargs(cls, item_model, menu_instance, **kwargs):
         """
         Subclasses can add new or update values by providing them as 'kwargs'
-        when calling super().get_item_serializer_init_kwargs().
+        when calling super().get_item_serializer_create_kwargs().
 
         NOTE: A 'sub item' is almost always a ``Page`` object, but wagtailmenus
         allows custom menu items to be added via hooks or custom ``MenuPage``
@@ -238,7 +238,7 @@ class BaseModelMenuSerializer(MenuSerializerMixin, serializers.ModelSerializer):
     @classmethod
     def get_sub_item_serializer_class(cls, item_model, menu_instance):
         base_class = cls.base_sub_item_serializer
-        init_kwargs = cls.get_sub_item_serializer_init_kwargs(base_class, item_model, menu_instance)
+        init_kwargs = cls.get_sub_item_serializer_create_kwargs(item_model, menu_instance)
         return make_serializer_class('SubItemSerializer', base_class, **init_kwargs)
 
     # -----------------------------------------------------------------------------
@@ -269,10 +269,10 @@ class BaseModelMenuSerializer(MenuSerializerMixin, serializers.ModelSerializer):
         }
 
     @classmethod
-    def get_sub_item_page_serializer_init_kwargs(cls, base_class, item_model, menu_instance, **kwargs):
+    def get_sub_item_page_serializer_create_kwargs(cls, item_model, menu_instance, **kwargs):
         """
         Subclasses can add new or update values by providing them as 'kwargs'
-        when calling super().get_item_serializer_init_kwargs().
+        when calling super().get_item_serializer_create_kwargs().
         """
         values = {
             'model': Page,
@@ -285,7 +285,7 @@ class BaseModelMenuSerializer(MenuSerializerMixin, serializers.ModelSerializer):
     @classmethod
     def get_sub_item_page_serializer_class(cls, item_model, menu_instance):
         base_class = cls.base_sub_item_page_serializer or cls.base_item_page_serializer_class
-        init_kwargs = cls.get_sub_item_page_serializer_init_kwargs(base_class, item_model, menu_instance)
+        init_kwargs = cls.get_sub_item_page_serializer_create_kwargs(item_model, menu_instance)
         return make_serializer_class('SubItemPageSerializer', base_class, **init_kwargs)
 
 
@@ -324,10 +324,10 @@ class ChildrenMenuSerializer(MenuSerializerMixin, serializers.Serializer):
         }
 
     @classmethod
-    def get_parent_page_serializer_init_kwargs(cls, base_class, parent_page, menu_instance, **kwargs):
+    def get_parent_page_serializer_create_kwargs(cls, parent_page, menu_instance, **kwargs):
         """
         Subclasses can add new or update values by providing them as 'kwargs'
-        when calling super().get_parent_page_serializer_init_kwargs().
+        when calling super().get_parent_page_serializer_create_kwargs().
         """
         values = {
             'model': type(parent_page),
@@ -340,7 +340,7 @@ class ChildrenMenuSerializer(MenuSerializerMixin, serializers.Serializer):
     @classmethod
     def get_parent_page_serializer_class(cls, parent_page, menu_instance):
         base_class = cls.base_parent_page_serializer
-        init_kwargs = cls.get_parent_page_serializer_init_kwargs(base_class, parent_page, menu_instance)
+        init_kwargs = cls.get_parent_page_serializer_create_kwargs(parent_page, menu_instance)
         return make_serializer_class('ParentPageSerializer', base_class, **init_kwargs)
 
     def get_parent_page(self, menu_instance):
@@ -384,10 +384,10 @@ class SectionMenuSerializer(MenuSerializerMixin, serializers.Serializer):
         }
 
     @classmethod
-    def get_section_root_serializer_init_kwargs(cls, base_class, section_root_page, menu_instance, **kwargs):
+    def get_section_root_serializer_create_kwargs(cls, section_root_page, menu_instance, **kwargs):
         """
         Subclasses can add new or update values by providing them as 'kwargs'
-        when calling super().get_section_root_serializer_init_kwargs().
+        when calling super().get_section_root_serializer_create_kwargs().
         """
         values = {
             'model': type(section_root_page),
@@ -400,7 +400,7 @@ class SectionMenuSerializer(MenuSerializerMixin, serializers.Serializer):
     @classmethod
     def get_section_root_serializer_class(cls, section_root_page, menu_instance):
         base_class = cls.base_section_root_serializer
-        init_kwargs = cls.get_section_root_serializer_init_kwargs(base_class, section_root_page, menu_instance)
+        init_kwargs = cls.get_section_root_serializer_create_kwargs(section_root_page, menu_instance)
         return make_serializer_class('SectionRootSerializer', base_class, **init_kwargs)
 
     def get_section_root(self, menu_instance):
