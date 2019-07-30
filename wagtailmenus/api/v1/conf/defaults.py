@@ -9,9 +9,11 @@ CHILDREN_MENU_SERIALIZER = 'wagtailmenus.api.v1.serializers.ChildrenMenuSerializ
 SECTION_MENU_SERIALIZER = 'wagtailmenus.api.v1.serializers.SectionMenuSerializer'
 
 
-# ----------------------------
-# Util methods
-# ----------------------------
+# --------------
+# View behaviour
+# --------------
+
+SINGLE_SITE_MODE = False
 
 CURRENT_SITE_DERIVATION_FUNCTION = 'wagtailmenus.api.utils.derive_current_site'
 

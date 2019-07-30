@@ -104,6 +104,14 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
             "for this menu type."
         )
     )
+    current_site_id = api_form_fields.SiteIDChoiceField(
+        label='current_site_id',
+        required=False,
+        help_text=_(
+            "The ID of the Wagtail 'Site' you are generating the menu for "
+            "(if available)."
+        ),
+    )
     apply_active_classes = api_form_fields.BooleanChoiceField(
         label='apply_active_classes',
         required=False,
@@ -152,7 +160,18 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         super().__init__(request, *args, **kwargs)
         self.fields['current_page_id'].queryset = Page.objects.filter(depth__gt=1)
         if not settings.USE_I18N:
-            self.fields['language'].widget = forms.HiddenInput()
+            self.fields.pop('language')
+        if api_settings.SINGLE_SITE_MODE:
+            self.fields.pop('current_site_id')
+
+    def clean_current_site_id(self):
+        value = self.cleaned_data['current_site_id']
+        # Set 'current_site' to the page object (or None)
+        self.cleaned_data['current_site'] = value
+        if value:
+            # Use the page PK for 'current_site_id'
+            return value.pk
+        return value
 
     def clean_current_page_id(self):
         value = self.cleaned_data['current_page_id']
@@ -165,15 +184,31 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
 
     def clean(self):
         data = super().clean()
-        for field_name in ('apply_active_classes', 'relative_page_urls'):
-            if data.get(field_name):
-                if not data.get("current_page_id") and not data.get("current_url"):
-                    self.add_error(field_name, (
-                        "To support a value of 'true', 'current_page_id' or "
-                        "'current_url' values must also be provided."
-                    ))
-                elif not data.get('current_page') and not data.get('best_match_page'):
-                    self.derive_current_or_best_match_page()
+
+        if data.get('relative_page_urls'):
+            if(
+                not api_settings.SINGLE_SITE_MODE and
+                not data.get("current_site_id") and
+                not data.get("current_page_id") and
+                not data.get("current_url")
+            ):
+                self.add_error('relative_page_urls', (
+                    "To use relative page URLs, one of the following must "
+                    "also be provided: 'current_site_id', 'current_page_id' "
+                    "or 'current_url'. For single-site projects, you might "
+                    "also consider enabling SINGLE_SITE_MODE."
+                ))
+            elif not data.get('current_site'):
+                self.derive_current_site()
+
+        if data.get('apply_active_classes'):
+            if not data.get("current_page_id") and not data.get("current_url"):
+                self.add_error('apply_active_classes', (
+                    "To apply active classes, one of the following must also "
+                    "be provided: 'current_page_id' or 'current_url'."
+                ))
+            elif not data.get('current_page') and not data.get('best_match_page'):
+                self.derive_current_or_best_match_page()
 
     def derive_current_site(self):
         """
@@ -181,6 +216,10 @@ class BaseMenuGeneratorArgumentForm(BaseAPIViewArgumentForm):
         ``cleaned_data`` and update ``cleaned_data`` with the value.
         """
         data = self.cleaned_data
+
+        if api_settings.SINGLE_SITE_MODE:
+            data['current_site'] = Site.objects.all().first()
+            return
 
         site_page = data.get('current_page') or \
             data.get('parent_page') or \
@@ -233,21 +272,26 @@ class BaseMenuModelGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
     def clean(self):
         data = self.cleaned_data
 
-        if not data.get("current_page_id") and not data.get("current_url"):
-            self.add_error('current_page_id', (
-                "This or 'current_url' are required to allow the "
-                "correct menu instance to be identified."
-            ))
-            return
-
         if not data.get('current_site'):
-            self.derive_current_site()
+
+            if(
+                not api_settings.SINGLE_SITE_MODE and
+                not data.get("current_page_id") and
+                not data.get("current_url")
+            ):
+                self.add_error('current_site', (
+                    "You must provide this, 'current_page_id' or 'current_url' "
+                    "to allow the relevant menu to be identified."
+                ))
+            else:
+                self.derive_current_site()
 
         return super().clean()
 
 
 class MainMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
     field_order = (
+        'current_site_id',
         'current_page_id',
         'current_url',
         'max_levels',
@@ -278,6 +322,7 @@ class FlatMenuGeneratorArgumentForm(BaseMenuModelGeneratorArgumentForm):
     )
 
     field_order = (
+        'current_site_id',
         'handle',
         'current_page_id',
         'current_url',
@@ -302,6 +347,7 @@ class ChildrenMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
     field_order = (
         'parent_page_id',
+        'current_site_id',
         'current_page_id',
         'current_url',
         'max_levels',
@@ -340,6 +386,7 @@ class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
 
     field_order = (
         'section_root_page_id',
+        'current_site_id',
         'current_page_id',
         'current_url',
         'max_levels',
@@ -387,7 +434,6 @@ class SectionMenuGeneratorArgumentForm(BaseMenuGeneratorArgumentForm):
         if section_root:
             data['section_root_page'] = section_root
             data['section_root_page_id'] = section_root.pk
-
         else:
             self.add_error('section_root_page_id', (
                 "This value could not be derived from the 'current_page_id' "

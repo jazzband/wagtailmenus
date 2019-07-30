@@ -120,7 +120,7 @@ class PageIDChoiceField(forms.ModelChoiceField):
         super().__init__(*args, **kwargs)
 
 
-class SiteChoiceField(forms.ModelChoiceField):
+class SiteIDChoiceField(forms.ModelChoiceField):
 
     default_error_messages = {
         'invalid_choice': _('The provided valie is not a valid site ID.')
@@ -128,7 +128,7 @@ class SiteChoiceField(forms.ModelChoiceField):
 
     def __init__(self, *args, **kwargs):
         if 'queryset' not in 'kwargs':
-            kwargs['queryset'] = Site.objects.none()
+            kwargs['queryset'] = Site.objects.all()
         super().__init__(*args, **kwargs)
 
 
