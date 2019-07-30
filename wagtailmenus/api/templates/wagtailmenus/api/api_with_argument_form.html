@@ -1,75 +1,16 @@
 {% extends "rest_framework/api.html" %}
 {% load i18n %}
-{% load rest_framework %}
 
-{% block content %}
-  <div class="region" aria-label="{% trans "request form" %}">
-    <form id="get-form" class="pull-right">
-      <fieldset>
-        {% if api_settings.URL_FORMAT_OVERRIDE %}
-          <div class="btn-group format-selection">
-            <a class="btn btn-primary js-tooltip" href="{{ request.get_full_path }}" rel="nofollow" title="Make a GET request on the {{ name }} resource">GET</a>
+{% block request_forms %}
+  {{ block.super }}
 
-            <button class="btn btn-primary dropdown-toggle js-tooltip" data-toggle="dropdown" title="Specify a format for the GET request">
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-              {% for format in available_formats %}
-                <li>
-                  <a class="js-tooltip format-option" href="{% add_query_param request api_settings.URL_FORMAT_OVERRIDE format %}" rel="nofollow" title="Make a GET request on the {{ name }} resource with the format set to `{{ format }}`">{{ format }}</a>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
-        {% else %}
-          <a class="btn btn-primary js-tooltip" href="{{ request.get_full_path }}" rel="nofollow" title="Make a GET request on the {{ name }} resource">GET</a>
-        {% endif %}
-      </fieldset>
-    </form>
+  {% if argument_form %}
+    <button style="float: right; margin-right: 10px" data-toggle="modal" data-target="#argumentFormModal" class="btn btn-default">
+      <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+      {% trans "Arguments" %}
+    </button>
 
-    {% if options_form %}
-      <form class="button-form" action="{{ request.get_full_path }}" data-method="OPTIONS">
-        <button class="btn btn-primary js-tooltip" title="Make an OPTIONS request on the {{ name }} resource">OPTIONS</button>
-      </form>
-    {% endif %}
+    {{ argument_form }}
+  {% endif %}
 
-    {% if argument_form %}
-      <button style="float: right; margin-right: 10px" data-toggle="modal" data-target="#argumentFormModal" class="btn btn-default">
-        <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-        {% trans "Arguments" %}
-      </button>
-      {{ argument_form }}
-    {% endif %}
-
-  </div>
-
-  <div class="content-main" role="main"  aria-label="{% trans "main content" %}">
-    <div class="page-header">
-      <h1>{{ name }}</h1>
-    </div>
-    <div style="float:left">
-      {% block description %}
-        {{ description }}
-      {% endblock %}
-    </div>
-
-    {% if paginator %}
-      <nav style="float: right">
-        {% get_pagination_html paginator %}
-      </nav>
-    {% endif %}
-
-    <div class="request-info" style="clear: both" aria-label="{% trans "request info" %}">
-      <pre class="prettyprint"><b>{{ request.method }}</b> {{ request.get_full_path }}</pre>
-    </div>
-
-    <div class="response-info" aria-label="{% trans "response info" %}">
-      <pre class="prettyprint"><span class="meta nocode"><b>HTTP {{ response.status_code }} {{ response.status_text }}</b>{% autoescape off %}{% for key, val in response_headers|items %}
-<b>{{ key }}:</b> <span class="lit">{{ val|break_long_headers|urlize_quoted_links }}</span>{% endfor %}
-
-</span>{{ content|urlize_quoted_links }}</pre>{% endautoescape %}
-    </div>
-  </div>
-
-{% endblock content %}
-        
+{% endblock %}
