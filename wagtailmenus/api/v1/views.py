@@ -1,5 +1,6 @@
 from collections import OrderedDict
 
+from django.core.exceptions import ImproperlyConfigured
 from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.exceptions import ValidationError, NotFound
@@ -45,7 +46,7 @@ class BaseMenuGeneratorView(APIView):
     menu_class = None
 
     # argument validation and defaults
-    form_class = None
+    argument_form_class = None
     max_levels_default = None
     allow_repeating_parents_default = True
 
@@ -57,23 +58,23 @@ class BaseMenuGeneratorView(APIView):
 
     @classmethod
     def get_menu_class(cls):
-        if cls.menu_class is None:
-            raise NotImplementedError(
-                "You must either set the 'menu_class' attribute or override "
-                "the get_menu_class() method for '%s'"
-                % cls.__name__
-            )
-        return cls.menu_class
+        if cls.menu_class:
+            return cls.menu_class
+        raise ImproperlyConfigured(
+            "You must either set the 'menu_class' attribute or override "
+            "the get_menu_class() method for '%s'"
+            % cls.__name__
+        )
 
     @classmethod
-    def get_form_class(cls):
-        if cls.form_class is None:
-            raise NotImplementedError(
-                "You must either set the 'form_class' attribute or "
-                "override the get_form_class() method for '%s'"
-                % cls.__name__
-            )
-        return cls.form_class
+    def get_argument_form_class(cls):
+        if cls.argument_form_class:
+            return cls.argument_form_class
+        raise ImproperlyConfigured(
+            "You must either set the 'argument_form_class' attribute or "
+            "override the get_argument_form_class() method for '%s'"
+            % cls.__name__
+        )
 
     @classmethod
     def get_serializer_class(cls):
@@ -81,30 +82,30 @@ class BaseMenuGeneratorView(APIView):
             return cls.serializer_class
         if cls.serializer_class_setting_name:
             return api_settings.get_object(cls.serializer_class_setting_name)
-        raise NotImplementedError(
+        raise ImproperlyConfigured(
             "You must either set the 'serializer_class' attribute, "
             "or override the get_serializer_class() method for '%s'"
             % cls.__name__
         )
 
-    def get_form_init_kwargs(self):
+    def get_argument_form_init_kwargs(self):
         return {
             'request': self.request,
             'data': self.request.POST or self.request.GET,
-            'initial': self.get_form_initial(),
+            'initial': self.get_argument_form_initial(),
         }
 
-    def get_form_initial(self):
+    def get_argument_form_initial(self):
         return {
             'max_levels': self.max_levels_default,
             'allow_repeating_parents': self.allow_repeating_parents_default,
         }
 
-    def get_form(self):
+    def get_argument_form(self):
         if hasattr(self, '_form'):
             return self._form
-        form_class = self.get_form_class()
-        init_kwargs = self.get_form_init_kwargs()
+        form_class = self.get_argument_form_class()
+        init_kwargs = self.get_argument_form_init_kwargs()
         form = form_class(**init_kwargs)
         self._form = form
         return form
@@ -129,7 +130,7 @@ class BaseMenuGeneratorView(APIView):
         self.seen_types = OrderedDict()
 
         # Ensure all argument values are valid
-        form = self.get_form()
+        form = self.get_argument_form()
         if not form.is_valid():
             raise ValidationError(form.errors)
 
@@ -203,7 +204,7 @@ class ChildrenMenuGeneratorView(BaseMenuGeneratorView):
     """
     name = _('Generate Children Menu')
     menu_class = wagtailmenus_settings.objects.CHILDREN_MENU_CLASS
-    form_class = forms.ChildrenMenuGeneratorArgumentForm
+    argument_form_class = forms.ChildrenMenuGeneratorArgumentForm
     serializer_class_setting_name = 'CHILDREN_MENU_SERIALIZER'
 
     # argument defaults
@@ -217,7 +218,7 @@ class SectionMenuGeneratorView(BaseMenuGeneratorView):
     """
     name = _('Generate Section Menu')
     menu_class = wagtailmenus_settings.objects.SECTION_MENU_CLASS
-    form_class = forms.SectionMenuGeneratorArgumentForm
+    argument_form_class = forms.SectionMenuGeneratorArgumentForm
     serializer_class_setting_name = 'SECTION_MENU_SERIALIZER'
 
     # argument defaults
@@ -270,7 +271,7 @@ class MainMenuGeneratorView(BaseModelMenuGeneratorView):
     """
     name = _('Generate Main Menu')
     menu_class = wagtailmenus_settings.models.MAIN_MENU_MODEL
-    form_class = forms.MainMenuGeneratorArgumentForm
+    argument_form_class = forms.MainMenuGeneratorArgumentForm
     base_serializer_class_setting_name = 'BASE_MAIN_MENU_SERIALIZER'
 
 
@@ -281,13 +282,13 @@ class FlatMenuGeneratorView(BaseModelMenuGeneratorView):
     """
     name = _('Generate Flat Menu')
     menu_class = wagtailmenus_settings.models.FLAT_MENU_MODEL
-    form_class = forms.FlatMenuGeneratorArgumentForm
+    argument_form_class = forms.FlatMenuGeneratorArgumentForm
     base_serializer_class_setting_name = 'BASE_FLAT_MENU_SERIALIZER'
 
     # argument defaults
     fall_back_to_default_site_menus_default = True
 
-    def get_form_initial(self):
-        initial = super().get_form_initial()
+    def get_argument_form_initial(self):
+        initial = super().get_argument_form_initial()
         initial['fall_back_to_default_site_menus'] = self.fall_back_to_default_site_menus_default
         return initial
