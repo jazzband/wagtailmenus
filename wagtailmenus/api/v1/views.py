@@ -8,12 +8,12 @@ from rest_framework.views import APIView
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
+from rest_framework.settings import perform_import
 
 from wagtailmenus.conf import settings as wagtailmenus_settings
 from wagtailmenus.utils.misc import derive_ancestor_ids
 from wagtailmenus.api.utils import make_serializer_class
 from wagtailmenus.api.v1.conf import settings as api_settings
-from wagtailmenus.api.v1.renderers import BrowsableAPIWithArgumentFormRenderer
 from wagtailmenus.api.v1.serializers import BaseModelMenuSerializer
 
 from . import forms
@@ -54,7 +54,23 @@ class BaseMenuGeneratorView(APIView):
     serializer_class = None
     serializer_class_setting_name = None
 
-    renderer_classes = (JSONRenderer, BrowsableAPIWithArgumentFormRenderer)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if api_settings.AUTHENTICATION_CLASSES is not None:
+            self.authentication_classes = perform_import(
+                api_settings.AUTHENTICATION_CLASSES,
+                'WAGTAILMENUS_API_V1_AUTHENTICATION_CLASSES'
+            )
+        if api_settings.PERMISSION_CLASSES is not None:
+            self.permission_classes = perform_import(
+                api_settings.PERMISSION_CLASSES,
+                'WAGTAILMENUS_API_V1_PERMISSION_CLASSES'
+            )
+        if api_settings.RENDERER_CLASSES is not None:
+            self.renderer_classes = perform_import(
+                api_settings.RENDERER_CLASSES,
+                'WAGTAILMENUS_API_V1_RENDERER_CLASSES'
+            )
 
     @classmethod
     def get_menu_class(cls):
