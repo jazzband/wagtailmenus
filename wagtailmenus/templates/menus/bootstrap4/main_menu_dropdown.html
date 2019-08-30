@@ -2,7 +2,7 @@
 <ul class="navbar-nav mr-auto">
 {% for item in menu_items %}
     <li class="nav-item {{ item.active_class }}{% if item.has_children_in_menu %} dropdown{% endif %}">
-        <a href="{{ item.href }}"{% if item.has_children_in_menu %} class="nav-link dropdown-toggle" id="ddtoggle_{{ item.link_page.pk }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"{% endif %}>{{ item.text }}{% if item.has_children_in_menu %} <span class="caret"></span>{% endif %}</a>
+        <a href="{{ item.href }}" class="nav-item{% if item.has_children_in_menu %} dropdown-toggle" id="ddtoggle_{{ item.link_page.pk }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"{% else %}"{% endif %}>{{ item.text }}{% if item.has_children_in_menu %} <span class="caret"></span>{% endif %}</a>
         {% if item.has_children_in_menu %}
             {% sub_menu item template="menus/bootstrap4/sub_menu.html" %}
         {% endif %}
