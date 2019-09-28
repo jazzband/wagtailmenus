@@ -1,21 +1,14 @@
-from importlib import reload
-from unittest.mock import call, patch
-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
-from django.test import TestCase, TransactionTestCase, override_settings, \
-    modify_settings
+from django.test import TransactionTestCase, override_settings
+
 from django_webtest import WebTest
-from wagtail.admin.edit_handlers import ObjectList, InlinePanel
+from wagtail.admin.edit_handlers import ObjectList
 from wagtail.core.models import Page, Site
 
-from wagtailmenus import (
-    get_flat_menu_model, get_main_menu_model, wagtail_hooks
-)
-from wagtailmenus.panels import (
-    FlatMenuItemsInlinePanel, MainMenuItemsInlinePanel
-)
+from wagtailmenus import get_flat_menu_model, get_main_menu_model
+
 from wagtailmenus.tests.models import LinkPage
 
 FlatMenu = get_flat_menu_model()
@@ -134,6 +127,7 @@ class LinkPageCMSTest(WebTest):
         response = self.app.get(
             '/admin/pages/%s/view_draft/' % self.link_page_id,
             user='test1')
+        print(response.__dict__)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'This page redirects to: https://www.rkh.co.uk#testing')
 
@@ -147,6 +141,7 @@ class LinkPageCMSTest(WebTest):
         response = self.app.get(
             '/admin/pages/%s/view_draft/' % self.link_page_id,
             user='test1')
+        print(response.__dict__)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'This page redirects to: http://www.wagtailmenus.co.uk:8000/#testing')
 
