@@ -34,7 +34,8 @@ matrix:
   - env: TOXENV=py37-dj22-wt27
     dist: xenial
     python: 3.7
-
+  allow_failures:
+    - env: TOXENV=py37-dj22-wt27
 
 install:
 - pip install tox codecov
