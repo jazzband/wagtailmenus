@@ -16,7 +16,7 @@ Wagtailmenus 3.0 (alpha) release notes
 What's new?
 ===========
 
-Wagtailmenus now always uses 'specific' page data to rendering menus
+Wagtailmenus now ALWAYS uses 'specific' page data to rendering menus
 --------------------------------------------------------------------
 
 Previously, developers needed to specify how specific pages should be fetched
@@ -55,6 +55,8 @@ Minor changes & bug fixes
 
 * Added support for Django 2.2 (no code changes necessary).
 * Added support for Wagtail 2.5 (no code changes necessary).
+* Added support for Wagtail 2.6 (no code changes necessary).
+* Added support for Wagtail 2.7.
 * Removed recommendation / automatic integration for ``wagtail-condensedinlinepanel``.
 * Optimised 'derive page from URL' and 'derive section root' logic.
 * Fixed bug `#329 <https://github.com/rkhleics/wagtailmenus/issues/329>`_, which prevented level-specific template naming from working as specified in the docs.
@@ -177,7 +179,7 @@ needed for sub menus.
 --------------------------------------------
 
 Menu instances are intended to be rendered only once after being prepared for
-rendering. So, this methods (originally added to aid with testing) no longer
+rendering. So, this method (originally added to aid with testing) no longer
 serves any useful purpose.
 
 
