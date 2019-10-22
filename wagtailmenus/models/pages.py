@@ -297,66 +297,15 @@ class AbstractLinkPage(Page):
             self.relative_url(current_site=site, request=request)
         )
 
-    def _get_dummy_headers(self, original_request=None):
+    def _get_dummy_header_url(self, original_request=None):
         """
-        Overrides Page._get_dummy_headers() (added in Wagtail 2.7) to avoid
+        Overrides Page._get_dummy_header_url() (added in Wagtail 2.7) to avoid
         creating dummy headers from full_url(), which, in the case of a link
         page, could be for a different domain (which would likely result in
         a 400 error if ALLOWED_HOSTS is not ['*']).
         """
         if original_request:
-            path = original_request.path
-            port = original_request.get_port()
-            scheme = original_request.scheme
-            http_host = original_request.get_host()
-            hostname = http_host
-            if hostname.endswith(':' + port):
-                num_chars = len(port)+1
-                hostname = hostname[:-num_chars]
-        else:
-            # Cannot determine a URL to this page - cobble one together based on
-            # whatever we find in ALLOWED_HOSTS
-            try:
-                hostname = settings.ALLOWED_HOSTS[0]
-                if hostname == '*':
-                    # '*' is a valid value to find in ALLOWED_HOSTS[0], but it's not a valid domain name.
-                    # So we pretend it isn't there.
-                    raise IndexError
-            except IndexError:
-                hostname = 'localhost'
-            path = '/'
-            port = 80
-            scheme = 'http'
-            http_host = hostname
-
-        dummy_values = {
-            'REQUEST_METHOD': 'GET',
-            'PATH_INFO': path,
-            'SERVER_NAME': hostname,
-            'SERVER_PORT': port,
-            'SERVER_PROTOCOL': 'HTTP/1.1',
-            'HTTP_HOST': http_host,
-            'wsgi.version': (1, 0),
-            'wsgi.input': StringIO(),
-            'wsgi.errors': StringIO(),
-            'wsgi.url_scheme': scheme,
-            'wsgi.multithread': True,
-            'wsgi.multiprocess': True,
-            'wsgi.run_once': False,
-        }
-
-        # Add important values from the original request object, if it was provided.
-        HEADERS_FROM_ORIGINAL_REQUEST = [
-            'REMOTE_ADDR', 'HTTP_X_FORWARDED_FOR', 'HTTP_COOKIE', 'HTTP_USER_AGENT', 'HTTP_AUTHORIZATION',
-            'wsgi.version', 'wsgi.multithread', 'wsgi.multiprocess', 'wsgi.run_once',
-        ]
-        if django_settings.SECURE_PROXY_SSL_HEADER:
-            HEADERS_FROM_ORIGINAL_REQUEST.append(django_settings.SECURE_PROXY_SSL_HEADER[0])
-        if original_request:
-            for header in HEADERS_FROM_ORIGINAL_REQUEST:
-                if header in original_request.META:
-                    dummy_values[header] = original_request.META[header]
-
-        return dummy_values
+            return original_request.build_absolute_uri()
+        return super()._get_dummy_header_url(original_request)
 
     edit_handler = linkpage_edit_handler
