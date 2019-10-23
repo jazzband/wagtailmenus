@@ -8,13 +8,15 @@ Changelog
 * Optimised 'derive page from URL' and 'derive section root' logic
 * Added support for Django 2.2 (no code changes necessary).
 * Added support for Wagtail 2.5 (no code changes necessary).
+* Added support for Wagtail 2.6 (no code changes necessary).
+* Added support for Wagtail 2.7.
 * Removed support for `get_sub_menu_templates()` methods that do not accept a **level** argument.
 * Removed recommendation / automatic integration for `wagtail-condensedinlinepanel`.
 * Fix: [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
 * Fix: [#323](https://github.com/rkhleics/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
 
 
-2.13.1 (XX.XX.XXXX)
+2.13.1 (21.05.2019)
 -------------------
 
 * Fix: [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.

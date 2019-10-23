@@ -1,5 +1,7 @@
 from copy import copy
+from io import StringIO
 
+from django.conf import settings as django_settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.http import HttpResponse
@@ -294,5 +296,16 @@ class AbstractLinkPage(Page):
         return redirect(
             self.relative_url(current_site=site, request=request)
         )
+
+    def _get_dummy_header_url(self, original_request=None):
+        """
+        Overrides Page._get_dummy_header_url() (added in Wagtail 2.7) to avoid
+        creating dummy headers from full_url(), which, in the case of a link
+        page, could be for a different domain (which would likely result in
+        a 400 error if ALLOWED_HOSTS is not ['*']).
+        """
+        if original_request:
+            return original_request.build_absolute_uri()
+        return super()._get_dummy_header_url(original_request)
 
     edit_handler = linkpage_edit_handler
