@@ -10,6 +10,7 @@ Changelog
 * Added support for Wagtail 2.5 (no code changes necessary).
 * Added support for Wagtail 2.6 (no code changes necessary).
 * Added support for Wagtail 2.7.
+* Added support for Python 3.8.
 * Removed support for `get_sub_menu_templates()` methods that do not accept a **level** argument.
 * Removed recommendation / automatic integration for `wagtail-condensedinlinepanel`.
 * Fix: [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.

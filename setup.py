@@ -14,7 +14,7 @@ branch_url = "%stree/stable/%s" % (base_url, stable_branch_name)
 
 # Essential dependencies
 requires = [
-    'django-cogwheels==0.2',
+    'django-cogwheels==0.3',
 ]
 
 testing_extras = [
@@ -67,6 +67,7 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Framework :: Django',
         'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.0',
@@ -76,7 +77,7 @@ setup(
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     ],
     install_requires=requires,
-    python_requires='>=3.4,<3.8',
+    python_requires='>=3.4',
     extras_require={
         'testing': testing_extras,
         'docs': documentation_extras,

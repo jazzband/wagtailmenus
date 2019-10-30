@@ -9,7 +9,7 @@ The current version is tested for compatibility with the following:
 
 - Wagtail versions 2.0 to 2.7
 - Django versions 1.11 to 2.2
-- Python versions 3.4 to 3.7
+- Python versions 3.4 to 3.8
 
 To find out more about what wagtailmenus does and why, see :doc:`overview`
 

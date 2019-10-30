@@ -1,6 +1,6 @@
 language: python
 cache: pip
-dist: trusty
+dist: xenial
 
 matrix:
   include:
@@ -11,31 +11,23 @@ matrix:
   - env: TOXENV=py36-dj111-wt2
     python: 3.6
   - env: TOXENV=py37-dj111-wt2
-    dist: xenial
     python: 3.7
   - env: TOXENV=py37-dj2-wt21
-    dist: xenial
     python: 3.7
   - env: TOXENV=py37-dj2-wt22
-    dist: xenial
     python: 3.7
   - env: TOXENV=py37-dj21-wt23
-    dist: xenial
     python: 3.7
   - env: TOXENV=py37-dj21-wt24
-    dist: xenial
     python: 3.7
   - env: TOXENV=py37-dj22-wt25
-    dist: xenial
     python: 3.7
   - env: TOXENV=py37-dj22-wt26
-    dist: xenial
     python: 3.7
   - env: TOXENV=py37-dj22-wt27
-    dist: xenial
     python: 3.7
-  allow_failures:
-    - env: TOXENV=py37-dj22-wt27
+  - env: TOXENV=py38-dj22-wt27
+    python: 3.8
 
 install:
 - pip install tox codecov
