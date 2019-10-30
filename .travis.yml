@@ -28,8 +28,6 @@ matrix:
     python: 3.7
   - env: TOXENV=py38-dj22-wt27
     python: 3.8
-  allow_failures:
-    - env: TOXENV=py38-dj22-wt27
 
 install:
 - pip install tox codecov
