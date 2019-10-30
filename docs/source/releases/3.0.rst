@@ -57,6 +57,7 @@ Minor changes & bug fixes
 * Added support for Wagtail 2.5 (no code changes necessary).
 * Added support for Wagtail 2.6 (no code changes necessary).
 * Added support for Wagtail 2.7.
+* Added support for Python 3.8.
 * Removed recommendation / automatic integration for ``wagtail-condensedinlinepanel``.
 * Optimised 'derive page from URL' and 'derive section root' logic.
 * Fixed bug `#329 <https://github.com/rkhleics/wagtailmenus/issues/329>`_, which prevented level-specific template naming from working as specified in the docs.
