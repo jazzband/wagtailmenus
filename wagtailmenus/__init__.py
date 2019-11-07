@@ -2,11 +2,11 @@ from wagtailmenus.utils.version import get_version, get_stable_branch_name
 
 # major.minor.patch.release.number
 # release must be one of alpha, beta, rc, or final
-VERSION = (3, 0, 0, 'alpha', 0)
+VERSION = (3, 0, 0, "final", 0)
 __version__ = get_version(VERSION)
 stable_branch_name = get_stable_branch_name(VERSION)
 
-default_app_config = 'wagtailmenus.apps.WagtailMenusConfig'
+default_app_config = "wagtailmenus.apps.WagtailMenusConfig"
 
 
 def get_main_menu_model_string():
@@ -17,6 +17,7 @@ def get_main_menu_model_string():
     required.
     """
     from wagtailmenus.conf import settings
+
     return settings.MAIN_MENU_MODEL
 
 
@@ -28,6 +29,7 @@ def get_flat_menu_model_string():
     required.
     """
     from wagtailmenus.conf import settings
+
     return settings.FLAT_MENU_MODEL
 
 
@@ -39,6 +41,7 @@ def get_main_menu_model():
     if no custom model is defined.
     """
     from wagtailmenus.conf import settings
+
     return settings.models.MAIN_MENU_MODEL
 
 
@@ -50,4 +53,5 @@ def get_flat_menu_model():
     if no custom model is defined.
     """
     from wagtailmenus.conf import settings
+
     return settings.models.FLAT_MENU_MODEL

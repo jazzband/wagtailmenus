@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.0 (XX.XX.XXXX)
+3.0 (07.11.2019)
 ----------------
 
 * Always fetch/use specific page data when rendering menus (see release notes for more details).
