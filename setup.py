@@ -14,7 +14,7 @@ branch_url = "%stree/stable/%s" % (base_url, stable_branch_name)
 
 # Essential dependencies
 requires = [
-    'django-cogwheels==0.3',
+    'django-cogwheels==0.3', 'six',
 ]
 
 testing_extras = [

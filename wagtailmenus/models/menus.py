@@ -1,3 +1,4 @@
+import six
 import warnings
 from collections import defaultdict, namedtuple, OrderedDict
 from types import GeneratorType
@@ -6,7 +7,6 @@ from django.db import models
 from django.db.models import BooleanField, Case, Q, When
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import get_template, select_template
-from django.utils import six
 from django.utils.functional import cached_property, lazy
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
