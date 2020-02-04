@@ -6,7 +6,6 @@ from django.db import models
 from django.db.models import BooleanField, Case, Q, When
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import get_template, select_template
-from django.utils import six
 from django.utils.functional import cached_property, lazy
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
@@ -22,7 +21,7 @@ from .mixins import DefinesSubMenuTemplatesMixin
 from .pages import AbstractLinkPage
 
 
-mark_safe_lazy = lazy(mark_safe, six.text_type)
+mark_safe_lazy = lazy(mark_safe, str)
 
 ContextualVals = namedtuple('ContextualVals', (
     'parent_context',
