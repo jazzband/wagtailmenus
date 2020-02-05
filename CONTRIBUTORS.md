@@ -20,7 +20,7 @@
 * Philipp Bosch (philippbosch) (A Color Bright)
 * Oktay Altay (OktayAltay)
 * Dan Bentley (danbentley)
-
+* Arkadiusz Michał Ryś (ArkadiuszMichalRys)
 
 ## Translators
 

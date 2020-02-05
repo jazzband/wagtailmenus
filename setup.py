@@ -9,7 +9,7 @@ with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 base_url = "https://github.com/rkhleics/wagtailmenus/"
-dowload_url = '%starball/v%s' % (base_url, __version__)
+download_url = '%starball/v%s' % (base_url, __version__)
 branch_url = "%stree/stable/%s" % (base_url, stable_branch_name)
 
 # Essential dependencies
@@ -24,7 +24,7 @@ testing_extras = [
 ]
 
 development_extras = [
-    'wagtail>=2.4,<2.5',
+    'wagtail>=2.4,<2.9',
     'django-debug-toolbar',
     'django-extensions',
     'ipdb',
@@ -53,7 +53,7 @@ setup(
     packages=find_packages(),
     license="MIT",
     keywords="wagtail cms model utility",
-    download_url=dowload_url,
+    download_url=download_url,
     url=branch_url,
     include_package_data=True,
     zip_safe=False,
@@ -72,6 +72,7 @@ setup(
         'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.0',
         'Framework :: Django :: 2.1',
+        'Framework :: Django :: 3.0',
         'Framework :: Wagtail :: 2',
         'Topic :: Internet :: WWW/HTTP',
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
