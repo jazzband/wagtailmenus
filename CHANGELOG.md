@@ -1,6 +1,12 @@
 Changelog
 =========
 
+3.0.1 (08.02.2020)
+------------------
+
+* Added support for Django 3.0 and Wagtail 2.8 (thanks to Arkadiusz Michał Ryś).
+
+
 3.0 (07.11.2019)
 ----------------
 
