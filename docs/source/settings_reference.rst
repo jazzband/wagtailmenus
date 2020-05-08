@@ -105,7 +105,7 @@ Use this to change the icon used to represent 'Main menus' in the Wagtail CMS.
 
 Default value: ``True``
 
-By default, 'Main menus' are editable in the Wagtail CMS. Setting this to `False` in your project's settings will disable editing 'Main menus' in the Wagtail CMS.
+By default, 'Main menus' are editable in the Wagtail CMS. Setting this to `False` in your project's settings will disable editing 'Main menus' in the Wagtail CMS. It will hide the menu-item from the Wagtail CMS.
 
 
 .. _MAIN_MENUS_MODELADMIN_CLASS:
