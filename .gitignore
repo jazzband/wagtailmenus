@@ -68,3 +68,6 @@ wagtailmenus.sqlite
 
 # VSCode
 .vscode/
+
+# Pyenv
+.python-version

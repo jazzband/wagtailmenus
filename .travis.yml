@@ -18,6 +18,8 @@ matrix:
     python: 3.7
   - env: TOXENV=py37-dj2-wt23
     python: 3.7
+  - env: TOXENV=py37-d21-wt23
+    python: 3.7
   - env: TOXENV=py37-dj2-wt24
     python: 3.7
   - env: TOXENV=py37-dj22-wt25
@@ -27,6 +29,8 @@ matrix:
   - env: TOXENV=py38-dj22-wt27
     python: 3.8
   - env: TOXENV=py38-dj3-wt28
+    python: 3.8
+  - env: TOXENV=py38-dj3-wt29
     python: 3.8
 
 install:

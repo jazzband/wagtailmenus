@@ -1,6 +1,17 @@
 Changelog
 =========
 
+
+3.0.2 (xx.06.2020)
+------------------
+
+* Added support for Wagtail 2.9 (no code changes necessary).
+* Added compatibility with Django Sites Framework.
+* Modify tox configuration file to ensure Django 1.11/2.1/3.0 are in dependencies.
+* Modify Travis CI configuration file to test against Django 2.1, Wagtail 2.9.
+* Minor documentation updates.
+
+
 3.0.1 (08.02.2020)
 ------------------
 
