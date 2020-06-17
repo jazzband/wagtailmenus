@@ -6,7 +6,7 @@ from wagtailmenus.models.menuitems import MenuItem
 
 def get_site_from_request(request, fallback_to_default=True):
     site = getattr(request, 'site', None)
-    if site and isinstance(site, Site):
+    if isinstance(site, Site):
         return request.site
     site = Site.find_for_request(request)
     if site:

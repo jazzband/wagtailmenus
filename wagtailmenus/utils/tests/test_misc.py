@@ -1,4 +1,4 @@
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase, modify_settings
 from distutils.version import LooseVersion
 from wagtail.core import __version__ as wagtail_version
 from wagtail.core.models import Page, Site
@@ -255,42 +255,27 @@ class TestGetSiteFromRequest(TestCase):
         site = get_site_from_request(request)
         self.assertIsInstance(site, Site)
 
-    def _run_test_with_no_site_in_request(self):
-        """
-        Temporarily remove SiteMiddleware to ensure no Site exists at
-        request.site, then run test.
-        """
-        with self.modify_settings(MIDDLEWARE={'remove': 'wagtail.core.middleware.SiteMiddleware'}):
-            self._run_test()
-
-    def _run_test_with_django_site_in_request(self):
-        """
-        Temporarily add Django's CurrentSiteMiddleware and remove Wagtail's
-        SiteMiddleware to ensure only a Django Site exists at request.site,
-        then run test.
-        """
-        with self.modify_settings(MIDDLEWARE={
-            'append': 'django.contrib.sites.middleware.CurrentSiteMiddleware',
-            'remove': 'wagtail.core.middleware.SiteMiddleware',
-        }):
-            self._run_test()
-
     def test_with_wagtail_site_in_request(self):
         """
         Test when Wagtail Site exists at request.site.
         """
         self._run_test()
 
+    @modify_settings(MIDDLEWARE={
+        'append': 'django.contrib.sites.middleware.CurrentSiteMiddleware',
+        'remove': 'wagtail.core.middleware.SiteMiddleware',
+    })
     def test_with_django_site_in_request_wagtail_29_and_above(self):
         """
         Test when only a Django Site exists at request.site for Wagtail 2.9 and above.
         """
         if self.is_wagtail_29_or_above:
-            self._run_test_with_django_site_in_request()
+            self._run_test()
 
+    @modify_settings(MIDDLEWARE={'remove': 'wagtail.core.middleware.SiteMiddleware'})
     def test_with_no_site_in_request_wagtail_29_and_above(self):
         """
         Test when no Site object exists at request.site for Wagtail 2.9 and above.
         """
         if self.is_wagtail_29_or_above:
-            self._run_test_with_no_site_in_request()
+            self._run_test()
