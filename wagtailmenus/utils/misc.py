@@ -5,8 +5,12 @@ from wagtailmenus.models.menuitems import MenuItem
 
 
 def get_site_from_request(request, fallback_to_default=True):
-    if getattr(request, 'site', None):
+    site = getattr(request, 'site', None)
+    if isinstance(site, Site):
         return request.site
+    site = Site.find_for_request(request)
+    if site:
+        return site
     if fallback_to_default:
         return Site.objects.filter(is_default_site=True).first()
     return None

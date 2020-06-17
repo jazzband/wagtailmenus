@@ -24,7 +24,7 @@ testing_extras = [
 ]
 
 development_extras = [
-    'wagtail>=2.4,<2.9',
+    'wagtail>=2.4,<=2.9',
     'django-debug-toolbar',
     'django-extensions',
     'ipdb',

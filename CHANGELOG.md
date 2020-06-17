@@ -1,6 +1,15 @@
 Changelog
 =========
 
+
+3.0.2 (xx.06.2020)
+------------------
+
+* Added support for Wagtail 2.9 (no code changes necessary) (Sekani Tembo).
+* Added compatibility with Django Sites Framework (Sekani Tembo).
+* Minor documentation updates (Sekani Tembo).
+
+
 3.0.1 (08.02.2020)
 ------------------
 

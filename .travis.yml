@@ -28,6 +28,8 @@ matrix:
     python: 3.8
   - env: TOXENV=py38-dj3-wt28
     python: 3.8
+  - env: TOXENV=py38-dj3-wt29
+    python: 3.8
 
 install:
 - pip install tox codecov

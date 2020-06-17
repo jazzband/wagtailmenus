@@ -21,6 +21,7 @@
 * Oktay Altay (OktayAltay)
 * Dan Bentley (danbentley)
 * Arkadiusz Michał Ryś (ArkadiuszMichalRys)
+* Sekani Tembo (Method Softworks)
 
 ## Translators
 

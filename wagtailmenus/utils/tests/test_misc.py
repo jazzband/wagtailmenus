@@ -1,8 +1,10 @@
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase, modify_settings
+from distutils.version import LooseVersion
+from wagtail.core import __version__ as wagtail_version
 from wagtail.core.models import Page, Site
 
 from wagtailmenus.conf import defaults
-from wagtailmenus.utils.misc import derive_page, derive_section_root
+from wagtailmenus.utils.misc import derive_page, derive_section_root, get_site_from_request
 from wagtailmenus.tests.models import (
     ArticleListPage, ArticlePage, LowLevelPage, TopLevelPage
 )
@@ -229,3 +231,51 @@ class TestDeriveSectionRoot(TestCase):
             with self.assertNumQueries(0):
                 result = derive_section_root(self.page_with_depth_of_3)
                 self.assertIs(result, None)
+
+
+class TestGetSiteFromRequest(TestCase):
+    """Tests for wagtailmenus.utils.misc.get_site_from_request()"""
+    fixtures = ['test.json']
+
+    def setUp(self):
+        # URL to request during test
+        self.url = '/superheroes/marvel-comics/'
+        # Establish if Wagtail is v2.9 or above
+        if LooseVersion(wagtail_version) >= LooseVersion('2.9'):
+            self.is_wagtail_29_or_above = True
+        else:
+            self.is_wagtail_29_or_above = False
+
+    def _run_test(self):
+        """
+        Confirm that the Site returned by get_site_from_request() is a Wagtail Site
+        instance.
+        """
+        request = self.client.get(self.url).wsgi_request
+        site = get_site_from_request(request)
+        self.assertIsInstance(site, Site)
+
+    def test_with_wagtail_site_in_request(self):
+        """
+        Test when Wagtail Site exists at request.site.
+        """
+        self._run_test()
+
+    @modify_settings(MIDDLEWARE={
+        'append': 'django.contrib.sites.middleware.CurrentSiteMiddleware',
+        'remove': 'wagtail.core.middleware.SiteMiddleware',
+    })
+    def test_with_django_site_in_request_wagtail_29_and_above(self):
+        """
+        Test when only a Django Site exists at request.site for Wagtail 2.9 and above.
+        """
+        if self.is_wagtail_29_or_above:
+            self._run_test()
+
+    @modify_settings(MIDDLEWARE={'remove': 'wagtail.core.middleware.SiteMiddleware'})
+    def test_with_no_site_in_request_wagtail_29_and_above(self):
+        """
+        Test when no Site object exists at request.site for Wagtail 2.9 and above.
+        """
+        if self.is_wagtail_29_or_above:
+            self._run_test()
