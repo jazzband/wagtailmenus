@@ -14,6 +14,7 @@ Installing wagtailmenus
     ``INSTALLED_APPS`` setting in your project settings:
 
     .. code-block:: python
+        :caption: settings.py
 
         INSTALLED_APPS = [
             ...
@@ -26,6 +27,8 @@ Installing wagtailmenus
     should look something like this:
 
     .. code-block:: python
+        :caption: settings.py
+        :emphasize-lines: 19
 
         TEMPLATES = [
             {
@@ -75,11 +78,11 @@ Installing wagtailmenus
         ├── About us
         ├── What we do
         ├── Careers
-        |   ├── Vacancy one
-        |   └── Vacancy two
+        │   ├── Vacancy one
+        │   └── Vacancy two
         ├── News & events
-        |   ├── News
-        |   └── Events
+        │   ├── News
+        │   └── Events
         └── Contact us
 
     Running the command from the console:
@@ -112,7 +115,7 @@ Installing wagtailmenus
     * News & events
     * Contact us
 
-    .. NOTE ::
+    .. note ::
         The 'autopopulate_main_menus' command is meant as 'run once' command to
         help you get started, and will only affect menus that do not already
         have any menu items defined. Running it more than once won't have any

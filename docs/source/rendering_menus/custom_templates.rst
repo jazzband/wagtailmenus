@@ -11,7 +11,7 @@ Using your own menu templates
 -----
 
 Writing custom menu templates
-============================= 
+=============================
 
 .. _template_context_variables:
 
@@ -20,7 +20,7 @@ What context variables are available to use?
 
 The following variables are added to the context for each menu template or sub-menu template that you create:
 
-:``menu_items``: 
+:``menu_items``:
     If the template is for rendering the first level of a main or flat menu,
     then ``menu_items`` will be a list of ``MainMenuItem`` or ``FlatMenuItem``
     objects (respectively). In all other cases. it will be a list ``Page``
@@ -30,54 +30,54 @@ The following variables are added to the context for each menu template or sub-m
     item to help keep you menu templates consistent. For more information
     see: :ref:`menu_items_added_attributes`
 
-:``current_level``: 
+:``current_level``:
     An integer indicating the current level being rendered. This starts at
-    ``1`` for the initial template tag call, then increments by one for each 
-    additional ``<ul>`` level that is added by calling the ``{% sub_menu %}`` 
+    ``1`` for the initial template tag call, then increments by one for each
+    additional ``<ul>`` level that is added by calling the ``{% sub_menu %}``
     tag
 
-:``max_levels``: 
+:``max_levels``:
     An integer indicating the maximum number of levels that should be rendered
     for the current menu, as determined by the original ``main_menu``,
     ``section_menu``, ``flat_menu`` or ``children_menu`` tag call.
 
-:``current_template``: 
-    The name of the template currently being used for rendering. This is most 
-    useful when rendering a ``sub_menu`` template that calls ``sub_menu`` 
+:``current_template``:
+    The name of the template currently being used for rendering. This is most
+    useful when rendering a ``sub_menu`` template that calls ``sub_menu``
     recursively, and you wish to use the same template for all recursions.
 
-:``sub_menu_template``: 
-    The name of the template that should be used for rendering any further 
+:``sub_menu_template``:
+    The name of the template that should be used for rendering any further
     levels (should be picked up automatically by the ``sub_menu`` tag).
 
-:``original_menu_tag``: 
+:``original_menu_tag``:
     A string value indicating the name of the tag that was originally called in order to
-    render the branch currently being rendered. The value will be one of 
+    render the branch currently being rendered. The value will be one of
     ``"main_menu"``, ``"flat_menu"``, ``"section_menu"``, ``"children_menu"``
     or ``"sub_menu"``.
 
-:``allow_repeating_parents``: 
+:``allow_repeating_parents``:
     A boolean indicating whether ``MenuPage`` fields should be respected when
     rendering further menu levels.
 
-:``apply_active_classes``: 
-    A boolean indicating whether ``sub_menu`` 
+:``apply_active_classes``:
+    A boolean indicating whether ``sub_menu``
     tags should attempt to add  'active' and 'ancestor' classes to menu items
     when rendering further menu levels.
 
-:``use_absolute_page_urls``: 
+:``use_absolute_page_urls``:
     A boolean indicating whether absolute page URLs should be used for page
     links when rendering.
 
 
 .. _menu_items_added_attributes:
 
-Attributes added to each item in ``menu_items`` 
+Attributes added to each item in ``menu_items``
 -----------------------------------------------
 
-Whether ``menu_items`` is a list of ``Page``, ``MainMenuItem`` or ``FlatMenuItem`` objects, the following additional attributes are added to each item to help improve consistency of menu templates: 
+Whether ``menu_items`` is a list of ``Page``, ``MainMenuItem`` or ``FlatMenuItem`` objects, the following additional attributes are added to each item to help improve consistency of menu templates:
 
-:``href``: 
+:``href``:
     The URL that the menu item should link to.
 
 :``text``:
@@ -87,16 +87,16 @@ Whether ``menu_items`` is a list of ``Page``, ``MainMenuItem`` or ``FlatMenuItem
     attribute by utilising the :ref:`DEFAULT_PAGE_FIELD_FOR_MENU_ITEM_TEXT`
     setting.
 
-:``active_class``: 
+:``active_class``:
     A class name to indicate the 'active' state of the menu item. The value
     will be 'active' if linking to the current page, or 'ancestor' if linking
     to one of it's ancestors.
 
-    You can change the CSS class strings used to indicate 'active' and 
+    You can change the CSS class strings used to indicate 'active' and
     'ancestor' statuses by utilising the :ref:`ACTIVE_CLASS` and
     :ref:`ACTIVE_ANCESTOR_CLASS` settings.
 
-:``has_children_in_menu``: 
+:``has_children_in_menu``:
     A boolean indicating whether the menu item has children that should be
     output as a sub-menu.
 
@@ -108,7 +108,7 @@ Getting wagtailmenus to use your custom menu templates
 
 .. _custom_templates_auto:
 
-Using preferred paths and names for your templates 
+Using preferred paths and names for your templates
 --------------------------------------------------
 
 This is the easiest (and recommended) approach for getting wagtailmenus to use your custom menu templates for rendering.
@@ -165,7 +165,7 @@ For a multi-level main menu that displays three levels of links, your templates 
 
 .. _custom_templates_flat_menu:
 
-Preferred template paths for ``{% flat_menu %}`` 
+Preferred template paths for ``{% flat_menu %}``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For flat menus, the tag also uses the `handle` field of the specific menu being rendered, so that you can have wagtailmenus use different templates for different menus.
@@ -234,7 +234,7 @@ Or, if the ``info`` menu only ever needed to show one level of menu items, you m
 
     templates
     └── menus
-        └── info.html 
+        └── info.html
 
 
 If your were happy for most of your flat menus to share the same templates, you might put those common templates in the same folder where they'd automatically get selected for all flat menus:
@@ -254,14 +254,14 @@ Building on the above example, you could then override menu templates for certai
     templates
     └── menus
         └── flat
-            ├── level_1.html 
-            ├── level_2.html 
-            ├── level_3.html 
+            ├── level_1.html
+            ├── level_2.html
+            ├── level_3.html
             ├── info
-            |   |   # This location is preferred when rendering an 'info' menu
-            |   └── level_2.html  # Only override the level 2 template
+            │   │   # This location is preferred when rendering an 'info' menu
+            │   └── level_2.html  # Only override the level 2 template
             └── contact
-                |   # This location is preferred when rendering a 'contact' menu
+                │   # This location is preferred when rendering a 'contact' menu
                 └── level_1.html  # Only override the level 1 template
 
 
@@ -283,16 +283,16 @@ The above structure would work, but it's not ideal. Imagine if a new front-end d
     templates
         └── menus
             └── flat
-                |   # Still used by default (e.g. for menus with different handles)
-                ├── level_1.html 
-                ├── level_2.html 
-                ├── level_3.html 
+                │   # Still used by default (e.g. for menus with different handles)
+                ├── level_1.html
+                ├── level_2.html
+                ├── level_3.html
                 ├── info
-                |   |   # This location is preferred when rendering an 'info' menu
-                |   ├── level_1.html  # {% extends 'menus/flat/level_1.html' %}
-                |   └── level_2.html  # Our custom template from before
+                │   │   # This location is preferred when rendering an 'info' menu
+                │   ├── level_1.html  # {% extends 'menus/flat/level_1.html' %}
+                │   └── level_2.html  # Our custom template from before
                 └── contact
-                    |   # This location is preferred when rendering a 'contact' menu
+                    │   # This location is preferred when rendering a 'contact' menu
                     ├── level_1.html  # Our custom template from before
                     └── level_2.html  # {% extends 'menus/flat/level_2.html' %}
 
@@ -303,16 +303,16 @@ That's better, but you might even like to make the ``info`` and ``contact`` temp
     templates
         └── menus
             ├── flat
-            |   |   # Still used by default (e.g. for menus with different handles)
-            |   ├── level_1.html 
-            |   ├── level_2.html 
-            |   └── level_3.html 
+            │   │   # Still used by default (e.g. for menus with different handles)
+            │   ├── level_1.html
+            │   ├── level_2.html
+            │   └── level_3.html
             ├── info
-            |   |   # This location is still preferred when rendering an 'info' menu
-            |   ├── level_1.html  # {% includes 'menus/flat/level_1.html' %}
-            |   └── level_2.html  # Our custom template from before
+            │   │   # This location is still preferred when rendering an 'info' menu
+            │   ├── level_1.html  # {% includes 'menus/flat/level_1.html' %}
+            │   └── level_2.html  # Our custom template from before
             └── contact
-                |   # This location is still preferred when rendering a 'contact' menu
+                │   # This location is still preferred when rendering a 'contact' menu
                 ├── level_1.html  # Our custom template from before
                 └── level_2.html  # {% includes 'menus/flat/level_2.html' %}
 
@@ -322,7 +322,7 @@ The templates in the ``info`` and ``contact`` folders will still be preferred ov
 
 .. _custom_templates_section_menu:
 
-Preferred template paths for ``{% section_menu %}`` 
+Preferred template paths for ``{% section_menu %}``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. NOTE::
@@ -371,7 +371,7 @@ Or, if your section menu only needs to surface the first of level of pages withi
 
 .. _custom_templates_children_menu:
 
-Preferred template paths for ``{% children_menu %}`` 
+Preferred template paths for ``{% children_menu %}``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. NOTE::
@@ -406,7 +406,7 @@ If your project needs multi-level children menus, displaying two levels of links
     └── menus
         └── children
             ├── level_1.html  # Used by the {% children_menu %} tag for the 1st level
-            └── level_2.html  # Used by the {% sub_menu %} tag for the 2nd level 
+            └── level_2.html  # Used by the {% sub_menu %} tag for the 2nd level
 
 
 Or, if you only need single-level children menus, you might structure things more simply, like so:
@@ -430,7 +430,7 @@ Even if the various menus in your project tend to share a lot of common template
 Specifying menu templates using template tag parameters
 -------------------------------------------------------
 
-All template tags included in wagtailmenus support ``template``, ``sub_menu_template`` and ``sub_menu_templates`` arguments to allow you to explicitly override the templates used during rendering. 
+All template tags included in wagtailmenus support ``template``, ``sub_menu_template`` and ``sub_menu_templates`` arguments to allow you to explicitly override the templates used during rendering.
 
 For example, if you had created the following templates in your project's root 'templates' directory:
 
@@ -442,12 +442,16 @@ You could make :ref:`main_menu` use those templates for rendering by specifying 
 
 .. code-block:: html
 
+    {% load menu_tags %}
+
     {% main_menu max_levels=3 template="custom_menus/main_menu.html" sub_menu_templates="custom_menus/main_menu_sub.html, custom_menus/main_menu_sub_level_2.html" %}
 
 Or, if you only wanted to use a single template for sub menus, you could specify that template like so:
 
 .. code-block:: html
-    
+
+    {% load menu_tags %}
+
     {# A 'sub_menu_templates' value without commas is recognised as a single template #}
     {% main_menu max_levels=3 template="custom_menus/main_menu.html" sub_menu_templates="custom_menus/main_menu_sub.html" %}
 
@@ -457,6 +461,8 @@ Or, if you only wanted to use a single template for sub menus, you could specify
 Or you could just override one or the other, like so:
 
 .. code-block:: html
+
+    {% load menu_tags %}
 
     {# Just override the top-level template #}
     {% main_menu max_levels=3 template="custom_menus/main_menu.html" %}

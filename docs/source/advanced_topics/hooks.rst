@@ -54,7 +54,7 @@ By default, ``get_base_page_queryset()`` applies a few simple filters to prevent
     Page.objects.filter(live=True, expired=False, show_in_menus=True)
 
 
-However, if you'd like to filter this result down further, you can do so using something like the following: 
+However, if you'd like to filter this result down further, you can do so using something like the following:
 
 
 .. NOTE::
@@ -137,7 +137,7 @@ However, if you'd only like to include a subset of the CMS-defined menu item, or
         NOTE: MUST ALWAYS RETURN A QUERYSET
         """
         if(
-            current_site.hostname.startswith('intranet.') and 
+            current_site.hostname.startswith('intranet.') and
             request.user.is_authenticated()
         ):
             queryset = queryset.exclude(handle__contains="visiting-only")
@@ -163,9 +163,9 @@ These changes would be applied to all menu types that use menu items to define t
         NOTE: MUST ALWAYS RETURN A QUERYSET
         """
         if(
-            original_menu_tag == 'flat_menu' and 
+            original_menu_tag == 'flat_menu' and
             menu_instance.handle == 'action-links' and
-            current_site.hostname.startswith('intranet.') and 
+            current_site.hostname.startswith('intranet.') and
             request.user.is_authenticated()
         ):
             queryset = queryset.exclude(handle__contains="visiting-only")
@@ -245,7 +245,7 @@ This hook allows you to modify the list of items **after** they have been 'prime
         link to the RKH website
 
         NOTE: This result won't undergo any more processing before sending to
-        a template for rendering, so you may need to set 'href' and 
+        a template for rendering, so you may need to set 'href' and
         'text' attributes / keys so that those values are picked up by menu
         templates.
         """
@@ -294,7 +294,7 @@ Below is a full list of the additional arguments that are passed to methods usin
     An integer value indicating the 'level' or 'depth' that is currently being rendered in the process of rendering a multi-level menu. This will start at `1` for the first/top-level items of a menu, and increment by `1` for each additional level.
 
 ``max_levels``
-    An integer value indicating the maximum number of levels that should be rendered for the current menu. This will either have been specified by the developer using the ``max_levels`` argument of a menu tag, or might have been set in the CMS for a specific ``MainMenu`` or ``FlatMenu`` instance. 
+    An integer value indicating the maximum number of levels that should be rendered for the current menu. This will either have been specified by the developer using the ``max_levels`` argument of a menu tag, or might have been set in the CMS for a specific ``MainMenu`` or ``FlatMenu`` instance.
 
 ``current_site``
     A Wagtail ``Site`` instance, indicating the site that the current request is for (usually also available as ``request.site``)
@@ -312,13 +312,13 @@ Below is a full list of the additional arguments that are passed to methods usin
         ├── About us
         ├── What we do
         ├── Careers
-        |   ├── Vacancy one
-        |   └── Vacancy two
+        │   ├── Vacancy one
+        │   └── Vacancy two
         ├── News & events
-        |   ├── News
-        |   |   ├── Article one
-        |   |   └── Article two
-        |   └── Events
+        │   ├── News
+        │   │   ├── Article one
+        │   │   └── Article two
+        │   └── Events
         └── Contact us
 
     If the current page was 'Vacancy one', the section root page would be 'Careers'. Or, if the current page was 'Article one', the section root page would be 'News & events'.
@@ -327,9 +327,7 @@ Below is a full list of the additional arguments that are passed to methods usin
     A boolean value indicating the preferred policy for having pages that subclass ``MenuPageMixin`` add a repeated versions of themselves to it's children pages (when rendering a `sub_menu` for that page). For more information see: :ref:`menupage_and_menupagemixin`.
 
 ``apply_active_classes``
-    A boolean value indicating the preferred policy for setting ``active_class`` attributes on menu items for the current menu.  
+    A boolean value indicating the preferred policy for setting ``active_class`` attributes on menu items for the current menu.
 
 ``use_absolute_page_urls``
     A boolean value indicating the preferred policy for using full/absolute page URLs for menu items representing pages (observed by ``prime_menu_items()`` when setting the ``href`` attribute on each menu item). In most cases this will be ``False``, as the default behaviour is to use 'relative' URLs for pages.
-
-

@@ -102,8 +102,8 @@ No         ``bool``             ``False``
 
 By default, relative page URLs are used for the ``href`` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add ``use_absolute_page_urls=True`` to the ``main_menu`` tag in your template. The preference will also be respected automatically by any subsequent calls to ``{% sub_menu %}`` during the course of rendering the menu (unless explicitly overridden in custom menu templates ).
 
-    .. NOTE:
-        Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
+.. NOTE:
+    Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
 
 -----
 
@@ -124,7 +124,11 @@ By default, you have to call the ``{% sub_menu %}`` tag within a menu template t
 For example, instead of the following:
 
 .. code-block:: html
+    :caption: templates/menus/main_menu.html
 
+    {% load menu_tags %}
+
+    <ul>
     {% for item in menu_items %}
         <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
@@ -133,19 +137,27 @@ For example, instead of the following:
             {% endif %}
         </li>
     {% endfor %}
+    </ul>
 
 You could do:
 
 .. code-block:: html
+    :caption: templates/menus/main_menu.html
 
+    <ul>
     {% for item in menu_items %}
         <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
-            {% if item.has_children_in_menu %}
-                {{ item.sub_menu.render_to_template }}
+            {% if item.sub_menu %}
+                <ul class="sub-menu">
+                    {% for sub_item in item.sub_menu.items %}
+                        <li class="{{ sub_item.active_class }}"><a href="{{ sub_item.href }}">{{ sub_item.text }}</a></li>
+                    {% endfor %}
+                </ul>
             {% endif %}
         </li>
     {% endfor %}
+    </ul>
 
 .. TIP:
     If you'd rather have sub menus be added inline by default (without having to add ``add_sub_menus_inline=True`` each time you use a template tag), you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENUS_INLINE` setting in your project's Django settings.
@@ -198,6 +210,8 @@ No         Comma separated template paths (``str``)  ``''``
 Allows you to specify multiple templates to use for rendering different levels of sub menu. In the following example, ``"level_1.html"`` would be used to render the first level of the menu, then subsequent calls to ``{% sub_menu %}`` would use ``"level_2.html"`` to render any second level menu items, or ``"level_3.html"`` for and third level menu items.
 
 .. code-block:: html
+
+    {% load menu_tags %}
 
     {% main_menu max_levels=3 template="level_1.html" sub_menu_templates="level_2.html, level_3.html" %}
 
@@ -348,7 +362,11 @@ By default, you have to call the ``{% sub_menu %}`` tag within a menu template t
 For example, instead of the following:
 
 .. code-block:: html
+    :caption: templates/menus/flat_menu.html
 
+    {% load menu_tags %}
+
+    <ul>
     {% for item in menu_items %}
         <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
@@ -357,19 +375,27 @@ For example, instead of the following:
             {% endif %}
         </li>
     {% endfor %}
+    </ul>
 
 You could do:
 
 .. code-block:: html
+    :caption: templates/menus/flat_menu.html
 
+    <ul>
     {% for item in menu_items %}
         <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
-            {% if item.has_children_in_menu %}
-                {{ item.sub_menu.render_to_template }}
+            {% if item.sub_menu %}
+                <ul class="sub-menu">
+                    {% for sub_item in item.sub_menu.items %}
+                        <li class="{{ sub_item.active_class }}"><a href="{{ sub_item.href }}">{{ sub_item.text }}</a></li>
+                    {% endfor %}
+                </ul>
             {% endif %}
         </li>
     {% endfor %}
+    </ul>
 
 .. TIP:
     If you'd rather have sub menus be added inline by default (without having to add ``add_sub_menus_inline=True`` each time you use a template tag), you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENUS_INLINE` setting in your project's Django settings.
@@ -404,8 +430,8 @@ No         ``bool``             ``False``
 
 By default, relative page URLs are used for the ``href`` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add ``use_absolute_page_urls=True`` to the ``{% flat_menu %}`` tag in your template. The preference will also be respected automatically by any subsequent calls to ``{% sub_menu %}`` during the course of rendering the menu (unless explicitly overridden in custom menu templates).
 
-    .. NOTE:
-        Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
+.. NOTE:
+    Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
 
 -----
 
@@ -438,6 +464,8 @@ No         Comma separated template paths (``str``)  ``''``
 Allows you to specify multiple templates to use for rendering different levels of sub menu. In the following example, ``"level_1.html"`` would be used to render the first level of the menu, then subsequent calls to ``{% sub_menu %}`` would use ``"level_2.html"`` to render any second level menu items, or ``"level_3.html"`` for and third level (or greater) menu items.
 
 .. code-block:: html
+
+    {% load menu_tags %}
 
     {% flat_menu 'info' template="level_1.html" sub_menu_templates="level_2.html, level_3.html" %}
 
@@ -557,8 +585,8 @@ No         ``bool``             ``False``
 
 By default, relative page URLs are used for the ``href`` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add ``use_absolute_page_urls=True`` to the ``{% section_menu %}`` tag in your template. The preference will also be respected automatically by any subsequent calls to ``{% sub_menu %}`` during the course of rendering the menu (unless explicitly overridden in custom menu templates).
 
-    .. NOTE:
-        Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
+.. NOTE:
+    Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
 
 -----
 
@@ -578,7 +606,11 @@ By default, you have to call the ``{% sub_menu %}`` tag within a menu template t
 For example, instead of the following:
 
 .. code-block:: html
+    :caption: templates/menus/section_menu.html
 
+    {% load menu_tags %}
+
+    <ul>
     {% for item in menu_items %}
         <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
@@ -587,19 +619,27 @@ For example, instead of the following:
             {% endif %}
         </li>
     {% endfor %}
+    </ul>
 
 You could do:
 
 .. code-block:: html
+    :caption: templates/menus/section_menu.html
 
+    <ul>
     {% for item in menu_items %}
         <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
-            {% if item.has_children_in_menu %}
-                {{ item.sub_menu.render_to_template }}
+            {% if item.sub_menu %}
+                <ul class="sub-menu">
+                    {% for sub_item in item.sub_menu.items %}
+                        <li class="{{ sub_item.active_class }}"><a href="{{ sub_item.href }}">{{ sub_item.text }}</a></li>
+                    {% endfor %}
+                </ul>
             {% endif %}
         </li>
     {% endfor %}
+    </ul>
 
 .. TIP:
     If you'd rather have sub menus be added inline by default (without having to add ``add_sub_menus_inline=True`` each time you use a template tag), you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENUS_INLINE` setting in your project's Django settings.
@@ -652,6 +692,8 @@ No         Comma separated template paths (``str``)  ``''``
 Allows you to specify multiple templates to use for rendering different levels of sub menu. In the following example, ``"level_1.html"`` would be used to render the first level of the menu, then subsequent calls to ``{% sub_menu %}`` would use ``"level_2.html"`` to render any second level menu items, or ``"level_3.html"`` for and third level (or greater) menu items.
 
 .. code-block:: html
+
+    {% load menu_tags %}
 
     {% section_menu max_levels=3 template="level_1.html" sub_menu_templates="level_2.html, level_3.html" %}
 
@@ -757,8 +799,8 @@ No         ``bool``             ``False``
 
 By default, relative page URLs are used for the ``href`` attribute on page links when rendering your menu. If you wish to use absolute page URLs instead, add ``use_absolute_page_urls=True`` to the ``{% children_menu %}`` tag in your template. The preference will also be respected automatically by any subsequent calls to ``{% sub_menu %}`` during the course of rendering the menu (unless explicitly overridden in custom menu templates).
 
-    .. NOTE:
-        Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
+.. NOTE:
+    Using absolute URLs will have a negative impact on performance, especially if you're using a Wagtail version prior to 1.11.
 
 -----
 
@@ -778,7 +820,11 @@ By default, you have to call the ``{% sub_menu %}`` tag within a menu template t
 For example, instead of the following:
 
 .. code-block:: html
+    :caption: templates/menus/children_menu.html
 
+    {% load menu_tags %}
+
+    <ul>
     {% for item in menu_items %}
         <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
@@ -787,19 +833,27 @@ For example, instead of the following:
             {% endif %}
         </li>
     {% endfor %}
+    </ul>
 
 You could do:
 
 .. code-block:: html
+    :caption: templates/menus/children_menu.html
 
+    <ul>
     {% for item in menu_items %}
         <li class="{{ item.active_class }}">
             <a href="{{ item.href }}">{{ item.text }}</a>
-            {% if item.has_children_in_menu %}
-                {{ item.sub_menu.render_to_template }}
+            {% if item.sub_menu %}
+                <ul class="sub-menu">
+                    {% for sub_item in item.sub_menu.items %}
+                        <li class="{{ sub_item.active_class }}"><a href="{{ sub_item.href }}">{{ sub_item.text }}</a></li>
+                    {% endfor %}
+                </ul>
             {% endif %}
         </li>
     {% endfor %}
+    </ul>
 
 .. TIP:
     If you'd rather have sub menus be added inline by default (without having to add ``add_sub_menus_inline=True`` each time you use a template tag), you can change the default behaviour for all template tags by overriding the :ref:`DEFAULT_ADD_SUB_MENUS_INLINE` setting in your project's Django settings.
@@ -853,6 +907,8 @@ Allows you to specify multiple templates to use for rendering different levels o
 
 .. code-block:: html
 
+    {% load menu_tags %}
+
     {% children_menu max_levels=3 template="level_1.html" sub_menu_templates="level_2.html, level_3.html" %}
 
 If not provided, wagtailmenus will attempt to find suitable sub menu templates automatically.
@@ -875,6 +931,7 @@ Example usage
 -------------
 
 .. code-block:: html
+    :caption: templates/menus/sub_menu.html
 
     {% load menu_tags %}
 
