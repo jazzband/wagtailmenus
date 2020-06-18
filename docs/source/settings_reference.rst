@@ -66,7 +66,7 @@ For example, if your project uses an 'info' menu in the header, a 'footer' menu 
 
 Default value: ``True``
 
-By default, 'Flat menus' are editable in the Wagtail CMS. Setting this to `False` in your project's settings will disable editing 'Flat menus' in the Wagtail CMS.
+By default, 'Flat menus' are editable in the Wagtail CMS. Setting this to ``False`` in your project's settings will disable this functionality, and remove the **Flat menus** item from Wagtail's **Settings** menu.
 
 
 .. _FLAT_MENUS_MODELADMIN_CLASS:
@@ -105,7 +105,7 @@ Use this to change the icon used to represent 'Main menus' in the Wagtail CMS.
 
 Default value: ``True``
 
-By default, 'Main menus' are editable in the Wagtail CMS. Setting this to `False` in your project's settings will disable editing 'Main menus' in the Wagtail CMS.
+By default, 'Main menus' are editable in the Wagtail CMS. Setting this to ``False`` in your project's settings will disable this functionality, and remove the **Main menus** item from Wagtail's **Settings** menu.
 
 
 .. _MAIN_MENUS_MODELADMIN_CLASS:
