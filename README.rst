@@ -10,9 +10,9 @@
     :alt: Code coverage
     :target: https://codecov.io/gh/rkhleics/wagtailmenus
 
-.. image:: https://readthedocs.org/projects/wagtailmenus/badge/?version=stable
+.. image:: https://readthedocs.org/projects/wagtailmenus/badge/?version=latest
     :alt: Documentation Status
-    :target: http://wagtailmenus.readthedocs.io/en/stable/?badge=stable
+    :target: http://wagtailmenus.readthedocs.io/en/latest/
 
 
 ============
