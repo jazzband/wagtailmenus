@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-07 22:07+0000\n"
+"POT-Creation-Date: 2020-06-18 13:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,7 +55,7 @@ msgid "Flat menus"
 msgstr ""
 
 #: wagtailmenus/modeladmin.py:103 wagtailmenus/models/menuitems.py:53
-#: wagtailmenus/models/menus.py:1118
+#: wagtailmenus/models/menus.py:1117
 msgid "handle"
 msgstr ""
 
@@ -126,64 +126,64 @@ msgid ""
 "how the menu is used in this project's templates."
 msgstr ""
 
-#: wagtailmenus/models/menus.py:1031 wagtailmenus/models/menus.py:1107
+#: wagtailmenus/models/menus.py:1030 wagtailmenus/models/menus.py:1106
 msgid "site"
 msgstr ""
 
-#: wagtailmenus/models/menus.py:1038 wagtailmenus/models/menus.py:1132
+#: wagtailmenus/models/menus.py:1037 wagtailmenus/models/menus.py:1131
 msgid "maximum levels"
 msgstr ""
 
-#: wagtailmenus/models/menus.py:1042
+#: wagtailmenus/models/menus.py:1041
 msgid ""
 "The maximum number of levels to display when rendering this menu. The value "
 "can be overidden by supplying a different <code>max_levels</code> value to "
 "the <code>{% main_menu %}</code> tag in your templates."
 msgstr ""
 
-#: wagtailmenus/models/menus.py:1051 wagtailmenus/models/menus.py:1052
+#: wagtailmenus/models/menus.py:1050 wagtailmenus/models/menus.py:1051
 msgid "main menu"
 msgstr ""
 
-#: wagtailmenus/models/menus.py:1092
+#: wagtailmenus/models/menus.py:1091
 #, python-format
 msgid "Main menu for %(site_name)s"
 msgstr ""
 
-#: wagtailmenus/models/menus.py:1113
+#: wagtailmenus/models/menus.py:1112
 msgid "title"
 msgstr ""
 
-#: wagtailmenus/models/menus.py:1115
+#: wagtailmenus/models/menus.py:1114
 msgid "For internal reference only."
 msgstr ""
 
-#: wagtailmenus/models/menus.py:1121
+#: wagtailmenus/models/menus.py:1120
 msgid ""
 "Used to reference this menu in templates etc. Must be unique for the "
 "selected site."
 msgstr ""
 
-#: wagtailmenus/models/menus.py:1126
+#: wagtailmenus/models/menus.py:1125
 msgid "heading"
 msgstr ""
 
-#: wagtailmenus/models/menus.py:1129
+#: wagtailmenus/models/menus.py:1128
 msgid "If supplied, appears above the menu when rendered."
 msgstr ""
 
-#: wagtailmenus/models/menus.py:1136
+#: wagtailmenus/models/menus.py:1135
 msgid ""
 "The maximum number of levels to display when rendering this menu. The value "
 "can be overidden by supplying a different <code>max_levels</code> value to "
 "the <code>{% flat_menu %}</code> tag in your templates."
 msgstr ""
 
-#: wagtailmenus/models/menus.py:1146
+#: wagtailmenus/models/menus.py:1145
 msgid "flat menu"
 msgstr ""
 
-#: wagtailmenus/models/menus.py:1147
+#: wagtailmenus/models/menus.py:1146
 msgid "flat menus"
 msgstr ""
 
