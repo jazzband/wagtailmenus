@@ -21,7 +21,7 @@ wagtailmenus
 
 wagtailmenus is an extension for Torchbox's `Wagtail CMS <https://github.com/torchbox/wagtail>`_ to help you manage and render multi-level navigation and simple flat menus in a consistent, flexible way.
 
-The current version is tested for compatiblily with the following:
+The current version is tested for compatibility with the following:
 
 - Wagtail versions 2.0 to 2.9
 - Django versions 1.11, 2.0, 2.2 and 3.0
