@@ -32,8 +32,8 @@ The current version is tested for compatibility with the following:
 New to wagtailmenus?
 ====================
 
-Take a few minutes to read our `Overview and key concepts <http://wagtailmenus.readthedocs.io/en/stable/overview.html>`_ page.
-It will give you a better understand of how the apps works, and help you decide whether it is a good fit for you project.
+Start by reading our `Overview and key concepts <http://wagtailmenus.readthedocs.io/en/stable/overview.html>`_ page.
+It will give you a better understand of how the app works, and help you decide whether it is a good fit for your project.
 
 
 How do I use it?
