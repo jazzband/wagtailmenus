@@ -14,7 +14,7 @@ Installing wagtailmenus
     ``INSTALLED_APPS`` setting in your project settings:
 
     .. code-block:: python
-        :caption: settings.py
+        :caption: e.g. settings/base.py
 
         INSTALLED_APPS = [
             ...
@@ -27,7 +27,7 @@ Installing wagtailmenus
     should look something like this:
 
     .. code-block:: python
-        :caption: settings.py
+        :caption: e.g. settings/base.py
         :emphasize-lines: 19
 
         TEMPLATES = [
