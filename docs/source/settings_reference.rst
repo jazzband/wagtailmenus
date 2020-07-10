@@ -50,7 +50,7 @@ For example, if your project uses an 'info' menu in the header, a 'footer' menu 
 
 .. code-block:: python
 
-    # settings.py
+    # e.g. settings/base.py
 
     WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES = (
         ('info', 'Info'),
@@ -80,7 +80,7 @@ If you wish to override the ``ModelAdmin`` class used to represent **'Flat menus
 
 .. code-block:: python
 
-    # settings.py
+    # e.g. settings/base.py
 
     WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS = "projectname.appname.modulename.ClassName"
 
@@ -119,7 +119,7 @@ If you wish to override the ``ModelAdmin`` class used to represent **'Main menus
 
 .. code-block:: python
 
-    # settings.py
+    # e.g. settings/base.py
 
     WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS = "projectname.appname.modulename.ClassName"
 
@@ -192,7 +192,7 @@ If you have a multi-site project, and want to be able to use different templates
 
 .. code-block:: python
 
-    # settings.py
+    # e.g. settings/base.py
 
     WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS = True
 

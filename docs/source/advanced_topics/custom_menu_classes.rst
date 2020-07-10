@@ -177,7 +177,7 @@ If you also need to override the ``MainMenu`` model, that's possible too. But, b
 
     .. code-block:: python
 
-        # settings.py
+        # e.g. settings/base.py
 
         WAGTAILMENUS_MAIN_MENU_MODEL = "appname.LimitedMainMenu"
 
@@ -262,7 +262,7 @@ If you're happy with the default ``FlatMenu`` model, but wish customise the menu
 
     .. code-block:: python
 
-        # settings.py
+        # e.g. settings/base.py
 
         # Use the 'related_name' attribute you used on your custom model's ParentalKey field
         WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = "custom_menu_items"
@@ -411,7 +411,7 @@ If you also need to override the ``FlatMenu`` model, that's possible too. But, b
 
     .. code-block:: python
 
-        # settings.py
+        # e.g. settings/base.py
 
         WAGTAILMENUS_FLAT_MENU_MODEL = "appname.TranslatedFlatMenu"
 
@@ -453,7 +453,7 @@ The class ``wagtailmenus.models.menus.SectionMenu`` is used by default, but you 
 
 .. code-block:: python
 
-    # settings.py
+    # e.g. settings/base.py
 
     WAGTAILMENUS_SECTION_MENU_CLASS = "mysite.appname.models.CustomSectionMenu"
 
@@ -487,7 +487,7 @@ The class ``wagtailmenus.models.menus.ChildrenMenu`` is used by default, but you
 
 .. code-block:: python
 
-    # settings.py
+    # e.g. settings/base.py
 
     WAGTAILMENUS_CHILDREN_MENU_CLASS = "mysite.appname.models.CustomChildrenMenu"
 
