@@ -33,7 +33,7 @@ New ``use_absolute_page_urls`` parameter added to template tags
 
 The new parameter allows you to render menus that use 'absolute' URLs
 for pages (including the protocol/domain derived from the relevant 
-``wagtailcore.models.Site`` object), instead of the 'relative' URLs used by
+``wagtail.core.models.Site`` object), instead of the 'relative' URLs used by
 default.
 
 
