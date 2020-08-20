@@ -1080,7 +1080,7 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     @classmethod
     def get_for_site(cls, site):
         """Return the 'main menu' instance for the provided site"""
-        instance, created = cls.objects.get_or_create(site=site)
+        instance, created = cls.objects.get_or_create(site=site, defaults={'site': site})
         return instance
 
     @classmethod
