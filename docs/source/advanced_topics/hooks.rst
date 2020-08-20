@@ -76,7 +76,7 @@ However, if you'd like to filter this result down further, you can do so using s
         """
         if not request.user.is_authenticated():
             return queryset.none()
-        return queryset.filter(owner=self.request.user)
+        return queryset.filter(owner=request.user)
 
 
 This would ensure that only pages 'owned' by currently logged-in user will appear in menus. And the changes will be applied to ALL types of menu, regardless of what template tag is being called to do the rendering.
@@ -101,7 +101,7 @@ Or, if you only wanted to change the queryset for a menu of a specific type, you
         if menu_type in ('main_menu', 'flat_menu'):
             if not request.user.is_authenticated():
                 return queryset.none()
-            queryset = queryset.filter(owner=self.request.user)
+            queryset = queryset.filter(owner=request.user)
 
         return queryset  # always return a queryset
 
