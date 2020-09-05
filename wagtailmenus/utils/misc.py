@@ -1,7 +1,29 @@
-from django.http import Http404
+from django.http import Http404, HttpRequest
 from wagtail.core.models import Page, Site
 
 from wagtailmenus.models.menuitems import MenuItem
+
+
+def get_fake_site():
+    site = Site()
+    site.id = 0
+    site.pk = 0
+    return site
+
+
+def get_fake_request():
+    """
+    Return a HttpRequest that can be passed to page url
+    methods to benefit from caching of site root paths.
+    """
+    request = HttpRequest()
+    request.method = "GET"
+    request.path = "/"
+    request.META["SERVER_NAME"] = "localhost"
+    site = get_fake_site()
+    request.site = site  # for Wagtail < 2.9
+    request._wagtail_site = site  # For Wagtail >= 2.9
+    return request
 
 
 def get_site_from_request(request, fallback_to_default=True):
