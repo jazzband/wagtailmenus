@@ -22,7 +22,7 @@ TBA
 Minor changes & bug fixes
 =========================
 
-TBA
+* Added support for Wagtail 2.10 (no code changes necessary)
 
 
 Deprecations

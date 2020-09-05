@@ -4,6 +4,8 @@ Changelog
 3.1 IN DEVELOPMENT
 ------------------
 
+* Added support for Wagtail 2.10 (no code changes necessary)
+
 
 3.0.2 (18.06.2020)
 ------------------
