@@ -4,10 +4,38 @@ from wagtail.core import __version__ as wagtail_version
 from wagtail.core.models import Page, Site
 
 from wagtailmenus.conf import defaults
-from wagtailmenus.utils.misc import derive_page, derive_section_root, get_site_from_request
+from wagtailmenus.utils.misc import (
+    derive_page, derive_section_root, get_fake_request, get_site_from_request
+)
 from wagtailmenus.tests.models import (
     ArticleListPage, ArticlePage, LowLevelPage, TopLevelPage
 )
+
+
+class TestGetFakeRequest(TestCase):
+    """Ensures the value returned by get_fake_request() is compatible
+    with Page url methods."""
+
+    fixtures = ['test.json']
+
+    def setUp(self):
+        self.page = Page.objects.last()
+        self.site = self.page.get_site()
+        self.relative_page_url = self.page.get_url(current_site=self.site)
+        self.full_page_url = self.page.full_url
+        self.fake_request = get_fake_request()
+
+    def test_works_with_get_url(self):
+        result = self.page.get_url(self.fake_request, self.site)
+        self.assertEqual(result, self.relative_page_url)
+
+    def test_works_with_relative_url(self):
+        result = self.page.relative_url(self.site, request=self.fake_request)
+        self.assertEqual(result, self.relative_page_url)
+
+    def test_works_with_full_url(self):
+        result = self.page.get_full_url(request=self.fake_request)
+        self.assertEqual(result, self.full_page_url)
 
 
 class TestDerivePage(TestCase):

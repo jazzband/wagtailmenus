@@ -5,6 +5,7 @@ Changelog
 ------------------
 
 * Added support for Wagtail 2.10 (no code changes necessary)
+* Updated menu classes to better support cases where 'request' and 'site' are not available in the context
 
 
 3.0.2 (18.06.2020)

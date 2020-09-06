@@ -1,10 +1,10 @@
-import warnings
 from collections import defaultdict, namedtuple, OrderedDict
 from types import GeneratorType
 
 from django.db import models
 from django.db.models import BooleanField, Case, Q, When
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, MultipleObjectsReturned
+from django.http import HttpRequest
 from django.template.loader import get_template, select_template
 from django.utils.functional import cached_property, lazy
 from django.utils.safestring import mark_safe
@@ -15,7 +15,8 @@ from wagtail.core.models import Page, Site
 
 from wagtailmenus import forms, panels
 from wagtailmenus.conf import constants, settings
-from wagtailmenus.utils.misc import get_site_from_request
+from wagtailmenus.errors import RequestUnavailableError
+from wagtailmenus.utils.misc import get_fake_request, get_site_from_request
 from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
 from .pages import AbstractLinkPage
@@ -131,8 +132,8 @@ class Menu:
         context_processor_vals = context.get('wagtailmenus_vals', {})
         return ContextualVals(
             context,
-            context['request'],
-            get_site_from_request(context['request']),
+            context.get('request') or get_fake_request(),
+            cls._get_site(context),
             context.get('current_level', 0) + 1,
             context.get('original_menu_tag', cls.related_templatetag_name),
             context.get('original_menu_instance'),
@@ -140,6 +141,15 @@ class Menu:
             context_processor_vals.get('section_root'),
             context_processor_vals.get('current_page_ancestor_ids', ()),
         )
+
+    @classmethod
+    def _get_site(cls, context):
+        site = context.get('site')
+        if isinstance(site, Site):
+            return site
+        request = context.get('request')
+        if request is not None:
+            return get_site_from_request(request)
 
     @classmethod
     def _create_optionvals_obj_from_values(cls, **kwargs):
@@ -886,6 +896,24 @@ class MenuWithMenuItems(ClusterableModel, Menu):
 
     class Meta:
         abstract = True
+
+    @classmethod
+    def _get_site(cls, context):
+        site = super()._get_site(context)
+        if site is not None:
+            return site
+        try:
+            return Site.objects.get()
+        except MultipleObjectsReturned:
+            raise RequestUnavailableError(
+                f"In multisite projects, menus of type '{cls.__name__}' can "
+                "only be identified when the current HttpRequest is "
+                "available to the menu tag. If you are rendering menus "
+                "from within a streamfield block, try using Wagtail's "
+                "{% include_block %} tag to render streamfield values, "
+                "which passes ``request`` and other values through to the "
+                "block template context."
+            )
 
     @classmethod
     def _get_menu_items_related_name(cls):

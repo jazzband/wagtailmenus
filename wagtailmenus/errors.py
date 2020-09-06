@@ -1,6 +1,10 @@
 from django.template import TemplateSyntaxError
 
 
+class RequestUnavailableError(TemplateSyntaxError):
+    pass
+
+
 class SubMenuUsageError(TemplateSyntaxError):
     def __init__(self):
         return TemplateSyntaxError.__init__(self, (
