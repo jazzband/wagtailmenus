@@ -3,7 +3,7 @@ from collections import OrderedDict
 from django.core.exceptions import ImproperlyConfigured
 from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
-from rest_framework.exceptions import ValidationError, NotFound
+from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 from rest_framework.reverse import reverse
@@ -12,48 +12,12 @@ from rest_framework.settings import perform_import
 
 from wagtailmenus.conf import settings as wagtailmenus_settings
 from wagtailmenus.utils.misc import derive_ancestor_ids
-from wagtailmenus.api.utils import make_serializer_class
+from wagtailmenus.api.utils import make_result_serializer_class
 from wagtailmenus.api.v1.conf import settings as api_settings
-from wagtailmenus.api.v1.serializers import BaseModelMenuSerializer
-
-from . import forms
+from wagtailmenus.api.v1.serializers import BaseModelMenuSerializer, options as option_serializers
 
 
-class MenuGeneratorIndexView(APIView):
-    name = "Menu Generation"
-
-    renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
-
-    def get(self, request, *args, **kwargs):
-        # Return a plain {"name": "hyperlink"} response.
-        data = OrderedDict()
-        namespace = request.resolver_match.namespace
-        names = ('main_menu', 'flat_menu', 'section_menu', 'children_menu')
-        for url_name in names:
-            if namespace:
-                url_name = namespace + ':' + url_name
-            data[url_name] = reverse(
-                url_name,
-                args=args,
-                kwargs=kwargs,
-                request=request,
-                format=kwargs.get('format', None)
-            )
-        return Response(data)
-
-
-class BaseMenuGeneratorView(APIView):
-    menu_class = None
-
-    # argument validation and defaults
-    argument_form_class = None
-    max_levels_default = None
-    allow_repeating_parents_default = True
-
-    # serialization
-    serializer_class = None
-    serializer_class_setting_name = None
-
+class MenuAPIView(APIView):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if api_settings.AUTHENTICATION_CLASSES is not None:
@@ -72,6 +36,89 @@ class BaseMenuGeneratorView(APIView):
                 'WAGTAILMENUS_API_V1_RENDERER_CLASSES'
             )
 
+
+class MenuGeneratorIndexView(MenuAPIView):
+    name = "Menu Generation"
+
+    renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
+
+    def get(self, request, *args, **kwargs):
+        # Return a plain {"name": "hyperlink"} response.
+        data = OrderedDict()
+        namespace = request.resolver_match.namespace
+        url_names = ('main_menu', 'flat_menu', 'section_menu', 'children_menu')
+        for name in url_names:
+            if namespace:
+                name = namespace + ':' + name
+            data[name] = reverse(
+                name,
+                args=args,
+                kwargs=kwargs,
+                request=request,
+                format=kwargs.get('format', None)
+            )
+        return Response(data)
+
+
+class BaseMenuGeneratorView(MenuAPIView):
+    menu_class = None
+
+    # argument validation and defaults
+    serializer_class = None
+    max_levels_default = None
+    allow_repeating_parents_default = True
+
+    # result serialization
+    result_serializer_class = None
+    result_serializer_class_setting_name = None
+
+    # ---------------------------------------------------------------
+    # Querystring option serialization
+    # ---------------------------------------------------------------
+
+    def get_option_data(self):
+        original = self.request.POST or self.request.GET
+        data = original.copy()
+        for key, value in self.self.get_default_option_values():
+            if key not in data:
+                data[key] = value
+        return data
+
+    @classmethod
+    def get_serializer_class(cls):
+        if cls.serializer_class:
+            return cls.serializer_class
+        raise ImproperlyConfigured(
+            "You must either set the 'serializer_class' attribute or "
+            "override the get_serializer_class() method for '%s'"
+            % cls.__name__
+        )
+
+    def get_serializer(self):
+        serializer_class = self.get_serializer_class()
+        context = self.get_serializer_context()
+        return serializer_class(
+            data=self.get_option_data(),
+            context=context
+        )
+
+    def get_serializer_context(self):
+        return {
+            'request': self.request,
+            'format': self.format_kwarg,
+            'view': self,
+        }
+
+    def get_default_option_values(self):
+        return {
+            'max_levels': self.max_levels_default,
+            'allow_repeating_parents': self.allow_repeating_parents_default,
+        }
+
+    # ---------------------------------------------------------------
+    # Getting a menu instance from serialized options
+    # ---------------------------------------------------------------
+
     @classmethod
     def get_menu_class(cls):
         if cls.menu_class:
@@ -82,88 +129,7 @@ class BaseMenuGeneratorView(APIView):
             % cls.__name__
         )
 
-    @classmethod
-    def get_argument_form_class(cls):
-        if cls.argument_form_class:
-            return cls.argument_form_class
-        raise ImproperlyConfigured(
-            "You must either set the 'argument_form_class' attribute or "
-            "override the get_argument_form_class() method for '%s'"
-            % cls.__name__
-        )
-
-    @classmethod
-    def get_serializer_class(cls):
-        if cls.serializer_class:
-            return cls.serializer_class
-        if cls.serializer_class_setting_name:
-            return api_settings.get_object(cls.serializer_class_setting_name)
-        raise ImproperlyConfigured(
-            "You must either set the 'serializer_class' attribute, "
-            "or override the get_serializer_class() method for '%s'"
-            % cls.__name__
-        )
-
-    def get_argument_form_init_kwargs(self):
-        return {
-            'request': self.request,
-            'data': self.request.POST or self.request.GET,
-            'initial': self.get_argument_form_initial(),
-        }
-
-    def get_argument_form_initial(self):
-        return {
-            'max_levels': self.max_levels_default,
-            'allow_repeating_parents': self.allow_repeating_parents_default,
-        }
-
-    def get_argument_form(self):
-        if hasattr(self, '_form'):
-            return self._form
-        form_class = self.get_argument_form_class()
-        init_kwargs = self.get_argument_form_init_kwargs()
-        form = form_class(**init_kwargs)
-        self._form = form
-        return form
-
-    def get_serializer(self, menu_instance):
-        serializer_class = self.get_serializer_class()
-        context = self.get_serializer_context()
-        return serializer_class(menu_instance, context=context)
-
-    def get_serializer_context(self):
-        return {
-            'request': self.request,
-            'format': self.format_kwarg,
-            'view': self,
-        }
-
-    def get(self, request, *args, **kwargs):
-        # seen_types is a mapping of type name strings
-        # (format: "app_label.ModelName") to model classes.
-        # When an page object is serialised in the API, its
-        # model is added to this mapping
-        self.seen_types = OrderedDict()
-
-        # Ensure all argument values are valid
-        form = self.get_argument_form()
-        if not form.is_valid():
-            raise ValidationError(form.errors)
-
-        # Activate selected language during serialization
-        with translation.override(
-            form.cleaned_data.get('language', translation.get_language())
-        ):
-            # Get a menu instance using the valid data
-            menu_instance = self.get_menu_instance(form.cleaned_data)
-
-            # Create a serializer for this menu instance
-            menu_serializer = self.get_serializer(menu_instance)
-            response_data = menu_serializer.data
-
-        return Response(response_data)
-
-    def get_menu_instance(self, form_data):
+    def get_menu_instance(self, **kwargs):
         """
         The Menu classes themselves are responsible for getting/creating menu
         instances and preparing them for rendering. So, the role of this
@@ -171,14 +137,16 @@ class BaseMenuGeneratorView(APIView):
         ``Menu._get_render_prepared_object()`` will understand, and call that.
         """
 
-        # Set request.site attribute from 'current_site'
-        if 'current_site' in form_data:
-            self.request.site = form_data.pop('current_site')
+        # Set request attributes with 'current_site'
+        current_site = kwargs.pop('current_site', None)
+        if current_site is not None:
+            self.request.site = current_site  # Wagtail < 2.9
+            self.request._wagtatil_site = current_site  # Wagtail >= 2.9
 
         # Generate ancestor_page_ids
-        if form_data['apply_active_classes']:
+        if kwargs['apply_active_classes']:
             ancestor_page_ids = derive_ancestor_ids(
-                form_data['current_page'] or form_data.get('best_match_page')
+                kwargs.get('current_page') or kwargs.get('best_match_page')
             )
         else:
             ancestor_page_ids = ()
@@ -188,9 +156,10 @@ class BaseMenuGeneratorView(APIView):
         # similar data structure.
         dummy_context = {
             'request': self.request,
+            'current_site': current_site,
             'wagtailmenus_vals': {
-                'current_page': form_data.pop('current_page', None),
-                'section_root': form_data.pop('section_root_page', None),
+                'current_page': kwargs.pop('current_page', None),
+                'section_root': kwargs.pop('section_root_page', None),
                 'current_page_ancestor_ids': ancestor_page_ids,
             }
         }
@@ -200,9 +169,9 @@ class BaseMenuGeneratorView(APIView):
         menu_instance = menu_class._get_render_prepared_object(
             dummy_context,
             add_sub_menus_inline=True,
-            use_absolute_page_urls=not form_data.pop('relative_page_urls'),
+            use_absolute_page_urls=not kwargs.pop('relative_page_urls'),
             ancestor_page_ids=ancestor_page_ids,
-            **form_data
+            **kwargs
         )
         if menu_instance is None:
             raise NotFound(_(
@@ -212,6 +181,58 @@ class BaseMenuGeneratorView(APIView):
 
         return menu_instance
 
+    # ---------------------------------------------------------------
+    # Serializating the result
+    # ---------------------------------------------------------------
+
+    @classmethod
+    def get_result_serializer_class(cls):
+        if cls.result_serializer_class:
+            return cls.result_serializer_class
+        if cls.result_serializer_class_setting_name:
+            return api_settings.get_object(cls.result_serializer_class_setting_name)
+        raise ImproperlyConfigured(
+            "You must either set the 'result_serializer_class' attribute, "
+            "or override the get_result_serializer_class() method for '%s'"
+            % cls.__name__
+        )
+
+    def get_result_serializer(self, menu_instance):
+        result_serializer_class = self.get_result_serializer_class()
+        context = self.get_result_serializer_context()
+        return result_serializer_class(menu_instance, context=context)
+
+    def get_result_serializer_context(self):
+        return self.get_serializer_context()
+
+    # ---------------------------------------------------------------
+    # View logic
+    # ---------------------------------------------------------------
+
+    def get(self, request, *args, **kwargs):
+        # seen_types is a mapping of type name strings
+        # (format: "app_label.ModelName") to model classes.
+        # When an page object is serialised in the API, its
+        # model is added to this mapping
+        self.seen_types = OrderedDict()
+
+        # Ensure supplied option arguments are valid for this view
+        option_serializer = self.get_serializer()
+        option_serializer.is_valid(raise_exception=True)
+
+        # Activate selected language during serialization
+        with translation.override(
+            option_serializer.validated_data.get('language', translation.get_language())
+        ):
+            # Get a menu instance using the valid data
+            menu_instance = self.get_menu_instance(**option_serializer.validated_data)
+
+            # Create a serializer for this menu instance
+            menu_serializer = self.get_result_serializer(menu_instance)
+            response_data = menu_serializer.data
+
+        return Response(response_data)
+
 
 class ChildrenMenuGeneratorView(BaseMenuGeneratorView):
     """
@@ -220,8 +241,8 @@ class ChildrenMenuGeneratorView(BaseMenuGeneratorView):
     """
     name = _('Generate Children Menu')
     menu_class = wagtailmenus_settings.objects.CHILDREN_MENU_CLASS
-    argument_form_class = forms.ChildrenMenuGeneratorArgumentForm
-    serializer_class_setting_name = 'CHILDREN_MENU_SERIALIZER'
+    serializer_class = option_serializers.ChildrenMenuOptionSerializer
+    result_serializer_class_setting_name = 'CHILDREN_MENU_SERIALIZER'
 
     # argument defaults
     max_levels_default = wagtailmenus_settings.DEFAULT_CHILDREN_MENU_MAX_LEVELS
@@ -234,50 +255,50 @@ class SectionMenuGeneratorView(BaseMenuGeneratorView):
     """
     name = _('Generate Section Menu')
     menu_class = wagtailmenus_settings.objects.SECTION_MENU_CLASS
-    argument_form_class = forms.SectionMenuGeneratorArgumentForm
-    serializer_class_setting_name = 'SECTION_MENU_SERIALIZER'
+    serializer_class = option_serializers.SectionMenuOptionSerializer
+    result_serializer_class_setting_name = 'SECTION_MENU_SERIALIZER'
 
     # argument defaults
     max_levels_default = wagtailmenus_settings.DEFAULT_SECTION_MENU_MAX_LEVELS
 
 
 class BaseModelMenuGeneratorView(BaseMenuGeneratorView):
-    base_serializer_class = BaseModelMenuSerializer
+    base_result_serializer_class = BaseModelMenuSerializer
 
     @classmethod
-    def get_serializer_fields(cls):
+    def get_result_serializer_fields(cls):
         return cls.menu_class.api_fields
 
     @classmethod
-    def get_serializer_field_names(cls):
-        return [field.name for field in cls.get_serializer_fields()]
+    def get_result_serializer_field_names(cls):
+        return [field.name for field in cls.get_result_serializer_fields()]
 
     @classmethod
-    def get_serializer_field_overrides(cls):
+    def get_result_serializer_field_overrides(cls):
         return {
             field.name: field.serializer
-            for field in cls.get_serializer_fields()
+            for field in cls.get_result_serializer_fields()
             if field.serializer is not None
         }
 
     @classmethod
-    def get_serializer_class_create_kwargs(cls, **kwargs):
+    def get_result_serializer_class_create_kwargs(cls, **kwargs):
         values = {
             'model': cls.menu_class,
-            'field_names': cls.get_serializer_field_names(),
-            'field_serializer_overrides': cls.get_serializer_field_overrides(),
+            'field_names': cls.get_result_serializer_field_names(),
+            'field_serializer_overrides': cls.get_result_serializer_field_overrides(),
         }
         values.update(kwargs)
         return values
 
     @classmethod
-    def get_serializer_class(cls):
-        if cls.serializer_class:
-            return cls.serializer_class
+    def get_result_serializer_class(cls):
+        if cls.result_serializer_class:
+            return cls.result_serializer_class
         name = cls.menu_class.__name__ + 'Serializer'
-        base_class = cls.base_serializer_class
-        create_kwargs = cls.get_serializer_class_create_kwargs()
-        return make_serializer_class(name, base_class, **create_kwargs)
+        base_class = cls.base_result_serializer_class
+        create_kwargs = cls.get_result_serializer_class_create_kwargs()
+        return make_result_serializer_class(name, base_class, **create_kwargs)
 
 
 class MainMenuGeneratorView(BaseModelMenuGeneratorView):
@@ -287,8 +308,8 @@ class MainMenuGeneratorView(BaseModelMenuGeneratorView):
     """
     name = _('Generate Main Menu')
     menu_class = wagtailmenus_settings.models.MAIN_MENU_MODEL
-    argument_form_class = forms.MainMenuGeneratorArgumentForm
-    base_serializer_class_setting_name = 'BASE_MAIN_MENU_SERIALIZER'
+    serializer_class = option_serializers.MainMenuOptionSerializer
+    base_result_serializer_class_setting_name = 'BASE_MAIN_MENU_SERIALIZER'
 
 
 class FlatMenuGeneratorView(BaseModelMenuGeneratorView):
@@ -298,13 +319,13 @@ class FlatMenuGeneratorView(BaseModelMenuGeneratorView):
     """
     name = _('Generate Flat Menu')
     menu_class = wagtailmenus_settings.models.FLAT_MENU_MODEL
-    argument_form_class = forms.FlatMenuGeneratorArgumentForm
-    base_serializer_class_setting_name = 'BASE_FLAT_MENU_SERIALIZER'
+    serializer_class = option_serializers.FlatMenuOptionSerializer
+    base_result_serializer_class_setting_name = 'BASE_FLAT_MENU_SERIALIZER'
 
     # argument defaults
     fall_back_to_default_site_menus_default = True
 
-    def get_argument_form_initial(self):
-        initial = super().get_argument_form_initial()
+    def get_default_option_values(self):
+        initial = super().get_default_option_values()
         initial['fall_back_to_default_site_menus'] = self.fall_back_to_default_site_menus_default
         return initial

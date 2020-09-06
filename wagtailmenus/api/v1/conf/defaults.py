@@ -14,9 +14,20 @@ PERMISSION_CLASSES = None
 # API in production
 RENDERER_CLASSES = [
     'rest_framework.renderers.JSONRenderer',
-    'wagtailmenus.api.v1.renderers.BrowsableAPIWithArgumentFormRenderer',
+    'rest_framework.renderers.BrowsableAPIRenderer',
 ]
 
+# -------------------------
+# Option serializer classes
+# -------------------------
+
+CHILDREN_MENU_OPTION_SERIALIZER = 'wagtailmenus.api.v1.serializers.ChildrenMenuOptionSerializer'
+
+SECTION_MENU_OPTION_SERIALIZER = 'wagtailmenus.api.v1.serializers.SectionMenuOptionSerializer'
+
+MAIN_MENU_OPTION_SERIALIZER = 'wagtailmenus.api.v1.serializers.MainMenuOptionSerializer'
+
+FLAT_MENU_OPTION_SERIALIZER = 'wagtailmenus.api.v1.serializers.FlatMenuOptionSerializer'
 
 # -----------------------
 # Menu serializer classes
@@ -26,6 +37,9 @@ CHILDREN_MENU_SERIALIZER = 'wagtailmenus.api.v1.serializers.ChildrenMenuSerializ
 
 SECTION_MENU_SERIALIZER = 'wagtailmenus.api.v1.serializers.SectionMenuSerializer'
 
+MAIN_MENU_BASE_SERIALIZER = 'wagtailmenus.api.v1.serializers.BaseModelMenuSerializer'
+
+FLAT_MENU_BASE_SERIALIZER = 'wagtailmenus.api.v1.serializers.BaseModelMenuSerializer'
 
 # --------------
 # View behaviour
