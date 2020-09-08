@@ -208,7 +208,7 @@ If you're happy with the default ``FlatMenu`` model, but wish customise the menu
         from django.db import models
         from django.utils.translation import ugettext_lazy as _
         from modelcluster.fields import ParentalKey
-        from wagtail.iamges import get_image_model_string
+        from wagtail.images import get_image_model_string
         from wagtail.images.edit_handlers import ImageChooserPanel
         from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
         from wagtailmenus.models import AbstractFlatMenuItem
