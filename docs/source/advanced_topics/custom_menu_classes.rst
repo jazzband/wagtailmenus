@@ -33,9 +33,9 @@ If you're happy with the default ``MainMenu`` model, but wish customise the menu
         from django.db import models
         from django.utils.translation import ugettext_lazy as _
         from modelcluster.fields import ParentalKey
-        from wagtail.wagtailimages import get_image_model_string
-        from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
-        from wagtail.wagtailadmin.edit_handlers import FieldPanel, PageChooserPanel
+        from wagtail.images import get_image_model_string
+        from wagtail.images.edit_handlers import ImageChooserPanel
+        from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
         from wagtailmenus.models import AbstractMainMenuItem
 
 
@@ -113,7 +113,7 @@ If you also need to override the ``MainMenu`` model, that's possible too. But, b
         from django.utils.translation import ugettext_lazy as _
         from django.utils import timezone
         from modelcluster.fields import ParentalKey
-        from wagtail.wagtailadmin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel
+        from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel
         from wagtailmenus.conf import settings
         from wagtailmenus.models import AbstractMainMenu, AbstractMainMenuItem
 
@@ -208,9 +208,9 @@ If you're happy with the default ``FlatMenu`` model, but wish customise the menu
         from django.db import models
         from django.utils.translation import ugettext_lazy as _
         from modelcluster.fields import ParentalKey
-        from wagtail.wagtailimages import get_image_model_string
-        from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
-        from wagtail.wagtailadmin.edit_handlers import FieldPanel, PageChooserPanel
+        from wagtail.images import get_image_model_string
+        from wagtail.images.edit_handlers import ImageChooserPanel
+        from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
         from wagtailmenus.models import AbstractFlatMenuItem
 
 
@@ -289,7 +289,7 @@ If you also need to override the ``FlatMenu`` model, that's possible too. But, b
         from django.utils import translation
         from django.utils.translation import ugettext_lazy as _
         from modelcluster.fields import ParentalKey
-        from wagtail.wagtailadmin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel
+        from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel
         from wagtailmenus.conf import settings
         from wagtailmenus.panels import FlatMenuItemsInlinePanel
         from wagtailmenus.models import AbstractFlatMenu, AbstractFlatMenuItem
@@ -437,7 +437,7 @@ The class ``wagtailmenus.models.menus.SectionMenu`` is used by default, but you 
     # mysite/appname/models.py
 
     from django.utils.translation import ugettext_lazy as _
-    from wagtail.wagtailcore.models import Page
+    from wagtail.core.models import Page
     from wagtailmenus.models import SectionMenu
 
 
@@ -472,7 +472,7 @@ The class ``wagtailmenus.models.menus.ChildrenMenu`` is used by default, but you
     # appname/menus.py
 
     from django.utils.translation import ugettext_lazy as _
-    from wagtail.wagtailcore.models import Page
+    from wagtail.core.models import Page
     from wagtailmenus.models import ChildrenMenu
 
 

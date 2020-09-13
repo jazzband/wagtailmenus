@@ -11,7 +11,7 @@ Registering functions with a Wagtail hook is done through the ``@hooks.register`
 
 .. code-block:: python
 
-  from wagtail.wagtailcore import hooks
+  from wagtail.core import hooks
 
   @hooks.register('name_of_hook')
   def my_hook_function(arg1, arg2...)
@@ -63,7 +63,7 @@ However, if you'd like to filter this result down further, you can do so using s
 
 .. code-block:: python
 
-    from wagtail.wagtailcore import hooks
+    from wagtail.core import hooks
 
     @hooks.register('menus_modify_base_page_queryset')
     def make_some_changes(
@@ -76,7 +76,7 @@ However, if you'd like to filter this result down further, you can do so using s
         """
         if not request.user.is_authenticated():
             return queryset.none()
-        return queryset.filter(owner=self.request.user)
+        return queryset.filter(owner=request.user)
 
 
 This would ensure that only pages 'owned' by currently logged-in user will appear in menus. And the changes will be applied to ALL types of menu, regardless of what template tag is being called to do the rendering.
@@ -86,7 +86,7 @@ Or, if you only wanted to change the queryset for a menu of a specific type, you
 
 .. code-block:: python
 
-    from wagtail.wagtailcore import hooks
+    from wagtail.core import hooks
 
     @hooks.register('menus_modify_base_page_queryset')
     def make_some_changes(
@@ -101,7 +101,7 @@ Or, if you only wanted to change the queryset for a menu of a specific type, you
         if menu_type in ('main_menu', 'flat_menu'):
             if not request.user.is_authenticated():
                 return queryset.none()
-            queryset = queryset.filter(owner=self.request.user)
+            queryset = queryset.filter(owner=request.user)
 
         return queryset  # always return a queryset
 
@@ -124,7 +124,7 @@ However, if you'd only like to include a subset of the CMS-defined menu item, or
 
 .. code-block:: python
 
-    from wagtail.wagtailcore import hooks
+    from wagtail.core import hooks
 
     @hooks.register('menus_modify_base_menuitem_queryset')
     def make_some_changes(
@@ -149,7 +149,7 @@ These changes would be applied to all menu types that use menu items to define t
 
 .. code-block:: python
 
-    from wagtail.wagtailcore import hooks
+    from wagtail.core import hooks
 
     @hooks.register('menus_modify_base_menuitem_queryset')
     def make_some_changes(
@@ -193,7 +193,7 @@ This hook allows you to modify the list **before** it is 'primed' (a process tha
 
 .. code-block:: python
 
-    from wagtail.wagtailcore import hooks
+    from wagtail.core import hooks
 
     @hooks.register('menus_modify_raw_menu_items')
     def make_some_changes(
@@ -233,7 +233,7 @@ This hook allows you to modify the list of items **after** they have been 'prime
 
 .. code-block:: python
 
-    from wagtail.wagtailcore import hooks
+    from wagtail.core import hooks
 
     @hooks.register('menus_modify_primed_menu_items')
     def make_some_changes(

@@ -158,7 +158,7 @@ Wagtail has a restriction that forbids models from subclassing more than one oth
         
         # appname/models.py
 
-        from wagtail.wagtailforms.models import AbstractEmailForm
+        from wagtail.contrib.forms.models import AbstractEmailForm
         from wagtailmenus.models import MenuPageMixin
         from wagtailmenus.panels import menupage_panel
 

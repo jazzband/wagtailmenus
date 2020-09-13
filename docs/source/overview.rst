@@ -203,7 +203,7 @@ Solves the problem of important page links becoming just 'toggles' in multi-leve
 =======================================================================================
 
 Extend the ``wagtailmenus.models.MenuPage`` model instead of the usual
-``wagtail.wagtailcore.models.Page`` model to create your custom page types, and gain a
+``wagtail.core.models.Page`` model to create your custom page types, and gain a
 couple of extra fields that will allow you to configure certain pages to appear again
 alongside their children in multi-level menus. Use the menu tags provided, and that
 behaviour will remain consistent in all menus throughout your site. To find out more,
