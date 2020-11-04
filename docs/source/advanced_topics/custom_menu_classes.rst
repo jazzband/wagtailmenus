@@ -31,7 +31,7 @@ If you're happy with the default ``MainMenu`` model, but wish customise the menu
         # appname/models.py
 
         from django.db import models
-        from django.utils.translation import ugettext_lazy as _
+        from django.utils.translation import gettext_lazy as _
         from modelcluster.fields import ParentalKey
         from wagtail.images import get_image_model_string
         from wagtail.images.edit_handlers import ImageChooserPanel
@@ -110,7 +110,7 @@ If you also need to override the ``MainMenu`` model, that's possible too. But, b
 
         from django.db import models
         from django.utils import translation
-        from django.utils.translation import ugettext_lazy as _
+        from django.utils.translation import gettext_lazy as _
         from django.utils import timezone
         from modelcluster.fields import ParentalKey
         from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel
@@ -206,7 +206,7 @@ If you're happy with the default ``FlatMenu`` model, but wish customise the menu
         # apname/models.py
 
         from django.db import models
-        from django.utils.translation import ugettext_lazy as _
+        from django.utils.translation import gettext_lazy as _
         from modelcluster.fields import ParentalKey
         from wagtail.images import get_image_model_string
         from wagtail.images.edit_handlers import ImageChooserPanel
@@ -287,7 +287,7 @@ If you also need to override the ``FlatMenu`` model, that's possible too. But, b
 
         from django.db import models
         from django.utils import translation
-        from django.utils.translation import ugettext_lazy as _
+        from django.utils.translation import gettext_lazy as _
         from modelcluster.fields import ParentalKey
         from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel
         from wagtailmenus.conf import settings
@@ -436,7 +436,7 @@ The class ``wagtailmenus.models.menus.SectionMenu`` is used by default, but you 
 
     # mysite/appname/models.py
 
-    from django.utils.translation import ugettext_lazy as _
+    from django.utils.translation import gettext_lazy as _
     from wagtail.core.models import Page
     from wagtailmenus.models import SectionMenu
 
@@ -471,7 +471,7 @@ The class ``wagtailmenus.models.menus.ChildrenMenu`` is used by default, but you
 
     # appname/menus.py
 
-    from django.utils.translation import ugettext_lazy as _
+    from django.utils.translation import gettext_lazy as _
     from wagtail.core.models import Page
     from wagtailmenus.models import ChildrenMenu
 
