@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.urls import reverse
 from django.utils.functional import SimpleLazyObject
 from wagtailmenus.conf import settings
 from wagtailmenus.utils.misc import (
@@ -7,6 +8,8 @@ from wagtailmenus.utils.misc import (
 
 
 def wagtailmenus(request):
+    if request.path.startswith(reverse("wagtailadmin_home")):
+        return {}
 
     def _get_wagtailmenus_vals():
         current_page = request.META.get('WAGTAILMENUS_CURRENT_PAGE')
