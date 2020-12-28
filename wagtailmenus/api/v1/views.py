@@ -129,7 +129,7 @@ class BaseMenuGeneratorView(MenuAPIView):
             % cls.__name__
         )
 
-    def get_menu_instance(self, **kwargs):
+    def get_object(self, **kwargs):
         """
         The Menu classes themselves are responsible for getting/creating menu
         instances and preparing them for rendering. So, the role of this
@@ -225,7 +225,7 @@ class BaseMenuGeneratorView(MenuAPIView):
             option_serializer.validated_data.get('language', translation.get_language())
         ):
             # Get a menu instance using the valid data
-            menu_instance = self.get_menu_instance(**option_serializer.validated_data)
+            menu_instance = self.get_object(**option_serializer.validated_data)
 
             # Create a serializer for this menu instance
             menu_serializer = self.get_result_serializer(menu_instance)
