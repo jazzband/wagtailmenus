@@ -1,6 +1,6 @@
 {% load menu_tags %}
 <div class="flat-menu {{ menu_handle }} {% if menu_heading %}with_heading{% else %}no_heading{% endif %}">
-    {% if menu_heading %}<h4>{{ menu_heading|safe }}</h4>{% endif %}
+    {% if show_menu_heading and menu_heading %}<h4>{{ menu_heading|safe }}</h4>{% endif %}
     {% if menu_items %}
     <ul>
         {% for item in menu_items %}
