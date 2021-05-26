@@ -74,7 +74,7 @@ However, if you'd like to filter this result down further, you can do so using s
         Ensure only pages 'owned' by the currently logged in user are included.
         NOTE: MUST ALWAYS RETURN A QUERYSET
         """
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return queryset.none()
         return queryset.filter(owner=request.user)
 
@@ -99,7 +99,7 @@ Or, if you only wanted to change the queryset for a menu of a specific type, you
         NOTE: MUST ALWAYS RETURN A QUERYSET
         """
         if menu_type in ('main_menu', 'flat_menu'):
-            if not request.user.is_authenticated():
+            if not request.user.is_authenticated:
                 return queryset.none()
             queryset = queryset.filter(owner=request.user)
 
@@ -138,7 +138,7 @@ However, if you'd only like to include a subset of the CMS-defined menu item, or
         """
         if(
             current_site.hostname.startswith('intranet.') and
-            request.user.is_authenticated()
+            request.user.is_authenticated
         ):
             queryset = queryset.exclude(handle__contains="visiting-only")
         return queryset  # always return a queryset
@@ -166,7 +166,7 @@ These changes would be applied to all menu types that use menu items to define t
             original_menu_tag == 'flat_menu' and
             menu_instance.handle == 'action-links' and
             current_site.hostname.startswith('intranet.') and
-            request.user.is_authenticated()
+            request.user.is_authenticated
         ):
             queryset = queryset.exclude(handle__contains="visiting-only")
         return queryset  # always return a queryset
