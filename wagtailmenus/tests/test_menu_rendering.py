@@ -121,7 +121,7 @@ class TestTemplateTags(TestCase):
         <div id="main-menu-two-levels">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/">Home</a></li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                         <li class=""><a href="/about-us/">Section home</a></li>
@@ -130,7 +130,7 @@ class TestTemplateTags(TestCase):
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
@@ -139,7 +139,7 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
                         <li class="support"><a href="/contact-us/#support">Get support</a></li>
@@ -165,11 +165,11 @@ class TestTemplateTags(TestCase):
         <div id="main-menu-three-levels">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/">Home</a></li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                         <li class=""><a href="/about-us/">Section home</a></li>
-                        <li class=" dropdown">
+                        <li class="dropdown">
                             <a href="/about-us/meet-the-team/" class="dropdown-toggle" id="ddtoggle_7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Meet the team <span class="caret"></span></a>
                             <ul class="dropdown-menu" aria-labelledby="ddtoggle_7">
                                 <li class=""><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
@@ -181,7 +181,7 @@ class TestTemplateTags(TestCase):
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
@@ -190,7 +190,7 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
                         <li class="support"><a href="/contact-us/#support">Get support</a></li>
@@ -218,7 +218,7 @@ class TestTemplateTags(TestCase):
                 <li class="active">
                     <a href="http://www.wagtailmenus.co.uk:8000/">Home</a>
                 </li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="http://www.wagtailmenus.co.uk:8000/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                         <li class="">
@@ -235,7 +235,7 @@ class TestTemplateTags(TestCase):
                         </li>
                     </ul>
                 </li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class="">
@@ -252,7 +252,7 @@ class TestTemplateTags(TestCase):
                 <li class="">
                     <a href="http://google.co.uk">Google</a>
                 </li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="http://www.wagtailmenus.co.uk:8000/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
                         <li class="support">
@@ -385,7 +385,7 @@ class TestTemplateTags(TestCase):
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
@@ -394,7 +394,7 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
                         <li class="support"><a href="/contact-us/#support">Get support</a></li>
@@ -426,7 +426,7 @@ class TestTemplateTags(TestCase):
                         <li class="active">
                             <a href="/about-us/">Section home</a>
                         </li>
-                        <li class=" dropdown">
+                        <li class="dropdown">
                             <a href="/about-us/meet-the-team/" class="dropdown-toggle" id="ddtoggle_7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Meet the team <span class="caret"></span></a>
                             <ul class="dropdown-menu" aria-labelledby="ddtoggle_7">
                                 <li class=""><a href="/about-us/meet-the-team/staff-member-one/">Staff member one</a></li>
@@ -438,7 +438,7 @@ class TestTemplateTags(TestCase):
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
@@ -447,7 +447,7 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
                         <li class="support"><a href="/contact-us/#support">Get support</a></li>
@@ -475,7 +475,7 @@ class TestTemplateTags(TestCase):
                     <li class="active">
                         <a href="http://www.wagtailmenus.co.uk:8000/">Home</a>
                     </li>
-                    <li class=" dropdown">
+                    <li class="dropdown">
                         <a href="http://www.wagtailmenus.co.uk:8000/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                         <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                             <li class="">
@@ -492,7 +492,7 @@ class TestTemplateTags(TestCase):
                             </li>
                         </ul>
                     </li>
-                    <li class=" dropdown">
+                    <li class="dropdown">
                         <a href="http://www.wagtailmenus.co.uk:8000/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                         <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                             <li class="">
@@ -509,7 +509,7 @@ class TestTemplateTags(TestCase):
                     <li class="">
                         <a href="http://google.co.uk">Google</a>
                     </li>
-                    <li class=" dropdown">
+                    <li class="dropdown">
                         <a href="http://www.wagtailmenus.co.uk:8000/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
                         <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
                             <li class="support">
@@ -909,7 +909,7 @@ class TestTemplateTags(TestCase):
         <div id="main-menu-two-levels">
             <ul class="nav navbar-nav">
                 <li class=""><a href="/">Home</a></li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_6">
                         <li class=""><a href="/about-us/">Section home</a></li>
@@ -918,7 +918,7 @@ class TestTemplateTags(TestCase):
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
@@ -927,7 +927,7 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
                         <li class="support"><a href="/contact-us/#support">Get support</a></li>
@@ -1007,7 +1007,7 @@ class TestTemplateTags(TestCase):
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
@@ -1016,7 +1016,7 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
                         <li class="support"><a href="/contact-us/#support">Get support</a></li>
@@ -1106,7 +1106,7 @@ class TestTemplateTags(TestCase):
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_14">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
@@ -1115,7 +1115,7 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="ddtoggle_18">
                         <li class="support"><a href="/contact-us/#support">Get support</a></li>
@@ -1215,7 +1215,7 @@ class TestTemplateTags(TestCase):
         <div id="main-menu-sub-menu-templates">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/">Home</a></li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/about-us/" class="dropdown-toggle" id="ddtoggle_6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
                     <ul class="sub-menu-level-2" data-level="2">
                         <li class=""><a href="/about-us/">Section home</a></li>
@@ -1231,7 +1231,7 @@ class TestTemplateTags(TestCase):
                         <li class=""><a href="/about-us/mission-and-values/">Our mission and values</a></li>
                     </ul>
                 </li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/news-and-events/" class="dropdown-toggle" id="ddtoggle_14" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">News &amp; events <span class="caret"></span></a>
                     <ul class="sub-menu-level-2" data-level="2">
                         <li class=""><a href="/news-and-events/latest-news/">Latest news</a></li>
@@ -1240,7 +1240,7 @@ class TestTemplateTags(TestCase):
                     </ul>
                 </li>
                 <li class=""><a href="http://google.co.uk">Google</a></li>
-                <li class=" dropdown">
+                <li class="dropdown">
                     <a href="/contact-us/" class="dropdown-toggle" id="ddtoggle_18" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Contact us <span class="caret"></span></a>
                     <ul class="sub-menu-level-2" data-level="2">
                         <li class="support"><a href="/contact-us/#support">Get support</a></li>
