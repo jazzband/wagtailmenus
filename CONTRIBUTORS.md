@@ -22,6 +22,7 @@
 * Dan Bentley (danbentley)
 * Arkadiusz Michał Ryś (ArkadiuszMichalRys)
 * Sekani Tembo (Method Softworks)
+* Fernando Cordeiro (MrCordeiro)
 
 ## Translators
 

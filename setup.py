@@ -18,7 +18,7 @@ requires = [
 ]
 
 testing_extras = [
-    'beautifulsoup4<4.6.1,>=4.5.1',
+    'beautifulsoup4',
     'coverage>=4.5',
     'django-webtest>=1.9,<1.10',
 ]
@@ -68,11 +68,17 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Framework :: Django',
         'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.0',
         'Framework :: Django :: 2.1',
+        'Framework :: Django :: 2.2',
         'Framework :: Django :: 3.0',
+        'Framework :: Django :: 3.1',
+        'Framework :: Django :: 3.2',
+        'Framework :: Django :: 4.0',
         'Framework :: Wagtail :: 2',
         'Topic :: Internet :: WWW/HTTP',
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",

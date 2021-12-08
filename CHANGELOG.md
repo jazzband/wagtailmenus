@@ -5,6 +5,7 @@ Changelog
 ------------------
 
 * Added support for Wagtail 2.10 (no code changes necessary)
+* Added support for Django 4.0
 * Updated menu classes to better support cases where 'request' and 'site' are not available in the context
 
 
