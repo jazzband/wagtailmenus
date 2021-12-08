@@ -7,3 +7,4 @@ Advanced topics
 
     hooks
     custom_menu_classes
+    recipes
