@@ -104,7 +104,7 @@ Installing wagtailmenus
 
     .. code-block:: console
 
-        python manage.py autopopulate_main_menus --add-home-links=True
+        python manage.py autopopulate_main_menus --add-home-links
 
     This would create a main menu with the following items:
 
