@@ -1,6 +1,6 @@
-.. image:: https://travis-ci.org/rkhleics/wagtailmenus.svg?branch=master
-    :alt: Build Status
-    :target: https://travis-ci.org/rkhleics/wagtailmenus
+.. image:: https://jazzband.co/static/img/badge.svg
+   :target: https://jazzband.co/
+   :alt: Jazzband
 
 .. image:: https://img.shields.io/pypi/v/wagtailmenus.svg
     :alt: PyPi Version
