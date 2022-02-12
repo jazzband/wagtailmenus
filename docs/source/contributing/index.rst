@@ -20,7 +20,7 @@ The `issue tracker <https://github.com/jazzband/wagtailmenus/issues>`_ is the pr
 Submitting translations
 =======================
 
-Please submit any new or improved translations through `Transifex <https://www.transifex.com/jazzband/wagtailmenus/>`_.
+Please submit any new or improved translations (both `.po` and `.mo` files) as a new PR.
 
 
 Contributing code changes via pull requests

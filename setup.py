@@ -38,9 +38,7 @@ documentation_extras = [
     'sphinx_rtd_theme>=0.3',
 ]
 
-deployment_extras = [
-    'transifex-client',
-]
+deployment_extras = []
 
 setup(
     name="wagtailmenus",

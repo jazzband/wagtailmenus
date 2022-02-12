@@ -7,7 +7,7 @@ Changelog
 * Added support for Wagtail 2.10 (no code changes necessary).
 * Updated menu classes to better support cases where 'request' and 'site' are not available in the context.
 * Transfered project to [Jazzband](https://jazzband.co).
-
+* Removed project from Transifex.
 
 3.0.2 (18.06.2020)
 ------------------
@@ -16,12 +16,10 @@ Changelog
 * Added compatibility with Django Sites Framework (Sekani Tembo).
 * Various documentation updates.
 
-
 3.0.1 (08.02.2020)
 ------------------
 
 * Added support for Django 3.0 and Wagtail 2.8 (thanks to Arkadiusz Michał Ryś).
-
 
 3.0 (07.11.2019)
 ----------------
@@ -38,13 +36,11 @@ Changelog
 * Fix: [#329](https://github.com/jazzband/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
 * Fix: [#323](https://github.com/jazzband/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
 
-
 2.13.1 (21.05.2019)
 -------------------
 
 * Fix: [#329](https://github.com/jazzband/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
 * Fix: [#323](https://github.com/jazzband/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
-
 
 2.13 (16.03.2019)
 -----------------
@@ -61,13 +57,11 @@ Changelog
 * Documentation typo correction and other improvements (DanAtShenTech).
 * Fix an issue where the `WAGTAILMENUS_USE_CONDENSEDINLINEPANEL` setting wasn't being respected.
 
-
 2.12.1 (XX.XX.XXXX)
 -------------------
 
 * Fix: [#329](https://github.com/jazzband/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
 * Fix: [#323](https://github.com/jazzband/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
-
 
 2.12 (17.11.2018)
 -----------------
@@ -87,7 +81,6 @@ indication of what the method does.
 * Removed support for the deprecated ``WAGTAILMENUS_SECTION_MENU_CLASS_PATH`` setting.
 * Removed the deprecated ``wagtailmenus.constants`` module.
 
-
 2.11.1 (10.09.2018)
 -------------------
 
@@ -95,7 +88,6 @@ indication of what the method does.
 * Updated tox config to test against Python 3.7 and Wagtail 2.2.
 * Updated Travis CI config to deploy to PyPi automatically when commits are tagged appropriately.
 * Pinned django-cogwheels dependency to version 0.2 to reduce potential for backwards-incompatibility issues.
-
 
 2.11.0 (15.07.2018)
 -------------------
@@ -116,12 +108,10 @@ indication of what the method does.
 * Replaced custom app settings module with `django-cogwheels` and removed a lot of the tests that existed to test its workings.
 * Moved remaining app settings tests to `wagtailmenus.conf.tests`.
 
-
 2.10.1 (XX.XX.XXXX)
 -------------------
 
 * Fix: [#329](https://github.com/jazzband/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
-
 
 2.10.0 (14.06.2018)
 -------------------
@@ -136,7 +126,6 @@ indication of what the method does.
 * Deprecated the ``WAGTAILMENUS_SECTION_MENU_CLASS_PATH`` setting in favour of using just ``WAGTAILMENUS_SECTION_MENU_CLASS``.
 * Added Latin American Spanish translations (thanks to José Luis).
 
-
 2.9.0 (06.05.2018)
 ------------------
 
@@ -144,7 +133,6 @@ indication of what the method does.
 * Added `WAGTAILMENUS_FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN` setting to the 'Flat menus' menu item and underlying management functionality to be removed from the Wagtail admin area (thanks to Michael van de Waeter).
 * Added the 'sub_menu_templates' option to menu tags to allow sub menu templates to be specified for each level.
 * Updated 'get_template_names()' and 'get_sub_menu_template_names()' methods for each class to search for template paths including the level currently being rendered, allowing developers to define level-specific templates in their templates directory, and have wagtailmenus find and use them automatically.
-
 
 2.8.0 (29.03.2018)
 ------------------
@@ -157,7 +145,6 @@ indication of what the method does.
 * Removed `main_menu_panels` and `flat_menu_panels` from `wagtailmenus.panels`.
 * Various documentation spelling/formatting corrections (thanks to Sergey Fedoseev and Pierre Manceaux).
 
-
 2.7.1 (07.03.2018)
 ------------------
 
@@ -166,7 +153,6 @@ indication of what the method does.
 * Added a badge to README.rst to indicate the documentation build status.
 * Added a missing 'migrate' step to the **Developing locally** instructions in the contribution guidelines.
 * Updated the code block in the **.po to .mo** conversion step in the packaging guidelines to the `find` command with `execdir`.
-
 
 2.7.0 (01.03.2018)
 ------------------
@@ -196,7 +182,6 @@ indication of what the method does.
   the `handle` field when using the `FLAT_MENUS_HANDLE_CHOICES` setting
   (Contributed by @jeromelebleu)
 
-
 2.6.0 (22.12.2017)
 ------------------
 
@@ -207,14 +192,12 @@ indication of what the method does.
   their own tab.
 * Updated tests to test compatibility with Wagtail 1.13.
 
-
 2.5.1 (27.10.2017)
 ------------------
 
 * Fixed a bug that was causing Django to create new migrations for wagtailmenus
   after changing Django's `LANGUAGE_CODE` setting for a project. Thanks to
   @philippbosch from A Color Bright for the fix.
-
 
 2.5.0 (14.10.2017)
 ------------------
@@ -224,7 +207,7 @@ indication of what the method does.
 * Added support for several 'hooks', allowing for easier customisation of base
   querysets and manipulation of menu items during rendering. For more
   information and examples, see the 'Hooks' section of the documentation:
-  http://wagtailmenus.readthedocs.io/en/latest/advanced_topics/hooks.html
+  <http://wagtailmenus.readthedocs.io/en/latest/advanced_topics/hooks.html>
 * Updated the 'sub_menu' tag to raise an error if used in a way that isn't
   supported.
 * Deprecated `get_sub_menu_items_for_page` and `prime_menu_items` methods from
@@ -258,7 +241,6 @@ indication of what the method does.
   by moving it out into a separate 'get_top_level_items()' method, which the
   original (@cached_property decorated) method calls.
 
-
 2.4.0 (04.08.2017)
 ------------------
 
@@ -270,14 +252,13 @@ indication of what the method does.
 * Replaced overly long README.md with brand new documentation and a new
   README.rst which will render better on PyPi. The documentation is kindly
   hosted by readthedocs.org and can be found at
-  http://wagtailmenus.readthedocs.io/
+  <http://wagtailmenus.readthedocs.io/>
 * Added Chinese translations, kindly submitted by 汇民 王 (levinewong)
 * Added the 'use_absolute_page_urls' argument to all template tags. When a
   value equating to `True` is provided, the menu will be rendered using the
   'full URL' for each page (including the protocol/domain derived from the
   relevant `wagtailcore.models.Site` object), instead the 'relative URL' used
   by default. Developed by Trent Holliday of Morris Technology and Andy Babic.
-
 
 2.3.2 (21.07.2017)
 ------------------
@@ -286,7 +267,6 @@ indication of what the method does.
   until raising a "maximum recursion depth exceeded" exception) if a
   'repeated menu item' was added at anything past the 2nd level. Thanks to
   @pyMan for raising/investigating.
-
 
 2.3.1 (01.07.2017)
 ------------------
@@ -297,7 +277,6 @@ indication of what the method does.
 * Marked a missing string for translation (@einsfr).
 * Updated translations for Lithuanian, Portuguese (Brazil), and Russian.
   Many thanks to @mamorim, @matas.dailyda and @einsfr!
-
 
 2.3.0 (21.06.2017)
 ------------------
@@ -333,7 +312,6 @@ indication of what the method does.
   related models added to the editor interface using `InlinePanel`.
 * Added Russian translations (submitted by Alex einsfr).
 
-
 2.2.3 (21.07.2017)
 ------------------
 
@@ -341,7 +319,6 @@ indication of what the method does.
   until raising a "maximum recursion depth exceeded" exception) if a
   'repeated menu item' was added at anything past the 2nd level. Thanks to
   @pyMan for raising/investigating.
-
 
 2.2.2 (27.03.2017)
 ------------------
@@ -352,7 +329,6 @@ indication of what the method does.
 * Add Lithuanian translations (submitted by Matas Dailyda).
 * Better handle situations where `request` isn't available in the context, or
   `request.site` hasn't been set.
-
 
 2.2.1 (06.03.2017)
 ------------------
@@ -367,7 +343,6 @@ indication of what the method does.
   django-allauth).
 * Added new symantic version handling to the project (solution inspired by
   wagtail)
-
 
 2.2.0 (20.02.2017)
 ------------------
@@ -387,7 +362,6 @@ indication of what the method does.
 * Added try/except to `AbstractMenuItem.relative_url()` so that errors aren't
   thrown when `Page.relative_url` returns `None` for some reason.
 
-
 2.1.4 (21.07.2017)
 ------------------
 
@@ -395,7 +369,6 @@ indication of what the method does.
   until raising a "maximum recursion depth exceeded" exception) if a
   'repeated menu item' was added at anything past the 2nd level. Thanks to
   @pyMan for raising/investigating.
-
 
 2.1.3 (20.01.2017)
 ------------------
@@ -405,7 +378,6 @@ indication of what the method does.
   been overridden to return additional items without an `active_class`
   attribute (like in the example code in README).
 
-
 2.1.2 (07.01.2017)
 ------------------
 
@@ -413,12 +385,10 @@ indication of what the method does.
   after saving. The Meta class on the new abstract models had knocked out the
   `sort_order` ordering from `wagtail.wagtailcore.models.Orderable`.
 
-
 2.1.1 (02.01.2017)
 ------------------
 
 * Fixed import error on pip install from version 2.1.0 (Adriaan Tijsseling)
-
 
 2.1.0 (28.12.2016)
 ------------------
@@ -437,24 +407,20 @@ indication of what the method does.
 * Added german translation by Pierre (@bloodywing).
 * Split models.py into 3 logically-named files to make models easier to find.
 
-
 2.0.3 (08.12.2016)
 ------------------
 
 Fixed migration related issue raised by @urlsangel.
-
 
 2.0.2 (08.12.2016)
 ------------------
 
 This release is broken and shouldn't be used. Skip to v2.0.3 instead.
 
-
 2.0.1 (22.11.2016)
 ------------------
 
 Bug fix for `main_menu` template tag.
-
 
 2.0.0 (19.11.2016)
 ------------------
@@ -508,12 +474,10 @@ Bug fix for `main_menu` template tag.
   styles to be disabled.
 * Other minor performance improvements.
 
-
 1.6.1 (04.11.2016)
 ------------------
 
 * French translations added by François GUÉRIN (frague59)
-
 
 1.6.0 (28.10.2016)
 ------------------
@@ -539,7 +503,6 @@ Bug fix for `main_menu` template tag.
   set, will turn the `CharField` used for FlatMenu.handle in add/edit/copy
   forms into a `ChoiceField`, with that setting as the available choices.
 
-
 1.5.1 (10.10.2016)
 ------------------
 
@@ -553,7 +516,6 @@ Bug fix for `main_menu` template tag.
 * Fixed a migration-related issue that was Django to create new migrations for
   the app.
 * Fixed an issue where not all help text was marked for translation.
-
 
 1.5.0 (05.10.2016)
 ------------------
@@ -576,13 +538,12 @@ Bug fix for `main_menu` template tag.
 * Added a `handle` to `MenuItem` model to provide a string which can be
   used to do specific matching of menu items in the template. (Tim Leguijt)
 
-
 1.4.1 (02.10.2016)
 ------------------
 
 * Updated FlatMenu listing in CMS to include a column for `site`, a filter for
   `handle`, and a MenuItem count for each object. Also added default ordering,
-  and output the handle value in a <code></code> tag to make it stand out.
+  and output the handle value in a `<code></code>` tag to make it stand out.
 * Made it easier to develop and debug wagtailmenus locally, by running it as a
   Django project. See CONTRIBUTING.md for instructions.
 * Added a `get_for_site` class method to the FlatMenu model, to be consistent
@@ -591,7 +552,6 @@ Bug fix for `main_menu` template tag.
   of these.
 * Fixed an minor bug in the `prime_menu_items` method, where a `depth`
   value was hard-coded, instead of utilising the `SECTION_ROOT_LEVEL` setting.
-
 
 1.4.0 (22.09.2016)
 ------------------
@@ -613,7 +573,6 @@ Bug fix for `main_menu` template tag.
   `relative_url` method on the specific page to determine a menu item's `href`
   value, meaning overrides to that method will be respected.
 
-
 1.3.1 (09.08.2016)
 ------------------
 
@@ -624,7 +583,6 @@ Bug fix for `main_menu` template tag.
 * Added further tests for path matching.
 * Reduced the number of unnecessary calls to `Page.specific` in `menu_tags.py`
   where possible.
-
 
 1.3.0 (06.08.2016)
 ------------------
@@ -637,7 +595,6 @@ Bug fix for `main_menu` template tag.
   and `sub_menu` tags. A DRYer approach, that is easier to extend/override to
   meet custom needs.
 
-
 1.2.3 (25.07.2016)
 ------------------
 
@@ -647,9 +604,8 @@ Bug fix for `main_menu` template tag.
 * Added tests for Python 3.4 and 3.5 to confirm compatibility
 * Added CONTRIBUTORS.rst
 
-
 1.2.2 (06.07.2016)
 ------------------
 
- * Added this changelog :)
- * Added `WAGTAILMENUS_SECTION_ROOT_DEPTH` setting support, for more consistent identification of 'section root' pages
+* Added this changelog :)
+* Added `WAGTAILMENUS_SECTION_ROOT_DEPTH` setting support, for more consistent identification of 'section root' pages
