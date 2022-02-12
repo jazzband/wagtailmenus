@@ -23,7 +23,7 @@ also slightly different for between menu types, and were difficult to explain
 in a way that made sense to everyone.
 
 The 'default' behaviour was also sub-optimal, as additional queries would often
-be made to fetch individual instances of ``MenuPage`` or``AbstractLinkPage``.
+be made to fetch individual instances of ``MenuPage`` or ``AbstractLinkPage``.
 If used quite widely, this could quietly push up the number of database queries
 to a point where fetching the specific pages in advance would have been
 far more performant.
