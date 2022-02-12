@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.1 (xx.02.2022)
+3.1 (12.02.2022)
 ------------------
 
 * Added support for Wagtail 2.10 (no code changes necessary).
