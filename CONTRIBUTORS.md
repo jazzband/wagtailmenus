@@ -7,7 +7,6 @@ This is a [Jazzband](https://jazzband.co/) project. By contributing you agree to
 * Andy Babic (ababic)
   twitter.com/andyjbabic
 
-
 ## Contributors
 
 * Adrian Tijsseling (adriaant)
@@ -26,6 +25,8 @@ This is a [Jazzband](https://jazzband.co/) project. By contributing you agree to
 * Dan Bentley (danbentley)
 * Arkadiusz Michał Ryś (ArkadiuszMichalRys)
 * Sekani Tembo (Method Softworks)
+* Fernando Cordeiro (MrCordeiro)
+  twitter.com/brauhaus
 
 ## Translators
 

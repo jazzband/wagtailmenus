@@ -82,7 +82,7 @@ Follow the steps outlined below to prep changes in your fork:
         git push
 
 13. Submit your changes as a PR to the main repository via
-    https://github.com/rkhleics/wagtailmenus/compare
+    https://github.com/jazzband/wagtailmenus/compare
 
 
 Packaging and pushing to PyPi
@@ -90,7 +90,7 @@ Packaging and pushing to PyPi
 
 When satisfied with the PR for preparing the files:
 
-1.  From https://github.com/rkhleics/wagtailmenus/pulls, merge the PR into the
+1.  From https://github.com/jazzband/wagtailmenus/pulls, merge the PR into the
     ``master`` branch using the "merge commit" option.
 
 2.  Locally, ``cd`` to the project's root directory, checkout the ``master``
@@ -144,7 +144,7 @@ When satisfied with the PR for preparing the files:
         git push --tags
 
 9. Edit the release notes for the release from
-    https://github.com/rkhleics/wagtailmenus/releases, by copying and pasting
+    https://github.com/jazzband/wagtailmenus/releases, by copying and pasting
     the content from ``docs/releases/x.x.x.rst``
 
 10. Crack open a beer - you earned it!

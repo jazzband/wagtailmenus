@@ -18,7 +18,7 @@ The newly added ``AbstractLinkPage`` model can be easily sub-classed and used
 in projects to create 'link pages' that act in a similar fashion to menu items
 when appearing in menus, but can be placed in any part of the page tree.
 
-`Find out more about this feature <https://github.com/rkhleics/wagtailmenus#using-the-abstractlinkpage-model>`_
+`Find out more about this feature <https://github.com/jazzband/wagtailmenus#using-the-abstractlinkpage-model>`_
 
 
 Introducing the ``MenuPageMixin`` model!

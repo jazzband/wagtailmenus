@@ -2,4 +2,4 @@
 Wagtailmenus 2.0.3 release notes
 ================================
 
-This is a maintenance release to fix a migration related issue raised by @urlsangel: https://github.com/rkhleics/wagtailmenus/issues/85 
+This is a maintenance release to fix a migration related issue raised by @urlsangel: https://github.com/jazzband/wagtailmenus/issues/85 

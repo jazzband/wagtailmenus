@@ -1,11 +1,12 @@
 Changelog
 =========
 
-3.1 IN DEVELOPMENT
+3.1 (xx.02.2022)
 ------------------
 
-* Added support for Wagtail 2.10 (no code changes necessary)
-* Updated menu classes to better support cases where 'request' and 'site' are not available in the context
+* Added support for Wagtail 2.10 (no code changes necessary).
+* Updated menu classes to better support cases where 'request' and 'site' are not available in the context.
+* Transfered project to [Jazzband](https://jazzband.co).
 
 
 3.0.2 (18.06.2020)
@@ -34,15 +35,15 @@ Changelog
 * Added support for Python 3.8.
 * Removed support for `get_sub_menu_templates()` methods that do not accept a **level** argument.
 * Removed recommendation / automatic integration for `wagtail-condensedinlinepanel`.
-* Fix: [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
-* Fix: [#323](https://github.com/rkhleics/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
+* Fix: [#329](https://github.com/jazzband/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
+* Fix: [#323](https://github.com/jazzband/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
 
 
 2.13.1 (21.05.2019)
 -------------------
 
-* Fix: [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
-* Fix: [#323](https://github.com/rkhleics/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
+* Fix: [#329](https://github.com/jazzband/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
+* Fix: [#323](https://github.com/jazzband/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
 
 
 2.13 (16.03.2019)
@@ -64,8 +65,8 @@ Changelog
 2.12.1 (XX.XX.XXXX)
 -------------------
 
-* Fix: [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
-* Fix: [#323](https://github.com/rkhleics/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
+* Fix: [#329](https://github.com/jazzband/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
+* Fix: [#323](https://github.com/jazzband/wagtailmenus/issues/323), which prevented `StreamField` from working properly when creating or editing menus with custom item models.
 
 
 2.12 (17.11.2018)
@@ -119,7 +120,7 @@ indication of what the method does.
 2.10.1 (XX.XX.XXXX)
 -------------------
 
-* Fix: [#329](https://github.com/rkhleics/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
+* Fix: [#329](https://github.com/jazzband/wagtailmenus/issues/329), which prevented level-specific template naming from working as specified in the docs.
 
 
 2.10.0 (14.06.2018)

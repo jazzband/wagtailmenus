@@ -14,13 +14,13 @@ We welcome all support, whether on bug reports, code, reviews, tests, documentat
 Using the issue tracker
 =======================
 
-The `issue tracker <https://github.com/rkhleics/wagtailmenus/issues>`_ is the preferred channel for bug reports, features requests and submitting pull requests. Please don't use the issue tracker for support requests. If you need help with something that isn't a bug, you can join our `Wagtailmenus support group <https://groups.google.com/forum/#!forum/wagtailmenus-support-requests>`_ and ask your question there.
+The `issue tracker <https://github.com/jazzband/wagtailmenus/issues>`_ is the preferred channel for bug reports, features requests and submitting pull requests. Please don't use the issue tracker for support requests. If you need help with something that isn't a bug, you can join our `Wagtailmenus support group <https://groups.google.com/forum/#!forum/wagtailmenus-support-requests>`_ and ask your question there.
 
 
 Submitting translations
 =======================
 
-Please submit any new or improved translations through `Transifex <https://www.transifex.com/rkhleics/wagtailmenus/>`_.
+Please submit any new or improved translations through `Transifex <https://www.transifex.com/jazzband/wagtailmenus/>`_.
 
 
 Contributing code changes via pull requests
