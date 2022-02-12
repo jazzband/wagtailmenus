@@ -9,7 +9,7 @@ What's changed?
 ===============
 
 * Update codebase to better handle situations where ``request`` isn't available in the context when rendering, or ``request.site`` hasn't been set.
-* Got the project set up in Transifex (finally!): https://www.transifex.com/rkhleics/wagtailmenus/
+* Got the project set up in Transifex (finally!): https://www.transifex.com/jazzband/wagtailmenus/
 * Updated translatable strings throughout the project to use named variable substitution, and unmarked a few exception messages.
 * Added Lithuanian translations (submitted by Matas Dailyda).
 

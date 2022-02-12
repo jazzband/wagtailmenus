@@ -14,13 +14,13 @@ We welcome all support, whether on bug reports, code, reviews, tests, documentat
 Using the issue tracker
 =======================
 
-The `issue tracker <https://github.com/rkhleics/wagtailmenus/issues>`_ is the preferred channel for bug reports, features requests and submitting pull requests. Please don't use the issue tracker for support requests. If you need help with something that isn't a bug, you can join our `Wagtailmenus support group <https://groups.google.com/forum/#!forum/wagtailmenus-support-requests>`_ and ask your question there.
+The `issue tracker <https://github.com/jazzband/wagtailmenus/issues>`_ is the preferred channel for bug reports, features requests and submitting pull requests. Please don't use the issue tracker for support requests. If you need help with something that isn't a bug, you can join our `Wagtailmenus support group <https://groups.google.com/forum/#!forum/wagtailmenus-support-requests>`_ and ask your question there.
 
 
 Submitting translations
 =======================
 
-Please submit any new or improved translations through `Transifex <https://www.transifex.com/rkhleics/wagtailmenus/>`_.
+Please submit any new or improved translations (both `.po` and `.mo` files) as a new PR.
 
 
 Contributing code changes via pull requests
@@ -51,15 +51,15 @@ following criteria:
 Developing locally
 ==================
 
-If you'd like a runnable Django project to help with development of wagtailmenus, follow these steps to get started (Mac only). The development environment has ``django-debug-toolbar`` and some other helpful packages installed to help you debug with your code as you develop:
+If you'd like a runnable Django project to help with development of wagtailmenus, follow these steps to get started. The development environment has ``django-debug-toolbar`` and some other helpful packages installed to help you debug with your code as you develop:
 
-1.  In a Terminal window, ``cd`` to the project’s root directory, and run:
+1.  In a Terminal window, ``cd`` to the project's root directory, and run:
 
     .. code-block:: console
 
-        mkvirtualenv wagtailmenus
+        python3 -m venv .venv
         pip install -e '.[development]' -U
-        setvirtualenvproject
+        source .venv/bin/activate
 
 2.  Create a copy of the development settings:
 
@@ -113,7 +113,7 @@ It's important that any new code is tested before submitting. To quickly test co
 
 .. code-block:: console
 
-    workon wagtailmenus
+    source .venv/bin/activate
     pip install -e '.[testing]' -U
 
 Then, run the following command to execute tests:
@@ -145,7 +145,7 @@ Building the documentation
 
     .. code-block:: console
 
-        workon wagtailmenus
+        source .venv/bin/activate
         pip install -e '.[docs]' -U
 
 2. ``cd`` into the ``docs`` directory to do documentation-related stuff:
@@ -154,7 +154,7 @@ Building the documentation
 
         cd docs
 
-3. Check for and correct any spelling errors raised by sphinx:
+3. Check for and correct any spelling errors raised by sphinx. If you're on Windows, please see `how to run make commands on Windows <http://gnuwin32.sourceforge.net/packages/make.htm>`_:
 
     .. code-block:: console
 

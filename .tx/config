@@ -1,9 +1,0 @@
-[main]
-host = https://www.transifex.com
-
-[wagtailmenus.djangopo]
-file_filter = wagtailmenus/locale/<lang>/LC_MESSAGES/django.po
-source_file = wagtailmenus/locale/en/LC_MESSAGES/django.po
-source_lang = en
-type = PO
-

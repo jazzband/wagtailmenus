@@ -124,7 +124,7 @@ This would generate a menu with the following structure (with ``max_levels=2``):
     └── Donate
 
 .. note::
-    Have you noticed how the aricle pages are not shown below the 'Latest news' item,
+    Have you noticed how the article pages are not shown below the 'Latest news' item,
     despite specifying ``allow_subnav=True`` on the menu item? Only pages with a
     ``show_in_menus`` value of ``True`` will be displayed (at any level) in rendered
     menus. The field is added by Wagtail, so is present for all custom page types.

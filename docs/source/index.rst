@@ -13,7 +13,7 @@ The current version is tested for compatibility with the following:
 
 To find out more about what wagtailmenus does and why, see :doc:`overview`
 
-To view the code, open an issue, or submit a pull request, view the `wagtailmenus project on github <https://github.com/rkhleics/wagtailmenus>`_.
+To view the code, open an issue, or submit a pull request, view the `wagtailmenus project on github <https://github.com/jazzband/wagtailmenus>`_.
 
 
 Below are some useful links to help you get you started:

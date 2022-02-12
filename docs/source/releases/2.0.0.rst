@@ -99,7 +99,7 @@ of the menu tags, you'll need to change that to one of the following:
 - ``use_specific=USE_SPECIFIC_TOP_LEVEL`` (or ``use_specific=2``)
 - ``use_specific=USE_SPECIFIC_ALWAYS`` (or ``use_specific=3``)
 
-See the following section of the README for further info: https://github.com/rkhleics/wagtailmenus/blob/v2.0.0/README.md#using-menupage
+See the following section of the README for further info: https://github.com/jazzband/wagtailmenus/blob/v2.0.0/README.md#using-menupage
 
 
 Changes to ``MenuPage.has_submenu_items()`` and ``MenuPage.modify_submenu_items()``
@@ -112,7 +112,7 @@ Firstly, the ``check_for_children`` argument is no longer supplied to ``has_subm
 Secondly, both the ``modify_submenu_items()`` and ``has_submenu_items()`` methods both accept an optional ``menu_instance`` argument, which you'll need to also accept.
 
 See the updated section of the README for corrected code examples:
-https://github.com/rkhleics/wagtailmenus/blob/v2.0.0/README.md#11-manipulating-sub-menu-items-for-specific-page-types
+https://github.com/jazzband/wagtailmenus/blob/v2.0.0/README.md#11-manipulating-sub-menu-items-for-specific-page-types
 
 
 Adding the ``context_processor`` to settings 

@@ -23,7 +23,7 @@ also slightly different for between menu types, and were difficult to explain
 in a way that made sense to everyone.
 
 The 'default' behaviour was also sub-optimal, as additional queries would often
-be made to fetch individual instances of ``MenuPage`` or``AbstractLinkPage``.
+be made to fetch individual instances of ``MenuPage`` or ``AbstractLinkPage``.
 If used quite widely, this could quietly push up the number of database queries
 to a point where fetching the specific pages in advance would have been
 far more performant.
@@ -54,8 +54,8 @@ Minor changes & bug fixes
 * Added support for Python 3.8.
 * Removed recommendation / automatic integration for ``wagtail-condensedinlinepanel``.
 * Optimised 'derive page from URL' and 'derive section root' logic.
-* Fixed bug `#329 <https://github.com/rkhleics/wagtailmenus/issues/329>`_, which prevented level-specific template naming from working as specified in the docs.
-* Fixed bug `#323 <https://github.com/rkhleics/wagtailmenus/issues/323>`_, which prevented ``StreamField`` from working properly when creating or editing menus with custom item models.
+* Fixed bug `#329 <https://github.com/jazzband/wagtailmenus/issues/329>`_, which prevented level-specific template naming from working as specified in the docs.
+* Fixed bug `#323 <https://github.com/jazzband/wagtailmenus/issues/323>`_, which prevented ``StreamField`` from working properly when creating or editing menus with custom item models.
 
 
 Upgrade considerations

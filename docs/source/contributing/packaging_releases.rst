@@ -82,7 +82,7 @@ Follow the steps outlined below to prep changes in your fork:
         git push
 
 13. Submit your changes as a PR to the main repository via
-    https://github.com/rkhleics/wagtailmenus/compare
+    https://github.com/jazzband/wagtailmenus/compare
 
 
 Packaging and pushing to PyPi
@@ -90,7 +90,7 @@ Packaging and pushing to PyPi
 
 When satisfied with the PR for preparing the files:
 
-1.  From https://github.com/rkhleics/wagtailmenus/pulls, merge the PR into the
+1.  From https://github.com/jazzband/wagtailmenus/pulls, merge the PR into the
     ``master`` branch using the "merge commit" option.
 
 2.  Locally, ``cd`` to the project's root directory, checkout the ``master``
@@ -109,42 +109,15 @@ When satisfied with the PR for preparing the files:
 
         pip install -e '.[deployment]' -U
 
-4.  Push any updated translation source files to Transifex:
-
-    .. code-block:: console
-
-        tx push -s -l en
-
-5.  Pull down updated translations from Transifex:
-
-    .. code-block:: console
-
-        tx pull --a
-        rm -r wagtailmenus/locale/en_GB/
-        git add *.po
-
-6.  Convert the ``.po`` files to ``.mo`` for each language by running:
-    
-    .. code-block:: console
-
-         find . -name \*.po -execdir msgfmt django.po -o django.mo \;
-
-7.  Commit and push all changes so far:
-    
-    .. code-block:: console
-
-        git commit -am 'Pulled updated translations from Transifex and converted to .mo'
-        git push
-
-8.  Create a new tag for the new version and push that too. Travis CI should deploy the new version directly to PyPI once it's finished building:
+4.  Create a new tag for the new version and push that too. Github Actions should deploy the new version directly to PyPI once it's finished building:
 
     .. code-block:: console
         
         git tag -a v2.X
         git push --tags
 
-9. Edit the release notes for the release from
-    https://github.com/rkhleics/wagtailmenus/releases, by copying and pasting
+5. Edit the release notes for the release from
+    https://github.com/jazzband/wagtailmenus/releases, by copying and pasting
     the content from ``docs/releases/x.x.x.rst``
 
-10. Crack open a beer - you earned it!
+6. Crack open a beer - you earned it!

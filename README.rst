@@ -10,13 +10,13 @@
     :alt: PyPi Version
     :target: https://pypi.python.org/pypi/wagtailmenus
 
-.. image:: https://github.com/rkhleics/wagtailmenus/actions/workflows/test.yml/badge.svg
+.. image:: https://github.com/jazzband/wagtailmenus/actions/workflows/test.yml/badge.svg
     :alt: Build Status
-    :target: https://github.com/rkhleics/wagtailmenus/actions/workflows/test.yml
+    :target: https://github.com/jazzband/wagtailmenus/actions/workflows/test.yml
 
-.. image:: https://codecov.io/gh/rkhleics/wagtailmenus/branch/master/graph/badge.svg
+.. image:: https://codecov.io/gh/jazzband/wagtailmenus/branch/master/graph/badge.svg
     :alt: Code coverage
-    :target: https://codecov.io/gh/rkhleics/wagtailmenus
+    :target: https://codecov.io/gh/jazzband/wagtailmenus
 
 .. image:: https://readthedocs.org/projects/wagtailmenus/badge/?version=latest
     :alt: Documentation Status
@@ -35,7 +35,7 @@ The current version is tested for compatibility with the following:
 - Django versions 1.11, 2.0, 2.2 and 3.0
 - Python versions 3.4 to 3.8
 
-.. image:: https://raw.githubusercontent.com/rkhleics/wagtailmenus/master/docs/source/_static/images/repeating-item.png
+.. image:: https://raw.githubusercontent.com/jazzband/wagtailmenus/master/docs/source/_static/images/repeating-item.png
 
 New to wagtailmenus?
 ====================
