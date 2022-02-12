@@ -98,7 +98,7 @@ When satisfied with the PR for preparing the files:
 
     .. code-block:: console
         
-        workon wagtailmenus
+        source .venv/bin/activate
         cd ../path-to-original-repo
         git checkout master
         git pull
