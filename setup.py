@@ -18,7 +18,7 @@ requires = [
 ]
 
 testing_extras = [
-    'beautifulsoup4<4.6.1,>=4.5.1',
+    'beautifulsoup4>=4.8,<4.10',
     'coverage>=4.5',
     'django-webtest>=1.9,<1.10',
 ]
