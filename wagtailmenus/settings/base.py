@@ -1,5 +1,4 @@
 import os
-from django.conf.global_settings import *  # NOQA
 
 DEBUG = True
 SITE_ID = 1
