@@ -1,7 +1,9 @@
 from django.db import models
 from modelcluster.fields import ParentalKey
+from rest_framework.fields import CharField
 from wagtail.admin.edit_handlers import (
     FieldPanel, MultiFieldPanel, PageChooserPanel)
+from wagtail.api import APIField
 
 from wagtailmenus.models import (
     SectionMenu, ChildrenMenu, AbstractMainMenu,
@@ -121,6 +123,11 @@ class CustomFlatMenu(AbstractFlatMenu):
         ),
         AbstractFlatMenu.content_panels[1],
     )
+
+    api_fields = [
+        APIField('handle'),
+        APIField('translated_heading', CharField(read_only=True)),
+    ]
 
 
 class CustomMainMenuItem(MultilingualMenuItem, AbstractMainMenuItem):

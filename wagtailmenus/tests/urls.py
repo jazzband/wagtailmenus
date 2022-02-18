@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 from django.views.generic import TemplateView
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
-
+from wagtailmenus.api import urls as api_urls
 
 urlpatterns = [
     url(r'^admin/', include(wagtailadmin_urls)),
@@ -17,5 +17,6 @@ urlpatterns = [
         TemplateView.as_view(template_name='page.html')),
     url(r'^news-and-events/$',
         TemplateView.as_view(template_name='page.html')),
+    url(r'menu_api/', include('wagtailmenus.api.urls')),
     url(r'', include(wagtail_urls)),
 ]

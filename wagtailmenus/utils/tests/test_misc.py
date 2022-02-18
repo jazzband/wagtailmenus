@@ -1,15 +1,22 @@
-from django.test import RequestFactory, TestCase, modify_settings
 from distutils.version import LooseVersion
+from unittest import mock
+
+from django.http import Http404
+from django.test import RequestFactory, TestCase, modify_settings
+
 from wagtail.core import __version__ as wagtail_version
 from wagtail.core.models import Page, Site
 
 from wagtailmenus.conf import defaults
 from wagtailmenus.utils.misc import (
-    derive_page, derive_section_root, get_fake_request, get_site_from_request
+    derive_page, derive_section_root, get_fake_request,
+    get_site_from_request
 )
 from wagtailmenus.tests.models import (
     ArticleListPage, ArticlePage, LowLevelPage, TopLevelPage
 )
+
+request_factory = RequestFactory()
 
 
 class TestGetFakeRequest(TestCase):
@@ -43,8 +50,6 @@ class TestDerivePage(TestCase):
     fixtures = ['test.json']
 
     def setUp(self):
-        # Every test needs access to the request factory.
-        self.rf = RequestFactory()
         self.site = Site.objects.select_related('root_page').first()
         # Prefetch the specific page, so that it doesn't count
         # toward the counted queries
@@ -54,7 +59,7 @@ class TestDerivePage(TestCase):
         self, url, expected_page, expected_num_queries, full_url_match_expected,
         accept_best_match=True, max_subsequent_route_failures=3
     ):
-        request = self.rf.get(url)
+        request = request_factory.get(url)
         # Set these to improve efficiency
         request.site = self.site
         request._wagtail_cached_site_root_paths = Site.get_site_root_paths()
@@ -265,45 +270,29 @@ class TestGetSiteFromRequest(TestCase):
     """Tests for wagtailmenus.utils.misc.get_site_from_request()"""
     fixtures = ['test.json']
 
-    def setUp(self):
-        # URL to request during test
-        self.url = '/superheroes/marvel-comics/'
-        # Establish if Wagtail is v2.9 or above
-        if LooseVersion(wagtail_version) >= LooseVersion('2.9'):
-            self.is_wagtail_29_or_above = True
-        else:
-            self.is_wagtail_29_or_above = False
+    @mock.patch.object(Site, 'find_for_request')
+    def test_returns_site_attribute_from_request_if_a_site_object(self, mocked_method):
+        request = request_factory.get('/')
+        dummy_site = Site(hostname='beepboop')
+        request.site = dummy_site
+        request._wagtail_site = dummy_site
 
-    def _run_test(self):
-        """
-        Confirm that the Site returned by get_site_from_request() is a Wagtail Site
-        instance.
-        """
-        request = self.client.get(self.url).wsgi_request
-        site = get_site_from_request(request)
-        self.assertIsInstance(site, Site)
+        result = get_site_from_request(request)
+        self.assertIs(result, dummy_site)
+        self.assertFalse(mocked_method.called)
 
-    def test_with_wagtail_site_in_request(self):
-        """
-        Test when Wagtail Site exists at request.site.
-        """
-        self._run_test()
+    @mock.patch.object(Site, 'find_for_request')
+    def test_find_for_request_called_if_site_attribute_is_not_a_site_object(self, mocked_method):
+        request = request_factory.get('/')
+        dummy_site = 'just a string'
+        request.site = dummy_site
+        request._wagtail_site = dummy_site
 
-    @modify_settings(MIDDLEWARE={
-        'append': 'django.contrib.sites.middleware.CurrentSiteMiddleware',
-        'remove': 'wagtail.core.middleware.SiteMiddleware',
-    })
-    def test_with_django_site_in_request_wagtail_29_and_above(self):
-        """
-        Test when only a Django Site exists at request.site for Wagtail 2.9 and above.
-        """
-        if self.is_wagtail_29_or_above:
-            self._run_test()
+        get_site_from_request(request)
+        self.assertTrue(mocked_method.called)
 
-    @modify_settings(MIDDLEWARE={'remove': 'wagtail.core.middleware.SiteMiddleware'})
-    def test_with_no_site_in_request_wagtail_29_and_above(self):
-        """
-        Test when no Site object exists at request.site for Wagtail 2.9 and above.
-        """
-        if self.is_wagtail_29_or_above:
-            self._run_test()
+    @mock.patch.object(Site, 'find_for_request', side_effect=Site.DoesNotExist())
+    def test_returns_none_if_find_for_request_raises_doesnotexist_error(self, mocked_method):
+        request = request_factory.get('/')
+        result = get_site_from_request(request)
+        self.assertIs(result, None)

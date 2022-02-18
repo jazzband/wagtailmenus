@@ -1,6 +1,7 @@
 from django.http import Http404, HttpRequest
 from wagtail.core.models import Page, Site
 
+from wagtailmenus.conf import settings
 from wagtailmenus.models.menuitems import MenuItem
 
 
@@ -26,16 +27,11 @@ def get_fake_request():
     return request
 
 
-def get_site_from_request(request, fallback_to_default=True):
+def get_site_from_request(request):
     site = getattr(request, 'site', None)
     if isinstance(site, Site):
-        return request.site
-    site = Site.find_for_request(request)
-    if site:
         return site
-    if fallback_to_default:
-        return Site.objects.filter(is_default_site=True).first()
-    return None
+    return Site.find_for_request(request)
 
 
 def derive_page(request, site, accept_best_match=True, max_subsequent_route_failures=3):
@@ -102,12 +98,29 @@ def derive_section_root(page):
     if no such page can be identified. Results are dependant on the
     value of the ``WAGTAILMENUS_SECTION_ROOT_DEPTH`` setting.
     """
-    from wagtailmenus.conf import settings
     desired_depth = settings.SECTION_ROOT_DEPTH
+    if page is None:
+        return
     if page.depth == desired_depth:
         return page.specific
     if page.depth > desired_depth:
         return page.get_ancestors().get(depth=desired_depth).specific
+
+
+def derive_ancestor_ids(page):
+    """
+    Returns a list of page IDs for ancestors of the provided ``page``,
+    (excluding 'tree root' and 'home' pages, which are technically
+    always ancestors). Results are dependant on the value of the
+    ``WAGTAILMENUS_SECTION_ROOT_DEPTH`` setting.
+    """
+    section_root_depth = settings.SECTION_ROOT_DEPTH
+    if page and page.depth >= section_root_depth:
+        return page.get_ancestors(inclusive=True).filter(
+            # exclude 'home' and 'root' pages
+            depth__gte=section_root_depth
+        ).values_list('id', flat=True)
+    return ()
 
 
 def validate_supplied_values(tag, max_levels=None, parent_page=None,

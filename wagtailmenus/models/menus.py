@@ -10,6 +10,8 @@ from django.utils.functional import cached_property, lazy
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
+from rest_framework import fields
+from wagtail.api import APIField
 from wagtail.core import hooks
 from wagtail.core.models import Page, Site
 
@@ -144,7 +146,7 @@ class Menu:
 
     @classmethod
     def _get_site(cls, context):
-        site = context.get('site')
+        site = context.get('current_site')
         if isinstance(site, Site):
             return site
         request = context.get('request')
@@ -460,10 +462,7 @@ class Menu:
         # Determine appropriate value for 'has_children_in_menu'
         # ---------------------------------------------------------------------
 
-        # NOTE: Attributes aren't being set yet, as the item could potentially
-        # be replaced
-
-        has_children_in_menu = False
+        item.has_children_in_menu = False
 
         if page:
             if (
@@ -472,7 +471,7 @@ class Menu:
                 (not item_is_menu_item_object or item.allow_subnav)
             ):
                 if hasattr(page, 'has_submenu_items'):
-                    has_children_in_menu = page.has_submenu_items(
+                    item.has_children_in_menu = page.has_submenu_items(
                         menu_instance=self,
                         request=request,
                         allow_repeating_parents=option_vals.allow_repeating_parents,
@@ -480,35 +479,32 @@ class Menu:
                         original_menu_tag=ctx_vals.original_menu_tag,
                     )
                 else:
-                    has_children_in_menu = self.page_has_children(page)
+                    item.has_children_in_menu = self.page_has_children(page)
 
         # ---------------------------------------------------------------------
         # Determine appropriate value for 'active_class'
         # ---------------------------------------------------------------------
 
-        # NOTE: Attributes aren't being set yet, as the item could potentially
-        # be replaced
-
-        active_class = ''
+        item.active_class = ''
 
         if option_vals.apply_active_classes:
             if page:
                 if(current_page and page.pk == current_page.pk):
                     # This is the current page, so the menu item should
                     # probably have the 'active' class
-                    active_class = settings.ACTIVE_CLASS
+                    item.active_class = settings.ACTIVE_CLASS
                     if (
                         option_vals.allow_repeating_parents and
-                        has_children_in_menu
+                        item.has_children_in_menu
                     ):
                         if getattr(page, 'repeat_in_subnav', False):
-                            active_class = settings.ACTIVE_ANCESTOR_CLASS
+                            item.active_class = settings.ACTIVE_ANCESTOR_CLASS
 
                 elif page.pk in ctx_vals.current_page_ancestor_ids:
-                    active_class = settings.ACTIVE_ANCESTOR_CLASS
+                    item.active_class = settings.ACTIVE_ANCESTOR_CLASS
             else:
                 # This is a `MenuItem` for a custom URL
-                active_class = item.get_active_class_for_request(request)
+                item.active_class = item.get_active_class_for_request(request)
 
         # ---------------------------------------------------------------------
         # Set 'text' attribute
@@ -531,9 +527,6 @@ class Menu:
         # ---------------------------------------------------------------------
         # Set additional attributes
         # ---------------------------------------------------------------------
-
-        item.has_children_in_menu = has_children_in_menu
-        item.active_class = active_class
 
         if item.has_children_in_menu and option_vals.add_sub_menus_inline:
             item.sub_menu = self.create_sub_menu(page)
@@ -695,6 +688,54 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     menu_instance_context_name = 'section_menu'
     related_templatetag_name = 'section_menu'
 
+    """
+    Override this to change the representation of 'section_root' in API
+    responses. The serializer should be capable of rendering custom page
+    field values, but only if the ``Page`` object being serialized always has
+    those fields. To include other fields or attributes, or to override the
+    default value representation for a field, provide a field serializer
+    as the second positional argument when defining an ``APIField`` (as shown
+    at: http://docs.wagtail.io/en/stable/advanced_topics/api/v2/configuration.html#custom-serialisers)
+    """
+    section_root_api_fields = [
+        APIField('id'),
+        APIField('title'),
+        APIField('slug'),
+        APIField('type'),
+        APIField('menu_text', fields.CharField(read_only=True, source='text')),
+        APIField('url', fields.CharField(read_only=True, source='href')),
+        APIField('active_class', fields.CharField(read_only=True))
+    ]
+
+    """
+    Override this to change the representation of 'items.item' in API
+    responses. To surface custom page field values, it is recommended that you
+    update ``item_page_api_fields`` instead, , as that value is guaranteed to
+    be a ``Page`` object (whereas the 'item' value is not).
+    """
+    item_api_fields = [
+        APIField('text'),
+        APIField('href'),
+        APIField('active_class'),
+        APIField('page'),
+        APIField('children'),
+    ]
+
+    """
+    Override this to change the representation of 'items.item.page' in API
+    responses. The serializer is only capable of serializing vanilla ``Page``
+    field values by default. To serialize custom page field values (or to
+    override the default field representation for a vanilla ``Page`` field),
+    provide a field serializer as the second positional argument when defining
+    an ``APIField`` (as shown at: http://docs.wagtail.io/en/stable/advanced_topics/api/v2/configuration.html#custom-serialisers)
+    """
+    item_page_api_fields = [
+        APIField('id'),
+        APIField('title'),
+        APIField('slug'),
+        APIField('type'),
+    ]
+
     @classmethod
     def render_from_tag(
         cls, context, show_section_root=True, max_levels=None,
@@ -744,9 +785,9 @@ class SectionMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
             root_page.title
         )
         if option_vals.use_absolute_page_urls:
-            href = root_page.get_full_url(request=self.request)
+            href = root_page.get_full_url(request=request)
         else:
-            href = root_page.relative_url(contextual_vals.current_site)
+            href = root_page.relative_url(contextual_vals.current_site, request=request)
         root_page.href = href
 
         active_class = ''
@@ -778,6 +819,51 @@ class ChildrenMenu(DefinesSubMenuTemplatesMixin, MenuFromPage):
     menu_short_name = 'children'  # used to find templates
     menu_instance_context_name = 'children_menu'
     related_templatetag_name = 'children_menu'
+
+    """
+    Override this to change the representation of 'parent_page' in API
+    responses. The serializer should be capable of rendering custom page
+    field values, but only if the ``Page`` object being serialized always has
+    those fields. To include other fields or attributes, or to override the
+    default value representation for a field, provide a field serializer
+    as the second positional argument when defining an ``APIField`` (as shown
+    at: http://docs.wagtail.io/en/stable/advanced_topics/api/v2/configuration.html#custom-serialisers)
+    """
+    parent_page_api_fields = [
+        APIField('id'),
+        APIField('title'),
+        APIField('slug'),
+        APIField('type'),
+    ]
+
+    """
+    Override this to change the representation of 'items.item' in API
+    responses. To surface custom page field values, it is recommended that you
+    update ``item_page_api_fields`` instead, , as that value is guaranteed to
+    be a ``Page`` object (whereas the 'item' value isn't).
+    """
+    item_api_fields = [
+        APIField('text'),
+        APIField('href'),
+        APIField('active_class'),
+        APIField('page'),
+        APIField('children'),
+    ]
+
+    """
+    Override this to change the representation of 'items.item.page' in API
+    responses. The serializer is only capable of serializing vanilla ``Page``
+    field values by default. To serialize custom page field values (or to
+    override the default field representation for a vanilla ``Page`` field),
+    provide a field serializer as the second positional argument when defining
+    an ``APIField`` (as shown at: http://docs.wagtail.io/en/stable/advanced_topics/api/v2/configuration.html#custom-serialisers)
+    """
+    item_page_api_fields = [
+        APIField('id'),
+        APIField('title'),
+        APIField('slug'),
+        APIField('type'),
+    ]
 
     @classmethod
     def render_from_tag(
@@ -1073,6 +1159,12 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         ))
     )
 
+    # Override to modify output for custom classes in wagtailmenus.api
+    api_fields = [
+        APIField('site_id'),
+        APIField('items', ),
+    ]
+
     class Meta:
         abstract = True
         verbose_name = _("main menu")
@@ -1166,6 +1258,15 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
             "</code> tag in your templates."
         ))
     )
+
+    # Override to modify output for custom classes in wagtailmenus.api
+    api_fields = [
+        APIField('site_id'),
+        APIField('handle'),
+        APIField('title'),
+        APIField('heading'),
+        APIField('items'),
+    ]
 
     class Meta:
         abstract = True
@@ -1319,6 +1420,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
 # ########################################################
 # Concrete models
 # ########################################################
+
 
 class MainMenu(AbstractMainMenu):
     """The default model for 'main menu' instances."""

@@ -1,8 +1,10 @@
 from django.http import Http404
 from django.utils.functional import SimpleLazyObject
-from wagtailmenus.conf import settings
+
+from wagtailmenus.conf import constants, settings
 from wagtailmenus.utils.misc import (
-    get_site_from_request, derive_page, derive_section_root
+    derive_page, derive_section_root, derive_ancestor_ids,
+    get_site_from_request
 )
 
 
@@ -11,26 +13,20 @@ def wagtailmenus(request):
     def _get_wagtailmenus_vals():
         current_page = request.META.get('WAGTAILMENUS_CURRENT_PAGE')
         section_root = request.META.get('WAGTAILMENUS_CURRENT_SECTION_ROOT')
-        site = get_site_from_request(request, fallback_to_default=True)
+        site = get_site_from_request(request)
         ancestor_ids = ()
-        match = None
-
         guess_position = settings.GUESS_TREE_POSITION_FROM_PATH
-        section_root_depth = settings.SECTION_ROOT_DEPTH
+        best_match_page = None
 
         if guess_position and not current_page:
-            match, full_url_match = derive_page(request, site)
+            best_match_page, full_url_match = derive_page(request, site)
             if full_url_match:
-                current_page = match
+                current_page = best_match_page
 
-        if not section_root and current_page or match:
-            section_root = derive_section_root(current_page or match)
+        if not section_root:
+            section_root = derive_section_root(current_page or best_match_page)
 
-        if current_page or match:
-            page = current_page or match
-            if page.depth >= section_root_depth:
-                ancestor_ids = page.get_ancestors(inclusive=True).filter(
-                    depth__gte=section_root_depth).values_list('id', flat=True)
+        ancestor_ids = derive_ancestor_ids(current_page or best_match_page)
 
         return {
             'current_page': current_page,
