@@ -105,7 +105,7 @@ class TestMenuItemsForRequest(TestCase):
         self.rf = RequestFactory()
 
     def test_menu_item_exact_match(self):
-        menu_item = AbstractMenuItem()
+        menu_item = MainMenuItem()
         menu_item.link_url = '/some-page/'
         request = self.rf.get('/some-page/')
 
@@ -113,7 +113,7 @@ class TestMenuItemsForRequest(TestCase):
         self.assertEqual(active_class, settings.ACTIVE_CLASS)
 
     def test_menu_item_with_query_params(self):
-        menu_item = AbstractMenuItem()
+        menu_item = MainMenuItem()
         menu_item.link_url = '/some-page/?some_param=foo'
         request = self.rf.get('/some-page/?some_other_param=foo')
 
@@ -121,7 +121,7 @@ class TestMenuItemsForRequest(TestCase):
         self.assertEqual(active_class, settings.ACTIVE_CLASS)
 
     def test_menu_item_with_hash_fragment(self):
-        menu_item = AbstractMenuItem()
+        menu_item = MainMenuItem()
         menu_item.link_url = '/some-page/#some_fragment'
         request = self.rf.get('/some-page/#some_other_hash_fragment')
 
@@ -129,7 +129,7 @@ class TestMenuItemsForRequest(TestCase):
         self.assertEqual(active_class, settings.ACTIVE_CLASS)
 
     def test_menu_item_ancestor(self):
-        menu_item = AbstractMenuItem()
+        menu_item = MainMenuItem()
         menu_item.link_url = '/some-page/'
         request = self.rf.get('/some-page/some-child-page')
 
@@ -137,7 +137,7 @@ class TestMenuItemsForRequest(TestCase):
         self.assertEqual(active_class, settings.ACTIVE_ANCESTOR_CLASS)
 
     def test_menu_item_with_netloc(self):
-        menu_item = AbstractMenuItem()
+        menu_item = MainMenuItem()
         menu_item.link_url = 'https://example.com/some-page'
         request = self.rf.get('/some-page/')
 
