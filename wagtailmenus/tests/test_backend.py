@@ -259,5 +259,9 @@ class TestNonSuperUser(TransactionTestCase):
         self.client.login(username='test2', password='password')
 
     def test_mainmenu_edit_denied(self):
-        response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
-        self.assertEqual(response.status_code, 403)
+        response = self.client.get(
+            "/admin/wagtailmenus/mainmenu/edit/1/", follow=True
+        )
+        self.assertContains(
+            response, "Sorry, you do not have permission to access this area"
+        )
