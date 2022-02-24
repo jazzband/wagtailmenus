@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
@@ -40,7 +42,7 @@ class CMSUsecaseTests(WebTest):
             '%scopy/%s/' % (self.base_flatmenu_admin_url, site_one_footer_menu.pk),
             user='test1')
 
-        form = copy_view.forms[1]
+        form = copy_view.forms[next(reversed(OrderedDict(copy_view.forms)))]
         form['site'] = site_two.pk
         response = form.submit().follow()
 
@@ -71,7 +73,7 @@ class CMSUsecaseTests(WebTest):
         copy_view = self.app.get(
             '%scopy/%s/' % (self.base_flatmenu_admin_url, site_one_footer_menu.pk),
             user='test1')
-        form = copy_view.forms[1]
+        form = copy_view.forms[next(reversed(OrderedDict(copy_view.forms)))]
         form['site'] = site_two.pk
         response = form.submit()
 
@@ -81,7 +83,7 @@ class CMSUsecaseTests(WebTest):
     def test_main_menu_save_success(self):
         edit_view = self.app.get(
             '%sedit/1/' % self.base_mainmenu_admin_url, user='test1')
-        form = edit_view.forms[2]
+        form = edit_view.forms[next(reversed(OrderedDict(edit_view.forms)))]
         response = form.submit().follow()
 
         assert 'Main menu updated successfully.' in response
