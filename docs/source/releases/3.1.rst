@@ -15,9 +15,9 @@ Wagtailmenus 3.1 release notes (12.02.2022)
 What's new?
 ===========
 
-wagtailmenus is not a Jazzband project. Many thanks to Andy Babic continued support before and during the transfer!
+wagtailmenus is now a Jazzband project. Many thanks to Andy Babic's continued support before and during the transfer!
 
-Because Jazzband projects on Transifex are not very well maintained and to make it easier to manage the project, the support for Transifex was removed. Please  submit new translations as PRs directly from now on.
+Because Jazzband projects on Transifex are not very well maintained and to make it easier to manage the project, support for Transifex was removed. Please submit new translations as PRs directly from now on.
 
 
 Minor changes & bug fixes
