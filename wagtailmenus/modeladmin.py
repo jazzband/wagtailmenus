@@ -82,7 +82,7 @@ class FlatMenuAdmin(ModelAdmin):
     def get_admin_urls_for_registration(self):
         urls = super().get_admin_urls_for_registration()
         urls += (
-            url(self.url_helper.get_action_url_pattern('copy'),
+            path(self.url_helper.get_action_url_pattern('copy'),
                 self.copy_view,
                 name=self.url_helper.get_action_url_name('copy')),
         )
