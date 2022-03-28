@@ -5,7 +5,7 @@ from django.contrib.admin.utils import quote, unquote
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.text import capfirst
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from wagtail.admin import messages
 from wagtail.admin.edit_handlers import ObjectList, TabbedInterface
 from wagtail.contrib.modeladmin.views import (

@@ -1,5 +1,7 @@
 {% load menu_tags %}
+{% load wagtailcore_tags %}
 
+{% wagtail_site as current_site %}
 The following will raise a 'SubMenuUsageError' because the sub_menu tag should only be used in menu templates, not directly.
 
-{% sub_menu request.site.root_page max_levels=2 %}
+{% sub_menu current_site.root_page max_levels=2 %}

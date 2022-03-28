@@ -18,13 +18,13 @@ requires = [
 ]
 
 testing_extras = [
-    'beautifulsoup4<4.6.1,>=4.5.1',
+    'beautifulsoup4>=4.8,<4.10',
     'coverage>=4.5',
     'django-webtest>=1.9,<1.10',
 ]
 
 development_extras = [
-    'wagtail>=2.4,<=2.9',
+    'wagtail>=2.15',
     'django-debug-toolbar',
     'django-extensions',
     'ipdb',
@@ -61,22 +61,19 @@ setup(
         "Operating System :: OS Independent",
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Framework :: Django',
-        'Framework :: Django :: 1.11',
-        'Framework :: Django :: 2.0',
-        'Framework :: Django :: 2.1',
-        'Framework :: Django :: 3.0',
+        'Framework :: Django :: 3.2',
+        'Framework :: Django :: 4.0',
         'Framework :: Wagtail :: 2',
         'Topic :: Internet :: WWW/HTTP',
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     ],
     install_requires=requires,
-    python_requires='>=3.4',
+    python_requires='>=3.7',
     extras_require={
         'testing': testing_extras,
         'docs': documentation_extras,

@@ -1,7 +1,7 @@
-from django.conf.urls import url
 from django.contrib.admin.utils import quote
+from django.urls import re_path
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.helpers import ButtonHelper
 
@@ -24,10 +24,10 @@ class MainMenuAdmin(ModelAdmin):
 
     def get_admin_urls_for_registration(self):
         return (
-            url(self.url_helper.get_action_url_pattern('index'),
+            re_path(self.url_helper.get_action_url_pattern('index'),
                 self.index_view,
                 name=self.url_helper.get_action_url_name('index')),
-            url(self.url_helper.get_action_url_pattern('edit'),
+            re_path(self.url_helper.get_action_url_pattern('edit'),
                 self.edit_view,
                 name=self.url_helper.get_action_url_name('edit')),
         )
@@ -82,7 +82,7 @@ class FlatMenuAdmin(ModelAdmin):
     def get_admin_urls_for_registration(self):
         urls = super().get_admin_urls_for_registration()
         urls += (
-            url(self.url_helper.get_action_url_pattern('copy'),
+            re_path(self.url_helper.get_action_url_pattern('copy'),
                 self.copy_view,
                 name=self.url_helper.get_action_url_name('copy')),
         )

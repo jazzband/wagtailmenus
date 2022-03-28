@@ -1,5 +1,33 @@
 [
     {
+        "model": "wagtailcore.locale",
+        "pk": 1,
+        "fields": {
+            "language_code": "en"
+        }
+    },
+    {
+        "model": "wagtailcore.locale",
+        "pk": 2,
+        "fields": {
+            "language_code": "de"
+        }
+    },
+    {
+        "model": "wagtailcore.locale",
+        "pk": 3,
+        "fields": {
+            "language_code": "fr"
+        }
+    },
+    {
+        "model": "wagtailcore.locale",
+        "pk": 4,
+        "fields": {
+            "language_code": "it"
+        }
+    },
+    {
         "model": "wagtailcore.site",
         "pk": 1,
         "fields": {
@@ -287,6 +315,7 @@
             "numchild": 2,
             "title": "Root",
             "slug": "root",
+            "locale": 1,
             "content_type": [
                 "wagtailcore",
                 "page"
@@ -308,6 +337,7 @@
             "numchild": 0,
             "title": "Non-routable page",
             "slug": "non-routable-page",
+            "locale": 1,
             "content_type": [
                 "wagtailcore",
                 "page"
@@ -328,6 +358,7 @@
             "numchild": 5,
             "title": "Home",
             "slug": "home",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "homepage"
@@ -348,6 +379,7 @@
             "numchild": 4,
             "title": "About us",
             "slug": "about-us",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "toplevelpage"
@@ -368,6 +400,7 @@
             "numchild": 3,
             "title": "Meet the team",
             "slug": "meet-the-team",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -388,6 +421,7 @@
             "numchild": 0,
             "title": "Staff member one",
             "slug": "staff-member-one",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -408,6 +442,7 @@
             "numchild": 0,
             "title": "Staff member two",
             "slug": "staff-member-two",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -428,6 +463,7 @@
             "numchild": 0,
             "title": "Staff member three",
             "slug": "staff-member-three",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -448,6 +484,7 @@
             "numchild": 0,
             "title": "Our heritage",
             "slug": "our-heritage",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -468,6 +505,7 @@
             "numchild": 0,
             "title": "Our mission and values",
             "slug": "mission-and-values",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -488,6 +526,7 @@
             "numchild": 0,
             "title": "Staff vacancies",
             "slug": "staff-vacancies",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "typicalpage"
@@ -508,6 +547,7 @@
             "numchild": 2,
             "title": "Superheroes",
             "slug": "superheroes",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "toplevelpage"
@@ -528,6 +568,7 @@
             "numchild": 3,
             "title": "Marvel Comics",
             "slug": "marvel-comics",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -548,6 +589,7 @@
             "numchild": 0,
             "title": "Iron Man",
             "slug": "iron-man",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -568,6 +610,7 @@
             "numchild": 0,
             "title": "Wolverine",
             "slug": "wolverine",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -588,6 +631,7 @@
             "numchild": 0,
             "title": "Spiderman",
             "slug": "spiderman",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -608,6 +652,7 @@
             "numchild": 3,
             "title": "D.C. Comics",
             "slug": "dc-comics",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -628,6 +673,7 @@
             "numchild": 0,
             "title": "Batman",
             "slug": "batman",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -648,6 +694,7 @@
             "numchild": 0,
             "title": "Superman",
             "slug": "superman",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -668,6 +715,7 @@
             "numchild": 0,
             "title": "Wonder Woman",
             "slug": "wonder-woman",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -688,6 +736,7 @@
             "numchild": 3,
             "title": "News & events",
             "slug": "news-and-events",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "toplevelpage"
@@ -708,6 +757,7 @@
             "numchild": 1,
             "title": "Latest news",
             "slug": "latest-news",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "articlelistpage"
@@ -728,6 +778,7 @@
             "numchild": 0,
             "title": "Article One",
             "slug": "article-one",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "articlepage"
@@ -748,6 +799,7 @@
             "numchild": 0,
             "title": "Upcoming events",
             "slug": "upcoming-events",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -768,6 +820,7 @@
             "numchild": 0,
             "title": "In the press",
             "slug": "press",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -788,6 +841,7 @@
             "numchild": 0,
             "title": "Contact us",
             "slug": "contact-us",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "contactpage"
@@ -808,6 +862,7 @@
             "numchild": 4,
             "title": "Legal",
             "slug": "legal",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "toplevelpage"
@@ -828,6 +883,7 @@
             "numchild": 0,
             "title": "Accessibility",
             "slug": "accessibility",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -848,6 +904,7 @@
             "numchild": 0,
             "title": "Privacy policy",
             "slug": "privacy-policy",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -868,6 +925,7 @@
             "numchild": 0,
             "title": "Terms and conditions",
             "slug": "terms-and-conditions",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
@@ -888,6 +946,7 @@
             "numchild": 0,
             "title": "Test draft",
             "slug": "test",
+            "locale": 1,
             "content_type": [
                 "tests",
                 "lowlevelpage"
