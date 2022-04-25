@@ -5,6 +5,7 @@ Release notes
 .. toctree::
     :maxdepth: 1
 
+    3.1.1
     3.1
     3.0.2
     3.0.1
@@ -45,6 +46,7 @@ Release notes
     2.0.2
     2.0.1
     2.0.0
+
 
 Release notes for versions preceding ``v2.0.0`` can be found on GitHub:
 https://github.com/jazzband/wagtailmenus/releases?after=v2.0.0
