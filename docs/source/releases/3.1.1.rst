@@ -1,0 +1,26 @@
+===============================================
+Wagtailmenus 3.1.1 release notes (25.04.2022)
+===============================================
+
+.. NOTE ::
+    
+    In order to keep wagtailmenus working with the latest versions of Wagtail and Django, with code that is clean and maintainable, this version will be the last feature release to support Wagtail versions earlier than 2.15, and Django versions earlier than 3.2.
+
+.. contents::
+    :local:
+    :depth: 1
+
+
+What's new?
+===========
+
+There are no new major features in this release.
+
+Minor changes & bug fixes
+=========================
+
+* Removed support for Wagtail <2.15.
+* Removed support for Django <3.2.
+* Added support for Wagtail 2.15.
+* Added support for Wagtail 2.16.
+* Added support for Django 4.0.

@@ -2,11 +2,6 @@
 Wagtailmenus 3.1 release notes (12.02.2022)
 ===============================================
 
-.. NOTE ::
-
-    Wagtailmenus 3.1 is in the release candidate.
-
-
 .. contents::
     :local:
     :depth: 1
