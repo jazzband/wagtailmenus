@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.core.management import call_command
-from wagtail.core.models import Site
+from wagtail.models import Site
 from wagtailmenus.conf import settings
 
 

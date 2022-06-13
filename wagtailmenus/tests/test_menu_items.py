@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.test.client import RequestFactory
-from wagtail.core.models import Page
+from wagtail.models import Page
 
 from wagtailmenus.conf import settings
 from wagtailmenus.models import (

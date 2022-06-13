@@ -1,7 +1,7 @@
 import logging
 
 from django.core.management.base import BaseCommand
-from wagtail.core.models import Site
+from wagtail.models import Site
 
 from wagtailmenus.conf import settings
 

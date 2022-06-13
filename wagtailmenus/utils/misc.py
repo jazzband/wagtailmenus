@@ -1,5 +1,5 @@
 from django.http import Http404, HttpRequest
-from wagtail.core.models import Page, Site
+from wagtail.models import Page, Site
 
 from wagtailmenus.models.menuitems import MenuItem
 

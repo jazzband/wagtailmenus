@@ -1,5 +1,5 @@
 from django.template import Library
-from wagtail.core.models import Page
+from wagtail.models import Page
 
 from wagtailmenus.conf import constants, settings
 from wagtailmenus.errors import SubMenuUsageError
