@@ -27,6 +27,7 @@ This is a [Jazzband](https://jazzband.co/) project. By contributing you agree to
 * Sekani Tembo (Method Softworks)
 * Fernando Cordeiro (MrCordeiro)
   twitter.com/brauhaus
+* Abdulmajeed Isa (amajai)
 
 ## Translators
 
