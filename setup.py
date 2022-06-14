@@ -24,7 +24,7 @@ testing_extras = [
 ]
 
 development_extras = [
-    'wagtail>=3.0',
+    'wagtail>=2.15',
     'django-debug-toolbar',
     'django-extensions',
     'ipdb',
@@ -68,7 +68,7 @@ setup(
         'Framework :: Django',
         'Framework :: Django :: 3.2',
         'Framework :: Django :: 4.0',
-        'Framework :: Wagtail :: 3',
+        'Framework :: Wagtail :: 2',
         'Topic :: Internet :: WWW/HTTP',
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     ],
