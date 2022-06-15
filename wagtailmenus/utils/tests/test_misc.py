@@ -1,8 +1,5 @@
 from django.test import RequestFactory, TestCase, modify_settings
 from distutils.version import LooseVersion
-from wagtail import __version__ as wagtail_version
-from wagtail.models import Page, Site
-
 from wagtailmenus.conf import defaults
 from wagtailmenus.utils.misc import (
     derive_page, derive_section_root, get_fake_request, get_site_from_request
@@ -10,6 +7,12 @@ from wagtailmenus.utils.misc import (
 from wagtailmenus.tests.models import (
     ArticleListPage, ArticlePage, LowLevelPage, TopLevelPage
 )
+try:
+    from wagtail import __version__ as wagtail_version
+    from wagtail.models import Page, Site
+except ImportError:
+    from wagtail.core import __version__ as wagtail_version
+    from wagtail.core.models import Page, Site
 
 
 class TestGetFakeRequest(TestCase):
@@ -291,7 +294,7 @@ class TestGetSiteFromRequest(TestCase):
 
     @modify_settings(MIDDLEWARE={
         'append': 'django.contrib.sites.middleware.CurrentSiteMiddleware',
-        'remove': 'wagtail.middleware.SiteMiddleware',
+        'remove': 'wagtail.core.middleware.SiteMiddleware',
     })
     def test_with_django_site_in_request_wagtail_29_and_above(self):
         """
@@ -300,7 +303,7 @@ class TestGetSiteFromRequest(TestCase):
         if self.is_wagtail_29_or_above:
             self._run_test()
 
-    @modify_settings(MIDDLEWARE={'remove': 'wagtail.middleware.SiteMiddleware'})
+    @modify_settings(MIDDLEWARE={'remove': 'wagtail.core.middleware.SiteMiddleware'})
     def test_with_no_site_in_request_wagtail_29_and_above(self):
         """
         Test when no Site object exists at request.site for Wagtail 2.9 and above.
