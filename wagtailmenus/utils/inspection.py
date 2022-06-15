@@ -1,7 +1,7 @@
 import inspect
 
 """
-This method below was copied from wagtail.utils (v1.11) and allows
+This method below was copied from wagtail.wagtailcore.utils (v1.11) and allows
 us to handle deprecation of method arguments in a way that doesn't swallow
 `TypeError` exceptions raised further down the chain. Thank you @gasman!
 """
