@@ -1,6 +1,13 @@
 Changelog
 =========
 
+3.1.2 (17.06.2022)
+------------------
+
+* Added support for Wagtail >3.0.
+* Updated travis/tox test settings to test against Wagtail 3.0.
+* Fix: [#421](https://github.com/jazzband/wagtailmenus/issues/421), which prevented creating or editing menus in wagtail 3.0.
+
 3.1.1 (25.04.2022)
 ------------------
 
