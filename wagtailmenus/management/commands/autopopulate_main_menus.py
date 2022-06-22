@@ -1,9 +1,11 @@
 import logging
 
 from django.core.management.base import BaseCommand
-from wagtail.core.models import Site
-
 from wagtailmenus.conf import settings
+try:
+    from wagtail.models import Site
+except ImportError:
+    from wagtail.core.models import Site
 
 logger = logging.getLogger(__name__)
 

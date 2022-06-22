@@ -7,11 +7,13 @@ from django.db import models
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
-from wagtail.core.models import Page
-
 from wagtailmenus.conf import settings
 from wagtailmenus.forms import LinkPageAdminForm
 from wagtailmenus.panels import menupage_settings_panels, linkpage_edit_handler
+try:
+    from wagtail.models import Page
+except ImportError:
+    from wagtail.core.models import Page
 
 
 class MenuPageMixin(models.Model):

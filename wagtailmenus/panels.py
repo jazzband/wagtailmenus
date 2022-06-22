@@ -2,12 +2,17 @@ from distutils.version import LooseVersion
 
 from django.conf import settings as django_settings
 from django.utils.translation import gettext_lazy as _
-from wagtail.admin.edit_handlers import (
-    FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel,
-    PageChooserPanel, ObjectList, TabbedInterface
-)
-
 from wagtailmenus.conf import settings
+try:
+    from wagtail.admin.panels import (
+        FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel,
+        PageChooserPanel, ObjectList, TabbedInterface
+    )
+except ImportError:
+    from wagtail.admin.edit_handlers import (
+        FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel,
+        PageChooserPanel, ObjectList, TabbedInterface
+    )
 
 
 # ########################################################

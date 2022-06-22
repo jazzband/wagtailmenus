@@ -1,12 +1,14 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.test.client import RequestFactory
-from wagtail.core.models import Page
-
 from wagtailmenus.conf import settings
 from wagtailmenus.models import (
     AbstractMenuItem, MainMenu, MainMenuItem, FlatMenu, FlatMenuItem
 )
+try:
+    from wagtail.models import Page
+except ImportError:
+    from wagtail.core.models import Page
 
 
 class MenuItemModelTestMixin:

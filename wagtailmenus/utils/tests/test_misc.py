@@ -1,8 +1,5 @@
 from django.test import RequestFactory, TestCase, modify_settings
 from distutils.version import LooseVersion
-from wagtail.core import __version__ as wagtail_version
-from wagtail.core.models import Page, Site
-
 from wagtailmenus.conf import defaults
 from wagtailmenus.utils.misc import (
     derive_page, derive_section_root, get_fake_request, get_site_from_request
@@ -10,6 +7,12 @@ from wagtailmenus.utils.misc import (
 from wagtailmenus.tests.models import (
     ArticleListPage, ArticlePage, LowLevelPage, TopLevelPage
 )
+try:
+    from wagtail import __version__ as wagtail_version
+    from wagtail.models import Page, Site
+except ImportError:
+    from wagtail.core import __version__ as wagtail_version
+    from wagtail.core.models import Page, Site
 
 
 class TestGetFakeRequest(TestCase):

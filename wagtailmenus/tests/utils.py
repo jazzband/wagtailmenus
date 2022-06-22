@@ -12,12 +12,18 @@ SINGLE_ITEM_SUB_MENU_TEMPLATE_LIST = ('menus/sub_menu_level_2.html',)
 
 
 def get_page_model():
-    from wagtail.core.models import Page
+    try:
+        from wagtail.models import Page
+    except ImportError:
+        from wagtail.core.models import Page
     return Page
 
 
 def get_site_model():
-    from wagtail.core.models import Site
+    try:
+        from wagtail.models import Site
+    except ImportError:
+        from wagtail.core.models import Site
     return Site
 
 

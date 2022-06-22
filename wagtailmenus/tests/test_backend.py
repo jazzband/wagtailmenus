@@ -6,12 +6,15 @@ from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase, TransactionTestCase, override_settings
 
 from django_webtest import WebTest
-from wagtail.admin.edit_handlers import ObjectList
-from wagtail.core.models import Page, Site
-
 from wagtailmenus import get_flat_menu_model, get_main_menu_model
 
 from wagtailmenus.tests.models import LinkPage
+try:
+    from wagtail.admin.panels import ObjectList
+    from wagtail.models import Page, Site
+except ImportError:
+    from wagtail.admin.edit_handlers import ObjectList
+    from wagtail.core.models import Page, Site
 
 FlatMenu = get_flat_menu_model()
 
