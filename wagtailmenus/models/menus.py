@@ -28,6 +28,7 @@ from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
 from .pages import AbstractLinkPage
 
+
 if LooseVersion(django_version) >= LooseVersion('4.1'):
     mark_safe_lazy = mark_safe
 else:
