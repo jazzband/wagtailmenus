@@ -13,8 +13,8 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10']
-        django-version: ['3.2', '4.0']
-        wagtail-version: ['2.15', '2.16', '3.0']
+        django-version: ['3.2', '4.0', '4.1']
+        wagtail-version: ['2.15', '2.16', '3.0', '4.0']
         exclude:
           - python-version: '3.7'
             django-version: '4.0'
