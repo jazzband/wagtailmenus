@@ -1,0 +1,22 @@
+===============================================
+Wagtailmenus 3.1.2 release notes (17.06.2022)
+===============================================
+
+.. contents::
+    :local:
+    :depth: 1
+
+
+What's new?
+===========
+
+There are no new major features in this release.
+
+
+Minor changes & bug fixes
+=========================
+
+* Added support for Wagtail >3.0.
+* Updated Travis/tox test settings to test against Wagtail 3.0.
+* Fixed bug `#421 <https://github.com/jazzband/wagtailmenus/issues/421>`_, which prevented creating or editing menus in wagtail 3.0.
+

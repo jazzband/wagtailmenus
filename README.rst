@@ -31,9 +31,9 @@ wagtailmenus is an extension for Torchbox's `Wagtail CMS <https://github.com/tor
 
 The current version is tested for compatibility with the following:
 
-- Wagtail versions 2.0 to 2.10
-- Django versions 1.11, 2.0, 2.2 and 3.0
-- Python versions 3.4 to 3.8
+- Wagtail versions >2.15, 3.0, and 4.0
+- Django versions 3.0, 4.0, and 4.1
+- Python versions 3.7 to 3.10
 
 .. image:: https://raw.githubusercontent.com/jazzband/wagtailmenus/master/docs/source/_static/images/repeating-item.png
 
@@ -52,5 +52,7 @@ For everything you need to get up and running with wagtailmenus, `view the offic
 
 Contributing
 ============
+
+Instructions on how to contribute to can be house `here <https://wagtailmenus.readthedocs.io/en/stable/contributing/index.html>`_.
 
 As we are members of a `JazzBand project <https://jazzband.co/projects>`_, `wagtailmenus` contributors should adhere to the `Contributor Code of Conduct <https://jazzband.co/about/conduct>`_.
