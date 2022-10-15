@@ -28,6 +28,8 @@ This is a [Jazzband](https://jazzband.co/) project. By contributing you agree to
 * Fernando Cordeiro (MrCordeiro)
   twitter.com/brauhaus
 * Abdulmajeed Isa (amajai)
+* Jon Parker (jnpkr)
+* Arnar Tumi Þorsteinsson (ArnarTumi)
 
 ## Translators
 

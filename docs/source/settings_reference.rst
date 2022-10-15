@@ -371,7 +371,7 @@ Default value: ``'title'``
 When preparing menu items for rendering, wagtailmenus looks for a field, attribute or property method on each page with this name to set a ``text`` attribute value, which is used in menu templates as the label for each item. The ``title`` field is used by default.
 
 .. NOTE::
-    wagtailmenus will only be able to access custom page fields or methods if 'specific' pages are being used (See :ref:`specific_pages`). If no attribute can be found matching the specified name, wagtailmenus will silently fall back to using the page's ``title`` field value.
+    wagtailmenus will only be able to access custom page fields or methods if 'specific' pages are being used. If no attribute can be found matching the specified name, wagtailmenus will silently fall back to using the page's ``title`` field value.
 
 
 .. _SECTION_ROOT_DEPTH:
