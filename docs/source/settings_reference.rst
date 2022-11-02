@@ -196,7 +196,7 @@ If you have a multi-site project, and want to be able to use different templates
 
     WAGTAILMENUS_SITE_SPECIFIC_TEMPLATE_DIRS = True
 
-With this set, menu tags will attempt to identify the relevant ``wagtail.core.models.Site`` instance for the current ``request``. Wagtailmenus will then look for template names with the ``domain`` value of that ``Site`` object in their path.
+With this set, menu tags will attempt to identify the relevant ``wagtail.models.Site`` instance for the current ``request``. Wagtailmenus will then look for template names with the ``domain`` value of that ``Site`` object in their path.
 
 For more information about where wagtailmenus looks for templates, see: :ref:`custom_templates_auto`
 

@@ -1,5 +1,5 @@
 from django.template import Library
-from wagtailmenus.conf import constants, settings
+from wagtailmenus.conf import settings
 from wagtailmenus.errors import SubMenuUsageError
 from wagtailmenus.utils.misc import validate_supplied_values
 try:

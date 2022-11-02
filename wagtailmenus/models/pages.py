@@ -1,7 +1,5 @@
 from copy import copy
-from io import StringIO
 
-from django.conf import settings as django_settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.http import HttpResponse

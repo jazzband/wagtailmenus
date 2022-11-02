@@ -141,5 +141,3 @@ class TestLinkPage(TestCase):
             response,
             '/superheroes/marvel-comics/spiderman/?somevar=value'
         )
-
-

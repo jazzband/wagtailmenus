@@ -1,4 +1,3 @@
-from django.http import Http404
 from django.utils.functional import SimpleLazyObject
 from wagtailmenus.conf import settings
 from wagtailmenus.utils.misc import (

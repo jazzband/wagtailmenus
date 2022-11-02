@@ -7,6 +7,7 @@ try:
 except ImportError:
     from wagtail.core import hooks
 
+
 class TestHooks(TestCase):
     fixtures = ['test.json']
 

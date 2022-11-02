@@ -1,6 +1,5 @@
 from django.template import RequestContext
 from django.test.client import RequestFactory
-from wagtailmenus.conf import constants
 from wagtailmenus.models.menus import ContextualVals, OptionVals
 
 

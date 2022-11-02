@@ -1,6 +1,3 @@
-from distutils.version import LooseVersion
-
-from django.conf import settings as django_settings
 from django.utils.translation import gettext_lazy as _
 from wagtailmenus.conf import settings
 try:

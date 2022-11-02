@@ -1,6 +1,5 @@
 from django.test import TestCase
 
-from wagtailmenus.conf import constants
 from wagtailmenus.models import MainMenu
 from wagtailmenus.tests import base, utils
 
@@ -102,7 +101,6 @@ class TestGetPagesForDisplay(MainMenuTestCase):
         # accessing it again shouldn't trigger any database queries
         with self.assertNumQueries(0):
             list(menu.pages_for_display.values())
-
 
 
 class TestAddMenuItemsForPages(MainMenuTestCase):

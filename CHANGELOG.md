@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Unreleased
+------------------
+
+* Removed usage of the deprecated distutils.
+* Added new variables in settings to suppress warnings.
+* Fixed formatting, removed unused imports.
+* Updated workflow action versions.
+
 3.1.3 (15.10.2022)
 ------------------
 

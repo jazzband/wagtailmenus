@@ -1,5 +1,5 @@
 from django.test import RequestFactory, TestCase, modify_settings
-from distutils.version import LooseVersion
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtailmenus.conf import defaults
 from wagtailmenus.utils.misc import (
     derive_page, derive_section_root, get_fake_request, get_site_from_request
@@ -8,10 +8,8 @@ from wagtailmenus.tests.models import (
     ArticleListPage, ArticlePage, LowLevelPage, TopLevelPage
 )
 try:
-    from wagtail import __version__ as wagtail_version
     from wagtail.models import Page, Site
 except ImportError:
-    from wagtail.core import __version__ as wagtail_version
     from wagtail.core.models import Page, Site
 
 
@@ -272,7 +270,7 @@ class TestGetSiteFromRequest(TestCase):
         # URL to request during test
         self.url = '/superheroes/marvel-comics/'
         # Establish if Wagtail is v2.9 or above
-        if LooseVersion(wagtail_version) >= LooseVersion('2.9'):
+        if WAGTAIL_VERSION >= (2, 9):
             self.is_wagtail_29_or_above = True
         else:
             self.is_wagtail_29_or_above = False

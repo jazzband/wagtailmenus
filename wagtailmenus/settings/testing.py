@@ -18,3 +18,7 @@ ROOT_URLCONF = 'wagtailmenus.tests.urls'
 WAGTAIL_SITE_NAME = 'Wagtailmenus Test'
 LOGIN_URL = 'wagtailadmin_login'
 LOGIN_REDIRECT_URL = 'wagtailadmin_home'
+
+# Suppress warnings while testing
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+WAGTAILADMIN_BASE_URL = "http://example.com"

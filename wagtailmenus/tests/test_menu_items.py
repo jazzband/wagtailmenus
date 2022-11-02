@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.test.client import RequestFactory
 from wagtailmenus.conf import settings
 from wagtailmenus.models import (
-    AbstractMenuItem, MainMenu, MainMenuItem, FlatMenu, FlatMenuItem
+    MainMenu, MainMenuItem, FlatMenu, FlatMenuItem
 )
 try:
     from wagtail.models import Page
