@@ -128,7 +128,7 @@ class MenuPageMixin(models.Model):
 
 class MenuPage(Page, MenuPageMixin):
 
-    settings_panels = menupage_settings_panels
+    settings_panels = Page.settings_panels + menupage_settings_panels
 
     class Meta:
         abstract = True

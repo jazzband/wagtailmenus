@@ -103,16 +103,6 @@ menupage_panel = MultiFieldPanel(
 )
 
 menupage_settings_panels = [
-    MultiFieldPanel(
-        heading=_("Scheduled publishing"),
-        classname="publishing",
-        children=(
-            FieldRowPanel((
-                FieldPanel('go_live_at', classname="col6"),
-                FieldPanel('expire_at', classname="col6"),
-            )),
-        )
-    ),
     menupage_panel,
 ]
 
