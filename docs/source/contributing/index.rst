@@ -65,19 +65,19 @@ If you'd like a runnable Django project to help with development of wagtailmenus
 
     .. code-block:: console
 
-        cp wagtailmenus/settings/development.py.example wagtailmenus/settings/development.py
+        cp wagtailmenus/settings/development.py{.example,}
 
 3.  Create a copy of the development urls:
 
     .. code-block:: console
 
-        cp wagtailmenus/development/urls.py.example wagtailmenus/development/urls.py
+        cp wagtailmenus/development/urls.py{.example,}
 
 4.  Create ``manage.py`` by copying the example provided:
 
     .. code-block:: console
 
-        cp manage.py.example manage.py
+        cp manage.py{.example,}
 
 5.  Run the migrate command to set up the database tables:
 
