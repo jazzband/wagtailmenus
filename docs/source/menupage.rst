@@ -118,14 +118,15 @@ Implementing ``MenuPage`` into your project
             custom_settings_field_one = BooleanField(default=False)
             custom_settings_field_two = BooleanField(default=True)
 
-            # 'menupage_panel' is a collapsible `MultiFieldPanel` with the important
-            # fields already grouped together, making it easy to include in custom
-            # panel definitions, like so:
+            # `menupage_settings_panels` is a collapsible `MultiFieldPanel` with the important
+            # fields already grouped together in addition to wagtail settings fields, making 
+            # it easy to include in custom panel definitions as shown. If you want to exclude
+            # wagtail settings, instead use `[menupage_panel]`
             settings_panels = [
                 FieldPanel('custom_settings_field_one'),
                 FieldPanel('custom_settings_field_two'),
-                menupage_panel
-            ]
+            ] + menupage_settings_panels
+
             ...
 
 3.  Create migrations for any models you've updated by running:
@@ -149,7 +150,7 @@ Implementing ``MenuPageMixin`` into your project
 Wagtail has a restriction that forbids models from subclassing more than one other class derived from ``Page``, and that single page-derived class must be the left-most item when subclassing more than one model class. Most of the time, that doesn't cause any noticeable issues. But, in some cases, it can make it difficult to swap out base model classes used for page models. In these cases, you can use ``wagtailmenus.models.MenuPageMixin`` instead of ``MenuPage``. 
 
 .. NOTE::
-    ``MenuPageMixin`` doesn't change make any changes to the panel configuration on your model that would cause it's new fields to be surfaced in the page editing interface. If you want those fields to appear, you'll have to override ``settings_panels`` on your model to include ``menupage_panel``
+    ``MenuPageMixin`` doesn't change make any changes to the panel configuration on your model that would cause it's new fields to be surfaced in the page editing interface. If you want those fields to appear, you'll have to override ``settings_panels`` on your model to include ``menupage_panel``. If you want to retain wagtails settings fields for features like comments, privacy, and scheduled publishing, add ``menupage_settings_panels``.
 
 
 1.   Subclass ``wagtailmenus.models.MenuPageMixin`` to create your model, including it to the right of any other class that subclasses ``Page``: 
@@ -160,8 +161,10 @@ Wagtail has a restriction that forbids models from subclassing more than one oth
 
         from wagtail.contrib.forms.models import AbstractEmailForm
         from wagtailmenus.models import MenuPageMixin
+        # option 1 (described below)
         from wagtailmenus.panels import menupage_panel
-
+        # option 2 (described below)
+        from wagtailmenus.panels import menupage_settings_panels
 
         class MyEmailFormPage(AbstractEmailForm, MenuPageMixin):
             """This page will gain the same fields and methods as if it extended
@@ -170,10 +173,21 @@ Wagtail has a restriction that forbids models from subclassing more than one oth
             ...
 
             # It's not possible for MenuPageMixin to set `settings_panel`, so you must
-            # override `settings_panels` yourself, and include `menupage_panel` in
-            # order to surface additional fields in the 'Settings' tab of the editor
-            # interface
-            settings_panels = [
+            # override `settings_panels` yourself, and include `menupage_panel` or 
+            # `menupage_settings_panels` in order to surface additional fields in 
+            # the 'Settings' tab of the editor interface
+            # If you wish to retain the wagtail `settings_panel` features like privacy,
+            # comments, etc, you must include Page.settings_panels
+
+            # option 1
+            # this version simply retains wagtail and wagtailmenus settings
+            # this is what the MenuPage class uses by default
+            settings_panels = menupage_settings_panels
+
+            # option 2
+            # this version drops wagail settings and adds custom ones in
+            # addition to wagtailmenus fields
+            settings_panels = [ 
                 FieldPanel('custom_settings_field_one'),
                 FieldPanel('custom_settings_field_two'),
                 menupage_panel
