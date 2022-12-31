@@ -4,6 +4,7 @@ from wagtail.admin.panels import (FieldPanel, FieldRowPanel, InlinePanel,
                                   PageChooserPanel, TabbedInterface)
 
 from wagtailmenus.conf import settings
+from wagtail.models import Page
 
 # ########################################################
 # For menu models
@@ -90,7 +91,7 @@ linkpage_edit_handler = TabbedInterface([linkpage_tab])
 
 
 # ########################################################
-# For MenuPageMixin
+# For MenuPageMixin and MenuPage
 # ########################################################
 
 menupage_panel = MultiFieldPanel(
@@ -102,10 +103,4 @@ menupage_panel = MultiFieldPanel(
     )
 )
 
-menupage_settings_panels = [
-    menupage_panel,
-]
-
-menupage_settings_tab = ObjectList(
-    menupage_settings_panels, heading=_("Settings"), classname="settings"
-)
+menupage_settings_panels = Page.settings_panels + [menupage_panel]
