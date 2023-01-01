@@ -33,6 +33,7 @@ This is a [Jazzband](https://jazzband.co/) project. By contributing you agree to
 * Rebecca Claire Murphy (rcmurphy)
 * Gabriel Augendre (Crocmagnon)
 * Bojan Mihelac (bmihelac)
+* Ben Froelich-Leon (benfroelich)
 
 ## Translators
 
