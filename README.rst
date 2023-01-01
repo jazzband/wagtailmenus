@@ -52,6 +52,6 @@ For everything you need to get up and running with wagtailmenus, `view the offic
 Contributing
 ============
 
-Instructions on how to contribute to can be house `here <https://wagtailmenus.readthedocs.io/en/stable/contributing/index.html>`_.
+Instructions on how to contribute can be found `here <https://wagtailmenus.readthedocs.io/en/stable/contributing/index.html>`_.
 
 As we are members of a `JazzBand project <https://jazzband.co/projects>`_, `wagtailmenus` contributors should adhere to the `Contributor Code of Conduct <https://jazzband.co/about/conduct>`_.
