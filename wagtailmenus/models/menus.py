@@ -502,6 +502,8 @@ class Menu:
 
         if option_vals.apply_active_classes:
             if page:
+                if (page.pk != page.localized.pk):
+                    page = page.localized
                 if(current_page and page.pk == current_page.pk):
                     # This is the current page, so the menu item should
                     # probably have the 'active' class
