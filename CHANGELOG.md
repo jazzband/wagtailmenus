@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+* Update testing for Wagtail 4.1 and 4.2
+
 3.1.3 (15.10.2022)
 ------------------
 

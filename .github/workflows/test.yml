@@ -12,9 +12,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
         django-version: ['3.2', '4.0', '4.1']
-        wagtail-version: ['2.15', '2.16', '3.0', '4.0']
+        wagtail-version: ['2.15', '2.16', '3.0', '4.0', '4.1', '4.2']
         exclude:
           - python-version: '3.7'
             django-version: '4.0'
@@ -31,6 +31,24 @@ jobs:
           - python-version: '3.10'
             django-version: '4.0'
             wagtail-version: '2.15'
+          - python-version: '3.11'
+            django-version: '3.2'
+            wagtail-version: '2.15'
+          - python-version: '3.11'
+            django-version: '3.2'
+            wagtail-version: '2.16'
+          - python-version: '3.11'
+            django-version: '3.2'
+            wagtail-version: '3.0'
+          - python-version: '3.11'
+            django-version: '3.2'
+            wagtail-version: '4.0'
+          - python-version: '3.11'
+            django-version: '3.2'
+            wagtail-version: '4.1'
+          - python-version: '3.11'
+            django-version: '3.2'
+            wagtail-version: '4.2'
     steps:
     - uses: actions/checkout@v2
 
