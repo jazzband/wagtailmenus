@@ -17,11 +17,6 @@ class MainMenuAdmin(ModelAdmin):
     edit_view_class = views.MainMenuEditView
     add_to_settings_menu = True
 
-    def get_form_view_extra_css(self):
-        if settings.ADD_EDITOR_OVERRIDE_STYLES:
-            return ['wagtailmenus/css/menu-edit.css']
-        return []
-
     def get_admin_urls_for_registration(self):
         return (
             re_path(self.url_helper.get_action_url_pattern('index'),
@@ -69,11 +64,6 @@ class FlatMenuAdmin(ModelAdmin):
     create_view_class = views.FlatMenuCreateView
     edit_view_class = views.FlatMenuEditView
     add_to_settings_menu = True
-
-    def get_form_view_extra_css(self):
-        if settings.ADD_EDITOR_OVERRIDE_STYLES:
-            return ['wagtailmenus/css/menu-edit.css']
-        return []
 
     def copy_view(self, request, instance_pk):
         kwargs = {'model_admin': self, 'instance_pk': instance_pk}

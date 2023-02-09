@@ -5,8 +5,6 @@
 # Admin / UI settings
 # -------------------
 
-ADD_EDITOR_OVERRIDE_STYLES = True
-
 FLATMENU_MENU_ICON = 'list-ol'
 
 FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN = True
@@ -89,3 +87,5 @@ SECTION_ROOT_DEPTH = 3
 # ----------
 # Deprecated
 # ----------
+
+ADD_EDITOR_OVERRIDE_STYLES = True
