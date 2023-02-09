@@ -5,6 +5,8 @@ Unreleased
 ----------
 
 * Update testing for Wagtail 4.1 and 4.2
+* Tidy up imports and remove unused imports
+* Silence DEFAULT_AUTO_FIELD warnings in tests
 
 3.1.3 (15.10.2022)
 ------------------
