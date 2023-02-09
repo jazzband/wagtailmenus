@@ -1,8 +1,7 @@
 from collections import OrderedDict, defaultdict, namedtuple
-from distutils.version import LooseVersion
 from types import GeneratorType
 
-from django import __version__ as django_version
+from django import VERSION as DJANGO_VERSION
 from django.core.exceptions import (ImproperlyConfigured,
                                     MultipleObjectsReturned)
 from django.db import models
@@ -24,7 +23,7 @@ from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
 from .pages import AbstractLinkPage
 
-if LooseVersion(django_version) >= LooseVersion('4.1'):
+if DJANGO_VERSION >= (4, 1):
     mark_safe_lazy = mark_safe
 else:
     mark_safe_lazy = lazy(mark_safe, str)
