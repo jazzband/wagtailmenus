@@ -14,6 +14,7 @@ from wagtailmenus.managers import MenuItemManager
 # Base classes
 #########################################################
 
+
 class MenuItem:
     """A base class that all other 'menu item' classes should inherit from."""
     allow_subnav = False

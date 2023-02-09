@@ -10,7 +10,7 @@ DATABASES = {
     }
 }
 
-INSTALLED_APPS += (
+INSTALLED_APPS += (  # NOQA
     'wagtailmenus.tests',
 )
 

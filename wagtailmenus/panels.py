@@ -9,6 +9,7 @@ from wagtailmenus.conf import settings
 # For menu models
 # ########################################################
 
+
 class MenuItemInlinePanel(InlinePanel):
 
     def __init__(self, **kwargs):

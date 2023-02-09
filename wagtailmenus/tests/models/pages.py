@@ -191,6 +191,7 @@ class NoAbsoluteUrlsPage(MenuPage):
 class LinkPage(AbstractLinkPage):
     pass
 
+
 class ArticleListPage(RoutablePageMixin, Page):
     template = 'page.html'
     subpage_types = ['tests.ArticlePage']

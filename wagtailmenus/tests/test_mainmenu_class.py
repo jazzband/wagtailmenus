@@ -103,7 +103,6 @@ class TestGetPagesForDisplay(MainMenuTestCase):
             list(menu.pages_for_display.values())
 
 
-
 class TestAddMenuItemsForPages(MainMenuTestCase):
 
     # ------------------------------------------------------------------------
