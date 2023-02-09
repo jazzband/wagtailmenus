@@ -12,12 +12,8 @@ from django.utils.functional import cached_property, lazy
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from modelcluster.models import ClusterableModel
-try:
-    from wagtail import hooks
-    from wagtail.models import Page, Site
-except ImportError:
-    from wagtail.core import hooks
-    from wagtail.core.models import Page, Site
+from wagtail import hooks
+from wagtail.models import Page, Site
 
 
 from wagtailmenus import forms, panels

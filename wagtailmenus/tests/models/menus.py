@@ -5,12 +5,8 @@ from wagtailmenus.models import (
     AbstractMainMenuItem, AbstractFlatMenu, AbstractFlatMenuItem)
 
 from .utils import TranslatedField
-try:
-    from wagtail.admin.panels import (
-        FieldPanel, MultiFieldPanel, PageChooserPanel)
-except ImportError:
-    from wagtail.admin.edit_handlers import (
-        FieldPanel, MultiFieldPanel, PageChooserPanel)
+from wagtail.admin.panels import (
+    FieldPanel, MultiFieldPanel, PageChooserPanel)
 
 
 class CustomChildrenMenu(ChildrenMenu):

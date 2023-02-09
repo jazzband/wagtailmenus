@@ -3,10 +3,7 @@ from django.test import TestCase, override_settings
 from wagtailmenus.errors import SubMenuUsageError
 from wagtailmenus.models import MainMenu, FlatMenu
 from wagtailmenus.templatetags.menu_tags import validate_supplied_values
-try:
-    from wagtail.models import Site
-except ImportError:
-    from wagtail.core.models import Site
+from wagtail.models import Site
 
 
 class TestTemplateTags(TestCase):

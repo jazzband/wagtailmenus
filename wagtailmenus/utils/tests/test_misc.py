@@ -7,12 +7,8 @@ from wagtailmenus.utils.misc import (
 from wagtailmenus.tests.models import (
     ArticleListPage, ArticlePage, LowLevelPage, TopLevelPage
 )
-try:
-    from wagtail import __version__ as wagtail_version
-    from wagtail.models import Page, Site
-except ImportError:
-    from wagtail.core import __version__ as wagtail_version
-    from wagtail.core.models import Page, Site
+from wagtail.models import Page, Site
+
 
 
 class TestGetFakeRequest(TestCase):
@@ -271,11 +267,6 @@ class TestGetSiteFromRequest(TestCase):
     def setUp(self):
         # URL to request during test
         self.url = '/superheroes/marvel-comics/'
-        # Establish if Wagtail is v2.9 or above
-        if LooseVersion(wagtail_version) >= LooseVersion('2.9'):
-            self.is_wagtail_29_or_above = True
-        else:
-            self.is_wagtail_29_or_above = False
 
     def _run_test(self):
         """
@@ -296,17 +287,15 @@ class TestGetSiteFromRequest(TestCase):
         'append': 'django.contrib.sites.middleware.CurrentSiteMiddleware',
         'remove': 'wagtail.core.middleware.SiteMiddleware',
     })
-    def test_with_django_site_in_request_wagtail_29_and_above(self):
+    def test_with_django_site_in_request(self):
         """
         Test when only a Django Site exists at request.site for Wagtail 2.9 and above.
         """
-        if self.is_wagtail_29_or_above:
-            self._run_test()
+        self._run_test()
 
     @modify_settings(MIDDLEWARE={'remove': 'wagtail.core.middleware.SiteMiddleware'})
-    def test_with_no_site_in_request_wagtail_29_and_above(self):
+    def test_with_no_site_in_request(self):
         """
         Test when no Site object exists at request.site for Wagtail 2.9 and above.
         """
-        if self.is_wagtail_29_or_above:
-            self._run_test()
+        self._run_test()

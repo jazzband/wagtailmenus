@@ -2,10 +2,7 @@ from django.template import Library
 from wagtailmenus.conf import constants, settings
 from wagtailmenus.errors import SubMenuUsageError
 from wagtailmenus.utils.misc import validate_supplied_values
-try:
-    from wagtail.models import Page
-except ImportError:
-    from wagtail.core.models import Page
+from wagtail.models import Page
 
 register = Library()
 

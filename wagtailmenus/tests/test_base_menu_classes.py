@@ -1,10 +1,7 @@
 from django.test import TestCase
 from wagtailmenus.errors import RequestUnavailableError
 from wagtailmenus.models import Menu, MenuWithMenuItems
-try:
-    from wagtail.models import Page, Site
-except ImportError:
-    from wagtail.core.models import Page, Site
+from wagtail.models import Page, Site
 
 
 class TestMenuGetSite(TestCase):

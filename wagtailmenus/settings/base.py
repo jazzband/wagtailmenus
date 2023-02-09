@@ -24,7 +24,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'wagtail.admin',
-    'wagtail.core',
+    'wagtail',
     'wagtail.documents',
     'wagtail.embeds',
     'wagtail.images',

@@ -2,10 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 from bs4 import BeautifulSoup
 from django.test import TestCase
-try:
-    from wagtail import hooks
-except ImportError:
-    from wagtail.core import hooks
+from wagtail import hooks
 
 class TestHooks(TestCase):
     fixtures = ['test.json']

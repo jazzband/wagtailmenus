@@ -10,14 +10,9 @@ from wagtailmenus.models import AbstractLinkPage, MenuPage
 
 from .utils import TranslatedField
 
-try:
-    from wagtail.admin.panels import (FieldPanel, MultiFieldPanel,
-                                      PublishingPanel)
-    from wagtail.models import Page
-except ImportError:
-    from wagtail.admin.edit_handlers import (FieldPanel, MultiFieldPanel,
-                                             PublishingPanel)
-    from wagtail.core.models import Page
+from wagtail.admin.panels import (FieldPanel, MultiFieldPanel,
+                                    PublishingPanel)
+from wagtail.models import Page
 
 
 class MultilingualMenuPage(MenuPage):

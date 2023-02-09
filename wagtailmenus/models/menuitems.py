@@ -6,12 +6,8 @@ from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
 from wagtailmenus.conf import settings
 from wagtailmenus.managers import MenuItemManager
-try:
-    from wagtail.admin.panels import FieldPanel, PageChooserPanel
-    from wagtail.models import Page, Orderable
-except ImportError:
-    from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
-    from wagtail.core.models import Page, Orderable
+from wagtail.admin.panels import FieldPanel, PageChooserPanel
+from wagtail.models import Page, Orderable
 
 
 #########################################################

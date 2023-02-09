@@ -5,10 +5,7 @@ from wagtailmenus.conf import settings
 from wagtailmenus.models import (
     AbstractMenuItem, MainMenu, MainMenuItem, FlatMenu, FlatMenuItem
 )
-try:
-    from wagtail.models import Page
-except ImportError:
-    from wagtail.core.models import Page
+from wagtail.models import Page
 
 
 class MenuItemModelTestMixin:
