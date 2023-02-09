@@ -2,11 +2,11 @@ from django.contrib.admin.utils import quote
 from django.urls import re_path
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
-from wagtail.contrib.modeladmin.options import ModelAdmin
 from wagtail.contrib.modeladmin.helpers import ButtonHelper
+from wagtail.contrib.modeladmin.options import ModelAdmin
 
-from wagtailmenus.conf import settings
 from wagtailmenus import views
+from wagtailmenus.conf import settings
 
 
 class MainMenuAdmin(ModelAdmin):

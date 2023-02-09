@@ -1,12 +1,12 @@
 from django.db import models
 from modelcluster.fields import ParentalKey
-from wagtailmenus.models import (
-    SectionMenu, ChildrenMenu, AbstractMainMenu,
-    AbstractMainMenuItem, AbstractFlatMenu, AbstractFlatMenuItem)
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PageChooserPanel
+
+from wagtailmenus.models import (AbstractFlatMenu, AbstractFlatMenuItem,
+                                 AbstractMainMenu, AbstractMainMenuItem,
+                                 ChildrenMenu, SectionMenu)
 
 from .utils import TranslatedField
-from wagtail.admin.panels import (
-    FieldPanel, MultiFieldPanel, PageChooserPanel)
 
 
 class CustomChildrenMenu(ChildrenMenu):

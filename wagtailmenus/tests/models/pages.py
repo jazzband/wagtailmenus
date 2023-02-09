@@ -3,16 +3,13 @@ from datetime import date
 from django.db import models
 from django.http import Http404
 from django.template.response import TemplateResponse
-from django import __version__ as django_version
-from distutils.version import LooseVersion
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PublishingPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.models import Page
+
 from wagtailmenus.models import AbstractLinkPage, MenuPage
 
 from .utils import TranslatedField
-
-from wagtail.admin.panels import (FieldPanel, MultiFieldPanel,
-                                    PublishingPanel)
-from wagtail.models import Page
 
 
 class MultilingualMenuPage(MenuPage):

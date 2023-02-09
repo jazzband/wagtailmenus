@@ -4,13 +4,12 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase, TransactionTestCase, override_settings
-
 from django_webtest import WebTest
-from wagtailmenus import get_flat_menu_model, get_main_menu_model
-
-from wagtailmenus.tests.models import LinkPage
 from wagtail.admin.panels import ObjectList
-from wagtail.models import Page, Site
+from wagtail.models import Site
+
+from wagtailmenus import get_flat_menu_model, get_main_menu_model
+from wagtailmenus.tests.models import LinkPage
 
 FlatMenu = get_flat_menu_model()
 

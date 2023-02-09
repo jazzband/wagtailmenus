@@ -1,8 +1,9 @@
 from django.template import Library
-from wagtailmenus.conf import constants, settings
+from wagtail.models import Page
+
+from wagtailmenus.conf import settings
 from wagtailmenus.errors import SubMenuUsageError
 from wagtailmenus.utils.misc import validate_supplied_values
-from wagtail.models import Page
 
 register = Library()
 

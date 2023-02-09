@@ -1,4 +1,5 @@
 import sys
+
 from cogwheels import BaseAppSettingsHelper
 
 

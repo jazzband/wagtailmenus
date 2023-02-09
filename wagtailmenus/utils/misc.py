@@ -1,7 +1,7 @@
 from django.http import Http404, HttpRequest
+from wagtail.models import Page, Site
 
 from wagtailmenus.models.menuitems import MenuItem
-from wagtail.models import Page, Site
 
 
 def get_fake_site():

@@ -1,10 +1,9 @@
-from django.conf import settings as django_settings
 from django.utils.translation import gettext_lazy as _
+from wagtail.admin.panels import (FieldPanel, FieldRowPanel, InlinePanel,
+                                  MultiFieldPanel, ObjectList,
+                                  PageChooserPanel, TabbedInterface)
+
 from wagtailmenus.conf import settings
-from wagtail.admin.panels import (
-    FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel,
-    PageChooserPanel, ObjectList, TabbedInterface
-)
 
 # ########################################################
 # For menu models

@@ -7,13 +7,12 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils.text import capfirst
 from django.utils.translation import gettext as _
 from wagtail.admin import messages
-from wagtail.contrib.modeladmin.views import (
-    WMABaseView, CreateView, EditView, ModelFormView
-)
-from wagtailmenus.conf import settings
-from distutils.version import LooseVersion
-from wagtail.models import Site
 from wagtail.admin.panels import ObjectList, TabbedInterface
+from wagtail.contrib.modeladmin.views import (CreateView, EditView,
+                                              ModelFormView, WMABaseView)
+from wagtail.models import Site
+
+from wagtailmenus.conf import settings
 
 
 class SiteSwitchForm(forms.Form):

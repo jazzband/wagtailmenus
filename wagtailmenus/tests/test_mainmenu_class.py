@@ -1,6 +1,5 @@
 from django.test import TestCase
 
-from wagtailmenus.conf import constants
 from wagtailmenus.models import MainMenu
 from wagtailmenus.tests import base, utils
 

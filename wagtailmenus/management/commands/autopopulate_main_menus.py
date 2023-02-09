@@ -1,8 +1,9 @@
 import logging
 
 from django.core.management.base import BaseCommand
-from wagtailmenus.conf import settings
 from wagtail.models import Site
+
+from wagtailmenus.conf import settings
 
 logger = logging.getLogger(__name__)
 

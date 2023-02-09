@@ -1,7 +1,8 @@
-from django.test import TestCase
 from django.core.management import call_command
-from wagtailmenus.conf import settings
+from django.test import TestCase
 from wagtail.models import Site
+
+from wagtailmenus.conf import settings
 
 
 class TestAutoPopulateMainMenus(TestCase):

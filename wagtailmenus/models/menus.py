@@ -1,12 +1,12 @@
-from collections import defaultdict, namedtuple, OrderedDict
+from collections import OrderedDict, defaultdict, namedtuple
+from distutils.version import LooseVersion
 from types import GeneratorType
 
-from distutils.version import LooseVersion
 from django import __version__ as django_version
+from django.core.exceptions import (ImproperlyConfigured,
+                                    MultipleObjectsReturned)
 from django.db import models
 from django.db.models import BooleanField, Case, Q, When
-from django.core.exceptions import ImproperlyConfigured, MultipleObjectsReturned
-from django.http import HttpRequest
 from django.template.loader import get_template, select_template
 from django.utils.functional import cached_property, lazy
 from django.utils.safestring import mark_safe
@@ -15,11 +15,11 @@ from modelcluster.models import ClusterableModel
 from wagtail import hooks
 from wagtail.models import Page, Site
 
-
 from wagtailmenus import forms, panels
 from wagtailmenus.conf import constants, settings
 from wagtailmenus.errors import RequestUnavailableError
 from wagtailmenus.utils.misc import get_fake_request, get_site_from_request
+
 from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
 from .pages import AbstractLinkPage

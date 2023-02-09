@@ -4,11 +4,11 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
+from wagtail.admin.panels import FieldPanel, PageChooserPanel
+from wagtail.models import Orderable, Page
+
 from wagtailmenus.conf import settings
 from wagtailmenus.managers import MenuItemManager
-from wagtail.admin.panels import FieldPanel, PageChooserPanel
-from wagtail.models import Page, Orderable
-
 
 #########################################################
 # Base classes

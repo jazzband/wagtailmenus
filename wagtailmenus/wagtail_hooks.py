@@ -1,11 +1,8 @@
+from wagtail import hooks
 from wagtail.contrib.modeladmin.options import modeladmin_register
 
 from wagtailmenus.conf import settings
 from wagtailmenus.utils.misc import derive_section_root
-from wagtailmenus.modeladmin import ( # noqa
-    MainMenuAdmin, FlatMenuAdmin, FlatMenuButtonHelper
-)
-from wagtail import hooks
 
 if settings.MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN:
     modeladmin_register(settings.objects.MAIN_MENUS_MODELADMIN_CLASS)

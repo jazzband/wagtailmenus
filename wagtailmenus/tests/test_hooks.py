@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from django.test import TestCase
 from wagtail import hooks
 
+
 class TestHooks(TestCase):
     fixtures = ['test.json']
 

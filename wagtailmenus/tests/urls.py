@@ -1,8 +1,8 @@
 from django.conf.urls import include
 from django.urls import re_path
 from django.views.generic import TemplateView
-from wagtail.admin import urls as wagtailadmin_urls
 from wagtail import urls as wagtail_urls
+from wagtail.admin import urls as wagtailadmin_urls
 
 urlpatterns = [
     re_path(r'^admin/', include(wagtailadmin_urls)),

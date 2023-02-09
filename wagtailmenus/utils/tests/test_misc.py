@@ -1,14 +1,11 @@
 from django.test import RequestFactory, TestCase, modify_settings
-from distutils.version import LooseVersion
-from wagtailmenus.conf import defaults
-from wagtailmenus.utils.misc import (
-    derive_page, derive_section_root, get_fake_request, get_site_from_request
-)
-from wagtailmenus.tests.models import (
-    ArticleListPage, ArticlePage, LowLevelPage, TopLevelPage
-)
 from wagtail.models import Page, Site
 
+from wagtailmenus.conf import defaults
+from wagtailmenus.tests.models import (ArticleListPage, ArticlePage,
+                                       LowLevelPage, TopLevelPage)
+from wagtailmenus.utils.misc import (derive_page, derive_section_root,
+                                     get_fake_request, get_site_from_request)
 
 
 class TestGetFakeRequest(TestCase):
