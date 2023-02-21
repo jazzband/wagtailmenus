@@ -1,4 +1,4 @@
-from wagtailmenus.utils.version import get_version, get_stable_branch_name
+from wagtailmenus.utils.version import get_stable_branch_name, get_version
 
 # major.minor.patch.release.number
 # release must be one of alpha, beta, rc, or final

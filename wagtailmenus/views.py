@@ -7,19 +7,12 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils.text import capfirst
 from django.utils.translation import gettext as _
 from wagtail.admin import messages
-from wagtail.contrib.modeladmin.views import (
-    WMABaseView, CreateView, EditView, ModelFormView
-)
+from wagtail.admin.panels import ObjectList, TabbedInterface
+from wagtail.contrib.modeladmin.views import (CreateView, EditView,
+                                              ModelFormView, WMABaseView)
+from wagtail.models import Site
+
 from wagtailmenus.conf import settings
-from distutils.version import LooseVersion
-try:
-    from wagtail import __version__ as wagtail_version
-    from wagtail.models import Site
-    from wagtail.admin.panels import ObjectList, TabbedInterface
-except ImportError:
-    from wagtail.core import __version__ as wagtail_version
-    from wagtail.core.models import Site
-    from wagtail.admin.edit_handlers import ObjectList, TabbedInterface
 
 
 class SiteSwitchForm(forms.Form):
@@ -60,9 +53,6 @@ class MenuTabbedInterfaceMixin:
                 ObjectList(self.model.settings_panels, heading=_("Settings"),
                            classname="settings"),
             ])
-        if LooseVersion(wagtail_version) < LooseVersion('3.0'):
-            # For Wagtail>=2.5,<3.0
-            return edit_handler.bind_to(model=self.model)
         return edit_handler.bind_to_model(self.model)
 
     def form_invalid(self, form):

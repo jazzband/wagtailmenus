@@ -4,19 +4,16 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
+from wagtail.admin.panels import FieldPanel, PageChooserPanel
+from wagtail.models import Orderable, Page
+
 from wagtailmenus.conf import settings
 from wagtailmenus.managers import MenuItemManager
-try:
-    from wagtail.admin.panels import FieldPanel, PageChooserPanel
-    from wagtail.models import Page, Orderable
-except ImportError:
-    from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
-    from wagtail.core.models import Page, Orderable
-
 
 #########################################################
 # Base classes
 #########################################################
+
 
 class MenuItem:
     """A base class that all other 'menu item' classes should inherit from."""

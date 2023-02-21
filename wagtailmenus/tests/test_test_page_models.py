@@ -1,5 +1,7 @@
 from unittest.mock import ANY, patch
+
 from django.test import TestCase
+
 from wagtailmenus.tests.models import ArticleListPage, ArticlePage
 
 

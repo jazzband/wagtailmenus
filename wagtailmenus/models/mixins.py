@@ -1,7 +1,6 @@
 from django.template.loader import get_template, select_template
 
 from wagtailmenus.conf import settings
-from wagtailmenus.utils.inspection import accepts_kwarg
 
 
 def get_item_by_index_or_last_item(items, index):

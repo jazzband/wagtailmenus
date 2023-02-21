@@ -1,12 +1,10 @@
 from bs4 import BeautifulSoup
 from django.test import TestCase, override_settings
+from wagtail.models import Site
+
 from wagtailmenus.errors import SubMenuUsageError
-from wagtailmenus.models import MainMenu, FlatMenu
+from wagtailmenus.models import FlatMenu, MainMenu
 from wagtailmenus.templatetags.menu_tags import validate_supplied_values
-try:
-    from wagtail.models import Site
-except ImportError:
-    from wagtail.core.models import Site
 
 
 class TestTemplateTags(TestCase):

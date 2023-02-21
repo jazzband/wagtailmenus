@@ -5,12 +5,12 @@ from bs4 import BeautifulSoup
 from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 
-from wagtailmenus import get_main_menu_model, get_flat_menu_model
-from wagtailmenus.models import MainMenu, FlatMenu
-from wagtailmenus.tests.models import (
-    MainMenuCustomMenuItem, FlatMenuCustomMenuItem,
-    CustomMainMenu, CustomMainMenuItem, CustomFlatMenu, CustomFlatMenuItem
-)
+from wagtailmenus import get_flat_menu_model, get_main_menu_model
+from wagtailmenus.models import FlatMenu, MainMenu
+from wagtailmenus.tests.models import (CustomFlatMenu, CustomFlatMenuItem,
+                                       CustomMainMenu, CustomMainMenuItem,
+                                       FlatMenuCustomMenuItem,
+                                       MainMenuCustomMenuItem)
 
 
 @override_settings(

@@ -3,21 +3,13 @@ from datetime import date
 from django.db import models
 from django.http import Http404
 from django.template.response import TemplateResponse
-from django import __version__ as django_version
-from distutils.version import LooseVersion
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PublishingPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.models import Page
+
 from wagtailmenus.models import AbstractLinkPage, MenuPage
 
 from .utils import TranslatedField
-
-try:
-    from wagtail.admin.panels import (FieldPanel, MultiFieldPanel,
-                                      PublishingPanel)
-    from wagtail.models import Page
-except ImportError:
-    from wagtail.admin.edit_handlers import (FieldPanel, MultiFieldPanel,
-                                             PublishingPanel)
-    from wagtail.core.models import Page
 
 
 class MultilingualMenuPage(MenuPage):
@@ -198,6 +190,7 @@ class NoAbsoluteUrlsPage(MenuPage):
 
 class LinkPage(AbstractLinkPage):
     pass
+
 
 class ArticleListPage(RoutablePageMixin, Page):
     template = 'page.html'
