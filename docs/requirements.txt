@@ -1,3 +1,0 @@
-wagtail>=2.8,<2.9
-pyenchant>=2.0
-sphinxcontrib-spelling>=2.3.0

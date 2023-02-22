@@ -1,8 +1,0 @@
-=================================
-Wagtailmenus 2.12.1 release notes
-=================================
-
-This release includes fixes for the following bugs:
-
-- `#329 <https://github.com/jazzband/wagtailmenus/issues/329>`_, which prevented level-specific template names working as specified in the docs.
-- `#323 <https://github.com/jazzband/wagtailmenus/issues/323>`_, which prevented ``StreamField`` from working properly when creating or editing menus with custom item models.

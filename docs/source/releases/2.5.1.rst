@@ -1,7 +1,0 @@
-================================
-Wagtailmenus 2.5.1 release notes
-================================
-
-This is a maintenance release to fix a bug that was resulting in Django creating additional migrations for the app when running the  ``makemigrations`` command after changing the project's default language to something other than ``"en"``.
-
-Thanks to @philippbosch from A Color Bright for submitting the fix.

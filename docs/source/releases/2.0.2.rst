@@ -1,5 +1,0 @@
-================================
-Wagtailmenus 2.0.2 release notes
-================================
-
-This release is broken and shouldn't be use. Skip straight to v2.0.3 instead.

@@ -1,7 +1,0 @@
-================================
-Wagtailmenus 2.4.1 release notes
-================================
-
-This is a maintenance release to add a migration that should have been included in the previous release, but wasn't. Thanks to Stuart George (@stuartaccent) for reporting and submitting the fix.
-
-If you experience problems after upgrading from 2.4.0 to 2.4.1 (due to your project creating it's own, conflicting migration), please try running ``pip uninstall wagtailmenus`` first, then install the latest version.

@@ -1,6 +1,0 @@
-================================
-Wagtailmenus 3.0.1 release notes
-================================
-
-This release includes minor changes to add compatibility with Django 3.0
-and Wagtail 2.8 (thanks to Arkadiusz Michał Ryś).

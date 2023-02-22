@@ -1,8 +1,0 @@
-================================
-Wagtailmenus 2.2.3 release notes
-================================
-
-This is a maintenance release to fix a bug that was resulting in 
-``{% sub_menu %}`` being called recursively (until raising a "maximum
-recursion depth exceeded" exception) if a 'repeated menu item' was added at
-anything past the second level. Thanks to @pyMan for raising/investigating.

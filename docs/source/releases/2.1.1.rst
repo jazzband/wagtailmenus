@@ -1,5 +1,0 @@
-================================
-Wagtailmenus 2.1.1 release notes
-================================
-
-This is a maintenance release to fix a bug introduced in 2.1.0 preventing the app from being installed via pip
