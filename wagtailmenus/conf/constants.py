@@ -1,6 +1,5 @@
 from django.utils.translation import gettext_lazy as _
 
-
 MAX_LEVELS_CHOICES = (
     (1, _('1: No sub-navigation (flat)')),
     (2, _('2: Allow 1 level of sub-navigation')),

@@ -30,3 +30,4 @@ ROOT_URLCONF = 'wagtailmenus.development.urls'
 WAGTAIL_SITE_NAME = 'Wagtailmenus development'
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INTERNAL_IPS = ['127.0.0.1']
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

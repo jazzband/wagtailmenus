@@ -1,9 +1,8 @@
-from django.http import Http404
 from django.utils.functional import SimpleLazyObject
+
 from wagtailmenus.conf import settings
-from wagtailmenus.utils.misc import (
-    get_site_from_request, derive_page, derive_section_root
-)
+from wagtailmenus.utils.misc import (derive_page, derive_section_root,
+                                     get_site_from_request)
 
 
 def wagtailmenus(request):
