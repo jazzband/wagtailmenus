@@ -44,7 +44,7 @@ def main_menu(
 
 @register.simple_tag(takes_context=True)
 def flat_menu(
-    context, handle, max_levels=None, show_menu_heading=False,
+    context, handle, max_levels=None, show_menu_heading=True,
     apply_active_classes=False, allow_repeating_parents=True,
     show_multiple_levels=True, template='', sub_menu_template='',
     sub_menu_templates=None, fall_back_to_default_site_menus=None,
