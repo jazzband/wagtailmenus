@@ -153,7 +153,7 @@ following code for an example:
                 current_page, allow_repeating_parents, original_menu_tag,
                 menu_instance, request)
 
- If you choose NOT to update your versions of those methods to accept the 
- ``request`` keyword argument, you will continue to see deprecation warnings
- until version ``2.5.0``, when it will be a requirement, and your existing code
- will no longer work.
+If you choose NOT to update your versions of those methods to accept the 
+``request`` keyword argument, you will continue to see deprecation warnings
+until version ``2.5.0``, when it will be a requirement, and your existing code
+will no longer work.
