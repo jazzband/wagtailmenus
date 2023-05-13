@@ -1,0 +1,21 @@
+===============================================
+Wagtailmenus 3.1.4 release notes (21.02.2023)
+===============================================
+
+.. contents::
+    :local:
+    :depth: 1
+
+
+What's new?
+===========
+
+This release wasn't published correctly to PyPI, which was fixed in 3.1.5.
+
+
+Minor changes & bug fixes
+=========================
+
+* Update testing for Wagtail 4.1 and 4.2
+* Tidy up imports and remove unused imports
+* Silence DEFAULT_AUTO_FIELD warnings in tests

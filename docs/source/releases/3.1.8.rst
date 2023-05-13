@@ -1,0 +1,24 @@
+===============================================
+Wagtailmenus 3.1.8 release notes (13.05.2023)
+===============================================
+
+.. contents::
+    :local:
+    :depth: 1
+
+
+What's new?
+===========
+
+There are no new major features in this release.
+
+
+Minor changes & bug fixes
+=========================
+
+* Fix bug that prevented the `show_menu_heading` from working on default flat menus.
+* Fix `autopopulate_main_menus` instructions.
+* Fix docs examples for registering hooks.
+* Fix `#435 <https://github.com/jazzband/wagtailmenus/issues/435>`_ and \
+  `#452 <https://github.com/jazzband/wagtailmenus/issues/452>`_, which were causing \
+  extra migrations on the id fields. 

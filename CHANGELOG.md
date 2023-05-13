@@ -1,7 +1,30 @@
 Changelog
 =========
 
-Unreleased
+3.1.8 (13.05.2023)
+----------
+
+* Fix bug that prevented the `show_menu_heading` from working on default flat menus.
+* Fix `autopopulate_main_menus` instructions.
+* Fix docs examples for registering hooks.
+* Fix [#435](https://github.com/jazzband/wagtailmenus/issues/435) and [#452](https://github.com/jazzband/wagtailmenus/issues/452), which were causing extra migrations on the id fields.
+
+3.1.7 (17.04.2023)
+----------
+
+* This is a dummy release to fix the publishing of the 3.1.6 release on PyPI.
+
+3.1.6 (17.04.2023)
+----------
+
+* Add "Python 3.11" to the list of PyPI classifiers.
+
+3.1.5 (21.02.2023)
+----------
+
+* This is a dummy release to fix the publishing of the 3.1.4 release on PyPI.
+
+3.1.4 (21.02.2023)
 ----------
 
 * Update testing for Wagtail 4.1 and 4.2

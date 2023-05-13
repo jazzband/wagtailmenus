@@ -19,6 +19,7 @@ embeddable
 frontend
 GitHub
 Github
+html
 init
 inline
 Jazzband
@@ -34,6 +35,7 @@ performant
 pre
 prefetch
 prepopulated
+py
 QuerySet
 queryset
 refactor
