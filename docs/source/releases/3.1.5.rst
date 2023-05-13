@@ -1,0 +1,13 @@
+===============================================
+Wagtailmenus 3.1.5 release notes (21.02.2023)
+===============================================
+
+.. contents::
+    :local:
+    :depth: 1
+
+
+What's new?
+===========
+
+This is a dummy release to fix the publishing of the 3.1.4 release on PyPI.
