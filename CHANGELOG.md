@@ -1,6 +1,11 @@
 Changelog
 =========
 
+3.1.9 (Unreleased)
+----------
+
+Fix [#445](https://github.com/jazzband/wagtailmenus/issues/445) which caused discrepancy between compatibility on website and readme.
+
 3.1.8 (13.05.2023)
 ----------
 
