@@ -50,3 +50,4 @@ This is a [Jazzband](https://jazzband.co/) project. By contributing you agree to
 * Jérôme Lebleu (jeromelebleu)
 * José Luis (SalahAdDin)
 * Abdulaziz Alfuhigi (3bdul3ziz)
+* Kira (kiraware)

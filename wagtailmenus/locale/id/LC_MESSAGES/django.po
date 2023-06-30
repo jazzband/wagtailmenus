@@ -1,0 +1,314 @@
+# Indonesian translation for wagtailmenus
+# Copyright (C) 2023
+# This file is distributed under the same license as the wagtailmenus package.
+# Kira <kiraware@github.com>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: wagtailmenus 3.1.8\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-30 09:44+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kira <kiraware@github.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+#: .\wagtailmenus\conf\constants.py:4
+msgid "1: No sub-navigation (flat)"
+msgstr "1: Tidak ada sub-navigasi (datar)"
+
+#: .\wagtailmenus\conf\constants.py:5
+msgid "2: Allow 1 level of sub-navigation"
+msgstr "2: Izinkan 1 tingkat sub-navigasi"
+
+#: .\wagtailmenus\conf\constants.py:6
+msgid "3: Allow 2 levels of sub-navigation"
+msgstr "3: Izinkan 2 tingkat sub-navigasi"
+
+#: .\wagtailmenus\conf\constants.py:7
+msgid "4: Allow 3 levels of sub-navigation"
+msgstr "4: Izinkan 3 tingkat sub-navigasi"
+
+#: .\wagtailmenus\forms.py:22
+msgid "By default, this will be used as the link text when appearing in menus."
+msgstr ""
+"Secara default, ini akan digunakan sebagai teks tautan saat muncul di menu."
+
+#: .\wagtailmenus\modeladmin.py:14
+msgid "Main menu"
+msgstr "Menu utama"
+
+#: .\wagtailmenus\modeladmin.py:37
+msgid "Copy"
+msgstr "Salin"
+
+#: .\wagtailmenus\modeladmin.py:39
+#, python-format
+msgid "Copy this %(model_name)s"
+msgstr "Salin %(model_name)s ini"
+
+#: .\wagtailmenus\modeladmin.py:60
+msgid "Flat menus"
+msgstr "Menu datar"
+
+#: .\wagtailmenus\modeladmin.py:93 .\wagtailmenus\models\menuitems.py:53
+#: .\wagtailmenus\models\menus.py:1151
+msgid "handle"
+msgstr "pegangan"
+
+#: .\wagtailmenus\modeladmin.py:101
+msgid "no. of items"
+msgstr "jumlah item"
+
+#: .\wagtailmenus\models\menuitems.py:32 .\wagtailmenus\models\pages.py:140
+msgid "link to an internal page"
+msgstr "tautan ke halaman internal"
+
+#: .\wagtailmenus\models\menuitems.py:38 .\wagtailmenus\models\pages.py:147
+msgid "link to a custom URL"
+msgstr "tautan ke URL khusus"
+
+#: .\wagtailmenus\models\menuitems.py:44 .\wagtailmenus\models\pages.py:153
+msgid "append to URL"
+msgstr "tambahkan ke URL"
+
+#: .\wagtailmenus\models\menuitems.py:48
+msgid ""
+"Use this to optionally append a #hash or querystring to the above page's URL."
+msgstr ""
+"Gunakan ini untuk menambahkan #hash atau querystring secara opsional ke URL "
+"halaman di atas."
+
+#: .\wagtailmenus\models\menuitems.py:57
+msgid ""
+"Use this field to optionally specify an additional value for each menu item, "
+"which you can then reference in custom menu templates."
+msgstr ""
+"Gunakan bidang ini untuk menentukan nilai tambahan secara opsional untuk "
+"setiap item menu, yang kemudian dapat Anda rujuk dalam templat menu kustom."
+
+#: .\wagtailmenus\models\menuitems.py:63
+msgid "link text"
+msgstr "teks tautan"
+
+#: .\wagtailmenus\models\menuitems.py:67
+msgid ""
+"Provide the text to use for a custom URL, or set on an internal page link to "
+"use instead of the page's title."
+msgstr ""
+"Berikan teks yang akan digunakan untuk URL khusus, atau tetapkan pada tautan "
+"halaman internal untuk gunakan sebagai pengganti judul halaman."
+
+#: .\wagtailmenus\models\menuitems.py:76 .\wagtailmenus\panels.py:19
+msgid "menu item"
+msgstr "item menu"
+
+#: .\wagtailmenus\models\menuitems.py:77
+msgid "menu items"
+msgstr "item menu"
+
+#: .\wagtailmenus\models\menuitems.py:113 .\wagtailmenus\models\pages.py:207
+msgid "Please choose an internal page or provide a custom URL"
+msgstr "Pilih halaman internal atau berikan URL khusus"
+
+#: .\wagtailmenus\models\menuitems.py:116 .\wagtailmenus\models\pages.py:212
+msgid "Linking to both a page and custom URL is not permitted"
+msgstr "Menautkan ke halaman dan URL khusus tidak diizinkan"
+
+#: .\wagtailmenus\models\menuitems.py:119
+msgid "This field is required when linking to a custom URL"
+msgstr "Bidang ini wajib diisi saat menautkan ke URL khusus"
+
+#: .\wagtailmenus\models\menuitems.py:157
+#: .\wagtailmenus\models\menuitems.py:173
+msgid "allow sub-menu for this item"
+msgstr "izinkan sub-menu untuk item ini"
+
+#: .\wagtailmenus\models\menuitems.py:160
+#: .\wagtailmenus\models\menuitems.py:176
+msgid ""
+"NOTE: The sub-menu might not be displayed, even if checked. It depends on "
+"how the menu is used in this project's templates."
+msgstr ""
+"CATATAN: Sub-menu mungkin tidak ditampilkan, meskipun sudah dicentang. Hal"
+" ini tergantung pada bagaimana menu tersebut digunakan dalam templat "
+"proyek ini."
+
+#: .\wagtailmenus\models\menus.py:1064 .\wagtailmenus\models\menus.py:1140
+msgid "site"
+msgstr "situs"
+
+#: .\wagtailmenus\models\menus.py:1071 .\wagtailmenus\models\menus.py:1165
+msgid "maximum levels"
+msgstr "level maksimum"
+
+#: .\wagtailmenus\models\menus.py:1075
+msgid ""
+"The maximum number of levels to display when rendering this menu. The value "
+"can be overidden by supplying a different <code>max_levels</code> value to "
+"the <code>{% main_menu %}</code> tag in your templates."
+msgstr ""
+"Jumlah maksimum level yang akan ditampilkan saat merender menu ini. Nilai "
+"ini dapat diganti dengan memberikan nilai <code>max_levels</code> yang "
+"berbeda pada tag <code>{% main_menu %}</code> di templat Anda."
+
+#: .\wagtailmenus\models\menus.py:1084 .\wagtailmenus\models\menus.py:1085
+msgid "main menu"
+msgstr "menu utama"
+
+#: .\wagtailmenus\models\menus.py:1125
+#, python-format
+msgid "Main menu for %(site_name)s"
+msgstr "Menu utama untuk %(site_name)s"
+
+#: .\wagtailmenus\models\menus.py:1146
+msgid "title"
+msgstr "judul"
+
+#: .\wagtailmenus\models\menus.py:1148
+msgid "For internal reference only."
+msgstr "Hanya untuk referensi internal."
+
+#: .\wagtailmenus\models\menus.py:1154
+msgid ""
+"Used to reference this menu in templates etc. Must be unique for the "
+"selected site."
+msgstr ""
+"Digunakan untuk mereferensikan menu ini di templat, dll. Harus unik "
+"untuk situs yang dipilih."
+
+#: .\wagtailmenus\models\menus.py:1159
+msgid "heading"
+msgstr "tajuk"
+
+#: .\wagtailmenus\models\menus.py:1162
+msgid "If supplied, appears above the menu when rendered."
+msgstr "Jika disediakan, akan muncul di atas menu ketika ditampilkan."
+
+#: .\wagtailmenus\models\menus.py:1169
+msgid ""
+"The maximum number of levels to display when rendering this menu. The value "
+"can be overidden by supplying a different <code>max_levels</code> value to "
+"the <code>{% flat_menu %}</code> tag in your templates."
+msgstr ""
+"Jumlah maksimum level yang akan ditampilkan saat merender menu ini. Nilai "
+"dapat diganti dengan memberikan nilai <code>max_levels</code> yang berbeda"
+" ke tag <code>{% flat_menu %}</code> di templat Anda."
+
+#: .\wagtailmenus\models\menus.py:1179
+msgid "flat menu"
+msgstr "menu datar"
+
+#: .\wagtailmenus\models\menus.py:1180
+msgid "flat menus"
+msgstr "menu datar"
+
+#: .\wagtailmenus\models\pages.py:17
+msgid "repeat in sub-navigation"
+msgstr "ulangi dalam sub-navigasi"
+
+#: .\wagtailmenus\models\pages.py:20
+msgid ""
+"If checked, a link to this page will be repeated alongside it's direct "
+"children when displaying a sub-navigation for this page."
+msgstr ""
+"Jika dicentang, tautan ke halaman ini akan diulang di samping tautan "
+"langsung anak saat menampilkan sub-navigasi untuk halaman ini."
+
+#: .\wagtailmenus\models\pages.py:25
+msgid "repeated item link text"
+msgstr "teks tautan item yang diulang"
+
+#: .\wagtailmenus\models\pages.py:29
+msgid ""
+"e.g. 'Section home' or 'Overview'. If left blank, the page title will be "
+"used."
+msgstr ""
+"misalnya 'Bagian beranda' atau 'Ikhtisar'. Jika dibiarkan kosong, judul "
+"halaman akan digunakan."
+
+#: .\wagtailmenus\models\pages.py:157
+msgid "Use this to optionally append a #hash or querystring to the URL."
+msgstr ""
+"Gunakan ini untuk menambahkan #hash atau querystring ke URL secara "
+"opsional."
+
+#: .\wagtailmenus\models\pages.py:161
+msgid "menu item css classes"
+msgstr "kelas css item menu"
+
+#: .\wagtailmenus\models\pages.py:165
+msgid ""
+"Optionally specify css classes to be added to this page when it appears in "
+"menus."
+msgstr ""
+"Tentukan secara opsional kelas css yang akan ditambahkan ke halaman ini "
+"ketika muncul di menu."
+
+#: .\wagtailmenus\models\pages.py:201
+msgid "A link page cannot link to another link page"
+msgstr "Halaman tautan tidak dapat menautkan ke halaman tautan lain"
+
+#: .\wagtailmenus\models\pages.py:289 .\wagtailmenus\models\pages.py:299
+#, python-format
+msgid "This page redirects to: %(url)s"
+msgstr "Halaman ini dialihkan ke: %(url)s"
+
+#: .\wagtailmenus\panels.py:18
+msgid "Menu items"
+msgstr "Item menu"
+
+#: .\wagtailmenus\panels.py:50
+msgid "Menu details"
+msgstr "Detail menu"
+
+#: .\wagtailmenus\panels.py:64
+msgid "Render settings"
+msgstr "Pengaturan render"
+
+#: .\wagtailmenus\panels.py:87 .\wagtailmenus\views.py:53
+msgid "Settings"
+msgstr "Pengaturan"
+
+#: .\wagtailmenus\panels.py:98
+msgid "Advanced menu behaviour"
+msgstr "Perilaku menu lanjutan"
+
+#: .\wagtailmenus\views.py:52
+msgid "Content"
+msgstr "Konten"
+
+#: .\wagtailmenus\views.py:67
+msgid "Editing"
+msgstr "Pengeditan"
+
+#: .\wagtailmenus\views.py:91
+#, python-format
+msgid "Editing %(model_name)s"
+msgstr "Mengedit %(model_name)s"
+
+#: .\wagtailmenus\views.py:122
+msgid "Main menu updated successfully."
+msgstr "Menu utama berhasil diperbarui."
+
+#: .\wagtailmenus\views.py:126
+msgid "The menu could not be saved due to errors."
+msgstr "Menu tidak dapat disimpan karena kesalahan."
+
+#: .\wagtailmenus\views.py:141
+msgid "Copying"
+msgstr "Menyalin"
+
+#: .\wagtailmenus\views.py:148
+#, python-format
+msgid "Copying %(model_name)s"
+msgstr "Menyalin %(model_name)s"
+
+#: .\wagtailmenus\views.py:180
+#, python-brace-format
+msgid "Flat menu '{instance}' created."
+msgstr "Menu datar '{instance}' dibuat."
