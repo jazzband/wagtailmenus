@@ -1,5 +1,8 @@
 from wagtail import hooks
-from wagtail.contrib.modeladmin.options import modeladmin_register
+try:
+    from wagtail_modeladmin.options import modeladmin_register
+except ModuleNotFoundError:
+    from wagtail.contrib.modeladmin.options import modeladmin_register
 
 from wagtailmenus.conf import settings
 from wagtailmenus.utils.misc import derive_section_root

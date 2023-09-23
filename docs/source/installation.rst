@@ -4,13 +4,14 @@
 Installing wagtailmenus
 =========================
 
-1.  Install the package using pip:
+1.  Install packages using pip:
 
     .. code-block:: console
 
         pip install wagtailmenus
+        pip install wagtail_modeladmin  # if Wagtail >= 5.1
 
-2.  Add ``wagtailmenus`` and ``wagtail.contrib.modeladmin`` to the
+2.  Add ``wagtailmenus`` and ``modeladmin`` to the
     ``INSTALLED_APPS`` setting in your project settings:
 
     .. code-block:: python
@@ -18,7 +19,8 @@ Installing wagtailmenus
 
         INSTALLED_APPS = [
             ...
-            'wagtail.contrib.modeladmin',  # Don't repeat if it's there already
+            'wagtail_modeladmin',          # if Wagtail >=5.1; Don't repeat if it's there already
+            'wagtail.contrib.modeladmin',  # if Wagtail <5.1;  Don't repeat if it's there already
             'wagtailmenus',
         ]
 
