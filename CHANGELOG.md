@@ -1,10 +1,11 @@
 Changelog
 =========
 
-3.1.9 (Unreleased)
+3.1.9 (23.09.2023)
 ----------
 
 * Fix [#445](https://github.com/jazzband/wagtailmenus/issues/445) which caused discrepancy between compatibility on website and readme.
+* Fix [460](https://github.com/jazzband/wagtailmenus/issues/460) by replacing `wagtail.contrib.modeladmin` with `wagtail_modeladmin`.
 * Update testing for Wagtail 5.0 and Django 4.2.
 * Dropped support for Python 3.7.
 
