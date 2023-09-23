@@ -8,8 +8,12 @@ from django.utils.text import capfirst
 from django.utils.translation import gettext as _
 from wagtail.admin import messages
 from wagtail.admin.panels import ObjectList, TabbedInterface
-from wagtail.contrib.modeladmin.views import (CreateView, EditView,
-                                              ModelFormView, WMABaseView)
+try:
+    from wagtail_modeladmin.views import (CreateView, EditView,
+                                          ModelFormView, WMABaseView)
+except ModuleNotFoundError:
+    from wagtail.contrib.modeladmin.views import (CreateView, EditView,
+                                                  ModelFormView, WMABaseView)
 from wagtail.models import Site
 
 from wagtailmenus.conf import settings

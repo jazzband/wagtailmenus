@@ -2,8 +2,12 @@ from django.contrib.admin.utils import quote
 from django.urls import re_path
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
-from wagtail.contrib.modeladmin.helpers import ButtonHelper
-from wagtail.contrib.modeladmin.options import ModelAdmin
+try:
+    from wagtail_modeladmin.helpers import ButtonHelper
+    from wagtail_modeladmin.options import ModelAdmin
+except ModuleNotFoundError:
+    from wagtail.contrib.modeladmin.helpers import ButtonHelper
+    from wagtail.contrib.modeladmin.options import ModelAdmin
 
 from wagtailmenus import views
 from wagtailmenus.conf import settings
