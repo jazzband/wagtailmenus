@@ -25,6 +25,7 @@ testing_extras = [
 
 development_extras = [
     'wagtail>=2.15',
+    'wagtail_modeladmin>=1.0',
     'django-debug-toolbar',
     'django-extensions',
     'ipdb',
