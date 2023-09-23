@@ -1,0 +1,19 @@
+===============================================
+Wagtailmenus 3.1.9 release notes (23.09.2023)
+===============================================
+
+.. contents::
+    :local:
+    :depth: 1
+
+
+What's new?
+===========
+
+Wagtail 6 will deprecate the `wagtail.contrib.modeladmin` module in favour of `wagtail.snippets`. A new maintenance package, called `wagtail-modeladmin` was released to provide a smooth transition. This release adds `wagtail-modeladmin` support. It's a stop-gap measure to provide clean support for Wagtail 5.1 while a more permanent Snippet-based solution is developed.
+
+Minor changes & bug fixes
+=========================
+
+* Update testing for Wagtail 5.0 and Django 4.2.
+* Dropped support for Django 4.1.
