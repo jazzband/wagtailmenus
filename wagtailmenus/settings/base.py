@@ -1,5 +1,7 @@
 import os
 
+import wagtail
+
 DEBUG = True
 SITE_ID = 1
 
@@ -10,7 +12,7 @@ USE_L10N = True
 LANGUAGE_CODE = 'en'
 
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'wagtailmenus',
 
     'taggit',
@@ -35,9 +37,12 @@ INSTALLED_APPS = (
     'wagtail.contrib.redirects',
     'wagtail.contrib.routable_page',
     'wagtail.contrib.settings',
-    'wagtail.contrib.modeladmin',
+]
 
-)
+if wagtail.VERSION >= (5, 1):
+    INSTALLED_APPS += ['wagtail_modeladmin']
+else:
+    INSTALLED_APPS += ['wagtail.contrib.modeladmin']
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
