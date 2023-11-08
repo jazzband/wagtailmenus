@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+* Added support for Wagtail 5.2 and Python 3.12.
+* Dropped support for Django 4.0.
+
 3.1.9 (23.09.2023)
 ----------
 
