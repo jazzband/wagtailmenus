@@ -51,3 +51,4 @@ This is a [Jazzband](https://jazzband.co/) project. By contributing you agree to
 * José Luis (SalahAdDin)
 * Abdulaziz Alfuhigi (3bdul3ziz)
 * Kira (kiraware)
+* Yaroslav Prykhodko (yarickprih)
