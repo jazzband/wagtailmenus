@@ -12,6 +12,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from modelcluster.models import ClusterableModel
 from wagtail import hooks
+from wagtail.admin.panels import TabbedInterface, ObjectList
 from wagtail.models import Page, Site
 
 from wagtailmenus import forms, panels
@@ -1058,6 +1059,12 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     related_templatetag_name = 'main_menu'
     content_panels = panels.main_menu_content_panels
     menu_items_relation_setting_name = 'MAIN_MENU_ITEMS_RELATED_NAME'
+    edit_handler = TabbedInterface(
+        [
+            ObjectList(content_panels, heading=_("Content")),
+            ObjectList(panels.menu_settings_panels, heading=_("Settings"))
+        ]
+    )
 
     site = models.OneToOneField(
         'wagtailcore.Site',
@@ -1134,6 +1141,12 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     base_form_class = forms.FlatMenuAdminForm
     content_panels = panels.flat_menu_content_panels
     menu_items_relation_setting_name = 'FLAT_MENU_ITEMS_RELATED_NAME'
+    edit_handler = TabbedInterface(
+        [
+            ObjectList(content_panels, heading=_("Content")),
+            ObjectList(panels.menu_settings_panels, heading=_("Settings"))
+        ]
+    )
 
     site = models.ForeignKey(
         Site,
