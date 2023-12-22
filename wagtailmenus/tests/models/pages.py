@@ -71,7 +71,7 @@ class MultilingualMenuPage(MenuPage):
         item.text = self.translated_repeated_item_text or self.translated_title
         return item
 
-    settings_panels = [
+    s_panels = [
         PublishingPanel(),
         MultiFieldPanel(
             heading="Advanced menu behaviour",

@@ -172,12 +172,12 @@ class TestSuperUser(TransactionTestCase):
 
         # Set 'panels' attribute on menu model to increase coverage for
         # MenuTabbedInterfaceMixin.get_edit_handler_class()
-        menu_model.panels = menu_model.content_panels
+        menu_model.panels = menu_model.c_panels
         response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
 
         # Set 'edit_handler' attribute on menu model to increase coverage for
         # MenuTabbedInterfaceMixin.get_edit_handler_class()
-        menu_model.edit_handler = ObjectList(menu_model.content_panels)
+        menu_model.edit_handler = ObjectList(menu_model.c_panels)
         response = self.client.get('/admin/wagtailmenus/mainmenu/edit/1/')
 
     def test_mainmenu_edit_multisite(self):

@@ -53,8 +53,8 @@ class MenuTabbedInterfaceMixin:
             edit_handler = ObjectList(self.model.panels)
         else:
             edit_handler = TabbedInterface([
-                ObjectList(self.model.content_panels, heading=_("Content")),
-                ObjectList(self.model.settings_panels, heading=_("Settings"),
+                ObjectList(self.model.c_panels, heading=_("Content")),
+                ObjectList(self.model.s_panels, heading=_("Settings"),
                            classname="settings"),
             ])
         return edit_handler.bind_to_model(self.model)
