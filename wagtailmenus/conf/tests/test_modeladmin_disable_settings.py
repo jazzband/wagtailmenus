@@ -6,12 +6,8 @@ from django.test import TestCase, override_settings
 from wagtailmenus import wagtail_hooks
 from wagtailmenus.modeladmin import FlatMenuAdmin, MainMenuAdmin
 
-try:
-    from wagtail_modeladmin.options import modeladmin_register
-    modeladmin_register_str = 'wagtail_modeladmin.options.modeladmin_register'
-except ModuleNotFoundError:
-    from wagtail.contrib.modeladmin.options import modeladmin_register
-    modeladmin_register_str = 'wagtail.contrib.modeladmin.options.modeladmin_register'
+modeladmin_register_str = 'wagtail.snippets.models.register_snippet'
+
 
 class TestDisablingFlatMenusInWagtailCMS(TestCase):
     """

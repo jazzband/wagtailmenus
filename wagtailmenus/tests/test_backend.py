@@ -1,4 +1,5 @@
 from collections import OrderedDict
+import re
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -45,7 +46,7 @@ class CMSUsecaseTests(WebTest):
         response = form.submit().follow()
 
         assert len(response.context['object_list']) == 4
-        assert '<div class="changelist-filter col3">' in response
+        assert '<div class="filterable__filters">' in response
 
         # Let's just compare the two menu with the old one
         site_two_footer_menu = FlatMenu.get_for_site('footer', site_two)
@@ -84,7 +85,7 @@ class CMSUsecaseTests(WebTest):
         form = edit_view.forms[next(reversed(OrderedDict(edit_view.forms)))]
         response = form.submit().follow()
 
-        assert 'Main menu updated successfully.' in response
+        assert re.search(r"Main menu [^<>]+ updated", response.content.decode())
 
 
 class LinkPageCMSTest(TestCase):
@@ -230,9 +231,9 @@ class TestSuperUser(TransactionTestCase):
         # filters
         response = self.client.get('/admin/wagtailmenus/flatmenu/')
         self.assertEqual(response.status_code, 200)
-        self.assertContains(
-            response, '<th scope="col"  class="sortable column-site">')
-        self.assertContains(response, '<div class="changelist-filter col3">')
+        assert re.search(
+            r"Sort by [^<>]+Site[^<>]+ in ascending order", response.content.decode())
+        self.assertContains(response, 'data-field data-contentpath="site"')
 
     def test_flatmenu_edit(self):
         response = self.client.get(
