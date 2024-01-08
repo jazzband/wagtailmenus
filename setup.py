@@ -14,6 +14,7 @@ branch_url = "%stree/stable/%s" % (base_url, stable_branch_name)
 
 # Essential dependencies
 requires = [
+    'wagtail>=5.2',
     'django-cogwheels==0.3',
 ]
 
@@ -24,8 +25,7 @@ testing_extras = [
 ]
 
 development_extras = [
-    'wagtail>=2.15',
-    'wagtail_modeladmin>=1.0',
+    'wagtail>=5.2',
     'django-debug-toolbar',
     'django-extensions',
     'ipdb',
@@ -71,9 +71,6 @@ setup(
         'Framework :: Django :: 3.2',
         'Framework :: Django :: 4.1',
         'Framework :: Django :: 4.2',
-        'Framework :: Wagtail :: 2',
-        'Framework :: Wagtail :: 3',
-        'Framework :: Wagtail :: 4',
         'Framework :: Wagtail :: 5',
         'Topic :: Internet :: WWW/HTTP',
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
