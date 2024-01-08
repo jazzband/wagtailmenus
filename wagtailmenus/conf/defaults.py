@@ -9,7 +9,7 @@ FLATMENU_MENU_ICON = 'list-ol'
 
 FLAT_MENUS_EDITABLE_IN_WAGTAILADMIN = True
 
-FLAT_MENUS_MODELADMIN_CLASS = 'wagtailmenus.modeladmin.FlatMenuAdmin'
+FLAT_MENUS_ADMIN_CLASS = 'wagtailmenus.modeladmin.FlatMenuAdmin'
 
 FLAT_MENUS_HANDLE_CHOICES = None
 
@@ -17,7 +17,7 @@ MAINMENU_MENU_ICON = 'list-ol'
 
 MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN = True
 
-MAIN_MENUS_MODELADMIN_CLASS = 'wagtailmenus.modeladmin.MainMenuAdmin'
+MAIN_MENUS_ADMIN_CLASS = 'wagtailmenus.modeladmin.MainMenuAdmin'
 
 USE_CONDENSEDINLINEPANEL = True
 

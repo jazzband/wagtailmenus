@@ -1179,6 +1179,15 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         verbose_name = _("flat menu")
         verbose_name_plural = _("flat menus")
 
+    def handle_formatted(self):
+        return mark_safe(f'<code>{self.handle}</code>')
+    handle_formatted.short_description = _('handle')
+    handle_formatted.admin_order_field = 'handle'
+
+    def items(self):
+        return self.get_menu_items_manager().count()
+    items.short_description = _('no. of items')
+
     @classmethod
     def render_from_tag(
         cls, context, handle, fall_back_to_default_site_menus=True,
