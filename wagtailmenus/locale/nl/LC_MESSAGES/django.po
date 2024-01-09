@@ -1,0 +1,323 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#
+# Translators:
+# Maarten Ureel <maarten@youreal.eu>, 2023
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-09-23 22:25+0100\n"
+"PO-Revision-Date: 2023-11-12 17:54+0100\n"
+"Last-Translator: Maarten Ureel <maarten@youreal.eu>\n"
+"Language-Team: \n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.1\n"
+
+#: wagtailmenus/conf/constants.py:4
+msgid "1: No sub-navigation (flat)"
+msgstr "1: Geen subnavigatie (vlak)"
+
+#: wagtailmenus/conf/constants.py:5
+msgid "2: Allow 1 level of sub-navigation"
+msgstr "2: 1 niveau van subnavigatie toestaan"
+
+#: wagtailmenus/conf/constants.py:6
+msgid "3: Allow 2 levels of sub-navigation"
+msgstr "3: 2 niveaus van subnavigatie toestaan"
+
+#: wagtailmenus/conf/constants.py:7
+msgid "4: Allow 3 levels of sub-navigation"
+msgstr "4: 3 niveaus van subnavigatie toestaan"
+
+#: wagtailmenus/forms.py:22
+msgid "By default, this will be used as the link text when appearing in menus."
+msgstr ""
+"Dit wordt standaard gebruikt als de linktekst wanneer deze in menu's wordt "
+"weergegeven."
+
+#: wagtailmenus/modeladmin.py:18
+msgid "Main menu"
+msgstr "Hoofdmenu"
+
+#: wagtailmenus/modeladmin.py:41
+msgid "Copy"
+msgstr "Kopiëren"
+
+#: wagtailmenus/modeladmin.py:43
+#, python-format
+msgid "Copy this %(model_name)s"
+msgstr "Kopieer dit %(model_name)s"
+
+#: wagtailmenus/modeladmin.py:64
+msgid "Flat menus"
+msgstr "Platte menu's"
+
+#: wagtailmenus/modeladmin.py:97 wagtailmenus/models/menuitems.py:53
+#: wagtailmenus/models/menus.py:1151
+msgid "handle"
+msgstr "handle"
+
+#: wagtailmenus/modeladmin.py:105
+msgid "no. of items"
+msgstr "aantal items"
+
+#: wagtailmenus/models/menuitems.py:32 wagtailmenus/models/pages.py:140
+msgid "link to an internal page"
+msgstr "link naar een interne pagina"
+
+#: wagtailmenus/models/menuitems.py:38 wagtailmenus/models/pages.py:147
+msgid "link to a custom URL"
+msgstr "link naar een aangepaste URL"
+
+#: wagtailmenus/models/menuitems.py:44 wagtailmenus/models/pages.py:153
+msgid "append to URL"
+msgstr "toevoegen aan URL"
+
+#: wagtailmenus/models/menuitems.py:48
+msgid ""
+"Use this to optionally append a #hash or querystring to the above page's URL."
+msgstr ""
+"Gebruik dit om optioneel een #hash of querystring toe te voegen aan de URL "
+"van de bovenstaande pagina."
+
+#: wagtailmenus/models/menuitems.py:57
+msgid ""
+"Use this field to optionally specify an additional value for each menu item, "
+"which you can then reference in custom menu templates."
+msgstr ""
+"Gebruik dit veld om optioneel een extra waarde op te geven voor elk menu-"
+"item, waarnaar je vervolgens kunt verwijzen in aangepaste menu templates."
+
+#: wagtailmenus/models/menuitems.py:63
+msgid "link text"
+msgstr "link tekst"
+
+#: wagtailmenus/models/menuitems.py:67
+msgid ""
+"Provide the text to use for a custom URL, or set on an internal page link to "
+"use instead of the page's title."
+msgstr ""
+"Geef de tekst op die moet worden gebruikt voor een aangepaste URL, of stel "
+"deze in op een interne paginalink om te gebruiken in plaats van de "
+"paginatitel."
+
+#: wagtailmenus/models/menuitems.py:76 wagtailmenus/panels.py:19
+msgid "menu item"
+msgstr "menu item"
+
+#: wagtailmenus/models/menuitems.py:77
+msgid "menu items"
+msgstr "menu items"
+
+#: wagtailmenus/models/menuitems.py:113 wagtailmenus/models/pages.py:207
+msgid "Please choose an internal page or provide a custom URL"
+msgstr "Kies een interne pagina of geef een aangepaste URL op"
+
+#: wagtailmenus/models/menuitems.py:116 wagtailmenus/models/pages.py:212
+msgid "Linking to both a page and custom URL is not permitted"
+msgstr "Linken naar zowel een pagina als een aangepaste URL is niet toegestaan"
+
+#: wagtailmenus/models/menuitems.py:119
+msgid "This field is required when linking to a custom URL"
+msgstr "Dit veld is vereist bij het linken naar een aangepaste URL"
+
+#: wagtailmenus/models/menuitems.py:157 wagtailmenus/models/menuitems.py:173
+msgid "allow sub-menu for this item"
+msgstr "submenu voor dit item toestaan"
+
+#: wagtailmenus/models/menuitems.py:160 wagtailmenus/models/menuitems.py:176
+msgid ""
+"NOTE: The sub-menu might not be displayed, even if checked. It depends on "
+"how the menu is used in this project's templates."
+msgstr ""
+"OPMERKING: Het is mogelijk dat het submenu niet wordt weergegeven, zelfs als "
+"het is aangevinkt. Dit hangt af van hoe het menu wordt gebruikt in de "
+"templates van dit project."
+
+#: wagtailmenus/models/menus.py:1064 wagtailmenus/models/menus.py:1140
+msgid "site"
+msgstr "site"
+
+#: wagtailmenus/models/menus.py:1071 wagtailmenus/models/menus.py:1165
+msgid "maximum levels"
+msgstr "maximum niveaus"
+
+#: wagtailmenus/models/menus.py:1075
+msgid ""
+"The maximum number of levels to display when rendering this menu. The value "
+"can be overidden by supplying a different <code>max_levels</code> value to "
+"the <code>{% main_menu %}</code> tag in your templates."
+msgstr ""
+"Het maximum aantal niveaus dat moet worden weergegeven bij het renderen van "
+"dit menu. Deze waarde kan overschreven worden door een andere "
+"<code>max_levels</code> waarde toe te voegen aan de <code>{% main_menu %}</"
+"code> tag in je templates."
+
+#: wagtailmenus/models/menus.py:1084 wagtailmenus/models/menus.py:1085
+msgid "main menu"
+msgstr "hoofdmenu"
+
+#: wagtailmenus/models/menus.py:1125
+#, python-format
+msgid "Main menu for %(site_name)s"
+msgstr "Hoofdmenu voor %(site_name)s"
+
+#: wagtailmenus/models/menus.py:1146
+msgid "title"
+msgstr "titel"
+
+#: wagtailmenus/models/menus.py:1148
+msgid "For internal reference only."
+msgstr "Alleen voor interne referentie."
+
+#: wagtailmenus/models/menus.py:1154
+msgid ""
+"Used to reference this menu in templates etc. Must be unique for the "
+"selected site."
+msgstr ""
+"Wordt gebruikt om naar dit menu te verwijzen in templates enz. Moet uniek "
+"zijn voor de geselecteerde site."
+
+#: wagtailmenus/models/menus.py:1159
+msgid "heading"
+msgstr "heading"
+
+#: wagtailmenus/models/menus.py:1162
+msgid "If supplied, appears above the menu when rendered."
+msgstr ""
+"Wordt, indien opgegeven, boven het menu weergegeven wanneer het wordt "
+"weergegeven."
+
+#: wagtailmenus/models/menus.py:1169
+msgid ""
+"The maximum number of levels to display when rendering this menu. The value "
+"can be overidden by supplying a different <code>max_levels</code> value to "
+"the <code>{% flat_menu %}</code> tag in your templates."
+msgstr ""
+"Het maximum aantal niveaus dat moet worden weergegeven bij het renderen van "
+"dit menu. Deze waarde kan overschreven worden door een andere "
+"<code>max_levels</code> waarde toe te voegen aan de <code>{% flat_menu %}</"
+"code> tag in je templates."
+
+#: wagtailmenus/models/menus.py:1179
+msgid "flat menu"
+msgstr "plat menu"
+
+#: wagtailmenus/models/menus.py:1180
+msgid "flat menus"
+msgstr "platte menu's"
+
+#: wagtailmenus/models/pages.py:17
+msgid "repeat in sub-navigation"
+msgstr "herhalen in subnavigatie"
+
+#: wagtailmenus/models/pages.py:20
+msgid ""
+"If checked, a link to this page will be repeated alongside it's direct "
+"children when displaying a sub-navigation for this page."
+msgstr ""
+"Als deze optie is aangevinkt, wordt een link naar deze pagina herhaald naast "
+"zijn directe kinderen wanneer een subnavigatie voor deze pagina wordt "
+"weergegeven."
+
+#: wagtailmenus/models/pages.py:25
+msgid "repeated item link text"
+msgstr "herhaalde item link tekst"
+
+#: wagtailmenus/models/pages.py:29
+msgid ""
+"e.g. 'Section home' or 'Overview'. If left blank, the page title will be "
+"used."
+msgstr ""
+"bijvoorbeeld 'Start' of 'Overzicht'. Als u niets invult, wordt de "
+"paginatitel gebruikt."
+
+#: wagtailmenus/models/pages.py:157
+msgid "Use this to optionally append a #hash or querystring to the URL."
+msgstr ""
+"Gebruik dit om optioneel een #hash of querystring toe te voegen aan de URL."
+
+#: wagtailmenus/models/pages.py:161
+msgid "menu item css classes"
+msgstr "menu item css klassen"
+
+#: wagtailmenus/models/pages.py:165
+msgid ""
+"Optionally specify css classes to be added to this page when it appears in "
+"menus."
+msgstr ""
+"Geef optioneel css-klassen op die moeten worden toegevoegd aan deze pagina "
+"wanneer deze wordt weergegeven in menu's."
+
+#: wagtailmenus/models/pages.py:201
+msgid "A link page cannot link to another link page"
+msgstr "Een linkpagina kan niet naar een andere linkpagina linken"
+
+#: wagtailmenus/models/pages.py:289 wagtailmenus/models/pages.py:299
+#, python-format
+msgid "This page redirects to: %(url)s"
+msgstr "Deze pagina wordt doorverwezen naar: %(url)s"
+
+#: wagtailmenus/panels.py:18
+msgid "Menu items"
+msgstr "Menu items"
+
+#: wagtailmenus/panels.py:50
+msgid "Menu details"
+msgstr "Details menu"
+
+#: wagtailmenus/panels.py:64
+msgid "Render settings"
+msgstr "Weergave-instellingen"
+
+#: wagtailmenus/panels.py:87 wagtailmenus/views.py:57
+msgid "Settings"
+msgstr "Instellingen"
+
+#: wagtailmenus/panels.py:98
+msgid "Advanced menu behaviour"
+msgstr "Geavanceerd menugedrag"
+
+#: wagtailmenus/views.py:56
+msgid "Content"
+msgstr "Inhoud"
+
+#: wagtailmenus/views.py:71
+msgid "Editing"
+msgstr "Bewerken"
+
+#: wagtailmenus/views.py:95
+#, python-format
+msgid "Editing %(model_name)s"
+msgstr "Bewerken %(model_name)s"
+
+#: wagtailmenus/views.py:126
+msgid "Main menu updated successfully."
+msgstr "Hoofdmenu succesvol bijgewerkt."
+
+#: wagtailmenus/views.py:130
+msgid "The menu could not be saved due to errors."
+msgstr "Het menu kon niet worden opgeslagen vanwege fouten."
+
+#: wagtailmenus/views.py:145
+msgid "Copying"
+msgstr "Kopiëren"
+
+#: wagtailmenus/views.py:152
+#, python-format
+msgid "Copying %(model_name)s"
+msgstr "Kopiëren %(model_name)s"
+
+#: wagtailmenus/views.py:184
+#, python-brace-format
+msgid "Flat menu '{instance}' created."
+msgstr "Plat menu '{instance}' gemaakt."
