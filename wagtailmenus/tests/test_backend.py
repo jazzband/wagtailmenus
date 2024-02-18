@@ -46,7 +46,8 @@ class CMSUsecaseTests(WebTest):
         response = form.submit().follow()
 
         assert len(response.context['object_list']) == 4
-        assert '<div class="filterable__filters">' in response
+        # Check for Wagtail 5.2 or >=6.0 response
+        assert '<div class="filterable__filters">' in response or '<div id="filters-drilldown"' in response
 
         # Let's just compare the two menu with the old one
         site_two_footer_menu = FlatMenu.get_for_site('footer', site_two)
