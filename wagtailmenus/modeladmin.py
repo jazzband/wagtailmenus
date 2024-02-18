@@ -12,7 +12,14 @@ from wagtailmenus import panels
 from wagtailmenus.conf import settings
 from wagtailmenus.forms import SiteSwitchForm
 
-from .copyable_snippetviewset import CopyableSnippetIndexView, CopyableSnippetViewSet
+# Wagtail 6 introduced Snippet copy.
+# CopyableSnippetViewSet provides the equivalent in Wagtail 5.2
+from wagtail import VERSION as WAGTAIL_VERSION
+if WAGTAIL_VERSION >= (6, 0):
+    CopyableSnippetIndexView = IndexView
+    CopyableSnippetViewSet = SnippetViewSet
+else:
+    from .copyable_snippetviewset import CopyableSnippetIndexView, CopyableSnippetViewSet
 
 
 class MainMenuIndexView(IndexView):
