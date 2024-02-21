@@ -1,0 +1,55 @@
+==============================
+Wagtailmenus 4.0 release notes
+==============================
+
+.. contents::
+    :local:
+    :depth: 1
+
+
+What's new?
+===========
+
+Wagtailmenus now uses Snippets
+------------------------------
+
+Wagtailmenus prior to this release used the Wagtail ModelAdmin contrib package for menu administration.
+With the deprecation of ModelAdmin in Wagtail 5.2 and its removal in Wagtail 6, Wagtail's enhanced Snippet capability is now used for menu admin.
+
+This release retains all the functionality of wagtailmenus 3.1.9, however the admin user interface has changed consistent with the revised look in Wagtail 5.2 and 6.
+Any existing menu configuration is retained.
+
+Upgrade considerations
+======================
+
+Migration from ModelAdmin to Snippets
+-------------------------------------
+
+The two menu administration ViewSets, ``MainMenuAdmin`` and ``FlatMenuAdmin``, are now based on ``SnippetViewSet``.
+
+Ensure wagtail.snippets is in your INSTALLED_APPS:
+
+.. code-block:: python
+
+    INSTALLED_APPS = [
+        ...,
+        'wagtail.snippets',
+        ...,
+    ]
+
+If `wagtailmenus` is your code's last dependency on `ModelAdmin`,
+then you can remove `wagtail_modeladmin` or `wagtail.contrib.modeladmin` from your `INSTALLED_APPS` and if present, from your `requirements.txt` file.
+
+Customised Admin Classes
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you have customised either of ``MainMenuAdmin`` and ``FlatMenuAdmin``,
+you will need to refactor your code to be compatible with ``SnippetViewSet`` behaviour.
+The guide at `Migrating from ModelAdmin to Snippets <https://docs.wagtail.org/en/v5.2.3/reference/contrib/modeladmin/migrating_to_snippets.html>`_ in the Wagtail documentation may assist with this task.
+
+You will need to assign the newly customised admin classes to the following settings:
+
+- ``WAGTAILMENUS_MAIN_MENUS_ADMIN_CLASS``. This replaces ``WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS``
+- ``WAGTAILMENUS_FLAT_MENUS_ADMIN_CLASS``. This replaces ``WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS``
+
+Note that ``MainMenuAdmin`` and ``FlatMenuAdmin`` are now in the ``wagtailmenus.menuadmin`` module, and that the ``wagtailmenus.modeladmin`` module has been removed.
