@@ -1,9 +1,9 @@
-from wagtailmenus.modeladmin import FlatMenuAdmin, MainMenuAdmin
+from wagtailmenus.menuadmin import FlatMenuAdmin, MainMenuAdmin
 
 
-class CustomFlatMenuModelAdmin(FlatMenuAdmin):
+class CustomFlatMenuAdmin(FlatMenuAdmin):
     pass
 
 
-class CustomMainMenuModelAdmin(MainMenuAdmin):
+class CustomMainMenuAdmin(MainMenuAdmin):
     pass

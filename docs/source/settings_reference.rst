@@ -71,18 +71,18 @@ By default, 'Flat menus' are editable in the Wagtail CMS. Setting this to ``Fals
 
 .. _FLAT_MENUS_MODELADMIN_CLASS:
 
-``WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS``
+``WAGTAILMENUS_FLAT_MENUS_ADMIN_CLASS``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Default value: ``'wagtailmenus.modeladmin.FlatMenuAdmin'``
+Default value: ``'wagtailmenus.menuadmin.FlatMenuAdmin'``
 
-If you wish to override the ``ModelAdmin`` class used to represent **'Flat menus'** in the Wagtail admin area for your project (e.g. to display additional custom fields in the listing view, or change/add new views), you can do so by using this setting to swap out the default class for a custom one. e.g.
+If you wish to override the admin class used to represent **'Flat menus'** in the Wagtail admin area for your project (e.g. to display additional custom fields in the listing view, or change/add new views), you can do so by using this setting to swap out the default class for a custom one. e.g.
 
 .. code-block:: python
 
     # e.g. settings/base.py
 
-    WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS = "projectname.appname.modulename.ClassName"
+    WAGTAILMENUS_FLAT_MENUS_ADMIN_CLASS = "projectname.appname.modulename.ClassName"
 
 
 The value should be an import path string, rather than a direct pointer to the class itself. wagtailmenus will lazily import the class from this path when it is required. If the path is invalid, an ``ImproperlyConfigured`` exception will be raised.
@@ -110,12 +110,12 @@ By default, 'Main menus' are editable in the Wagtail CMS. Setting this to ``Fals
 
 .. _MAIN_MENUS_MODELADMIN_CLASS:
 
-``WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS``
+``WAGTAILMENUS_MAIN_MENUS_ADMIN_CLASS``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Default value: ``'wagtailmenus.modeladmin.MainMenuAdmin'``
+Default value: ``'wagtailmenus.menuadmin.MainMenuAdmin'``
 
-If you wish to override the ``ModelAdmin`` class used to represent **'Main menus'** in the Wagtail admin area for your project (e.g. to display additional custom fields in the listing view, or change/add new views), you can do so by using this setting to swap out the default class for a custom one. e.g.
+If you wish to override the admin class used to represent **'Main menus'** in the Wagtail admin area for your project (e.g. to display additional custom fields in the listing view, or change/add new views), you can do so by using this setting to swap out the default class for a custom one. e.g.
 
 .. code-block:: python
 
