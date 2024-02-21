@@ -1,0 +1,3 @@
+{% extends "wagtailsnippets/snippets/index.html" %}
+{% load i18n %}
+{% block titletag %}{% blocktrans trimmed with snippet_type_name_plural=model_opts.verbose_name_plural|capfirst %}{{ snippet_type_name_plural }}{% endblocktrans %}{% endblock %}

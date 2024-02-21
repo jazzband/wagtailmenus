@@ -1,11 +1,11 @@
 {% extends "wagtailadmin/base.html" %}
 {% load wagtailadmin_tags i18n %}
-{% block titletag %}{% blocktrans trimmed with snippet_type_name=model_opts.verbose_name %}Editing {{ snippet_type_name }} - {{ object }}{% endblocktrans %}{% endblock %}
+{% block titletag %}{% blocktrans trimmed with snippet_type_name=model_opts.verbose_name %}Copying {{ snippet_type_name }} - {{ object }}{% endblocktrans %}{% endblock %}
 {% block bodyclass %}{% if locked_for_user %}content-locked{% endif %}{% endblock %}
 {% block content %}
     {% include 'wagtailadmin/shared/headers/slim_header.html' %}
 
-    {% include "wagtailmenus/includes/header_with_site_switcher.html" with title=object icon=header_icon merged=1 %}
+    {% include "wagtailadmin/shared/header.html" with title=object icon=header_icon merged=1 only %}
 
     <div class="row row-flush">
 
@@ -34,13 +34,11 @@
 {% block extra_css %}
     {{ block.super }}
     {{ media.css }}
-    {{ view.media.css }}
 {% endblock %}
 {% block extra_js %}
     {{ block.super }}
     {% include "wagtailadmin/pages/_editor_js.html" %}
     {{ media.js }}
-    {{ view.media.js }}
 
     <script>
         // Set wagtailConfig.ACTIVE_CONTENT_LOCALE if this is a translated page

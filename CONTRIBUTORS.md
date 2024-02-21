@@ -34,6 +34,7 @@ This is a [Jazzband](https://jazzband.co/) project. By contributing you agree to
 * Gabriel Augendre (Crocmagnon)
 * Bojan Mihelac (bmihelac)
 * Ben Froelich-Leon (benfroelich)
+* Daniel Kirkham (dkirkham)
 
 ## Translators
 
