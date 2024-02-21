@@ -4,7 +4,7 @@ from unittest.mock import call, patch
 from django.test import TestCase, override_settings
 
 from wagtailmenus import wagtail_hooks
-from wagtailmenus.modeladmin import FlatMenuAdmin, MainMenuAdmin
+from wagtailmenus.menuadmin import FlatMenuAdmin, MainMenuAdmin
 
 modeladmin_register_str = 'wagtail.snippets.models.register_snippet'
 
