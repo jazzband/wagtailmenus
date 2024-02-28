@@ -1,9 +1,9 @@
 name: Release
 
 on:
-  push:
-    tags:
-    - '*'
+  release:
+    types:
+      - published
 
 jobs:
   build:
@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: 3.8
 
@@ -35,4 +35,4 @@ jobs:
         with:
           user: jazzband
           password: ${{ secrets.JAZZBAND_RELEASE_KEY }}
-          repository_url: https://jazzband.co/projects/wagtailmenus/upload 
+          repository-url: https://jazzband.co/projects/wagtailmenus/upload 
