@@ -53,3 +53,7 @@ You will need to assign the newly customised admin classes to the following sett
 - ``WAGTAILMENUS_FLAT_MENUS_ADMIN_CLASS``. This replaces ``WAGTAILMENUS_FLAT_MENUS_MODELADMIN_CLASS``
 
 Note that ``MainMenuAdmin`` and ``FlatMenuAdmin`` are now in the ``wagtailmenus.menuadmin`` module, and that the ``wagtailmenus.modeladmin`` module has been removed.
+
+Full Release Notes
+==================
+View the full release notes on GitHub or in CHANGELOG.md
