@@ -1,9 +1,10 @@
 Changelog
 =========
 
-Unreleased
+4.0.0rc1 (28.02.2024)
 ----------
 
+* Fix [#459](https://github.com/jazzband/wagtailmenus/issues/459) [BREAKING CHANGE]: Migrated to wagtail.snippets. Removed `wagtail_modeladmin` support.
 * Added support for Wagtail 5.2 and Python 3.12.
 * Dropped support for Django 4.0.
 
