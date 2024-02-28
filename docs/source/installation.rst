@@ -10,7 +10,7 @@ Installing wagtailmenus
 
         pip install wagtailmenus
 
-2.  Add ``wagtailmenus`` and ``modeladmin`` to the
+2.  Add ``wagtailmenus`` to the
     ``INSTALLED_APPS`` setting in your project settings:
 
     .. code-block:: python
