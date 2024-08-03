@@ -72,7 +72,7 @@ msgstr "Anz. der Einträge"
 
 #: wagtailmenus/models/menuitems.py:32 wagtailmenus/models/pages.py:142
 msgid "link to an internal page"
-msgstr "Link zu internen Seite"
+msgstr "Link zu interner Seite"
 
 #: wagtailmenus/models/menuitems.py:38 wagtailmenus/models/pages.py:149
 msgid "link to a custom URL"
