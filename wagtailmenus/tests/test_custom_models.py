@@ -68,7 +68,7 @@ class TestCustomMenuItemsGerman(TestCase):
 
     def test_translated_main_menu(self):
         response = self.client.get('/superheroes/dc-comics/batman/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-two-levels').decode()
@@ -113,7 +113,7 @@ class TestCustomMenuItemsGerman(TestCase):
         'contact') renders as expected.
         """
         response = self.client.get('/superheroes/dc-comics/batman/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='nav-contact').decode()
@@ -147,7 +147,7 @@ class TestCustomMenuItemsFrench(TestCase):
 
     def test_translated_main_menu(self):
         response = self.client.get('/superheroes/dc-comics/batman/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-two-levels').decode()
@@ -192,7 +192,7 @@ class TestCustomMenuItemsFrench(TestCase):
         handle 'contact') renders as expected.
         """
         response = self.client.get('/superheroes/dc-comics/batman/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='nav-contact').decode()
@@ -249,7 +249,7 @@ class TestCustomMenuModels(TestCase):
     @override_settings(LANGUAGE_CODE="it",)
     def test_custom_main_menu_english(self):
         response = self.client.get('/superheroes/dc-comics/batman/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-two-levels').decode()
@@ -291,7 +291,7 @@ class TestCustomMenuModels(TestCase):
     @override_settings(LANGUAGE_CODE="de",)
     def test_custom_main_menu_german(self):
         response = self.client.get('/superheroes/dc-comics/batman/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-two-levels').decode()
@@ -336,7 +336,7 @@ class TestCustomMenuModels(TestCase):
         'contact') renders as expected.
         """
         response = self.client.get('/superheroes/dc-comics/batman/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='nav-contact').decode()
@@ -365,7 +365,7 @@ class TestCustomMenuModels(TestCase):
         'contact') renders as expected.
         """
         response = self.client.get('/superheroes/dc-comics/batman/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='nav-contact').decode()
