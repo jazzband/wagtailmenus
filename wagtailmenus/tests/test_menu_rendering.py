@@ -113,7 +113,7 @@ class TestTemplateTags(TestCase):
         Test '{{ main_menu }}' output for homepage
         """
         response = self.client.get('/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-two-levels').decode()
@@ -157,7 +157,7 @@ class TestTemplateTags(TestCase):
         Test '{{ main_menu max_levels=3 }}' output for homepage
         """
         response = self.client.get('/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-three-levels').decode()
@@ -208,7 +208,7 @@ class TestTemplateTags(TestCase):
         Test '{{ main_menu use_absolute_page_urls=True }}' output for homepage
         """
         response = self.client.get('/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-absolute-url').decode()
@@ -276,7 +276,7 @@ class TestTemplateTags(TestCase):
         Test '{% children_menu %}' output for homepage
         """
         response = self.client.get('/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
         menu_html = soup.find(id='children-menu-one-level').decode()
         expected_menu_html = """
         <div id="children-menu-one-level">
@@ -295,7 +295,7 @@ class TestTemplateTags(TestCase):
         Test '{% children_menu max_levels=3 allow_repeating_parents=False %}' output for homepage
         """
         response = self.client.get('/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
         menu_html = soup.find(id='children-menu-three-levels').decode()
         expected_menu_html = """
         <div id="children-menu-three-levels">
@@ -341,7 +341,7 @@ class TestTemplateTags(TestCase):
         Test '{% children_menu use_absolute_page_urls=True %}' output for homepage
         """
         response = self.client.get('/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
         menu_html = soup.find(id='children-menu-absolute-url').decode()
         expected_menu_html = """
         <div id="children-menu-absolute-url">
@@ -368,7 +368,7 @@ class TestTemplateTags(TestCase):
         Test '{% main_menu %}' output for 'About us' page
         """
         response = self.client.get('/about-us/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-two-levels').decode()
@@ -412,7 +412,7 @@ class TestTemplateTags(TestCase):
         Test '{% main_menu max_levels=3 %}' output for 'About us' page
         """
         response = self.client.get('/about-us/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-three-levels').decode()
@@ -465,7 +465,7 @@ class TestTemplateTags(TestCase):
                 Test '{{ main_menu use_absolute_page_urls=True }}' output for homepage
                 """
         response = self.client.get('/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-absolute-url').decode()
@@ -533,7 +533,7 @@ class TestTemplateTags(TestCase):
         Test '{% section_menu %}' output for 'About us' page
         """
         response = self.client.get('/about-us/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='section-menu-two-levels').decode()
@@ -564,7 +564,7 @@ class TestTemplateTags(TestCase):
         Test '{% section_menu max_levels=1 %}' output for 'About us' page
         """
         response = self.client.get('/about-us/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='section-menu-one-level').decode()
@@ -588,7 +588,7 @@ class TestTemplateTags(TestCase):
         Test '{% section_menu use_absolute_page_urls=True %}' output for 'About us' page
         """
         response = self.client.get('/about-us/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='section-menu-absolute-url').decode()
@@ -631,7 +631,7 @@ class TestTemplateTags(TestCase):
         Test '{{ sub_menu self }}' output for 'About us' page
         """
         response = self.client.get('/about-us/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
         menu_html = soup.find(id='children-menu-one-level').decode()
         expected_menu_html = """
         <div id="children-menu-one-level">
@@ -650,7 +650,7 @@ class TestTemplateTags(TestCase):
         Test '{% children_menu max_levels=3 allow_repeating_parents=False %}' output for 'About us' page
         """
         response = self.client.get('/about-us/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
         menu_html = soup.find(id='children-menu-three-levels').decode()
         expected_menu_html = """
         <div id="children-menu-three-levels">
@@ -675,7 +675,7 @@ class TestTemplateTags(TestCase):
         Test '{{ sub_menu self }}' output for 'About us' page
         """
         response = self.client.get('/about-us/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
         menu_html = soup.find(id='children-menu-absolute-urls').decode()
         expected_menu_html = """
         <div id="children-menu-absolute-urls">
@@ -702,7 +702,7 @@ class TestTemplateTags(TestCase):
         Test '{% section_menu %}' output for 'Marvel comics' page
         """
         response = self.client.get('/superheroes/marvel-comics/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         menu_html = soup.find(id='section-menu-two-levels').decode()
         expected_menu_html = """
@@ -737,7 +737,7 @@ class TestTemplateTags(TestCase):
         Test '{% section_menu max_levels=1 %}' output for 'Marvel comics' page
         """
         response = self.client.get('/superheroes/marvel-comics/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='section-menu-one-level').decode()
@@ -759,7 +759,7 @@ class TestTemplateTags(TestCase):
         Test '{% section_menu use_absolute_page_urls=True %}' output for 'Marvel comics' page
         """
         response = self.client.get('/superheroes/marvel-comics/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='section-menu-absolute-url').decode()
@@ -801,7 +801,7 @@ class TestTemplateTags(TestCase):
         Test that the HTML output by the 'flat_menu' tag (when using the handle 'contact') renders as expected.
         """
         response = self.client.get('/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='nav-contact').decode()
@@ -813,7 +813,7 @@ class TestTemplateTags(TestCase):
         Test that the HTML output by the 'flat_menu' tag (when using the handle 'footer') renders as expected.
         """
         response = self.client.get('/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='nav-footer').decode()
@@ -833,7 +833,7 @@ class TestTemplateTags(TestCase):
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
         response = self.client.get('/legal/privacy-policy/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='nav-footer').decode()
@@ -853,7 +853,7 @@ class TestTemplateTags(TestCase):
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
         response = self.client.get('/about-us/meet-the-team/custom-url/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='nav-footer').decode()
@@ -873,7 +873,7 @@ class TestTemplateTags(TestCase):
         self.assertHTMLEqual(menu_html, expected_menu_html)
 
         response = self.client.get('/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='nav-footer-absolute-urls').decode()
@@ -902,7 +902,7 @@ class TestTemplateTags(TestCase):
 
     def test_custom_page_menu_output(self):
         response = self.client.get('/custom-url/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         main_menu_html = soup.find(id='main-menu-two-levels').decode()
         expected_menu_html = """
@@ -953,7 +953,7 @@ class TestTemplateTags(TestCase):
         'ancestors', as indicated by the request path.
         """
         response = self.client.get('/about-us/meet-the-team/custom-url/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='section-menu-two-levels').decode()
@@ -990,7 +990,7 @@ class TestTemplateTags(TestCase):
         """
         response = self.client.get('/about-us/meet-the-team/custom-url/')
         self.assertEqual(response.status_code, 200)
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-two-levels').decode()
@@ -1039,7 +1039,7 @@ class TestTemplateTags(TestCase):
         """
         response = self.client.get('/superheroes/marvel-comics/custom-man/about/')
         self.assertEqual(response.status_code, 200)
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='section-menu-two-levels').decode()
@@ -1080,7 +1080,7 @@ class TestTemplateTags(TestCase):
         the page is identified using the request path.
         """
         response = self.client.get('/about-us/meet-the-team/staff-member-one/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-three-levels').decode()
@@ -1138,7 +1138,7 @@ class TestTemplateTags(TestCase):
         the page is identified using the request path.
         """
         response = self.client.get('/about-us/meet-the-team/staff-member-one/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='section-menu-two-levels').decode()
@@ -1175,7 +1175,7 @@ class TestTemplateTags(TestCase):
         """
         response = self.client.get('/news-and-events/')
 
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='section-menu-two-levels').decode()
@@ -1207,7 +1207,7 @@ class TestTemplateTags(TestCase):
         is used to specify different templates for each level
         """
         response = self.client.get('/')
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         # Assertions to compare rendered HTML against expected HTML
         menu_html = soup.find(id='main-menu-sub-menu-templates').decode()
