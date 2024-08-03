@@ -1,10 +1,11 @@
 Changelog
 =========
 
-4.0.1 (Unreleased)
+4.0.1 (04.08.2024)
 ----------
 
-* Fix German translation
+* Fix German translation.
+* Fix `bs4.FeatureNotFound` error on tests.
 
 4.0.0 (28.02.2024)
 ----------
