@@ -75,7 +75,7 @@ class TestHooks(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Test output reflects hook changes
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
         section_menu_html = soup.find(id='section-menu-one-level').decode()
         # 'Call us' is a page link, so should no longer appear
         expected_html = """
@@ -124,7 +124,7 @@ class TestHooks(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Test output reflects hook changes
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
         contact_menu_html = soup.find(id='nav-contact').decode()
         # 'Call us' is a page link, so should no longer appear
         expected_html = """
@@ -169,7 +169,7 @@ class TestHooks(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Test output reflects hook changes
-        soup = BeautifulSoup(response.content, 'html5lib')
+        soup = BeautifulSoup(response.content, 'html.parser')
         contact_menu_html = soup.find(id='nav-contact').decode()
         # There should be no menu items, so just an empty div (no <ul>)
         expected_html = """
