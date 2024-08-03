@@ -1,39 +1,32 @@
 Changelog
 =========
 
+4.0.1 (Unreleased)
+----------
+
+* Fix German translation
+
 4.0.0 (28.02.2024)
 ----------
 
-## What's Changed
-* 🐛 FIX: Versions on docs index by @MrCordeiro in https://github.com/jazzband/wagtailmenus/pull/455
-* Support/wagtail-50 by @katdom13 in https://github.com/jazzband/wagtailmenus/pull/457
-* Fix/settings panel append by @benfroelich in https://github.com/jazzband/wagtailmenus/pull/441
-* add indonesian translation by @kiraware in https://github.com/jazzband/wagtailmenus/pull/458
-* Independent wagtail_modeladmin support for Wagtail 5.1 by @dkirkham in https://github.com/jazzband/wagtailmenus/pull/461
-* Release prep/3.1.9 by @MrCordeiro in https://github.com/jazzband/wagtailmenus/pull/462
-* [pre-commit.ci] pre-commit autoupdate by @pre-commit-ci in https://github.com/jazzband/wagtailmenus/pull/463
-* Wagtail 5.2 by @katdom13 in https://github.com/jazzband/wagtailmenus/pull/465
-* Add Ukrainian translation by @yarickprih in https://github.com/jazzband/wagtailmenus/pull/466
-* Dutch translation by @MaartenUreel in https://github.com/jazzband/wagtailmenus/pull/469
-* Upgrade GitHub Actions by @cclauss in https://github.com/jazzband/wagtailmenus/pull/473
-* 💥BREAKING: Migrate from ModelAdmin to Snippets by @dkirkham in https://github.com/jazzband/wagtailmenus/pull/472
-* 👷: update gh actions by @schlich in https://github.com/jazzband/wagtailmenus/pull/477
-* 👷: update set-output command by @schlich in https://github.com/jazzband/wagtailmenus/pull/478
-* Update package and testing configurations by @dkirkham in https://github.com/jazzband/wagtailmenus/pull/481
-* ModelAdmin to Snippets Documentation Update by @dkirkham in https://github.com/jazzband/wagtailmenus/pull/483
-* Rename admin module by @dkirkham in https://github.com/jazzband/wagtailmenus/pull/482
-* 🔒: add bandit code scanner by @schlich in https://github.com/jazzband/wagtailmenus/pull/479
-
-## New Contributors
-* @katdom13 made their first contribution in https://github.com/jazzband/wagtailmenus/pull/457
-* @benfroelich made their first contribution in https://github.com/jazzband/wagtailmenus/pull/441
-* @kiraware made their first contribution in https://github.com/jazzband/wagtailmenus/pull/458
-* @dkirkham made their first contribution in https://github.com/jazzband/wagtailmenus/pull/461
-* @yarickprih made their first contribution in https://github.com/jazzband/wagtailmenus/pull/466
-* @MaartenUreel made their first contribution in https://github.com/jazzband/wagtailmenus/pull/469
-* @cclauss made their first contribution in https://github.com/jazzband/wagtailmenus/pull/473
-
-**Full Changelog**: https://github.com/jazzband/wagtailmenus/compare/v3.1.8...v4.0.0
+* 🐛 FIX: Versions on docs index by @MrCordeiro in <https://github.com/jazzband/wagtailmenus/pull/455>
+* Support/wagtail-50 by @katdom13 in <https://github.com/jazzband/wagtailmenus/pull/457>
+* Fix/settings panel append by @benfroelich in <https://github.com/jazzband/wagtailmenus/pull/441>
+* add indonesian translation by @kiraware in <https://github.com/jazzband/wagtailmenus/pull/458>
+* Independent wagtail_modeladmin support for Wagtail 5.1 by @dkirkham in <https://github.com/jazzband/wagtailmenus/pull/461>
+* Release prep/3.1.9 by @MrCordeiro in <https://github.com/jazzband/wagtailmenus/pull/462>
+* [pre-commit.ci] pre-commit autoupdate by @pre-commit-ci in <https://github.com/jazzband/wagtailmenus/pull/463>
+* Wagtail 5.2 by @katdom13 in <https://github.com/jazzband/wagtailmenus/pull/465>
+* Add Ukrainian translation by @yarickprih in <https://github.com/jazzband/wagtailmenus/pull/466>
+* Dutch translation by @MaartenUreel in <https://github.com/jazzband/wagtailmenus/pull/469>
+* Upgrade GitHub Actions by @cclauss in <https://github.com/jazzband/wagtailmenus/pull/473>
+* 💥BREAKING: Migrate from ModelAdmin to Snippets by @dkirkham in <https://github.com/jazzband/wagtailmenus/pull/472>
+* 👷: update gh actions by @schlich in <https://github.com/jazzband/wagtailmenus/pull/477>
+* 👷: update set-output command by @schlich in <https://github.com/jazzband/wagtailmenus/pull/478>
+* Update package and testing configurations by @dkirkham in <https://github.com/jazzband/wagtailmenus/pull/481>
+* ModelAdmin to Snippets Documentation Update by @dkirkham in <https://github.com/jazzband/wagtailmenus/pull/483>
+* Rename admin module by @dkirkham in <https://github.com/jazzband/wagtailmenus/pull/482>
+* 🔒: add bandit code scanner by @schlich in <https://github.com/jazzband/wagtailmenus/pull/479>
 
 3.1.9 (23.09.2023)
 ----------
