@@ -6,13 +6,13 @@
 #
 # Translators:
 # Maarten Ureel <maarten@youreal.eu>, 2023
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-23 22:25+0100\n"
+"POT-Creation-Date: 2024-08-24 21:55+0100\n"
 "PO-Revision-Date: 2023-11-12 17:54+0100\n"
 "Last-Translator: Maarten Ureel <maarten@youreal.eu>\n"
 "Language-Team: \n"
@@ -38,37 +38,59 @@ msgstr "3: 2 niveaus van subnavigatie toestaan"
 msgid "4: Allow 3 levels of sub-navigation"
 msgstr "4: 3 niveaus van subnavigatie toestaan"
 
-#: wagtailmenus/forms.py:22
+#: wagtailmenus/copyable_snippetviewset.py:17
+#, fuzzy
+#| msgid "The menu could not be saved due to errors."
+msgid "The snippet could not be copied due to errors."
+msgstr "Het menu kon niet worden opgeslagen vanwege fouten."
+
+#: wagtailmenus/copyable_snippetviewset.py:38
+msgid "Copy"
+msgstr "Kopiëren"
+
+#: wagtailmenus/copyable_snippetviewset.py:41
+#, python-format
+msgid "Copy '%(title)s'"
+msgstr ""
+
+#: wagtailmenus/forms.py:26
 msgid "By default, this will be used as the link text when appearing in menus."
 msgstr ""
 "Dit wordt standaard gebruikt als de linktekst wanneer deze in menu's wordt "
 "weergegeven."
 
-#: wagtailmenus/modeladmin.py:18
+#: wagtailmenus/menuadmin.py:82
 msgid "Main menu"
 msgstr "Hoofdmenu"
 
-#: wagtailmenus/modeladmin.py:41
-msgid "Copy"
-msgstr "Kopiëren"
+#: wagtailmenus/menuadmin.py:91
+msgid "The menu could not be saved due to errors."
+msgstr "Het menu kon niet worden opgeslagen vanwege fouten."
 
-#: wagtailmenus/modeladmin.py:43
-#, python-format
-msgid "Copy this %(model_name)s"
-msgstr "Kopieer dit %(model_name)s"
+#: wagtailmenus/menuadmin.py:94 wagtailmenus/menuadmin.py:147
+msgid "Content"
+msgstr "Inhoud"
 
-#: wagtailmenus/modeladmin.py:64
+#: wagtailmenus/menuadmin.py:95 wagtailmenus/menuadmin.py:148
+#: wagtailmenus/panels.py:87
+msgid "Settings"
+msgstr "Instellingen"
+
+#: wagtailmenus/menuadmin.py:127
+#, fuzzy
+#| msgid "The menu could not be saved due to errors."
+msgid "The flat menu could not be saved due to errors"
+msgstr "Het menu kon niet worden opgeslagen vanwege fouten."
+
+#: wagtailmenus/menuadmin.py:132
 msgid "Flat menus"
 msgstr "Platte menu's"
 
-#: wagtailmenus/modeladmin.py:97 wagtailmenus/models/menuitems.py:53
-#: wagtailmenus/models/menus.py:1151
-msgid "handle"
-msgstr "handle"
-
-#: wagtailmenus/modeladmin.py:105
-msgid "no. of items"
-msgstr "aantal items"
+#: wagtailmenus/menuadmin.py:144
+#, fuzzy
+#| msgid "The menu could not be saved due to errors."
+msgid "The flat menu could not be saved due to errors."
+msgstr "Het menu kon niet worden opgeslagen vanwege fouten."
 
 #: wagtailmenus/models/menuitems.py:32 wagtailmenus/models/pages.py:140
 msgid "link to an internal page"
@@ -88,6 +110,11 @@ msgid ""
 msgstr ""
 "Gebruik dit om optioneel een #hash of querystring toe te voegen aan de URL "
 "van de bovenstaande pagina."
+
+#: wagtailmenus/models/menuitems.py:53 wagtailmenus/models/menus.py:1151
+#: wagtailmenus/models/menus.py:1184
+msgid "handle"
+msgstr "handle"
 
 #: wagtailmenus/models/menuitems.py:57
 msgid ""
@@ -216,6 +243,10 @@ msgstr "plat menu"
 msgid "flat menus"
 msgstr "platte menu's"
 
+#: wagtailmenus/models/menus.py:1189
+msgid "no. of items"
+msgstr "aantal items"
+
 #: wagtailmenus/models/pages.py:17
 msgid "repeat in sub-navigation"
 msgstr "herhalen in subnavigatie"
@@ -279,45 +310,26 @@ msgstr "Details menu"
 msgid "Render settings"
 msgstr "Weergave-instellingen"
 
-#: wagtailmenus/panels.py:87 wagtailmenus/views.py:57
-msgid "Settings"
-msgstr "Instellingen"
-
 #: wagtailmenus/panels.py:98
 msgid "Advanced menu behaviour"
 msgstr "Geavanceerd menugedrag"
 
-#: wagtailmenus/views.py:56
-msgid "Content"
-msgstr "Inhoud"
-
-#: wagtailmenus/views.py:71
-msgid "Editing"
-msgstr "Bewerken"
-
-#: wagtailmenus/views.py:95
+#: wagtailmenus/templates/wagtailmenus/flatmenu_index.html:3
 #, python-format
-msgid "Editing %(model_name)s"
-msgstr "Bewerken %(model_name)s"
+msgid "%(snippet_type_name_plural)s"
+msgstr "%(snippet_type_name_plural)s"
 
-#: wagtailmenus/views.py:126
-msgid "Main menu updated successfully."
-msgstr "Hoofdmenu succesvol bijgewerkt."
-
-#: wagtailmenus/views.py:130
-msgid "The menu could not be saved due to errors."
-msgstr "Het menu kon niet worden opgeslagen vanwege fouten."
-
-#: wagtailmenus/views.py:145
-msgid "Copying"
-msgstr "Kopiëren"
-
-#: wagtailmenus/views.py:152
+#: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:3
 #, python-format
-msgid "Copying %(model_name)s"
-msgstr "Kopiëren %(model_name)s"
+msgid "Editing %(snippet_type_name)s - %(object)s"
+msgstr "Bewerken  %(snippet_type_name)s - %(object)s"
 
-#: wagtailmenus/views.py:184
-#, python-brace-format
-msgid "Flat menu '{instance}' created."
-msgstr "Plat menu '{instance}' gemaakt."
+#: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:19
+#: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:19
+msgid "Actions"
+msgstr ""
+
+#: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:3
+#, python-format
+msgid "Copying %(snippet_type_name)s - %(object)s"
+msgstr "Kopiëren %(snippet_type_name)s - %(object)s"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-10 21:49+0000\n"
+"POT-Creation-Date: 2024-08-24 21:55+0100\n"
 "PO-Revision-Date: 2023-11-13 11:38+2\n"
 "Last-Translator: Yaroslav Prykhodko <yarick.prih2903@hotmail.com>\n"
 "Language-Team: Ukrainian <LL@li.org>\n"
@@ -20,6 +20,7 @@ msgstr ""
 "11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
 "100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+
 #: wagtailmenus/conf/constants.py:4
 msgid "1: No sub-navigation (flat)"
 msgstr "1: Без вкладених рівнів навігації (пласке)"
@@ -36,35 +37,59 @@ msgstr "3: Дозволити 2 рівні вкладення навігації
 msgid "4: Allow 3 levels of sub-navigation"
 msgstr "4: Дозволити 3 рівні вкладення навігації"
 
-#: wagtailmenus/forms.py:22
-msgid "By default, this will be used as the link text when appearing in menus."
-msgstr "Це значення буде використовуватися в якості тексту посилання при появі в меню за замовчуванням."
+#: wagtailmenus/copyable_snippetviewset.py:17
+#, fuzzy
+#| msgid "The menu could not be saved due to errors."
+msgid "The snippet could not be copied due to errors."
+msgstr "Не вдалося зберегти меню через помилки"
 
-#: wagtailmenus/modeladmin.py:18
-msgid "Main menu"
-msgstr "Головне меню"
-
-#: wagtailmenus/modeladmin.py:41
+#: wagtailmenus/copyable_snippetviewset.py:38
 msgid "Copy"
 msgstr "Копіювати"
 
-#: wagtailmenus/modeladmin.py:43
+#: wagtailmenus/copyable_snippetviewset.py:41
 #, python-format
-msgid "Copy this %(model_name)s"
-msgstr "Копіювати %(model_name)s"
+msgid "Copy '%(title)s'"
+msgstr ""
 
-#: wagtailmenus/modeladmin.py:64
+#: wagtailmenus/forms.py:26
+msgid "By default, this will be used as the link text when appearing in menus."
+msgstr ""
+"Це значення буде використовуватися в якості тексту посилання при появі в "
+"меню за замовчуванням."
+
+#: wagtailmenus/menuadmin.py:82
+msgid "Main menu"
+msgstr "Головне меню"
+
+#: wagtailmenus/menuadmin.py:91
+msgid "The menu could not be saved due to errors."
+msgstr "Не вдалося зберегти меню через помилки"
+
+#: wagtailmenus/menuadmin.py:94 wagtailmenus/menuadmin.py:147
+msgid "Content"
+msgstr "Контент"
+
+#: wagtailmenus/menuadmin.py:95 wagtailmenus/menuadmin.py:148
+#: wagtailmenus/panels.py:87
+msgid "Settings"
+msgstr "Налаштування"
+
+#: wagtailmenus/menuadmin.py:127
+#, fuzzy
+#| msgid "The menu could not be saved due to errors."
+msgid "The flat menu could not be saved due to errors"
+msgstr "Не вдалося зберегти меню через помилки"
+
+#: wagtailmenus/menuadmin.py:132
 msgid "Flat menus"
 msgstr "Плоскі меню"
 
-#: wagtailmenus/modeladmin.py:97 wagtailmenus/models/menuitems.py:53
-#: wagtailmenus/models/menus.py:1151
-msgid "handle"
-msgstr "Назва змінної"
-
-#: wagtailmenus/modeladmin.py:105
-msgid "no. of items"
-msgstr "к-сть елементів"
+#: wagtailmenus/menuadmin.py:144
+#, fuzzy
+#| msgid "The menu could not be saved due to errors."
+msgid "The flat menu could not be saved due to errors."
+msgstr "Не вдалося зберегти меню через помилки"
 
 #: wagtailmenus/models/menuitems.py:32 wagtailmenus/models/pages.py:140
 msgid "link to an internal page"
@@ -82,15 +107,21 @@ msgstr "додати до URL-адреси"
 msgid ""
 "Use this to optionally append a #hash or querystring to the above page's URL."
 msgstr ""
-"Використовуйте це поле для додавання #hash або параметрів запиту до вказаної вище URL-адреси"
+"Використовуйте це поле для додавання #hash або параметрів запиту до вказаної "
+"вище URL-адреси"
+
+#: wagtailmenus/models/menuitems.py:53 wagtailmenus/models/menus.py:1151
+#: wagtailmenus/models/menus.py:1184
+msgid "handle"
+msgstr "Назва змінної"
 
 #: wagtailmenus/models/menuitems.py:57
 msgid ""
 "Use this field to optionally specify an additional value for each menu item, "
 "which you can then reference in custom menu templates."
 msgstr ""
-"Використовуйте це поле, щоб за бажанням вказати додаткове значення для кожного пункту меню, "
-"на яке потім можна посилатися у власних шаблонах меню."
+"Використовуйте це поле, щоб за бажанням вказати додаткове значення для "
+"кожного пункту меню, на яке потім можна посилатися у власних шаблонах меню."
 
 #: wagtailmenus/models/menuitems.py:63
 msgid "link text"
@@ -101,8 +132,8 @@ msgid ""
 "Provide the text to use for a custom URL, or set on an internal page link to "
 "use instead of the page's title."
 msgstr ""
-"Вкажіть текст для вказаної URL-адреси або вкажіть посилання на внутрішню сторінку "
-"замість заголовка сторінки."
+"Вкажіть текст для вказаної URL-адреси або вкажіть посилання на внутрішню "
+"сторінку замість заголовка сторінки."
 
 #: wagtailmenus/models/menuitems.py:76 wagtailmenus/panels.py:19
 msgid "menu item"
@@ -118,7 +149,8 @@ msgstr "Будь-ласка, оберіть внутрішнє посиланн�
 
 #: wagtailmenus/models/menuitems.py:116 wagtailmenus/models/pages.py:212
 msgid "Linking to both a page and custom URL is not permitted"
-msgstr "Не дозволяється привʼязка до сторінки та довільної URL-адреси одночасно."
+msgstr ""
+"Не дозволяється привʼязка до сторінки та довільної URL-адреси одночасно."
 
 #: wagtailmenus/models/menuitems.py:119
 msgid "This field is required when linking to a custom URL"
@@ -133,8 +165,8 @@ msgid ""
 "NOTE: The sub-menu might not be displayed, even if checked. It depends on "
 "how the menu is used in this project's templates."
 msgstr ""
-"ПРИМІТКА: Під-меню може не відображатися, навіть якщо це поле було позначене. "
-"Це залежить від того, як меню використовується в шаблонах проекту."
+"ПРИМІТКА: Під-меню може не відображатися, навіть якщо це поле було "
+"позначене. Це залежить від того, як меню використовується в шаблонах проекту."
 
 #: wagtailmenus/models/menus.py:1064 wagtailmenus/models/menus.py:1140
 msgid "site"
@@ -150,9 +182,9 @@ msgid ""
 "can be overidden by supplying a different <code>max_levels</code> value to "
 "the <code>{% main_menu %}</code> tag in your templates."
 msgstr ""
-"Максимальна кількість рівнів для відображення під час відображення цього меню. "
-"Це значення можна змінити, додавши інше значення <code>max_levels</code> "
-"до тегу <code>{% main_menu %}</code> у ваших шаблонах."
+"Максимальна кількість рівнів для відображення під час відображення цього "
+"меню. Це значення можна змінити, додавши інше значення <code>max_levels</"
+"code> до тегу <code>{% main_menu %}</code> у ваших шаблонах."
 
 #: wagtailmenus/models/menus.py:1084 wagtailmenus/models/menus.py:1085
 msgid "main menu"
@@ -176,9 +208,8 @@ msgid ""
 "Used to reference this menu in templates etc. Must be unique for the "
 "selected site."
 msgstr ""
-"Використовується для посилання на це меню в шаблонах тощо. "
-"Має бути унікальним для вибраного сайту."
-
+"Використовується для посилання на це меню в шаблонах тощо. Має бути "
+"унікальним для вибраного сайту."
 
 #: wagtailmenus/models/menus.py:1159
 msgid "heading"
@@ -194,9 +225,9 @@ msgid ""
 "can be overidden by supplying a different <code>max_levels</code> value to "
 "the <code>{% flat_menu %}</code> tag in your templates."
 msgstr ""
-"Максимальна кількість рівнів цього меню під час відображення. "
-"Це значення можна змінити, додавши інше значення <code>max_levels</code> "
-"до тегу <code>{% flat_menu %}</code> у ваших шаблонах."
+"Максимальна кількість рівнів цього меню під час відображення. Це значення "
+"можна змінити, додавши інше значення <code>max_levels</code> до тегу "
+"<code>{% flat_menu %}</code> у ваших шаблонах."
 
 #: wagtailmenus/models/menus.py:1179
 msgid "flat menu"
@@ -205,6 +236,10 @@ msgstr "плоске меню"
 #: wagtailmenus/models/menus.py:1180
 msgid "flat menus"
 msgstr "плоскі меню"
+
+#: wagtailmenus/models/menus.py:1189
+msgid "no. of items"
+msgstr "к-сть елементів"
 
 #: wagtailmenus/models/pages.py:17
 msgid "repeat in sub-navigation"
@@ -215,8 +250,8 @@ msgid ""
 "If checked, a link to this page will be repeated alongside it's direct "
 "children when displaying a sub-navigation for this page."
 msgstr ""
-"Якщо позначено, посилання на цю сторінку повторюватиметься поруч із її прямими "
-"дочірніми елементами під час відображення під-меню цієї сторінки."
+"Якщо позначено, посилання на цю сторінку повторюватиметься поруч із її "
+"прямими дочірніми елементами під час відображення під-меню цієї сторінки."
 
 #: wagtailmenus/models/pages.py:25
 msgid "repeated item link text"
@@ -227,12 +262,14 @@ msgid ""
 "e.g. 'Section home' or 'Overview'. If left blank, the page title will be "
 "used."
 msgstr ""
-"напр. «Головна сторінка» або «Огляд». Якщо залишити порожнім, буде використано "
-"назву сторінки"
+"напр. «Головна сторінка» або «Огляд». Якщо залишити порожнім, буде "
+"використано назву сторінки"
 
 #: wagtailmenus/models/pages.py:157
 msgid "Use this to optionally append a #hash or querystring to the URL."
-msgstr "Використовуйте це, аби за потреби додати #hash або параметри запиту до URL-адреси"
+msgstr ""
+"Використовуйте це, аби за потреби додати #hash або параметри запиту до URL-"
+"адреси"
 
 #: wagtailmenus/models/pages.py:161
 msgid "menu item css classes"
@@ -267,45 +304,26 @@ msgstr "Деталі меню"
 msgid "Render settings"
 msgstr "Параметри відображення"
 
-#: wagtailmenus/panels.py:87 wagtailmenus/views.py:57
-msgid "Settings"
-msgstr "Налаштування"
-
 #: wagtailmenus/panels.py:98
 msgid "Advanced menu behaviour"
 msgstr "Розширені налаштування меню"
 
-#: wagtailmenus/views.py:56
-msgid "Content"
-msgstr "Контент"
-
-#: wagtailmenus/views.py:71
-msgid "Editing"
-msgstr "Редагування"
-
-#: wagtailmenus/views.py:95
+#: wagtailmenus/templates/wagtailmenus/flatmenu_index.html:3
 #, python-format
-msgid "Editing %(model_name)s"
-msgstr "Редагування %(model_name)s"
+msgid "%(snippet_type_name_plural)s"
+msgstr "%(snippet_type_name_plural)s"
 
-#: wagtailmenus/views.py:126
-msgid "Main menu updated successfully."
-msgstr "Головне меню було успішно оновлено"
-
-#: wagtailmenus/views.py:130
-msgid "The menu could not be saved due to errors."
-msgstr "Не вдалося зберегти меню через помилки"
-
-#: wagtailmenus/views.py:145
-msgid "Copying"
-msgstr "Копіювання"
-
-#: wagtailmenus/views.py:152
+#: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:3
 #, python-format
-msgid "Copying %(model_name)s"
-msgstr "Копіювання %(model_name)s"
+msgid "Editing %(snippet_type_name)s - %(object)s"
+msgstr "Редагування %(snippet_type_name)s - %(object)s"
 
-#: wagtailmenus/views.py:184
-#, python-brace-format
-msgid "Flat menu '{instance}' created."
-msgstr "Плоске меню '{instance}' було створено"
+#: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:19
+#: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:19
+msgid "Actions"
+msgstr ""
+
+#: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:3
+#, python-format
+msgid "Copying %(snippet_type_name)s - %(object)s"
+msgstr "Копіювання %(snippet_type_name)s - %(object)s"
