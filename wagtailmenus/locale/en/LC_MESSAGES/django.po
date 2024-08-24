@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-23 22:25+0100\n"
+"POT-Creation-Date: 2024-08-24 21:55+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,34 +33,50 @@ msgstr ""
 msgid "4: Allow 3 levels of sub-navigation"
 msgstr ""
 
-#: wagtailmenus/forms.py:22
-msgid "By default, this will be used as the link text when appearing in menus."
+#: wagtailmenus/copyable_snippetviewset.py:17
+msgid "The snippet could not be copied due to errors."
 msgstr ""
 
-#: wagtailmenus/modeladmin.py:18
-msgid "Main menu"
-msgstr ""
-
-#: wagtailmenus/modeladmin.py:41
+#: wagtailmenus/copyable_snippetviewset.py:38
 msgid "Copy"
 msgstr ""
 
-#: wagtailmenus/modeladmin.py:43
+#: wagtailmenus/copyable_snippetviewset.py:41
 #, python-format
-msgid "Copy this %(model_name)s"
+msgid "Copy '%(title)s'"
 msgstr ""
 
-#: wagtailmenus/modeladmin.py:64
+#: wagtailmenus/forms.py:26
+msgid "By default, this will be used as the link text when appearing in menus."
+msgstr ""
+
+#: wagtailmenus/menuadmin.py:82
+msgid "Main menu"
+msgstr ""
+
+#: wagtailmenus/menuadmin.py:91
+msgid "The menu could not be saved due to errors."
+msgstr ""
+
+#: wagtailmenus/menuadmin.py:94 wagtailmenus/menuadmin.py:147
+msgid "Content"
+msgstr ""
+
+#: wagtailmenus/menuadmin.py:95 wagtailmenus/menuadmin.py:148
+#: wagtailmenus/panels.py:87
+msgid "Settings"
+msgstr ""
+
+#: wagtailmenus/menuadmin.py:127
+msgid "The flat menu could not be saved due to errors"
+msgstr ""
+
+#: wagtailmenus/menuadmin.py:132
 msgid "Flat menus"
 msgstr ""
 
-#: wagtailmenus/modeladmin.py:97 wagtailmenus/models/menuitems.py:53
-#: wagtailmenus/models/menus.py:1151
-msgid "handle"
-msgstr ""
-
-#: wagtailmenus/modeladmin.py:105
-msgid "no. of items"
+#: wagtailmenus/menuadmin.py:144
+msgid "The flat menu could not be saved due to errors."
 msgstr ""
 
 #: wagtailmenus/models/menuitems.py:32 wagtailmenus/models/pages.py:140
@@ -78,6 +94,11 @@ msgstr ""
 #: wagtailmenus/models/menuitems.py:48
 msgid ""
 "Use this to optionally append a #hash or querystring to the above page's URL."
+msgstr ""
+
+#: wagtailmenus/models/menuitems.py:53 wagtailmenus/models/menus.py:1151
+#: wagtailmenus/models/menus.py:1184
+msgid "handle"
 msgstr ""
 
 #: wagtailmenus/models/menuitems.py:57
@@ -187,6 +208,10 @@ msgstr ""
 msgid "flat menus"
 msgstr ""
 
+#: wagtailmenus/models/menus.py:1189
+msgid "no. of items"
+msgstr ""
+
 #: wagtailmenus/models/pages.py:17
 msgid "repeat in sub-navigation"
 msgstr ""
@@ -242,45 +267,26 @@ msgstr ""
 msgid "Render settings"
 msgstr ""
 
-#: wagtailmenus/panels.py:87 wagtailmenus/views.py:57
-msgid "Settings"
-msgstr ""
-
 #: wagtailmenus/panels.py:98
 msgid "Advanced menu behaviour"
 msgstr ""
 
-#: wagtailmenus/views.py:56
-msgid "Content"
-msgstr ""
-
-#: wagtailmenus/views.py:71
-msgid "Editing"
-msgstr ""
-
-#: wagtailmenus/views.py:95
+#: wagtailmenus/templates/wagtailmenus/flatmenu_index.html:3
 #, python-format
-msgid "Editing %(model_name)s"
+msgid "%(snippet_type_name_plural)s"
 msgstr ""
 
-#: wagtailmenus/views.py:126
-msgid "Main menu updated successfully."
-msgstr ""
-
-#: wagtailmenus/views.py:130
-msgid "The menu could not be saved due to errors."
-msgstr ""
-
-#: wagtailmenus/views.py:145
-msgid "Copying"
-msgstr ""
-
-#: wagtailmenus/views.py:152
+#: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:3
 #, python-format
-msgid "Copying %(model_name)s"
+msgid "Editing %(snippet_type_name)s - %(object)s"
 msgstr ""
 
-#: wagtailmenus/views.py:184
-#, python-brace-format
-msgid "Flat menu '{instance}' created."
+#: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:19
+#: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:19
+msgid "Actions"
+msgstr ""
+
+#: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:3
+#, python-format
+msgid "Copying %(snippet_type_name)s - %(object)s"
 msgstr ""
