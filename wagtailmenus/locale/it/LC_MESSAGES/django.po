@@ -67,7 +67,7 @@ msgstr "Non è stato possibile salvare il menù a seguito di errori."
 
 #: wagtailmenus/menuadmin.py:94 wagtailmenus/menuadmin.py:147
 msgid "Content"
-msgstr "Soddisfare"
+msgstr "Contenuto"
 
 #: wagtailmenus/menuadmin.py:95 wagtailmenus/menuadmin.py:148
 #: wagtailmenus/panels.py:87
