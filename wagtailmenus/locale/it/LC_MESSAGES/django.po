@@ -1,5 +1,5 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Italian translation for wagtailmenus
+# Copyright (C) 2024
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -7,7 +7,6 @@
 # Claudio Marinozzi <claudiomarinozzi78@gmail.com>, 2017
 # Andy Babic, 2018
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -39,10 +38,8 @@ msgid "4: Allow 3 levels of sub-navigation"
 msgstr "4: Fino a 3 livelli di sottomenù"
 
 #: wagtailmenus/copyable_snippetviewset.py:17
-#, fuzzy
-#| msgid "The menu could not be saved due to errors."
 msgid "The snippet could not be copied due to errors."
-msgstr "Non è stato possibile salvare il menù a seguito di errori."
+msgstr "Non è stato possibile salvare lo snippet a seguito di errori."
 
 #: wagtailmenus/copyable_snippetviewset.py:38
 msgid "Copy"
@@ -55,7 +52,7 @@ msgstr ""
 
 #: wagtailmenus/forms.py:26
 msgid "By default, this will be used as the link text when appearing in menus."
-msgstr "Questo è il testo di collegamento predefinito usato nei menu."
+msgstr "Questo è il testo di collegamento predefinito usato nei menù."
 
 #: wagtailmenus/menuadmin.py:82
 msgid "Main menu"
@@ -75,20 +72,16 @@ msgid "Settings"
 msgstr "Impostazioni"
 
 #: wagtailmenus/menuadmin.py:127
-#, fuzzy
-#| msgid "The menu could not be saved due to errors."
 msgid "The flat menu could not be saved due to errors"
-msgstr "Non è stato possibile salvare il menù a seguito di errori."
+msgstr "Non è stato possibile salvare il menù piatto a seguito di errori."
 
 #: wagtailmenus/menuadmin.py:132
 msgid "Flat menus"
 msgstr "Menù piatti"
 
 #: wagtailmenus/menuadmin.py:144
-#, fuzzy
-#| msgid "The menu could not be saved due to errors."
 msgid "The flat menu could not be saved due to errors."
-msgstr "Non è stato possibile salvare il menù a seguito di errori."
+msgstr "Non è stato possibile salvare il menù piatto a seguito di errori."
 
 #: wagtailmenus/models/menuitems.py:32 wagtailmenus/models/pages.py:140
 msgid "link to an internal page"
@@ -100,7 +93,7 @@ msgstr "link a URL specifico"
 
 #: wagtailmenus/models/menuitems.py:44 wagtailmenus/models/pages.py:153
 msgid "append to URL"
-msgstr "aggiunti all'URL"
+msgstr "aggiungi all'URL"
 
 #: wagtailmenus/models/menuitems.py:48
 msgid ""
@@ -119,8 +112,8 @@ msgid ""
 "Use this field to optionally specify an additional value for each menu item, "
 "which you can then reference in custom menu templates."
 msgstr ""
-"Opzionalmente usa questo campo per specificare, per ogni voce di menù, un "
-"valore addizionale che può essere poi referenziato in un template di menù "
+"Usa questo campo per specificare, per ogni voce di menù, un valore "
+"addizionale che può essere poi referenziato in un template di menù "
 "personalizzato."
 
 #: wagtailmenus/models/menuitems.py:63
@@ -145,7 +138,7 @@ msgstr "voci menù"
 
 #: wagtailmenus/models/menuitems.py:113 wagtailmenus/models/pages.py:207
 msgid "Please choose an internal page or provide a custom URL"
-msgstr "Scegliere una pagina interna o definire un URL specifico"
+msgstr "Scegli una pagina interna o definisci un URL specifico"
 
 #: wagtailmenus/models/menuitems.py:116 wagtailmenus/models/pages.py:212
 msgid "Linking to both a page and custom URL is not permitted"
@@ -201,7 +194,7 @@ msgstr "titolo"
 
 #: wagtailmenus/models/menus.py:1148
 msgid "For internal reference only."
-msgstr "Solamente per utilizzo interno"
+msgstr "Solo per riferimento interno."
 
 #: wagtailmenus/models/menus.py:1154
 msgid ""
@@ -217,7 +210,7 @@ msgstr "intestazione"
 
 #: wagtailmenus/models/menus.py:1162
 msgid "If supplied, appears above the menu when rendered."
-msgstr "Se valorizzato, appare sopra il menù quando disegnato."
+msgstr "Se specificato, appare sopra il menù quando disegnato."
 
 #: wagtailmenus/models/menus.py:1169
 msgid ""
@@ -240,7 +233,7 @@ msgstr "menù piatti"
 
 #: wagtailmenus/models/menus.py:1189
 msgid "no. of items"
-msgstr "N. di voci"
+msgstr "N° di voci"
 
 #: wagtailmenus/models/pages.py:17
 msgid "repeat in sub-navigation"
@@ -252,8 +245,8 @@ msgid ""
 "children when displaying a sub-navigation for this page."
 msgstr ""
 "Se selezionato, un link a questa stessa pagina verrà mostrato insieme alle "
-"voci di menù dei diretti figli quando visualizzato un sottomenù per questa "
-"pagina"
+"voci di menù dei diretti figli quando viene visualizzato un sottomenù per "
+"questa pagina."
 
 #: wagtailmenus/models/pages.py:25
 msgid "repeated item link text"
@@ -285,9 +278,7 @@ msgstr ""
 
 #: wagtailmenus/models/pages.py:201
 msgid "A link page cannot link to another link page"
-msgstr ""
-"Un collegamento di pagina non può referenziare un altro collegamento di "
-"pagina."
+msgstr "Un collegamento di pagina non può referenziare un altro collegamento di pagina."
 
 #: wagtailmenus/models/pages.py:289 wagtailmenus/models/pages.py:299
 #, python-format
@@ -323,7 +314,7 @@ msgstr "Modifica %(snippet_type_name)s - %(object)s"
 #: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:19
 #: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:19
 msgid "Actions"
-msgstr ""
+msgstr "Azioni"
 
 #: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:3
 #, python-format
