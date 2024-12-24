@@ -86,7 +86,7 @@ class CMSUsecaseTests(WebTest):
         form = edit_view.forms[next(reversed(OrderedDict(edit_view.forms)))]
         response = form.submit().follow()
 
-        assert re.search(r"Main menu [^<>]+ updated", response.content.decode())
+        assert "Main menu 'Main menu for wagtailmenus (co.uk)' updated." in response
 
 
 class LinkPageCMSTest(TestCase):
