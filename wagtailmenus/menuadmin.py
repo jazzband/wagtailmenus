@@ -90,6 +90,8 @@ class MainMenuAdmin(SnippetViewSet):
     edit_template_name = "wagtailmenus/mainmenu_edit.html"
     error_message = _("The menu could not be saved due to errors.")
 
+    copy_view_enabled = False
+
     edit_handler = TabbedInterface([
         ObjectList(panels.main_menu_content_panels, heading=_("Content")),
         ObjectList(panels.menu_settings_panels, heading=_("Settings"),
