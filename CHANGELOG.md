@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Unreleased
+==========
+
+- Update the testing environment to test Wagtail 6.3 and Django 5.1
+- Add conditional support for Wagtail 6.3 templates
+
 4.0.1 (04.08.2024)
 ----------
 

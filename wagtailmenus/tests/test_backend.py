@@ -86,7 +86,7 @@ class CMSUsecaseTests(WebTest):
         form = edit_view.forms[next(reversed(OrderedDict(edit_view.forms)))]
         response = form.submit().follow()
 
-        assert re.search(r"Main menu [^<>]+ updated", response.content.decode())
+        assert re.search(r"Main menu .*? updated\.", response.content.decode())
 
 
 class LinkPageCMSTest(TestCase):

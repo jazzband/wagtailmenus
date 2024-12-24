@@ -87,8 +87,13 @@ class MainMenuAdmin(SnippetViewSet):
     index_view_class = MainMenuIndexView
 
     edit_view_class = MainMenuEditView
-    edit_template_name = "wagtailmenus/mainmenu_edit.html"
+    if WAGTAIL_VERSION < (6, 3):
+        edit_template_name = "wagtailmenus/mainmenu_edit.html"
+    else:
+        edit_template_name = "wagtailmenus/wagtail_63/mainmenu_edit.html"
     error_message = _("The menu could not be saved due to errors.")
+
+    copy_view_enabled = False
 
     edit_handler = TabbedInterface([
         ObjectList(panels.main_menu_content_panels, heading=_("Content")),

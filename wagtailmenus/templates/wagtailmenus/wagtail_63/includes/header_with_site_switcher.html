@@ -1,0 +1,12 @@
+{% if site_switcher %}
+<div class="w-field__wrapper " data-field-wrapper="">
+    <form method="get" id="settings-site-switch">
+        <label class="w-field__label" for="{{ site_switcher.site.id_for_label }}" id="{{ site_switcher.site.id_for_label }}-label">
+            Site: <span class="w-required-mark">*</span>
+        </label>
+        <div class="w-field__input" data-field-input="">
+        {{ site_switcher.site }}
+        </div>
+    </form>
+</div>
+{% endif %}
