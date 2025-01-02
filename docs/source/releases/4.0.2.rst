@@ -1,0 +1,21 @@
+===============================================
+Wagtailmenus 4.0.2 release notes (02.01.2025)
+===============================================
+
+.. contents::
+    :local:
+    :depth: 1
+
+
+What's new?
+===========
+
+There are no new major features in this release.
+
+Minor changes & bug fixes
+=========================
+
+* Added support for Wagtail 6.3.
+* Added support for Django 5.1.
+* Added "Python 3.13" to the list of PyPI classifiers.
+* Fix Italian translation [#499](github.com/jazzband/wagtailmenus/pull/499).
