@@ -1,0 +1,19 @@
+===============================================
+Wagtailmenus 4.0.1 release notes (04.08.2024)
+===============================================
+
+.. contents::
+    :local:
+    :depth: 1
+
+
+What's new?
+===========
+
+There are no new major features in this release.
+
+Minor changes & bug fixes
+=========================
+
+* Fix German translation.
+* Fix `bs4.FeatureNotFound` error on tests.
