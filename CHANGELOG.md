@@ -1,11 +1,12 @@
 Changelog
 =========
 
-Unreleased
-==========
+4.0.1 (02.01.2025)
+----------
 
-- Update the testing environment to test Wagtail 6.3 and Django 5.1
-- Add conditional support for Wagtail 6.3 templates
+* Update the testing environment to test Wagtail 6.3 and Django 5.1
+* Add conditional support for Wagtail 6.3 templates.
+* Fix Italian translation [#499](github.com/jazzband/wagtailmenus/pull/499).
 
 4.0.1 (04.08.2024)
 ----------
