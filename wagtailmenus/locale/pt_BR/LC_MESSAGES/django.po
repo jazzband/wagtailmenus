@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-24 21:55+0100\n"
+"POT-Creation-Date: 2025-01-02 16:38+0000\n"
 "PO-Revision-Date: 2017-03-20 23:04+0000\n"
 "Last-Translator: Andy Babic, 2018\n"
 "Language-Team: Portuguese (Brazil) (https://www.transifex.com/rkhleics/"
@@ -63,30 +63,30 @@ msgstr "Por padrão, esse será o texto do link usado quando aparecer em menus."
 msgid "Main menu"
 msgstr "Menu principal"
 
-#: wagtailmenus/menuadmin.py:91
+#: wagtailmenus/menuadmin.py:93
 msgid "The menu could not be saved due to errors."
 msgstr "O menu não pode ser salvo por conta de erros."
 
-#: wagtailmenus/menuadmin.py:94 wagtailmenus/menuadmin.py:147
+#: wagtailmenus/menuadmin.py:98 wagtailmenus/menuadmin.py:151
 msgid "Content"
 msgstr "Conteúdo"
 
-#: wagtailmenus/menuadmin.py:95 wagtailmenus/menuadmin.py:148
+#: wagtailmenus/menuadmin.py:99 wagtailmenus/menuadmin.py:152
 #: wagtailmenus/panels.py:87
 msgid "Settings"
 msgstr "Configurações"
 
-#: wagtailmenus/menuadmin.py:127
+#: wagtailmenus/menuadmin.py:131
 #, fuzzy
 #| msgid "The menu could not be saved due to errors."
 msgid "The flat menu could not be saved due to errors"
 msgstr "O menu não pode ser salvo por conta de erros."
 
-#: wagtailmenus/menuadmin.py:132
+#: wagtailmenus/menuadmin.py:136
 msgid "Flat menus"
 msgstr "Menus simples"
 
-#: wagtailmenus/menuadmin.py:144
+#: wagtailmenus/menuadmin.py:148
 #, fuzzy
 #| msgid "The menu could not be saved due to errors."
 msgid "The flat menu could not be saved due to errors."
@@ -314,11 +314,12 @@ msgid "%(snippet_type_name_plural)s"
 msgstr "%(snippet_type_name_plural)s"
 
 #: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:3
+#: wagtailmenus/templates/wagtailmenus/wagtail_before_63/mainmenu_edit.html:3
 #, python-format
 msgid "Editing %(snippet_type_name)s - %(object)s"
 msgstr "Editando %(snippet_type_name)s - %(object)s"
 
-#: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:19
+#: wagtailmenus/templates/wagtailmenus/wagtail_before_63/mainmenu_edit.html:19
 #: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:19
 msgid "Actions"
 msgstr "Ações"
