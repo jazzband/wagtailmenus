@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wagtailmenus 3.1.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-24 21:55+0100\n"
+"POT-Creation-Date: 2025-01-02 16:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kira <kiraware@github.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,30 +58,30 @@ msgstr ""
 msgid "Main menu"
 msgstr "Menu utama"
 
-#: wagtailmenus/menuadmin.py:91
+#: wagtailmenus/menuadmin.py:93
 msgid "The menu could not be saved due to errors."
 msgstr "Menu tidak dapat disimpan karena kesalahan."
 
-#: wagtailmenus/menuadmin.py:94 wagtailmenus/menuadmin.py:147
+#: wagtailmenus/menuadmin.py:98 wagtailmenus/menuadmin.py:151
 msgid "Content"
 msgstr "Konten"
 
-#: wagtailmenus/menuadmin.py:95 wagtailmenus/menuadmin.py:148
+#: wagtailmenus/menuadmin.py:99 wagtailmenus/menuadmin.py:152
 #: wagtailmenus/panels.py:87
 msgid "Settings"
 msgstr "Pengaturan"
 
-#: wagtailmenus/menuadmin.py:127
+#: wagtailmenus/menuadmin.py:131
 #, fuzzy
 #| msgid "The menu could not be saved due to errors."
 msgid "The flat menu could not be saved due to errors"
 msgstr "Menu tidak dapat disimpan karena kesalahan."
 
-#: wagtailmenus/menuadmin.py:132
+#: wagtailmenus/menuadmin.py:136
 msgid "Flat menus"
 msgstr "Menu datar"
 
-#: wagtailmenus/menuadmin.py:144
+#: wagtailmenus/menuadmin.py:148
 #, fuzzy
 #| msgid "The menu could not be saved due to errors."
 msgid "The flat menu could not be saved due to errors."
@@ -309,11 +309,12 @@ msgid "%(snippet_type_name_plural)s"
 msgstr "%(snippet_type_name_plural)s"
 
 #: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:3
+#: wagtailmenus/templates/wagtailmenus/wagtail_before_63/mainmenu_edit.html:3
 #, python-format
 msgid "Editing %(snippet_type_name)s - %(object)s"
 msgstr "Mengedit %(snippet_type_name)s - %(object)s"
 
-#: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:19
+#: wagtailmenus/templates/wagtailmenus/wagtail_before_63/mainmenu_edit.html:19
 #: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:19
 msgid "Actions"
 msgstr ""
