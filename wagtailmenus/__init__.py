@@ -2,7 +2,7 @@ from wagtailmenus.utils.version import get_stable_branch_name, get_version
 
 # major.minor.patch.release.number
 # release must be one of alpha, beta, rc, or final
-VERSION = (4, 0, 1, "final", 0)
+VERSION = (4, 0, 2, "final", 0)
 __version__ = get_version(VERSION)
 stable_branch_name = get_stable_branch_name(VERSION)
 
