@@ -56,7 +56,7 @@ msgstr ""
 #: wagtailmenus/forms.py:26
 msgid "By default, this will be used as the link text when appearing in menus."
 msgstr ""
-"Standardmäßig wird dies als Link Text benutzt wenn es in Menüs erscheint."
+"Standardmäßig wird dies als Link-Text benutzt, wenn es in Menüs erscheint."
 
 #: wagtailmenus/menuadmin.py:82
 msgid "Main menu"
@@ -107,7 +107,7 @@ msgstr "an URL anheften"
 msgid ""
 "Use this to optionally append a #hash or querystring to the above page's URL."
 msgstr ""
-"Benutzte um einen optionalen #hash oder Query an die obige Seiten URL "
+"Benutze dies, um einen optionalen #hash oder Query an die obige Seiten URL "
 "anzuheften."
 
 #: wagtailmenus/models/menuitems.py:53 wagtailmenus/models/menus.py:1151
@@ -120,7 +120,7 @@ msgid ""
 "Use this field to optionally specify an additional value for each menu item, "
 "which you can then reference in custom menu templates."
 msgstr ""
-"Nutze dieses optionale Feld um einen zusätzlichen Wert für jeden Menüeintrag "
+"Nutze dieses optionale Feld, um einen zusätzlichen Wert für jeden Menüeintrag "
 "festzulegen, welcher dann in eigenen Menütemplates referenziert werden kann."
 
 #: wagtailmenus/models/menuitems.py:63
@@ -132,7 +132,7 @@ msgid ""
 "Provide the text to use for a custom URL, or set on an internal page link to "
 "use instead of the page's title."
 msgstr ""
-"Gib einen Text für eine eigene URL an oder verwende diesen um bei internen "
+"Gib einen Text für eine eigene URL an oder verwende diesen, um bei internen "
 "Seiten diesen anstelle des Seitentitels anzuzeigen."
 
 #: wagtailmenus/models/menuitems.py:76 wagtailmenus/panels.py:19
@@ -153,7 +153,7 @@ msgstr "Verlinken von Seiten und eigenen URLs ist nicht erlaubt"
 
 #: wagtailmenus/models/menuitems.py:119
 msgid "This field is required when linking to a custom URL"
-msgstr "Dieses Feld wird benötigt wenn sie eine eigene URL verlinken"
+msgstr "Dieses Feld wird benötigt, wenn sie eine eigene URL verlinken"
 
 #: wagtailmenus/models/menuitems.py:157 wagtailmenus/models/menuitems.py:173
 msgid "allow sub-menu for this item"
@@ -182,8 +182,8 @@ msgid ""
 "can be overidden by supplying a different <code>max_levels</code> value to "
 "the <code>{% main_menu %}</code> tag in your templates."
 msgstr ""
-"Maximaltiefe wenn das Menü gerendert wird. Der Wert kann überschrieben "
-"werden indem man <code>max_levels</code> im <code>{% main_menu %}</code> tag "
+"Maximaltiefe, wenn das Menü gerendert wird. Der Wert kann überschrieben "
+"werden, indem man <code>max_levels</code> im <code>{% main_menu %}</code>-Tag "
 "in den Templates mit angibt."
 
 #: wagtailmenus/models/menus.py:1084 wagtailmenus/models/menus.py:1085
@@ -208,7 +208,7 @@ msgid ""
 "Used to reference this menu in templates etc. Must be unique for the "
 "selected site."
 msgstr ""
-"Verwendet um dieses Menü in Templates zu referenzieren. Muss einzigartig für "
+"Wird verwendet, um dieses Menü in Templates zu referenzieren. Muss einzigartig für "
 "die ausgewählte Seite sein."
 
 #: wagtailmenus/models/menus.py:1159
@@ -218,7 +218,7 @@ msgstr "Überschrift"
 #: wagtailmenus/models/menus.py:1162
 msgid "If supplied, appears above the menu when rendered."
 msgstr ""
-"Wenn angegeben erscheint dies oberhalb des Menüs, wen es gerendert wird."
+"Wenn angegeben, erscheint dies oberhalb des Menüs, wenn es gerendert wird."
 
 #: wagtailmenus/models/menus.py:1169
 msgid ""
@@ -226,7 +226,7 @@ msgid ""
 "can be overidden by supplying a different <code>max_levels</code> value to "
 "the <code>{% flat_menu %}</code> tag in your templates."
 msgstr ""
-"Maximaltiefe wenn das Menü gerendert wird. Der Wert kann überschrieben "
+"Maximaltiefe, wenn das Menü gerendert wird. Der Wert kann überschrieben "
 "werden indem man <code>max_levels</code> im <code>{% flat_menu %}</code> tag "
 "in den Templates mit angibt."
 
@@ -252,7 +252,7 @@ msgid ""
 "children when displaying a sub-navigation for this page."
 msgstr ""
 "Wenn markiert, dann wird ein Link zu dieser Seite zusammen mit den direkten "
-"Kindern angezeigt wenn für diese Untermenüs angezeigt werden."
+"Kindern angezeigt, wenn für diese Untermenüs angezeigt werden."
 
 #: wagtailmenus/models/pages.py:25
 msgid "repeated item link text"
@@ -269,7 +269,7 @@ msgstr ""
 #: wagtailmenus/models/pages.py:157
 msgid "Use this to optionally append a #hash or querystring to the URL."
 msgstr ""
-"Benutzte um einen optionalen #hash oder Query an die Seiten URL anzuheften."
+"Benutze dies, um einen optionalen #hash oder Query an die Seiten-URL anzuheften."
 
 #: wagtailmenus/models/pages.py:161
 msgid "menu item css classes"
@@ -279,7 +279,7 @@ msgstr "Menüeinträge css Klassen"
 msgid ""
 "Optionally specify css classes to be added to this page when it appears in "
 "menus."
-msgstr "Optionale css Klasse für diese Seite wenn sie in einem Menü erscheint."
+msgstr "Optionale css-Klasse für diese Seite, wenn sie in einem Menü erscheint."
 
 #: wagtailmenus/models/pages.py:201
 msgid "A link page cannot link to another link page"
