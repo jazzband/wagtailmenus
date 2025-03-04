@@ -1,7 +1,12 @@
 Changelog
 =========
 
-4.0.1 (02.01.2025)
+Unreleased
+----------
+
+* Update testing environment for Wagtail 6.4
+
+4.0.2 (02.01.2025)
 ----------
 
 * Update the testing environment to test Wagtail 6.3 and Django 5.1
