@@ -33,8 +33,7 @@ The current version is tested for compatibility with the following:
 
 - Wagtail versions >= 5.2
 - Django versions 4.2, 5.0 and >= 5.1
-- Python versions 3.9 to 3.12
-  - Python 3.13 for Django 5.1 with Wagtail releases >= 6.3
+- Python versions 3.9 to 3.13
 
 .. image:: https://raw.githubusercontent.com/jazzband/wagtailmenus/master/docs/source/_static/images/repeating-item.png
 
