@@ -12,15 +12,6 @@ from wagtailmenus import panels
 from wagtailmenus.conf import settings
 from wagtailmenus.forms import SiteSwitchForm
 
-# Wagtail 6 introduced Snippet copy.
-# CopyableSnippetViewSet provides the equivalent in Wagtail 5.2
-from wagtail import VERSION as WAGTAIL_VERSION
-if WAGTAIL_VERSION >= (6, 0):
-    CopyableSnippetIndexView = IndexView
-    CopyableSnippetViewSet = SnippetViewSet
-else:
-    from .copyable_snippetviewset import CopyableSnippetIndexView, CopyableSnippetViewSet
-
 
 class MainMenuIndexView(IndexView):
     def dispatch(self, request, *args, **kwargs):
@@ -88,8 +79,6 @@ class MainMenuAdmin(SnippetViewSet):
 
     edit_view_class = MainMenuEditView
     edit_template_name = "wagtailmenus/mainmenu_edit.html"
-    if WAGTAIL_VERSION < (6, 3):
-        edit_template_name = "wagtailmenus/wagtail_before_63/mainmenu_edit.html"
     error_message = _("The menu could not be saved due to errors.")
 
     copy_view_enabled = False
@@ -101,7 +90,7 @@ class MainMenuAdmin(SnippetViewSet):
     ])
 
 
-class FlatMenuIndexView(CopyableSnippetIndexView):
+class FlatMenuIndexView(IndexView):
     @property
     def list_display(self):
         if self.is_multisite_listing:
@@ -131,7 +120,7 @@ class FlatMenuCreateView(CreateView):
     error_message = _("The flat menu could not be saved due to errors")
 
 
-class FlatMenuAdmin(CopyableSnippetViewSet):
+class FlatMenuAdmin(SnippetViewSet):
     model = settings.models.FLAT_MENU_MODEL
     menu_label = _('Flat menus')
     icon = settings.FLATMENU_MENU_ICON
