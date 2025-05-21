@@ -14,7 +14,7 @@ branch_url = "%stree/stable/%s" % (base_url, stable_branch_name)
 
 # Essential dependencies
 requires = [
-    'wagtail>=5.2',
+    'wagtail>=6.3',
     'django-cogwheels==0.3',
 ]
 
@@ -25,7 +25,7 @@ testing_extras = [
 ]
 
 development_extras = [
-    'wagtail>=5.2',
+    'wagtail>=6.3',
     'django-debug-toolbar',
     'django-extensions',
     'ipdb',
