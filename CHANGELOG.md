@@ -5,6 +5,9 @@ Unreleased
 ----------
 
 * Update testing environment for Wagtail 6.4
+* Update testing environment for Wagtail 7.0
+* Removed support for Wagtail <6.3.
+* Removed support for Django 5.0.
 
 4.0.2 (02.01.2025)
 ----------
