@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.0.3 (03.05.2025)
+4.0.3 (26.05.2025)
 ----------
 
 * Update testing environment for Wagtail 6.4
