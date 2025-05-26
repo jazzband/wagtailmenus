@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-02 16:38+0000\n"
+"POT-Creation-Date: 2025-05-26 10:00+0100\n"
 "PO-Revision-Date: 2017-03-20 23:04+0000\n"
 "Last-Translator: Andy Babic, 2018\n"
 "Language-Team: German (https://www.transifex.com/rkhleics/teams/73023/de/)\n"
@@ -38,54 +38,39 @@ msgstr "3: Erlaube 2 Untermenüs"
 msgid "4: Allow 3 levels of sub-navigation"
 msgstr "4: Erlaube 3 Untermenüs"
 
-#: wagtailmenus/copyable_snippetviewset.py:17
-#, fuzzy
-#| msgid "The menu could not be saved due to errors."
-msgid "The snippet could not be copied due to errors."
-msgstr "Das Menü konnte aufgrund von Fehlern nicht gespeichert werden."
-
-#: wagtailmenus/copyable_snippetviewset.py:38
-msgid "Copy"
-msgstr "Kopieren"
-
-#: wagtailmenus/copyable_snippetviewset.py:41
-#, python-format
-msgid "Copy '%(title)s'"
-msgstr ""
-
 #: wagtailmenus/forms.py:26
 msgid "By default, this will be used as the link text when appearing in menus."
 msgstr ""
 "Standardmäßig wird dies als Link-Text benutzt, wenn es in Menüs erscheint."
 
-#: wagtailmenus/menuadmin.py:82
+#: wagtailmenus/menuadmin.py:73
 msgid "Main menu"
 msgstr "Hauptmenü"
 
-#: wagtailmenus/menuadmin.py:93
+#: wagtailmenus/menuadmin.py:82
 msgid "The menu could not be saved due to errors."
 msgstr "Das Menü konnte aufgrund von Fehlern nicht gespeichert werden."
 
-#: wagtailmenus/menuadmin.py:98 wagtailmenus/menuadmin.py:151
+#: wagtailmenus/menuadmin.py:87 wagtailmenus/menuadmin.py:140
 msgid "Content"
 msgstr "Inhalt"
 
-#: wagtailmenus/menuadmin.py:99 wagtailmenus/menuadmin.py:152
+#: wagtailmenus/menuadmin.py:88 wagtailmenus/menuadmin.py:141
 #: wagtailmenus/panels.py:87
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: wagtailmenus/menuadmin.py:131
+#: wagtailmenus/menuadmin.py:120
 #, fuzzy
 #| msgid "The menu could not be saved due to errors."
 msgid "The flat menu could not be saved due to errors"
 msgstr "Das Menü konnte aufgrund von Fehlern nicht gespeichert werden."
 
-#: wagtailmenus/menuadmin.py:136
+#: wagtailmenus/menuadmin.py:125
 msgid "Flat menus"
 msgstr "Flache Menüs"
 
-#: wagtailmenus/menuadmin.py:148
+#: wagtailmenus/menuadmin.py:137
 #, fuzzy
 #| msgid "The menu could not be saved due to errors."
 msgid "The flat menu could not be saved due to errors."
@@ -120,8 +105,9 @@ msgid ""
 "Use this field to optionally specify an additional value for each menu item, "
 "which you can then reference in custom menu templates."
 msgstr ""
-"Nutze dieses optionale Feld, um einen zusätzlichen Wert für jeden Menüeintrag "
-"festzulegen, welcher dann in eigenen Menütemplates referenziert werden kann."
+"Nutze dieses optionale Feld, um einen zusätzlichen Wert für jeden "
+"Menüeintrag festzulegen, welcher dann in eigenen Menütemplates referenziert "
+"werden kann."
 
 #: wagtailmenus/models/menuitems.py:63
 msgid "link text"
@@ -183,8 +169,8 @@ msgid ""
 "the <code>{% main_menu %}</code> tag in your templates."
 msgstr ""
 "Maximaltiefe, wenn das Menü gerendert wird. Der Wert kann überschrieben "
-"werden, indem man <code>max_levels</code> im <code>{% main_menu %}</code>-Tag "
-"in den Templates mit angibt."
+"werden, indem man <code>max_levels</code> im <code>{% main_menu %}</code>-"
+"Tag in den Templates mit angibt."
 
 #: wagtailmenus/models/menus.py:1084 wagtailmenus/models/menus.py:1085
 msgid "main menu"
@@ -208,8 +194,8 @@ msgid ""
 "Used to reference this menu in templates etc. Must be unique for the "
 "selected site."
 msgstr ""
-"Wird verwendet, um dieses Menü in Templates zu referenzieren. Muss einzigartig für "
-"die ausgewählte Seite sein."
+"Wird verwendet, um dieses Menü in Templates zu referenzieren. Muss "
+"einzigartig für die ausgewählte Seite sein."
 
 #: wagtailmenus/models/menus.py:1159
 msgid "heading"
@@ -269,7 +255,8 @@ msgstr ""
 #: wagtailmenus/models/pages.py:157
 msgid "Use this to optionally append a #hash or querystring to the URL."
 msgstr ""
-"Benutze dies, um einen optionalen #hash oder Query an die Seiten-URL anzuheften."
+"Benutze dies, um einen optionalen #hash oder Query an die Seiten-URL "
+"anzuheften."
 
 #: wagtailmenus/models/pages.py:161
 msgid "menu item css classes"
@@ -279,7 +266,8 @@ msgstr "Menüeinträge css Klassen"
 msgid ""
 "Optionally specify css classes to be added to this page when it appears in "
 "menus."
-msgstr "Optionale css-Klasse für diese Seite, wenn sie in einem Menü erscheint."
+msgstr ""
+"Optionale css-Klasse für diese Seite, wenn sie in einem Menü erscheint."
 
 #: wagtailmenus/models/pages.py:201
 msgid "A link page cannot link to another link page"
@@ -312,17 +300,23 @@ msgid "%(snippet_type_name_plural)s"
 msgstr "%(snippet_type_name_plural)s"
 
 #: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:3
-#: wagtailmenus/templates/wagtailmenus/wagtail_before_63/mainmenu_edit.html:3
 #, python-format
 msgid "Editing %(snippet_type_name)s - %(object)s"
 msgstr "Bearbeite %(snippet_type_name)s - %(object)s"
-
-#: wagtailmenus/templates/wagtailmenus/wagtail_before_63/mainmenu_edit.html:19
-#: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:19
-msgid "Actions"
-msgstr ""
 
 #: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:3
 #, python-format
 msgid "Copying %(snippet_type_name)s - %(object)s"
 msgstr "Kopiere %(snippet_type_name)s - %(object)s"
+
+#: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:19
+msgid "Actions"
+msgstr ""
+
+#, fuzzy
+#~| msgid "The menu could not be saved due to errors."
+#~ msgid "The snippet could not be copied due to errors."
+#~ msgstr "Das Menü konnte aufgrund von Fehlern nicht gespeichert werden."
+
+#~ msgid "Copy"
+#~ msgstr "Kopieren"

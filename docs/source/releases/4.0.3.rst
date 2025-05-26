@@ -1,0 +1,21 @@
+===============================================
+Wagtailmenus 4.0.3 release notes (26.05.2025)
+===============================================
+
+.. contents::
+    :local:
+    :depth: 1
+
+
+What's new?
+===========
+
+There are no new major features in this release.
+
+Minor changes & bug fixes
+=========================
+
+* Update testing environment for Wagtail 6.4
+* Update testing environment for Wagtail 7.0
+* Removed support for Wagtail <6.3.
+* Removed support for Django 5.0.

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-02 16:38+0000\n"
+"POT-Creation-Date: 2025-05-26 10:00+0100\n"
 "PO-Revision-Date: 2017-03-20 23:04+0000\n"
 "Last-Translator: Andy Babic, 2018\n"
 "Language-Team: Italian (https://www.transifex.com/rkhleics/teams/73023/it/)\n"
@@ -37,49 +37,36 @@ msgstr "3: Fino a 2 livelli di sottomenù"
 msgid "4: Allow 3 levels of sub-navigation"
 msgstr "4: Fino a 3 livelli di sottomenù"
 
-#: wagtailmenus/copyable_snippetviewset.py:17
-msgid "The snippet could not be copied due to errors."
-msgstr "Non è stato possibile salvare lo snippet a seguito di errori."
-
-#: wagtailmenus/copyable_snippetviewset.py:38
-msgid "Copy"
-msgstr "Copia"
-
-#: wagtailmenus/copyable_snippetviewset.py:41
-#, python-format
-msgid "Copy '%(title)s'"
-msgstr ""
-
 #: wagtailmenus/forms.py:26
 msgid "By default, this will be used as the link text when appearing in menus."
 msgstr "Questo è il testo di collegamento predefinito usato nei menù."
 
-#: wagtailmenus/menuadmin.py:82
+#: wagtailmenus/menuadmin.py:73
 msgid "Main menu"
 msgstr "Menù principale"
 
-#: wagtailmenus/menuadmin.py:93
+#: wagtailmenus/menuadmin.py:82
 msgid "The menu could not be saved due to errors."
 msgstr "Non è stato possibile salvare il menù a seguito di errori."
 
-#: wagtailmenus/menuadmin.py:98 wagtailmenus/menuadmin.py:151
+#: wagtailmenus/menuadmin.py:87 wagtailmenus/menuadmin.py:140
 msgid "Content"
 msgstr "Contenuto"
 
-#: wagtailmenus/menuadmin.py:99 wagtailmenus/menuadmin.py:152
+#: wagtailmenus/menuadmin.py:88 wagtailmenus/menuadmin.py:141
 #: wagtailmenus/panels.py:87
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: wagtailmenus/menuadmin.py:131
+#: wagtailmenus/menuadmin.py:120
 msgid "The flat menu could not be saved due to errors"
 msgstr "Non è stato possibile salvare il menù piatto a seguito di errori."
 
-#: wagtailmenus/menuadmin.py:136
+#: wagtailmenus/menuadmin.py:125
 msgid "Flat menus"
 msgstr "Menù piatti"
 
-#: wagtailmenus/menuadmin.py:148
+#: wagtailmenus/menuadmin.py:137
 msgid "The flat menu could not be saved due to errors."
 msgstr "Non è stato possibile salvare il menù piatto a seguito di errori."
 
@@ -309,17 +296,21 @@ msgid "%(snippet_type_name_plural)s"
 msgstr ""
 
 #: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:3
-#: wagtailmenus/templates/wagtailmenus/wagtail_before_63/mainmenu_edit.html:3
 #, python-format
 msgid "Editing %(snippet_type_name)s - %(object)s"
 msgstr "Modifica %(snippet_type_name)s - %(object)s"
-
-#: wagtailmenus/templates/wagtailmenus/wagtail_before_63/mainmenu_edit.html:19
-#: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:19
-msgid "Actions"
-msgstr "Azioni"
 
 #: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:3
 #, python-format
 msgid "Copying %(snippet_type_name)s - %(object)s"
 msgstr "Copiatura %(snippet_type_name)s - %(object)s"
+
+#: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:19
+msgid "Actions"
+msgstr "Azioni"
+
+#~ msgid "The snippet could not be copied due to errors."
+#~ msgstr "Non è stato possibile salvare lo snippet a seguito di errori."
+
+#~ msgid "Copy"
+#~ msgstr "Copia"

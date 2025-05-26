@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-02 16:38+0000\n"
+"POT-Creation-Date: 2025-05-26 10:00+0100\n"
 "PO-Revision-Date: 2017-03-20 23:04+0000\n"
 "Last-Translator: Andy Babic, 2018\n"
 "Language-Team: Portuguese (Brazil) (https://www.transifex.com/rkhleics/"
@@ -40,53 +40,38 @@ msgstr "3: Permitir até 2 níveis de submenus"
 msgid "4: Allow 3 levels of sub-navigation"
 msgstr "4: Permitir até 3 níveis de submenu"
 
-#: wagtailmenus/copyable_snippetviewset.py:17
-#, fuzzy
-#| msgid "The menu could not be saved due to errors."
-msgid "The snippet could not be copied due to errors."
-msgstr "O menu não pode ser salvo por conta de erros."
-
-#: wagtailmenus/copyable_snippetviewset.py:38
-msgid "Copy"
-msgstr "Copiar"
-
-#: wagtailmenus/copyable_snippetviewset.py:41
-#, python-format
-msgid "Copy '%(title)s'"
-msgstr ""
-
 #: wagtailmenus/forms.py:26
 msgid "By default, this will be used as the link text when appearing in menus."
 msgstr "Por padrão, esse será o texto do link usado quando aparecer em menus."
 
-#: wagtailmenus/menuadmin.py:82
+#: wagtailmenus/menuadmin.py:73
 msgid "Main menu"
 msgstr "Menu principal"
 
-#: wagtailmenus/menuadmin.py:93
+#: wagtailmenus/menuadmin.py:82
 msgid "The menu could not be saved due to errors."
 msgstr "O menu não pode ser salvo por conta de erros."
 
-#: wagtailmenus/menuadmin.py:98 wagtailmenus/menuadmin.py:151
+#: wagtailmenus/menuadmin.py:87 wagtailmenus/menuadmin.py:140
 msgid "Content"
 msgstr "Conteúdo"
 
-#: wagtailmenus/menuadmin.py:99 wagtailmenus/menuadmin.py:152
+#: wagtailmenus/menuadmin.py:88 wagtailmenus/menuadmin.py:141
 #: wagtailmenus/panels.py:87
 msgid "Settings"
 msgstr "Configurações"
 
-#: wagtailmenus/menuadmin.py:131
+#: wagtailmenus/menuadmin.py:120
 #, fuzzy
 #| msgid "The menu could not be saved due to errors."
 msgid "The flat menu could not be saved due to errors"
 msgstr "O menu não pode ser salvo por conta de erros."
 
-#: wagtailmenus/menuadmin.py:136
+#: wagtailmenus/menuadmin.py:125
 msgid "Flat menus"
 msgstr "Menus simples"
 
-#: wagtailmenus/menuadmin.py:148
+#: wagtailmenus/menuadmin.py:137
 #, fuzzy
 #| msgid "The menu could not be saved due to errors."
 msgid "The flat menu could not be saved due to errors."
@@ -314,17 +299,23 @@ msgid "%(snippet_type_name_plural)s"
 msgstr "%(snippet_type_name_plural)s"
 
 #: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:3
-#: wagtailmenus/templates/wagtailmenus/wagtail_before_63/mainmenu_edit.html:3
 #, python-format
 msgid "Editing %(snippet_type_name)s - %(object)s"
 msgstr "Editando %(snippet_type_name)s - %(object)s"
-
-#: wagtailmenus/templates/wagtailmenus/wagtail_before_63/mainmenu_edit.html:19
-#: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:19
-msgid "Actions"
-msgstr "Ações"
 
 #: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:3
 #, python-format
 msgid "Copying %(snippet_type_name)s - %(object)s"
 msgstr "Copiando %(snippet_type_name)s - %(object)s"
+
+#: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:19
+msgid "Actions"
+msgstr "Ações"
+
+#, fuzzy
+#~| msgid "The menu could not be saved due to errors."
+#~ msgid "The snippet could not be copied due to errors."
+#~ msgstr "O menu não pode ser salvo por conta de erros."
+
+#~ msgid "Copy"
+#~ msgstr "Copiar"

@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Unreleased
+4.0.3 (26.05.2025)
 ----------
 
 * Update testing environment for Wagtail 6.4
