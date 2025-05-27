@@ -1,16 +1,12 @@
 import os
 from setuptools import setup, find_packages
-from wagtailmenus import __version__, stable_branch_name
+from wagtailmenus import __version__
 
 with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
     README = readme.read()
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
-
-base_url = "https://github.com/jazzband/wagtailmenus/"
-download_url = '%starball/v%s' % (base_url, __version__)
-branch_url = "%stree/stable/%s" % (base_url, stable_branch_name)
 
 # Essential dependencies
 requires = [
@@ -52,8 +48,7 @@ setup(
     packages=find_packages(),
     license="MIT",
     keywords="wagtail cms model utility",
-    download_url=download_url,
-    url=branch_url,
+    url="https://github.com/jazzband/wagtailmenus",
     include_package_data=True,
     zip_safe=False,
     classifiers=[
