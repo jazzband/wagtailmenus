@@ -1,6 +1,11 @@
 Changelog
 =========
 
+4.0.4 (21.06.2025)
+----------
+
+* Fix Pypi Project links are broken, Read the Docs not updated [#488](https://github.com/jazzband/wagtailmenus/issues/488)
+
 4.0.3 (26.05.2025)
 ----------
 

@@ -1,0 +1,18 @@
+===============================================
+Wagtailmenus 4.0.4 release notes (21.06.2025)
+===============================================
+
+.. contents::
+    :local:
+    :depth: 1
+
+
+What's new?
+===========
+
+There are no new major features in this release.
+
+Minor changes & bug fixes
+=========================
+
+* Fix Pypi Project links are broken, Read the Docs not updated [#488](https://github.com/jazzband/wagtailmenus/issues/488)
