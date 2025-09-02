@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+* Add testing for Wagtail 7.1
+
 4.0.4 (21.06.2025)
 ----------
 
