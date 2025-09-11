@@ -11,7 +11,7 @@ from django.utils.functional import cached_property, lazy
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from modelcluster.models import ClusterableModel
-from wagtail import hooks
+from wagtail import hooks, VERSION as WAGTAIL_VERSION
 from wagtail.models import Page, Site
 
 from wagtailmenus import forms, panels
@@ -1045,7 +1045,10 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         data.update(kwargs)
         return super().get_context_data(**data)
 
-    settings_panels = panels.menu_settings_panels
+    if WAGTAIL_VERSION < (5, 2):
+        settings_panels = panels.menu_settings_panels
+    else:
+        panels = panels.menu_settings_panels
 
 
 # ########################################################
@@ -1056,7 +1059,10 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_short_name = 'main'  # used to find templates
     menu_instance_context_name = 'main_menu'
     related_templatetag_name = 'main_menu'
-    content_panels = panels.main_menu_content_panels
+    if WAGTAIL_VERSION < (5, 2):
+        content_panels = panels.main_menu_content_panels
+    else:
+        panels = MenuWithMenuItems.panels + panels.main_menu_content_panels
     menu_items_relation_setting_name = 'MAIN_MENU_ITEMS_RELATED_NAME'
 
     site = models.OneToOneField(
@@ -1132,7 +1138,10 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
     menu_instance_context_name = 'flat_menu'
     related_templatetag_name = 'flat_menu'
     base_form_class = forms.FlatMenuAdminForm
-    content_panels = panels.flat_menu_content_panels
+    if WAGTAIL_VERSION < (5, 2):
+        content_panels = panels.flat_menu_content_panels
+    else:
+        panels = MenuWithMenuItems.panels + panels.flat_menu_content_panels
     menu_items_relation_setting_name = 'FLAT_MENU_ITEMS_RELATED_NAME'
 
     site = models.ForeignKey(
