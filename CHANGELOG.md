@@ -1,14 +1,14 @@
 Changelog
 =========
 
-Unreleased
+4.0.5 (29.11.2025)
 ----------
 
 * Add testing for Wagtail 7.2
-* Drop testing for Wagtail 6.4
 * Add testing for Python 3.14
-* Drop testing for Python 3.9
 * Add testing for Wagtail 7.1
+* Removed support for Python 3.9
+* Removed support for Wagtail 6.4
 
 4.0.4 (21.06.2025)
 ----------
