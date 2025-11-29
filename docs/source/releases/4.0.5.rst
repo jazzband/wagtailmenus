@@ -1,0 +1,22 @@
+===============================================
+Wagtailmenus 4.0.5 release notes (29.11.2025)
+===============================================
+
+.. contents::
+    :local:
+    :depth: 1
+
+
+What's new?
+===========
+
+There are no new major features in this release.
+
+Minor changes & bug fixes
+=========================
+
+* Add testing for Wagtail 7.2
+* Add testing for Python 3.14
+* Add testing for Wagtail 7.1
+* Removed support for Python 3.9
+* Removed support for Wagtail 6.4
