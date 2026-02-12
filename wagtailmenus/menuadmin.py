@@ -1,3 +1,4 @@
+from django import VERSION as DJANGO_VERSION
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -11,6 +12,15 @@ from wagtailmenus import panels
 from wagtailmenus.conf import settings
 from wagtailmenus.forms import SiteSwitchForm
 
+if DJANGO_VERSION < (6, 0):
+    from django.contrib.admin.utils import quote, unquote
+else:
+    def quote(s):
+        return s
+    
+    def unquote(s):
+        return s
+
 
 class MainMenuIndexView(IndexView):
     def dispatch(self, request, *args, **kwargs):
@@ -20,7 +30,7 @@ class MainMenuIndexView(IndexView):
 
 class MainMenuEditView(EditView):
     def setup(self, request, *args, **kwargs):
-        self.site = get_object_or_404(Site, id=kwargs['pk'])
+        self.site = get_object_or_404(Site, id=unquote(kwargs['pk']))
 
         super().setup(request, *args, **kwargs)
 
@@ -35,7 +45,7 @@ class MainMenuEditView(EditView):
         return self.object
     
     def get_edit_url(self):
-        return reverse(self.edit_url_name, args=(self.site.pk,))
+        return reverse(self.edit_url_name, args=(quote(self.site.pk),))
 
     @property
     def media(self):
@@ -49,7 +59,7 @@ class MainMenuEditView(EditView):
             self.site_switcher = SiteSwitchForm(self.site, self.edit_url_name)
             site_from_get = request.GET.get('site', None)
             if site_from_get and site_from_get != str(self.site.pk):
-                return redirect(reverse(self.edit_url_name, args=(site_from_get,)))
+                return redirect(reverse(self.edit_url_name, args=(quote(site_from_get),)))
 
         return super().dispatch(request, *args, **kwargs)
         
