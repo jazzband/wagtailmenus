@@ -1,5 +1,4 @@
 from django import forms
-from django.contrib.admin.utils import quote
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -37,9 +36,9 @@ class SiteSwitchForm(forms.Form):
         ]
 
     def __init__(self, current_site, edit_url_name, **kwargs):
-        initial = {'site': reverse(edit_url_name, args=(quote(current_site.pk),))}
+        initial = {'site': reverse(edit_url_name, args=(current_site.pk,))}
         super().__init__(initial=initial, **kwargs)
         sites = []
         for site in Site.objects.all():
-            sites.append((reverse(edit_url_name, args=(quote(site.pk),)), site))
+            sites.append((reverse(edit_url_name, args=(site.pk,)), site))
         self.fields['site'].choices = sites
