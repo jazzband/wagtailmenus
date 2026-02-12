@@ -1,4 +1,3 @@
-from django.contrib.admin.utils import unquote, quote
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -21,7 +20,7 @@ class MainMenuIndexView(IndexView):
 
 class MainMenuEditView(EditView):
     def setup(self, request, *args, **kwargs):
-        self.site = get_object_or_404(Site, id=unquote(kwargs['pk']))
+        self.site = get_object_or_404(Site, id=kwargs['pk'])
 
         super().setup(request, *args, **kwargs)
 
@@ -36,7 +35,7 @@ class MainMenuEditView(EditView):
         return self.object
     
     def get_edit_url(self):
-        return reverse(self.edit_url_name, args=(quote(self.site.pk),))
+        return reverse(self.edit_url_name, args=(self.site.pk,))
 
     @property
     def media(self):
@@ -50,7 +49,7 @@ class MainMenuEditView(EditView):
             self.site_switcher = SiteSwitchForm(self.site, self.edit_url_name)
             site_from_get = request.GET.get('site', None)
             if site_from_get and site_from_get != str(self.site.pk):
-                return redirect(reverse(self.edit_url_name, args=(quote(site_from_get),)))
+                return redirect(reverse(self.edit_url_name, args=(site_from_get,)))
 
         return super().dispatch(request, *args, **kwargs)
         
