@@ -1,4 +1,4 @@
-from django import forms
+from django import forms, VERSION as DJANGO_VERSION
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -6,6 +6,12 @@ from wagtail.admin.forms import WagtailAdminModelForm, WagtailAdminPageForm
 from wagtail.models import Site
 
 from wagtailmenus.conf import settings
+
+if DJANGO_VERSION < (6, 0):
+    from django.contrib.admin.utils import quote
+else:
+    def quote(s):
+        return s
 
 
 class FlatMenuAdminForm(WagtailAdminModelForm):
@@ -36,9 +42,9 @@ class SiteSwitchForm(forms.Form):
         ]
 
     def __init__(self, current_site, edit_url_name, **kwargs):
-        initial = {'site': reverse(edit_url_name, args=(current_site.pk,))}
+        initial = {'site': reverse(edit_url_name, args=(quote(current_site.pk),))}
         super().__init__(initial=initial, **kwargs)
         sites = []
         for site in Site.objects.all():
-            sites.append((reverse(edit_url_name, args=(site.pk,)), site))
+            sites.append((reverse(edit_url_name, args=(quote(site.pk),)), site))
         self.fields['site'].choices = sites
