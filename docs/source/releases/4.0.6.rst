@@ -1,0 +1,19 @@
+===============================================
+Wagtailmenus 4.0.6 release notes (14.02.2026)
+===============================================
+
+.. contents::
+    :local:
+    :depth: 1
+
+
+What's new?
+===========
+
+There are no new major features in this release.
+
+Minor changes & bug fixes
+=========================
+
+* Fix TypeError with Django 6.0+
+* Add testing for Django 6.0

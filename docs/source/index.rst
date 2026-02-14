@@ -7,9 +7,9 @@ wagtailmenus is an open-source extension for `Wagtail CMS
 
 The current version is tested for compatibility with the following:
 
-- Wagtail versions >= 5.2
+- Wagtail versions 6.5 to 7.2
 - Django versions 4.2 and >= 5.0
-- Python versions 3.9 to 3.13
+- Python versions 3.10 to 3.14
 
 To find out more about what wagtailmenus does and why, see :doc:`overview`
 

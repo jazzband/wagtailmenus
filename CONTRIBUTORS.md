@@ -35,6 +35,7 @@ This is a [Jazzband](https://jazzband.co/) project. By contributing you agree to
 * Ben Froelich-Leon (benfroelich)
 * Daniel Kirkham (dkirkham)
 * Nick Moreton (nickmoreton)
+* GokhanKabar
 
 ## Translators
 
