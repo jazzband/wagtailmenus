@@ -1,6 +1,12 @@
 Changelog
 =========
 
+4.0.6 (14.02.2026)
+----------
+
+* Fix TypeError with Django 6.0+ [#522](https://github.com/jazzband/wagtailmenus/pull/522).
+* Add testing for Django 6.0
+
 4.0.5 (29.11.2025)
 ----------
 
