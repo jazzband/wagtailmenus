@@ -1,6 +1,10 @@
 Changelog
 =========
 
+Unreleased
+
+Fix TypeError when using Wagtail 7.3 with Django < 6.0
+
 4.0.6 (14.02.2026)
 ----------
 

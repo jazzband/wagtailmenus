@@ -2,12 +2,13 @@ from django import forms, VERSION as DJANGO_VERSION
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin.forms import WagtailAdminModelForm, WagtailAdminPageForm
 from wagtail.models import Site
 
 from wagtailmenus.conf import settings
 
-if DJANGO_VERSION < (6, 0):
+if DJANGO_VERSION < (6, 0) and WAGTAIL_VERSION < (7, 3):
     from django.contrib.admin.utils import quote
 else:
     def quote(s):
