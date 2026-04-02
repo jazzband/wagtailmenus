@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin.panels import TabbedInterface, ObjectList
 from wagtail.models import Site
 from wagtail.snippets.views.snippets import CreateView, EditView, IndexView, SnippetViewSet
@@ -12,7 +13,7 @@ from wagtailmenus import panels
 from wagtailmenus.conf import settings
 from wagtailmenus.forms import SiteSwitchForm
 
-if DJANGO_VERSION < (6, 0):
+if DJANGO_VERSION < (6, 0) and WAGTAIL_VERSION < (7, 3):
     from django.contrib.admin.utils import quote, unquote
 else:
     def quote(s):
