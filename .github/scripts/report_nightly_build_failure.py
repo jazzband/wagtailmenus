@@ -17,6 +17,7 @@ if "SLACK_WEBHOOK_URL" in os.environ:
         json={
             "text": f"A Nightly build failed. See {url}",
         },
+        timeout=10,
     )
 
     print(f"Slack responded with: {response}")
