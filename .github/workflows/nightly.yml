@@ -1,0 +1,30 @@
+name: Nightly Wagtail Test
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+    # At 01:00, daily
+  workflow_dispatch:
+
+jobs:
+  nightly-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Install Tox
+        run: |
+          python -m pip install --upgrade pip setuptools wheel tox
+      - name: Run 'future' tests
+        id: test
+        continue-on-error: true
+        run: |
+          tox -e future
+      - name: 'On failure, report to #nightly-build-failures in Wagtail Slack'
+        if: steps.test.outcome == 'failure'
+        run: |
+          python .github/scripts/report_nightly_build_failure.py
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
