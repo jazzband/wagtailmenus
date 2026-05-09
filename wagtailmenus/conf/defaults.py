@@ -75,6 +75,8 @@ SECTION_MENU_CLASS = 'wagtailmenus.models.SectionMenu'
 # Miscellaneous settings
 # ----------------------
 
+LOCALIZE_MENU_ITEMS = False
+
 ACTIVE_CLASS = 'active'
 
 ACTIVE_ANCESTOR_CLASS = 'ancestor'

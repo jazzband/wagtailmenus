@@ -77,6 +77,13 @@ class AbstractMenuItem(models.Model, MenuItem):
         verbose_name_plural = _("menu items")
         ordering = ('sort_order',)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if settings.LOCALIZE_MENU_ITEMS and self.link_page_id and self.link_page:
+            localized = self.link_page.localized
+            if localized is not None:
+                self.link_page = localized
+
     @property
     def menu_text(self):
         if self.link_text:
