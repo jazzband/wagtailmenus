@@ -1010,8 +1010,21 @@ class MenuWithMenuItems(ClusterableModel, Menu):
                 # Add this page only to the overall `queryset`
                 queryset = queryset | Page.objects.filter(id=item.link_page_id)
 
-        # Filter out pages unsutable display
-        queryset = self.get_base_page_queryset() & queryset
+        if settings.LOCALIZE_MENU_ITEMS:
+            # When menu items have been swapped to their localized counterparts
+            # (see AbstractMenuItem.__init__), item.link_page and
+            # item.link_page_id already refer to the active-locale page, so
+            # `queryset` contains localized pages.  get_base_page_queryset()
+            # however filters on show_in_menus=True etc. and may not include
+            # the localized pages (e.g. if show_in_menus was not propagated to
+            # translations).  Bridge the gap by resolving each base page's
+            # localized counterpart and collecting their IDs.
+            base_qs = self.get_base_page_queryset()
+            suitable_ids = [p.localized.id for p in base_qs]
+            queryset = queryset.filter(id__in=suitable_ids)
+        else:
+            # Filter out pages unsuitable for display
+            queryset = self.get_base_page_queryset() & queryset
 
         # Always return 'specific' page instances
         return queryset.specific()
