@@ -963,6 +963,11 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         # allow this query result to be reused by get_pages_for_display()
         self._raw_menu_items = menu_items
 
+        # pages_for_display triggers get_pages_for_display(), which populates
+        # self._localize_id_map when LOCALIZE_MENU_ITEMS is active.
+        pages = self.pages_for_display
+        localize_map = getattr(self, '_localize_id_map', {})
+
         top_level_items = []
         for item in menu_items:
 
@@ -971,10 +976,14 @@ class MenuWithMenuItems(ClusterableModel, Menu):
                 top_level_items.append(item)
                 continue
 
+            # Translate the stored (default-locale) FK to the active-locale id
+            # when localization is active, without mutating item.link_page_id.
+            lookup_id = localize_map.get(item.link_page_id, item.link_page_id)
+
             # But, we only want to include links to pages if the page was
             # in the get_pages_for_display() result
             try:
-                item.link_page = self.pages_for_display[item.link_page_id]
+                item.link_page = pages[lookup_id]
                 top_level_items.append(item)
             except KeyError:
                 continue
@@ -996,32 +1005,46 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         # Start with an empty queryset, and expand as needed
         queryset = Page.objects.none()
 
+        # When localization is active, record a mapping of stored (default-locale)
+        # page ID → active-locale page ID so that get_top_level_items() can look
+        # up pages in pages_for_display using the right key without mutating the
+        # stored FK on the menu item.
+        localize_id_map = {}
+
         for item in (item for item in menu_items if item.link_page):
+            if settings.LOCALIZE_MENU_ITEMS:
+                # Resolve the active-locale page without touching item.link_page
+                # (avoids persisting the swap via admin save).
+                effective_page = item.link_page.localized or item.link_page
+                if effective_page.pk != item.link_page.pk:
+                    localize_id_map[item.link_page.pk] = effective_page.pk
+            else:
+                effective_page = item.link_page
+
             if(
                 item.allow_subnav and
-                item.link_page.depth >= settings.SECTION_ROOT_DEPTH
+                effective_page.depth >= settings.SECTION_ROOT_DEPTH
             ):
                 # Add this branch to the overall `queryset`
                 queryset = queryset | Page.objects.filter(
-                    path__startswith=item.link_page.path,
-                    depth__lt=item.link_page.depth + self.max_levels,
+                    path__startswith=effective_page.path,
+                    depth__lt=effective_page.depth + self.max_levels,
                 )
             else:
                 # Add this page only to the overall `queryset`
-                queryset = queryset | Page.objects.filter(id=item.link_page_id)
+                queryset = queryset | Page.objects.filter(id=effective_page.pk)
+
+        # Store the mapping so get_top_level_items() can translate lookup keys.
+        self._localize_id_map = localize_id_map
 
         if settings.LOCALIZE_MENU_ITEMS:
-            # When menu items have been swapped to their localized counterparts
-            # (see AbstractMenuItem.__init__), item.link_page and
-            # item.link_page_id already refer to the active-locale page, so
-            # `queryset` contains localized pages.  get_base_page_queryset()
-            # however filters on show_in_menus=True etc. and may not include
-            # the localized pages (e.g. if show_in_menus was not propagated to
-            # translations).  Bridge the gap by resolving each base page's
-            # localized counterpart and collecting their IDs.
-            base_qs = self.get_base_page_queryset()
-            suitable_ids = [p.localized.id for p in base_qs]
-            queryset = queryset.filter(id__in=suitable_ids)
+            # `queryset` already contains the localized pages.
+            # Apply the same live/show_in_menus/expired constraints as
+            # get_base_page_queryset() but only against the small set of pages
+            # in `queryset` (scales with menu size, not site size).
+            queryset = self.get_base_page_queryset().filter(
+                id__in=queryset.values('id')
+            )
         else:
             # Filter out pages unsuitable for display
             queryset = self.get_base_page_queryset() & queryset
