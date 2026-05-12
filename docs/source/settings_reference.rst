@@ -392,3 +392,44 @@ Use this to specify the 'depth' value of a project's 'section root' pages. For m
 Default value: ``False``
 
 By default, menu items linking to custom URLs are attributed with the 'active' class only if their ``link_url`` value matches the path of the current request _exactly_. Setting this to `True` in your project's settings will enable a smarter approach to active class attribution for custom URLs, where only the 'path' part of the ``link_url`` value is used to determine what active class should be used. The new approach will also attribute the  'ancestor'  class to menu items if the ``link_url`` looks like an ancestor of the current request URL.
+
+
+.. _LOCALIZE_MENU_ITEMS:
+
+``WAGTAILMENUS_LOCALIZE_MENU_ITEMS``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Default value: ``False`` (or ``True`` when ``WAGTAIL_I18N_ENABLED = True``)
+
+When enabled, wagtailmenus will resolve each menu item's ``link_page`` to its
+translation in the currently active locale at render time, so that menu item
+titles and URLs automatically reflect the visitor's language without any
+additional configuration.
+
+If ``WAGTAIL_I18N_ENABLED`` is set to ``True`` in your project's settings,
+this feature is **enabled automatically** — you do not need to set
+``WAGTAILMENUS_LOCALIZE_MENU_ITEMS`` explicitly. You can still opt out by
+setting it to ``False`` even when ``WAGTAIL_I18N_ENABLED`` is ``True``.
+
+.. code-block:: python
+
+    # e.g. settings/base.py
+
+    # Opt in explicitly (not required if WAGTAIL_I18N_ENABLED = True):
+    WAGTAILMENUS_LOCALIZE_MENU_ITEMS = True
+
+    # Opt out even when WAGTAIL_I18N_ENABLED = True:
+    WAGTAILMENUS_LOCALIZE_MENU_ITEMS = False
+
+When active, menu items stored against a default-locale page will be displayed
+using the equivalent page in the active locale (if a translation exists).
+If no translation is found for the active locale, the original page is used as
+a fallback. The localization is applied **at render time only** — the stored
+``link_page`` foreign key on the menu item is never modified.
+
+.. NOTE::
+    This feature requires `wagtail-localize <https://github.com/wagtail/wagtail-localize>`_
+    (or another package that provides ``Page.localized``) to be installed, and
+    pages to be translated via Wagtail's standard translation mechanism.
+    Menu items are configured once (against the default-locale pages) and the
+    correct locale is resolved automatically on each request.
