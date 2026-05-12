@@ -14,7 +14,7 @@ These tests verify that when `WAGTAILMENUS_LOCALIZE_MENU_ITEMS = True` (or
 - All existing behaviour is preserved when the setting is disabled.
 """
 
-from unittest.mock import PropertyMock, patch
+from unittest.mock import patch
 
 from django.test import TestCase, override_settings
 from wagtail.models import Page
@@ -78,80 +78,108 @@ class TestLocalizationSetting(TestCase):
 
 
 # ---------------------------------------------------------------------------
-# 2.  AbstractMenuItem.__init__ locale swap
+# 2.  get_top_level_items() locale swap (render-time, not __init__-time)
 # ---------------------------------------------------------------------------
 
-class TestMenuItemLocalizationInit(TestCase):
-    """AbstractMenuItem.__init__ swaps link_page to its localized version."""
+class TestMenuItemLocalizationRenderTime(TestCase):
+    """
+    Localization is applied at render time by get_top_level_items(), not in
+    AbstractMenuItem.__init__. This means the stored FK is never mutated so
+    admin saves cannot accidentally persist the swapped value.
+    """
 
     fixtures = ['test.json']
 
-    def _two_distinct_pages(self):
-        pages = list(Page.objects.all().order_by('id')[:2])
-        self.assertEqual(len(pages), 2)
-        original, localized = pages
-        self.assertNotEqual(original.pk, localized.pk)
-        return original, localized
-
     # --- disabled (default) -------------------------------------------------
 
-    def test_init_does_not_swap_when_disabled(self):
-        original, localized = self._two_distinct_pages()
-        menu = MainMenu.objects.first()
+    def test_top_level_items_link_page_unchanged_when_disabled(self):
+        """When the feature is off, link_page is whatever is stored."""
+        menu = MainMenu.objects.get(pk=1)
+        first_item = menu.get_menu_items_manager().filter(
+            link_page__isnull=False
+        ).first()
+        item_pk = first_item.pk
+        original_page_pk = first_item.link_page_id
 
-        mapping = _LocalizedMapping({original.pk: localized})
+        # Even with a localization mapping active, link_page must not be swapped
+        other_page = Page.objects.exclude(pk=original_page_pk).filter(
+            live=True, expired=False, show_in_menus=True
+        ).first()
+        mapping = _LocalizedMapping({original_page_pk: other_page})
         with patch.object(Page, 'localized', mapping):
-            item = MainMenuItem(menu=menu, link_page=original)
+            items = menu.get_top_level_items()
 
-        # link_page must stay as the original when the feature is off
-        self.assertEqual(item.link_page.pk, original.pk)
+        # Identify the item by its menu item pk (stable; not the page FK)
+        matched = [i for i in items if getattr(i, 'pk', None) == item_pk]
+        self.assertTrue(len(matched) > 0)
+        self.assertEqual(matched[0].link_page.pk, original_page_pk)
 
     # --- enabled ------------------------------------------------------------
 
     @override_settings(WAGTAILMENUS_LOCALIZE_MENU_ITEMS=True)
-    def test_init_swaps_link_page_when_enabled(self):
-        original, localized = self._two_distinct_pages()
-        menu = MainMenu.objects.first()
+    def test_top_level_items_link_page_swapped_when_enabled(self):
+        """When localization is on, item.link_page is set to the localized page."""
+        menu = MainMenu.objects.get(pk=1)
+        first_item = menu.get_menu_items_manager().filter(
+            link_page__isnull=False
+        ).first()
+        item_pk = first_item.pk  # stable menu item pk, not the page FK
+        en_page = first_item.link_page
+        it_page = Page.objects.exclude(pk=en_page.pk).filter(
+            live=True, expired=False, show_in_menus=True
+        ).first()
 
-        mapping = _LocalizedMapping({original.pk: localized})
+        mapping = _LocalizedMapping({en_page.pk: it_page})
         with patch.object(Page, 'localized', mapping):
-            item = MainMenuItem(menu=menu, link_page=original)
+            items = menu.get_top_level_items()
 
-        self.assertEqual(item.link_page.pk, localized.pk)
+        # After the swap, link_page_id is updated to it_page.pk by Django's FK
+        # descriptor, so identify the item by its stable menu item pk instead.
+        matched = [i for i in items if getattr(i, 'pk', None) == item_pk]
+        self.assertTrue(len(matched) > 0)
+        self.assertEqual(matched[0].link_page.pk, it_page.pk)
 
     @override_settings(WAGTAILMENUS_LOCALIZE_MENU_ITEMS=True)
-    def test_init_updates_link_page_id_after_swap(self):
-        """Django FK descriptor must keep link_page_id in sync."""
-        original, localized = self._two_distinct_pages()
-        menu = MainMenu.objects.first()
+    def test_stored_link_page_id_not_mutated_by_render(self):
+        """The FK column (link_page_id) must not change after get_top_level_items()."""
+        menu = MainMenu.objects.get(pk=1)
+        first_item = menu.get_menu_items_manager().filter(
+            link_page__isnull=False
+        ).first()
+        en_page = first_item.link_page
+        it_page = Page.objects.exclude(pk=en_page.pk).filter(
+            live=True, expired=False, show_in_menus=True
+        ).first()
 
-        mapping = _LocalizedMapping({original.pk: localized})
+        mapping = _LocalizedMapping({en_page.pk: it_page})
         with patch.object(Page, 'localized', mapping):
-            item = MainMenuItem(menu=menu, link_page=original)
+            menu.get_top_level_items()
 
-        # link_page_id is the FK column; after the swap it must point at the
-        # localized page so that pages_for_display keying works correctly.
-        self.assertEqual(item.link_page_id, localized.pk)
+        # Re-read the item from DB: the FK must still be the original en page
+        stored = menu.get_menu_items_manager().get(pk=first_item.pk)
+        self.assertEqual(stored.link_page_id, en_page.pk)
 
     @override_settings(WAGTAILMENUS_LOCALIZE_MENU_ITEMS=True)
-    def test_init_does_not_swap_when_already_in_active_locale(self):
-        """When localized returns the same page, nothing changes."""
-        original, _ = self._two_distinct_pages()
-        menu = MainMenu.objects.first()
-
-        # No mapping entry → descriptor returns the same page
+    def test_top_level_items_unchanged_when_already_in_active_locale(self):
+        """When localized returns the same page (already active locale), nothing changes."""
+        menu = MainMenu.objects.get(pk=1)
+        # Empty mapping → all pages return themselves
         mapping = _LocalizedMapping({})
         with patch.object(Page, 'localized', mapping):
-            item = MainMenuItem(menu=menu, link_page=original)
-
-        self.assertEqual(item.link_page.pk, original.pk)
+            items = menu.get_top_level_items()
+        self.assertEqual(len(items), 5)
 
     @override_settings(WAGTAILMENUS_LOCALIZE_MENU_ITEMS=True)
-    def test_init_no_op_when_link_page_is_none(self):
-        """Items with no link_page (custom URL items) are unaffected."""
-        menu = MainMenu.objects.first()
-        item = MainMenuItem(menu=menu, link_url='/custom/', link_text='Custom')
-        self.assertIsNone(item.link_page)
+    def test_top_level_items_no_op_when_link_page_is_none(self):
+        """Custom URL items (no link_page) are always included unchanged."""
+        menu = MainMenu.objects.get(pk=1)
+        mapping = _LocalizedMapping({})
+        with patch.object(Page, 'localized', mapping):
+            items = menu.get_top_level_items()
+        url_items = [i for i in items if not getattr(i, 'link_page_id', None)]
+        # All URL-only items must still be present
+        for item in url_items:
+            self.assertIsNone(item.link_page)
 
 
 # ---------------------------------------------------------------------------
@@ -168,7 +196,6 @@ class TestGetPagesForDisplayLocalization(TestCase):
     def _get_menu_and_first_item_pages(self):
         """Return (menu, en_page, it_page) where it_page != en_page."""
         menu = MainMenu.objects.get(pk=1)
-        all_pages = list(Page.objects.all().order_by('id'))
         # Pick the first item that has a link_page
         first_item = menu.get_menu_items_manager().filter(
             link_page__isnull=False
