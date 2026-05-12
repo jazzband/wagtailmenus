@@ -1,8 +1,9 @@
 name: Nightly Wagtail Test
 
 on:
-  schedule:
-    - cron: '0 1 * * *'
+  # Schedule turned off until webhook is provided and request package installed on report_nightly script
+  # schedule:
+    # - cron: '0 1 * * *'
     # At 01:00, daily
   workflow_dispatch:
 
