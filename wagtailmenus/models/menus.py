@@ -22,7 +22,6 @@ from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
 from .pages import AbstractLinkPage
 
-mark_safe_lazy = mark_safe
 
 ContextualVals = namedtuple('ContextualVals', (
     'parent_context',
@@ -1067,7 +1066,7 @@ class AbstractMainMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         verbose_name=_('maximum levels'),
         choices=constants.MAX_LEVELS_CHOICES,
         default=2,
-        help_text=mark_safe_lazy(_(
+        help_text=mark_safe(_(
             "The maximum number of levels to display when rendering this "
             "menu. The value can be overidden by supplying a different "
             "<code>max_levels</code> value to the <code>{% main_menu %}"
@@ -1161,7 +1160,7 @@ class AbstractFlatMenu(DefinesSubMenuTemplatesMixin, MenuWithMenuItems):
         verbose_name=_('maximum levels'),
         choices=constants.MAX_LEVELS_CHOICES,
         default=1,
-        help_text=mark_safe_lazy(_(
+        help_text=mark_safe(_(
             "The maximum number of levels to display when rendering this "
             "menu. The value can be overidden by supplying a different "
             "<code>max_levels</code> value to the <code>{% flat_menu %}"
