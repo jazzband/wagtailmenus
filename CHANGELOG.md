@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+* Added testing for Wagtail 7.4 (LTS).
+* Removed support for Wagtail 6.3 LTS, 7.1 and 7.2 (end of life).
+* Removed support for Django 5.1 (end of life).
+* Raised minimum Wagtail version to 7.0.
+* Removed dead Django <4.1 compatibility shim in `models/menus.py`.
+
 4.0.7 (23.04.2026)
 ----------
 
