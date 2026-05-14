@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 # Essential dependencies
 requires = [
-    'wagtail>=6.3',
+    'wagtail>=7.0',
     'django-cogwheels==0.3',
 ]
 
@@ -21,7 +21,7 @@ testing_extras = [
 ]
 
 development_extras = [
-    'wagtail>=6.3',
+    'wagtail>=7.0',
     'django-debug-toolbar',
     'django-extensions',
     'ipdb',
@@ -64,9 +64,8 @@ setup(
         'Programming Language :: Python :: 3.14',
         'Framework :: Django',
         'Framework :: Django :: 4.2',
-        'Framework :: Django :: 5.1',
         'Framework :: Django :: 5.2',
-        'Framework :: Wagtail :: 6',
+        'Framework :: Django :: 6.0',
         'Framework :: Wagtail :: 7',
         'Topic :: Internet :: WWW/HTTP',
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",

@@ -1,13 +1,12 @@
 from collections import OrderedDict, defaultdict, namedtuple
 from types import GeneratorType
 
-from django import VERSION as DJANGO_VERSION
 from django.core.exceptions import (ImproperlyConfigured,
                                     MultipleObjectsReturned)
 from django.db import models
 from django.db.models import BooleanField, Case, Q, When
 from django.template.loader import get_template, select_template
-from django.utils.functional import cached_property, lazy
+from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from modelcluster.models import ClusterableModel
@@ -23,10 +22,7 @@ from .menuitems import MenuItem
 from .mixins import DefinesSubMenuTemplatesMixin
 from .pages import AbstractLinkPage
 
-if DJANGO_VERSION >= (4, 1):
-    mark_safe_lazy = mark_safe
-else:
-    mark_safe_lazy = lazy(mark_safe, str)
+mark_safe_lazy = mark_safe
 
 ContextualVals = namedtuple('ContextualVals', (
     'parent_context',
