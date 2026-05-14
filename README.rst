@@ -31,8 +31,8 @@ wagtailmenus is an extension for Torchbox's `Wagtail CMS <https://github.com/tor
 
 The current version is tested for compatibility with the following:
 
-- Wagtail versions >= 6.5
-- Django versions 4.2, 5.1, 5.2 and 6.0
+- Wagtail versions 7.0, 7.3 and 7.4
+- Django versions 4.2, 5.2 and 6.0
 - Python versions 3.10 to 3.14
 
 .. image:: https://raw.githubusercontent.com/jazzband/wagtailmenus/master/docs/source/_static/images/repeating-item.png
