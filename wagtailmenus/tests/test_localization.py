@@ -256,3 +256,81 @@ class TestLocalizationRegressionWhenDisabled(TestCase):
             self.assertTrue(page.live)
             self.assertFalse(page.expired)
             self.assertTrue(page.show_in_menus)
+
+
+class TestSubtreeLocalization(TestCase):
+    """Verify subtree localization: when a parent page is localized to a
+    different page with children, pages_for_display() includes the localized
+    subtree, not the original one."""
+
+    fixtures = ['test.json']
+
+    @override_settings(WAGTAILMENUS_LOCALIZE_MENU_ITEMS=True)
+    def test_subtree_includes_localized_parent_and_children(self):
+        """When a parent page is mapped to a different localized page with
+        children, pages_for_display() must include the localized parent
+        and its descendants, but exclude the original parent."""
+        menu = MainMenu.objects.get(pk=1)
+
+        # Find a parent page that has allow_subnav and children in the fixture
+        # We need a page at depth >= SECTION_ROOT_DEPTH (3) with children
+        # that has a menu item with allow_subnav=True
+        item = menu.get_menu_items_manager().filter(
+            link_page__isnull=False,
+            allow_subnav=True,
+            link_page__depth__gte=3,       # SECTION_ROOT_DEPTH
+        ).first()
+
+        if item is None:
+            self.skipTest("No menu item with allow_subnav and depth>=3 in fixture")
+
+        en_page = item.link_page
+        en_page_children = Page.objects.filter(
+            path__startswith=en_page.path,
+            depth__gt=en_page.depth,
+            depth__lt=en_page.depth + menu.max_levels,
+            live=True, expired=False, show_in_menus=True,
+        )
+        if not en_page_children.exists():
+            self.skipTest("Parent page has no children in fixture")
+
+        # Find a localized counterpart page with its own children
+        # Pick a different page at the same depth with children as the "localized" version
+        localized_page = Page.objects.filter(
+            depth=en_page.depth,
+            live=True, expired=False, show_in_menus=True,
+        ).exclude(pk=en_page.pk).first()
+        if localized_page is None:
+            self.skipTest("No alternative page at same depth in fixture")
+
+        localized_children = Page.objects.filter(
+            path__startswith=localized_page.path,
+            depth__gt=localized_page.depth,
+            depth__lt=localized_page.depth + menu.max_levels,
+            live=True, expired=False, show_in_menus=True,
+        )
+        if not localized_children.exists():
+            self.skipTest("Localized page has no children in fixture")
+
+        # Build a mapping: en_page → localized_page
+        mapping = _LocalizedMapping({en_page.pk: localized_page})
+
+        with patch.object(Page, 'localized', mapping):
+            pages = menu.get_pages_for_display()
+            page_ids = {p.id for p in pages}
+
+        # The localized page and its children SHOULD be in pages_for_display
+        self.assertIn(localized_page.pk, page_ids,
+                      "Localized parent page should be in pages_for_display")
+        for child in localized_children:
+            self.assertIn(child.pk, page_ids,
+                          f"Child page {child.pk} of localized parent should be in pages_for_display")
+
+        # The original en_page should NOT be in pages_for_display
+        # (unless it's also linked from another menu item — we skip in that case)
+        other_items_link_to_en = menu.get_menu_items_manager().filter(
+            link_page_id=en_page.pk
+        ).exclude(pk=item.pk).exists()
+        if not other_items_link_to_en:
+            self.assertNotIn(en_page.pk, page_ids,
+                             "Original page should not be in pages_for_display when localized")
