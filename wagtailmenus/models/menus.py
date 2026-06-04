@@ -282,6 +282,21 @@ class Menu:
         # using OrderedDict to preserve ordering in Python < 3.6
         return OrderedDict((p.id, p) for p in self.get_pages_for_display())
 
+    @cached_property
+    def localize_id_map(self):
+        """Mapping of stored (default-locale) page IDs to active-locale page IDs.
+        Empty dict when LOCALIZE_MENU_ITEMS is disabled."""
+        if not settings.LOCALIZE_MENU_ITEMS:
+            return {}
+        menu_items = getattr(self, '_raw_menu_items', None) or self.get_base_menuitem_queryset()
+        mapping = {}
+        for item in menu_items:
+            if item.link_page:
+                effective_page = item.link_page.localized or item.link_page
+                if effective_page.pk != item.link_page.pk:
+                    mapping[item.link_page.pk] = effective_page.pk
+        return mapping
+
     def get_page_children_dict(self, page_qs=None):
         """
         Returns a dictionary of lists, where the keys are 'path' values for
@@ -959,9 +974,9 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         self._raw_menu_items = menu_items
 
         # pages_for_display triggers get_pages_for_display(), which populates
-        # self._localize_id_map when LOCALIZE_MENU_ITEMS is active.
+        # self.localize_id_map when LOCALIZE_MENU_ITEMS is active.
         pages = self.pages_for_display
-        localize_map = getattr(self, '_localize_id_map', {})
+        localize_map = self.localize_id_map
 
         top_level_items = []
         for item in menu_items:
@@ -1000,19 +1015,11 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         # Start with an empty queryset, and expand as needed
         queryset = Page.objects.none()
 
-        # When localization is active, record a mapping of stored (default-locale)
-        # page ID → active-locale page ID so that get_top_level_items() can look
-        # up pages in pages_for_display using the right key without mutating the
-        # stored FK on the menu item.
-        localize_id_map = {}
-
         for item in (item for item in menu_items if item.link_page):
             if settings.LOCALIZE_MENU_ITEMS:
                 # Resolve the active-locale page without touching item.link_page
                 # (avoids persisting the swap via admin save).
                 effective_page = item.link_page.localized or item.link_page
-                if effective_page.pk != item.link_page.pk:
-                    localize_id_map[item.link_page.pk] = effective_page.pk
             else:
                 effective_page = item.link_page
 
@@ -1028,9 +1035,6 @@ class MenuWithMenuItems(ClusterableModel, Menu):
             else:
                 # Add this page only to the overall `queryset`
                 queryset = queryset | Page.objects.filter(id=effective_page.pk)
-
-        # Store the mapping so get_top_level_items() can translate lookup keys.
-        self._localize_id_map = localize_id_map
 
         if settings.LOCALIZE_MENU_ITEMS:
             # `queryset` already contains the localized pages.
