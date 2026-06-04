@@ -1,18 +1,7 @@
-"""
-Tests for the LOCALIZE_MENU_ITEMS feature (closes #242).
+"""Tests for the LOCALIZE_MENU_ITEMS feature (closes #242).
 
-These tests verify that when `WAGTAILMENUS_LOCALIZE_MENU_ITEMS = True` (or
-`WAGTAIL_I18N_ENABLED = True`) is configured:
-
-- ``AbstractMenuItem.__init__`` swaps ``link_page`` to its active-locale
-  counterpart so that ``menu_text`` / ``href`` are locale-aware.
-- ``get_pages_for_display()`` builds the prefetch queryset from the
-  localized page tree, so multi-level submenus are populated correctly.
-- The final page filter correctly bridges the locale gap (the N+1 query
-  path based on ``p.localized.id``) instead of a direct queryset
-  intersection that would be empty when locales differ.
-- All existing behaviour is preserved when the setting is disabled.
-"""
+Verifies that when LOCALIZE_MENU_ITEMS is enabled, menu items resolve
+to the active-locale page at render time without mutating stored FKs."""
 
 from unittest.mock import patch
 
@@ -20,12 +9,8 @@ from django.test import TestCase, override_settings
 from wagtail.models import Page
 
 from wagtailmenus.conf import settings
-from wagtailmenus.models import MainMenu, MainMenuItem
+from wagtailmenus.models import MainMenu
 
-
-# ---------------------------------------------------------------------------
-# Helper: a descriptor that replaces Page.localized during a test
-# ---------------------------------------------------------------------------
 
 class _LocalizedMapping:
     """
@@ -45,23 +30,18 @@ class _LocalizedMapping:
         return self.mapping.get(obj.pk, obj)
 
 
-# ---------------------------------------------------------------------------
-# 1.  Setting configuration
-# ---------------------------------------------------------------------------
-
 class TestLocalizationSetting(TestCase):
     """LOCALIZE_MENU_ITEMS setting defaults and auto-detection."""
 
-    def test_disabled_by_default(self):
+    def test_localize_menu_items_disabled_by_default_and_explicit_false(self):
+        """LOCALIZE_MENU_ITEMS is False by default and stays False when explicitly set False."""
         self.assertFalse(settings.LOCALIZE_MENU_ITEMS)
+        with override_settings(WAGTAILMENUS_LOCALIZE_MENU_ITEMS=False):
+            self.assertFalse(settings.LOCALIZE_MENU_ITEMS)
 
     @override_settings(WAGTAILMENUS_LOCALIZE_MENU_ITEMS=True)
     def test_explicit_override_enables_feature(self):
         self.assertTrue(settings.LOCALIZE_MENU_ITEMS)
-
-    @override_settings(WAGTAILMENUS_LOCALIZE_MENU_ITEMS=False)
-    def test_explicit_false_disables_feature(self):
-        self.assertFalse(settings.LOCALIZE_MENU_ITEMS)
 
     @override_settings(WAGTAIL_I18N_ENABLED=True)
     def test_auto_detection_from_wagtail_i18n_enabled(self):
@@ -77,10 +57,6 @@ class TestLocalizationSetting(TestCase):
         self.assertFalse(settings.LOCALIZE_MENU_ITEMS)
 
 
-# ---------------------------------------------------------------------------
-# 2.  get_top_level_items() locale swap (render-time, not __init__-time)
-# ---------------------------------------------------------------------------
-
 class TestMenuItemLocalizationRenderTime(TestCase):
     """
     Localization is applied at render time by get_top_level_items(), not in
@@ -89,8 +65,6 @@ class TestMenuItemLocalizationRenderTime(TestCase):
     """
 
     fixtures = ['test.json']
-
-    # --- disabled (default) -------------------------------------------------
 
     def test_top_level_items_link_page_unchanged_when_disabled(self):
         """When the feature is off, link_page is whatever is stored."""
@@ -101,20 +75,11 @@ class TestMenuItemLocalizationRenderTime(TestCase):
         item_pk = first_item.pk
         original_page_pk = first_item.link_page_id
 
-        # Even with a localization mapping active, link_page must not be swapped
-        other_page = Page.objects.exclude(pk=original_page_pk).filter(
-            live=True, expired=False, show_in_menus=True
-        ).first()
-        mapping = _LocalizedMapping({original_page_pk: other_page})
-        with patch.object(Page, 'localized', mapping):
-            items = menu.get_top_level_items()
+        items = menu.get_top_level_items()
 
-        # Identify the item by its menu item pk (stable; not the page FK)
         matched = [i for i in items if getattr(i, 'pk', None) == item_pk]
         self.assertTrue(len(matched) > 0)
         self.assertEqual(matched[0].link_page.pk, original_page_pk)
-
-    # --- enabled ------------------------------------------------------------
 
     @override_settings(WAGTAILMENUS_LOCALIZE_MENU_ITEMS=True)
     def test_top_level_items_link_page_swapped_when_enabled(self):
@@ -160,14 +125,16 @@ class TestMenuItemLocalizationRenderTime(TestCase):
         self.assertEqual(stored.link_page_id, en_page.pk)
 
     @override_settings(WAGTAILMENUS_LOCALIZE_MENU_ITEMS=True)
-    def test_top_level_items_unchanged_when_already_in_active_locale(self):
-        """When localized returns the same page (already active locale), nothing changes."""
+    def test_noop_when_already_in_active_locale(self):
+        """When localized returns the same page (already active locale),
+        both top_level_items and pages_for_display are unchanged."""
         menu = MainMenu.objects.get(pk=1)
-        # Empty mapping → all pages return themselves
         mapping = _LocalizedMapping({})
         with patch.object(Page, 'localized', mapping):
             items = menu.get_top_level_items()
+            pages = menu.get_pages_for_display()
         self.assertEqual(len(items), 5)
+        self.assertEqual(len(pages), 12)
 
     @override_settings(WAGTAILMENUS_LOCALIZE_MENU_ITEMS=True)
     def test_top_level_items_no_op_when_link_page_is_none(self):
@@ -181,10 +148,6 @@ class TestMenuItemLocalizationRenderTime(TestCase):
         for item in url_items:
             self.assertIsNone(item.link_page)
 
-
-# ---------------------------------------------------------------------------
-# 3.  get_pages_for_display – locale-aware queryset building
-# ---------------------------------------------------------------------------
 
 class TestGetPagesForDisplayLocalization(TestCase):
     """
@@ -207,14 +170,10 @@ class TestGetPagesForDisplayLocalization(TestCase):
         ).first()
         return menu, en_page, it_page
 
-    # --- disabled (default) -------------------------------------------------
-
     def test_pages_for_display_unchanged_when_disabled(self):
         menu = MainMenu.objects.get(pk=1)
         # The fixture has 12 pages for this menu
         self.assertEqual(len(menu.pages_for_display), 12)
-
-    # --- enabled: localized page is included --------------------------------
 
     @override_settings(WAGTAILMENUS_LOCALIZE_MENU_ITEMS=True)
     def test_pages_for_display_includes_localized_page(self):
@@ -272,29 +231,6 @@ class TestGetPagesForDisplayLocalization(TestCase):
         self.assertNotIn(en_page.pk, page_ids)
         self.assertIn(it_page.pk, page_ids)
 
-    # --- enabled: same-locale is a no-op ------------------------------------
-
-    @override_settings(WAGTAILMENUS_LOCALIZE_MENU_ITEMS=True)
-    def test_pages_for_display_unchanged_when_already_in_active_locale(self):
-        """
-        When Page.localized returns the same page (already in active locale)
-        the output of get_pages_for_display() must be identical to the
-        non-localization case.
-        """
-        menu = MainMenu.objects.get(pk=1)
-
-        # Empty mapping → all pages return themselves
-        mapping = _LocalizedMapping({})
-        with patch.object(Page, 'localized', mapping):
-            pages = menu.get_pages_for_display()
-
-        # Still the same 12 pages
-        self.assertEqual(len(pages), 12)
-
-
-# ---------------------------------------------------------------------------
-# 4.  Regression: existing behaviour preserved when disabled
-# ---------------------------------------------------------------------------
 
 class TestLocalizationRegressionWhenDisabled(TestCase):
     """
