@@ -1,7 +1,7 @@
-"""Tests for the LOCALIZE_MENU_ITEMS feature (closes #242).
+"""Tests for the LOCALIZE_MENU_ITEMS feature.
 
 Verifies that when LOCALIZE_MENU_ITEMS is enabled, menu items resolve
-to the active-locale page at render time without mutating stored FKs."""
+to the active-locale page at render time."""
 
 from unittest.mock import patch
 
@@ -58,11 +58,7 @@ class TestLocalizationSetting(TestCase):
 
 
 class TestMenuItemLocalizationRenderTime(TestCase):
-    """
-    Localization is applied at render time by get_top_level_items(), not in
-    AbstractMenuItem.__init__. This means the stored FK is never mutated so
-    admin saves cannot accidentally persist the swapped value.
-    """
+    """Localization is applied at render time."""
 
     fixtures = ['test.json']
 
@@ -98,8 +94,6 @@ class TestMenuItemLocalizationRenderTime(TestCase):
         with patch.object(Page, 'localized', mapping):
             items = menu.get_top_level_items()
 
-        # After the swap, link_page_id is updated to it_page.pk by Django's FK
-        # descriptor, so identify the item by its stable menu item pk instead.
         matched = [i for i in items if getattr(i, 'pk', None) == item_pk]
         self.assertTrue(len(matched) > 0)
         self.assertEqual(matched[0].link_page.pk, it_page.pk)
@@ -177,11 +171,6 @@ class TestGetPagesForDisplayLocalization(TestCase):
 
     @override_settings(WAGTAILMENUS_LOCALIZE_MENU_ITEMS=True)
     def test_pages_for_display_includes_localized_page(self):
-        """
-        When localization is active and a localized page exists, it must
-        appear in pages_for_display (keyed by the localized page id, which
-        is what __init__ sets as link_page_id after the swap).
-        """
         menu, en_page, it_page = self._get_menu_and_first_item_pages()
 
         # Map: en_page → it_page; everything else stays the same
@@ -196,10 +185,6 @@ class TestGetPagesForDisplayLocalization(TestCase):
 
     @override_settings(WAGTAILMENUS_LOCALIZE_MENU_ITEMS=True)
     def test_pages_for_display_excludes_original_when_localized_differs(self):
-        """
-        When the localized page is different, the original (en) page should
-        not be in pages_for_display unless it is also linked elsewhere.
-        """
         menu, en_page, it_page = self._get_menu_and_first_item_pages()
 
         # Only the single-page (no allow_subnav) case for a clean assertion:
