@@ -285,21 +285,13 @@ msgstr ""
 #: wagtailmenus/templates/wagtailmenus/mainmenu_edit.html:3
 #, python-format
 msgid "Editing %(snippet_type_name)s - %(object)s"
-msgstr "编辑%(snippet_type_name)s - % (object)s"
+msgstr "编辑%(snippet_type_name)s - %(object)s"
 
 #: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:3
 #, python-format
 msgid "Copying %(snippet_type_name)s - %(object)s"
-msgstr "复制%(snippet_type_name)s - % (object)s"
+msgstr "复制%(snippet_type_name)s - %(object)s"
 
 #: wagtailmenus/templates/wagtailsnippets/snippets/copy.html:19
 msgid "Actions"
 msgstr ""
-
-#, fuzzy
-#~| msgid "The menu could not be saved due to errors."
-#~ msgid "The snippet could not be copied due to errors."
-#~ msgstr "出现错误，无法保存菜单。"
-
-#~ msgid "Copy"
-#~ msgstr "复制"
