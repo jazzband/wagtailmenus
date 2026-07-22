@@ -428,8 +428,7 @@ a fallback. The localization is applied **at render time only** — the stored
 ``link_page`` foreign key on the menu item is never modified.
 
 .. NOTE::
-    This feature requires `wagtail-localize <https://github.com/wagtail/wagtail-localize>`_
-    (or another package that provides ``Page.localized``) to be installed, and
-    pages to be translated via Wagtail's standard translation mechanism.
-    Menu items are configured once (against the default-locale pages) and the
-    correct locale is resolved automatically on each request.
+    Menu items are configured once, against the default-locale page. For this feature to do
+    anything, your pages need translated versions. `wagtail-localize
+    <https://github.com/wagtail/wagtail-localize>`_ is the usual way to produce them, but any
+    Wagtail translation workflow that creates linked ``Locale`` copies will work.
