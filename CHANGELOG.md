@@ -1,9 +1,10 @@
 Changelog
 =========
 
-Unreleased
+4.1.0
 ----------
 
+* Added LOCALIZE_MENU_ITEMS setting for i18n locale-aware menus (fixes [#242](https://github.com/jazzband/wagtailmenus/issues/242)).
 * Added testing for Wagtail 7.4 (LTS).
 * Removed support for Wagtail 6.3 LTS, 7.1 and 7.2 (end of life).
 * Removed support for Django 5.1 (end of life).
