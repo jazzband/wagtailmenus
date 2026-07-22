@@ -1,0 +1,21 @@
+===============================================
+Wagtailmenus 4.0.6 release notes (14.02.2026)
+===============================================
+
+.. contents::
+    :local:
+    :depth: 1
+
+
+What's new?
+===========
+
+Setting `WAGTAIL_I18N_ENABLED` to `True` in your Wagtail settings will now enable locale-aware menu items. This means that their titles and URLs will automatically reflect the visitor's language without any additional configuration.
+
+Minor changes & bug fixes
+=========================
+
+* Added testing for Wagtail 7.4 (LTS).
+* Removed support for Wagtail 6.3 LTS, 7.1 and 7.2 (end of life).
+* Removed support for Django 5.1 (end of life).
+* Raised minimum Wagtail version to 7.0.

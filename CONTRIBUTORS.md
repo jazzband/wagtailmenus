@@ -36,6 +36,7 @@ This is a [Jazzband](https://jazzband.co/) project. By contributing you agree to
 * Daniel Kirkham (dkirkham)
 * Nick Moreton (nickmoreton)
 * GokhanKabar
+* Francesco Pennica (fpennica)
 
 ## Translators
 
