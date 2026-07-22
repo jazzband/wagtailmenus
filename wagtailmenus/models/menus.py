@@ -288,18 +288,18 @@ class Menu:
         return OrderedDict((p.id, p) for p in self.get_pages_for_display())
 
     @cached_property
-    def localize_id_map(self):
-        """Mapping of stored (default-locale) page IDs to active-locale page IDs.
-        Empty dict when LOCALIZE_MENU_ITEMS is disabled."""
+    def localize_page_map(self):
+        """Mapping of stored (default-locale) page IDs to their active-locale
+        page counterparts. Empty dict when LOCALIZE_MENU_ITEMS is disabled."""
         if not settings.LOCALIZE_MENU_ITEMS:
             return {}
         menu_items = getattr(self, '_raw_menu_items', None) or self.get_base_menuitem_queryset()
         mapping = {}
         for item in menu_items:
             if item.link_page:
-                effective_page = item.link_page.localized or item.link_page
-                if effective_page.pk != item.link_page.pk:
-                    mapping[item.link_page.pk] = effective_page.pk
+                localized = item.link_page.localized
+                if localized and localized.pk != item.link_page.pk:
+                    mapping[item.link_page.pk] = localized
         return mapping
 
     def get_page_children_dict(self, page_qs=None):
@@ -978,10 +978,8 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         # allow this query result to be reused by get_pages_for_display()
         self._raw_menu_items = menu_items
 
-        # pages_for_display triggers get_pages_for_display(), which populates
-        # self.localize_id_map when LOCALIZE_MENU_ITEMS is active.
         pages = self.pages_for_display
-        localize_map = self.localize_id_map
+        localize_map = self.localize_page_map
 
         top_level_items = []
         for item in menu_items:
@@ -991,14 +989,14 @@ class MenuWithMenuItems(ClusterableModel, Menu):
                 top_level_items.append(item)
                 continue
 
-            # Translate the stored (default-locale) FK to the active-locale id
+            # Translate the stored (default-locale) FK to the active-locale page
             # when localization is active, without mutating item.link_page_id.
-            lookup_id = localize_map.get(item.link_page_id, item.link_page_id)
+            effective_page = localize_map.get(item.link_page_id, item.link_page)
 
             # But, we only want to include links to pages if the page was
             # in the get_pages_for_display() result
             try:
-                item.link_page = pages[lookup_id]
+                item.link_page = pages[effective_page.pk]
                 top_level_items.append(item)
             except KeyError:
                 continue
@@ -1021,12 +1019,7 @@ class MenuWithMenuItems(ClusterableModel, Menu):
         queryset = Page.objects.none()
 
         for item in (item for item in menu_items if item.link_page):
-            if settings.LOCALIZE_MENU_ITEMS:
-                # Resolve the active-locale page without touching item.link_page
-                # (avoids persisting the swap via admin save).
-                effective_page = item.link_page.localized or item.link_page
-            else:
-                effective_page = item.link_page
+            effective_page = self.localize_page_map.get(item.link_page.pk, item.link_page)
 
             if(
                 item.allow_subnav and
