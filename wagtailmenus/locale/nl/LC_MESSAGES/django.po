@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-26 10:00+0100\n"
+"POT-Creation-Date: 2026-07-22 14:05+0100\n"
 "PO-Revision-Date: 2023-11-12 17:54+0100\n"
 "Last-Translator: Maarten Ureel <maarten@youreal.eu>\n"
 "Language-Team: \n"
@@ -38,40 +38,40 @@ msgstr "3: 2 niveaus van subnavigatie toestaan"
 msgid "4: Allow 3 levels of sub-navigation"
 msgstr "4: 3 niveaus van subnavigatie toestaan"
 
-#: wagtailmenus/forms.py:26
+#: wagtailmenus/forms.py:32
 msgid "By default, this will be used as the link text when appearing in menus."
 msgstr ""
 "Dit wordt standaard gebruikt als de linktekst wanneer deze in menu's wordt "
 "weergegeven."
 
-#: wagtailmenus/menuadmin.py:73
+#: wagtailmenus/menuadmin.py:83
 msgid "Main menu"
 msgstr "Hoofdmenu"
 
-#: wagtailmenus/menuadmin.py:82
+#: wagtailmenus/menuadmin.py:92
 msgid "The menu could not be saved due to errors."
 msgstr "Het menu kon niet worden opgeslagen vanwege fouten."
 
-#: wagtailmenus/menuadmin.py:87 wagtailmenus/menuadmin.py:140
+#: wagtailmenus/menuadmin.py:97 wagtailmenus/menuadmin.py:150
 msgid "Content"
 msgstr "Inhoud"
 
-#: wagtailmenus/menuadmin.py:88 wagtailmenus/menuadmin.py:141
+#: wagtailmenus/menuadmin.py:98 wagtailmenus/menuadmin.py:151
 #: wagtailmenus/panels.py:87
 msgid "Settings"
 msgstr "Instellingen"
 
-#: wagtailmenus/menuadmin.py:120
+#: wagtailmenus/menuadmin.py:130
 #, fuzzy
 #| msgid "The menu could not be saved due to errors."
 msgid "The flat menu could not be saved due to errors"
 msgstr "Het menu kon niet worden opgeslagen vanwege fouten."
 
-#: wagtailmenus/menuadmin.py:125
+#: wagtailmenus/menuadmin.py:135
 msgid "Flat menus"
 msgstr "Platte menu's"
 
-#: wagtailmenus/menuadmin.py:137
+#: wagtailmenus/menuadmin.py:147
 #, fuzzy
 #| msgid "The menu could not be saved due to errors."
 msgid "The flat menu could not be saved due to errors."
@@ -96,8 +96,8 @@ msgstr ""
 "Gebruik dit om optioneel een #hash of querystring toe te voegen aan de URL "
 "van de bovenstaande pagina."
 
-#: wagtailmenus/models/menuitems.py:53 wagtailmenus/models/menus.py:1151
-#: wagtailmenus/models/menus.py:1184
+#: wagtailmenus/models/menuitems.py:53 wagtailmenus/models/menus.py:1179
+#: wagtailmenus/models/menus.py:1212
 msgid "handle"
 msgstr "handle"
 
@@ -155,15 +155,15 @@ msgstr ""
 "het is aangevinkt. Dit hangt af van hoe het menu wordt gebruikt in de "
 "templates van dit project."
 
-#: wagtailmenus/models/menus.py:1064 wagtailmenus/models/menus.py:1140
+#: wagtailmenus/models/menus.py:1092 wagtailmenus/models/menus.py:1168
 msgid "site"
 msgstr "site"
 
-#: wagtailmenus/models/menus.py:1071 wagtailmenus/models/menus.py:1165
+#: wagtailmenus/models/menus.py:1099 wagtailmenus/models/menus.py:1193
 msgid "maximum levels"
 msgstr "maximum niveaus"
 
-#: wagtailmenus/models/menus.py:1075
+#: wagtailmenus/models/menus.py:1103
 msgid ""
 "The maximum number of levels to display when rendering this menu. The value "
 "can be overidden by supplying a different <code>max_levels</code> value to "
@@ -174,24 +174,24 @@ msgstr ""
 "<code>max_levels</code> waarde toe te voegen aan de <code>{% main_menu %}</"
 "code> tag in je templates."
 
-#: wagtailmenus/models/menus.py:1084 wagtailmenus/models/menus.py:1085
+#: wagtailmenus/models/menus.py:1112 wagtailmenus/models/menus.py:1113
 msgid "main menu"
 msgstr "hoofdmenu"
 
-#: wagtailmenus/models/menus.py:1125
+#: wagtailmenus/models/menus.py:1153
 #, python-format
 msgid "Main menu for %(site_name)s"
 msgstr "Hoofdmenu voor %(site_name)s"
 
-#: wagtailmenus/models/menus.py:1146
+#: wagtailmenus/models/menus.py:1174
 msgid "title"
 msgstr "titel"
 
-#: wagtailmenus/models/menus.py:1148
+#: wagtailmenus/models/menus.py:1176
 msgid "For internal reference only."
 msgstr "Alleen voor interne referentie."
 
-#: wagtailmenus/models/menus.py:1154
+#: wagtailmenus/models/menus.py:1182
 msgid ""
 "Used to reference this menu in templates etc. Must be unique for the "
 "selected site."
@@ -199,17 +199,17 @@ msgstr ""
 "Wordt gebruikt om naar dit menu te verwijzen in templates enz. Moet uniek "
 "zijn voor de geselecteerde site."
 
-#: wagtailmenus/models/menus.py:1159
+#: wagtailmenus/models/menus.py:1187
 msgid "heading"
 msgstr "heading"
 
-#: wagtailmenus/models/menus.py:1162
+#: wagtailmenus/models/menus.py:1190
 msgid "If supplied, appears above the menu when rendered."
 msgstr ""
 "Wordt, indien opgegeven, boven het menu weergegeven wanneer het wordt "
 "weergegeven."
 
-#: wagtailmenus/models/menus.py:1169
+#: wagtailmenus/models/menus.py:1197
 msgid ""
 "The maximum number of levels to display when rendering this menu. The value "
 "can be overidden by supplying a different <code>max_levels</code> value to "
@@ -220,15 +220,15 @@ msgstr ""
 "<code>max_levels</code> waarde toe te voegen aan de <code>{% flat_menu %}</"
 "code> tag in je templates."
 
-#: wagtailmenus/models/menus.py:1179
+#: wagtailmenus/models/menus.py:1207
 msgid "flat menu"
 msgstr "plat menu"
 
-#: wagtailmenus/models/menus.py:1180
+#: wagtailmenus/models/menus.py:1208
 msgid "flat menus"
 msgstr "platte menu's"
 
-#: wagtailmenus/models/menus.py:1189
+#: wagtailmenus/models/menus.py:1217
 msgid "no. of items"
 msgstr "aantal items"
 

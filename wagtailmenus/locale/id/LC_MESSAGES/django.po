@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wagtailmenus 3.1.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-26 10:00+0100\n"
+"POT-Creation-Date: 2026-07-22 14:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kira <kiraware@github.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,39 +34,39 @@ msgstr "3: Izinkan 2 tingkat sub-navigasi"
 msgid "4: Allow 3 levels of sub-navigation"
 msgstr "4: Izinkan 3 tingkat sub-navigasi"
 
-#: wagtailmenus/forms.py:26
+#: wagtailmenus/forms.py:32
 msgid "By default, this will be used as the link text when appearing in menus."
 msgstr ""
 "Secara default, ini akan digunakan sebagai teks tautan saat muncul di menu."
 
-#: wagtailmenus/menuadmin.py:73
+#: wagtailmenus/menuadmin.py:83
 msgid "Main menu"
 msgstr "Menu utama"
 
-#: wagtailmenus/menuadmin.py:82
+#: wagtailmenus/menuadmin.py:92
 msgid "The menu could not be saved due to errors."
 msgstr "Menu tidak dapat disimpan karena kesalahan."
 
-#: wagtailmenus/menuadmin.py:87 wagtailmenus/menuadmin.py:140
+#: wagtailmenus/menuadmin.py:97 wagtailmenus/menuadmin.py:150
 msgid "Content"
 msgstr "Konten"
 
-#: wagtailmenus/menuadmin.py:88 wagtailmenus/menuadmin.py:141
+#: wagtailmenus/menuadmin.py:98 wagtailmenus/menuadmin.py:151
 #: wagtailmenus/panels.py:87
 msgid "Settings"
 msgstr "Pengaturan"
 
-#: wagtailmenus/menuadmin.py:120
+#: wagtailmenus/menuadmin.py:130
 #, fuzzy
 #| msgid "The menu could not be saved due to errors."
 msgid "The flat menu could not be saved due to errors"
 msgstr "Menu tidak dapat disimpan karena kesalahan."
 
-#: wagtailmenus/menuadmin.py:125
+#: wagtailmenus/menuadmin.py:135
 msgid "Flat menus"
 msgstr "Menu datar"
 
-#: wagtailmenus/menuadmin.py:137
+#: wagtailmenus/menuadmin.py:147
 #, fuzzy
 #| msgid "The menu could not be saved due to errors."
 msgid "The flat menu could not be saved due to errors."
@@ -91,8 +91,8 @@ msgstr ""
 "Gunakan ini untuk menambahkan #hash atau querystring secara opsional ke URL "
 "halaman di atas."
 
-#: wagtailmenus/models/menuitems.py:53 wagtailmenus/models/menus.py:1151
-#: wagtailmenus/models/menus.py:1184
+#: wagtailmenus/models/menuitems.py:53 wagtailmenus/models/menus.py:1179
+#: wagtailmenus/models/menus.py:1212
 msgid "handle"
 msgstr "pegangan"
 
@@ -149,15 +149,15 @@ msgstr ""
 "ini tergantung pada bagaimana menu tersebut digunakan dalam templat proyek "
 "ini."
 
-#: wagtailmenus/models/menus.py:1064 wagtailmenus/models/menus.py:1140
+#: wagtailmenus/models/menus.py:1092 wagtailmenus/models/menus.py:1168
 msgid "site"
 msgstr "situs"
 
-#: wagtailmenus/models/menus.py:1071 wagtailmenus/models/menus.py:1165
+#: wagtailmenus/models/menus.py:1099 wagtailmenus/models/menus.py:1193
 msgid "maximum levels"
 msgstr "level maksimum"
 
-#: wagtailmenus/models/menus.py:1075
+#: wagtailmenus/models/menus.py:1103
 msgid ""
 "The maximum number of levels to display when rendering this menu. The value "
 "can be overidden by supplying a different <code>max_levels</code> value to "
@@ -167,24 +167,24 @@ msgstr ""
 "ini dapat diganti dengan memberikan nilai <code>max_levels</code> yang "
 "berbeda pada tag <code>{% main_menu %}</code> di templat Anda."
 
-#: wagtailmenus/models/menus.py:1084 wagtailmenus/models/menus.py:1085
+#: wagtailmenus/models/menus.py:1112 wagtailmenus/models/menus.py:1113
 msgid "main menu"
 msgstr "menu utama"
 
-#: wagtailmenus/models/menus.py:1125
+#: wagtailmenus/models/menus.py:1153
 #, python-format
 msgid "Main menu for %(site_name)s"
 msgstr "Menu utama untuk %(site_name)s"
 
-#: wagtailmenus/models/menus.py:1146
+#: wagtailmenus/models/menus.py:1174
 msgid "title"
 msgstr "judul"
 
-#: wagtailmenus/models/menus.py:1148
+#: wagtailmenus/models/menus.py:1176
 msgid "For internal reference only."
 msgstr "Hanya untuk referensi internal."
 
-#: wagtailmenus/models/menus.py:1154
+#: wagtailmenus/models/menus.py:1182
 msgid ""
 "Used to reference this menu in templates etc. Must be unique for the "
 "selected site."
@@ -192,15 +192,15 @@ msgstr ""
 "Digunakan untuk mereferensikan menu ini di templat, dll. Harus unik untuk "
 "situs yang dipilih."
 
-#: wagtailmenus/models/menus.py:1159
+#: wagtailmenus/models/menus.py:1187
 msgid "heading"
 msgstr "tajuk"
 
-#: wagtailmenus/models/menus.py:1162
+#: wagtailmenus/models/menus.py:1190
 msgid "If supplied, appears above the menu when rendered."
 msgstr "Jika disediakan, akan muncul di atas menu ketika ditampilkan."
 
-#: wagtailmenus/models/menus.py:1169
+#: wagtailmenus/models/menus.py:1197
 msgid ""
 "The maximum number of levels to display when rendering this menu. The value "
 "can be overidden by supplying a different <code>max_levels</code> value to "
@@ -210,15 +210,15 @@ msgstr ""
 "dapat diganti dengan memberikan nilai <code>max_levels</code> yang berbeda "
 "ke tag <code>{% flat_menu %}</code> di templat Anda."
 
-#: wagtailmenus/models/menus.py:1179
+#: wagtailmenus/models/menus.py:1207
 msgid "flat menu"
 msgstr "menu datar"
 
-#: wagtailmenus/models/menus.py:1180
+#: wagtailmenus/models/menus.py:1208
 msgid "flat menus"
 msgstr "menu datar"
 
-#: wagtailmenus/models/menus.py:1189
+#: wagtailmenus/models/menus.py:1217
 msgid "no. of items"
 msgstr "jumlah item"
 
