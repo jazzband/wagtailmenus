@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+* Added support for Wagtail 8.0.
+* Added support for Django 6.1.
+
 4.1.0
 ----------
 

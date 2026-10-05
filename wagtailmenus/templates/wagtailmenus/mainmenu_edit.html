@@ -15,7 +15,7 @@
 {% endblock %}
 {% block extra_js %}
     {{ block.super }}
-    {% include "wagtailadmin/pages/_editor_js.html" %}
+    {% hook_output 'insert_editor_js' %}
     {{ media.js }}
     {{ view.media.js }}
 
