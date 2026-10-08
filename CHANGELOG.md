@@ -1,13 +1,13 @@
 Changelog
 =========
 
-Unreleased
+4.1.1 (08.10.2026)
 ----------
 
 * Added support for Wagtail 8.0.
 * Added support for Django 6.1.
 
-4.1.0
+4.1.0 (22.07.2026)
 ----------
 
 * Added LOCALIZE_MENU_ITEMS setting for i18n locale-aware menus (fixes [#242](https://github.com/jazzband/wagtailmenus/issues/242)).

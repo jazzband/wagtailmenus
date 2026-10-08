@@ -1,0 +1,20 @@
+===============================================
+Wagtailmenus 4.1.1 release notes (08.10.2026)
+===============================================
+
+.. contents::
+    :local:
+    :depth: 1
+
+
+What's new?
+===========
+
+There are no new major features in this release.
+
+Minor changes & bug fixes
+=========================
+
+* Added support for Wagtail 8.0.
+* Added support for Django 6.1.
+* Removed usages of the ``wagtailadmin/pages/_editor_js.html`` template partial (removed in Wagtail 8.0) from the main menu edit and flat menu copy admin templates. The copy template now calls the ``insert_editor_js`` hook directly.
